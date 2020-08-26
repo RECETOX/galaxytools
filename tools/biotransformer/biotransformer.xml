@@ -1,0 +1,131 @@
+<tool id="biotransformer" name="BioTransformer" version="1.1.0">
+    <requirements>
+      <container type="docker">registry.gitlab.ics.muni.cz:443/recetox/mass-spectrometry/biotransformer:1.1.0</container>
+    </requirements>
+  <command><![CDATA[ cd /biotransformer && python3 wrapper_biotransformer.py
+ -k $k
+ -b $b 
+ -s $steps
+ -t $tolerance
+ -a
+ #if $input.type_selector == "sdf"
+	-isdf $input.input_format
+ #else if $input.type_selector == "csv"
+	-icsv $input.input_format
+ #else
+	-ismi "$input.input_format"
+ #end if
+
+ #if $output.type_selector == "csv"
+   #if $input.type_selector == "csv"
+	-ocsv $output_file
+        -ocsvDup $output_file2
+        -ocsvDup2 $output_file3	
+   #else if $input.type_selector == "smile"
+	-ocsv $output_file
+   #end if
+ #else
+	-osdf $output_file
+ #end if
+
+  ]]>
+  </command>
+  <inputs>
+    <param name="k" type="select" value="pred" label="The task to be permed [pred=prediction, cid=compound identification].">
+       <option value="pred" selected="true" >pred</option>
+       <option value="cid">cid</option>
+    </param>
+    <param name="b" type="select" value="ecbased" label="The type of description.">
+       <option value="ecbased" selected="true" >EC-based</option>
+       <option value="cyp450">CYP450</option>
+       <option value="phaseII">Phase II</option>
+       <option value="hgut">Human gut microbial</option>
+       <option value="superbio">Human super transformer 1 (superbio)</option>
+       <option value="allHuman">Human super transformer 2 (allHuman)</option>
+       <option value="envimicro">Environmental microbial</option>
+    </param>
+    <param name="steps" type="integer" value="1" label=" The number of steps for the prediction."/>
+    <param name="tolerance" type="float" value="0.01" label="Mass tolerance for metabolite identification."/>
+
+    <conditional name="input">
+    	<param name="type_selector" type="select" label="Input format [SMILES, SDF, CSV].">
+        	<option value="smile" selected="true">SMILES</option>
+		<option value="sdf">SDF</option>
+		<option value="csv">CSV</option>
+        </param>
+        <when value="sdf">
+        	<param name="input_format" argument="-isdf" type="data" format="sdf" label="SDF"/>
+    	</when>
+    	<when value="smile">
+        	<param name="input_format" argument="-ismi" type="text" label="SMILES (example string format: CC(C)C1=CC=C(C)C=C1O )."/>
+    	</when>
+	<when value="csv">
+		<param name="input_format" argument="-csv" type="data" format="csv" label="CSV with one molecule (SMILES format) per line."/>
+	</when>
+    </conditional>
+
+    <conditional name="output">
+        <param name="type_selector" type="select" label="Output format [CSV, SDF].">
+                <option value="osdf" selected="true">SDF</option>
+                <option value="csv">CSV</option>
+        </param>
+    </conditional>
+
+  </inputs>
+
+  <outputs>
+
+    <data format="csv" name="output_file" label="BioTransformer - output.">
+            <change_format>
+                <when input="output.type_selector" value="osdf" format="sdf" />
+            </change_format>
+    </data>
+    <data format="csv" name="output_file2" label="BioTransformer - filtered CSV output.">
+	  <filter>input['type_selector'] == 'csv'</filter>
+    </data>
+
+    <data format="csv" name="output_file3" label="BioTransformer - super-filtered CSV output.">
+	  <filter>input['type_selector'] == 'csv'</filter>
+    </data>
+  </outputs>
+  <help>
+This is version 1.1.0 of BioTransformer. BioTransformer is a software tool that predicts small molecule metabolism in mammals, their gut micr
+obiota, as well as the soil/aquatic microbiota. BioTransformer also assists scientists in metabolite identification, based on the metabolism
+prediction.
+
+BioTransformer is offered to the public as a freely acessible software package under the GNU License GPL v2.1.
+
+Users are free to copy and redistribute the material in any medium or format. Moreover, they could modify, and build upon the material unfer
+the condition that they must give appropriate credit, provide links to the license, and indicate if changes were made. Furthermore, the above
+ copyright notice and this permission notice must be included. Use and re-distribution of the these resources, in whole or in part, for comme
+rcial purposes requires explicit permission of the authors. We ask that all users of the BioTransformer software tool, the BioTransformer web
+ server, or BioTransformerDB to cite the BioTransformer reference in any resulting publications, and to acknowledge the authors.
+
+Parameters explanation:
+
+Input. User can chose from SDF, SMILES and CSV. CSV expects file with one moleluce in SMILES format per line. If CSV is selected, OUTPUT MUST
+ BE CSV AS WELL!
+
+The type of description: Type of biotransformer - EC-based (ecbased), CYP450 (cyp450), Phase II (phaseII), Human gut microbial (hgut), human
+super transformer* (superbio, or allHuman), Environmental microbial (envimicro).
+
+The number of steps for the prediction. This option will be useed for the EC-based, CYP450, Phase II, and Environmental microbial biotransfor
+mers. The default value is 1.
+
+Mass tolerance for metabolite identification (default is 0.01).
+
+Output of BioTransformer with CSV as an input are 3 CSV files. One without any filtering, second with filtered duplicates based on 6 columns
+(InChI, InChIKey, Synonyms, Molecular formula, Major Isotope Mass, AlogP) and third with filtered duplicates based on 3 columns (Molecular fo
+rmula, Major Isotope Mass, AlogP).
+
+Output of BioTransformer with SMILES as an input is 1 CSV file.
+
+(* ) While the 'superbio' option runs a set number of transformation steps in a pre-defined order (e.g. deconjugation first, then Oxidation/r
+eduction, etc.), the 'allHuman' option predicts all possible metabolites from any applicable reaction(Oxidation, reduction, (de-)conjugation)
+ at each step.
+
+Cite: Djoumbou-Feunang Y, Fiamoncini J, de la Fuente AG, Manach C, Greiner R, and Wishart DS; BioTransformer: A Comprehensive Computational T
+ool for Small Molecule Metabolism Prediction and Metabolite Identification; Journal of Cheminformatics 201911:2; DOI: 10.1186/s13321-018-0324
+-5.
+  </help>
+</tool>
