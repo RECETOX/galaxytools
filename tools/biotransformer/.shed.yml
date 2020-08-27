@@ -1,9 +1,11 @@
 categories:
 - Metabolomics
 description: BioTransformer is a tool for prediction of small molecule metabolism in mammals.
-homepage_url: https://gitlab.ics.muni.cz/recetox/mass-spectrometry/biotransformer
+homepage_url: https://bitbucket.org/djoumbou/biotransformerjar/src/master/
 long_description: |
-  This tool is a complete wrapper for biotransformer.
+  BioTransformer is a software tool that predicts small molecule metabolism in mammals,
+  their gut microbiota, as well as the soil/aquatic microbiota. BioTransformer also assists
+  scientists in metabolite identification, based on the metabolism prediction.
 name: biotransformer
 owner: recetox
 remote_repository_url: https://github.com/RECETOX/galaxytools/tree/master/tools/biotransformer
