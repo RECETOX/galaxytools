@@ -1,0 +1,31 @@
+<tool id="retip_apply" name="Retip prediction" version="@VERSION@">
+    <description>is retention time predictor for Metabolomics</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="requirements"/>
+    <command detect_errors="exit_code"><![CDATA[
+           /run.sh spell.R '$descr_train' '$model_hdf5' '$input' 'SMILES'
+      ]]>
+    </command>
+
+    <inputs>
+        <param name="descr_train" label="Select Descriptors.Feather Dataset" type="data" format="feather"
+               optional="false"/>
+        <param name="model_hdf5" label="Select Model.hdf5 Dataset" type="data" format="h5" optional="false"/>
+        <param name="input" label="Select Input Dataset" type="data" format="tabular" optional="false"/>
+    </inputs>
+
+    <outputs>
+        <data format="tabular" name="output" label="Predicted RT" from_work_dir="SMILES"/>
+    </outputs>
+    <help><![CDATA[
+.. class:: infomark
+
+This tool is used for **Retention Time Prediction** on a whole database.
+
+@HELP@
+        ]]>
+    </help>
+    <expand macro="citations"/>
+</tool>
