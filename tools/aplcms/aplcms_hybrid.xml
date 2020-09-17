@@ -1,0 +1,80 @@
+<tool id="recetox_aplcms_hybrid" name="apLCMS - Hybrid" version="@VERSION@">
+    <macros>
+        <import>aplcms_macros.xml</import>
+    </macros>
+
+    <expand macro="requirements" />
+
+    <command detect_errors="aggressive"><![CDATA[
+        #set file_str = str('", "').join([str($f) for $f in $files])
+
+        Rscript
+            -e 'result <- apLCMS::hybrid(
+                    files = c("$file_str"),
+                    known_table = arrow::read_feather("$known_table"),
+                    min_exp = $noise_filtering.min_exp,
+                    min_pres = $noise_filtering.min_pres,
+                    min_run = $noise_filtering.min_run,
+                    mz_tol = $noise_filtering.mz_tol,
+                    baseline_correct = $noise_filtering.baseline_correct,
+                    baseline_correct_noise_percentile = $noise_filtering.baseline_correct_noise_percentile,
+                    intensity_weighted = $noise_filtering.intensity_weighted,
+                    shape_model = "$feature_detection.shape_model",
+                    BIC_factor = $feature_detection.BIC_factor,
+                    peak_estim_method = "$feature_detection.peak_estim_method",
+                    min_bandwidth = $feature_detection.min_bandwidth,
+                    max_bandwidth = $feature_detection.max_bandwidth,
+                    sd_cut = c($feature_detection.sd_cut_min, $feature_detection.sd_cut_max),
+                    sigma_ratio_lim = c($feature_detection.sigma_ratio_lim_min, $feature_detection.sigma_ratio_lim_max),
+                    component_eliminate = $feature_detection.component_eliminate,
+                    moment_power = $feature_detection.moment_power,
+                    align_chr_tol = $peak_alignment.align_chr_tol,
+                    align_mz_tol = $peak_alignment.align_mz_tol,
+                    max_align_mz_diff = $peak_alignment.max_align_mz_diff,
+                    match_tol_ppm = $history_db.match_tol_ppm,
+                    new_feature_min_count = $history_db.new_feature_min_count,
+                    recover_mz_range = $weak_signal_recovery.recover_mz_range,
+                    recover_chr_range = $weak_signal_recovery.recover_chr_range,
+                    use_observed_range = $weak_signal_recovery.use_observed_range,
+                    recover_min_count = $weak_signal_recovery.recover_min_count
+                )'
+            -e 'arrow::write_feather(result\$final_times, "$times")'
+            -e 'arrow::write_feather(result\$final_features, "$features")'
+            -e 'arrow::write_feather(result\$updated_known_table, "$updated_known_table")'
+            -e 'arrow::write_feather(result\$aligned_times, "$aligned_times")'
+            -e 'arrow::write_feather(result\$aligned_features, "$aligned_features")'
+            -e 'arrow::write_feather(result\$corrected_features, "$corrected_features")'
+            -e 'arrow::write_feather(result\$extracted_features, "$extracted_features")'
+    ]]></command>
+
+    <expand macro="inputs">
+        <expand macro="history_db" />
+        <expand macro="noise_filtering" />
+        <expand macro="feature_detection" />
+        <expand macro="peak_alignment" />
+        <expand macro="weak_signal_recovery" />
+    </expand>
+
+    <outputs>
+        <data name="times" format="time_table.feather" />
+        <data name="features" format="peak_table.feather" />
+        <data name="updated_known_table" format="aplcms_history.feather" />
+        <data name="aligned_times" format="time_table.feather" hidden="true" />
+        <data name="aligned_features" format="peak_table.feather" hidden="true" />
+        <data name="corrected_features" format="peak_table.feather" hidden="true" />
+        <data name="extracted_features" format="peak_table.feather" hidden="true" />
+    </outputs>
+
+    <help>
+        This is the Hybrid version of apLCMS which is incorporating the knowledge of known metabolites and historically
+        detected features on the same machinery to help detect and quantify lower-intensity peaks.
+
+        CAUTION: To use such knowledge, especially historical data, you must keep using (1) the same chromatography
+        system (otherwise the retention time will not match), and (2) the same type of samples with similar extraction
+        technique, such as human serum.
+
+        @GENERAL_HELP@
+    </help>
+
+    <expand macro="citations" />
+</tool>
