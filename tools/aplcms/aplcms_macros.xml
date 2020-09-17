@@ -1,10 +1,10 @@
 <macros>
-    <token name="@VERSION@">{{tool_version}}</token>
+    <token name="@TOOL_VERSION@">6.6.6</token>
 
     <xml name="requirements">
         <requirements>
             <requirement type="package">recetox_datatypes</requirement>
-            <container type="docker">{{container_registry}}:{{tool_version}}</container>
+            <container type="docker">recetox/aplcms:6.6.6-recetox0</container>
         </requirements>
     </xml>
 
