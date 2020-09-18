@@ -1,0 +1,73 @@
+<tool id="xmsannotator_advanced" name="xmsannotator - advanced" version="@TOOL_VERSION@+galaxy0">
+    <macros>
+        <import>xmsannotator_macros.xml</import>
+    </macros>
+
+    <expand macro="requirements"/>
+
+    <command detect_errors="aggressive"><![CDATA[
+        #set expected_adducts = [f'"{$i.adduct}"' for $i in $annotation.expected_adducts]
+        #set expected_adducts = "c(" + ', '.join($annotation.expected_adducts) + ",)"
+
+        Rscript -e 'annotation <- xmsannotator::advanced_annotation(
+                        data = arrow::read_feather("$peaks"),
+                        metabolite = rhdf5::h5read("$metabolites", "metabolites"),
+                        max_mz_diff = as.double($tolerances.max_mz_diff),
+                        max_rt_diff = as.double($tolerances.max_rt_diff),
+                        correlation_method = "$clustering.correlation_method",
+                        correlation_threshold = as.double($clustering.correlation_threshold),
+                        min_cluster_size = as.integer($clustering.min_cluster_size),
+                        deep_split = as.integer($clustering.deep_split),
+                        network_type = "$clustering.network_type",
+                        boost_metabolites = arrow::read_feather("$annotation.boost_metabolites"),
+                        expected_adducts = as.character($expected_adducts),
+                        min_isp = as.integer($annotation.min_isp),
+                        max_isp = as.integer($annotation.max_isp),
+                        strict_boosting = as.logical($annotation.strict_boosting),
+                        redundancy_filtering = as.logical($annotation.redundancy_filtering)
+                   )'
+                -e 'arrow::write_feather(annotation, "$annotation")'
+    ]]></command>
+
+    <inputs>
+        <expand macro="peaks"/>
+        <expand macro="metabolites"/>
+
+        <section name="tolerances" title="Tolerances" expanded="true">
+            <param name="max_mz_diff" type="float" value="10" min="0" label="Mass tolerance [ppm]" help="Mass tolerance in ppm for database matching."/>
+            <param name="max_rt_diff" type="float" value="10" min="0" label="Retention time tolerance [s]" help="Retention time tolerance in seconds for finding peaks derived from the same parent metabolite."/>
+        </section>
+
+        <section name="clustering" title="Clustering">
+            <param name="correlation_method" type="select" display="radio" label="Correlation method">
+                <option value="pearson" selected="true"/>
+                <option value="spearman"/>
+            </param>
+            <param name="correlation_threshold" type="float" value="0.7" label="Correlation threshold" help="Correlation threshold between peaks to qualify as adducts/isotopes of the same metabolite."/>
+            <param name="min_cluster_size" type="integer" value="10" min="1" label="Minimum cluster size" help="The minimum number of nodes to be considered as a cluster."/>
+            <param name="deep_split" type="integer" value="2" min="0" max="4" label="Deep split" help="Deep split provides a rough control over sensitivity to cluster splitting. The higher the value, the more and smaller clusters will be produced (see WGCNA package documentation)."/>
+            <param name="network_type" type="select" display="radio" label="Network type" help="Network type parameter affects how the network's adjacency matrix is created from the correlation matrix (see WGCNA package documentation).">
+                <option value="signed"/>
+                <option value="unsigned" selected="true"/>
+            </param>
+        </section>
+
+        <section name="annotation" title="Annotation" expanded="true">
+            <param name="boost_metabolites" type="data" format="csv" optional="true" label="Validated metabolites score boosting (optional)" help="Table of previously validated metabolites to boost their confidence scores. The 1st column of the table must contain IDs of metabolites. The optional 2nd and 3rd columns may contain mz values and retention times."/>
+            <repeat name="expected_adducts" title="Expected adducts" help="Require the presence of certain adducts for a high confidence match.">
+                <param name="adduct" type="text" value="M+H" label="Adduct"/>
+            </repeat>
+            <param name="min_isp" type="integer" min="0" value="1" label="Minimum number of expected isotopes" help="Minimum number of adducts/isotopes to be present for a match to be considered as a high confidence match."/>
+            <param name="max_isp" type="integer" min="0" value="5" label="Maximum number of expected isotopes" help="Maximum number of adducts/isotopes to be present for a match to be considered as a high confidence match."/>
+            <param name="strict_boosting" type="boolean" checked="true" truevalue="TRUE" falsevalue="FALSE" label="Strict boosting" help="Boost the scores of metabolites that not only belongs to the same pathway but also to the same cluster. Otherwise, do not account for cluster membership."/>
+            <param name="redundancy_filtering" type="boolean" checked="true" truevalue="TRUE" falsevalue="FALSE" label="Redundancy filtering" help="Whether to perform final redundancy filtering or not."/>
+        </section>
+    </inputs>
+
+    <outputs>
+        <expand macro="annotation_output"/>
+    </outputs>
+
+    <help><![CDATA[]]></help>
+    <expand macro="citations"/>
+</tool>
