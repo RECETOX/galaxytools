@@ -1,8 +1,10 @@
-<tool id="biotransformer" name="BioTransformer" version="1.1.0">
-    <requirements>
-      <container type="docker">registry.gitlab.ics.muni.cz:443/recetox/mass-spectrometry/biotransformer:1.1.0</container>
-    </requirements>
-  <command><![CDATA[ cd /biotransformer && python3 wrapper_biotransformer.py
+<tool id="biotransformer" name="BioTransformer" version="1.1.5">
+  <requirements>
+     <requirement type="package" version="1.1.5"> biotransformer </requirement>
+     <requirement type="package" version="3.1.1"> openbabel </requirement>
+     <requirement type="package" version="1.1.1"> pandas </requirement>
+  </requirements>
+  <command><![CDATA[ python3 '${__tool_directory__}/wrapper_biotransformer.py'
  -k $k
  -b $b 
  -s $steps
@@ -127,3 +129,4 @@ reaction(Oxidation, reduction, (de-)conjugation) at each step.
     <citation type="doi">https://doi.org/10.1186/s13321-018-0324-5</citation>
   </citations>
 </tool>
+
