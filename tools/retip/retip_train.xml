@@ -1,4 +1,4 @@
-<tool id="retip_train" name="Retip training" version="@VERSION@">
+<tool id="retip_train" name="Retip training" version="@TOOL_VERSION@+galaxy0">
     <description>the Keras model to predict retention times</description>
     <macros>
         <import>macros.xml</import>
@@ -8,15 +8,19 @@
             /run.sh trainKeras.R '$descr_train' 'model.hdf5'
       ]]>
     </command>
-
     <inputs>
-        <param name="descr_train" label="Select Descriptors.Feather Dataset" type="data" format="feather"
+        <param name="descr_train" label="Select Descriptors.Feather Dataset" type="data" format="h5"
                optional="false"/>
     </inputs>
-
     <outputs>
-        <data format="h5" name="output_file2" label="Model.hdf5 Dataset" from_work_dir="model.hdf5"/>
+        <data format="h5" name="output1" label="Model.hdf5 Dataset" from_work_dir="model.hdf5"/>
     </outputs>
+    <tests>
+        <test expect_num_outputs="1">
+            <param name="descr_train" value="descriptors.feather"/>
+            <output name="output1" file="model.hdf5" ftype="h5" lines_diff="2"/>
+        </test>
+    </tests>
     <help><![CDATA[
 .. class:: infomark
 

@@ -1,8 +1,8 @@
 <macros>
-    <token name="@VERSION@">1.0.0</token>
+    <token name="@TOOL_VERSION@">0.2.1</token>
     <xml name="requirements">
         <requirements>
-            <container type="docker">registry.gitlab.ics.muni.cz:443/recetox/mass-spectrometry/retip:@VERSION@</container>
+            <container type="docker">recetox/retip:@TOOL_VERSION@-recetox0</container>
         </requirements>
     </xml>
     <xml name="citations">
