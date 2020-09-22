@@ -1,6 +1,7 @@
-import sys
 import subprocess
+import sys
 import tempfile
+
 import pandas
 from openbabel import pybel
 
