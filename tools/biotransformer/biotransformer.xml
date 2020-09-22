@@ -1,12 +1,13 @@
-<tool id="biotransformer" name="BioTransformer" version="1.1.5">
+<tool id="biotransformer" name="BioTransformer" version="1.1.5+galaxy0">
   <requirements>
-     <requirement type="package" version="1.1.5"> biotransformer </requirement>
-     <requirement type="package" version="3.1.1"> openbabel </requirement>
-     <requirement type="package" version="1.1.1"> pandas </requirement>
+     <requirement type="package" version="1.1.5">biotransformer</requirement>
+     <requirement type="package" version="3.1.1">openbabel</requirement>
+     <requirement type="package" version="1.1.1">pandas</requirement>
+     <requirement type="package" version="3.7">python</requirement>
   </requirements>
   <command><![CDATA[ python3 '${__tool_directory__}/wrapper_biotransformer.py'
  -k $k
- -b $b 
+ -b $b
  -s $steps
  -t $tolerance
  -a
@@ -22,7 +23,7 @@
    #if $input.type_selector == "csv"
 	-ocsv $output_file
         -ocsvDup $output_file2
-        -ocsvDup2 $output_file3	
+        -ocsvDup2 $output_file3
    #else if $input.type_selector == "smile"
 	-ocsv $output_file
    #end if
