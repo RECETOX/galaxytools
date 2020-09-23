@@ -1,0 +1,76 @@
+<tool id="xmsannotator_advanced" name="xMSannotator (advanced)" version="@TOOL_VERSION@+galaxy0">
+    <macros>
+        <import>xmsannotator_macros.xml</import>
+    </macros>
+
+    <expand macro="requirements"/>
+
+    <command detect_errors="aggressive"><![CDATA[
+        #set expected_adducts = ['"{}"'.format($i.adduct) for $i in $scoring.expected_adducts]
+        #set expected_adducts = "c(" + ', '.join($expected_adducts) + ")"
+
+        Rscript -e 'annotation <- xmsannotator::advanced_annotation(
+                        peaks = rhdf5::h5read("$peaks", "peaks"),
+                        adducts = rhdf5::h5read("$adducts", "adducts"),
+                        metabolites = rhdf5::h5read("$metabolites", "metabolites"),
+
+                        mz_tolerance_ppm = as.double($mz_tolerance_ppm),
+                        rt_tolerance = as.double($rt_tolerance),
+
+                        correlation_threshold = as.double($clustering.correlation_threshold),
+                        min_cluster_size = as.integer($clustering.min_cluster_size),
+                        deep_split = as.integer($clustering.deep_split),
+                        network_type = "$clustering.network_type",
+
+                        #if $scoring.boost_metabolites
+                            boost_metabolites = rhdf5::h5read("$scoring.boost_metabolites", "boost_metabolites"),
+                        #end if
+
+                        expected_adducts = as.character($expected_adducts)
+                   )'
+                -e 'rhdf5::h5write(annotation, "$annotation", "annotation")'
+    ]]></command>
+
+    <inputs>
+        <expand macro="annotation"/>
+        <param name="rt_tolerance" type="float" value="10" min="0" label="Retention time tolerance [s]" help="Retention time tolerance in seconds for finding peaks derived from the same parent metabolite."/>
+
+        <section name="clustering" title="Clustering">
+            <param name="correlation_method" type="select" display="radio" label="Correlation method">
+                <option value="pearson" selected="true"/>
+                <option value="spearman"/>
+            </param>
+            <param name="correlation_threshold" type="float" value="0.7" label="Correlation threshold" help="Correlation threshold between peaks to qualify as adducts/isotopes of the same metabolite."/>
+            <param name="min_cluster_size" type="integer" value="10" min="1" label="Minimum cluster size" help="The minimum number of nodes to be considered as a cluster."/>
+            <param name="deep_split" type="integer" value="2" min="0" max="4" label="Deep split" help="Deep split provides a rough control over sensitivity to cluster splitting. The higher the value, the more and smaller clusters will be produced (see WGCNA package documentation)."/>
+            <param name="network_type" type="select" display="radio" label="Network type" help="Network type parameter affects how the network's adjacency matrix is created from the correlation matrix (see WGCNA package documentation).">
+                <option value="signed"/>
+                <option value="unsigned" selected="true"/>
+            </param>
+        </section>
+
+        <section name="scoring" title="Scoring" expanded="true">
+            <param name="boost_metabolites" type="data" format="h5" optional="true" label="Validated metabolites score boosting (optional)" help="Table of previously validated metabolites to boost their confidence scores. The 1st column of the table must contain IDs of metabolites. The optional 2nd and 3rd columns may contain mz values and retention times."/>
+            <repeat name="expected_adducts" title="Expected adducts" help="Require the presence of certain adducts for a high confidence match.">
+                <param name="adduct" type="text" value="M+H" label="Adduct"/>
+            </repeat>
+            <param name="min_isp" type="integer" min="0" value="1" label="Minimum number of expected isotopes" help="Minimum number of adducts/isotopes to be present for a match to be considered as a high confidence match."/>
+            <param name="max_isp" type="integer" min="0" value="5" label="Maximum number of expected isotopes" help="Maximum number of adducts/isotopes to be present for a match to be considered as a high confidence match."/>
+            <param name="strict_boosting" type="boolean" checked="true" truevalue="TRUE" falsevalue="FALSE" label="Strict boosting" help="Boost the scores of metabolites that not only belongs to the same pathway but also to the same cluster. Otherwise, do not account for cluster membership."/>
+            <param name="redundancy_filtering" type="boolean" checked="true" truevalue="TRUE" falsevalue="FALSE" label="Redundancy filtering" help="Whether to perform final redundancy filtering or not."/>
+        </section>
+    </inputs>
+
+    <outputs>
+        <expand macro="output"/>
+    </outputs>
+
+    <help><![CDATA[
+        Annotate the peak intensity table (such as outputted from apLCMS) with metabolites from the metabolite database using advanced methods.
+
+        The annotation process generates all possible metabolite-adduct pairs from the metabolite and adduct databases and matches those pairs to the measured peaks.
+        A metabolite-adduct pair is pronounced as a match to the peak when the difference of their masses are withing some tolerance.
+        Then a score and a confidence level is assigned to each match based on peak correlation clustering, metabolite pathway associations, adducts expectations, and isotope conformations.
+    ]]></help>
+    <expand macro="citations"/>
+</tool>
