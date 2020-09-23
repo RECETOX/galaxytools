@@ -1,6 +1,0 @@
-<tables>
-    <table name="metabolite_databases" comment_char="#">
-        <columns>value, date, name, path</columns>
-        <file path="tool-data/metabolite_databases.loc" />
-    </table>
-</tables>

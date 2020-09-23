@@ -9,12 +9,8 @@ repositories:
     include:
       - xmsannotator_simple.xml
       - xmsannotator_macros.xml
-      - tool_data_table_conf.xml.sample
-      - tool-data/metabolite_databases.loc.sample
   xmsannotator_advanced:
     description: "Annotate peak table with metabolites"
     include:
       - xmsannotator_advanced.xml
       - xmsannotator_macros.xml
-      - tool_data_table_conf.xml.sample
-      - tool-data/metabolite_databases.loc.sample
