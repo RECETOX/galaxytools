@@ -2,31 +2,21 @@
     <token name="@TOOL_VERSION@">1.3.2</token>
     <xml name="requirements">
         <requirements>
-            <requirement type="package">recetox_datatypes</requirement>
-            <container type="docker">recetox/xmsannotator:2.0.0-recetox0</container>
+            <container type="docker">recetox/xmsannotator:latest</container>
         </requirements>
     </xml>
 
-    <xml name="peaks">
-        <param name="peaks" type="data" format="peak_table.feather" label="Peak intensity table"/>
+    <xml name="annotation">
+        <param name="peaks" type="data" format="h5" label="Peaks" help="Table of peaks to annotate."/>
+        <param name="metabolites" type="data" format="h5" label="Metabolite database"/>
+        <param name="adducts" type="data" format="h5" label="Adduct database"/>
+
+
+        <param name="mz_tolerance_ppm" type="float" value="5" min="0" label="Mass tolerance [ppm]" help="Mass tolerance in ppm for database matching."/>
     </xml>
 
-    <xml name="metabolites">
-        <!-- <param name="metabolites" type="select" label="Metabolite database">
-            <options from_data_table="metabolite_databases">
-                <column name="name" index="2"/>
-                <column name="value" index="3"/>
-            </options>
-        </param> -->
-        <param name="metabolites" type="data" format="metabolites.h5" label="Metabolite database"/>
-    </xml>
-
-    <xml name="mz_tolerance">
-        <param name="mz_tolerance" type="float" value="10" min="0" label="Mass tolerance [ppm]" help="Mass tolerance in ppm for database matching."/>
-    </xml>
-
-    <xml name="annotation_output">
-        <data format="annotated_peak_list.feather" name="annotation"/>
+    <xml name="output">
+        <data format="h5" name="annotation"/>
     </xml>
 
     <xml name="citations">
