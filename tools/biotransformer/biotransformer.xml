@@ -57,9 +57,9 @@
   </inputs>
 
   <outputs>
-    <data format="csv" name="output_file" label="BioTransformer - output.">
-    <data format="csv" name="output_file2" label="BioTransformer - filtered CSV output.">
-    <data format="csv" name="output_file3" label="BioTransformer - super-filtered CSV output.">
+    <data format="csv" name="output_file" label="BioTransformer - output."/>
+    <data format="csv" name="output_file2" label="BioTransformer - filtered CSV output."/>
+    <data format="csv" name="output_file3" label="BioTransformer - super-filtered CSV output."/>
   </outputs>
 
   <tests>
