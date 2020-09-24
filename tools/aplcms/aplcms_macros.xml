@@ -3,8 +3,7 @@
 
     <xml name="requirements">
         <requirements>
-            <requirement type="package">recetox_datatypes</requirement>
-            <container type="docker">recetox/aplcms:6.6.6-recetox0</container>
+            <container type="docker">recetox/aplcms:latest</container>
         </requirements>
     </xml>
 
