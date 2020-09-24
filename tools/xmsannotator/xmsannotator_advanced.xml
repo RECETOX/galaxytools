@@ -5,7 +5,7 @@
 
     <expand macro="requirements"/>
 
-    <command detect_errors="aggressive"><![CDATA[
+    <command detect_errors="exit_code"><![CDATA[
         #set expected_adducts = ['"{}"'.format($i.adduct) for $i in $scoring.expected_adducts]
         #set expected_adducts = "c(" + ', '.join($expected_adducts) + ")"
 
