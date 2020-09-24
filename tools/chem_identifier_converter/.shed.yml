@@ -1,0 +1,12 @@
+name: chemical_identifier_converter
+owner: recetox
+description: "Converter for different chemical identifiers."
+categories:
+  - Metabolomics
+homepage_url: "https://github.com/RECETOX/chem_identifier_converter"
+remote_repository_url: "https://github.com/RECETOX/galaxytools/tree/master/tools/chem_identifier_converter"
+long_description: |
+  User can input file with different chemical identifiers (common/preffered name, IUPAC name, InChIKey, SMILES)
+  in a CSV format (one identifier per line, no header) and will get file with all remaining identifiers.
+  Currently, only the beforementioned 4 chemical identifiers are allowed as an input.
+type: unrestricted

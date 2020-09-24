@@ -1,0 +1,34 @@
+<tool id="chem" name="Chemical Identifier Converter" version="0.1+galaxy0">
+  <requirements>
+    <container type="docker">recetox/chem_identifier_converter:latest</container>
+  </requirements>
+  <stdio>
+    <exit_code range="1:" />
+    <exit_code range=":-1" />
+  </stdio>
+  <command><![CDATA[ cd /chem_identifier_converter && Rscript chem_identifier_converter.r
+ 							--inFile $input --outFile $output
+  ]]>
+  </command>
+  <inputs>
+    <param name="input" type="data" label="CSV file with input."/>
+  </inputs>
+  <outputs>
+    <data format="csv" name="output" label="CSV file with output."/>
+  </outputs>
+  <help>
+This is a utility for chemical identifier conversion (version 1.0.2).
+User can input file with different chemical identifiers (common/preffered name, IUPAC name, InChIKey, SMILES)
+in a CSV format (one identifier per line, no header) and will get file with all remaining identifiers.
+Currently, only the beforementioned 4 chemical identifiers are allowed as an input.
+
+Author of the Galaxy tool: Karolína Trachtová (k.trachtova@gmail.com)
+
+If used, please cite:
+
+Eduard Szöcs et al. (2015). webchem: zenodo release. Zenodo. 10.5281/zenodo.33823.
+
+Kevin Horan and Thomas Girke (2018). ChemmineOB: R interface to a subset of OpenBabel functionalities. R package version 1.20.0. https://github.com/girke-lab/ChemmineOB.
+  </help>
+</tool>
+
