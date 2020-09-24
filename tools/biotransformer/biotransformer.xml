@@ -11,25 +11,12 @@
  -s $steps
  -t $tolerance
  -a
- #if $input.type_selector == "sdf"
-	-isdf $input.input_format
- #else if $input.type_selector == "csv"
+ #if $input.type_selector == "csv"
 	-icsv $input.input_format
- #else
-	-ismi "$input.input_format"
  #end if
-
- #if $output.type_selector == "csv"
-   #if $input.type_selector == "csv"
-	-ocsv $output_file
-        -ocsvDup $output_file2
-        -ocsvDup2 $output_file3
-   #else if $input.type_selector == "smile"
-	-ocsv $output_file
-   #end if
- #else
-	-osdf $output_file
- #end if
+ -ocsv $output_file
+ -ocsvDup $output_file2
+ -ocsvDup2 $output_file3
 
   ]]>
   </command>
@@ -51,43 +38,46 @@
     <param name="tolerance" type="float" value="0.01" label="Mass tolerance for metabolite identification."/>
 
     <conditional name="input">
-    	<param name="type_selector" type="select" label="Input format [SMILES, SDF, CSV].">
-        	<option value="smile" selected="true">SMILES</option>
-		<option value="sdf">SDF</option>
-		<option value="csv">CSV</option>
+    	<param name="type_selector" type="select" label="Input format [CSV].">
+		<option value="csv" selected="true">CSV</option>
         </param>
-        <when value="sdf">
-        	<param name="input_format" argument="-isdf" type="data" format="sdf" label="SDF"/>
-    	</when>
-    	<when value="smile">
-        	<param name="input_format" argument="-ismi" type="text" label="SMILES (example string format: CC(C)C1=CC=C(C)C=C1O )."/>
-    	</when>
 	<when value="csv">
-		<param name="input_format" argument="-csv" type="data" format="csv" label="CSV with one molecule (SMILES format) per line."/>
+		<param name="input_format" argument="-icsv" type="data" format="csv" label="CSV with one molecule (SMILES format) per line."/>
 	</when>
     </conditional>
 
+    <!-- If we would like to allow user to choose between format - not available now
     <conditional name="output">
         <param name="type_selector" type="select" label="Output format [CSV, SDF].">
                 <option value="osdf" selected="true">SDF</option>
                 <option value="csv">CSV</option>
         </param>
     </conditional>
+    -->
   </inputs>
 
   <outputs>
     <data format="csv" name="output_file" label="BioTransformer - output.">
-            <change_format>
-                <when input="output.type_selector" value="osdf" format="sdf" />
-            </change_format>
-    </data>
     <data format="csv" name="output_file2" label="BioTransformer - filtered CSV output.">
-	  <filter>input['type_selector'] == 'csv'</filter>
-    </data>
     <data format="csv" name="output_file3" label="BioTransformer - super-filtered CSV output.">
-	  <filter>input['type_selector'] == 'csv'</filter>
-    </data>
   </outputs>
+
+  <tests>
+    <test>
+      <param name="k" value="pred"/>
+      <param name="b" value="allHuman"/>
+      <param name="steps" value="1"/>
+      <param name="tolerance" value="0.01"/>
+      <conditional name="input">
+        <param name="type_selector" value="csv"/>
+        <param name="input_format" value="smiles.csv"/>
+      </conditional>
+      <output name="output_file" value="output1.csv"/>
+      <output name="output_file2" value="output2.csv"/>
+      <output name="output_file3" value="output3.csv"/>
+    </test>
+  </tests>
+
   <help>
 BioTransformer is a software tool that predicts small molecule metabolism in mammals, their gut micr obiota,
 as well as the soil/aquatic microbiota. BioTransformer also assists scientists in metabolite identification,
@@ -105,8 +95,7 @@ acknowledge the authors.
 
 Parameters explanation:
 
-Input. User can chose from SDF, SMILES and CSV. CSV expects file with one moleluce in SMILES format per line. If CSV
-is selected, OUTPUT MUST BE CSV AS WELL!
+Input. Currently, only a CSV file with one SMILES per line is accepted.
 
 The type of description: Type of biotransformer - EC-based (ecbased), CYP450 (cyp450), Phase II (phaseII), Human gut
 microbial (hgut), human super transformer* (superbio, or allHuman), Environmental microbial (envimicro).
@@ -120,8 +109,6 @@ Output of BioTransformer with CSV as an input are 3 CSV files. One without any f
 duplicates based on 6 columns (InChI, InChIKey, Synonyms, Molecular formula, Major Isotope Mass, AlogP) and third with
 filtered duplicates based on 3 columns (Molecular formula, Major Isotope Mass, AlogP).
 
-Output of BioTransformer with SMILES as an input is 1 CSV file.
-
 (* ) While the 'superbio' option runs a set number of transformation steps in a pre-defined order (e.g. deconjugation
 first, then Oxidation/reduction, etc.), the 'allHuman' option predicts all possible metabolites from any applicable
 reaction(Oxidation, reduction, (de-)conjugation) at each step.
@@ -130,4 +117,3 @@ reaction(Oxidation, reduction, (de-)conjugation) at each step.
     <citation type="doi">https://doi.org/10.1186/s13321-018-0324-5</citation>
   </citations>
 </tool>
-
