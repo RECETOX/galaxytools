@@ -1,0 +1,146 @@
+<macros>
+    <token name="@TOOL_VERSION@">6.6.6</token>
+
+    <xml name="requirements">
+        <requirements>
+            <requirement type="package">recetox_datatypes</requirement>
+            <container type="docker">recetox/aplcms:6.6.6-recetox0</container>
+        </requirements>
+    </xml>
+
+    <xml name="inputs">
+        <inputs>
+            <param name="files" type="data" format="mzdata,mzml,mzxml,netcdf" multiple="true" min="3" label="data"
+                   help="Mass spectrometry files for peak extraction." />
+            <yield />
+        </inputs>
+    </xml>
+
+    <xml name="history_db">
+        <param name="known_table" type="data" format="aplcms_history.feather" label="known_table"
+               help="A data table containing the known metabolite ions and previously found features. The table must contain these 18 columns: chemical_formula (optional), HMDB_ID (optional), KEGG_compound_ID (optional), neutral.mass (optional), ion.type (the ion form - optional), m.z (either theoretical or mean observed m/z value of previously found features), Number_profiles_processed (the total number of processed samples to build this database), Percent_found (the percentage of historically processed samples in which the feature appeared), mz_min (minimum  observed m/z value), mz_max (maximum observed m/z value), RT_mean (mean observed retention time), RT_sd (standard deviation of observed retention time), RT_min (minimum observed retention time), RT_max (maximum observed retention time), int_mean.log. (mean observed log intensity), int_sd.log. (standard deviation of observed log intensity), int_min.log. (minimum observed log intensity), int_max.log. (maximum observed log intensity)." />
+        <section name="history_db" title="Known-Table settings">
+            <param name="match_tol_ppm" type="integer" optional="true" min="0" label="match_tol_ppm (optional)"
+                   help="The ppm tolerance to match identified features to known metabolites/features." />
+            <param name="new_feature_min_count" type="integer" value="2" min="1" label="new_feature_min_count"
+                   help="The minimum number of occurrences of a historically unseen (unknown) feature to add this feature into the database of known features." />
+        </section>
+    </xml>
+
+    <xml name="noise_filtering">
+        <section name="noise_filtering" title="Noise filtering and peak detection">
+            <param name="min_exp" type="integer" min="1" value="2"
+                   label="min_exp"
+                   help="If a feature is to be included in the final feature table, it must be present in at least this number of spectra." />
+            <param name="min_pres" type="float" value="0.5"
+                   label="min_pres"
+                   help="The minimum proportion of presence in the time period for a series of signals grouped by m/z to be considered a peak." />
+            <param name="min_run" type="float" value="12"
+                   label="min_run"
+                   help="The minimum length of elution time for a series of signals grouped by m/z to be considered a peak." />
+            <param name="mz_tol" type="float" value="1e-05"
+                   label="mz_tol"
+                   help="The m/z tolerance level for the grouping of data points. This value is expressed as the fraction of the m/z value. This value, multiplied by the m/z value, becomes the cutoff level. The recommended value is the machine's nominal accuracy level. Divide the ppm value by 1e6. For FTMS, 1e-5 is recommended." />
+            <param name="baseline_correct" type="float" value="0" label="baseline_correct"
+                   help="After grouping the observations, the highest intensity in each group is found. If the highest is lower than this value, the entire group will be deleted. The default value is NA, in which case the program uses a percentile of the height of the noise groups. If given a value, the value will be used as the threshold, and baseline.correct.noise.percentile will be ignored." />
+            <param name="baseline_correct_noise_percentile" type="float" value="0.05"
+                   label="baseline_correct_noise_percentile"
+                   help="The percentile of signal strength of those EIC that don't pass the run filter, to be used as the baseline threshold of signal strength." />
+            <param name="intensity_weighted" type="boolean" checked="false" truevalue="TRUE" falsevalue="FALSE"
+                   label="intensity_weighted"
+                   help="Whether to weight the local density by signal intensities in initial peak detection." />
+        </section>
+    </xml>
+
+    <xml name="feature_detection">
+        <section name="feature_detection" title="Feature detection">
+            <param name="shape_model" type="select" display="radio"
+                   label="shape_model"
+                   help="The mathematical model for the shape of a peak. There are two choices - bi-Gaussian and Gaussian. When the peaks are asymmetric, the bi-Gaussian is better.">
+                <option value="Gaussian">Gaussian</option>
+                <option value="bi-Gaussian" selected="true">bi-Gaussian</option>
+            </param>
+            <param name="BIC_factor" type="float" value="2.0"
+                   label="BIC_factor"
+                   help="The factor that is multiplied on the number of parameters to modify the BIC criterion. If larger than 1, models with more peaks are penalized more." />
+            <param name="peak_estim_method" type="select" display="radio"
+                   label="peak_estim_method"
+                   help="The estimation method for the bi-Gaussian peak model. Two possible values: moment and EM.">
+                <option value="moment" selected="true">Moment</option>
+                <option value="EM">EM</option>
+            </param>
+            <param name="min_bandwidth" type="float" optional="true"
+                   label="min_bandwidth (optional)"
+                   help="The minimum bandwidth to use in the kernel smoother." />
+            <param name="max_bandwidth" type="float" optional="true"
+                   label="max_bandwidth (optional)"
+                   help="The maximum bandwidth to use in the kernel smoother." />
+            <param name="sd_cut_min" type="float" value="0.01"
+                   label="sd_cut_min"
+                   help="The minimum standard deviation of a feature to be not eliminated." />
+            <param name="sd_cut_max" type="float" value="500"
+                   label="sd_cut_max"
+                   help="The maximum standard deviation of a feature to be not eliminated." />
+            <param name="sigma_ratio_lim_min" type="float" value="0.01"
+                   label="sigma_ratio_lim_min"
+                   help="The lower limit of the believed ratio range between the left-standard deviation and the right-standard deviation of the bi-Gaussian function used to fit the data." />
+            <param name="sigma_ratio_lim_max" type="float" value="100"
+                   label="sigma_ratio_lim_max"
+                   help="The upper limit of the believed ratio range between the left-standard deviation and the right-standard deviation of the bi-Gaussian function used to fit the data." />
+            <param name="component_eliminate" type="float" value="0.01"
+                   label="component_eliminate"
+                   help="In fitting mixture of bi-Gaussian (or Gaussian) model of an EIC, when a component accounts for a proportion of intensities less than this value, the component will be ignored." />
+            <param name="moment_power" type="float" value="1"
+                   label="moment_power"
+                   help="The power parameter for data transformation when fitting the bi-Gaussian or Gaussian mixture model in an EIC." />
+        </section>
+    </xml>
+
+    <xml name="peak_alignment">
+        <section name="peak_alignment" title="Peak Alignment">
+            <param name="align_chr_tol" type="float" optional="true"
+                   label="align_chr_tol (optional)"
+                   help="The retention time tolerance level for peak alignment. The default is NA, which allows the program to search for the tolerance level based on the data." />
+            <param name="align_mz_tol" type="float" optional="true"
+                   label="align_mz_tol (optional)"
+                   help="The m/z tolerance level for peak alignment. The default is NA, which allows the program to search for the tolerance level based on the data. This value is expressed as the percentage of the m/z value. This value, multiplied by the m/z value, becomes the cutoff level." />
+            <param name="max_align_mz_diff" type="float" value="0.01"
+                   label="max_align_mz_diff"
+                   help="As the m/z tolerance is expressed in relative terms (ppm), it may not be suitable when the m/z range is wide. This parameter limits the tolerance in absolute terms. It mostly influences feature matching in higher m/z range." />
+        </section>
+    </xml>
+
+    <xml name="weak_signal_recovery">
+        <section name="weak_signal_recovery" title="Weak Signal Recovery">
+            <param name="recover_mz_range" type="float" optional="true"
+                   label="recover_mz_range (optional)"
+                   help="The m/z around the feature m/z to search for observations. The default value is NA, in which case 1.5 times the m/z tolerance in the aligned object will be used." />
+            <param name="recover_chr_range" type="float" optional="true"
+                   label="recover_chr_range (optional)"
+                   help="The retention time around the feature retention time to search for observations. The default value is NA, in which case 0.5 times the retention time tolerance in the aligned object will be used." />
+            <param name="use_observed_range" type="boolean" checked="true" truevalue="TRUE" falsevalue="FALSE"
+                   label="use_observed_range"
+                   help="If the value is true, the actual range of the observed locations of the feature in all the spectra will be used." />
+            <param name="recover_min_count" type="integer" value="3"
+                   label="recover_min_count"
+                   help="The minimum number of raw data points to be considered as a true feature." />
+        </section>
+    </xml>
+
+    <token name="@GENERAL_HELP@">
+        apLCMS is a software which generates a feature table from a batch of LC/MS spectra. The m/z and retention time
+        tolerance levels are estimated from the data. A run-filter is used to detect peaks and remove noise.
+        Non-parametric statistical methods are used to find-tune peak selection and grouping. After retention time
+        correction, a feature table is generated by aligning peaks across spectra. For further information on apLCMS
+        please refer to http://web1.sph.emory.edu/apLCMS.
+    </token>
+
+    <xml name="citations">
+        <citations>
+            <citation type="doi">10.1093/bioinformatics/btp291</citation>
+            <citation type="doi">10.1186/1471-2105-11-559</citation>
+            <citation type="doi">10.1021/pr301053d</citation>
+            <citation type="doi">10.1093/bioinformatics/btu430</citation>
+        </citations>
+    </xml>
+</macros>
