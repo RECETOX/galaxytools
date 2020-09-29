@@ -18,7 +18,7 @@
     <tests>
         <test expect_num_outputs="1">
             <param name="compounds" value="compounds-small.tsv"/>
-            <output name="output1" file="descriptors.feather" ftype="h5" lines_diff="2"/>
+            <output name="output1" file="descriptors.feather" ftype="h5"/>
         </test>
     </tests>
     <help><![CDATA[
