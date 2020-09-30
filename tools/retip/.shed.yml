@@ -1,0 +1,16 @@
+categories:
+  - Metabolomics
+owner: "recetox"
+remote_repository_url: "https://github.com/RECETOX/galaxytools/tree/master/tools/retip"
+homepage_url: "https://github.com/PaoloBnn/Retip"
+type: unrestricted
+auto_tool_repositories:
+  name_template: "{{ tool_id }}"
+  description_template: "The tool {{ tool_name }} from the Retip tool suite."
+suite:
+  name: "suite_retip"
+  description: "A suite of Retip (Retention Time Prediction for metabolomics) tools."
+  long_description: |
+    "Retip is an R package for predicting Retention Time (RT) for small molecules in a
+    high pressure liquid chromatography (HPLC) Mass Spectrometry analysis. Retention
+    time calculation can be useful in identifying unknowns and removing false positive annotations.

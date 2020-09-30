@@ -1,0 +1,33 @@
+<tool id="retip_descriptors" name="Retip chemical descriptors" version="@TOOL_VERSION@+galaxy0">
+    <description>for retention time prediction</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="requirements"/>
+    <command detect_errors="exit_code"><![CDATA[
+          /run.sh chemdesc.R '$compounds' 'descriptors.feather'
+      ]]>
+    </command>
+    <inputs>
+        <param name="compounds" label="Select Compounds Dataset" type="data" format="tabular" optional="false"/>
+    </inputs>
+    <outputs>
+        <data format="h5" name="output1" label="Descriptors.Feather Dataset"
+              from_work_dir="descriptors.feather"/>
+    </outputs>
+    <tests>
+        <test expect_num_outputs="1">
+            <param name="compounds" value="compounds-small.tsv"/>
+            <output name="output1" file="descriptors.feather" ftype="h5"/>
+        </test>
+    </tests>
+    <help><![CDATA[
+.. class:: infomark
+
+This tool **computes chemical descriptors** with CDK a JAVA based open source project aimed at cheminformatics.
+
+@HELP@
+        ]]>
+    </help>
+    <expand macro="citations"/>
+</tool>
