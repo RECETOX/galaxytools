@@ -2,7 +2,7 @@
     <token name="@TOOL_VERSION@">1.3.2</token>
     <xml name="requirements">
         <requirements>
-            <container type="docker">recetox/xmsannotator:latest</container>
+            <container type="docker">recetox/xmsannotator:1.3.2-recetox0</container>
         </requirements>
     </xml>
 
