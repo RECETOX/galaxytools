@@ -18,7 +18,7 @@
     <tests>
         <test expect_num_outputs="1">
             <param name="descr_train" value="descriptors.feather"/>
-            <output name="output1" file="model.hdf5" ftype="h5" lines_diff="2"/>
+            <output name="output1" file="model.hdf5" ftype="h5" compare="sim_size" delta="1000"/>
         </test>
     </tests>
     <help><![CDATA[

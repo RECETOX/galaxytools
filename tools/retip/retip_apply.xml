@@ -22,7 +22,7 @@
             <param name="descr_train" value="descriptors.feather"/>
             <param name="model_hdf5" value="model.hdf5"/>
             <param name="input_smiles" value="input.tsv"/>
-            <output name="output1" file="output.tsv" ftype="tabular"/>
+            <output name="output1" file="output.tsv" ftype="tabular" compare="sim_size" delta="50"/>
         </test>
     </tests>
     <help><![CDATA[
