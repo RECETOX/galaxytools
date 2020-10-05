@@ -3,7 +3,7 @@
 
     <xml name="requirements">
         <requirements>
-            <container type="docker">recetox/aplcms:latest</container>
+            <container type="docker">recetox/aplcms:6.6.6-recetox1</container>
         </requirements>
     </xml>
 
