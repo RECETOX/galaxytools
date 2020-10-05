@@ -1,4 +1,4 @@
-<tool id="retip_apply" name="Retip prediction" version="@TOOL_VERSION@+galaxy0">
+<tool id="retip_apply" name="Retip prediction" version="@TOOL_VERSION@+galaxy1">
     <description>is retention time predictor for Metabolomics</description>
     <macros>
         <import>macros.xml</import>
@@ -9,9 +9,9 @@
       ]]>
     </command>
     <inputs>
-        <param name="descr_train" label="Select Descriptors.Feather Dataset" type="data" format="h5"
+        <param name="descr_train" label="Select Descriptors.h5 Dataset" type="data" format="h5"
                optional="false"/>
-        <param name="model_hdf5" label="Select Model.hdf5 Dataset" type="data" format="h5" optional="false"/>
+        <param name="model_hdf5" label="Select Model.h5 Dataset" type="data" format="h5" optional="false"/>
         <param name="input_smiles" label="Select Input Dataset" type="data" format="tabular" optional="false"/>
     </inputs>
     <outputs>
@@ -19,8 +19,8 @@
     </outputs>
     <tests>
         <test expect_num_outputs="1">
-            <param name="descr_train" value="descriptors.feather"/>
-            <param name="model_hdf5" value="model.hdf5"/>
+            <param name="descr_train" value="descriptors.h5"/>
+            <param name="model_hdf5" value="model.h5"/>
             <param name="input_smiles" value="input.tsv"/>
             <output name="output1" file="output.tsv" ftype="tabular" compare="sim_size" delta="50"/>
         </test>

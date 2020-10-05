@@ -1,24 +1,24 @@
-<tool id="retip_train" name="Retip training" version="@TOOL_VERSION@+galaxy0">
+<tool id="retip_train" name="Retip training" version="@TOOL_VERSION@+galaxy1">
     <description>the Keras model to predict retention times</description>
     <macros>
         <import>macros.xml</import>
     </macros>
     <expand macro="requirements"/>
     <command detect_errors="exit_code"><![CDATA[
-            /run.sh trainKeras.R '$descr_train' 'model.hdf5'
+            /run.sh trainKeras.R '$descr_train' 'model.h5'
       ]]>
     </command>
     <inputs>
-        <param name="descr_train" label="Select Descriptors.Feather Dataset" type="data" format="h5"
+        <param name="descr_train" label="Select Descriptors.h5 Dataset" type="data" format="h5"
                optional="false"/>
     </inputs>
     <outputs>
-        <data format="h5" name="output1" label="Model.hdf5 Dataset" from_work_dir="model.hdf5"/>
+        <data format="h5" name="output1" label="Model.h5 Dataset" from_work_dir="model.h5"/>
     </outputs>
     <tests>
         <test expect_num_outputs="1">
-            <param name="descr_train" value="descriptors.feather"/>
-            <output name="output1" file="model.hdf5" ftype="h5" compare="sim_size" delta="1000"/>
+            <param name="descr_train" value="descriptors.h5"/>
+            <output name="output1" file="model.h5" ftype="h5" compare="sim_size" delta="1000"/>
         </test>
     </tests>
     <help><![CDATA[
