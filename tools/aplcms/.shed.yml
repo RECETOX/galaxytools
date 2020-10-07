@@ -9,8 +9,10 @@ repositories:
     include:
       - aplcms_unsupervised.xml
       - aplcms_macros.xml
+      - test-data
   recetox_aplcms_hybrid:
     description: "Generate a feature table from a batch of LC/MS spectra using apLCMS's Hybrid method."
     include:
       - aplcms_hybrid.xml
       - aplcms_macros.xml
+      - test-data
