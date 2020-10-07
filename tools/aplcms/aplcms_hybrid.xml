@@ -11,7 +11,7 @@
         Rscript
             -e 'x <- apLCMS::hybrid(
                     files = c("$file_str"),
-                    known_table = rhdf5::h5read("$known_table", "aplcms_known_table"),
+                    known_table = apLCMS::load_known_table_from_hdf("$known_table"),
                     min_exp = $noise_filtering.min_exp,
                     min_pres = $noise_filtering.min_pres,
                     min_run = $noise_filtering.min_run,
@@ -38,13 +38,8 @@
                     use_observed_range = $weak_signal_recovery.use_observed_range,
                     recover_min_count = $weak_signal_recovery.recover_min_count
                 )'
-            -e 'rhdf5::h5write(x\$final_peaks, "$peaks", "peaks")'
-            -e 'rhdf5::h5write(x\$aligned_peaks, "$peaks", "aligned_peaks")'
-            -e 'rhdf5::h5write(x\$corrected_features, "$peaks", "corrected_features")'
-            -e 'rhdf5::h5write(x\$extracted_features, "$peaks", "extracted_features")'
-            -e 'rhdf5::h5write(x\$aligned_mz_tolerance, "$peaks", "aligned_mz_tolerance")'
-            -e 'rhdf5::h5write(x\$aligned_rt_tolerance, "$peaks", "aligned_rt_tolerance")'
-            -e 'rhdf5::h5write(x\$updated_known_table, "$updated_known_table", "aplcms_known_table")'
+            -e 'apLCMS::save_peaks_to_hdf("$peaks", x)'
+            -e 'apLCMS::save_known_table_to_hdf("$updated_known_table", x\$updated_known_table)'
     ]]></command>
 
     <expand macro="inputs">
