@@ -55,6 +55,14 @@
         <data name="updated_known_table" format="h5" />
     </outputs>
 
+    <tests>
+        <test>
+            <param name="files" value="mbr_test0.mzml,mbr_test1.mzml,mbr_test2.mzml" ftype="mzml"/>
+            <param name="known_table" value="known_table.h5" ftype="h5"/>
+            <output name="peaks" file="peaks_hybrid.h5" ftype="h5" compare="sim_size" delta="1000"/>
+        </test>
+    </tests>
+
     <help>
         This is the Hybrid version of apLCMS which is incorporating the knowledge of known metabolites and historically
         detected features on the same machinery to help detect and quantify lower-intensity peaks.

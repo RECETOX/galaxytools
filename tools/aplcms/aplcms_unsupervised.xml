@@ -52,7 +52,7 @@
     <tests>
         <test>
             <param name="files" value="mbr_test0.mzml,mbr_test1.mzml,mbr_test2.mzml" ftype="mzml"/>
-            <output name="peaks" file="peaks.h5" ftype="h5" compare="sim_size" delta="1000"/>
+            <output name="peaks" file="peaks_unsupervised.h5" ftype="h5" compare="sim_size" delta="1000"/>
         </test>
     </tests>
 
