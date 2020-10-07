@@ -3,7 +3,7 @@
 
     <xml name="requirements">
         <requirements>
-            <container type="docker">recetox/aplcms:latest</container>
+            <container type="docker">recetox/aplcms:6.6.6-recetox1</container>
         </requirements>
     </xml>
 
@@ -16,7 +16,7 @@
     </xml>
 
     <xml name="history_db">
-        <param name="known_table" type="data" format="aplcms_history.feather" label="known_table"
+        <param name="known_table" type="data" format="h5" label="known_table"
                help="A data table containing the known metabolite ions and previously found features. The table must contain these 18 columns: chemical_formula (optional), HMDB_ID (optional), KEGG_compound_ID (optional), neutral.mass (optional), ion.type (the ion form - optional), m.z (either theoretical or mean observed m/z value of previously found features), Number_profiles_processed (the total number of processed samples to build this database), Percent_found (the percentage of historically processed samples in which the feature appeared), mz_min (minimum  observed m/z value), mz_max (maximum observed m/z value), RT_mean (mean observed retention time), RT_sd (standard deviation of observed retention time), RT_min (minimum observed retention time), RT_max (maximum observed retention time), int_mean.log. (mean observed log intensity), int_sd.log. (standard deviation of observed log intensity), int_min.log. (minimum observed log intensity), int_max.log. (maximum observed log intensity)." />
         <section name="history_db" title="Known-Table settings">
             <param name="match_tol_ppm" type="integer" optional="true" min="0" label="match_tol_ppm (optional)"

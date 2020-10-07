@@ -1,4 +1,4 @@
-<tool id="recetox_aplcms_hybrid" name="apLCMS - Hybrid" version="@TOOL_VERSION@+galaxy0">
+<tool id="recetox_aplcms_hybrid" name="apLCMS - Hybrid" version="@TOOL_VERSION@+galaxy1">
     <macros>
         <import>aplcms_macros.xml</import>
     </macros>
@@ -11,7 +11,7 @@
         Rscript
             -e 'x <- apLCMS::hybrid(
                     files = c("$file_str"),
-                    known_table = rhdf5::h5read("$known_table", "aplcms_known_table"),
+                    known_table = apLCMS::load_known_table_from_hdf("$known_table"),
                     min_exp = $noise_filtering.min_exp,
                     min_pres = $noise_filtering.min_pres,
                     min_run = $noise_filtering.min_run,
@@ -38,13 +38,8 @@
                     use_observed_range = $weak_signal_recovery.use_observed_range,
                     recover_min_count = $weak_signal_recovery.recover_min_count
                 )'
-            -e 'rhdf5::h5write(x\$final_peaks, "$peaks", "peaks")'
-            -e 'rhdf5::h5write(x\$aligned_peaks, "$peaks", "aligned_peaks")'
-            -e 'rhdf5::h5write(x\$corrected_features, "$peaks", "corrected_features")'
-            -e 'rhdf5::h5write(x\$extracted_features, "$peaks", "extracted_features")'
-            -e 'rhdf5::h5write(x\$aligned_mz_tolerance, "$peaks", "aligned_mz_tolerance")'
-            -e 'rhdf5::h5write(x\$aligned_rt_tolerance, "$peaks", "aligned_rt_tolerance")'
-            -e 'rhdf5::h5write(x\$updated_known_table, "$updated_known_table", "aplcms_known_table")'
+            -e 'apLCMS::save_peaks_to_hdf("$peaks", x)'
+            -e 'apLCMS::save_known_table_to_hdf("$updated_known_table", x\$updated_known_table)'
     ]]></command>
 
     <expand macro="inputs">
@@ -59,6 +54,14 @@
         <data name="peaks" format="h5" />
         <data name="updated_known_table" format="h5" />
     </outputs>
+
+    <tests>
+        <test>
+            <param name="files" value="mbr_test0.mzml,mbr_test1.mzml,mbr_test2.mzml" ftype="mzml"/>
+            <param name="known_table" value="known_table.h5" ftype="h5"/>
+            <output name="peaks" file="peaks_hybrid.h5" ftype="h5" compare="sim_size" delta="1000"/>
+        </test>
+    </tests>
 
     <help>
         This is the Hybrid version of apLCMS which is incorporating the knowledge of known metabolites and historically

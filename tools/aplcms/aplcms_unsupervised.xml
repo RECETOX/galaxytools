@@ -1,4 +1,4 @@
-<tool id="recetox_aplcms_unsupervised" name="apLCMS - Unsupervised" version="@TOOL_VERSION@+galaxy0">
+<tool id="recetox_aplcms_unsupervised" name="apLCMS - Unsupervised" version="@TOOL_VERSION@+galaxy1">
     <macros>
         <import>aplcms_macros.xml</import>
     </macros>
@@ -35,12 +35,7 @@
                     use_observed_range = $weak_signal_recovery.use_observed_range,
                     recover_min_count = $weak_signal_recovery.recover_min_count
                 )'
-            -e 'rhdf5::h5write(x\$final_peaks, "$peaks", "peaks")'
-            -e 'rhdf5::h5write(x\$aligned_peaks, "$peaks", "aligned_peaks")'
-            -e 'rhdf5::h5write(x\$corrected_features, "$peaks", "corrected_features")'
-            -e 'rhdf5::h5write(x\$extracted_features, "$peaks", "extracted_features")'
-            -e 'rhdf5::h5write(x\$aligned_mz_tolerance, "$peaks", "aligned_mz_tolerance")'
-            -e 'rhdf5::h5write(x\$aligned_rt_tolerance, "$peaks", "aligned_rt_tolerance")'
+            -e 'apLCMS::save_peaks_to_hdf("$peaks", x)'
     ]]></command>
 
     <expand macro="inputs">
@@ -53,6 +48,13 @@
     <outputs>
         <data name="peaks" format="h5" />
     </outputs>
+
+    <tests>
+        <test>
+            <param name="files" value="mbr_test0.mzml,mbr_test1.mzml,mbr_test2.mzml" ftype="mzml"/>
+            <output name="peaks" file="peaks_unsupervised.h5" ftype="h5" compare="sim_size" delta="1000"/>
+        </test>
+    </tests>
 
     <help>
         This is the Unsupervised version of apLCMS which is not relying on any existing knowledge about metabolites or
