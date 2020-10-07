@@ -3,32 +3,34 @@
         <import>xmsannotator_macros.xml</import>
     </macros>
 
-    <expand macro="requirements"/>
+    <requirements>
+        <container type="docker">@DOCKER_IMAGE@</container>
+    </requirements>
 
-    <command detect_errors="exit_code"><![CDATA[
+    <command detect_errors="aggressive"><![CDATA[
         #set expected_adducts = ['"{}"'.format($i.adduct) for $i in $scoring.expected_adducts]
         #set expected_adducts = "c(" + ', '.join($expected_adducts) + ")"
 
         Rscript -e 'annotation <- xmsannotator::advanced_annotation(
-                        peaks = rhdf5::h5read("$peaks", "peaks"),
-                        adducts = rhdf5::h5read("$adducts", "adducts"),
-                        metabolites = rhdf5::h5read("$metabolites", "metabolites"),
+                        peaks = xmsannotator::load_hdf("$peaks", "peaks"),
+                        adducts = xmsannotator::load_hdf("$adducts", "adducts"),
+                        compounds = xmsannotator::load_hdf("$compounds", "compounds"),
 
-                        mz_tolerance_ppm = as.double($mz_tolerance_ppm),
-                        rt_tolerance = as.double($rt_tolerance),
+                        mass_tolerance = 1e-6 * $mz_tolerance_ppm
+                        time_tolerance = $rt_tolerance,
 
                         correlation_threshold = as.double($clustering.correlation_threshold),
                         min_cluster_size = as.integer($clustering.min_cluster_size),
                         deep_split = as.integer($clustering.deep_split),
                         network_type = "$clustering.network_type",
 
-                        #if $scoring.boost_metabolites
-                            boost_metabolites = rhdf5::h5read("$scoring.boost_metabolites", "boost_metabolites"),
+                        expected_adducts = as.character($expected_adducts),
+                        #if $scoring.boost
+                            boost = xmsannotator::load_hdf("$scoring.boost", "boost"),
                         #end if
-
-                        expected_adducts = as.character($expected_adducts)
+                        redundancy_filtering = $scoring.redundancy_filtering
                    )'
-                -e 'rhdf5::h5write(annotation, "$annotation", "annotation")'
+                -e 'xmsannotator::save_hdf("$annotation", "annotation", annotation)'
     ]]></command>
 
     <inputs>
@@ -50,19 +52,19 @@
         </section>
 
         <section name="scoring" title="Scoring" expanded="true">
-            <param name="boost_metabolites" type="data" format="h5" optional="true" label="Validated metabolites score boosting (optional)" help="Table of previously validated metabolites to boost their confidence scores. The 1st column of the table must contain IDs of metabolites. The optional 2nd and 3rd columns may contain mz values and retention times."/>
+            <param name="strict_boosting" type="boolean" checked="true" truevalue="TRUE" falsevalue="FALSE" label="Strict boosting" help="Boost the scores of metabolites that not only belongs to the same pathway but also to the same cluster. Otherwise, do not account for cluster membership."/>
             <repeat name="expected_adducts" title="Expected adducts" help="Require the presence of certain adducts for a high confidence match.">
                 <param name="adduct" type="text" value="M+H" label="Adduct"/>
             </repeat>
+            <param name="boost" type="data" format="h5" optional="true" label="Validated compounds score boosting (optional)" help="Table of previously validated compounds to boost their scores and confidence levels. The 1st column of the table must contain IDs of compounds. The optional 2nd and 3rd columns may contain mz values and retention times."/>
             <param name="min_isp" type="integer" min="0" value="1" label="Minimum number of expected isotopes" help="Minimum number of adducts/isotopes to be present for a match to be considered as a high confidence match."/>
             <param name="max_isp" type="integer" min="0" value="5" label="Maximum number of expected isotopes" help="Maximum number of adducts/isotopes to be present for a match to be considered as a high confidence match."/>
-            <param name="strict_boosting" type="boolean" checked="true" truevalue="TRUE" falsevalue="FALSE" label="Strict boosting" help="Boost the scores of metabolites that not only belongs to the same pathway but also to the same cluster. Otherwise, do not account for cluster membership."/>
-            <param name="redundancy_filtering" type="boolean" checked="true" truevalue="TRUE" falsevalue="FALSE" label="Redundancy filtering" help="Whether to perform final redundancy filtering or not."/>
+            <param name="redundancy_filtering" type="boolean" checked="true" truevalue="TRUE" falsevalue="FALSE" label="Redundancy filtering" help="Whether to filter out low-scored multiple matcher or not."/>
         </section>
     </inputs>
 
     <outputs>
-        <expand macro="output"/>
+        <data format="h5" name="annotation"/>
     </outputs>
 
     <help><![CDATA[
@@ -72,5 +74,6 @@
         A metabolite-adduct pair is pronounced as a match to the peak when the difference of their masses are withing some tolerance.
         Then a score and a confidence level is assigned to each match based on peak correlation clustering, metabolite pathway associations, adducts expectations, and isotope conformations.
     ]]></help>
+
     <expand macro="citations"/>
 </tool>
