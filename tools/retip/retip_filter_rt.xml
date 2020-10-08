@@ -10,8 +10,8 @@
     </command>
     <inputs>
         <param name="tolerance" label="Select Tolerance Value" type="integer" value="" min="0" max="100"
-               help="0-100" optional="false"/>
-        <param name="input_smiles" label="Select Input Dataset" type="data" format="h5"/>
+               help="Value must be between [0 - 100]" optional="false"/>
+        <param name="input_smiles" label="Select Input Dataset" type="data" format="h5" optional="false"/>
     </inputs>
     <outputs>
         <data format="h5" name="output1" label="Predicted RT" from_work_dir="output_file"/>
