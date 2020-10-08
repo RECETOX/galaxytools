@@ -3,23 +3,26 @@
         <import>xmsannotator_macros.xml</import>
     </macros>
 
-    <expand macro="requirements"/>
+    <requirements>
+        <container type="docker">@DOCKER_IMAGE@</container>
+    </requirements>
 
     <command detect_errors="aggressive"><![CDATA[
         Rscript -e 'annotation <- xmsannotator::simple_annotation(
-                        peaks = rhdf5::h5read("$peaks", "peaks"),
-                        adducts = rhdf5::h5read("$adducts", "adducts"),
-                        metabolites = rhdf5::h5read("$metabolites", "metabolites"),
-                        mz_tolerance_ppm = as.double($mz_tolerance_ppm)
+                        peaks = xmsannotator::load_hdf("$peaks", "peaks"),
+                        adducts = xmsannotator::load_hdf("$adducts", "adducts"),
+                        compounds = xmsannotator::load_hdf("$compounds", "compounds"),
+                        mass_tolerance = 1e-6 * $mz_tolerance_ppm
                    )'
-                -e 'rhdf5::h5write(annotation, "$annotation", "annotation")'
+                -e 'xmsannotator::save_hdf("$annotation", "annotation", annotation)'
     ]]></command>
 
     <inputs>
         <expand macro="annotation"/>
     </inputs>
+
     <outputs>
-        <expand macro="output"/>
+        <data format="h5" name="annotation"/>
     </outputs>
 
     <help><![CDATA[
@@ -28,5 +31,6 @@
         The annotation process generates all possible metabolite-adduct pairs from the metabolite and adduct databases and matches those pairs to the measured peaks.
         A metabolite-adduct pair is pronounced as a match to the peak when the difference of their masses are withing some tolerance.
     ]]></help>
+
     <expand macro="citations"/>
 </tool>
