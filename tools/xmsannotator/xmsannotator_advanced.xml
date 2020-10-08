@@ -16,7 +16,7 @@
                         adducts = xmsannotator::load_hdf("$adducts", "adducts"),
                         compounds = xmsannotator::load_hdf("$compounds", "compounds"),
 
-                        mass_tolerance = 1e-6 * $mz_tolerance_ppm
+                        mass_tolerance = 1e-6 * $mz_tolerance_ppm,
                         time_tolerance = $rt_tolerance,
 
                         correlation_threshold = as.double($clustering.correlation_threshold),
