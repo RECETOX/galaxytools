@@ -1,0 +1,35 @@
+<tool id="retip_filter_rt" name="Retip filter" version="@TOOL_VERSION@+galaxy0">
+    <description>for predicted RT's</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="requirements"/>
+    <command detect_errors="exit_code"><![CDATA[
+               /run.sh filter_rt.R '$tolerance' '$input_smiles' 'output_file'
+      ]]>
+    </command>
+    <inputs>
+        <param name="tolerance" label="Select Tolerance Value" type="integer" value="" min="0" max="100"
+               help="Value must be between [0 - 100]" optional="false"/>
+        <param name="input_smiles" label="Select Input Dataset" type="data" format="h5" optional="false"/>
+    </inputs>
+    <outputs>
+        <data format="h5" name="output1" label="Predicted RT" from_work_dir="output_file"/>
+    </outputs>
+    <tests>
+        <test expect_num_outputs="1">
+            <param name="tolerance" value="10"/>
+            <param name="input_smiles" value="input_rt_filter.h5"/>
+            <output name="output1" file="output_rt_filter.h5" ftype="h5" compare="sim_size" delta="50"/>
+        </test>
+    </tests>
+    <help><![CDATA[
+.. class:: infomark
+
+This tool is used for Predicted Retention Time **Filtering**.
+
+@HELP@
+        ]]>
+    </help>
+    <expand macro="citations"/>
+</tool>

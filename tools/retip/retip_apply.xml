@@ -1,28 +1,38 @@
-<tool id="retip_apply" name="Retip prediction" version="@TOOL_VERSION@+galaxy1">
+<tool id="retip_apply" name="Retip prediction" version="@TOOL_VERSION@+galaxy2">
     <description>is retention time predictor for Metabolomics</description>
     <macros>
         <import>macros.xml</import>
     </macros>
     <expand macro="requirements"/>
     <command detect_errors="exit_code"><![CDATA[
-           /run.sh spell.R '$descr_train' '$model_hdf5' '$input_smiles' 'output.tsv'
+            #if $input_smiles.is_of_type('tabular')
+               /run.sh spell.R '$descr_train' '$model_h5' '$input_smiles' 'output_file'
+            #else
+               /run.sh spell_h5.R '$descr_train' '$model_h5' '$input_smiles' 'output_file'
+            #end if
       ]]>
     </command>
     <inputs>
-        <param name="descr_train" label="Select Descriptors.h5 Dataset" type="data" format="h5"
+        <param name="descr_train" label="Select Descriptors.h5 Dataset" type="data" format="h5" optional="false"/>
+        <param name="model_h5" label="Select Model.h5 Dataset" type="data" format="h5" optional="false"/>
+        <param format="tabular,h5" name="input_smiles" type="data" label="Select Input Smiles tsv or h5 Dataset"
                optional="false"/>
-        <param name="model_hdf5" label="Select Model.h5 Dataset" type="data" format="h5" optional="false"/>
-        <param name="input_smiles" label="Select Input Dataset" type="data" format="tabular" optional="false"/>
     </inputs>
     <outputs>
-        <data format="tabular" name="output1" label="Predicted RT" from_work_dir="output.tsv"/>
+        <data format_source="input_smiles" name="output1" label="Predicted RT" from_work_dir="output_file"/>
     </outputs>
     <tests>
         <test expect_num_outputs="1">
             <param name="descr_train" value="descriptors.h5"/>
-            <param name="model_hdf5" value="model.h5"/>
+            <param name="model_h5" value="model.h5"/>
             <param name="input_smiles" value="input.tsv"/>
             <output name="output1" file="output.tsv" ftype="tabular" compare="sim_size" delta="50"/>
+        </test>
+        <test expect_num_outputs="1">
+            <param name="descr_train" value="descriptors.h5"/>
+            <param name="model_h5" value="model.h5"/>
+            <param name="input_smiles" value="input.h5"/>
+            <output name="output1" file="output.h5" ftype="h5" compare="sim_size" delta="50"/>
         </test>
     </tests>
     <help><![CDATA[
