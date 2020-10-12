@@ -5,20 +5,26 @@
     </macros>
     <expand macro="requirements"/>
     <command detect_errors="exit_code"><![CDATA[
-               /run.sh filter_rt.R '$tolerance' '$input_smiles' 'output_file'
+               /run.sh filter_rt.R --tolerance '$tolerance' --mode '$filtering_mode' '$input_smiles' 'output_file'
       ]]>
     </command>
     <inputs>
-        <param name="tolerance" label="Select Tolerance Value" type="integer" value="" min="0" max="100"
+        <param name="filtering_mode" type="select" label="Filtering Mode">
+            <option value="absolute" selected="True">Absolute</option>
+            <option value="relative">Relative</option>
+            <option value="order">Order</option>
+        </param>
+        <param name="tolerance" label="Tolerance" type="integer" value="30" min="0" max="100"
                help="Value must be between [0 - 100]" optional="false"/>
         <param name="input_smiles" label="Select Input Dataset" type="data" format="h5" optional="false"/>
     </inputs>
     <outputs>
-        <data format="h5" name="output1" label="Predicted RT" from_work_dir="output_file"/>
+        <data format="h5" name="output1" label="Filtered RT" from_work_dir="output_file"/>
     </outputs>
     <tests>
         <test expect_num_outputs="1">
-            <param name="tolerance" value="10"/>
+            <param name="filtering_mode" value="absolute"/>
+            <param name="tolerance" value="30"/>
             <param name="input_smiles" value="input_rt_filter.h5"/>
             <output name="output1" file="output_rt_filter.h5" ftype="h5" compare="sim_size" delta="50"/>
         </test>
@@ -26,7 +32,15 @@
     <help><![CDATA[
 .. class:: infomark
 
-This tool is used for Predicted Retention Time **Filtering**.
+This tool is used for **Filtering** predicted retention time.
+
+This tool supports three filtering modes:
+
+- absolute (original): only records with \|RT - RTP\| < tolerance pass
+- relative: both RT and RTP are mapped to [0;1] first (independently) and compared on this scale
+- order: only relative order of RT and RTP is taken in account for comparison
+
+In all modes, tolerance is specified in percent.
 
 @HELP@
         ]]>
