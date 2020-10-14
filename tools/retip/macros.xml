@@ -11,7 +11,7 @@
         </citations>
     </xml>
     <token name="@HELP@"><![CDATA[
-Retip is an R package for predicting Retention Time (RT) for small molecules in a high pressure liquid
+**Retip** is an R package for predicting Retention Time (RT) for small molecules in a high pressure liquid
 chromatography (HPLC) Mass Spectrometry analysis. Retention time calculation can be useful in identifying
 unknowns and removing false positive annotations. It uses five different machine learning algorithms to built a
 stable, accurate and fast RT prediction model:
