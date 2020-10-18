@@ -4,13 +4,13 @@ homepage_url: "http://web1.sph.emory.edu/apLCMS/"
 categories:
   - Metabolomics
 repositories:
-  recetox_aplcms_unsupervised:
+  aplcms_unsupervised:
     description: "Generate a feature table from a batch of LC/MS spectra using apLCMS's Unsupervised method."
     include:
       - aplcms_unsupervised.xml
       - aplcms_macros.xml
       - test-data
-  recetox_aplcms_hybrid:
+  aplcms_hybrid:
     description: "Generate a feature table from a batch of LC/MS spectra using apLCMS's Hybrid method."
     include:
       - aplcms_hybrid.xml
