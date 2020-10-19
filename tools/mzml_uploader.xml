@@ -4,7 +4,7 @@
         <requirement type="set_environment">mzML_profile must be a subdirectory of batch_path</requirement>
     </requirements>
     <command detect_errors="aggressive"><![CDATA[
-python '$__tool_directory__/sally_uploader.py' -d '$export_dir' -p "/mnt/d/galaxy/sally"
+python '$__tool_directory__/sally_uploader.py' -d '$export_dir' -p "/mnt/sally"
 #for $d in $datasets
     '${d}' '${d.hid}: ${d.element_identifier}' '${d.ext}'
 #end for
