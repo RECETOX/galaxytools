@@ -1,0 +1,29 @@
+<tool id="mzml_uploader" name="mzML Uploader" version="0.0.1">
+    <description> to NFS</description>
+    <requirements>
+        <requirement type="set_environment">mzML_profile must be a subdirectory of batch_path</requirement>
+    </requirements>
+    <command detect_errors="aggressive"><![CDATA[
+python '$__tool_directory__/sally_uploader.py' -d '$export_dir' -p "/mnt/d/galaxy/sally"
+#for $d in $datasets
+    '${d}' '${d.hid}: ${d.element_identifier}' '${d.ext}'
+#end for
+> '$log'
+    ]]></command>
+    <inputs>
+        <param name="datasets" type="data" format="data" multiple="true" label="Datasets to export" />
+        <param name="batch_path" type="text" value="" label="Directory where RAW_profile and mzML_profile reside" help="No slash before first dir (e.g. some/path)">
+            <validator type="empty_field" />
+            <sanitizer sanitize="false" />
+        </param>
+    </inputs>
+    <outputs>
+        <data name="log" format="txt" />
+    </outputs>
+    <tests>
+    </tests>
+    <help><![CDATA[
+Simple tool to copy datasets to a directory on the cluster.
+    ]]></help>
+    <citations/>
+</tool>
