@@ -1,0 +1,29 @@
+<tool id="export_to_path" name="export to path" version="0.0.1">
+    <description> on Sally</description>
+    <requirements>
+        <requirement type="package" version="3.6">python</requirement>
+    </requirements>
+    <command detect_errors="aggressive"><![CDATA[
+python '$__tool_directory__/export_to_path.py' -d '$export_dir'
+#for $d in $datasets
+    '${d}' '${d.hid}: ${d.element_identifier}' '${d.ext}'
+#end for
+> '$log'
+    ]]></command>
+    <inputs>
+        <param name="datasets" type="data" format="data" multiple="true" label="Datasets to export" />
+        <param name="export_dir" type="text" value="" label="Directory where RAW_profile and mzML_profile reside" help="relative path to Sally's home e.g. share/path/to/project">
+            <validator type="empty_field" />
+            <sanitizer sanitize="false" />
+        </param>
+    </inputs>
+    <outputs>
+        <data name="log" format="txt" />
+    </outputs>
+    <tests>
+    </tests>
+    <help><![CDATA[
+Simple tool to copy datasets to a directory on the cluster.
+    ]]></help>
+    <citations/>
+</tool>

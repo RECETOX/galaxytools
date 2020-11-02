@@ -1,0 +1,9 @@
+categories:
+- Data Export
+description: Export datasets to given folder
+homepage_url: https://github.com/RECETOX/galaxytools/
+long_description: Simple tool to copy datasets to a directory on the cluster.
+name: export_to_cluster
+owner: recetox
+remote_repository_url: https://github.com/RECETOX/galaxytools/tree/master/tools/export_to_dir/
+type: unrestricted
