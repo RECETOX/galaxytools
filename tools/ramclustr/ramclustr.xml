@@ -1,0 +1,27 @@
+<tool id="ramclustr" name="RAMClustR" version="@TOOL_VERSION@+galaxy1">
+
+    <macros>
+        <import>ramclustr_macros.xml</import>
+    </macros>
+
+    <requirements>
+
+    </requirements>
+    <command detect_errors="aggressive"><![CDATA[
+        Rscript 
+            -e 'x <- RAMClustR::ramclustR()'
+            -e 'save(x, file = "$result")'
+    ]]></command>
+
+    <expand macro="inputs">
+        <expand macro="parameters" />
+    </expand>
+
+    <outputs>
+        <data name="result" format="Rda" />
+    </outputs>
+
+    <help><![CDATA[
+        TODO: Fill in help.
+    ]]></help>
+</tool>
