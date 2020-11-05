@@ -16,39 +16,7 @@
 
     <inputs>
         <param name="xcmsObj" label="xcmsObj" type="data" format="xcmsObject" help=": containing grouped feature data for clustering by ramclustR" />
-        <section name="params" title="Parameters">
-            <param label="ms" name="ms" type="data" format="filepath" help=": optional csv input. Features as columns, rows as samples. Column header mz_rt" />
-            <param label="idmsms" name="idmsms" type="data" format="filepath" help=": optional idMSMS / MSe csv data.  same dim and names as ms required" />
-            <param label="MStag" name="MStag" type="data" format="character" help=": character string in 'taglocation' to designat MS / MSe files e.g. '01.cdf'" />
-            <param label="idMSMStag" name="idMSMStag" type="data" format="character" help=": character string in 'taglocation' to designat idMSMS / MSe files e.g. '02.cdf'" />
-            <param label="taglocation" name="taglocation" type="data" format="character" help=": 'filepaths' by default, 'phenoData[,1]' is another option. referse to xcms slot" />
-            <param label="featdelim" name="featdelim" type="data" format="character" help=": how feature mz and rt are delimited in csv import column header e.g. ='-'" />
-            <param label="timepos" name="timepos" type="data" format="integer" help=": which position in delimited column header represents the retention time (csv only)" />
-            <param label="st" name="st" type="data" format="float" help=": sigma t - time similarity decay value " />
-            <param label="sr" name="sr" type="data" format="float" help=": sigma r - correlational similarity decay value" />
-            <param label="maxt" name="maxt" type="data" format="numeric" help=": maximum time difference to calculate retention similarity for - all values beyond this are assigned similarity of zero" />
-            <param label="deepSplit" name="deepSplit" type="data" format="boolean" help=": controls how agressively the HCA tree is cut - see ?cutreeDynamicTree" />
-            <param label="blocksize" name="blocksize" type="data" format="integer" help=": number of features (scans?) processed in one block  =1000," />
-            <param label="mult" name="mult" type="data" format="numeric" help=": internal value, can be used to influence processing speed/ram usage" />
-            <param label="hmax" name="hmax" type="data" format="float" value="0.3" help=": precut the tree at this height, default 0.3 - see ?cutreeDynamicTree" />
-            <param label="sampNameCol" name="sampNameCol" type="data" format="integer" help=": which column from the csv file contains sample names?" />
-            <param label="collapse" name="collapse" type="data" format="boolean" help=": reduce feature intensities to spectrum intensities?" />
-            <param label="usePheno" name="usePheno" type="data" format="boolean" help=": tranfer phenotype data from XCMS object to SpecAbund dataset?" />
-            <param label="mspout" name="mspout" type="data" format="boolean" help=": write msp formatted specta to file?" />
-            <param label="ExpDes" name="ExpDes" type="data" format="either" help=" an R object created by R ExpDes object: data used for record keeping and labelling msp spectral output" />
-            <param label="normalize" name="normalize" type="data" format="character" help=": either 'none', 'TIC', 'quantile', or 'batch.qc' normalization of feature intensities.  see batch.qc overview in details. " />
-            <param label="qc.inj.range" name="qc.inj.range" type="data" format="integer" help="how many injections around each injection are to be scanned for presence of QC samples when using batch.qc normalization?  A good rule of thumb is between 1 and 3 times the typical injection span between QC injections.  i.e. if you inject QC ever 7 samples, set this to between 7 and 21.  smaller values provide more local precision but make normalization sensitive to individual poor outliers (though these are first removed using the boxplot function outlier detection), while wider values provide less local precision in normalization but better stability to individual peak areas." />
-            <param label="batch" name="batch" type="data" format="integer" help=" vector with length equal to number of injections in xset or csv file" />
-            <param label="order" name="order" type="data" format="integer" help=" vector with length equal to number of injections in xset or csv file" />
-            <param label="qc" name="qc" type="data" format="boolean" help=" vector with length equal to number of injections in xset or csv file.  " />
-            <param label="minModuleSize" name="minModuleSize" type="data" format="integer" help=": how many features must be part of a cluster to be returned? default = 2" />
-            <param label="linkage" name="linkage" type="data" format="character" help=": heirarchical clustering linkage method - see ?hclust" />
-            <param label="mzdec" name="mzdec" type="data" format="integer" help=": number of decimal places used in printing m/z values" />
-            <param label="cor.method" name="cor.method" type="data" format="character" help="which correlational method used to calculate 'r' - see ?cor" />
-            <param label="rt.only.low.n" name="rt.only.low.n" type="data" format="boolean" value="TRUE" help="At low injection numbers, correlational relationships of peak intensities may be unreliable.  by defualt ramclustR will simply ignore the correlational r value and cluster on retention time alone.  if you wish to use correlation with at n less than 5, set this value to FALSE." />
-            <param label="fftempdir" name="fftempdir" type="data" format="character" help="valid path: if there are file size limitations on the default ff pacakge temp directory  - getOptions('fftempdir') - you can change the directory used as the fftempdir with this option." />
-            <param label="replace.zeros" name="replace.zeros" type="data" format="boolean" value="TRUE" help="NA, NaN, and Inf values are replaced with zero, and zero values are sometimes returned from peak peaking.  When TRUE, zero values will be replaced with a small amount of noise, with noise level set based on the detected signal intensities for that feature. " />
-        </section>
+        <expand macro="parameters" />
     </inputs>
 
     <outputs>
