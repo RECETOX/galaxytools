@@ -2,7 +2,7 @@
     <token name="@TOOL_VERSION@">0.5.4</token>
     <xml name="requirements">
         <requirements>
-            <container type="docker">recetox/retip:@TOOL_VERSION@-recetox2</container>
+            <container type="docker">recetox/retip:@TOOL_VERSION@-recetox3</container>
         </requirements>
     </xml>
     <xml name="citations">
