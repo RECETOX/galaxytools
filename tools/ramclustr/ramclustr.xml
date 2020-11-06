@@ -9,13 +9,16 @@
 
     <command detect_errors="aggressive"><![CDATA[
         Rscript 
-            -e 'x <- RAMClustR::ramclustR(xcmsObj = $xcmsObj)'
+            -e 'obj <- load("$xcmsObj")'
+            -e 'x <- RAMClustR::ramclustR(
+                xcmsObj = xdata
+                )'
             -e 'save(x, file = "$result")'
     ]]>
     </command>
 
     <inputs>
-        <param name="xcmsObj" label="xcmsObj" type="data" format="xcmsObject" help=": containing grouped feature data for clustering by ramclustR" />
+        <param name="xcmsObj" label="xcmsObj" type="data" format="RData" help=": containing grouped feature data for clustering by ramclustR" />
         <expand macro="parameters" />
     </inputs>
 
