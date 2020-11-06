@@ -2,14 +2,15 @@
     <token name="@TOOL_VERSION@">1.1.0</token>
 
     <xml name="parameters">
-    <section name="ms_csv" title="Input MS Data as CSV">
-        <param label="ms" name="ms" type="data" format="csv" optional="true" help="Optional csv input. Features as columns, rows as samples. Column header mz_rt" />
+        <section name="ms_csv" title="Input MS Data as CSV">
+            <param label="ms" name="ms" type="data" format="csv" optional="true" help="Optional csv input. Features as columns, rows as samples. Column header mz_rt" />
+            <param label="idmsms" name="idmsms" type="data" format="csv" optional="true" help="Optional idMSMS / MSe csv data.  same dim and names as ms required" />
             <param label="sampNameCol" name="sampNameCol" type="integer" value="1" help="which column from the csv file contains sample names?" />
             <param label="featdelim" name="featdelim" type="text" value="_" help="Only required if ms input is set! How feature mz and rt are delimited in csv import column header e.g. ='-'" />
             <param label="timepos" name="timepos" type="integer" value="2" help="which position in delimited column header represents the retention time (csv only)" />
         </section>
+
         <section name="params" title="Parameters" expanded="true">
-            <param label="idmsms" name="idmsms" type="data" format="csv" optional="true" help="Optional idMSMS / MSe csv data.  same dim and names as ms required" />
             <param label="MStag" name="MStag" type="text" help="character string in 'taglocation' to designat MS / MSe files e.g. '01.cdf'" />
             <param label="idMSMStag" name="idMSMStag" type="text" help="character string in 'taglocation' to designat idMSMS / MSe files e.g. '02.cdf'" />
             <param label="taglocation" name="taglocation" type="text" value="filepaths" help="'filepaths' by default, 'phenoData[,1]' is another option. refers to xcms slot" />
@@ -21,9 +22,9 @@
             <param label="mult" name="mult" type="integer" value="5" help="internal value, can be used to influence processing speed/ram usage" />
             <param label="hmax" name="hmax" type="float" value="0.3" help="precut the tree at this height, default 0.3 - see ?cutreeDynamicTree" />
             <param label="collapse" name="collapse" type="boolean" value="TRUE" help="reduce feature intensities to spectrum intensities?" />
-            <param label="usePheno" name="usePheno" type="boolean" value="TRUE" help="tranfer phenotype data from XCMS object to SpecAbund dataset?" />
+            <param label="usePheno" name="usePheno" type="boolean" value="TRUE" help="transfer phenotype data from XCMS object to SpecAbund dataset?" />
             <param label="mspout" name="mspout" type="boolean" value="TRUE" help="write msp formatted spectra to file?" />
-            <param label="ExpDes" name="ExpDes" type="data" format="Rda" help=" an R object created by R ExpDes object: data used for record keeping and labelling msp spectral output" />
+            <param label="ExpDes" name="ExpDes" type="data" format="RData" help=" an R object created by R ExpDes object: data used for record keeping and labelling msp spectral output" />
             <param label="normalize" name="normalize" type="select" display="radio" help="either 'none', 'TIC', 'quantile', or 'batch.qc' normalization of feature intensities.  see batch.qc overview in details. ">
                 <option value="none" selected="true">none</option>
                 <option value="TIC">TIC</option>
