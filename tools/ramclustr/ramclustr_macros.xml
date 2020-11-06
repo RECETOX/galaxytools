@@ -13,8 +13,8 @@
             <param label="MStag" name="MStag" type="text" help="character string in 'taglocation' to designat MS / MSe files e.g. '01.cdf'" />
             <param label="idMSMStag" name="idMSMStag" type="text" help="character string in 'taglocation' to designat idMSMS / MSe files e.g. '02.cdf'" />
             <param label="taglocation" name="taglocation" type="text" value="filepaths" help="'filepaths' by default, 'phenoData[,1]' is another option. refers to xcms slot" />
-            <param label="st" name="st" type="float" value="0.5" help="sigma t - time similarity decay value " />
-            <param label="sr" name="sr" type="float" optional="true" help="sigma r - correlational similarity decay value" />
+            <param label="st" name="st" type="float" optional="true" help="sigma t - time similarity decay value " />
+            <param label="sr" name="sr" type="float" value="0.5" help="sigma r - correlational similarity decay value" />
             <param label="maxt" name="maxt" type="integer" optional="true" help="maximum time difference to calculate retention similarity for - all values beyond this are assigned similarity of zero" />
             <param label="deepSplit" name="deepSplit" type="boolean" value="FALSE" help="controls how agressively the HCA tree is cut - see ?cutreeDynamicTree" />
             <param label="blocksize" name="blocksize" type="integer" value="2000" help="number of features (scans?) processed in one block  =1000," />
