@@ -18,8 +18,12 @@
             -e 'obj <- load("$input_xcms")'
             -e 'x <- RAMClustR::ramclustR(
                 xcmsObj = xdata,
-                MStag = "$params.MStag",
-                idMSMStag = "$params.idMSMStag",
+                #if $params.MStag 
+                    MStag = "$params.MStag",
+                #end if
+                #if $params.idMSMStag 
+                    idMSMStag = "$params.idMSMStag",
+                #end if
                 taglocation = "$params.taglocation",
                 sr = $params.sr,
                 #if $params.st 

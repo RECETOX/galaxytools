@@ -11,8 +11,8 @@
         </section>
 
         <section name="params" title="Parameters" expanded="false">
-            <param label="MStag" name="MStag" type="text" help="character string in 'taglocation' to designat MS / MSe files e.g. '01.cdf'" />
-            <param label="idMSMStag" name="idMSMStag" type="text" help="character string in 'taglocation' to designat idMSMS / MSe files e.g. '02.cdf'" />
+            <param label="MStag" name="MStag" type="text" optional="true" help="character string in 'taglocation' to designat MS / MSe files e.g. '01.cdf'" />
+            <param label="idMSMStag" name="idMSMStag" type="text" optional="true" help="character string in 'taglocation' to designat idMSMS / MSe files e.g. '02.cdf'" />
             <param label="taglocation" name="taglocation" type="text" value="filepaths" help="'filepaths' by default, 'phenoData[,1]' is another option. refers to xcms slot" />
             <param label="st" name="st" type="float" optional="true" help="sigma t - time similarity decay value " />
             <param label="sr" name="sr" type="float" value="0.5" help="sigma r - correlational similarity decay value" />
