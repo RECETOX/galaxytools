@@ -3,13 +3,13 @@
 
     <xml name="parameters">
         <section name="params" title="Parameters" expanded="true">
-            <param label="ms" name="ms" type="file" format="csv" optional="true" help="Optional csv input. Features as columns, rows as samples. Column header mz_rt" />
-            <param label="idmsms" name="idmsms" type="file" format="csv" optional="true" help="Optional idMSMS / MSe csv data.  same dim and names as ms required" />
+            <param label="ms" name="ms" type="data" format="csv" optional="true" help="Optional csv input. Features as columns, rows as samples. Column header mz_rt" />
+            <param label="idmsms" name="idmsms" type="data" format="csv" optional="true" help="Optional idMSMS / MSe csv data.  same dim and names as ms required" />
             <param label="MStag" name="MStag" type="text" help="character string in 'taglocation' to designat MS / MSe files e.g. '01.cdf'" />
             <param label="idMSMStag" name="idMSMStag" type="text" help="character string in 'taglocation' to designat idMSMS / MSe files e.g. '02.cdf'" />
             <param label="taglocation" name="taglocation" type="text" value="filepaths" help="'filepaths' by default, 'phenoData[,1]' is another option. refers to xcms slot" />
             <param label="featdelim" name="featdelim" type="text" value="_" help="how feature mz and rt are delimited in csv import column header e.g. ='-'" />
-            <param label="timepos" name="timepos" type="integer" value="2" help=": which position in delimited column header represents the retention time (csv only)" />
+            <param label="timepos" name="timepos" type="integer" value="2" help="which position in delimited column header represents the retention time (csv only)" />
             <param label="st" name="st" type="float" optional="true" help="sigma t - time similarity decay value " />
             <param label="sr" name="sr" type="float" optional="true" help="sigma r - correlational similarity decay value" />
             <param label="maxt" name="maxt" type="integer" optional="true" help="maximum time difference to calculate retention similarity for - all values beyond this are assigned similarity of zero" />
