@@ -2,22 +2,24 @@
     <token name="@TOOL_VERSION@">1.1.0</token>
 
     <xml name="parameters">
+    <section name="ms_csv" title="Input MS Data as CSV">
+        <param label="ms" name="ms" type="data" format="csv" optional="true" help="Optional csv input. Features as columns, rows as samples. Column header mz_rt" />
+            <param label="sampNameCol" name="sampNameCol" type="integer" value="1" help="which column from the csv file contains sample names?" />
+            <param label="featdelim" name="featdelim" type="text" value="_" help="Only required if ms input is set! How feature mz and rt are delimited in csv import column header e.g. ='-'" />
+            <param label="timepos" name="timepos" type="integer" value="2" help="which position in delimited column header represents the retention time (csv only)" />
+        </section>
         <section name="params" title="Parameters" expanded="true">
-            <param label="ms" name="ms" type="data" format="csv" optional="true" help="Optional csv input. Features as columns, rows as samples. Column header mz_rt" />
             <param label="idmsms" name="idmsms" type="data" format="csv" optional="true" help="Optional idMSMS / MSe csv data.  same dim and names as ms required" />
             <param label="MStag" name="MStag" type="text" help="character string in 'taglocation' to designat MS / MSe files e.g. '01.cdf'" />
             <param label="idMSMStag" name="idMSMStag" type="text" help="character string in 'taglocation' to designat idMSMS / MSe files e.g. '02.cdf'" />
             <param label="taglocation" name="taglocation" type="text" value="filepaths" help="'filepaths' by default, 'phenoData[,1]' is another option. refers to xcms slot" />
-            <param label="featdelim" name="featdelim" type="text" value="_" help="how feature mz and rt are delimited in csv import column header e.g. ='-'" />
-            <param label="timepos" name="timepos" type="integer" value="2" help="which position in delimited column header represents the retention time (csv only)" />
-            <param label="st" name="st" type="float" optional="true" help="sigma t - time similarity decay value " />
+            <param label="st" name="st" type="float" value="0.5" help="sigma t - time similarity decay value " />
             <param label="sr" name="sr" type="float" optional="true" help="sigma r - correlational similarity decay value" />
             <param label="maxt" name="maxt" type="integer" optional="true" help="maximum time difference to calculate retention similarity for - all values beyond this are assigned similarity of zero" />
             <param label="deepSplit" name="deepSplit" type="boolean" value="FALSE" help="controls how agressively the HCA tree is cut - see ?cutreeDynamicTree" />
             <param label="blocksize" name="blocksize" type="integer" value="2000" help="number of features (scans?) processed in one block  =1000," />
             <param label="mult" name="mult" type="integer" value="5" help="internal value, can be used to influence processing speed/ram usage" />
             <param label="hmax" name="hmax" type="float" value="0.3" help="precut the tree at this height, default 0.3 - see ?cutreeDynamicTree" />
-            <param label="sampNameCol" name="sampNameCol" type="integer" value="1" help="which column from the csv file contains sample names?" />
             <param label="collapse" name="collapse" type="boolean" value="TRUE" help="reduce feature intensities to spectrum intensities?" />
             <param label="usePheno" name="usePheno" type="boolean" value="TRUE" help="tranfer phenotype data from XCMS object to SpecAbund dataset?" />
             <param label="mspout" name="mspout" type="boolean" value="TRUE" help="write msp formatted spectra to file?" />
