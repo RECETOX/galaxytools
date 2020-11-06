@@ -7,23 +7,49 @@
         <container type="docker">recetox/ramclustr:1.1.0-recetox0</container>
     </requirements>
 
+    <inputs>
+        <param name="input_xcms" label="input_xcms" type="data" format="RData" help=": containing grouped feature data for clustering by ramclustR" />
+        <expand macro="parameters" />
+    </inputs>
+
     <command detect_errors="aggressive"><![CDATA[
+    
         Rscript 
-            -e 'obj <- load("$xcmsObj")'
+            -e 'obj <- load("$input_xcms")'
             -e 'x <- RAMClustR::ramclustR(
-                xcmsObj = xdata
+                xcmsObj = xdata,
+                MStag = "$params.MStag",
+                idMSMStag = "$params.idMSMStag",
+                taglocation = "$params.taglocation",
+                sr = $params.sr,
+                #if $params.st 
+                    st = $params.st,
+                #end if
+                #if $params.maxt 
+                    maxt = $params.maxt,
+                #end if
+                deepSplit = $params.deepSplit,
+                blocksize = $params.blocksize,
+                mult = $params.mult,
+                hmax = $params.hmax,
+                collapse = $params.collapse,
+                usePheno = $params.usePheno,
+                mspout = $params.mspout,
+                qc.inj.range = $params.qc_inj_range,
+                normalize = "$params.normalize",
+                minModuleSize = $params.minModuleSize,
+                linkage = $params.linkage,
+                mzdec = $params.mzdec,
+                cor.method = "$params.cor_method",
+                rt.only.low.n = $params.rt_only_low_n,
+                replace.zeros = $params.replace_zeros
                 )'
             -e 'save(x, file = "$result")'
     ]]>
     </command>
 
-    <inputs>
-        <param name="xcmsObj" label="xcmsObj" type="data" format="RData" help=": containing grouped feature data for clustering by ramclustR" />
-        <expand macro="parameters" />
-    </inputs>
-
     <outputs>
-        <data name="result" format="Rda" />
+        <data name="result" format="RData" />
     </outputs>
 
     <help><![CDATA[
