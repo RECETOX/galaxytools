@@ -15,20 +15,22 @@ parser = optparse.OptionParser()
 parser.add_option('-d', '--export_dir', help='Directory where to export the datasets')
 (options, args) = parser.parse_args()
 
+if not options.export_dir:
+    parser.error('Input cannot be empty')
+
 
 def get_path():
     dir_prefix = '/mnt/sally'
     dir_suffix = 'mzML_profile'
-    if not options.export_dir:
-        parser.error('Input cannot be empty')
-    elif not os.path.isdir(os.path.join(dir_prefix, options.export_dir.lstrip(os.sep))):
-        parser.error('Subdirectory must exist')
-    else:
-        return os.path.join(dir_prefix, options.export_dir.lstrip(os.sep), dir_suffix)
-
+    return os.path.join(dir_prefix, options.export_dir.lstrip(os.sep), dir_suffix)
 
 export_path = get_path()
 
+
+def check_subdirectory():
+    subdirectory_loc = os.path.join(dir_prefix, options.export_dir.lstrip(os.sep))
+    if not os.path.isdir(subdirectory_loc):
+        return parser.error('Subdirectory must exist')
 
 if not os.path.exists(export_path):
     os.makedirs(export_path)
