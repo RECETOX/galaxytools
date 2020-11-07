@@ -33,13 +33,16 @@ export_path = get_path()
 if not os.path.exists(export_path):
     os.makedirs(export_path)
 
-dataset_paths = args[::3]
-dataset_names = args[1::3]
-dataset_extensions = args[2::3]
+    
+def get_arguments():
+    dataset_paths = args[::3]
+    dataset_names = args[1::3]
+    dataset_extensions = args[2::3]
+    return zip(dataset_paths, dataset_names, dataset_extensions)
 
 exit_code = 0
 
-for dp, dn, de in zip(dataset_paths, dataset_names, dataset_extensions):
+for dp, dn, de in get_arguments():
     '''
     Copied from django https://github.com/django/django/blob/master/django/utils/text.py
     '''
