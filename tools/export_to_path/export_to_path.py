@@ -47,8 +47,10 @@ for dp, dn, de in zip(dataset_paths, dataset_names, dataset_extensions):
     '''
     dn_de = "%s.%s" % (dn, de)
     dn_de_safe = re.sub(r'(?u)[^-\w.]', '', dn_de.strip().replace(' ', '_'))
+    
+    dataset_loc = os.path.join(export_path, dn_de_safe)
 
-    if os.path.isfile(os.path.join(export_path, dn_de_safe)):
+    if os.path.isfile(dataset_loc):
         raise Exception("Error copying dataset '%s' to '%s'. Cannot overwrite existing dataset" % (dn, export_path))
     else:
         try:
