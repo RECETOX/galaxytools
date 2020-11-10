@@ -43,12 +43,22 @@
                 replace.zeros = $required.replace_zeros
                 )'
             -e 'save(x, file = "$result")'
+            -e 'RAMClustR::write.methods(x, "$method_metadata")'
     ]]>
     </command>
 
+                <!-- -e 'RAMClustR::exportDataset(
+                ramclustObj = x,
+                which.data="SpecAbund",
+                label.by="ann",
+                filter = TRUE
+                )'
+            -e 'file.copy("datasets/SpecAbund.csv", "$exported_dataset")' -->
+
     <outputs>
         <data name="result" format="RData" />
-        <data name="msp" format="msp" />
+        <!-- <data name="exported_dataset" format="csv" /> -->
+        <data name="method_metadata" format="txt" />
     </outputs>
 
     <help><![CDATA[
