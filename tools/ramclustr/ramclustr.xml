@@ -9,7 +9,8 @@
 
     <inputs>
         <param name="input_xcms" label="input_xcms" type="data" format="RData" help=": containing grouped feature data for clustering by ramclustR" />
-        <expand macro="parameters" />
+        <expand macro="parameters_required" />
+        <expand macro="parameters_optional" />
     </inputs>
 
     <command detect_errors="aggressive"><![CDATA[
@@ -17,36 +18,29 @@
         Rscript 
             -e 'obj <- load("$input_xcms")'
             -e 'x <- RAMClustR::ramclustR(
-                xcmsObj = xdata,
-                #if $params.MStag 
-                    MStag = "$params.MStag",
+                xcmsObj = xdata,                
+                #if $optional.st 
+                    st = $optional.st,
                 #end if
-                #if $params.idMSMStag 
-                    idMSMStag = "$params.idMSMStag",
+                #if $optional.maxt 
+                    maxt = $optional.maxt,
                 #end if
-                taglocation = "$params.taglocation",
-                sr = $params.sr,
-                #if $params.st 
-                    st = $params.st,
-                #end if
-                #if $params.maxt 
-                    maxt = $params.maxt,
-                #end if
-                deepSplit = $params.deepSplit,
-                blocksize = $params.blocksize,
-                mult = $params.mult,
-                hmax = $params.hmax,
-                collapse = $params.collapse,
-                usePheno = $params.usePheno,
-                mspout = $params.mspout,
-                qc.inj.range = $params.qc_inj_range,
-                normalize = "$params.normalize",
-                minModuleSize = $params.minModuleSize,
-                linkage = $params.linkage,
-                mzdec = $params.mzdec,
-                cor.method = "$params.cor_method",
-                rt.only.low.n = $params.rt_only_low_n,
-                replace.zeros = $params.replace_zeros
+                sr = $required.sr,
+                deepSplit = $required.deepSplit,
+                blocksize = $required.blocksize,
+                mult = $required.mult,
+                hmax = $required.hmax,
+                collapse = $required.collapse,
+                usePheno = $required.usePheno,
+                mspout = $required.mspout,
+                qc.inj.range = $required.qc_inj_range,
+                normalize = "$required.normalize",
+                minModuleSize = $required.minModuleSize,
+                linkage = "$required.linkage",
+                mzdec = $required.mzdec,
+                cor.method = "$required.cor_method",
+                rt.only.low.n = $required.rt_only_low_n,
+                replace.zeros = $required.replace_zeros
                 )'
             -e 'save(x, file = "$result")'
     ]]>
@@ -54,6 +48,7 @@
 
     <outputs>
         <data name="result" format="RData" />
+        <data name="msp" format="msp" />
     </outputs>
 
     <help><![CDATA[
