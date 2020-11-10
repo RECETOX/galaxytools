@@ -44,6 +44,7 @@
                 )'
             -e 'save(x, file = "$result")'
             -e 'RAMClustR::write.methods(x, "$method_metadata")'
+            -e 'write.csv(x\$SpecAbund, file="$exported_dataset", row.names=TRUE)'
     ]]>
     </command>
 
@@ -57,8 +58,8 @@
 
     <outputs>
         <data name="result" format="RData" />
-        <!-- <data name="exported_dataset" format="csv" /> -->
-        <data name="method_metadata" format="txt" />
+        <data name="exported_dataset" format="csv" />
+        <data label="metadata" name="method_metadata" format="txt" />
     </outputs>
 
     <help><![CDATA[
