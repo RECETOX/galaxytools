@@ -45,25 +45,17 @@
             -e 'save(x, file = "$result")'
             -e 'RAMClustR::write.methods(x, "$method_metadata")'
             -e 'RAMClustR::write.msp(x)'
-
+            -e 'msp_files <- list.files("spectra/msp", full.names=TRUE)'
             -e 'write.csv(x\$SpecAbund, file="$spec_abundance", row.names=TRUE)'
     ]]>
     </command>
-
-                <!-- -e 'RAMClustR::exportDataset(
-                ramclustObj = x,
-                which.data="SpecAbund",
-                label.by="ann",
-                filter = TRUE
-                )'
-            -e 'file.copy("datasets/SpecAbund.csv", "$exported_dataset")' -->
 
     <outputs>
         <data label="ramclustObj" name="result" format="RData" />
         <data label="Spec Abundance *.csv" name="spec_abundance" format="csv" />
         <data label="Method Metadata *.txt" name="method_metadata" format="txt" />
-        <collection label="Mass Spectra" name="msp" type="list">
-            <discover_datasets pattern="*" directory="/" ext="msp" recurse="true" />
+        <collection name="MSP" type="list" label="Mass spectra">
+            <discover_datasets pattern="__name_and_ext__" directory="spectra/msp" ext="msp" />
         </collection>
     </outputs>
 
