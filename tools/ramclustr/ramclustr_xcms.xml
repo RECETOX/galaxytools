@@ -69,10 +69,9 @@
         </test>
     </tests>
 
-    <help>
-        <![CDATA[
-            TODO: Fill in help.
-        ]]>
+    <help><![CDATA[
+    
+    your lines of restructuredText here ]]>
     </help>
 
     <citations>
@@ -82,7 +81,6 @@
             abstract = {Metabolomic data are frequently acquired using chromatographically coupled mass spectrometry (MS) platforms. For such datasets, the first step in data analysis relies on feature detection, where a feature is defined by a mass and retention time. While a feature typically is derived from a single compound, a spectrum of mass signals is more a more-accurate representation of the mass spectrometric signal for a given metabolite. Here, we report a novel feature grouping method that operates in an unsupervised manner to group signals from MS data into spectra without relying on predictability of the in-source phenomenon. We additionally address a fundamental bottleneck in metabolomics, annotation of MS level signals, by incorporating indiscriminant MS/MS (idMS/MS) data implicitly: feature detection is performed on both MS and idMS/MS data, and feature-feature relationships are determined simultaneously from the MS and idMS/MS data. This approach facilitates identification of metabolites using in-source MS and/or idMS/MS spectra from a single experiment, reduces quantitative analytical variation compared to single-feature measures, and decreases false positive annotations of unpredictable phenomenon as novel compounds. This tool is released as a freely available R package, called RAMClustR, and is sufficiently versatile to group features from any chromatographic-spectrometric platform or feature-finding software. {\textcopyright} 2014 American Chemical Society.},
             author = {Broeckling, C. D. and Afsar, F. A. and Neumann, S. and Ben-Hur, A. and Prenni, J. E.},
             doi = {10.1021/ac501530d},
-            file = {:C$\backslash$:/Users/473355/Documents/Mendeley Desktop/Broeckling et al/2014{\_}RAMClust A novel feature clustering method enables spectral-matching-based annotation for metabolomics data(3).pdf:pdf},
             issn = {15206882},
             journal = {Analytical Chemistry},
             number = {14},
