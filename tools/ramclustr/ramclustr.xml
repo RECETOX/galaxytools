@@ -32,7 +32,7 @@
                 hmax = $required.hmax,
                 collapse = $required.collapse,
                 usePheno = $required.usePheno,
-                mspout = $required.mspout,
+                mspout = FALSE,
                 qc.inj.range = $required.qc_inj_range,
                 normalize = "$required.normalize",
                 minModuleSize = $required.minModuleSize,
@@ -51,10 +51,10 @@
     </command>
 
     <outputs>
-        <data label="ramclustObj" name="result" format="RData" />
-        <data label="Spec Abundance *.csv" name="spec_abundance" format="csv" />
-        <data label="Method Metadata *.txt" name="method_metadata" format="txt" />
-        <collection name="MSP" type="list" label="Mass spectra">
+        <data label="${tool.name} on ${on_string}" name="result" format="RData" />
+        <data label="Spec Abundance of ${on_string}" name="spec_abundance" format="csv" />
+        <data label="Metadata for ${tool.name} on ${on_string}" name="method_metadata" format="txt"/>
+        <collection label="Mass spectra from ${tool.name} on ${on_string}" name="MSP" type="list">
             <discover_datasets pattern="__name_and_ext__" directory="spectra/msp" ext="msp" />
         </collection>
     </outputs>

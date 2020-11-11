@@ -26,7 +26,10 @@
             <param label="hmax" name="hmax" type="float" value="0.3" help="precut the tree at this height, default 0.3 - see ?cutreeDynamicTree" />
             <param label="collapse" name="collapse" type="boolean" truevalue="TRUE" falsevalue="FALSE" checked="true" help="reduce feature intensities to spectrum intensities?" />
             <param label="usePheno" name="usePheno" type="boolean" truevalue="TRUE" falsevalue="FALSE" checked="true" help="transfer phenotype data from XCMS object to SpecAbund dataset?" />
+            <!--
+            Currently not forwarded because the MSP is exported always manually afterwards
             <param label="mspout" name="mspout" type="boolean" truevalue="TRUE" falsevalue="FALSE" checked="true" help="write msp formatted spectra to file?" />
+            -->
             <param label="normalize" name="normalize" type="select" display="radio" help="either 'none', 'TIC', 'quantile', or 'batch.qc' normalization of feature intensities.  see batch.qc overview in details. ">
                 <option value="none" selected="true">none</option>
                 <option value="TIC">TIC</option>
