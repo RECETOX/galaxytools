@@ -1,4 +1,4 @@
-<tool id="ramclustr_xcms" name="RAMClustR on XCMS" version="@TOOL_VERSION@+galaxy1">
+<tool id="ramclustr_xcms" name="RAMClustR (XCMS)" version="@TOOL_VERSION@+galaxy1">
     <macros>
         <import>ramclustr_macros.xml</import>
     </macros>
@@ -40,12 +40,14 @@
                 mzdec = $required.mzdec,
                 cor.method = "$required.cor_method",
                 rt.only.low.n = $required.rt_only_low_n,
+                #if $optional.fftempdir 
+                    fftempdir = $optional.fftempdir,
+                #end if
                 replace.zeros = $required.replace_zeros
                 )'
             -e 'save(x, file = "$result")'
             -e 'RAMClustR::write.methods(x, "$method_metadata")'
-            -e 'RAMClustR::write.msp(x)'
-            -e 'msp_files <- list.files("spectra/msp", full.names=TRUE)'
+            -e 'RAMClustR::write.msp(x, one.file = $required.merge_msp)'
             -e 'write.csv(x\$SpecAbund, file="$spec_abundance", row.names=TRUE)'
     ]]>
     </command>
@@ -54,14 +56,12 @@
         <data label="${tool.name} on ${on_string}" name="result" format="RData" />
         <data label="Spec Abundance of ${on_string}" name="spec_abundance" format="csv" />
         <data label="Metadata for ${tool.name} on ${on_string}" name="method_metadata" format="txt"/>
-        <collection label="Mass spectra from ${tool.name} on ${on_string}" name="MSP" type="list">
-            <discover_datasets pattern="__name_and_ext__" directory="spectra/msp" ext="msp" />
-        </collection>
+        <expand macro="output_msp"/>
     </outputs>
 
     <tests>
         <test>
-            <param name="input_xcms" value="xcmsObj" ftype="RData"/>
+            <param name="input_xcms" value="xcmsObj.rdata" ftype="RData"/>
             <output name="result" file="ramclustObj.RData" ftype="RData"/>
             <output name="method_metadata" file="metadata.txt" ftype="txt"/>
             <output name="spec_abundance" file="spec_abundance.csv" ftype="csv"/>

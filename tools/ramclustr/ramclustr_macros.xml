@@ -60,6 +60,7 @@
             
             <param label="rt_only_low_n" name="rt_only_low_n" type="boolean" truevalue="TRUE" falsevalue="FALSE" checked="true" help="At low injection numbers, correlational relationships of peak intensities may be unreliable.  by defualt ramclustR will simply ignore the correlational r value and cluster on retention time alone.  if you wish to use correlation with at n less than 5, set this value to FALSE." />
             <param label="replace_zeros" name="replace_zeros" type="boolean" truevalue="TRUE" falsevalue="FALSE" checked="true" help="NA, NaN, and Inf values are replaced with zero, and zero values are sometimes returned from peak peaking.  When TRUE, zero values will be replaced with a small amount of noise, with noise level set based on the detected signal intensities for that feature. " />
+            <param label="Merge MSP Files" name="merge_msp" type="boolean" truevalue="TRUE" falsevalue="FALSE" checked="true" help="Whether to merge all msp in one file or export one msp per spectra"/>
         </section>
     </xml>
 
@@ -69,11 +70,20 @@
             <param label="fftempdir" name="fftempdir" type="text" optional="true" help="valid path: if there are file size limitations on the default ff pacakge temp directory  - getOptions('fftempdir') - you can change the directory used as the fftempdir with this option." />
             <param label="maxt" name="maxt" type="integer" optional="true" help="maximum time difference to calculate retention similarity for - all values beyond this are assigned similarity of zero" />
         </section>
+    </xml>
+
+    <xml name="parameters_optional_metadata">
         <section name="metadata" title="Optional Metadata" expanded="false">
             <param label="batch" name="batch" type="integer" optional="true" help="vector with length equal to number of injections in xset or csv file" />
             <param label="order" name="order" type="integer" optional="true" help="vector with length equal to number of injections in xset or csv file" />
             <param label="qc" name="qc" type="boolean" truevalue="TRUE" falsevalue="FALSE" optional="true" help=" vector with length equal to number of injections in xset or csv file.  " />
             <param label="ExpDes" name="ExpDes" type="data" format="RData" optional="true" help=" an R object created by R ExpDes object: data used for record keeping and labelling msp spectral output" />
         </section>
+    </xml>
+
+    <xml name="output_msp">
+        <collection label="Mass spectra from ${tool.name} on ${on_string}" name="MSP" type="list">
+            <discover_datasets pattern="__name_and_ext__" directory="spectra" recurse="true" ext="msp" />
+        </collection>
     </xml>
 </macros>
