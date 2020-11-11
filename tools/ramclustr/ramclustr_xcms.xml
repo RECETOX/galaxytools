@@ -61,10 +61,11 @@
 
     <tests>
         <test>
-            <param name="input_xcms" value="xcmsObj.rdata" ftype="RData"/>
-            <output name="result" file="ramclustObj.RData" ftype="RData"/>
-            <output name="method_metadata" file="metadata.txt" ftype="txt"/>
-            <output name="spec_abundance" file="spec_abundance.csv" ftype="csv"/>
+            <param name="input_xcms" value="xcmsObj.rdata.xcms.fillpeaks" ftype="rdata.xcms.fillpeaks"/>
+            <output name="result" file="ramclustObj.rdata" ftype="RData" compare="sim_size" delta="100"/>
+            <discovered_dataset name="mass_spectra" file="msp.tgz" ftype="tgz"/>
+            <output name="method_metadata" file="metadata.txt" ftype="txt" checksum="md5$81db28b08860988e3966f585b0f44b0f"/>
+            <output name="spec_abundance" file="spec_abundance.csv" ftype="csv" compare="sim_size" delta="100"/>
         </test>
     </tests>
 
