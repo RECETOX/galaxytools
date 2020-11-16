@@ -1,3 +1,3 @@
-FROM conda/miniconda3:latest
+FROM python:3.8-buster
 
-RUN conda install --channel nlesc --channel bioconda --channel conda-forge matchms
+RUN pip install matchms
