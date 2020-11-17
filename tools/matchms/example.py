@@ -1,4 +1,5 @@
 import sys, argparse, os, math
+import pandas
 
 from matchms import calculate_scores
 from matchms.importing import load_from_msp
@@ -11,6 +12,7 @@ def main(argv):
         "references_filename", type=str, help="Path to reference MSP library."
     )
     parser.add_argument("queries_filename", type=str, help="Path to query spectra.")
+    parser.add_argument("output_filename", type=str, help="Path where to store the output .csv.")
     # parser.add_argument('similarity_metric', type=str, help='Metric to use for matching.')
 
     args = parser.parse_args()
@@ -26,7 +28,11 @@ def main(argv):
         similarity_function=CosineGreedy(),
     )
 
-    return scores
+    query_names = [spectra.metadata['name'] for spectra in scores.queries]
+    reference_names = [spectra.metadata['name'] for spectra in scores.references]
+    dataframe = pandas.DataFrame(data=scores.scores, index=reference_names, columns=query_names)
+    dataframe.to_csv(args.output_filename)
+    return 0
 
 
 if __name__ == "__main__":
