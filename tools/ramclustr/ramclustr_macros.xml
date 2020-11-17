@@ -12,9 +12,9 @@
     </xml>
 
     <xml name="parameters_excluded">
-            <param label="MStag" name="MStag" type="text" optional="true" help="character string in 'taglocation' to designat MS / MSe files e.g. '01.cdf'" />
-            <param label="idMSMStag" name="idMSMStag" type="text" optional="true" help="character string in 'taglocation' to designat idMSMS / MSe files e.g. '02.cdf'" />
-            <param label="taglocation" name="taglocation" type="text" value="filepaths" help="'filepaths' by default, 'phenoData[,1]' is another option. refers to xcms slot" />
+        <param label="MStag" name="MStag" type="text" optional="true" help="character string in 'taglocation' to designat MS / MSe files e.g. '01.cdf'" />
+        <param label="idMSMStag" name="idMSMStag" type="text" optional="true" help="character string in 'taglocation' to designat idMSMS / MSe files e.g. '02.cdf'" />
+        <param label="taglocation" name="taglocation" type="text" value="filepaths" help="'filepaths' by default, 'phenoData[,1]' is another option. refers to xcms slot" />
     </xml>
 
     <xml name="parameters_required">
@@ -43,21 +43,21 @@
                 <option value="average" selected="true">average</option>
                 <option value="ward.D">ward.D</option>
                 <option value="ward.D2">ward.D2</option>
-                <option value="single">single</option>            
-                <option value="complete">complete</option>            
-                <option value="mcquitty">mcquitty</option>            
-                <option value="median">median</option>            
-                <option value="centroid">centroid</option>            
+                <option value="single">single</option>
+                <option value="complete">complete</option>
+                <option value="mcquitty">mcquitty</option>
+                <option value="median">median</option>
+                <option value="centroid">centroid</option>
             </param>
 
             <param label="mzdec" name="mzdec" type="integer" value="3" help="number of decimal places used in printing m/z values" />
-            <param label="cor_method" name="cor_method" type="select" display="radio" value="pearson" help="which correlational method used to calculate 'r' - see ?cor" >
+            <param label="cor_method" name="cor_method" type="select" display="radio" value="pearson" help="which correlational method used to calculate 'r' - see ?cor">
                 <option value="pearson" selected="true">pearson</option>
                 <option value="everything">everything</option>
                 <option value="spearman">spearman</option>
                 <option value="kendall">kendall</option>
             </param>
-            
+
             <param label="rt_only_low_n" name="rt_only_low_n" type="boolean" truevalue="TRUE" falsevalue="FALSE" checked="true" help="At low injection numbers, correlational relationships of peak intensities may be unreliable.  by defualt ramclustR will simply ignore the correlational r value and cluster on retention time alone.  if you wish to use correlation with at n less than 5, set this value to FALSE." />
             <param label="replace_zeros" name="replace_zeros" type="boolean" truevalue="TRUE" falsevalue="FALSE" checked="true" help="NA, NaN, and Inf values are replaced with zero, and zero values are sometimes returned from peak peaking.  When TRUE, zero values will be replaced with a small amount of noise, with noise level set based on the detected signal intensities for that feature. " />
             <param label="Merge MSP Files" name="merge_msp" type="boolean" truevalue="TRUE" falsevalue="FALSE" checked="true" help="Whether to merge all msp in one file or export one msp per spectra"/>
