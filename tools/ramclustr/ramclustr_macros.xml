@@ -2,7 +2,7 @@
     <token name="@TOOL_VERSION@">1.1.0</token>
 
     <xml name="parameters_csv">
-        <section name="ms_csv" title="Input MS Data as CSV">
+        <section name="ms_csv" title="Input MS Data as CSV" expanded="true">
             <param label="ms" name="ms" type="data" format="csv" optional="true" help="Optional csv input. Features as columns, rows as samples. Column header mz_rt" />
             <param label="idmsms" name="idmsms" type="data" format="csv" optional="true" help="Optional idMSMS / MSe csv data.  same dim and names as ms required" />
             <param label="sampNameCol" name="sampNameCol" type="integer" value="1" help="which column from the csv file contains sample names?" />
