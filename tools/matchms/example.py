@@ -1,9 +1,10 @@
 import sys, argparse, os, math
-import pandas
 
 from matchms import calculate_scores
 from matchms.importing import load_from_msp
 from matchms.similarity import CosineGreedy
+
+import pandas
 
 
 def main(argv):

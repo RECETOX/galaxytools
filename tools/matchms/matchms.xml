@@ -3,7 +3,7 @@
         <container type="docker">hechth/matchms:latest</container>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
-        python3 ${__tool_directory__}/example.py "$references" "$queries"
+        python3 ${__tool_directory__}/example.py "$references" "$queries" "$similarity_scores"
     ]]></command>
     <inputs>
         <param label="Reference spectra" name="references" type="data" format="msp" help="Reference mass spectra to match against as library." />
@@ -11,6 +11,7 @@
     </inputs>
     
     <outputs>
+        <data label="Similarity scores of ${on_string}" name="similarity_scores" format="csv" />
     </outputs>
     <help><![CDATA[
         TODO: Fill in help.
