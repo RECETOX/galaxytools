@@ -26,8 +26,7 @@ def main(argv):
         similarity_function=CosineGreedy(),
     )
 
-    print(scores)
-    return 0
+    return scores
 
 
 if __name__ == "__main__":
