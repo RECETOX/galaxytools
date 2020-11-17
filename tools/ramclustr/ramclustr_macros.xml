@@ -82,7 +82,7 @@
     </xml>
 
     <xml name="output_msp">
-        <collection label="Mass spectra from ${tool.name} on ${on_string}" name="MSP" type="list">
+        <collection label="Mass spectra from ${tool.name} on ${on_string}" name="mass_spectra" type="list">
             <discover_datasets pattern="__name_and_ext__" directory="spectra" recurse="true" ext="msp" />
         </collection>
     </xml>
