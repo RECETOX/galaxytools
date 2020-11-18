@@ -63,8 +63,8 @@
         <test>
             <param name="input_xcms" value="xcmsObj.rdata.xcms.fillpeaks" ftype="rdata.xcms.fillpeaks"/>
             <output name="result" file="ramclustObj.rdata" ftype="RData" compare="sim_size" delta="100"/>
-            <output_collection name="mass_spectra">
-                <element file="msp.tgz" ftype="tgz"/>
+            <output_collection name="mass_spectra" type="list">
+                <element name="fill" file="fill.msp" ftype="msp" checksum="md5$d53ed06d6f888a88ff321f833e29bb47"/>
             </output_collection>
             <output name="method_metadata" file="metadata.txt" ftype="txt" checksum="md5$81db28b08860988e3966f585b0f44b0f"/>
             <output name="spec_abundance" file="spec_abundance.csv" ftype="csv" compare="sim_size" delta="100"/>
