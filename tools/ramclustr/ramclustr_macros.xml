@@ -81,6 +81,19 @@
         </section>
     </xml>
 
+    <xml name="parameters_define_experiment">
+        <section name="define_experiment" title="Define Experiment" expanded="false">
+            <param label="Experiment" name="experiment" type="text" help="experiment name, no spaces" />
+            <param label="Species" name="species" type="text" help="species name" />
+            <param label="Sample" name="sample" type="text" help="sample type" />
+            <param label="Contributor" name="contributor" type="text" help="individual and/or organizational affiliation" />
+            <param label="Platform" name="platform" type="select" display="radio" help="platform">
+                <option value="GC-MS" selected="true">GC-MS</option>
+                <option value="LC-MS">LC-MS</option>
+            </param>
+        </section>
+    </xml>
+
     <xml name="output_msp">
         <collection label="Mass spectra from ${tool.name} on ${on_string}" name="mass_spectra" type="list">
             <discover_datasets pattern="__name_and_ext__" directory="spectra" recurse="true" ext="msp" />
