@@ -29,6 +29,7 @@
         <test>
             <param name="references" value="fill.msp" ftype="msp"/>
             <param name="queries" value="fill.msp" ftype="msp"/>
+            <param name="similarity_metric" value="CosineGreedy"/>
             <output name="similarity_scores" file="output.csv" ftype="csv" checksum="md5$0fd5cb719f8aa66ec5d9aeddca4b5fe7"/>
         </test>
     </tests>
