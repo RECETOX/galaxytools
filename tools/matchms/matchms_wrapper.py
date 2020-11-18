@@ -1,8 +1,8 @@
 import sys, argparse, os, math
 
-from matchms import calculate_scores
 from matchms.importing import load_from_msp
 from matchms.similarity import CosineGreedy
+from matchms import calculate_scores
 
 import pandas
 
