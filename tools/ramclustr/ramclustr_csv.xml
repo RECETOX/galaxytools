@@ -25,27 +25,34 @@
         <expand macro="output_msp"/>
     </outputs>
 
-    <help><![CDATA[
+    <help>
+    Documentation
+        For documentation on the tool see https://github.com/cbroeckl/RAMClustR/blob/master/vignettes/RAMClustR.Rmd
     
-    ]]>
+    Upstream Tools
+        +-------+------------------------+--------+------------+
+        | Name  | Output File            | Format | Parameter  |
+        +=======+========================+========+============+
+        | ???   | Feature Table with MS1 | csv    | ms         |
+        +-------+------------------------+--------+------------+
+        | ???   | Feature Table with MS2 | csv    | idmsms     |
+        +-------+------------------------+--------+------------+
+
+        The tool takes a **csv** table as input which has to fulfill the following requirements
+
+        (1) no more than one sample (or file) name column and one feature name row;
+        (2) feature names that contain the mass and retention times, separated by a constant delimiter; and
+        (3) features in columns and samples in rows.
+   
+    Downstream Tools
+        +---------+--------------+----------------------+
+        | Name    | Output File  | Format               |
+        +=========+==============+======================+
+        | matchMS | Mass Spectra | collection (tgz/msp) |
+        +---------+--------------+----------------------+
+
+    @GENERAL_HELP@
     </help>
 
-    <citations>
-        <!-- Example of annotating a citation using a BibTex entry. -->
-        <citation type="bibtex">
-            @article{Broeckling2014e,
-            abstract = {Metabolomic data are frequently acquired using chromatographically coupled mass spectrometry (MS) platforms. For such datasets, the first step in data analysis relies on feature detection, where a feature is defined by a mass and retention time. While a feature typically is derived from a single compound, a spectrum of mass signals is more a more-accurate representation of the mass spectrometric signal for a given metabolite. Here, we report a novel feature grouping method that operates in an unsupervised manner to group signals from MS data into spectra without relying on predictability of the in-source phenomenon. We additionally address a fundamental bottleneck in metabolomics, annotation of MS level signals, by incorporating indiscriminant MS/MS (idMS/MS) data implicitly: feature detection is performed on both MS and idMS/MS data, and feature-feature relationships are determined simultaneously from the MS and idMS/MS data. This approach facilitates identification of metabolites using in-source MS and/or idMS/MS spectra from a single experiment, reduces quantitative analytical variation compared to single-feature measures, and decreases false positive annotations of unpredictable phenomenon as novel compounds. This tool is released as a freely available R package, called RAMClustR, and is sufficiently versatile to group features from any chromatographic-spectrometric platform or feature-finding software. {\textcopyright} 2014 American Chemical Society.},
-            author = {Broeckling, C. D. and Afsar, F. A. and Neumann, S. and Ben-Hur, A. and Prenni, J. E.},
-            doi = {10.1021/ac501530d},
-            issn = {15206882},
-            journal = {Analytical Chemistry},
-            number = {14},
-            pages = {6812--6817},
-            pmid = {24927477},
-            title = {{RAMClust: A novel feature clustering method enables spectral-matching-based annotation for metabolomics data}},
-            volume = {86},
-            year = {2014}
-            }
-        </citation>
- </citations>
+    <expand macro="citations" />
 </tool>
