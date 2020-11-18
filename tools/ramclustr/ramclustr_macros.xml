@@ -86,4 +86,37 @@
             <discover_datasets pattern="__name_and_ext__" directory="spectra" recurse="true" ext="msp" />
         </collection>
     </xml>
+
+    <token name="@GENERAL_HELP@">
+    Background
+        Metabolomics
+            Metabolomics is frequently performed using chromatographically coupled mass spectrometry, with gas chromatography, liquid chromatography, and capillary electrophoresis being the most frequently utilized methods of separation.  The coupling of chromatography to mass spectrometry is enabled with an appropriate ionization source - electron impact (EI) for gas phase separations and electrospray ionization (ESI) for liquid phase separations. XCMS is a commonly used tool to detect all the signals from a metabolomics dataset, generating aligned features, where a feature is represented by a mass and retention time.  Each feature is presumed to derive from a single compound.  However, each compound is represented by several features.  With any ionization method, isotopic peaks will be observed reflective of the elemental composition of the analyte.  In EI, fragmentation is a byproduct of ionization, and has driven the generation of large mass spectral libraries.  In ESI, in-source fragmentation frequently occurs, the magnitude of which is compound dependent, with more labile compounds being more prone to in-source fragmentation.  ESI can also product multiple adduct forms (protonated, potassiated, sodiated, ammoniated...), and can produce multimers (i.e. [2M+H]+, [3M+K]+, etc) and multiple charged species ([M+2H]++).  This can become further complicated by considering combinations of these phenomena.  For example [2M+3H]+++ (triply charged dimer) or an in-source fragment of a dimer.
+    
+        RAMClustR approach
+            RAMClustR was designed to group features designed from the same compound using an approach which is __1.__ unsupervised, __2.__ platform agnosic, and __3.__ devoid of curated rules, as the depth of understanding of these processes is insufficent to enable accurate curation/prediction of all phenomenon that may occur.  We acheive this by making two assumptions.  The first is that two features derived from the same compound with have (approximately) the same retention time.  The second is that two features derived from the same compound will have (approximately) the same quantitative trend across all samples in the xcms sample set.  From these assumptions, we can calculate a retention time similarity score and a correlational similarity score for each feature pair.  A high similarity score for both retention time and correlation indicates a strong probability that two features derive from the same compound.  Since both conditions must be met, the product of the two similarity scores provides the best approximatio of the total similarity score - i.e. a feature pair with retention time similarity of 1 and correlational similarity of 0 is unlikely to derive from one compound - 1 x 0 = 0, the final similarity score is zero, indicating the two features represent two different compounds.  Similarly, a feature pair with retention time similarity of 0 and correlational similarity of 1 is unlikely to derive from one compound - 0 x 1 = 0.  Alternatively - a feature pair with retention time similarity of 1 and correlational similarity of 1 is likely to derive from one compound - 1 x 1 = 1.  
+
+
+            The RAMClustR algorithm is built on creating similarity scores for all pairs of features, submitting this score matrix for heirarchical clustering, and then cutting the resulting dendrogram into neat chunks using the dynamicTreeCut package - where each 'chunk' of the dendrogram results in a group of features likely to be derived from a single compound.  Importantly, this is acheived without looking for specific phenomenon (i.e. sodiation), meaning that grouping can be performed on any dataset, whether it is poisitive or negative ionization mode, EI or ESI, LC-MS GC-MS or CE-MS, in-source fragment or complex adduction event, and predictable or unpredictable signals.  
+    </token>
+
+    <xml name="citations">
+    <citations>
+        <!-- Example of annotating a citation using a BibTex entry. -->
+        <citation type="bibtex">
+            @article{Broeckling2014e,
+            abstract = {Metabolomic data are frequently acquired using chromatographically coupled mass spectrometry (MS) platforms. For such datasets, the first step in data analysis relies on feature detection, where a feature is defined by a mass and retention time. While a feature typically is derived from a single compound, a spectrum of mass signals is more a more-accurate representation of the mass spectrometric signal for a given metabolite. Here, we report a novel feature grouping method that operates in an unsupervised manner to group signals from MS data into spectra without relying on predictability of the in-source phenomenon. We additionally address a fundamental bottleneck in metabolomics, annotation of MS level signals, by incorporating indiscriminant MS/MS (idMS/MS) data implicitly: feature detection is performed on both MS and idMS/MS data, and feature-feature relationships are determined simultaneously from the MS and idMS/MS data. This approach facilitates identification of metabolites using in-source MS and/or idMS/MS spectra from a single experiment, reduces quantitative analytical variation compared to single-feature measures, and decreases false positive annotations of unpredictable phenomenon as novel compounds. This tool is released as a freely available R package, called RAMClustR, and is sufficiently versatile to group features from any chromatographic-spectrometric platform or feature-finding software. {\textcopyright} 2014 American Chemical Society.},
+            author = {Broeckling, C. D. and Afsar, F. A. and Neumann, S. and Ben-Hur, A. and Prenni, J. E.},
+            doi = {10.1021/ac501530d},
+            issn = {15206882},
+            journal = {Analytical Chemistry},
+            number = {14},
+            pages = {6812--6817},
+            pmid = {24927477},
+            title = {{RAMClust: A novel feature clustering method enables spectral-matching-based annotation for metabolomics data}},
+            volume = {86},
+            year = {2014}
+            }
+        </citation>
+    </citations>
+    </xml>
 </macros>
