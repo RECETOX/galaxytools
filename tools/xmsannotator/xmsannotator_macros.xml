@@ -1,6 +1,6 @@
 <macros>
     <token name="@TOOL_VERSION@">1.3.2</token>
-    <token name="@DOCKER_IMAGE@">recetox/xmsannotator:1.3.2-recetox0</token>
+    <token name="@DOCKER_IMAGE@">recetox/xmsannotator:1.3.2-recetox1</token>
 
     <xml name="annotation">
         <param name="peaks" type="data" format="h5" label="Peaks" help="Peaks to annotate."/>
