@@ -1,11 +1,11 @@
 import sys, argparse, os, math
 
 from matchms.importing import load_from_msp
-from matchms.similarity import CosineGreedy
+from matchms.similarity import BaseSimilarity
+from matchms.similarity import *
 from matchms import calculate_scores
 
 import pandas
-
 
 def main(argv):
     parser = argparse.ArgumentParser(description="Compute MSP similarity scores")
@@ -14,9 +14,22 @@ def main(argv):
     )
     parser.add_argument("queries_filename", type=str, help="Path to query spectra.")
     parser.add_argument("output_filename", type=str, help="Path where to store the output .csv.")
-    # parser.add_argument('similarity_metric', type=str, help='Metric to use for matching.')
+    parser.add_argument("similarity_metric", type=str, help='Metric to use for matching.')
 
     args = parser.parse_args()
+
+    if args.similarity_metric == 'CosineGreedy':
+        similarity_metric = CosineGreedy()
+    elif args.similarity_metric == 'CosineHungarian':
+        similarity_metric = CosineHungarian()
+    elif args.similarity_metric == 'FingerprintSimilarity':
+        similarity_metric = FingerprintSimilarity()
+    elif args.similarity_metric == 'IntersectMz':
+        similarity_metric = IntersectMz()
+    elif args.similarity_metric == 'ModifiedCosine':
+        similarity_metric = ModifiedCosine()
+    else:
+        similarity_metric = ParentmassMatch()
 
     reference_spectra = [
         spectrum for spectrum in load_from_msp(args.references_filename)
@@ -26,7 +39,7 @@ def main(argv):
     scores = calculate_scores(
         references=reference_spectra,
         queries=queries_spectra,
-        similarity_function=CosineGreedy(),
+        similarity_function=similarity_metric,
     )
 
     query_names = [spectra.metadata['name'] for spectra in scores.queries]
