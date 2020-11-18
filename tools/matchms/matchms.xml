@@ -9,13 +9,13 @@
 
     <command detect_errors="exit_code"><![CDATA[
         python3 ${__tool_directory__}/matchms.py "$references" "$queries" "$similarity_scores"
-    ]]></command>
+    ]]>    </command>
 
     <inputs>
         <param label="Reference spectra" name="references" type="data" format="msp" help="Reference mass spectra to match against as library." />
         <param label="Queries spectra" name="queries" type="data" format="msp" help="Query mass spectra to match against references." />
     </inputs>
-    
+
     <outputs>
         <data label="Similarity scores of ${on_string}" name="similarity_scores" format="csv" />
     </outputs>
@@ -29,6 +29,12 @@
     </tests>
 
     <help><![CDATA[
-        TODO: Fill in help.
-    ]]></help>
+        For documentation on the tool see https://github.com/matchms/matchms/blob/master/README.rst
+        
+    ]]>
+    </help>
+
+    <citations>
+        <citation type="doi">10.21105/joss.02411</citation>
+    </citations>
 </tool>
