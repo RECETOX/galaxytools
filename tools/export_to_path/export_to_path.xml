@@ -6,7 +6,7 @@
     <command detect_errors="aggressive"><![CDATA[
 python '$__tool_directory__/export_to_path.py' -d '$export_dir'
 #for $d,$m in zip($datasets, $metadata)
-    '${d}' '${d.hid}: ${d.element_identifier}' '${d.ext}' '${m}' '${m.hid}: ${m.element_identifier}' '${m.ext}'
+    '${d}' '${d.element_identifier}' '${d.ext}' '${m}' '${m.element_identifier}' '${m.ext}'
 #end for
 > '$log'
     ]]></command>
