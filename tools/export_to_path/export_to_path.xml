@@ -11,8 +11,8 @@ python '$__tool_directory__/export_to_path.py' -d '$export_dir'
 > '$log'
     ]]></command>
     <inputs>
-        <param name="datasets" type="data" format="mzml" multiple="true" label="Datasets to export" />
-        <param name="metadata" type="data" format="json" multiple="true" label="Metadata to export" />
+        <param name="datasets" type="data" format="data" multiple="true" label="Datasets to export" />
+        <param name="metadata" type="data" format="data" multiple="true" label="Metadata to export" optional="true"/>
         <param name="export_dir" type="text" value="" label="Directory where RAW_profile and mzML_profile reside" help="relative path to Sally's home e.g. share/path/to/project">
             <validator type="empty_field" />
             <sanitizer sanitize="false" />
