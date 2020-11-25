@@ -43,7 +43,7 @@ for dp, dn, de in zip(dataset_paths, dataset_names, dataset_exts):
         raise Exception("Error copying dataset '%s' to '%s'. Cannot overwrite existing dataset" % (dn, dest))
     else:
         try:
-            shutil.copy2(dp, dest)
+            shutil.copyfile(dp, dest)
             print("Dataset '%s' copied to '%s'" % (dn, dest))
         except Exception as e:
             msg = "Error copying dataset '%s' to '%s', %s" % (dn, dest, e)
