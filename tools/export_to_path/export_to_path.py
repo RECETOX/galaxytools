@@ -12,25 +12,26 @@ import sys
 Inspired by @nsoranzo's https://github.com/TGAC/earlham-galaxytools/tree/master/tools/export_to_cluster/
 '''
 
+exit_code = 0
+dir_prefix = "/mnt/sally"
+dir_suffix = 'mzML_profile'
 parser = optparse.OptionParser()
 parser.add_option('-d', '--export_dir', help='Directory where to export the datasets')
 (options, args) = parser.parse_args()
 if not options.export_dir:
     parser.error('Export directory cannot be empty')
-
-dir_prefix = "/mnt/sally"
-dir_suffix = 'mzML_profile'
+if not args or (len(args) % 3) != 0:
+    raise Exception("Incorrect number of arguments specified.")
 full_export_dir = os.path.join(dir_prefix, options.export_dir.lstrip(os.sep), dir_suffix)
 real_export_dir = os.path.realpath(full_export_dir)
 if not real_export_dir.startswith(dir_prefix):
     raise Exception("'%s' must be a subdirectory of '%s'" % (real_export_dir, dir_prefix))
 if not os.path.exists(real_export_dir):
     os.makedirs(real_export_dir)
-
 dataset_paths = args[::3]
 dataset_names = args[1::3]
 dataset_exts = args[2::3]
-exit_code = 0
+
 for dp, dn, de in zip(dataset_paths, dataset_names, dataset_exts):
     """
     Copied from get_valid_filename from django
