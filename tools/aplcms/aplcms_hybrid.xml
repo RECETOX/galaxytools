@@ -6,7 +6,7 @@
     <expand macro="requirements" />
 
     <command detect_errors="aggressive"><![CDATA[
-        #set file_str = str('", "').join([str($f) for $f in $files])
+        #set file_str = str("', '").join([str($f) for $f in $files])
 
         Rscript
             -e "x <- apLCMS::hybrid(
