@@ -34,7 +34,7 @@
                     recover_chr_range = $weak_signal_recovery.recover_chr_range,
                     use_observed_range = $weak_signal_recovery.use_observed_range,
                     recover_min_count = $weak_signal_recovery.recover_min_count,
-                    cores = as.numeric(\${GALAXY_SLOTS:-1})
+                    cores = \${GALAXY_SLOTS:-1}
                 )"
             -e "apLCMS::save_peaks_to_hdf('$peaks', x)"
     ]]></command>
