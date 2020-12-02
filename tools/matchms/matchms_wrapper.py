@@ -1,11 +1,19 @@
-import sys, argparse, os, math
+import argparse
+import sys
 
-from matchms.importing import load_from_msp
-from matchms.similarity import BaseSimilarity
-from matchms.similarity import *
 from matchms import calculate_scores
+from matchms.importing import load_from_msp
+from matchms.similarity import (
+    CosineGreedy,
+    CosineHungarian,
+    FingerprintSimilarity,
+    IntersectMz,
+    ModifiedCosine,
+    ParentMassMatch
+)
 
 import pandas
+
 
 def main(argv):
     parser = argparse.ArgumentParser(description="Compute MSP similarity scores")
@@ -29,7 +37,7 @@ def main(argv):
     elif args.similarity_metric == 'ModifiedCosine':
         similarity_metric = ModifiedCosine()
     else:
-        similarity_metric = ParentmassMatch()
+        similarity_metric = ParentMassMatch()
 
     reference_spectra = [
         spectrum for spectrum in load_from_msp(args.references_filename)
