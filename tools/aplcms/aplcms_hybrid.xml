@@ -37,7 +37,7 @@
                     recover_chr_range = $weak_signal_recovery.recover_chr_range,
                     use_observed_range = $weak_signal_recovery.use_observed_range,
                     recover_min_count = $weak_signal_recovery.recover_min_count,
-                    cluster = as.integer(Sys.getenv('GALAXY_SLOTS', unset=1))
+                    cluster = as.integer(\${GALAXY_SLOTS:-1})
                 )"
             -e "apLCMS::save_peaks_to_hdf('$peaks', x)"
             -e "apLCMS::save_known_table_to_hdf('$updated_known_table', x\$updated_known_table)"
