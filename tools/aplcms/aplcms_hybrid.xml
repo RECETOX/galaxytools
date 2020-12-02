@@ -40,7 +40,7 @@
                     cluster = as.integer(\${GALAXY_SLOTS:-1})
                 )"
             -e "apLCMS::save_peaks_to_hdf('$peaks', x)"
-            -e "apLCMS::save_known_table_to_hdf('$updated_known_table', x\$updated_known_table)"
+            -e "apLCMS::save_known_table_to_hdf('$updated_known_table', x\\$updated_known_table)"
     ]]></command>
 
     <expand macro="inputs">
