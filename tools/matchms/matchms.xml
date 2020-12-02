@@ -1,6 +1,7 @@
 <tool id="matchms" name="matchMS" version="0.6.0+galaxy1">
     <requirements>
-        <container type="docker">recetox/matchms:0.6.0-recetox0</container>
+        <requirement type="package" version="0.6.1">matchms</requirement>
+        <requirement type="package" version="1.1.4">pandas</requirement>
     </requirements>
 
     <environment_variables>
