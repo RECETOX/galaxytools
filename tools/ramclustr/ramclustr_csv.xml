@@ -1,0 +1,58 @@
+<tool id="ramclustr_csv" name="RAMClustR (CSV)" version="@TOOL_VERSION@+galaxy0">
+    <macros>
+        <import>ramclustr_macros.xml</import>
+    </macros>
+
+    <requirements>
+        <container type="docker">recetox/ramclustr:1.1.0-recetox0</container>
+    </requirements>
+
+    <inputs>
+        <expand macro="parameters_csv" />
+        <expand macro="parameters_required" />
+        <expand macro="parameters_optional" />
+    </inputs>
+
+    <command detect_errors="aggressive"><![CDATA[
+
+    ]]>
+    </command>
+
+    <outputs>
+        <data label="${tool.name} on ${on_string}" name="result" format="RData" />
+        <data label="Spec Abundance of ${on_string}" name="spec_abundance" format="csv" />
+        <data label="Metadata for ${tool.name} on ${on_string}" name="method_metadata" format="txt"/>
+        <expand macro="output_msp"/>
+    </outputs>
+
+    <help>
+    Documentation
+        For documentation on the tool see https://github.com/cbroeckl/RAMClustR/blob/master/vignettes/RAMClustR.Rmd
+
+    Upstream Tools
+        +-------+------------------------+--------+------------+
+        | Name  | Output File            | Format | Parameter  |
+        +=======+========================+========+============+
+        | ???   | Feature Table with MS1 | csv    | ms         |
+        +-------+------------------------+--------+------------+
+        | ???   | Feature Table with MS2 | csv    | idmsms     |
+        +-------+------------------------+--------+------------+
+
+        The tool takes a **csv** table as input which has to fulfill the following requirements
+
+        (1) no more than one sample (or file) name column and one feature name row;
+        (2) feature names that contain the mass and retention times, separated by a constant delimiter; and
+        (3) features in columns and samples in rows.
+
+    Downstream Tools
+        +---------+--------------+----------------------+
+        | Name    | Output File  | Format               |
+        +=========+==============+======================+
+        | matchMS | Mass Spectra | collection (tgz/msp) |
+        +---------+--------------+----------------------+
+
+    @GENERAL_HELP@
+    </help>
+
+    <expand macro="citations" />
+</tool>
