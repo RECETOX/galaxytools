@@ -1,4 +1,4 @@
-<tool id="ramclustr_xcms" name="RAMClustR (XCMS)" version="@TOOL_VERSION@+galaxy1">
+<tool id="ramclustr_xcms" name="RAMClustR (XCMS)" version="@TOOL_VERSION@+galaxy0">
     <macros>
         <import>ramclustr_macros.xml</import>
     </macros>
@@ -14,15 +14,15 @@
     </inputs>
 
     <command detect_errors="aggressive"><![CDATA[
-    
-        Rscript 
+
+        Rscript
             -e 'obj <- load("$input_xcms")'
             -e 'x <- RAMClustR::ramclustR(
                 xcmsObj = xdata,
-                #if $optional.st 
+                #if $optional.st
                     st = $optional.st,
                 #end if
-                #if $optional.maxt 
+                #if $optional.maxt
                     maxt = $optional.maxt,
                 #end if
                 sr = $required.sr,
@@ -40,7 +40,7 @@
                 mzdec = $required.mzdec,
                 cor.method = "$required.cor_method",
                 rt.only.low.n = $required.rt_only_low_n,
-                #if $optional.fftempdir 
+                #if $optional.fftempdir
                     fftempdir = $optional.fftempdir,
                 #end if
                 replace.zeros = $required.replace_zeros
@@ -74,7 +74,7 @@
     <help>
     Documentation
         For documentation on the tool see https://github.com/cbroeckl/RAMClustR/blob/master/vignettes/RAMClustR.Rmd
-    
+
     Upstream Tools
         +-------+----------------------+----------------------+------------+
         | Name  | Output File          | Format               | Parameter  |
@@ -83,7 +83,7 @@
         +-------+----------------------+----------------------+------------+
 
         The tool takes an **xcmsSet** object as input and extracts all relevant information.
-    
+
     Downstream Tools
         +---------+--------------+----------------------+
         | Name    | Output File  | Format               |

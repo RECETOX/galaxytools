@@ -1,4 +1,4 @@
-<tool id="ramclustr_csv" name="RAMClustR (CSV)" version="@TOOL_VERSION@+galaxy1">
+<tool id="ramclustr_csv" name="RAMClustR (CSV)" version="@TOOL_VERSION@+galaxy0">
     <macros>
         <import>ramclustr_macros.xml</import>
     </macros>
@@ -14,7 +14,7 @@
     </inputs>
 
     <command detect_errors="aggressive"><![CDATA[
-    
+
     ]]>
     </command>
 
@@ -28,7 +28,7 @@
     <help>
     Documentation
         For documentation on the tool see https://github.com/cbroeckl/RAMClustR/blob/master/vignettes/RAMClustR.Rmd
-    
+
     Upstream Tools
         +-------+------------------------+--------+------------+
         | Name  | Output File            | Format | Parameter  |
@@ -43,7 +43,7 @@
         (1) no more than one sample (or file) name column and one feature name row;
         (2) feature names that contain the mass and retention times, separated by a constant delimiter; and
         (3) features in columns and samples in rows.
-   
+
     Downstream Tools
         +---------+--------------+----------------------+
         | Name    | Output File  | Format               |
