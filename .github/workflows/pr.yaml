@@ -316,12 +316,8 @@ jobs:
       run: |
         mkdir json_output
         while read -r TOOL_GROUP; do
-            # Check if any of the lines in .tt_biocontainer_skip is a substring of $TOOL_GROUP
-            if echo $TOOL_GROUP | grep -qf .tt_biocontainer_skip; then
-                PLANEMO_OPTIONS=""
-            else
-                PLANEMO_OPTIONS="--biocontainers --no_dependency_resolution --no_conda_auto_init"
-            fi
+            # Run everything in docker
+            PLANEMO_OPTIONS="--docker"
             json=$(mktemp -u -p json_output --suff .json)
             PIP_QUIET=1 planemo test --database_connection postgresql://postgres:postgres@localhost:5432/galaxy $PLANEMO_OPTIONS --galaxy_source $GALAXY_REPO --galaxy_branch $GALAXY_RELEASE --galaxy_python_version ${{ matrix.python-version }} --test_output_json "$json" $TOOL_GROUP || true
             docker system prune --all --force --volumes || true
@@ -399,7 +395,7 @@ jobs:
       matrix:
         python-version: [3.7]
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/master' && github.repository_owner == 'galaxyproject'
+    if: github.ref == 'refs/heads/master' && github.repository_owner == 'RECETOX'
     steps:
     - uses: actions/checkout@v2
       with:
@@ -427,10 +423,10 @@ jobs:
             planemo shed_update --shed_target testtoolshed --shed_key "${{ env.SHED_KEY }}" --force_repository_creation "$DIR" || exit 1;
         done < ../workflow_artifacts/changed_repositories.list
       continue-on-error: true
-    - name: Deploy on toolshed
-      env:
-        SHED_KEY: ${{ secrets.TS_API_KEY }}
-      run: |
-        while read -r DIR; do
-            planemo shed_update --shed_target toolshed --shed_key "${{ env.SHED_KEY }}" --force_repository_creation "$DIR" || exit 1;
-        done < ../workflow_artifacts/changed_repositories.list
+    # - name: Deploy on toolshed
+    #   env:
+    #     SHED_KEY: ${{ secrets.TS_API_KEY }}
+    #   run: |
+    #     while read -r DIR; do
+    #         planemo shed_update --shed_target toolshed --shed_key "${{ env.SHED_KEY }}" --force_repository_creation "$DIR" || exit 1;
+    #     done < ../workflow_artifacts/changed_repositories.list
