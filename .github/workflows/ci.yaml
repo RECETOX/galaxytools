@@ -11,7 +11,7 @@ env:
 jobs:
   setup:
     name: Setup cache
-    if: github.repository_owner == 'galaxyproject'
+    if: github.repository_owner == 'RECETOX'
     runs-on: ubuntu-latest
     outputs:
       nchunks: ${{ steps.get-chunks.outputs.nchunks }}
