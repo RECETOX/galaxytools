@@ -1,0 +1,12 @@
+owner: recetox
+remote_repository_url: "https://github.com/RECETOX/galaxytools/tree/master/tools/matchms"
+homepage_url: "https://github.com/matchms/matchms"
+categories:
+  - Metabolomics
+repositories:
+  matchms:
+    description: "Matchms is an open-source Python package to import, process, clean, and compare mass spectrometry data (MS/MS)."
+    include:
+      - matchms.xml
+      - matchms_wrapper.py
+      - test-data
