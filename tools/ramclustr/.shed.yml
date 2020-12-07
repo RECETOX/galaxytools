@@ -1,0 +1,20 @@
+owner: recetox
+remote_repository_url: "https://github.com/RECETOX/galaxytools/tree/master/tools/ramclustr"
+homepage_url: "https://rdrr.io/cran/RAMClustR/"
+categories:
+  - Metabolomics
+repositories:
+  ramclustr_xcms:
+    description: "A feature clustering algorithm for non-targeted mass spectrometric metabolomics data using peaks detected using XCMS."
+    include:
+      - ramclustr_xcms.xml
+      - ramclustr_macros.xml
+      - ramclustr_wrapper.R
+      - test-data
+  ramclustr_csv:
+    description: "A feature clustering algorithm for non-targeted mass spectrometric metabolomics data using MS1 and MS2 spectra."
+    include:
+      - ramclustr_wrapper.R
+      - ramclustr_csv.xml
+      - ramclustr_macros.xml
+      - test-data
