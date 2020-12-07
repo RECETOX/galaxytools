@@ -20,7 +20,7 @@
                 ms="$ms_csv.ms",
                 idmsms="$ms_csv.idmsms",
                 feature_delimiter="$ms_csv.feature_delimiter",
-                samp_name_column = $ms_csv.sample_name_column,
+                sample_name_column = $ms_csv.sample_name_column,
                 retention_time_column= $ms_csv.retention_time_column,
                 sr = $required.sr,
                 deep_split = $required.deepSplit,
