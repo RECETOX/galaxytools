@@ -3,12 +3,11 @@ store_output <- function(
     output_filename,
     output_method_metadata,
     output_merge_msp,
-    output_spec_abundance)
-{
+    output_spec_abundance) {
     save(ramclustr_obj, file = output_filename)
     RAMClustR::write.methods(ramclustr_obj, output_method_metadata)
     RAMClustR::write.msp(ramclustr_obj, one.file = output_merge_msp)
-    write.csv(ramclustr_obj$SpecAbund, file=output_spec_abundance, row.names=TRUE)
+    write.csv(ramclustr_obj$SpecAbund, file = output_spec_abundance, row.names = TRUE)
 }
 
 ramclustr_xcms <- function(
@@ -31,8 +30,7 @@ ramclustr_xcms <- function(
     st = NULL,
     maxt = NULL,
     fftempdir = NULL
-) 
-{
+) {
     obj <- load(input_xcms)
 
     x <- RAMClustR::ramclustR(
@@ -57,7 +55,7 @@ ramclustr_xcms <- function(
         fftempdir = fftempdir,
         replace.zeros = replace_zeros
         )
-    return (x)
+    return(x)
 }
 
 ramclustr_csv <- function(
@@ -84,14 +82,13 @@ ramclustr_csv <- function(
     st = NULL,
     maxt = NULL,
     fftempdir = NULL
-)
-{
+) {
     x <- RAMClustR::ramclustR(
-        ms=ms,
-        idmsms=idmsms,
-        featdelim=feature_delimiter,
-        timepos=retention_time_column,
-        sampNameCol=sample_name_column,
+        ms = ms,
+        idmsms = idmsms,
+        featdelim = feature_delimiter,
+        timepos = retention_time_column,
+        sampNameCol = sample_name_column,
         st = st,
         maxt = maxt,
         sr = sr,
@@ -112,5 +109,5 @@ ramclustr_csv <- function(
         fftempdir = fftempdir,
         replace.zeros = replace_zeros
         )
-        return (x)
+        return(x)
 }
