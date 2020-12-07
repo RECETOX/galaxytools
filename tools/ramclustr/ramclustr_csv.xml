@@ -14,6 +14,40 @@
     </inputs>
 
     <command detect_errors="aggressive"><![CDATA[
+        Rscript
+            -e 'source("${__tool_directory__}/ramclustr_wrapper.R")'
+            -e 'x <- ramclustr_csv(
+                ms="$ms_csv.ms",
+                idmsms="$ms_csv.idmsms",
+                feature_delimiter="$ms_csv.feature_delimiter",
+                sample_name_column = $ms_csv.sample_name_column,
+                retention_time_column= $ms_csv.retention_time_column,
+                sr = $required.sr,
+                deep_split = $required.deepSplit,
+                block_size = $required.blocksize,
+                mult = $required.mult,
+                hmax = $required.hmax,
+                collapse = $required.collapse,
+                use_pheno = $required.usePheno,
+                qc_inj_range = $required.qc_inj_range,
+                normalize = "$required.normalize",
+                min_module_size = $required.minModuleSize,
+                linkage = "$required.linkage",
+                mzdec = $required.mzdec,
+                cor_method = "$required.cor_method",
+                rt_only_low_n = $required.rt_only_low_n,
+                replace_zeros = $required.replace_zeros,
+                #if $optional.st
+                    st = $optional.st,
+                #end if
+                #if $optional.maxt
+                    maxt = $optional.maxt,
+                #end if
+                #if $optional.fftempdir
+                    fftempdir = $optional.fftempdir,
+                #end if
+                )'
+            -e 'store_output(x, "$result", "$method_metadata", $required.merge_msp, "$spec_abundance")'
 
     ]]>
     </command>

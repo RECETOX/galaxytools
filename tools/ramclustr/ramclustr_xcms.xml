@@ -14,41 +14,36 @@
     </inputs>
 
     <command detect_errors="aggressive"><![CDATA[
-
         Rscript
-            -e 'obj <- load("$input_xcms")'
-            -e 'x <- RAMClustR::ramclustR(
-                xcmsObj = xdata,
+            -e 'source("${__tool_directory__}/ramclustr_wrapper.R")'
+            -e 'x <- ramclustr_xcms(
+                input_xcms = "$input_xcms",
+                sr = $required.sr,
+                deep_split = $required.deepSplit,
+                block_size = $required.blocksize,
+                mult = $required.mult,
+                hmax = $required.hmax,
+                collapse = $required.collapse,
+                use_pheno = $required.usePheno,
+                qc_inj_range = $required.qc_inj_range,
+                normalize = "$required.normalize",
+                min_module_size = $required.minModuleSize,
+                linkage = "$required.linkage",
+                mzdec = $required.mzdec,
+                cor_method = "$required.cor_method",
+                rt_only_low_n = $required.rt_only_low_n,
+                replace_zeros = $required.replace_zeros,
                 #if $optional.st
                     st = $optional.st,
                 #end if
                 #if $optional.maxt
                     maxt = $optional.maxt,
                 #end if
-                sr = $required.sr,
-                deepSplit = $required.deepSplit,
-                blocksize = $required.blocksize,
-                mult = $required.mult,
-                hmax = $required.hmax,
-                collapse = $required.collapse,
-                usePheno = $required.usePheno,
-                mspout = FALSE,
-                qc.inj.range = $required.qc_inj_range,
-                normalize = "$required.normalize",
-                minModuleSize = $required.minModuleSize,
-                linkage = "$required.linkage",
-                mzdec = $required.mzdec,
-                cor.method = "$required.cor_method",
-                rt.only.low.n = $required.rt_only_low_n,
                 #if $optional.fftempdir
                     fftempdir = $optional.fftempdir,
                 #end if
-                replace.zeros = $required.replace_zeros
                 )'
-            -e 'save(x, file = "$result")'
-            -e 'RAMClustR::write.methods(x, "$method_metadata")'
-            -e 'RAMClustR::write.msp(x, one.file = $required.merge_msp)'
-            -e 'write.csv(x\$SpecAbund, file="$spec_abundance", row.names=TRUE)'
+            -e 'store_output(x, "$result", "$method_metadata", $required.merge_msp, "$spec_abundance")'
     ]]>
     </command>
 
