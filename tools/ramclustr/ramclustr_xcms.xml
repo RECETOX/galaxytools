@@ -14,17 +14,10 @@
     </inputs>
 
     <command detect_errors="aggressive"><![CDATA[
-
         Rscript
             -e 'source("${__tool_directory__}/ramclustr_wrapper.R")'
             -e 'x <- ramclustr_xcms(
                 input_xcms = "$input_xcms",
-                #if $optional.st
-                    st = $optional.st,
-                #end if
-                #if $optional.maxt
-                    maxt = $optional.maxt,
-                #end if
                 sr = $required.sr,
                 deep_split = $required.deepSplit,
                 block_size = $required.blocksize,
@@ -39,10 +32,16 @@
                 mzdec = $required.mzdec,
                 cor_method = "$required.cor_method",
                 rt_only_low_n = $required.rt_only_low_n,
+                replace_zeros = $required.replace_zeros,
+                #if $optional.st
+                    st = $optional.st,
+                #end if
+                #if $optional.maxt
+                    maxt = $optional.maxt,
+                #end if
                 #if $optional.fftempdir
                     fftempdir = $optional.fftempdir,
                 #end if
-                replace_zeros = $required.replace_zeros
                 )'
             -e 'store_output(x, "$result", "$method_metadata", $required.merge_msp, "$spec_abundance")'
     ]]>
