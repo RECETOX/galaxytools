@@ -1,0 +1,71 @@
+<tool id="sql_query" name="SQL Query" version="@TOOL_VERSION@">
+    <macros>
+        <token name="@TOOL_VERSION@">0.0.1</token>
+    </macros>
+
+    <requirements>
+        <requirement type="package">click</requirement>
+        <requirement type="package">pyarrow</requirement>
+        <requirement type="package">pytables</requirement>
+        <requirement type="package">pandas</requirement>
+        <requirement type="package">pandasql</requirement>
+        <requirement type="package" version="3.7">python</requirement>
+    </requirements>
+
+    <command detect_errors="aggressive"><![CDATA[
+        python '$__tool_directory__/sql_query.py'
+            #for $input in $inputs
+                --input '${input.file}'
+                #if $input.file.is_of_type("h5")
+                        h5
+                #elif $input.file.is_of_type("csv")
+                        csv
+                #elif $input.file.is_of_type("tsv")
+                        rsv
+                #elif $input.file.is_of_type("sqlite")
+                        sqlite
+                #end if
+                        '${input.name}'
+            #end for
+            --query '${query}'
+            --result '${result}' '${result_format}' '${result_table}'
+    ]]></command>
+
+    <inputs>
+        <repeat name="inputs" title="Input">
+            <param name="file" type="data" format="h5,csv,tsv,sqlite"/>
+            <param name="name" type="text"/>
+        </repeat>
+
+        <param name="query" type="text" area="true"/>
+        <param name="result_table" type="text"/>
+
+        <param name="result_format" type="select">
+            <option value="h5">CSV</option>
+            <option value="csv">CSV</option>
+            <option value="tsv">TSV</option>
+            <option value="sqlite">SQLite</option>
+        </param>
+    </inputs>
+
+    <outputs>
+        <data name="result" format_source="result_format"/>
+    </outputs>
+
+    <tests>
+        <test>
+            <repeat name="inputs">
+                <param name="file" value="a.csv" ftype="csv"/>
+                <param name="name" value="A"/>
+            </repeat>
+            <repeat name="inputs">
+                <param name="file" value="b.csv" ftype="csv"/>
+                <param name="name" value="B"/>
+            </repeat>
+            <param name="query" value="SELECT * FROM A JOIN B"/>
+            <param name="result_table" value="C"/>
+            <param name="result_format" value="csv"/>
+            <output name="result" file="c.csv" ftype="csv"/>
+        </test>
+    </tests>
+</tool>
