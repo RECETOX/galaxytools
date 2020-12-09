@@ -1,6 +1,0 @@
-name: sql_query
-owner: recetox
-remote_repository_url: "https://github.com/RECETOX/galaxytools/tree/master/tools/sql_query"
-categories:
-  - Text Manipulation
-description: "Execute an SQL statement on a set of files"
