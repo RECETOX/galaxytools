@@ -1,10 +1,9 @@
+import json
 from typing import Tuple
 
 import click
-import json
 import pandas
 import pandasql
-
 from pandas import DataFrame
 
 
@@ -41,7 +40,6 @@ def write(df: DataFrame, path: str, filetype: str, name: str) -> None:
         df.to_sql(name, f'sqlite:///{path}')
     else:
         raise NotImplementedError(f'Unknown filetype {filetype}')
-
 
 
 @click.command()
