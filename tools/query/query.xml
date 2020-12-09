@@ -130,17 +130,5 @@
             </conditional>
             <output name="output" file="ab.csv" ftype="csv"/>
         </test>
-        <test>
-            <repeat name="tables">
-                <param name="file" value="a.parquet" ftype="parquet"/>
-                <param name="format" value="parquet"/>
-            </repeat>
-            <param name="query" value="SELECT * FROM t0"/>
-            <conditional name="result">
-                <param name="format" value="sqlite"/>
-                <param name="name" value="data"/>
-            </conditional>
-            <output name="output" file="a.sqlite" ftype="sqlite"/>
-        </test>
     </tests>
 </tool>
