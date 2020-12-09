@@ -1,0 +1,134 @@
+<tool id="query" name="Query" version="@TOOL_VERSION@">
+    <macros>
+        <token name="@TOOL_VERSION@">0.1</token>
+        <xml name="formats">
+            <option value="csv">csv</option>
+            <option value="tsv">tsv</option>
+            <option value="h5">h5</option>
+            <option value="feather">feather</option>
+            <option value="parquet">parquet</option>
+            <option value="sqlite">sqlite</option>
+        </xml>
+        <xml name="internal_name" token_format="">
+            <when value="@FORMAT@">
+                <param name="name" type="text" help="Specify the format's internal name of the table."/>
+            </when>
+        </xml>
+    </macros>
+
+    <requirements>
+        <requirement type="package">click</requirement>
+        <requirement type="package">pyarrow</requirement>
+        <requirement type="package">pytables</requirement>
+        <requirement type="package">pandas</requirement>
+        <requirement type="package">pandasql</requirement>
+        <requirement type="package" version="3.7">python</requirement>
+    </requirements>
+
+    <command><![CDATA[
+        python '$__tool_directory__/query.py'
+            $config
+    ]]></command>
+
+    <configfiles>
+        <configfile name="config"><![CDATA[
+            #def filetype(data):
+                #if $data.is_of_type('h5')
+                    #return 'hdf'
+                #elif $data.is_of_type('csv')
+                    #return 'csv'
+                #elif $data.is_of_type('tsv', 'tabular')
+                    #return 'tsv'
+                #elif $data.is_of_type('feather', 'arrow')
+                    #return 'feather'
+                #elif $data.is_of_type('parquet')
+                    #return 'parquet'
+                #elif $data.is_of_type('sqlite')
+                    #return 'sqlite'
+                #end if
+            #end def
+
+            #set $config = {
+                'tables': [
+                    {
+                        'path': str($table.file),
+                        'name': str($table.name) if $table.name else 't{}'.format(str($index)),
+                        'format': str($table.format) if $table.format else $filetype($table.file)
+                    }
+                    for $index, $table in enumerate($tables)
+                ],
+                'query': str($query),
+                'result': {
+                    'path': str($output),
+                    'name': str($result.name) if str($result.format) in ('h5', 'hdf', 'sqlite') and $result.name else None,
+                    'format': str($result.format)
+                }
+            }
+
+            #import json
+            #echo $json.dumps($config)
+        ]]></configfile>
+    </configfiles>
+
+    <inputs>
+        <repeat name="tables" title="Table">
+            <param name="file" type="data" format="csv,tsv,h5,feather,parquet,sqlite" label="File"/>
+            <param name="format" type="select" optional="true">
+                <label>Force the file format</label>
+                <help>Force a particular file format to get around formats unknown to Galaxy, ie. Parquet.</help>
+                <expand macro="formats"/>
+            </param>
+            <param name="name" type="text" optional="true">
+                <label>Table name</label>
+                <help>Choose an unique name for the table which then you may use in the SQL Query. By default tables will be named as: t0, t1, ...</help>
+            </param>
+        </repeat>
+        <param name="query" type="text" area="true">
+            <label>SQL Query</label>
+            <help>
+                Type an arbitrary SQL SELECT to perform on the input tables. The input tables may be referred by their given names.
+                An example query is SELECT employees.name AS employee, emails.value AS email FROM one JOIN b ON employees.id = emails.employee, provided that the input tables are named employees and emails.
+            </help>
+        </param>
+        <conditional name="result">
+            <param name="format" type="select">
+                <label>SQL Query</label>
+                <help>Specify the file format of the query result.</help>
+                <expand macro="formats"/>
+            </param>
+            <expand macro="internal_name" format="h5"/>
+            <expand macro="internal_name" format="sqlite"/>
+        </conditional>
+    </inputs>
+
+    <outputs>
+        <data name="output">
+            <change_format>
+                <when input="result.format" value="h5" format="h5"/>
+                <when input="result.format" value="csv" format="csv"/>
+                <when input="result.format" value="tsv" format="tsv"/>
+                <when input="result.format" value="feather" format="feather"/>
+                <when input="result.format" value="parquet" format="parquet"/>
+                <when input="result.format" value="sqlite" format="sqlite"/>
+            </change_format>
+        </data>
+    </outputs>
+
+    <tests>
+        <test>
+            <repeat name="tables">
+                <param name="file" value="a.csv" ftype="csv"/>
+                <param name="name" value="a"/>
+            </repeat>
+            <repeat name="tables">
+                <param name="file" value="b.csv" ftype="csv"/>
+                <param name="name" value="b"/>
+            </repeat>
+            <param name="query" value="SELECT a.x AS ax, a.y AS ay, a.z AS az, b.x AS bx, b.y AS by, b.z AS bz FROM a JOIN b ON a.x = b.x"/>
+            <conditional name="result">
+                <param name="format" value="csv"/>
+            </conditional>
+            <output name="output" file="ab.csv" ftype="csv"/>
+        </test>
+    </tests>
+</tool>

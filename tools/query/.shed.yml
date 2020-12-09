@@ -1,0 +1,6 @@
+name: query
+owner: recetox
+remote_repository_url: "https://github.com/RECETOX/galaxytools/tree/master/tools/query"
+categories:
+  - Text Manipulation
+description: "Execute an SQL statement on a set of tables"
