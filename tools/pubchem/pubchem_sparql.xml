@@ -1,0 +1,25 @@
+<tool id="pubchem_sparql" name="Pubchem SPARQL Query" version="0.1">
+    <requirements>
+        <requirement type="package">click</requirement>
+        <requirement type="package">pandas</requirement>
+        <requirement type="package">pyodbc</requirement>
+        <requirement type="package">virtuoso-opensource</requirement>
+        <requirement type="package" version="3.7">python</requirement>
+    </requirements>
+
+    <command  detect_errors="aggressive"><![CDATA[
+        python '${__tool_directory__}/pubchem_rdf.py'
+                --workers \${GALAXY_SLOTS:-1}
+                --memory \${GALAXY_MEMORY_MB}
+            load ${pubchem_database}
+            query ${query_result}
+    ]]></command>
+
+    <inputs>
+        <param name="pubchem_database" format="tar"/>
+    </inputs>
+
+    <outputs>
+        <data name="query_result" format_source="parquet"/>
+    </outputs>
+</tool>
