@@ -116,11 +116,11 @@
 
     <tests>
         <test>
-            <repeat name="inputs">
+            <repeat name="tables">
                 <param name="file" value="a.csv" ftype="csv"/>
                 <param name="name" value="a"/>
             </repeat>
-            <repeat name="inputs">
+            <repeat name="tables">
                 <param name="file" value="b.csv" ftype="csv"/>
                 <param name="name" value="b"/>
             </repeat>
@@ -131,7 +131,7 @@
             <output name="output" file="ab.csv" ftype="csv"/>
         </test>
         <test>
-            <repeat name="inputs">
+            <repeat name="tables">
                 <param name="file" value="a.parquet" ftype="parquet"/>
                 <param name="format" value="parquet"/>
             </repeat>
