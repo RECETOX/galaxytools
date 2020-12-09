@@ -1,0 +1,62 @@
+<tool id="pubchem_fetch" name="Pubchem Fetch" version="0.1">
+    <requirements>
+        <requirement type="package">tar</requirement>
+        <requirement type="package">wget</requirement>
+    </requirements>
+
+    <command detect_errors="exit_code"><![CDATA[
+        sh $fetch
+    ]]></command>
+
+    <configfiles>
+        <configfile name="fetch"><![CDATA[
+            mkdir workdir && cd workdir
+
+            wget --cut-dirs=2 -nH ftp://ftp.ncbi.nlm.nih.gov/pubchem/RDF/void.ttl
+
+            #for $url in $subsets
+                wget -r -A ttl.gz -nH --cut-dirs=2 $url
+            #end for
+
+            tar -cvf $pubchem_database *
+        ]]></configfile>
+    </configfiles>
+
+    <inputs>
+        <param name="subsets" type="select" display="checkboxes" multiple="true">
+            <label>Subsets</label>
+            <help>Select particular PubChemRDF subsets to fetch.</help>
+            <option value="ftp://ftp.ncbi.nlm.nih.gov/pubchem/RDF/compound/general">compound</option>
+            <option value="ftp://ftp.ncbi.nlm.nih.gov/pubchem/RDF/substance">substance</option>
+            <option value="ftp://ftp.ncbi.nlm.nih.gov/pubchem/RDF/descriptor">descriptor</option>
+            <option value="ftp://ftp.ncbi.nlm.nih.gov/pubchem/RDF/synonym">synonym</option>
+            <option value="ftp://ftp.ncbi.nlm.nih.gov/pubchem/RDF/inchikey">inchikey</option>
+            <option value="ftp://ftp.ncbi.nlm.nih.gov/pubchem/RDF/bioassay">bioassay</option>
+            <option value="ftp://ftp.ncbi.nlm.nih.gov/pubchem/RDF/measuregroup">measuregroup</option>
+            <option value="ftp://ftp.ncbi.nlm.nih.gov/pubchem/RDF/endpoint">endpoint</option>
+            <option value="ftp://ftp.ncbi.nlm.nih.gov/pubchem/RDF/protein">protein</option>
+            <option value="ftp://ftp.ncbi.nlm.nih.gov/pubchem/RDF/pathway">pathway</option>
+            <option value="ftp://ftp.ncbi.nlm.nih.gov/pubchem/RDF/conserveddomain">conserveddomain</option>
+            <option value="ftp://ftp.ncbi.nlm.nih.gov/pubchem/RDF/gene">gene</option>
+            <option value="ftp://ftp.ncbi.nlm.nih.gov/pubchem/RDF/source">source</option>
+            <option value="ftp://ftp.ncbi.nlm.nih.gov/pubchem/RDF/concept">concept</option>
+            <option value="ftp://ftp.ncbi.nlm.nih.gov/pubchem/RDF/reference">reference</option>
+        </param>
+    </inputs>
+
+    <outputs>
+        <data name="pubchem_database" format="tar"/>
+    </outputs>
+
+    <help><![CDATA[
+        Download the PubChem_ database from an official mirror in the form of RDF_ files.
+
+        Further, the RDF files may be loaded into an triplestore database an then queried using an SPARQL_ language.
+        For more information please visit an official `PubChemRDF documentation`_.
+
+        .. _RDF: https://www.w3.org/TR/rdf-primer/
+        .. _SPARQL: https://www.w3.org/TR/rdf-sparql-query/
+        .. _PubChem: https://pubchem.ncbi.nlm.nih.gov/
+        .. _PubChemRDF documentation: https://pubchemdocs.ncbi.nlm.nih.gov/rdf
+    ]]></help>
+</tool>
