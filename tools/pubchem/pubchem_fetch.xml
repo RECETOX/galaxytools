@@ -1,32 +1,44 @@
 <tool id="pubchem_fetch" name="Pubchem Fetch" version="0.1">
+    <macros>
+        <token name="@PUBCHEM_MIRROR@">ftp://ftp.ncbi.nlm.nih.gov/pubchem/RDF/</token>
+    </macros>
+
     <requirements>
         <requirement type="package">tar</requirement>
         <requirement type="package">wget</requirement>
     </requirements>
 
     <command detect_errors="exit_code"><![CDATA[
-        sh $fetch
+        cat $fetch > $pubchem_database
     ]]></command>
 
     <configfiles>
-        <configfile name="fetch"><![CDATA[
-            mkdir workdir && cd workdir
+        <configfile name="fetch">
+        <![CDATA[
+        #from urllib.parse import unquote, urlparse, urljoin
+        #from pathlib import PurePosixPath
 
-            wget --cut-dirs=2 -nH ftp://ftp.ncbi.nlm.nih.gov/pubchem/RDF/void.ttl
+        #set $cut_dirs = len(PurePosixPath(unquote(urlparse(str($mirror)).path)).parts) - 1
 
-            #for $url in $subsets
-                wget -r -A ttl.gz -nH --cut-dirs=2 $url
-            #end for
+        #for $subset in $subsets
+            wget --recursive --accept=ttl.gz --no-host-directories --cut-dirs=${cut_dirs} --directory-prefix=pubchem $urljoin(str($mirror), str($subset))
+        #end for
 
-            tar -cvf $pubchem_database *
-        ]]></configfile>
+        tar -cvf $pubchem_database pubchem
+        ]]>
+        </configfile>
     </configfiles>
 
     <inputs>
+        <param name="mirror" type="text" label="PubChemRDF Mirror" value="@PUBCHEM_MIRROR@">
+            <option value="@PUBCHEM_MIRROR@">@PUBCHEM_MIRROR@</option>
+        </param>
         <param name="subsets" type="select" display="checkboxes" multiple="true">
-            <label>Subsets</label>
-            <help>Select particular PubChemRDF subsets to fetch.</help>
-            <option value="ftp://ftp.ncbi.nlm.nih.gov/pubchem/RDF/compound/general">compound</option>
+            <label>PubChemRDF Subsets</label>
+            <help>Select particular PubChemRDF subsets to fetch. Omitting some subsets could substantially reduce the downloaded size.</help>
+            <option value="ftp://ftp.ncbi.nlm.nih.gov/pubchem/RDF/compound/general">compound/general</option>
+            <option value="ftp://ftp.ncbi.nlm.nih.gov/pubchem/RDF/compound/nbr2d">compound/nbr2d</option>
+            <option value="ftp://ftp.ncbi.nlm.nih.gov/pubchem/RDF/compound/nbr3d">compound/nbr3d</option>
             <option value="ftp://ftp.ncbi.nlm.nih.gov/pubchem/RDF/substance">substance</option>
             <option value="ftp://ftp.ncbi.nlm.nih.gov/pubchem/RDF/descriptor">descriptor</option>
             <option value="ftp://ftp.ncbi.nlm.nih.gov/pubchem/RDF/synonym">synonym</option>
@@ -45,7 +57,7 @@
     </inputs>
 
     <outputs>
-        <data name="pubchem_database" format="tar"/>
+        <data name="pubchem_database" format="txt"/>
     </outputs>
 
     <help><![CDATA[
