@@ -1,9 +1,11 @@
 import subprocess
 import sys
 import tempfile
-
+import re
 import pandas
-from openbabel import pybel
+
+from openbabel import openbabel, pybel
+openbabel.obErrorLog.StopLogging()
 
 
 # function for translating inchi to smiles
@@ -46,17 +48,24 @@ if "-icsv" in argv:
     smList3 = []
     for _, (smiles,) in in_df.iterrows():
         with tempfile.NamedTemporaryFile() as out:
-            subprocess.run(executable + argv + ["-ismi", smiles] + ["-ocsv", out.name])
-            tmp2 = pandas.read_csv(out.name)
-            tmp3 = pandas.read_csv(out.name)
-            tmp2.drop_duplicates(inplace=True, subset=["InChI", "InChIKey", "Synonyms", "Molecular formula", "Major Isotope Mass", "ALogP"])
-            tmp3.drop_duplicates(inplace=True, subset=["Molecular formula", "Major Isotope Mass", "ALogP"])
-            smList2.append([smiles] * tmp2.shape[0])
-            smList3.append([smiles] * tmp3.shape[0])
-            out_df1 = pandas.concat([out_df1, pandas.read_csv(out.name)])
-            out_df2 = pandas.concat([out_df2, tmp2])
-            out_df3 = pandas.concat([out_df3, tmp3])
-            smList1.append([smiles] * pandas.read_csv(out.name).shape[0])
+            print("Working on compound: " + smiles)
+            if not re.search(r'\.', smiles):
+                subprocess.run(executable + argv + ["-ismi", smiles] + ["-ocsv", out.name])
+                try:
+                    tmp2 = pandas.read_csv(out.name)
+                    tmp3 = pandas.read_csv(out.name)
+                    tmp2.drop_duplicates(inplace=True, subset=["InChI", "InChIKey", "Synonyms", "Molecular formula", "Major Isotope Mass", "ALogP"])
+                    tmp3.drop_duplicates(inplace=True, subset=["Molecular formula", "Major Isotope Mass", "ALogP"])
+                    smList2.append([smiles] * tmp2.shape[0])
+                    smList3.append([smiles] * tmp3.shape[0])
+                    out_df1 = pandas.concat([out_df1, pandas.read_csv(out.name)])
+                    out_df2 = pandas.concat([out_df2, tmp2])
+                    out_df3 = pandas.concat([out_df3, tmp3])
+                    smList1.append([smiles] * pandas.read_csv(out.name).shape[0])
+                except pandas.errors.EmptyDataError:
+                    continue
+            else:
+                print("ERROR: Input compound cannot be a mixture.")
     smList1 = sum(smList1, [])  # merge sublists into one list
     smList2 = sum(smList2, [])
     smList3 = sum(smList3, [])
