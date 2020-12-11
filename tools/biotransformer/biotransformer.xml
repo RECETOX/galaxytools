@@ -73,17 +73,17 @@ acknowledge the authors.
 
 Parameters explanation:
 
-Input. Currently, only a CSV file with one SMILES per line is accepted.
+**Input.** Currently, only a CSV file with one SMILES per line is accepted.
 
-The type of description: Type of biotransformer - EC-based (ecbased), CYP450 (cyp450), Phase II (phaseII), Human gut
+**The type of prediction:** EC-based (ecbased), CYP450 (cyp450), Phase II (phaseII), Human gut
 microbial (hgut), human super transformer* (superbio, or allHuman), Environmental microbial (envimicro).
 
-The number of steps for the prediction. This option will be used for the EC-based, CYP450, Phase II, and Environmental
+**The number of steps for the prediction:** this option will be used for the EC-based, CYP450, Phase II, and Environmental
 microbial biotransformers. The default value is 1.
 
-Mass tolerance for metabolite identification (default is 0.01).
+**Mass tolerance for metabolite identification** (default is 0.01).
 
-Output of BioTransformer with CSV as an input are 3 CSV files. One without any filtering, second with filtered
+**Output of BioTransformer** with CSV as an input are 3 CSV files. One without any filtering, second with filtered
 duplicates based on 6 columns (InChI, InChIKey, Synonyms, Molecular formula, Major Isotope Mass, AlogP) and third with
 filtered duplicates based on 3 columns (Molecular formula, Major Isotope Mass, AlogP).
 
