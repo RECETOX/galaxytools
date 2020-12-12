@@ -13,8 +13,8 @@ CYP2D6
 CYP3A4",HUMAN,,CC(C)C1=CC=C(C)C=C1O,"InChI=1S/C10H14O/c1-7(2)9-5-4-8(3)6-10(9)11/h4-7,11H,1-3H3",MGSRCZKZVOBKFT-UHFFFAOYSA-N,,150.1044
 2,CC(C)C1=CC=C(C)C=C1O,"CC(C)c1cc(c(C)cc1O)O	
 ","InChI=1S/C10H14O2/c1-6(2)8-5-9(11)7(3)4-10(8)12/h4-6,11-12H,1-3H3",OQIOHYHRGZNZCW-UHFFFAOYSA-N,CC(C)C1=CC(=C(C)C=C1O)O,"Thymohydroquinone
-Hydrothymoquinone
 Thymoquinol
+Hydrothymoquinone
 2217-60-9
 p-Cymene-2,5-diol
 1,4-Benzenediol, 2-methyl-5-(1-methylethyl)-
@@ -24,10 +24,11 @@ NSC 34803
 UNII-1C2ICM1R8V
 BRN 2084452
 1C2ICM1R8V
+2-methyl-5-propan-2-ylbenzene-1,4-diol
+2-methyl-5-(1-methylethyl)-1,4-benzenediol
 2-ISOPROPYL-5-METHYLBENZENE-1,4-DIOL
 Thymohydrochinon
 Thymohydroquinone (I)
-2-methyl-5-propan-2-ylbenzene-1,4-diol
 SCHEMBL69082
 p-Cymene-2,5-diol (8CI)
 CHEMBL4204349
@@ -72,7 +73,8 @@ CYP2D6
 CYP2E1
 CYP3A4",HUMAN,,CC(C)C1=CC=C(C)C=C1O,"InChI=1S/C10H14O/c1-7(2)9-5-4-8(3)6-10(9)11/h4-7,11H,1-3H3",MGSRCZKZVOBKFT-UHFFFAOYSA-N,,150.1044
 4,CC(C)C1=CC=C(C)C=C1O,"CC(C)c1c(cc(C)cc1O)O	
-","InChI=1S/C10H14O2/c1-6(2)10-8(11)4-7(3)5-9(10)12/h4-6,11-12H,1-3H3",TUWRZVAMHVWRER-UHFFFAOYSA-N,CC(C)C1=C(C=C(C)C=C1O)O,SCHEMBL1494319,12310887.0,C10H14O2,166.099379688,2.198500000000001,0,0,0,BTM00004,BTM00004,Hydroxylation of benzene on carbon ortho to electron donating group,BTMR1045,"CYP1A2
+","InChI=1S/C10H14O2/c1-6(2)10-8(11)4-7(3)5-9(10)12/h4-6,11-12H,1-3H3",TUWRZVAMHVWRER-UHFFFAOYSA-N,CC(C)C1=C(C=C(C)C=C1O)O,"SCHEMBL1494319
+5-methyl-2-propan-2-ylbenzene-1,3-diol",12310887.0,C10H14O2,166.099379688,2.198500000000001,0,0,0,BTM00004,BTM00004,Hydroxylation of benzene on carbon ortho to electron donating group,BTMR1045,"CYP1A2
 CYP2C8
 CYP2C9
 CYP2C19
@@ -80,19 +82,19 @@ CYP2D6
 CYP3A4",HUMAN,,CC(C)C1=CC=C(C)C=C1O,"InChI=1S/C10H14O/c1-7(2)9-5-4-8(3)6-10(9)11/h4-7,11H,1-3H3",MGSRCZKZVOBKFT-UHFFFAOYSA-N,,150.1044
 5,CC(C)C1=CC=C(C)C=C1O,"CC(C)c1ccc(C)c(c1O)O	
 ","InChI=1S/C10H14O2/c1-6(2)8-5-4-7(3)9(11)10(8)12/h4-6,11-12H,1-3H3",LYUBXLHGANLIMX-UHFFFAOYSA-N,CC(C)C1=CC=C(C)C(=C1O)O,"Cymopyrocatechol
-3-Isopropyl-6-methylpyrocatechol
-490-06-2
 p-cymene-2,3-diol
+490-06-2
+3-Isopropyl-6-methylpyrocatechol
 NSC 40567
 Pyrocatechol, 2-isopropyl-6-methyl-
 BRN 2248022
 UNII-93XFQ715UL
+3-methyl-6-propan-2-ylbenzene-1,2-diol
 93XFQ715UL
 p-Cymene-2,3-diol (7CI,8CI)
-3-isopropyl-6-methylcatechol
+3-isopropyl-6-methylbenzene-1,2-diol
 3-Isopropyl-6-Methyl-Benzene-1,2-Diol
 NSC40567
-3-methyl-6-propan-2-ylbenzene-1,2-diol
 SCHEMBL1494556
 1,2-Benzenediol, 3-methyl-6-(1-methylethyl)- (9CI)
 DTXSID10197652
@@ -114,6 +116,7 @@ CYP3A4",HUMAN,,CC(C)C1=CC=C(C)C=C1O,"InChI=1S/C10H14O/c1-7(2)9-5-4-8(3)6-10(9)11
 6,CC(C)C1=CC=C(C)C=C1O,"Cc1ccc(C(C)CO)c(c1)O	
 ","InChI=1S/C10H14O2/c1-7-3-4-9(8(2)6-11)10(12)5-7/h3-5,8,11-12H,6H2,1-2H3",CLJPRXFHCRIUKW-UHFFFAOYSA-N,C(C(C)C1=CC=C(C)C=C1O)O,"9-Hydroxythymol
 61955-76-8
+p-cymene-3,8-diol
 p-Mentha-1,3,5-triene-3,9-diol",14432748.0,C10H14O2,166.099379688,1.5777000000000003,0,0,0,BTM00006,BTM00006,Hydroxylation of terminal methyl,BTMR1061,"CYP1A2
 CYP2A6
 CYP2B6
@@ -125,10 +128,11 @@ CYP2E1
 CYP3A4",HUMAN,,CC(C)C1=CC=C(C)C=C1O,"InChI=1S/C10H14O/c1-7(2)9-5-4-8(3)6-10(9)11/h4-7,11H,1-3H3",MGSRCZKZVOBKFT-UHFFFAOYSA-N,,150.1044
 7,CC(C)C1=CC=C(C)C=C1O,"C=C(C)c1ccc(C)cc1O	
 ","InChI=1S/C10H12O/c1-7(2)9-5-4-8(3)6-10(9)11/h4-6,11H,1H2,2-3H3",IHWFPRKZRRGTTI-UHFFFAOYSA-N,CC(=C)C1=CC=C(C)C=C1O,"8,9-Dehydrothymol
+5-methyl-2-prop-1-en-2-ylphenol
 2-isopropenyl-5-methylphenol
 18612-99-2
 Phenol, 5-methyl-2-(1-methylethenyl)-
-5-methyl-2-prop-1-en-2-ylphenol
+p-Cymen-8-en-3-ol
 m-Cresol, 6-isopropenyl-
 SCHEMBL686122
 2-Isopropenyl-5-methyl-phenol
@@ -142,19 +146,19 @@ CYP2D6
 CYP3A4",HUMAN,,CC(C)C1=CC=C(C)C=C1O,"InChI=1S/C10H14O/c1-7(2)9-5-4-8(3)6-10(9)11/h4-7,11H,1-3H3",MGSRCZKZVOBKFT-UHFFFAOYSA-N,,150.1044
 8,CC(C)C1=CC=C(C)C=C1O,"CC(C)c1ccc(C)c(c1O)O	
 ","InChI=1S/C10H14O2/c1-6(2)8-5-4-7(3)9(11)10(8)12/h4-6,11-12H,1-3H3",LYUBXLHGANLIMX-UHFFFAOYSA-N,CC(C)C1=CC=C(C)C(=C1O)O,"Cymopyrocatechol
-3-Isopropyl-6-methylpyrocatechol
-490-06-2
 p-cymene-2,3-diol
+490-06-2
+3-Isopropyl-6-methylpyrocatechol
 NSC 40567
 Pyrocatechol, 2-isopropyl-6-methyl-
 BRN 2248022
 UNII-93XFQ715UL
+3-methyl-6-propan-2-ylbenzene-1,2-diol
 93XFQ715UL
 p-Cymene-2,3-diol (7CI,8CI)
-3-isopropyl-6-methylcatechol
+3-isopropyl-6-methylbenzene-1,2-diol
 3-Isopropyl-6-Methyl-Benzene-1,2-Diol
 NSC40567
-3-methyl-6-propan-2-ylbenzene-1,2-diol
 SCHEMBL1494556
 1,2-Benzenediol, 3-methyl-6-(1-methylethyl)- (9CI)
 DTXSID10197652
