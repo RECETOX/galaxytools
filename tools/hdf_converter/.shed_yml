@@ -1,0 +1,13 @@
+categories:
+- Convert Formats
+description: Convert hdf table to csv
+include:
+    - hdf_converter.xml
+    - hdf_converter.py
+    - test-data
+homepage_url: https://github.com/RECETOX/galaxytools/
+long_description: Tool to convert HDF output of apLCMS to csv input for RamClutstR
+name: hdf_converter
+owner: recetox
+remote_repository_url: https://github.com/RECETOX/galaxytools/tools/hdf_converter/
+type: unrestricted
