@@ -1,5 +1,5 @@
-<tool id="hdf_converter" name="HDF Converter" version="0.0.1" python_template_version="3.5">
-    <description>converts aplcms output to RamClustR csv input</description>
+<tool id="apCLMS_to_RamClustR_converter" name="apLCMS to RamClustR converter" version="0.0.1" python_template_version="3.5">
+    <description>converts aplcms HDF output to RamClustR csv input</description>
     <requirements>
         <container type="docker">maxskorik/hdf_converter</container>
     </requirements>
@@ -24,6 +24,6 @@
         </test>
     </tests>
     <help><![CDATA[
-        Tool to convert apLCMS output to csv file formated to upstream use with RamClustR.
+        Tool to convert apLCMS output to csv file formated in accordance to RamClustR input requirements.
     ]]></help>
 </tool>
