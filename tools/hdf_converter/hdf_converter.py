@@ -1,9 +1,10 @@
 #!/usr/bin/env python
 
 import optparse
-import pandas as pd
 import sys
 import warnings
+
+import pandas as pd
 
 
 warnings.simplefilter('ignore')
@@ -23,9 +24,7 @@ def extract_samples(table, num_samples, idx):
     mzrt = table['mz'].map(str) + '_' + table.iloc[:, rt_idx].map(str)
     intensity = table.iloc[:, intensity_idx]
     mzrt_intensity = {'mz_rt': mzrt, sample_name: intensity}
-    mzrt_intensity = pd.DataFrame(
-        mzrt_intensity, columns=['mz_rt', sample_name]
-        )
+    mzrt_intensity = pd.DataFrame(mzrt_intensity, columns=['mz_rt', sample_name])
     mzrt_intensity.set_index('mz_rt', inplace=True)
     return mzrt_intensity
 
