@@ -1,0 +1,29 @@
+<tool id="apCLMS_to_RamClustR_converter" name="apLCMS to RamClustR converter" version="0.0.1" python_template_version="3.5">
+    <description>converts aplcms HDF output to RamClustR csv input</description>
+    <requirements>
+        <container type="docker">maxskorik/hdf_converter</container>
+    </requirements>
+    <command detect_errors="exit_code"><![CDATA[
+        python $__tool_directory__/hdf_converter.py --dataframe '${hdf_dataframe}' --table '${table_name}' '${out_file}'
+    ]]></command>
+    <inputs>
+        <param name="hdf_dataframe" type="data" format="h5" label="apLCMS Dataset"/>
+        <param name="table_name" type="select" label="Table Name">
+            <option value="peaks">Peaks</option>
+            <option value="aligned_peaks">Aligned Peaks</option>
+        </param>
+    </inputs>
+    <outputs>
+        <data format="csv" name="out_file" label="${hdf_dataframe.name}"/>
+    </outputs>
+    <tests>
+        <test>
+            <param name="hdf_dataframe" value="test.h5" ftype="h5"/>
+            <param name="table_name" value="peaks"/>
+            <output name="out_file" file="test.csv" ftype="csv"/>
+        </test>
+    </tests>
+    <help><![CDATA[
+        Tool to convert apLCMS output to csv file formated in accordance to RamClustR input requirements.
+    ]]></help>
+</tool>
