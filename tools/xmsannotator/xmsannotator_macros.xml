@@ -1,18 +1,44 @@
 <macros>
     <token name="@TOOL_VERSION@">1.3.2</token>
-    <token name="@DOCKER_IMAGE@">recetox/xmsannotator:1.3.2-recetox1</token>
+    <token name="@DOCKER_IMAGE@">recetox/xmsannotator:1.3.2-recetox2</token>
 
-    <xml name="annotation">
-        <param name="peaks" type="data" format="h5" label="Peaks" help="Peaks to annotate."/>
-        <param name="adducts" type="data" format="h5" label="Adduct database"/>
-        <param name="compounds" type="data" format="h5" label="Compound database"/>
+    <xml name="inputs">
+        <param name="peak_table" type="data" format="csv,h5,parquet">
+            <label>Peak table</label>
+            <help><![CDATA[
+                A peak-intensity table such as outputted from apLCMS.
+                The file is required to contain the fields <em>mz</em> and <em>rt</em>.
+            ]]></help>
+        </param>
+        <param name="compound_table" type="data" format="csv,parquet">
+            <label>Compound database</label>
+            <help><![CDATA[
+                Database of compounds according to which the annotation is performed.
+                The database is required to contain the fields <em>compound_id</em>, <em>monoisotopic_mass</em>, and <em>molecular_formula</em>.
+            ]]></help>
+        </param>
+        <param name="adduct_table" type="data" format="csv,parquet" optional="true">
+            <label>Adduct database (optional)</label>
+            <help><![CDATA[
+                Database of adduct which is combined with the database of compound to form a molecule-adduct pairs.
+                The database is required to contain <em>adduct</em>, <em>charge</em>, <em>mass</em>, and <em>n_molecules</em>.
+            ]]></help>
+        </param>
+    </xml>
 
-        <param name="mz_tolerance_ppm" type="float" value="5" min="0" label="Mass tolerance [ppm]" help="Mass tolerance in ppm for database matching."/>
+    <xml name="outputs">
+        <data name="annotation_parquet" format="parquet"/>
+    </xml>
+
+    <xml name="tolerance">
+        <param name="mass_tolerance_ppm" type="integer" min="0" value="5">
+            <label>Mass tolerance [ppm]</label>
+            <help>Mass tolerance in ppm for database matching.</help>
+        </param>
+        <yield/>
     </xml>
 
     <xml name="citations">
-        <citations>
-            <citation type="doi">10.1021/acs.analchem.6b01214</citation>
-        </citations>
+        <citation type="doi">10.1021/acs.analchem.6b01214</citation>
     </xml>
 </macros>

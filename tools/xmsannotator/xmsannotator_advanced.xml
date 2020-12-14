@@ -1,4 +1,4 @@
-<tool id="xmsannotator_advanced" name="xMSannotator (advanced)" version="@TOOL_VERSION@+galaxy1">
+<tool id="xmsannotator_advanced" name="xMSannotator (advanced)" version="@TOOL_VERSION@+galaxy2">
     <macros>
         <import>xmsannotator_macros.xml</import>
     </macros>
@@ -8,72 +8,140 @@
     </requirements>
 
     <command detect_errors="aggressive"><![CDATA[
-        #set expected_adducts = ['"{}"'.format($i.adduct) for $i in $scoring.expected_adducts]
-        #set expected_adducts = "c(" + ', '.join($expected_adducts) + ")"
-
-        Rscript -e 'annotation <- xmsannotator::advanced_annotation(
-                        peaks = xmsannotator::load_hdf("$peaks", "peaks"),
-                        adducts = xmsannotator::load_hdf("$adducts", "adducts"),
-                        compounds = xmsannotator::load_hdf("$compounds", "compounds"),
-
-                        mass_tolerance = 1e-6 * $mz_tolerance_ppm,
-                        time_tolerance = $rt_tolerance,
-
-                        correlation_threshold = as.double($clustering.correlation_threshold),
-                        min_cluster_size = as.integer($clustering.min_cluster_size),
-                        deep_split = as.integer($clustering.deep_split),
-                        network_type = "$clustering.network_type",
-
-                        expected_adducts = as.character($expected_adducts),
-                        #if $scoring.boost
-                            boost = xmsannotator::load_hdf("$scoring.boost", "boost"),
-                        #end if
-                        redundancy_filtering = $scoring.redundancy_filtering
-                   )'
-                -e 'xmsannotator::save_hdf("$annotation", "annotation", annotation)'
+        Rscript $wrapper
     ]]></command>
 
-    <inputs>
-        <expand macro="annotation"/>
-        <param name="rt_tolerance" type="float" value="10" min="0" label="Retention time tolerance [s]" help="Retention time tolerance in seconds for finding peaks derived from the same parent metabolite."/>
+    <configfiles>
+        <configfile name="wrapper"><![CDATA[
+            library(xmsannotator)
 
+            annotation <- advanced_annotation(
+            #if $peak_table.is_of_type("h5")
+                peak_table = load_peak_table_hdf("${peak_table}"),
+            #elif $peak_table.is_of_type("parquet")
+                peak_table = load_peak_table_parquet("${peak_table}"),
+            #end if
+                adduct_table = load_adduct_table_parquet("${adduct_table}"),
+                compound_table = load_compound_table_parquet("${compound_table}"),
+                mass_tolerance = 1e-6 * ${mass_tolerance_ppm},
+                time_tolerance = $time_tolerance,
+                correlation_threshold = as.double($clustering.correlation_threshold),
+                min_cluster_size = as.integer($clustering.min_cluster_size),
+                deep_split = as.integer($clustering.deep_split),
+                network_type = "$clustering.network_type",
+            #if $scoring.expected_adducts
+                expected_adducts = load_expected_adducts_csv("${$scoring.expected_adducts_csv}")
+            #end if
+            #if $scoring.boost_compounds
+                boost_compounds = load_boost_compounds_csv("${scoring.boost_compounds_csv}")
+            #end if
+                redundancy_filtering = $scoring.redundancy_filtering,
+                n_workers = \${GALAXY_SLOTS:-1}
+            )
+
+            save_parquet(data = annotation, file = "${annotation_parquet}")
+        ]]></configfile>
+    </configfiles>
+
+    <inputs>
+        <expand macro="inputs"/>
+        <expand macro="tolerance">
+            <param name="time_tolerance" type="float" value="10" min="0">
+                <label>Retention time tolerance [s]</label>
+                <help>
+                    Retention time tolerance in seconds for finding peaks derived from the same parent metabolite.
+                </help>
+            </param>
+        </expand>
         <section name="clustering" title="Clustering">
             <param name="correlation_method" type="select" display="radio" label="Correlation method">
                 <option value="pearson" selected="true"/>
                 <option value="spearman"/>
             </param>
-            <param name="correlation_threshold" type="float" value="0.7" label="Correlation threshold" help="Correlation threshold between peaks to qualify as adducts/isotopes of the same metabolite."/>
-            <param name="min_cluster_size" type="integer" value="10" min="1" label="Minimum cluster size" help="The minimum number of nodes to be considered as a cluster."/>
-            <param name="deep_split" type="integer" value="2" min="0" max="4" label="Deep split" help="Deep split provides a rough control over sensitivity to cluster splitting. The higher the value, the more and smaller clusters will be produced (see WGCNA package documentation)."/>
-            <param name="network_type" type="select" display="radio" label="Network type" help="Network type parameter affects how the network's adjacency matrix is created from the correlation matrix (see WGCNA package documentation).">
+            <param name="correlation_threshold" type="float" value="0.7">
+                <label>Correlation threshold</label>
+                <help>Correlation threshold between peaks to qualify as adducts/isotopes of the same metabolite.</help>
+            </param>
+            <param name="min_cluster_size" type="integer" value="10" min="1">
+                <label>Minimum cluster size</label>
+                <help>The minimum number of nodes to be considered as a cluster.</help>
+            </param>
+            <param name="deep_split" type="integer" value="2" min="0" max="4">
+                <label>Deep split</label>
+                <help>
+                    Deep split provides a rough control over sensitivity to cluster splitting. The higher the value,
+                    the more and smaller clusters will be produced (see WGCNA package documentation).
+                </help>
+            </param>
+            <param name="network_type" type="select" display="radio">
+                <label>Network type</label>
+                <help>
+                    Network type parameter affects how the network's adjacency matrix is created from the correlation
+                    matrix (see WGCNA package documentation).
+                </help>
                 <option value="signed"/>
                 <option value="unsigned" selected="true"/>
             </param>
         </section>
-
         <section name="scoring" title="Scoring" expanded="true">
-            <param name="strict_boosting" type="boolean" checked="true" truevalue="TRUE" falsevalue="FALSE" label="Strict boosting" help="Boost the scores of metabolites that not only belongs to the same pathway but also to the same cluster. Otherwise, do not account for cluster membership."/>
-            <repeat name="expected_adducts" title="Expected adducts" help="Require the presence of certain adducts for a high confidence match.">
-                <param name="adduct" type="text" value="M+H" label="Adduct"/>
-            </repeat>
-            <param name="boost" type="data" format="h5" optional="true" label="Validated compounds score boosting (optional)" help="Table of previously validated compounds to boost their scores and confidence levels. The 1st column of the table must contain IDs of compounds. The optional 2nd and 3rd columns may contain mz values and retention times."/>
-            <param name="min_isp" type="integer" min="0" value="1" label="Minimum number of expected isotopes" help="Minimum number of adducts/isotopes to be present for a match to be considered as a high confidence match."/>
-            <param name="max_isp" type="integer" min="0" value="5" label="Maximum number of expected isotopes" help="Maximum number of adducts/isotopes to be present for a match to be considered as a high confidence match."/>
-            <param name="redundancy_filtering" type="boolean" checked="true" truevalue="TRUE" falsevalue="FALSE" label="Redundancy filtering" help="Whether to filter out low-scored multiple matcher or not."/>
+            <param name="strict_boosting" type="boolean" checked="true" truevalue="TRUE" falsevalue="FALSE">
+                <label>Strict boosting</label>
+                <help>
+                    Boost the scores of metabolites that not only belongs to the same pathway but also to the same
+                    cluster. Otherwise, do not account for cluster membership.
+                </help>
+            </param>
+            <param name="expected_adducts" type="data" format="csv,tsv" optional="true">
+                <label>Expected adducts</label>
+                <help>
+                    Require the presence of certain adducts for a high confidence match. By default, at least the
+                    presence of an M+H adduct is required for a high confidence match.
+                </help>
+                <conversion name="expected_adducts_csv" type="csv"/>
+            </param>
+            <param name="boost_compounds" type="data" format="csv,tsv" optional="true">
+                <label>Validated compounds score boosting (optional)</label>
+                <help>
+                    Table of previously validated compounds to boost their scores and confidence levels.
+                    The 1st column of the table must contain IDs of compounds.
+                    The optional 2nd and 3rd columns may contain mz values and retention times.
+                </help>
+                <conversion name="boost_compounds_csv" type="csv"/>
+            </param>
+            <param name="min_isp" type="integer" min="0" value="1">
+                <label>Minimum number of expected isotopes</label>
+                <help>
+                    Minimum number of adducts/isotopes to be present for a match to be considered as a high confidence match.
+                </help>
+            </param>
+            <param name="max_isp" type="integer" min="0" value="5">
+                <label>Maximum number of expected isotopes</label>
+                <help>
+                    Maximum number of adducts/isotopes to be present for a match to be considered as a high confidence match.
+                </help>
+            </param>
+            <param name="redundancy_filtering" type="boolean" checked="true" truevalue="TRUE" falsevalue="FALSE">
+                <label>Redundancy filtering</label>
+                <help>Whether to filter out low-scored multiple matcher or not.</help>
+            </param>
         </section>
     </inputs>
 
     <outputs>
-        <data format="h5" name="annotation"/>
+        <expand macro="outputs"/>
     </outputs>
 
     <help><![CDATA[
-        Annotate the peak intensity table (such as outputted from apLCMS) with metabolites from the metabolite database using advanced methods.
+        Annotate the peak intensity table (such as outputted from apLCMS) with compounds from the compounds database
+        using advanced methods.
 
-        The annotation process generates all possible metabolite-adduct pairs from the metabolite and adduct databases and matches those pairs to the measured peaks.
-        A metabolite-adduct pair is pronounced as a match to the peak when the difference of their masses are withing some tolerance.
-        Then a score and a confidence level is assigned to each match based on peak correlation clustering, metabolite pathway associations, adducts expectations, and isotope conformations.
+        The annotation process generates all possible compound-adduct pairs and matches those pairs to the measured
+        peaks. A compound-adduct pair is pronounced as a match to a certain peak when the difference of their masses are
+        withing some tolerance. Then, a score and a confidence level is assigned to each match based on peak correlation
+        clustering, metabolite pathway associations, adducts expectations, and isotope conformations.
     ]]></help>
 
-    <expand macro="citations"/>
+    <citations>
+        <expand macro="citations"/>
+    </citations>
 </tool>
