@@ -30,10 +30,10 @@
                 deep_split = as.integer($clustering.deep_split),
                 network_type = "$clustering.network_type",
             #if $scoring.expected_adducts
-                expected_adducts = load_expected_adducts_csv("${$scoring.expected_adducts_csv}")
+                expected_adducts = load_expected_adducts_csv("${$scoring.expected_adducts_csv}"),
             #end if
             #if $scoring.boost_compounds
-                boost_compounds = load_boost_compounds_csv("${scoring.boost_compounds_csv}")
+                boost_compounds = load_boost_compounds_csv("${scoring.boost_compounds_csv}"),
             #end if
                 redundancy_filtering = $scoring.redundancy_filtering,
                 n_workers = \${GALAXY_SLOTS:-1}
