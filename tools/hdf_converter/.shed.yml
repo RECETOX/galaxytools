@@ -1,6 +1,6 @@
 categories:
 - Convert Formats
-description: Convert hdf from apLCMS table to RamClustR csv
+description: Convert HDF tables from apLCMS to RamClustR csv
 include:
     - hdf_converter.xml
     - hdf_converter.py
