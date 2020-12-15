@@ -1,7 +1,9 @@
-<tool id="apCLMS_to_RamClustR_converter" name="apLCMS to RamClustR converter" version="0.0.1" python_template_version="3.5">
+<tool id="aplcms_to_ramclustr_converter" name="apLCMS to RamClustR converter" version="0.0.1" python_template_version="3.5">
     <description>converts aplcms HDF output to RamClustR csv input</description>
     <requirements>
-        <container type="docker">maxskorik/hdf_converter</container>
+        <requirement type="package" version="3.7">python</requirement>
+        <requirement type="package" version="1.1.5">pandas</requirement>
+        <requirement type="package" version="3.6.1">pytables</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
         python $__tool_directory__/hdf_converter.py --dataframe '${hdf_dataframe}' --table '${table_name}' '${out_file}'
@@ -24,6 +26,12 @@
         </test>
     </tests>
     <help><![CDATA[
-        Tool to convert apLCMS output to csv file formated in accordance to RamClustR input requirements.
+        Tool to convert apLCMS output to csv file formated in accordance to `RamClustR (CSV) <https://umsa.cerit-sc.cz/root?tool_id=testtoolshed.g2.bx.psu.edu/repos/recetox/ramclustr_csv/ramclustr_csv/1.1.0+galaxy0>`_ input requirements.
+
+        **Workflow position**
+
+        - Upstream tool: `apLCMS <https://github.com/RECETOX/galaxytools/tree/master/tools/aplcms>`_  Unsupervised or Hybrid
+
+        - Downstream tool: `RamClustR (CSV) <https://github.com/RECETOX/galaxytools/tree/master/tools/ramclustr>`_
     ]]></help>
 </tool>
