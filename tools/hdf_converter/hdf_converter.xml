@@ -26,7 +26,7 @@
         </test>
     </tests>
     <help><![CDATA[
-        Tool to convert apLCMS output to csv file formated in accordance to `RamClustR (CSV) <https://umsa.cerit-sc.cz/root?tool_id=testtoolshed.g2.bx.psu.edu/repos/recetox/ramclustr_csv/ramclustr_csv/1.1.0+galaxy0>`_ input requirements.
+        Tool to convert apLCMS output to csv file formated in accordance to RamClustR(CSV) input requirements.
 
         **Workflow position**
 
