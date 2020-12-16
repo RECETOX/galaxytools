@@ -53,8 +53,8 @@ def main():
     except KeyError:
         sys.exit("Selected table does not exist in HDF dataframe")
 
-    RamClutsr_data = join_samples(aplcms_table)
-    RamClustr_data = convert_to_RamClustR(RamClutsr_data)
+    RamClustr_data = join_samples(aplcms_table)
+    RamClustr_data = convert_to_RamClustR(RamClustr_data)
     output = args[0]
     RamClustr_data.to_csv(output, sep=';')
     print("Table '{}' of HDF dataset is converted to csv for RamClutsR".format(options.table))

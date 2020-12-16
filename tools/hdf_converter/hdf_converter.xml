@@ -11,12 +11,12 @@
     <inputs>
         <param name="hdf_dataframe" type="data" format="h5" label="apLCMS Dataset"/>
         <param name="table_name" type="select" label="Table Name">
-            <option value="peaks">Peaks</option>
-            <option value="aligned_peaks">Aligned Peaks</option>
+            <option value="peaks">peaks</option>
+            <option value="aligned_peaks">aligned peaks</option>
         </param>
     </inputs>
     <outputs>
-        <data format="csv" name="out_file" label="${hdf_dataframe.name}"/>
+        <data format="csv" name="out_file" label="CSV with ${table_name} from ${hdf_dataframe.name}"/>
     </outputs>
     <tests>
         <test>
@@ -26,12 +26,12 @@
         </test>
     </tests>
     <help><![CDATA[
-        Tool to convert apLCMS output to csv file formated in accordance to `RamClustR (CSV) <https://umsa.cerit-sc.cz/root?tool_id=testtoolshed.g2.bx.psu.edu/repos/recetox/ramclustr_csv/ramclustr_csv/1.1.0+galaxy0>`_ input requirements.
+        Tool to convert apLCMS output to csv file formated in accordance to RamClustR (CSV) input requirements.
 
         **Workflow position**
 
         - Upstream tool: `apLCMS <https://github.com/RECETOX/galaxytools/tree/master/tools/aplcms>`_  Unsupervised or Hybrid
 
-        - Downstream tool: `RamClustR (CSV) <https://github.com/RECETOX/galaxytools/tree/master/tools/ramclustr>`_
+        - Downstream tool: `RamClustR <https://github.com/RECETOX/galaxytools/tree/master/tools/ramclustr>`_ (CSV)
     ]]></help>
 </tool>
