@@ -16,7 +16,7 @@
         </param>
     </inputs>
     <outputs>
-        <data format="csv" name="out_file" label="${table_name} from ${hdf_dataframe.name}"/>
+        <data format="csv" name="out_file" label="CSV with ${table_name} from ${hdf_dataframe.name}"/>
     </outputs>
     <tests>
         <test>
