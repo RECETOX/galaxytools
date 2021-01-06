@@ -1,0 +1,52 @@
+<tool id="filter_orgmet_anorg" name="Filter organometallics and/or anorganics" version="@TOOL_VERSION@+galaxy@GALAXY_VERSION@">
+    <description>from a library of compounds</description>
+    <!--parallelism method="multi" split_inputs="infile" split_mode="to_size" split_size="50000" shared_inputs="" merge_outputs="outfile"></parallelism-->
+    <macros>
+        <import>macros.xml</import>
+        <token name="@GALAXY_VERSION@">1</token>
+    </macros>
+    <expand macro="requirements"/>
+    <command detect_errors="aggressive">
+<![CDATA[
+    python '$__tool_directory__/filter_compounds.py'
+      -i '${infile}'
+      -o '${outfile}'
+      $metorg
+      $anorg
+]]>
+    </command>
+    <inputs>
+        <param name="infile" type="data" format="smi" label="Select input file" help="Currently only SMILES identifiers are allowed as an input."/>
+        <param name="metorg" type="boolean" checked="false" truevalue="-m" falsevalue="" label="Filter out organometallic compounds?" />
+        <param name="anorg" type="boolean" checked="false" truevalue="-a" falsevalue="" label="Filter out anorganic compounds?" />
+    </inputs>
+    <outputs>
+	    <data format="smi" name="outfile"/>
+    </outputs>
+    <tests>
+        <test>
+            <param name="infile" ftype="smi" value="input_all.smi"/>
+            <param name="metorg" value="true"/>
+            <param name="anorg" value="true"/>	
+            <output name="outfile" ftype="smi" file="output_all.smi" />
+        </test>
+        <test>
+            <param name="infile" ftype="smi" value="input_all_table.smi"/>
+            <param name="metorg" value="true"/>
+            <param name="anorg" value="true"/>
+            <output name="outfile" ftype="smi" file="output_all_table.smi" />
+        </test>
+    </tests>
+    <help>
+<![CDATA[
+
+.. class:: infomark
+
+**What this tool does**
+
+Filters organometallics (compounds containing atoms other than C|N|O|P|F|S|I|B|Si|Se|Cl|Br|Li|Na|H|K) or anorganics (compounds without C). Input can be either list of SMILES identifiers or indexed table of SMILES (two tab-separated columns, first column is index, second columns is SMILES).
+
+]]>
+    </help>
+</tool>
+
