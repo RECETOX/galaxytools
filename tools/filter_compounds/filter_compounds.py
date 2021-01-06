@@ -1,5 +1,5 @@
-import re
 import argparse
+import re
 
 from openbabel import openbabel, pybel
 openbabel.obErrorLog.StopLogging()
@@ -31,9 +31,9 @@ def filter_compounds(args, pattern):
                 else:
                     outfile.write(f'{values[0]}\t{""}\n')
             else:
-                    mol = pybel.readstring('smi', values[0]).write('inchi').split('/')[1]
-                    if False not in ([bool(re.search(rf'{x}', mol)) for x in pattern]):
-                        outfile.write(line)
+                mol = pybel.readstring('smi', values[0]).write('inchi').split('/')[1]
+                if False not in ([bool(re.search(rf'{x}', mol)) for x in pattern]):
+                    outfile.write(line)
 
 
 def __main__():
@@ -46,16 +46,15 @@ def __main__():
     sel_pattern = []
     if args.met is False and args.anorg is False:
         print("No filtering selected - user did not specify what to filter out.")
-        sel_pattern = '^[a-zA-Z]+$'
+        sel_pattern = r'^[a-zA-Z]+$'
     # select patterns for filtering
     if args.met:
-        sel_pattern.append('^(?:C|N|O|P|F|S|I|B|Si|Se|Cl|Br|Li|Na|H|K|[0-9]|\.)+$')
+        sel_pattern.append(r'^(?:C|N|O|P|F|S|I|B|Si|Se|Cl|Br|Li|Na|H|K|[0-9]|\.)+$')
     if args.anorg:
-        sel_pattern.append('[C][^abd-z]')
+        sel_pattern.append(r'[C][^abd-z]')
 
     filter_compounds(args, sel_pattern)
 
 
 if __name__ == "__main__":
     __main__()
-
