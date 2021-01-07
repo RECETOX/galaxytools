@@ -1,0 +1,11 @@
+categories:
+- Metabolomics
+description: Tool for filtering organometallics/anorganic compounds from a list of compounds.
+homepage_url: https://github.com/RECETOX/galaxytools/
+long_description: |
+  Filters organometallics (compounds containing atoms other than C|N|O|P|F|S|I|B|Si|Se|Cl|Br|Li|Na|H|K) or anorganics (compounds without C).
+  Input can be either list of SMILES identifiers or indexed table of SMILES (two tab-separated columns, first column is index, second columns is SMILES).
+name: filter_compounds
+owner: recetox
+remote_repository_url: https://github.com/RECETOX/galaxytools/tree/master/tools/filter_compounds
+type: unrestricted
