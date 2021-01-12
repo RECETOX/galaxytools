@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import optparse
+import argparse
 import sys
 import warnings
 
@@ -9,55 +9,49 @@ import pandas as pd
 
 warnings.simplefilter('ignore')
 
-parser = optparse.OptionParser()
-parser.add_option("--dataframe", help="Name of hdf dataframe")
-parser.add_option("--table", help="Name of a table in the dataframe")
-(options, args) = parser.parse_args()
+parser = argparse.ArgumentParser()
+parser.add_argument("--dataframe", help="Name of hdf dataframe")
+parser.add_argument("--table", help="Name of a table in the dataframe")
+parser.add_argument('output')
+args = parser.parse_args()
 
 
-def extract_samples(table, num_samples, idx):
-    intensity_idx = 4 + idx
-    rt_idx = 4 + num_samples + idx
-    rt_idx_name = table.columns.tolist()[rt_idx]
-    table.dropna(subset=[rt_idx_name], inplace=True)
-    sample_name = table.columns.tolist()[intensity_idx].split('.')[1]
-    mzrt = table['mz'].map(str) + '_' + table.iloc[:, rt_idx].map(str)
-    intensity = table.iloc[:, intensity_idx]
-    mzrt_intensity = {'mz_rt': mzrt, sample_name: intensity}
-    mzrt_intensity = pd.DataFrame(mzrt_intensity, columns=['mz_rt', sample_name])
-    mzrt_intensity.set_index('mz_rt', inplace=True)
-    return mzrt_intensity
+def extract_data(table):
+    num_samples = int((len(table.columns.tolist()) - 4) / 2)
+    mz_rt = table['mz'].map(str) + "_" + table['rt'].map(str)
+
+    intensities = table.iloc[:, 4:(4 + num_samples)]
+    sample_labels = [label.split('.')[1] for label in intensities.columns.tolist()]
+    ramclustr_data = pd.DataFrame({'mz_rt': mz_rt})
+
+    for idx in range(num_samples):
+        label = sample_labels[idx]
+        ramclustr_data[label] = intensities.iloc[:, idx]
+
+    return ramclustr_data
 
 
-def join_samples(table):
-    num_samples = int((len(table.columns.tolist()) - 4) / 2)  # 4 default columns: mz,rt,mz_min,mz_max. The rest is intensity and rt columns for each sample
-    RamClustr_data = pd.DataFrame(columns=['mz_rt'])
-    for sample in range(num_samples):
-        sample_data = extract_samples(table, num_samples, sample)
-        RamClustr_data = pd.merge(RamClustr_data, sample_data, on='mz_rt', how='outer')
-    return RamClustr_data
-
-
-def convert_to_RamClustR(RamClustr_data):
-    RamClustr_data.fillna(0, inplace=True)
-    RamClustr_data.rename(columns={'mz_rt': 'sample'}, inplace=True)
-    RamClustr_data.set_index('sample', inplace=True)
-    RamClustr_data_transposed = RamClustr_data.transpose()
-    RamClustr_data_transposed.index.rename('sample', inplace=True)
-    return RamClustr_data_transposed
+def format_table(ramclustr_data):
+    ramclustr_data.set_index('mz_rt', inplace=True)
+    ramclustr_data = ramclustr_data.transpose()
+    ramclustr_data.index.rename('sample', inplace=True)
+    return ramclustr_data
 
 
 def main():
     try:
-        aplcms_table = pd.read_hdf(options.dataframe, options.table, errors='None')
+        aplcms_table = pd.read_hdf(args.dataframe, args.table, errors='None')
     except KeyError:
-        sys.exit("Selected table does not exist in HDF dataframe")
+        msg = "Selected table does not exist in HDF dataframe"
+        print(msg, file=sys.stderr)
+        sys.exit(1)
 
-    RamClustr_data = join_samples(aplcms_table)
-    RamClustr_data = convert_to_RamClustR(RamClustr_data)
-    output = args[0]
-    RamClustr_data.to_csv(output, sep=';')
-    print("Table '{}' of HDF dataset is converted to csv for RamClutsR".format(options.table))
+    ramclustr_data = extract_data(aplcms_table)
+    ramclustr_table = format_table(ramclustr_data)
+
+    ramclustr_table.to_csv(args.output, sep=',')
+    msg = "Table '{}' of HDF dataset is converted to csv for RamClutsR".format(args.table)
+    print(msg, file=sys.stdout)
 
 
 if __name__ == "__main__":

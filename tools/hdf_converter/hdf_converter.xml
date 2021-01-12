@@ -20,9 +20,9 @@
     </outputs>
     <tests>
         <test>
-            <param name="hdf_dataframe" value="test.h5" ftype="h5"/>
+            <param name="hdf_dataframe" value="test-input.h5" ftype="h5"/>
             <param name="table_name" value="peaks"/>
-            <output name="out_file" file="test.csv" ftype="csv"/>
+            <output name="out_file" file="test-output.csv" ftype="csv"/>
         </test>
     </tests>
     <help><![CDATA[
