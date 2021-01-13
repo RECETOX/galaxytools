@@ -8,6 +8,8 @@
             <param label="sample_name_column" name="sample_name_column" type="integer" value="1" help="which column from the csv file contains sample names?" />
             <param label="feature_delimiter" name="feature_delimiter" type="text" value="_" help="Only required if ms input is set! How feature mz and rt are delimited in csv import column header e.g. ='-'" />
             <param label="retention_time_column" name="retention_time_column" type="integer" value="2" help="which position in delimited column header represents the retention time (csv only)" />
+            <param label="st" name="st" type="float" value="1" help="sigma t - time similarity decay value. A recommended starting point is half the value of 
+      your average chromatographic peak width at half max (seconds))." />
         </section>
     </xml>
 
@@ -64,9 +66,17 @@
         </section>
     </xml>
 
-    <xml name="parameters_optional">
+    <xml name="parameters_optional_xcms">
         <section name="optional" title="Optional Parameters" expanded="false">
-            <param label="st" name="st" type="float" optional="true" help="sigma t - time similarity decay value " />
+            <param label="st" name="st" type="float" optional="true" help="sigma t - time similarity decay value. A recommended starting point is half the value of 
+      your average chromatographic peak width at half max (seconds))." />
+            <param label="fftempdir" name="fftempdir" type="text" optional="true" help="valid path: if there are file size limitations on the default ff pacakge temp directory  - getOptions('fftempdir') - you can change the directory used as the fftempdir with this option." />
+            <param label="maxt" name="maxt" type="integer" optional="true" help="maximum time difference to calculate retention similarity for - all values beyond this are assigned similarity of zero" />
+        </section>
+    </xml>
+
+        <xml name="parameters_optional_csv">
+        <section name="optional" title="Optional Parameters" expanded="false">
             <param label="fftempdir" name="fftempdir" type="text" optional="true" help="valid path: if there are file size limitations on the default ff pacakge temp directory  - getOptions('fftempdir') - you can change the directory used as the fftempdir with this option." />
             <param label="maxt" name="maxt" type="integer" optional="true" help="maximum time difference to calculate retention similarity for - all values beyond this are assigned similarity of zero" />
         </section>
