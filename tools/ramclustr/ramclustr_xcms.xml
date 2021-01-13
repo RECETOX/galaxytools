@@ -10,7 +10,7 @@
     <inputs>
         <param name="input_xcms" label="input_xcms" type="data" format="rdata.xcms.fillpeaks" help=": containing grouped feature data for clustering by ramclustR" />
         <expand macro="parameters_required" />
-        <expand macro="parameters_optional" />
+        <expand macro="parameters_optional_xcms" />
     </inputs>
 
     <command detect_errors="aggressive"><![CDATA[

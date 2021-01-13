@@ -10,7 +10,7 @@
     <inputs>
         <expand macro="parameters_csv" />
         <expand macro="parameters_required" />
-        <expand macro="parameters_optional" />
+        <expand macro="parameters_optional_csv" />
     </inputs>
 
     <command detect_errors="aggressive"><![CDATA[
@@ -37,9 +37,7 @@
                 cor_method = "$required.cor_method",
                 rt_only_low_n = $required.rt_only_low_n,
                 replace_zeros = $required.replace_zeros,
-                #if $optional.st
-                    st = $optional.st,
-                #end if
+                st = $ms_csv.st,
                 #if $optional.maxt
                     maxt = $optional.maxt,
                 #end if

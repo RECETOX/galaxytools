@@ -83,6 +83,9 @@ ramclustr_csv <- function(
     maxt = NULL,
     fftempdir = NULL
 ) {
+    if (!file.exists(idmsms))
+        idmsms <- NULL
+
     x <- RAMClustR::ramclustR(
         ms = ms,
         idmsms = idmsms,
