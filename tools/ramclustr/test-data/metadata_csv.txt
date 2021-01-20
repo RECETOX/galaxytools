@@ -1,0 +1,6 @@
+Raw mass spectrometry data were processed using an R based workflow for feature detection, retention time alignment, feature grouping, peak filling, feature clustering. Feature data was input as .csv files with ramclustR parameter settings of  st = 5 sr = 0.5 and maxt = 1.RAMClustR (version 1.1.0) was utilized to cluster features into spectra (Broeckling 2014). The feature similarity matrix was clustered using fastcluster package heirarchical clustering method using the average method. The dendrogram was cut using the cutreeDynamicTree function from the dynamicTreeCut package.  Cutting parameters were set to minModuleSize = 2, hmax = 0.3, and deepSplit = FALSE. 
+ 
+ 203 features were collapsed into 22 spectra. Since there were fewer than five injections, clustering was performed only using retention time simiilarity.
+ 
+(Broeckling 2014):  Broeckling CD, Afsar FA, Neumann S, Ben-Hur A, Prenni JE. RAMClust: a novel feature clustering method enables spectral-matching-based annotation for metabolomics data. Anal Chem. 2014. 86(14):6812-7.
+
