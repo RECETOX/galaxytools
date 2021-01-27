@@ -2,7 +2,7 @@
 
 # Galaxy tools for Untargeted Mass Spectrometry Analysis
 
-Developed and maintained in [RECETOX](https://www.recetox.muni.cz/en) in collaboration with [ICS](https://www.ics.muni.cz/en).
+Developed and maintained in [RECETOX](https://www.recetox.muni.cz/en) in collaboration with [CERIT-SC](https://www.cerit-sc.cz/).
 
 Deployed and available at our Galaxy instance: https://umsa.cerit-sc.cz/.
 
