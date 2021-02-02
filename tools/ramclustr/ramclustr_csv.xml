@@ -84,6 +84,9 @@
             <output name="result" file="ramclustR-csv_object.RData"/>
             <output name="spec_abundance" file="spec-abundance_csv.csv" ftype="csv"/>
             <output name="method_metadata" file="metadata_csv.txt" ftype="txt"/>
+            <output_collection name="mass_spectra" type="list">
+                <element name="fill" file="test-spectra_csv.msp" ftype="msp"/>
+            </output_collection>
         </test>
     </tests>
 
