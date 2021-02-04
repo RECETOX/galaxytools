@@ -1,0 +1,36 @@
+<tool id="pubchem_sparql" name="Pubchem SPARQL Query" version="0.1">
+    <requirements>
+        <requirement type="package" version="1">tar</requirement>
+        <requirement type="package" version="7.1.2">click</requirement>
+        <requirement type="package" version="0.5.0">fastparquet</requirement>
+        <requirement type="package" version="3.1.1">openbabel</requirement>
+        <requirement type="package" version="1.2.1">pandas</requirement>
+        <requirement type="package" version="4.0.30">pyodbc</requirement>
+        <requirement type="package" version="0.5.4">python-snappy</requirement>
+        <requirement type="package" version="3.8">python</requirement>
+    </requirements>
+
+    <command detect_errors="aggressive"><![CDATA[
+        tar -xvf ${pubchem_rdf}
+
+        python '${__tool_directory__}/pubchem_build.py'
+            --workers \${GALAXY_SLOTS:-1}
+            --memory \${GALAXY_MEMORY_MB}
+            ${compounds}
+            ${synonyms}
+    ]]></command>
+
+    <inputs>
+        <param name="pubchem_rdf" type="data" format="tar">
+            <label>PubChem RDF Database</label>
+        </param>
+    </inputs>
+
+    <outputs>
+        <data name="compounds" format="parquet"/>
+        <data name="synonyms" format="parquet"/>
+    </outputs>
+
+    <help><![CDATA[
+    ]]]></help>
+</tool>
