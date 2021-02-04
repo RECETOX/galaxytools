@@ -1,6 +1,6 @@
-from typing import Dict, Union, Iterable, Any, Optional
+from typing import Any, Dict, Iterable, Optional, Union
 
-from pandas import DataFrame, StringDtype, Int64Dtype, Float64Dtype, Series
+from pandas import DataFrame, Float64Dtype, Int64Dtype, Series, StringDtype
 from pandas.core.dtypes.base import ExtensionDtype
 
 

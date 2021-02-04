@@ -1,17 +1,17 @@
-from typing import List, Optional, Collection, Iterable
+import os
+from typing import Collection, Iterable, List, Optional
 
 import click
 import fastparquet
-import os
 import pandas
 from openbabel.openbabel import OBConversion, OBMol
 from openbabel.pybel import Molecule
 from pandas import DataFrame, Series
 from pyodbc import Connection
 
-from query import query_compounds, pubchem_graphs
+from query import pubchem_graphs, query_compounds
+from rdfs import rdfs_config, rdfs_load_data, rdfs_open, rdfs_start
 from schema import create_compounds
-from rdfs import rdfs_open, rdfs_load_data, rdfs_config, rdfs_start
 
 
 def read_molecules(fmt: str, molecules: Collection[str]) -> List[Optional[Molecule]]:

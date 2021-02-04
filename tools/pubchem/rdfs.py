@@ -1,9 +1,8 @@
 import subprocess
 from configparser import ConfigParser
-from typing import Tuple, List, Optional
+from typing import List, Optional, Tuple
 
 import pyodbc
-
 from pyodbc import Connection, DatabaseError
 
 Graph = Tuple[str, str, str]
@@ -39,7 +38,7 @@ def rdfs_load_data(connection: Connection, graphs: List[Graph]) -> None:
 
 def rdfs_config(memory: Optional[int] = None, workers: Optional[int] = None) -> None:
     if memory is None:
-        memory = 1024**3
+        memory = 1024 ** 3
     if workers is None:
         workers = 1
 
