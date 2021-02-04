@@ -57,6 +57,39 @@
         <expand macro="output_msp"/>
     </outputs>
 
+    <tests>
+        <test>
+            <param name="ms" value="csv_test-input.csv" ftype="csv"/>
+            <param name="sample_name_column" value="1"/>
+            <param name="feature_delimiter" value="_"/>
+            <param name="retention_time_column" value="2"/>
+            <param name="st" value="5.0"/>
+            <param name="sr" value="0.5"/>
+            <param name="deepSplit" value="False"/>
+            <param name="blocksize" value="1000"/>
+            <param name="mult" value="1"/>
+            <param name="hmax" value="0.3"/>
+            <param name="collapse" value="True"/>
+            <param name="usePheno" value="True"/>
+            <param name="normalize" value="none"/>
+            <param name="qc_inj_range" value="20"/>
+            <param name="minModuleSize" value="2"/>
+            <param name="linkage" value="average"/>
+            <param name="mzdec" value="3"/>
+            <param name="cor_method" value="pearson"/>
+            <param name="rt_only_low_n" value="True"/>
+            <param name="replace_zeros" value="True"/>
+            <param name="Merge MSP Files" value="True"/>
+            <param name="maxt" value="1"/>
+            <output name="result" file="ramclustR-csv_object.RData"/>
+            <output name="spec_abundance" file="spec-abundance_csv.csv" ftype="csv"/>
+            <output name="method_metadata" file="metadata_csv.txt" ftype="txt"/>
+            <output_collection name="mass_spectra" type="list">
+                <element name="fill" file="test-spectra_csv.msp" ftype="msp"/>
+            </output_collection>
+        </test>
+    </tests>
+
     <help>
     Documentation
         For documentation on the tool see https://github.com/cbroeckl/RAMClustR/blob/master/vignettes/RAMClustR.Rmd
