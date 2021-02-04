@@ -62,5 +62,5 @@ def rdfs_config(memory: Optional[int] = None, workers: Optional[int] = None) -> 
 def rdfs_start() -> None:
     try:
         subprocess.run(['virtuoso-t', '+wait'], check=True)
-    except subprocess.CalledProcessError as e:
+    except subprocess.CalledProcessError:
         raise RuntimeError('Unable to start the Virtuoso server')
