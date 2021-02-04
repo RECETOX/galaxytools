@@ -1,5 +1,5 @@
+owner: recetox
 auto_tool_repositories:
-  owner: recetox
   name_template: "{{ tool_id }}"
 suite:
   name: suite_pubchem_rdf
