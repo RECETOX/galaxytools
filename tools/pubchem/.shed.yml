@@ -1,0 +1,9 @@
+auto_tool_repositories:
+  owner: recetox
+  name_template: "{{ tool_id }}"
+suite:
+  name: suite_pubchem_rdf
+  description: "A suite of tools which enables downloading and querying the PubChem RDF database"
+  remote_repository_url: "https://github.com/RECETOX/galaxytools/tree/master/tools/pubchem"
+  category:
+    - Metabolomics
