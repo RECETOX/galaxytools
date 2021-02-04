@@ -8,7 +8,6 @@ from openbabel.openbabel import OBConversion, OBMol
 from openbabel.pybel import Molecule
 from pandas import DataFrame, Series
 from pyodbc import Connection
-
 from query import pubchem_graphs, query_compounds
 from rdfs import rdfs_config, rdfs_load_data, rdfs_open, rdfs_start
 from schema import create_compounds
