@@ -1,0 +1,99 @@
+<tool id="waveica" name="WaveICA" version="0.0.1" python_template_version="3.5">
+    <description>does intra and inter-batch normalization for LC-MS and GC-MS</description>
+    <requirements>
+        <container type="docker">maxskorik/waveica:0.0.1</container>
+    </requirements>
+    <command detect_errors="aggressive"><![CDATA[
+        Rscript
+            -e 'source("${__tool_directory__}/waveica_wrapper.R")'
+            -e 'norm_data <- waveica(
+                data="$features_data",
+                wfil="$parameters.wt.wfil",
+                wlen="$parameters.wt.wlen",
+                batch="$batch_data",
+                #if $optional_parameters.group
+                    group="$group",
+                #else
+                    group="NULL",
+                #end if
+                K=$parameters.K,
+                t=$parameters.t,
+                t2=$parameters.t2,
+                alpha=$parameters.alpha
+            )'
+            -e 'store_data(norm_data,"$normalized_spectra")'
+    ]]></command>
+    <inputs>
+        <param type="data" name="features_data" label="Sample-by-matrix data" help=""/>
+        <param type="data" name="batch_data" label="Batch data" help=""/>
+        <section name="parameters" title="Normalization Parameters" expanded="True">
+            <conditional name="wt">
+                <param type="select" name="wfil" label="Wavelet transform filter" help="selecting wavelet function and filter length">
+                    <option value="d" selected="True">Daubechies</option>
+                    <option value="la" >Least Asymetric</option>
+                    <option value="bl" >Best Localized</option>
+                    <option value="c" >Coiflet</option>
+                </param>
+                <when value="d">
+                    <param name="wlen" type="select" label="filter length">
+                        <option value="2" selected="True">2</option>
+                        <option value="4">4</option>
+                        <option value="6">6</option>
+                        <option value="8">8</option>
+                        <option value="10">10</option>
+                        <option value="12">12</option>
+                        <option value="14">14</option>
+                        <option value="16">16</option>
+                        <option value="18">18</option>
+                        <option value="20">20</option>
+                    </param>
+                </when>
+                <when value="la">
+                    <param name="wlen" type="select" label="filter length">
+                        <option value="8">8</option>
+                        <option value="10">10</option>
+                        <option value="12">12</option>
+                        <option value="14">14</option>
+                        <option value="16">16</option>
+                        <option value="18">18</option>
+                        <option value="20">20</option>
+                    </param>
+                </when>
+                <when value="bl">
+                    <param name="wlen" type="select" label="filter length">
+                        <option value="14">14</option>
+                        <option value="18">18</option>
+                        <option value="20">20</option>
+                    </param>
+                </when>
+                <when value="c">
+                    <param name="wlen" type="select" label="filter length">
+                        <option value="6">6</option>
+                        <option value="12">12</option>
+                        <option value="18">18</option>
+                        <option value="24">24</option>
+                        <option value="30">30</option>
+                    </param>
+                </when>
+            </conditional>
+            <param type="integer" value="20" name="K" label="Number of components to decompose" help="the maximal component that ICA decomposes"/>
+            <param type="float" value="0.05" name="t" label="Batch-assosiation threshold" help="the threshold to consider a component associate with the batch,
+ should be between 0 and 1"/>
+            <param type="float" value="0.05" name="t2" label="Group-assosiation threshold" help="the threshold to consider a component associate with the group,
+ should be between 0 and 1"/>
+            <param type="float" value="0" name="alpha" label="Alpha" help="the trade-off value between the independence of samples and those of variables and should be between 0 and 1"/>
+        </section>
+        <section name="optional_parameters" title="Optional Parameters" expanded="False">
+            <param type="data" optional="True" name="group" label="Group" help="denoting the biological group such as disease vs group" />
+        </section>
+    </inputs>
+    <outputs>
+        <data name="normalized_spectra" format="rda" />
+    </outputs>
+    <help><![CDATA[
+        Removal of batch effects for large-scale untargeted metabolomics data based on wavelet analysis. The WaveICA R package provides a new algorithm to removing batch effects for metabolomics data.
+    ]]></help>
+    <citations>
+        <citation type="doi">10.1016/j.aca.2019.02.010</citation>
+    </citations>
+</tool>
