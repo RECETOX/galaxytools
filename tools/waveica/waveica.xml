@@ -14,7 +14,7 @@
                 #if $optional_parameters.group
                     group="$group",
                 #else
-                    group="NULL",
+                    group=NULL,
                 #end if
                 K=$parameters.K,
                 t=$parameters.t,
