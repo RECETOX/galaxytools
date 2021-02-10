@@ -88,11 +88,11 @@ def pubchem_load(connection: Connection, subsets: List[str], prefix: str) -> Non
 
 
 @click.command
-@click.option('prefix', type=click.Path(), default='pubchem')
-@click.option('memory', type=int, defaults=None)
-@click.option('workers', type=int, defaults=None)
-@click.argument('compounds', type=click.Path())
-@click.argument('synonyms', type=click.Path())
+@click.option('--prefix', type=click.Path(), default='pubchem')
+@click.option('--memory', type=int, default=None)
+@click.option('--workers', type=int, default=None)
+@click.option('--compounds', required=True, type=click.Path())
+@click.option('--synonyms', required=True, type=click.Path())
 def build(compounds: str, synonyms: str, prefix: str, memory: Optional[int], workers: Optional[int]):
     graphs = ['compound/general', 'descriptor/compound', 'synonym']
 

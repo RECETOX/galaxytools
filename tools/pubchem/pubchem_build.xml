@@ -12,12 +12,12 @@
 
     <command detect_errors="aggressive"><![CDATA[
         tar -xvf ${pubchem_rdf}
-
+        &&
         python '${__tool_directory__}/pubchem_build.py'
             --workers \${GALAXY_SLOTS:-1}
             --memory \${GALAXY_MEMORY_MB}
-            ${compounds}
-            ${synonyms}
+            --compounds ${compounds}
+            --synonyms ${synonyms}
     ]]></command>
 
     <inputs>
