@@ -1,5 +1,5 @@
 <tool id="waveica" name="WaveICA" version="0.0.1" python_template_version="3.5">
-    <description>does intra and inter-batch normalization for LC-MS and GC-MS</description>
+    <description>does batch normalization for LC-MS and GC-MS data</description>
     <requirements>
         <container type="docker">maxskorik/waveica:0.0.1</container>
     </requirements>
@@ -11,7 +11,7 @@
                 wfil="$parameters.wt.wfil",
                 wlen="$parameters.wt.wlen",
                 batch="$batch_data",
-                #if $optional_parameters.group
+                #if $group
                     group="$group",
                 #else
                     group=NULL,
@@ -26,6 +26,7 @@
     <inputs>
         <param type="data" name="features_data" label="Sample-by-matrix data" help=""/>
         <param type="data" name="batch_data" label="Batch data" help=""/>
+        <param type="data" optional="True" name="group" label="Group" help="" />
         <section name="parameters" title="Normalization Parameters" expanded="True">
             <conditional name="wt">
                 <param type="select" name="wfil" label="Wavelet transform filter" help="selecting wavelet function and filter length">
@@ -82,9 +83,6 @@
             <param type="float" value="0.05" name="t2" label="Group-assosiation threshold" help="the threshold to consider a component associate with the group,
  should be between 0 and 1"/>
             <param type="float" value="0" name="alpha" label="Alpha" help="the trade-off value between the independence of samples and those of variables and should be between 0 and 1"/>
-        </section>
-        <section name="optional_parameters" title="Optional Parameters" expanded="False">
-            <param type="data" optional="True" name="group" label="Group" help="denoting the biological group such as disease vs group" />
         </section>
     </inputs>
     <outputs>
