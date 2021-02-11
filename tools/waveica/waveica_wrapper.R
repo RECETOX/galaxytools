@@ -61,6 +61,7 @@ define_wt_function <- function(
     return(wf)
 }
 
+
 store_data <- function(normalized_data, output) {
     normalized_data <- normalized_data$data_wave
     save(normalized_data,file=output)
