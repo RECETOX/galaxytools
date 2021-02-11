@@ -1,0 +1,9 @@
+name: waveica
+owner: recetox
+description: Does batch normalization for LC-MS and GC-MS.
+long_description: Removal of batch effects for large-scale untargeted metabolomics data based on wavelet analysis.
+homepage_url: "https://github.com/dengkuistat/WaveICA"
+remote_repository_url: "https://github.com/RECETOX/galaxytools/tree/master/tools/waveica"
+Categories:
+  - Metabolomics
+type: unrestricted
