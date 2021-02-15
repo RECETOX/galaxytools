@@ -15,7 +15,7 @@ waveica <- function(
     batch_data <- input[[2]]
     group_data <- input[[3]]
 
-    norm_data <- WaveICA::WaveICA(
+    normalized_data <- WaveICA::WaveICA(
         data = features_data,
         wf = define_wt_function(wfil, wlen),
         batch = batch_data,
@@ -25,10 +25,11 @@ waveica <- function(
         t2 = t2,
         alpha = alpha
         )
-        return(norm_data)
+        return(normalized_data)
 }
 
 
+# This is not ideal since R stores 2 copies of each dataset. Will be able to fix that once we use other input than Rdata
 assign_data <- function(
     data,
     batch,
@@ -43,11 +44,12 @@ assign_data <- function(
         group_data <- NULL
     }
 
-    list <- list(features_data, batch_data, group_data)
-    return(list)
+    input_data <- list(features_data, batch_data, group_data)
+    return(input_data)
 }
 
 
+# Creates appropriate input for R wavelets function
 define_wt_function <- function(
     wfil,
     wlen
@@ -55,15 +57,16 @@ define_wt_function <- function(
     wf=paste(wfil,wlen,sep="")
 
     if (wf == "d2") {
-        wf <- "haar" # exception to wavelet filter in R
+        wf <- "haar" # exception to wavelet function
     }
     
     return(wf)
 }
 
 
+# Stores output of WaveICA 
 store_data <- function(normalized_data, output) {
     normalized_data <- normalized_data$data_wave
     save(normalized_data,file=output)
-    print("Tool successfully finished.")
+    print("Normalization has been completed.")
 }
