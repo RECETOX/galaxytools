@@ -6,22 +6,30 @@
     <command detect_errors="aggressive"><![CDATA[
         Rscript
             -e 'source("${__tool_directory__}/waveica_wrapper.R")'
-            -e 'norm_data <- waveica(
-                data="$features_data",
-                wfil="$parameters.wt.wfil",
-                wlen="$parameters.wt.wlen",
-                batch="$batch_data",
+
+            -e 'normalized_data <- waveica(
+                data = "$features_data",
+                wfil = "$parameters.wt.wfil",
+                wlen = "$parameters.wt.wlen",
+                batch = "$batch_data",
                 #if $group
-                    group="$group",
+                    group = "$group",
                 #else
-                    group=NULL,
+                    group = NULL,
                 #end if
-                K=$parameters.K,
-                t=$parameters.t,
-                t2=$parameters.t2,
-                alpha=$parameters.alpha
+                K = $parameters.K,
+                t = $parameters.t,
+                t2 = $parameters.t2,
+                alpha = $parameters.alpha,
+                #if $optional_parameters.group_to_exclude != None
+                    group_label = $optional_parameters.group_to_exclude
+                #else 
+                    group_label = NULL
+                #end if
             )'
-            -e 'store_data(norm_data,"$normalized_spectra")'
+
+            -e 'store_data(normalized_data,"$normalized_spectra")'
+
     ]]></command>
     <inputs>
         <param type="data" name="features_data" label="Sample-by-matrix data" help=""/>
@@ -83,6 +91,9 @@
             <param type="float" value="0.05" name="t2" label="Group-assosiation threshold" help="the threshold to consider a component associate with the group,
  should be between 0 and 1"/>
             <param type="float" value="0" name="alpha" label="Alpha" help="the trade-off value between the independence of samples and those of variables and should be between 0 and 1"/>
+        </section>
+        <section name="optional_parameters" title="Optional Parameters">
+            <param name="group_to_exclude" optional="true" type="integer" label="Group to exclude" help="group label to be excluded from output dataframe. Remember to input Group data if using this feature" />
         </section>
     </inputs>
     <outputs>
