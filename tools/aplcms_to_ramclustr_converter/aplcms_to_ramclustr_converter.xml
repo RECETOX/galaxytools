@@ -1,4 +1,4 @@
-<tool id="aplcms_to_ramclustr_converter" name="apLCMS to RamClustR converter" version="0.0.1" python_template_version="3.5">
+<tool id="aplcms_to_ramclustr_converter" name="apLCMS to RamClustR converter" version="0.0.1+galaxy0" python_template_version="3.5">
     <description>converts aplcms HDF output to RamClustR csv input</description>
     <requirements>
         <requirement type="package" version="3.7">python</requirement>
