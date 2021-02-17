@@ -6,7 +6,7 @@
         <requirement type="package" version="3.6.1">pytables</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
-        python $__tool_directory__/hdf_converter.py --dataframe '${hdf_dataframe}' --table '${table_name}' '${out_file}'
+        python $__tool_directory__/aplcms_to_ramclustr_converter.py --dataframe '${hdf_dataframe}' --table '${table_name}' '${out_file}'
     ]]></command>
     <inputs>
         <param name="hdf_dataframe" type="data" format="h5" label="apLCMS Dataset"/>
