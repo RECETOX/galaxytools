@@ -2,12 +2,12 @@ categories:
 - Convert Formats
 description: Convert HDF table from apLCMS output to RamClustR csv input
 include:
-    - hdf_converter.xml
-    - hdf_converter.py
-    - test-data
+  - aplcms_to_ramclustr_converter.xml
+  - aplcms_to_ramclustr_converter.py
+  - test-data
 homepage_url: https://github.com/RECETOX/galaxytools/
 long_description: Tool to convert HDF table from apLCMS output to csv input for RamClutstR
 name: aplcms_to_ramclustr_converter
 owner: recetox
-remote_repository_url: https://github.com/RECETOX/galaxytools/tools/hdf_converter/
+remote_repository_url: https://github.com/RECETOX/galaxytools/tools/aplcms_to_ramclustr_converter/
 type: unrestricted
