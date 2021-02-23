@@ -25,20 +25,25 @@ if not os.path.exists(export_dir):
 #  Make sure program will never write outside of the mounted target directory.
 if not os.path.commonpath([os.path.realpath(options.remote_path), SALLY_MOUNT_PREFIX]) == SALLY_MOUNT_PREFIX:
     raise Exception(f"Invalid export path supplied: {options.remote_path}")
-remote_paths = [options.remote_path]
-if len(args) > 1:
-    remote_paths.append(f"{options.remote_path[:-5]}.json")
-if len(args) == 3:
-    remote_paths.append(f"{options.remote_path[:-5]}.txt")
-for dataset_path, remote_path in zip(args, remote_paths):
-    if os.path.isfile(remote_path):
-        raise Exception(f"Error copying dataset to {remote_path}. File already exists.")
+dataset_paths = args[::2]
+dataset_exts = args[1::2]
+for dataset_path, dataset_ext in zip(dataset_paths, dataset_exts):
+    if dataset_ext == "mzml":
+        destination = options.remote_path
+    elif dataset_ext == "json":
+        destination = f"{options.remote_path[:-5]}.json"
+    elif dataset_ext == "txt":
+        destination = f"{options.remote_path[:-5]}.txt"
+    else:
+        raise Exception(f"Uknown extension received: {dataset_ext}.")
+    if os.path.isfile(destination):
+        raise Exception(f"Error copying dataset to {destination}. File already exists.")
     else:
         try:
-            shutil.copyfile(dataset_path, remote_path)
-            print(f"Dataset {dataset_path} copied to {remote_path}")
+            shutil.copyfile(dataset_path, destination)
+            print(f"Dataset {dataset_path} copied to {destination}")
         except Exception as e:
-            msg = f"Dataset {dataset_path} couldn't be copied to {remote_path}. Exception {e}"
+            msg = f"Dataset {dataset_path} couldn't be copied to {destination}. Exception {e}"
             print(msg, file=sys.stderr)
             exit_code = 1
 sys.exit(exit_code)

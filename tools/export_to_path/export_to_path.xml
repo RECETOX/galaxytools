@@ -6,14 +6,14 @@
     <command detect_errors="aggressive"><![CDATA[
 python '$__tool_directory__/export_to_path.py'
 -p '$remote_path'
-'${mzml_dataset}'
+'${mzml_dataset}' '${mzml_dataset.ext}'
 
 #if $json_metadata
-  '${json_metadata}'
+  '${json_metadata}' '${json_metadata.ext}'
 #end if
 
 #if $txt_metadata
-  '${txt_metadata}'
+  '${txt_metadata}' '${txt_metadata.ext}'
 #end if
 
 > '$log'
