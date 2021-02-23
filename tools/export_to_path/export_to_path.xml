@@ -6,7 +6,10 @@
     <command detect_errors="aggressive"><![CDATA[
 python '$__tool_directory__/export_to_path.py'
 -p '$remote_path'
+
+#if $mzml_dataset
 '${mzml_dataset}' '${mzml_dataset.ext}'
+#end if
 
 #if $json_metadata
   '${json_metadata}' '${json_metadata.ext}'
@@ -19,7 +22,7 @@ python '$__tool_directory__/export_to_path.py'
 > '$log'
     ]]></command>
     <inputs>
-        <param name="mzml_dataset" type="data" format="mzml" label="mzML Dataset to export" />
+        <param name="mzml_dataset" type="data" format="mzml" label="mzML Dataset to export" optional="true"/>
         <param name="json_metadata" type="data" format="json" label="JSON metadata to export" optional="true"/>
         <param name="txt_metadata" type="data" format="txt" label="TXT metadata to export" optional="true"/>
         <param name="remote_path" type="text" value="" label="Remote path of the new mzML dataset." help="Full absolute path to the new mzml dataset to export.">

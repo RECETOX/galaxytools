@@ -25,6 +25,8 @@ if not os.path.exists(export_dir):
 #  Make sure program will never write outside of the mounted target directory.
 if not os.path.commonpath([os.path.realpath(options.remote_path), SALLY_MOUNT_PREFIX]) == SALLY_MOUNT_PREFIX:
     raise Exception(f"Invalid export path supplied: {options.remote_path}")
+if len(args) < 2:
+    raise Exception(f"At least one dataset to export is required. Supplied: {args}")
 dataset_paths = args[::2]
 dataset_exts = args[1::2]
 for dataset_path, dataset_ext in zip(dataset_paths, dataset_exts):
