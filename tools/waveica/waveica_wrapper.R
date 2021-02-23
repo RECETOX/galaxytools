@@ -1,97 +1,85 @@
 waveica <- function(
     data,
-    wfil,
-    wlen,
-    batch,
-    group,
+    wavelet_filter,
+    wavelet_length,
     K,
     t,
     t2,
     alpha,
-    group_label
+    exclude_blanks
 ) {
 
-    # get input from the Galaxy
-    input <- assign_data(data, batch, group)
-    features_data <- input[[1]]
-    batch_data <- input[[2]]
-    group_data <- input[[3]]
+    # get input from the Galaxy, preprocess data
+    data <- read.csv(data, header = TRUE, row.names = "sample_name")
+    data <- preprocess_data(data)
+
+    # divide data into features, batch and group
+    features <- data[,-c(1:4)]
+    group <- as.numeric(data$class)
+    batch <- data$batch
 
     # run WaveICA
     normalized_data <- WaveICA::WaveICA(
-        data = features_data,
-        wf = define_wt_function(wfil, wlen),
-        batch = batch_data,
-        group = group_data,
+        data = features,
+        wf = get_wf(wavelet_filter, wavelet_length),
+        batch = batch,
+        group = group,
         K = K,
         t = t,
         t2 = t2,
         alpha = alpha
         )
     
-    # get spectra from the list of 1 item
-    normalized_data <- normalized_data$data_wave
-
-    # exclude a group if label is provided
-    if (!is.null(group_label)) {
-        normalized_data <- exclude_group(normalized_data, group_data, group_label)
+    # exclude blanks if selected by user
+    if (exclude_blanks) {
+        normalized_data$data_wave <- exclude_group(normalized_data, group)
     }
 
     return(normalized_data)
 }
 
 
-# This is not ideal since R will store 2 copies of each dataset. Will fix that once we use other input than Rdata
-assign_data <- function(data, batch, group) {
-    assign('features_data', get(load(data)))
-    assign('batch_data', get(load(batch)))
-    
-    # handle optional "Group" input
-    if (!is.null(group)) {
-        assign('group_data', get(load(group)))
-    } else {
-        group_data <- NULL
-    }
+# Sort data, set numerical values for groups
+preprocess_data <- function(data) {
+    data <- data[order(data$injectionOrder, decreasing=FALSE),] # sort data by injection order
 
-    input_data <- list(features_data, batch_data, group_data)
-    return(input_data)
+    data$class[data$class=="blank"] <- 0
+    data$class[data$class=="sample"] <- 1
+    data$class[data$class=="QC"] <- 2
+
+    return(data)
 }
 
 
 # Create appropriate input for R wavelets function
-define_wt_function <- function(wfil, wlen) {
+get_wf <- function(wavelet_filter, wavelet_length) {
     
-    wf=paste(wfil,wlen,sep="")
+    wf=paste(wavelet_filter, wavelet_length, sep="")
 
     # exception to the wavelet function
     if (wf == "d2") {
         wf <- "haar"
-    }
+        }
     
     return(wf)
 }
 
 
-# Exclude certain group (e.g. blank) from a dataframe
-exclude_group <- function(normalized_data, group_data, group_label) {
-        
-    if (is.null(group_data)) {
-        cat("Cannot exclude a group as no group data was provided.\n")
-    }
-    else {
-        idx_to_exclude <- which(group_data %in% group_label)
-        data_without_group <- normalized_data[-c(idx_to_exclude),]
+# Exclude blanks from a dataframe (can be optimized to exclude other samples)
+exclude_group <- function(features, group) {
+    
+    row_idx_to_exclude <- which(group %in% 0)
+    features_no_blanks <- features$data_wave[-c(row_idx_to_exclude),]
 
-        msg <- paste("Group with label", group_label, "has been excluded from the dataframe.\n")
-        cat(msg)
+    msg <- paste("Blank samples have been excluded from the dataframe.\n")
+    cat(msg)
 
-        return(data_without_group)
-    }
+    return(features_no_blanks)
 }
 
 
 # Store output of WaveICA 
 store_data <- function(normalized_data, output) {
-    save(normalized_data,file=output)
+    write.csv(normalized_data,file=output)
     cat("Normalization has been completed.\n")
 }

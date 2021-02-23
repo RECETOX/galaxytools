@@ -1,5 +1,5 @@
-<tool id="waveica" name="WaveICA" version="0.0.1" python_template_version="3.5">
-    <description>does batch normalization for LC-MS and GC-MS data</description>
+<tool id="waveica" name="WaveICA" version="0.1.0+galaxy0" python_template_version="3.5">
+    <description>batch correction tool for chromatography-mass spectrometry analysis</description>
     <requirements>
         <container type="docker">maxskorik/waveica:0.0.1</container>
     </requirements>
@@ -8,43 +8,31 @@
             -e 'source("${__tool_directory__}/waveica_wrapper.R")'
 
             -e 'normalized_data <- waveica(
-                data = "$features_data",
-                wfil = "$parameters.wt.wfil",
-                wlen = "$parameters.wt.wlen",
-                batch = "$batch_data",
-                #if $group
-                    group = "$group",
-                #else
-                    group = NULL,
-                #end if
+                data = "$data",
+                wavelet_filter = "$parameters.wf.wavelet_filter",
+                wavelet_length = "$parameters.wf.wavelet_length",
                 K = $parameters.K,
                 t = $parameters.t,
                 t2 = $parameters.t2,
                 alpha = $parameters.alpha,
-                #if $optional_parameters.group_to_exclude != None
-                    group_label = $optional_parameters.group_to_exclude
-                #else 
-                    group_label = NULL
-                #end if
+                exclude_blanks = $optional_parameters.exclude_blanks
             )'
 
             -e 'store_data(normalized_data,"$normalized_spectra")'
 
     ]]></command>
     <inputs>
-        <param type="data" name="features_data" label="Sample-by-matrix data" help=""/>
-        <param type="data" name="batch_data" label="Batch data" help=""/>
-        <param type="data" optional="True" name="group" label="Group" help="" />
+        <param type="data" name="data" label="Sample-by-matrix data" format="csv" help=""/>
         <section name="parameters" title="Normalization Parameters" expanded="True">
-            <conditional name="wt">
-                <param type="select" name="wfil" label="Wavelet transform filter" help="selecting wavelet function and filter length">
+            <conditional name="wf">
+                <param type="select" name="wavelet_filter" label="Wavelet transform filter" help="selecting wavelet function and filter length">
                     <option value="d" selected="True">Daubechies</option>
                     <option value="la" >Least Asymetric</option>
                     <option value="bl" >Best Localized</option>
                     <option value="c" >Coiflet</option>
                 </param>
                 <when value="d">
-                    <param name="wlen" type="select" label="filter length">
+                    <param name="wavelet_length" type="select" label="filter length">
                         <option value="2" selected="True">2</option>
                         <option value="4">4</option>
                         <option value="6">6</option>
@@ -58,7 +46,7 @@
                     </param>
                 </when>
                 <when value="la">
-                    <param name="wlen" type="select" label="filter length">
+                    <param name="wavelet_length" type="select" label="filter length">
                         <option value="8">8</option>
                         <option value="10">10</option>
                         <option value="12">12</option>
@@ -69,14 +57,14 @@
                     </param>
                 </when>
                 <when value="bl">
-                    <param name="wlen" type="select" label="filter length">
+                    <param name="wavelet_length" type="select" label="filter length">
                         <option value="14">14</option>
                         <option value="18">18</option>
                         <option value="20">20</option>
                     </param>
                 </when>
                 <when value="c">
-                    <param name="wlen" type="select" label="filter length">
+                    <param name="wavelet_length" type="select" label="filter length">
                         <option value="6">6</option>
                         <option value="12">12</option>
                         <option value="18">18</option>
@@ -92,15 +80,32 @@
  should be between 0 and 1"/>
             <param type="float" value="0" name="alpha" label="Alpha" help="the trade-off value between the independence of samples and those of variables and should be between 0 and 1"/>
         </section>
-        <section name="optional_parameters" title="Optional Parameters">
-            <param name="group_to_exclude" optional="true" type="integer" label="Group to exclude" help="group label to be excluded from output dataframe. Remember to input Group data if using this feature" />
+        <section name="optional_parameters" expanded="true" title="Optional Parameters">
+            <param name="exclude_blanks" type="boolean" checked="false" truevalue="TRUE" falsevalue="FALSE" label="Remove blanks" help="Excludes blank samples from the output" />
         </section>
     </inputs>
     <outputs>
-        <data name="normalized_spectra" format="rda" />
+        <data name="normalized_spectra" format="csv" />
     </outputs>
     <help><![CDATA[
+        **Description**
+
         Removal of batch effects for large-scale untargeted metabolomics data based on wavelet analysis. The WaveICA R package provides a new algorithm to removing batch effects for metabolomics data.
+        The input is Sample-by-matrix table which must include: 
+
+        1. Injection order of samples
+
+        2. Types of the samples denoted as "blank", "sample" or "QC"
+
+        3. Batch number
+
+        4. Features data
+
+        **Workflow position**
+
+        - Upstream tools: `XCMS fillChromPeaks  <https://umsa.cerit-sc.cz/root?tool_id=toolshed.g2.bx.psu.edu/repos/lecorguille/xcms_fillpeaks/abims_xcms_fillPeaks/3.6.1+galaxy0>`_  > Metadata Merger 
+
+        - Downstream tool: ??
     ]]></help>
     <citations>
         <citation type="doi">10.1016/j.aca.2019.02.010</citation>
