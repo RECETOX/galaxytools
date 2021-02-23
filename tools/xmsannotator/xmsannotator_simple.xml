@@ -1,4 +1,4 @@
-<tool id="xmsannotator_simple" name="xMSannotator (simple)" version="@TOOL_VERSION@+galaxy2">
+<tool id="xmsannotator_simple" name="xMSannotator (simple)" version="@TOOL_VERSION@+galaxy3">
     <macros>
         <import>xmsannotator_macros.xml</import>
     </macros>
