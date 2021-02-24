@@ -24,7 +24,7 @@ waveica <- function(
         wf = get_wf(wavelet_filter, wavelet_length),
         batch = batch,
         group = group,
-        K = K,
+        K = k,
         t = t,
         t2 = t2,
         alpha = alpha
