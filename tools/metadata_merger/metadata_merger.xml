@@ -1,0 +1,38 @@
+<tool id="metadata_merger" name="Metadata Merger" version="0.0.1" python_template_version="3.5">
+    <description>merges metadata with features table</description>
+    <requirements>
+        <requirement type="package" version="3.8.5">python</requirement>
+        <requirement type="package" version="1.2.1">pandas</requirement>
+    </requirements>
+    <command detect_errors="exit_code"><![CDATA[
+        python $__tool_directory__/metadata_merger.py --dataframe "$features_table" --extension "${features_table.ext}" --metadata "$metadata_table" --output "$merged_data"
+    ]]></command>
+    <inputs>
+        <param name="features_table" type="data" format="csv,tabular, tsv" label="Sample-by-matrix data"/>
+        <param name="metadata_table" type="data" format="tsv, tabular" label="Metadata table"/>
+    </inputs>
+    <outputs>
+        <data name="merged_data" type="data" format="csv" label="${features_table.name} with metadata"/>
+    </outputs>
+    <tests>
+        <test>
+            <param name="features_table" value="xcms-test.tsv" ftype="tabular"/>
+            <param name="metadata_table" value="metadata-test.tsv" ftype="tsv"/>
+            <output name="merged_data" file="xcms-merged.csv" ftype="csv"/>
+        </test>
+        <test>
+            <param name="features_table" value="aplcms_converted-test.csv" ftype="csv"/>
+            <param name="metadata_table" value="metadata-test.tsv" ftype="tsv"/>
+            <output name="merged_data" file="aplcms_converted-merged.csv" ftype="csv"/>
+        </test>
+    </tests>
+    <help><![CDATA[
+        A simple tool to merge samples metadata with features table.
+        
+        **Workflow position**
+
+        - Upstream tools: `apLCMS to RamClustR converter <https://umsa.cerit-sc.cz/root?tool_id=testtoolshed.g2.bx.psu.edu/repos/recetox/aplcms_to_ramclustr_converter/aplcms_to_ramclustr_converter/0.0.1>`_ or `XCMS fillChromPeaks <https://umsa.cerit-sc.cz/root?tool_id=toolshed.g2.bx.psu.edu/repos/lecorguille/xcms_fillpeaks/abims_xcms_fillPeaks/3.6.1+galaxy0/>`_
+
+        - Downstream tools: `RamClustR <https://umsa.cerit-sc.cz/root?tool_id=testtoolshed.g2.bx.psu.edu/repos/recetox/ramclustr_csv/ramclustr_csv/1.1.0+galaxy0>`_ (CSV) or `WaveICA <future_link>`_
+    ]]></help>
+</tool>
