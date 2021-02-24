@@ -1,0 +1,9 @@
+name: Metadata Merger
+owner: recetox
+description: Merges metadata with features table
+long_description: A tool that merges samples metadata with sample-by-matrix features data of the samples.
+homepage_url: "https://github.com/RECETOX/galaxytools/"
+remote_repository_url: "https://github.com/RECETOX/galaxytools/tools/metadata_merger"
+Categories:
+  - Text Manipulation
+type: unrestricted
