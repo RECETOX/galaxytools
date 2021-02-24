@@ -1,4 +1,4 @@
-name: Metadata Merger
+name: metadata_merger
 owner: recetox
 description: Merges metadata with features table
 long_description: A tool that merges samples metadata with sample-by-matrix features data of the samples.
