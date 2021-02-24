@@ -1,9 +1,9 @@
 <tool id="waveica" name="WaveICA" version="0.1.0+galaxy0" python_template_version="3.5">
 
-    <description>batch correction tool for chromatography-mass spectrometry analysis</description>
+    <description>batch correction for chromatography-mass spectrometry analysis</description>
     
     <requirements>
-        <container type="docker">maxskorik/waveica:0.0.1</container>
+        <container type="docker">recetox/waveica:0.1.0-recetox0</container>
     </requirements>
 
     <command detect_errors="aggressive"><![CDATA[
