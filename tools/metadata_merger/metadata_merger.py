@@ -17,10 +17,10 @@ args = parser.parse_args()
 def main():
     # Load features data
     if args.extension == "tsv" or args.extension == "tabular":
-        dataframe = pd.read_csv(args.dataframe, sep="\t", index_col = 0)
+        dataframe = pd.read_csv(args.dataframe, sep="\t", index_col=0)
         dataframe = dataframe.transpose()
     elif args.extension == "csv":
-        dataframe = pd.read_csv(args.dataframe, sep=",", index_col = 0)
+        dataframe = pd.read_csv(args.dataframe, sep=",", index_col=0)
     else:
         print("Wrong format. Input has to be \"*.tsv\" or \"*.csv\" file.", file=sys.stderr)
         return(1)
@@ -44,7 +44,7 @@ def main():
     n_merged = len(merged_dataframe)
 
     # Sort by injection order
-    merged_dataframe.sort_values(by = "injectionOrder", inplace=True)
+    merged_dataframe.sort_values(by="injectionOrder", inplace=True)
 
     # Save output
     merged_dataframe.to_csv(args.output, sep=",")
