@@ -1,8 +1,11 @@
 <tool id="waveica" name="WaveICA" version="0.1.0+galaxy0" python_template_version="3.5">
+
     <description>batch correction tool for chromatography-mass spectrometry analysis</description>
+    
     <requirements>
         <container type="docker">maxskorik/waveica:0.0.1</container>
     </requirements>
+
     <command detect_errors="aggressive"><![CDATA[
         Rscript
             -e 'source("${__tool_directory__}/waveica_wrapper.R")'
@@ -18,9 +21,9 @@
                 exclude_blanks = $optional_parameters.exclude_blanks
             )'
 
-            -e 'store_data(normalized_data,"$normalized_spectra")'
-
+            -e 'store_data(normalized_data,"$normalized_features")'
     ]]></command>
+
     <inputs>
         <param type="data" name="data" label="Sample-by-matrix data" format="csv" help=""/>
         <section name="parameters" title="Normalization Parameters" expanded="True">
@@ -84,9 +87,24 @@
             <param name="exclude_blanks" type="boolean" checked="false" truevalue="TRUE" falsevalue="FALSE" label="Remove blanks" help="Excludes blank samples from the output" />
         </section>
     </inputs>
+
     <outputs>
-        <data name="normalized_spectra" format="tsv" />
+        <data name="normalized_features" format="tsv" />
     </outputs>
+
+    <tests>
+        <test>
+            <param name="data" value="features-test.csv" ftype="csv" />
+            <param name="wavelet_filter" value="d" />
+            <param name="filter_length" value="2" />
+            <param name="K" value="20" />
+            <param name="t" value="0.05" />
+            <param name="t2" value="0.05" />
+            <param name="alpha" value="0" />
+            <output name="normalized_features" file="features-normalized.tsv" /> 
+        </test>
+    </tests>
+
     <help><![CDATA[
         **Description**
 
@@ -106,7 +124,9 @@
 
         - Upstream tools: `XCMS fillChromPeaks  <https://umsa.cerit-sc.cz/root?tool_id=toolshed.g2.bx.psu.edu/repos/lecorguille/xcms_fillpeaks/abims_xcms_fillPeaks/3.6.1+galaxy0>`_  > Metadata Merger 
     ]]></help>
+
     <citations>
         <citation type="doi">10.1016/j.aca.2019.02.010</citation>
     </citations>
+
 </tool>
