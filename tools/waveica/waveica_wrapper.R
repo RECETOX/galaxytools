@@ -13,8 +13,8 @@ waveica <- function(
     data <- read.csv(data, header = TRUE, row.names = "sample_name")
     data <- preprocess_data(data)
 
-    # divide data into features, batch and group
-    features <- data[,-c(1:4)]
+    # separate data into features, batch and group
+    features <- data[ , -c(1:4)]
     group <- as.numeric(data$class)
     batch <- data$batch
 
@@ -41,7 +41,7 @@ waveica <- function(
 
 # Sort data, set numerical values for groups
 preprocess_data <- function(data) {
-    data <- data[order(data$injectionOrder, decreasing=FALSE),] # sort data by injection order
+    data <- data[order(data$injectionOrder, decreasing = FALSE), ] # sort data by injection order
 
     data$class[data$class=="blank"] <- 0
     data$class[data$class=="sample"] <- 1
@@ -54,7 +54,7 @@ preprocess_data <- function(data) {
 # Create appropriate input for R wavelets function
 get_wf <- function(wavelet_filter, wavelet_length) {
     
-    wf=paste(wavelet_filter, wavelet_length, sep="")
+    wf=paste(wavelet_filter, wavelet_length, sep = "")
 
     # exception to the wavelet function
     if (wf == "d2") {
@@ -65,11 +65,11 @@ get_wf <- function(wavelet_filter, wavelet_length) {
 }
 
 
-# Exclude blanks from a dataframe (can be optimized to exclude other samples)
+# Exclude blanks from a dataframe
 exclude_group <- function(features, group) {
     
     row_idx_to_exclude <- which(group %in% 0)
-    features_no_blanks <- features$data_wave[-c(row_idx_to_exclude),]
+    features_no_blanks <- features$data_wave[-c(row_idx_to_exclude), ]
 
     msg <- paste("Blank samples have been excluded from the dataframe.\n")
     cat(msg)
@@ -78,8 +78,8 @@ exclude_group <- function(features, group) {
 }
 
 
-# Store output of WaveICA 
+# Store output of WaveICA in a tsv file 
 store_data <- function(normalized_data, output) {
-    write.csv(normalized_data,file=output)
+    write.table(normalized_data, file = output, sep = "\t", col.names = NA)
     cat("Normalization has been completed.\n")
 }

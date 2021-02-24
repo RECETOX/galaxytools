@@ -85,7 +85,7 @@
         </section>
     </inputs>
     <outputs>
-        <data name="normalized_spectra" format="csv" />
+        <data name="normalized_spectra" format="tsv" />
     </outputs>
     <help><![CDATA[
         **Description**
@@ -105,8 +105,6 @@
         **Workflow position**
 
         - Upstream tools: `XCMS fillChromPeaks  <https://umsa.cerit-sc.cz/root?tool_id=toolshed.g2.bx.psu.edu/repos/lecorguille/xcms_fillpeaks/abims_xcms_fillPeaks/3.6.1+galaxy0>`_  > Metadata Merger 
-
-        - Downstream tool: ??
     ]]></help>
     <citations>
         <citation type="doi">10.1016/j.aca.2019.02.010</citation>
