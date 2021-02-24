@@ -12,7 +12,7 @@
         <param name="metadata_table" type="data" format="tsv, tabular" label="Metadata table"/>
     </inputs>
     <outputs>
-        <data name="merged_data" type="data" format="csv" label="${features_table.name} with metadata"/>
+        <data name="merged_data" format="csv" label="${features_table.name} with metadata"/>
     </outputs>
     <tests>
         <test>
