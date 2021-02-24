@@ -14,7 +14,7 @@
                 data = "$data",
                 wavelet_filter = "$parameters.wf.wavelet_filter",
                 wavelet_length = "$parameters.wf.wavelet_length",
-                K = $parameters.K,
+                k = $parameters.k,
                 t = $parameters.t,
                 t2 = $parameters.t2,
                 alpha = $parameters.alpha,
@@ -76,7 +76,7 @@
                     </param>
                 </when>
             </conditional>
-            <param type="integer" value="20" name="K" label="Number of components to decompose" help="the maximal component that ICA decomposes"/>
+            <param type="integer" value="20" name="k" label="Number of components to decompose" help="the maximal component that ICA decomposes"/>
             <param type="float" value="0.05" name="t" label="Batch-assosiation threshold" help="the threshold to consider a component associate with the batch,
  should be between 0 and 1"/>
             <param type="float" value="0.05" name="t2" label="Group-assosiation threshold" help="the threshold to consider a component associate with the group,
