@@ -29,7 +29,7 @@ def main():
     print("Reading features table of {} samples...".format(n), file=sys.stdout)
 
     # Load metadata
-    metadata = pd.read_csv(args.metadata, sep="\s+", index_col=0)
+    metadata = pd.read_csv(args.metadata, sep=r"\s+", index_col=0)
 
     # Check correspondency of metadata to samples
     if len(dataframe) != len(metadata):
