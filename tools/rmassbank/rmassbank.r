@@ -4,25 +4,28 @@
 #   - part2 (generation of MassBank records)
 #
 # Author: Karolina Trachtova (k.trachtova@gmail.com)
-# Original authors of RMassBank: Michael Stravs, Emma Schymanski, Steffen Neumann, Erik Mueller, with contributions from Tobias Schulze 
+# Original authors of RMassBank: Michael Stravs, Emma Schymanski,
+# Steffen Neumann, Erik Mueller, with contributions from Tobias Schulze.
 #
-# INPUT1 = settings list
-# INPUT2 = compounds csv list
-# INPUT3 = mode
-# INPUT4 = folder with infolists
-# INPUT5 = one or more mzML files
+# INPUT1: settings list
+# INPUT2: compounds csv list
+# INPUT3: mode
+# INPUT4: folder with infolists
+# INPUT5: one or more mzML files
 #
 # RUN:
-# Rscript rmassbank_galaxy_part1.r mysettings.ini Compoundlist.csv pH /path/to/files/1_3_Chlorophenyl_piperazin_2818_pos.mzML /path/to/files/1_3_Trifluoromethylphenyl_piperazin_2819_pos.mzML
+# Rscript rmassbank_galaxy_part1.r mysettings.ini Compoundlist.csv pH \
+# /path/to/files/1_3_Chlorophenyl_piperazin_2818_pos.mzML \
+# /path/to/files/1_3_Trifluoromethylphenyl_piperazin_2819_pos.mzML
 #############################################################
 # Load libraries
-rm(list=ls(all=TRUE))
+rm(list = ls(all = TRUE))
 
 suppressMessages(library("RMassBank", warn.conflicts = T, quietly = T))
 
 #############################################################
 # Read arguments
-args = commandArgs(trailingOnly=TRUE)
+args <- commandArgs(trailingOnly = TRUE)
 
 stt <- args[1] #file with settings
 cmp <- args[2] #csv file with compounds
@@ -57,7 +60,7 @@ w@files <- files
 print("Running RMassBank pipeline part 1 - all 8 steps...")
 
 prf <- c("results")
-w <- msmsWorkflow(w, mode=md, steps=c(1:8), archivename=prf)
+w <- msmsWorkflow(w, mode = md, steps = c(1:8), archivename = prf)
 
 ## Part II
 #
