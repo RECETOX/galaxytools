@@ -1,4 +1,4 @@
-<tool id="xmsannotator_advanced" name="xMSannotator (advanced)" version="@TOOL_VERSION@+galaxy3">
+<tool id="xmsannotator_advanced" name="xMSannotator (advanced)" version="@TOOL_VERSION@+galaxy4">
     <macros>
         <import>xmsannotator_macros.xml</import>
     </macros>
@@ -8,7 +8,7 @@
     </requirements>
 
     <command detect_errors="aggressive"><![CDATA[
-        Rscript $wrapper
+        Rscript -e "n_workers <- \${GALAXY_SLOTS:-1}" -e "source('${wrapper}')"
     ]]></command>
 
     <configfiles>
@@ -36,7 +36,7 @@
                 boost_compounds = load_boost_compounds_csv("${scoring.boost_compounds}"),
             #end if
                 redundancy_filtering = $scoring.redundancy_filtering,
-                n_workers = \${GALAXY_SLOTS:-1}
+                n_workers = n_workers
             )
 
             save_parquet(data = annotation, file = "${annotation_parquet}")
