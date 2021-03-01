@@ -1,9 +1,10 @@
 <tool id="rmassbank" name="RMassBank" version="3.0.0+galaxy0">
   <requirements>
      <requirement type="package" version="3.7">python</requirement>
-     <requirement type="package" version="2.4.1">openbabel</requirement>
+    <requirement type="package" version="2.4.1">openbabel</requirement>
      <requirement type="package" version="3.0.0">bioconductor-rmassbank</requirement>
      <requirement type="package" version="3.1.1">r-gplots</requirement>
+     <requirement type="package" version="3.0">zip</requirement>
   </requirements>
   <stdio>
     <exit_code range="1:" />
@@ -191,7 +192,7 @@
       <param  name="compounds" value="compoundList.csv"/>
       <param name="infolist" value="infolist.csv"/>
       <param name="mode" value="pH"/>
-      <param name="param_in" value="1_3_Chlorophenyl_piperazin_2818_pos.mzML,1_3_Trifluoromethylphenyl_piperazin_2819_pos.mzML"/>
+      <param name="param_in" value="1_3_Trifluoromethylphenyl_piperazin_2819_pos.mzML"/>
       <param name="rtMargin" value="0.4"/>
       <param name="rtShift" value="0.0"/>
       <param name="use_version" value="2"/>
