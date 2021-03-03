@@ -31,8 +31,8 @@
         
         **Workflow position**
 
-        - Upstream tools: `apLCMS to RamClustR converter <https://umsa.cerit-sc.cz/root?tool_id=testtoolshed.g2.bx.psu.edu/repos/recetox/aplcms_to_ramclustr_converter/aplcms_to_ramclustr_converter/0.0.1>`_ or `XCMS fillChromPeaks <https://umsa.cerit-sc.cz/root?tool_id=toolshed.g2.bx.psu.edu/repos/lecorguille/xcms_fillpeaks/abims_xcms_fillPeaks/3.6.1+galaxy0/>`_
+        - Upstream tools: `apLCMS to RamClustR converter <https://github.com/RECETOX/galaxytools/tree/master/tools/aplcms_to_ramclustr_converter>`_ or `XCMS fillChromPeaks <https://github.com/workflow4metabolomics/tools-metabolomics>`_
 
-        - Downstream tools: `RamClustR <https://umsa.cerit-sc.cz/root?tool_id=testtoolshed.g2.bx.psu.edu/repos/recetox/ramclustr_csv/ramclustr_csv/1.1.0+galaxy0>`_ (CSV) or `WaveICA <future_link>`_
+        - Downstream tools: `RamClustR <https://github.com/RECETOX/galaxytools/tree/master/tools/ramclustr>`_ (CSV) or WaveICA
     ]]></help>
 </tool>
