@@ -1,7 +1,7 @@
 <tool id="rmassbank" name="RMassBank" version="3.0.0+galaxy0">
   <requirements>
      <requirement type="package" version="3.7">python</requirement>
-    <requirement type="package" version="2.4.1">openbabel</requirement>
+     <requirement type="package" version="2.4.1">openbabel</requirement>
      <requirement type="package" version="3.0.0">bioconductor-rmassbank</requirement>
      <requirement type="package" version="3.1.1">r-gplots</requirement>
      <requirement type="package" version="3.0">zip</requirement>
@@ -12,10 +12,10 @@
   </stdio>
   <command><![CDATA[ 
  #for $infile in $param_in:      
-    ln -s $infile ./${infile.element_identifier} &&
+    ln -s '${infile}' '${infile.element_identifier}' &&
  #end for
   
- ln -s $compounds ./${compounds.element_identifier} &&
+ ln -s '${compounds}' '${compounds.element_identifier}' &&
 
  mkdir -p ./infolists &&
  ln -s $infolist ./infolists/${infolist.element_identifier} &&
@@ -23,54 +23,54 @@
  #if $select_settings.setting_file == "template"
    python3 '${__tool_directory__}/createSettingsFile.py'
    '${__tool_directory__}/mysettings.ini'
-   $select_settings.general_param.rtMargin
-   $select_settings.general_param.rtShift
-   $select_settings.general_param.use_version
-   $select_settings.general_param.use_rean_peaks
-   $select_settings.general_param.add_annotation
-   $select_settings.shifts.pH
-   $select_settings.shifts.pM
-   $select_settings.shifts.pNa
-   $select_settings.shifts.mH
-   $select_settings.shifts.mFA
-   $select_settings.noise_recalibration.electronicNoiseWidth
-   $select_settings.noise_recalibration.recalibrateBy
-   $select_settings.noise_recalibration.recalibrateMS1
-   $select_settings.noise_recalibration.recalibrateMS1Window
-   $select_settings.noise_recalibration.multiplicityFilter
-   $select_settings.data_filtering.ppmHighMass
-   $select_settings.data_filtering.ppmLowMass
-   $select_settings.data_filtering.massRangeDivision
-   $select_settings.data_filtering.ppmFine
-   $select_settings.data_filtering.prelimCut
-   $select_settings.data_filtering.prelimCutRatio
-   $select_settings.data_filtering.fineCut
-   $select_settings.data_filtering.fineCutRatio
-   $select_settings.data_filtering.specOkLimit
-   $select_settings.data_filtering.dbeMinLimit
-   $select_settings.data_filtering.satelliteMzLimit
-   $select_settings.data_filtering.satelliteIntLimit
-   $select_settings.raw_settings.ppmFine
-   $select_settings.raw_settings.mzCoarse
-   $select_settings.raw_settings.fillPrecursorScan
+   '${select_settings.general_param.rtMargin}'
+   '${select_settings.general_param.rtShift}'
+   '${select_settings.general_param.use_version}'
+   '${select_settings.general_param.use_rean_peaks}'
+   '${select_settings.general_param.add_annotation}'
+   '${select_settings.shifts.pH}'
+   '${select_settings.shifts.pM}'
+   '${select_settings.shifts.pNa}'
+   '${select_settings.shifts.mH}'
+   '${select_settings.shifts.mFA}'
+   '${select_settings.noise_recalibration.electronicNoiseWidth}'
+   '${select_settings.noise_recalibration.recalibrateBy}'
+   '${select_settings.noise_recalibration.recalibrateMS1}'
+   '${select_settings.noise_recalibration.recalibrateMS1Window}'
+   '${select_settings.noise_recalibration.multiplicityFilter}'
+   '${select_settings.data_filtering.ppmHighMass}'
+   '${select_settings.data_filtering.ppmLowMass}'
+   '${select_settings.data_filtering.massRangeDivision}'
+   '${select_settings.data_filtering.ppmFine}'
+   '${select_settings.data_filtering.prelimCut}'
+   '${select_settings.data_filtering.prelimCutRatio}'
+   '${select_settings.data_filtering.fineCut}'
+   '${select_settings.data_filtering.fineCutRatio}'
+   '${select_settings.data_filtering.specOkLimit}'
+   '${select_settings.data_filtering.dbeMinLimit}'
+   '${select_settings.data_filtering.satelliteMzLimit}'
+   '${select_settings.data_filtering.satelliteIntLimit}'
+   '${select_settings.raw_settings.ppmFine}'
+   '${select_settings.raw_settings.mzCoarse}'
+   '${select_settings.raw_settings.fillPrecursorScan}'
    \$(echo `which babel` | sed s/babel//)
-   $select_settings.general_param.include_sp_tags
-   $select_settings.raw_settings.unknownMass
+   '${select_settings.general_param.include_sp_tags}'
+   '${select_settings.raw_settings.unknownMass}'
    &&
  #else
    python3 '${__tool_directory__}/addBabelPath.py' 
-   $select_settings.setting_file_ext
+   '${select_settings.setting_file_ext}'
    \$(echo `which babel` | sed s/babel//)
    &&   
  #end if
 
  Rscript '${__tool_directory__}/rmassbank.r' 
-  "mysettings_galaxy.ini"
-  "${compounds.element_identifier}" 
-  "$mode"
+  mysettings_galaxy.ini
+  '${compounds.element_identifier}'
+  '${mode}'
   ./infolists
   #for $infile in $param_in:
-    "${infile.element_identifier}"
+    '${infile.element_identifier}'
   #end for
  &&
  
