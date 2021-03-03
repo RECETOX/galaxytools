@@ -5,7 +5,7 @@
         <requirement type="package" version="1.2.1">pandas</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
-        python $__tool_directory__/metadata_merger.py --dataframe "$features_table" --extension "${features_table.ext}" --metadata "$metadata_table" --output "$merged_data"
+        python $__tool_directory__/metadata_merger.py --dataframe '$features_table' --extension '${features_table.ext}' --metadata '$metadata_table' --output '$merged_data'
     ]]></command>
     <inputs>
         <param name="features_table" type="data" format="csv,tabular, tsv" label="Sample-by-matrix data"/>
