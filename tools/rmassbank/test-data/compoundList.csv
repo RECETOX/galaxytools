@@ -1,0 +1,16 @@
+ID,Name_deu,Name_Eng,Name,SMILES,RT,CAS
+2817,Kokain,Cocaine,Cocaine,[C@H]1([C@@H]2N([C@@H](C[C@@H]1OC(=O)c1ccccc1)CC2)C)C(=O)OC,5.15,50-36-2
+2818,1-(3-Chlorophenyl)-piperazin,1-(3-Chlorophenyl)piperazine,1-(3-Chlorophenyl)piperazine,c1c(Cl)cccc1N1CCNCC1,5.25,6640-24-0
+2819,1-(3-Trifluoromethylphenyl)-piperazin,1-(3-Trifluoromethylphenyl)-piperazine,1-(3-Trifluoromethylphenyl)-piperazine,c1c(C(F)(F)F)cccc1N1CCNCC1,6.05,15532-75-9
+2820,1-Benzylpiperazin,1-Benzylpiperazine,1-Benzylpiperazine,C1CN(CCN1)Cc1ccccc1,1.64,2759-28-6
+2821,Amitriptylin,Amitriptyline,Amitriptyline,C1(\c2c(CCc3c1cccc3)cccc2)=C\CCN(C)C,8.65,50-48-6
+2822,Amphetamin,Amphetamine,Amphetamine,c1(ccccc1)CC(N)C,3.7,300-62-9
+2823,Benzoylecgonin,Benzoylecgonine,Benzoylecgonine,O(C(=O)c1ccccc1)[C@@H]1[C@@H]([C@@H]2N([C@@H](C1)CC2)C)C(=O)O,4.7,519-09-5
+2824,Dextromethorphan,Dextromethorphan,Dextromethorphan,c12[C@]34[C@@H]([C@@H]([N@@](C)CC3)Cc1ccc(c2)OC)CCCC4,6.7,125-71-3
+2825,"EDDP (2-Ethylidene-1,5-dimethyl-3,3-diphenylpyrrolidin)","EDDP (2-Ethylidene-1,5-dimethyl-3,3-diphenylpyrrolidin)","EDDP (2-Ethylidene-1,5-dimethyl-3,3-diphenylpyrrolidin)",C1[C@@H](C)N(C)C(\C1(c1ccccc1)c1ccccc1)=C\C,6.65,30223-73-5
+2826,Ketamin,Ketamine,Ketamine,c1([C@@]2(C(CCCC2)=O)NC)c(cccc1)Cl,4.7,6740-88-1
+2827,Mephedron (4-Methylmethcathinon),Mephedrone (4-Methylmethcathinone),Mephedrone (4-Methylmethcathinone),Cc1ccc(cc1)C(=O)C(C)NC,4.45,1189805-46-6
+2828,Methadon,Methadone,Methadone,CCC(=O)C(CC(C)N(C)C)(c1ccccc1)c2ccccc2,8.35,76-99-3
+2829,Methamphetamin,Methamphetamine,Methamphetamine,c1cccc(c1)C[C@H](C)NC,3.85,537-46-2
+2830,Naltrexon,Naltrexone,Naltrexone,c12[C@]34[C@@]5([C@H]([N@](CC6CC6)CC4)Cc2ccc(c1O[C@H]3C(=O)CC5)O)O,3.25,16590-41-3
+2758,Ephedrin,Ephedrine,Ephedrine,c1([C@H]([C@@H](NC)C)O)ccccc1,3.03,299-42-3

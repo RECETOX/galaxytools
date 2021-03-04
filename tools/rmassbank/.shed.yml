@@ -1,0 +1,13 @@
+categories:
+- Metabolomics
+description: RMassBank is an R package for processing tandem MS files and building of MassBank records.
+homepage_url: https://github.com/MassBank/RMassBank
+long_description: |
+  Workflow to process tandem MS files and build MassBank records. Functions include automated
+  extraction of tandem MS spectra, formula assignment to tandem MS fragments, recalibration of tandem
+  MS spectra with assigned fragments, spectrum cleanup, automated retrieval of compound information
+  from Internet databases, and export to MassBank records.
+name: rmassbank
+owner: recetox
+remote_repository_url: https://github.com/RECETOX/galaxytools/tree/master/tools/rmassbank
+type: unrestricted
