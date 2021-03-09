@@ -1,6 +1,6 @@
-<tool id="matchms" name="matchMS" version="0.6.0+galaxy1">
+<tool id="matchms" name="matchMS" version="0.8.2+galaxy2">
     <requirements>
-        <requirement type="package" version="0.6.1">matchms</requirement>
+        <requirement type="package" version="0.8.2">matchms</requirement>
         <requirement type="package" version="1.1.4">pandas</requirement>
     </requirements>
 
