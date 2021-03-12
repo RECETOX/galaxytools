@@ -84,7 +84,7 @@
             <param type="float" value="0" name="alpha" label="Alpha" help="the trade-off value between the independence of samples and those of variables and should be between 0 and 1"/>
         </section>
         <section name="optional_parameters" expanded="true" title="Optional Parameters">
-            <param name="exclude_blanks" type="boolean" checked="false" truevalue="TRUE" falsevalue="FALSE" label="Remove blanks" help="Excludes blank samples from the output" />
+            <param name="exclude_blanks" type="boolean" checked="true" truevalue="TRUE" falsevalue="FALSE" label="Remove blanks" help="Excludes blank samples from the output" />
         </section>
     </inputs>
 

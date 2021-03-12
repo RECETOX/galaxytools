@@ -13,6 +13,10 @@ waveica <- function(
     data <- read.csv(data, header = TRUE, row.names = "sample_name")
     data <- preprocess_data(data)
 
+    if (exclude_blanks) {
+        data <- exclude_group(data)
+    }
+
     # separate data into features, batch and group
     features <- data[, -c(1:4)]
     group <- as.numeric(data$class)
@@ -30,16 +34,11 @@ waveica <- function(
         alpha = alpha
         )
 
-    # exclude blanks if selected by user
-    if (exclude_blanks) {
-        normalized_data$data_wave <- exclude_group(normalized_data, group)
-    }
-
     return(normalized_data)
 }
 
 
-# Sort data, set numerical values for groups
+# Sort data, set numerical values for groups, remove blanks from dataset
 preprocess_data <- function(data) {
     data <- data[order(data$injectionOrder, decreasing = FALSE), ] # sort data by injection order
 
@@ -53,7 +52,6 @@ preprocess_data <- function(data) {
 
 # Create appropriate input for R wavelets function
 get_wf <- function(wavelet_filter, wavelet_length) {
-
     wf <- paste(wavelet_filter, wavelet_length, sep = "")
 
     # exception to the wavelet function
@@ -66,15 +64,17 @@ get_wf <- function(wavelet_filter, wavelet_length) {
 
 
 # Exclude blanks from a dataframe
-exclude_group <- function(features, group) {
-
-    row_idx_to_exclude <- which(group %in% 0)
-    features_no_blanks <- features$data_wave[-c(row_idx_to_exclude), ]
-
-    msg <- paste("Blank samples have been excluded from the dataframe.\n")
-    cat(msg)
-
-    return(features_no_blanks)
+exclude_group <- function(data) {
+    row_idx_to_exclude <- which(data$class %in% 0)
+    if (length(row_idx_to_exclude) > 1) {
+        data_without_blanks <- data[-c(row_idx_to_exclude), ]
+        msg <- paste("Blank samples have been excluded from the dataframe.\n")
+        cat(msg)
+        return(data_without_blanks)
+        }
+    else {
+        return(data)
+    }
 }
 
 
