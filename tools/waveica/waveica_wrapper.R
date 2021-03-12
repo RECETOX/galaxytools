@@ -13,6 +13,7 @@ waveica <- function(
     data <- read.csv(data, header = TRUE, row.names = "sample_name")
     data <- preprocess_data(data)
 
+    # remove blanks from dataset
     if (exclude_blanks) {
         data <- exclude_group(data)
     }
@@ -38,7 +39,7 @@ waveica <- function(
 }
 
 
-# Sort data, set numerical values for groups, remove blanks from dataset
+# Sort data, set numerical values for groups
 preprocess_data <- function(data) {
     data <- data[order(data$injectionOrder, decreasing = FALSE), ] # sort data by injection order
 
