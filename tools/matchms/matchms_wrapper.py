@@ -1,7 +1,6 @@
 import argparse
 import sys
 
-from pandas import DataFrame
 from matchms import calculate_scores
 from matchms.importing import load_from_msp
 from matchms.similarity import (
@@ -13,6 +12,7 @@ from matchms.similarity import (
     ParentMassMatch
 )
 
+from pandas import DataFrame
 
 def main(argv):
     parser = argparse.ArgumentParser(description="Compute MSP similarity scores")
