@@ -1,7 +1,7 @@
 import argparse
 import sys
 
-import pandas
+from pandas import DataFrame
 from matchms import calculate_scores
 from matchms.importing import load_from_msp
 from matchms.similarity import (
@@ -51,7 +51,7 @@ def main(argv):
 
     query_names = [spectra.metadata['name'] for spectra in scores.queries]
     reference_names = [spectra.metadata['name'] for spectra in scores.references]
-    dataframe = pandas.DataFrame(data=scores.scores, index=reference_names, columns=query_names)
+    dataframe = DataFrame(data=scores.scores, index=reference_names, columns=query_names)
     dataframe.to_csv(args.output_filename, sep=';')
     return 0
 
