@@ -14,6 +14,7 @@ from matchms.similarity import (
 
 from pandas import DataFrame
 
+
 def main(argv):
     parser = argparse.ArgumentParser(description="Compute MSP similarity scores")
     parser.add_argument(
