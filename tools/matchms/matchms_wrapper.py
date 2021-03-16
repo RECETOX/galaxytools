@@ -21,8 +21,9 @@ def main(argv):
         "references_filename", type=str, help="Path to reference MSP library."
     )
     parser.add_argument("queries_filename", type=str, help="Path to query spectra.")
-    parser.add_argument("output_filename", type=str, help="Path where to store the output .csv.")
     parser.add_argument("similarity_metric", type=str, help='Metric to use for matching.')
+    parser.add_argument("output_filename_scores", type=str, help="Path where to store the output .csv scores.")
+    parser.add_argument("output_filename_matches", type=str, help="Path where to store the output .csv matches.")
 
     args = parser.parse_args()
 
@@ -52,8 +53,14 @@ def main(argv):
 
     query_names = [spectra.metadata['name'] for spectra in scores.queries]
     reference_names = [spectra.metadata['name'] for spectra in scores.references]
-    dataframe = DataFrame(data=[entry["score"] for entry in scores.scores], index=reference_names, columns=query_names)
-    dataframe.to_csv(args.output_filename, sep=';')
+    
+    # Write scores to dataframe
+    dataframe_scores = DataFrame(data=[entry["score"] for entry in scores.scores], index=reference_names, columns=query_names)
+    dataframe_scores.to_csv(args.output_filename_scores, sep=';')
+
+    # Write number of matches to dataframe
+    dataframe_matches = DataFrame(data=[entry["matches"] for entry in scores.scores], index=reference_names, columns=query_names)
+    dataframe_matches.to_csv(args.output_filename_matches, sep=';')
     return 0
 
 
