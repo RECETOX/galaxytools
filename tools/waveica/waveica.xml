@@ -1,6 +1,6 @@
 <tool id="waveica" name="WaveICA" version="0.1.0+galaxy0" python_template_version="3.5">
 
-    <description>batch correction for chromatography-mass spectrometry analysis</description>
+    <description>removal of batch effects for untargeted metabolomics data</description>
     
     <requirements>
         <container type="docker">recetox/waveica:0.1.0-recetox0</container>
@@ -116,13 +116,14 @@
 
         2. Types of the samples denoted as "blank", "sample" or "QC"
 
-        3. Batch number
+        3. Batch numbers
 
         4. Features data
 
-        **Workflow position**
+        **Documentation**
 
-        - Upstream tools: `XCMS fillChromPeaks  <https://umsa.cerit-sc.cz/root?tool_id=toolshed.g2.bx.psu.edu/repos/lecorguille/xcms_fillpeaks/abims_xcms_fillPeaks/3.6.1+galaxy0>`_  > Metadata Merger 
+        See original repository for further information: https://github.com/dengkuistat/WaveICA
+
     ]]></help>
 
     <citations>
