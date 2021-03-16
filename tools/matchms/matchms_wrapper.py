@@ -52,7 +52,7 @@ def main(argv):
 
     query_names = [spectra.metadata['name'] for spectra in scores.queries]
     reference_names = [spectra.metadata['name'] for spectra in scores.references]
-    dataframe = DataFrame(data=scores.scores, index=reference_names, columns=query_names)
+    dataframe = DataFrame(data=[entry["score"] for entry in scores.scores], index=reference_names, columns=query_names)
     dataframe.to_csv(args.output_filename, sep=';')
     return 0
 
