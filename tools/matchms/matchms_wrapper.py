@@ -11,7 +11,6 @@ from matchms.similarity import (
     ModifiedCosine,
     ParentMassMatch
 )
-
 from pandas import DataFrame
 
 
@@ -53,7 +52,7 @@ def main(argv):
 
     query_names = [spectra.metadata['name'] for spectra in scores.queries]
     reference_names = [spectra.metadata['name'] for spectra in scores.references]
-    
+
     # Write scores to dataframe
     dataframe_scores = DataFrame(data=[entry["score"] for entry in scores.scores], index=reference_names, columns=query_names)
     dataframe_scores.to_csv(args.output_filename_scores, sep=';')
