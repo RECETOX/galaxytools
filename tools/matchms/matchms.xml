@@ -33,18 +33,21 @@
             <param name="queries" value="fill.msp" ftype="msp"/>
             <param name="similarity_metric" value="CosineGreedy"/>
             <output name="similarity_scores" file="symmetric_fill_cosine_greedy.csv" ftype="csv" checksum="md5$1be210e4a219f6a9315d6ca840d89247"/>
+            <output name="similarity_matches" file="matches_symmetric_fill_greedy.csv" ftype="csv" checksum="md5$93a43a55e02c099581e5765d6ead9f13"/>
         </test>
         <test>
             <param name="references" value="recetox_gc-ei_ms_20201028.msp" ftype="msp"/>
             <param name="queries" value="fill.msp" ftype="msp"/>
             <param name="similarity_metric" value="CosineGreedy"/>
             <output name="similarity_scores" file="rcx_fill_cosine_greedy.csv" ftype="csv" checksum="md5$f9f9e3f9483de9486658fcdbba92451e"/>
+            <output name="similarity_matches" file="matches_rcx_fill_greedy.csv" ftype="csv" checksum="md5$4aadb19c261fa41907d80f2d326055b6"/>
         </test>
         <test>
             <param name="references" value="recetox_gc-ei_ms_20201028.msp" ftype="msp"/>
             <param name="queries" value="fill.msp" ftype="msp"/>
             <param name="similarity_metric" value="CosineHungarian"/>
-            <output name="similarity_scores" file="rcx_fill_cosine_greedy.csv" ftype="csv" checksum="md5$f9f9e3f9483de9486658fcdbba92451e"/>
+            <output name="similarity_scores" file="rcx_fill_cosine_hungarian.csv" ftype="csv" checksum="md5$e4063294e0f70e0e966a252ec43a1537"/>
+            <output name="similarity_matches" file="matches_rcx_fill_hungarian.csv" ftype="csv" checksum="md5$4aadb19c261fa41907d80f2d326055b6"/>
         </test>
     </tests>
 
@@ -64,7 +67,7 @@
         RAMClustR outputs a collection of **msp** files which can be matched to a library (.msp) using a similarity score computed in matchMS.
 
     Downstream Tools
-        The **output** is a csv which contains the similarity score and the number of matched peaks as a tuple.
+        The **output** is a csv which contains the similarity score and second csv containing the number of matched peaks.
     ]]></help>
 
 
