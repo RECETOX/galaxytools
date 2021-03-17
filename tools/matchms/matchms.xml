@@ -1,6 +1,6 @@
-<tool id="matchms" name="matchMS" version="0.6.0+galaxy1">
+<tool id="matchms" name="matchMS" version="0.8.2+galaxy2">
     <requirements>
-        <requirement type="package" version="0.6.1">matchms</requirement>
+        <requirement type="package" version="0.8.2">matchms</requirement>
         <requirement type="package" version="1.1.4">pandas</requirement>
     </requirements>
 
@@ -9,7 +9,7 @@
     </environment_variables>
 
     <command detect_errors="exit_code"><![CDATA[
-        python3 ${__tool_directory__}/matchms_wrapper.py "$references" "$queries" "$similarity_scores" "$similarity_metric"
+        python3 ${__tool_directory__}/matchms_wrapper.py "$references" "$queries" "$similarity_metric" "$similarity_scores" "$similarity_matches"
     ]]>    </command>
 
     <inputs>
@@ -23,7 +23,8 @@
     </inputs>
 
     <outputs>
-        <data label="$similarity_metric similarity of ${on_string}" name="similarity_scores" format="csv" />
+        <data label="$similarity_metric scores of ${on_string}" name="similarity_scores" format="csv" />
+        <data label="$similarity_metric matches of ${on_string}" name="similarity_matches" format="csv" />
     </outputs>
 
     <tests>
@@ -31,7 +32,22 @@
             <param name="references" value="fill.msp" ftype="msp"/>
             <param name="queries" value="fill.msp" ftype="msp"/>
             <param name="similarity_metric" value="CosineGreedy"/>
-            <output name="similarity_scores" file="output.csv" ftype="csv" checksum="md5$0fd5cb719f8aa66ec5d9aeddca4b5fe7"/>
+            <output name="similarity_scores" file="symmetric_fill_cosine_greedy.csv" ftype="csv" checksum="md5$1be210e4a219f6a9315d6ca840d89247"/>
+            <output name="similarity_matches" file="matches_symmetric_fill_greedy.csv" ftype="csv" checksum="md5$93a43a55e02c099581e5765d6ead9f13"/>
+        </test>
+        <test>
+            <param name="references" value="recetox_gc-ei_ms_20201028.msp" ftype="msp"/>
+            <param name="queries" value="fill.msp" ftype="msp"/>
+            <param name="similarity_metric" value="CosineGreedy"/>
+            <output name="similarity_scores" file="rcx_fill_cosine_greedy.csv" ftype="csv" checksum="md5$f9f9e3f9483de9486658fcdbba92451e"/>
+            <output name="similarity_matches" file="matches_rcx_fill_greedy.csv" ftype="csv" checksum="md5$4aadb19c261fa41907d80f2d326055b6"/>
+        </test>
+        <test>
+            <param name="references" value="recetox_gc-ei_ms_20201028.msp" ftype="msp"/>
+            <param name="queries" value="fill.msp" ftype="msp"/>
+            <param name="similarity_metric" value="CosineHungarian"/>
+            <output name="similarity_scores" file="rcx_fill_cosine_hungarian.csv" ftype="csv" checksum="md5$e4063294e0f70e0e966a252ec43a1537"/>
+            <output name="similarity_matches" file="matches_rcx_fill_hungarian.csv" ftype="csv" checksum="md5$4aadb19c261fa41907d80f2d326055b6"/>
         </test>
     </tests>
 
@@ -51,11 +67,12 @@
         RAMClustR outputs a collection of **msp** files which can be matched to a library (.msp) using a similarity score computed in matchMS.
 
     Downstream Tools
-        The **output** is a csv which contains the similarity score and the number of matched peaks as a tuple.
+        The **output** is a csv which contains the similarity score and second csv containing the number of matched peaks.
     ]]></help>
 
 
     <citations>
+        <citation type="doi">10.5281/zenodo.4589154</citation>
         <citation type="doi">10.21105/joss.02411</citation>
     </citations>
 </tool>
