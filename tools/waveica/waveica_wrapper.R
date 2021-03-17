@@ -41,7 +41,8 @@ waveica <- function(
 
 # Sort data, set numerical values for groups
 preprocess_data <- function(data) {
-    data <- data[order(data$injectionOrder, decreasing = FALSE), ] # sort data by injection order
+    # sort data by injection order
+    data <- data[order(data$injectionOrder, decreasing = FALSE), ]
 
     data$class[data$class == "blank"] <- 0
     data$class[data$class == "sample"] <- 1
