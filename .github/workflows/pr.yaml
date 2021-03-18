@@ -230,6 +230,7 @@ jobs:
       run: sudo apt-get install libcurl4-openssl-dev
     - name: Install lintr
       run: |
+        mkdir "/home/user/.R/lintr_cache"
         install.packages('remotes')
         remotes::install_cran("lintr")
       shell: Rscript {0}
