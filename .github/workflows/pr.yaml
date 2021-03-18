@@ -234,7 +234,7 @@ jobs:
     - name: Install lintr
       run: |
         install.packages('remotes')
-        remotes::install_cran("lintr", force = TRUE)
+        remotes::install_version("lintr", version = "2.0.0", force = TRUE)
       shell: Rscript {0}
     - name: lintr
       run: |
