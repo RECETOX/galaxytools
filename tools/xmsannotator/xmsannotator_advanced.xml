@@ -1,4 +1,4 @@
-<tool id="xmsannotator_advanced" name="xMSannotator (advanced)" version="@TOOL_VERSION@+galaxy2">
+<tool id="xmsannotator_advanced" name="xMSannotator (advanced)" version="@TOOL_VERSION@+galaxy4">
     <macros>
         <import>xmsannotator_macros.xml</import>
     </macros>
@@ -8,7 +8,7 @@
     </requirements>
 
     <command detect_errors="aggressive"><![CDATA[
-        Rscript $wrapper
+        Rscript -e "n_workers <- \${GALAXY_SLOTS:-1}" -e "source('${wrapper}')"
     ]]></command>
 
     <configfiles>
@@ -30,13 +30,13 @@
                 deep_split = as.integer($clustering.deep_split),
                 network_type = "$clustering.network_type",
             #if $scoring.expected_adducts
-                expected_adducts = load_expected_adducts_csv("${$scoring.expected_adducts_csv}"),
+                expected_adducts = load_expected_adducts_csv("${scoring.expected_adducts}"),
             #end if
             #if $scoring.boost_compounds
-                boost_compounds = load_boost_compounds_csv("${scoring.boost_compounds_csv}"),
+                boost_compounds = load_boost_compounds_csv("${scoring.boost_compounds}"),
             #end if
                 redundancy_filtering = $scoring.redundancy_filtering,
-                n_workers = \${GALAXY_SLOTS:-1}
+                n_workers = n_workers
             )
 
             save_parquet(data = annotation, file = "${annotation_parquet}")
@@ -91,22 +91,20 @@
                     cluster. Otherwise, do not account for cluster membership.
                 </help>
             </param>
-            <param name="expected_adducts" type="data" format="csv,tsv" optional="true">
+            <param name="expected_adducts" type="data" format="csv" optional="true">
                 <label>Expected adducts</label>
                 <help>
                     Require the presence of certain adducts for a high confidence match. By default, at least the
                     presence of an M+H adduct is required for a high confidence match.
                 </help>
-                <conversion name="expected_adducts_csv" type="csv"/>
             </param>
-            <param name="boost_compounds" type="data" format="csv,tsv" optional="true">
+            <param name="boost_compounds" type="data" format="csv" optional="true">
                 <label>Validated compounds score boosting (optional)</label>
                 <help>
                     Table of previously validated compounds to boost their scores and confidence levels.
                     The 1st column of the table must contain IDs of compounds.
                     The optional 2nd and 3rd columns may contain mz values and retention times.
                 </help>
-                <conversion name="boost_compounds_csv" type="csv"/>
             </param>
             <param name="min_isp" type="integer" min="0" value="1">
                 <label>Minimum number of expected isotopes</label>

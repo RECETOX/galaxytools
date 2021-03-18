@@ -1,19 +1,31 @@
-<tool id="export_to_path" name="export to path" version="0.0.1">
-    <description> on Sally</description>
+<tool id="export_to_path" name="export to path" version="0.0.2">
+    <description>on a filesystem accessible to compute node</description>
     <requirements>
         <requirement type="package" version="3.6">python</requirement>
     </requirements>
     <command detect_errors="aggressive"><![CDATA[
-python '$__tool_directory__/export_to_path.py' -d '$export_dir'
-#for $d,$m in zip($datasets, $metadata)
-    '${d}' '${d.element_identifier}' '${d.ext}' '${m}' '${m.element_identifier}' '${m.ext}'
-#end for
+python '$__tool_directory__/export_to_path.py'
+-p '$remote_path'
+
+#if $mzml_dataset
+'${mzml_dataset}' '${mzml_dataset.ext}'
+#end if
+
+#if $json_metadata
+  '${json_metadata}' '${json_metadata.ext}'
+#end if
+
+#if $txt_metadata
+  '${txt_metadata}' '${txt_metadata.ext}'
+#end if
+
 > '$log'
     ]]></command>
     <inputs>
-        <param name="datasets" type="data" format="data" multiple="true" label="Datasets to export" />
-        <param name="metadata" type="data" format="data" multiple="true" label="Metadata to export" optional="true"/>
-        <param name="export_dir" type="text" value="" label="Directory where RAW_profile and mzML_profile reside" help="relative path to Sally's home e.g. share/path/to/project">
+        <param name="mzml_dataset" type="data" format="mzml" label="mzML Dataset to export" optional="true"/>
+        <param name="json_metadata" type="data" format="json" label="JSON metadata to export" optional="true"/>
+        <param name="txt_metadata" type="data" format="txt" label="TXT metadata to export" optional="true"/>
+        <param name="remote_path" type="text" value="" label="Remote path of the new mzML dataset." help="Full absolute path to the new mzml dataset to export.">
             <validator type="empty_field" />
             <sanitizer sanitize="false" />
         </param>
