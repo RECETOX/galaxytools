@@ -230,7 +230,7 @@ jobs:
       run: sudo apt-get install libcurl4-openssl-dev
     - name: make lintr cache folder
       run: |
-        mkdir -p /home/user/.R/lintr_cache
+        mkdir -p ~/.R/lintr_cache
     - name: Install lintr
       run: |
         install.packages('remotes')
