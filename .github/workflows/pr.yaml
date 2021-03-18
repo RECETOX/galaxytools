@@ -228,9 +228,11 @@ jobs:
         key: r_cache_${{ matrix.r-version }}
     - name: Install non-R lintr dependencies
       run: sudo apt-get install libcurl4-openssl-dev
-    - name: Install lintr
+    - name: make lintr cache folder
       run: |
         mkdir -p /home/user/.R/lintr_cache
+    - name: Install lintr
+      run: |
         install.packages('remotes')
         remotes::install_cran("lintr")
       shell: Rscript {0}
