@@ -1,11 +1,11 @@
-<tool id="retip_filter_rt" name="Retip filter" version="@TOOL_VERSION@+galaxy0">
+<tool id="retip_filter_rt" name="Retip filter" version="@TOOL_VERSION@+galaxy3">
     <description>for predicted RT's</description>
     <macros>
         <import>macros.xml</import>
     </macros>
     <expand macro="requirements"/>
     <command detect_errors="exit_code"><![CDATA[
-               /run.sh filter_rt.R --tolerance '$tolerance' --mode '$filtering_mode' '$input_smiles' 'output_file'
+               /run.sh filter_rt.R --tolerance '$tolerance' --rt '$rt_column' --rtp '$rtp_column' --mode '$filtering_mode' '$input' 'filtered_file' 'dropped_file'
       ]]>
     </command>
     <inputs>
@@ -16,17 +16,21 @@
         </param>
         <param name="tolerance" label="Tolerance" type="integer" value="30" min="0" max="100"
                help="Value must be between [0 - 100]" optional="false"/>
-        <param name="input_smiles" label="Select Input Dataset" type="data" format="h5" optional="false"/>
+        <param name="input" label="Select Input Dataset" type="data" format="tsv" optional="false"/>
+	<param name="rt_column" label="Column with measured RT" type="text" value="rt" optional="false"/>
+	<param name="rtp_column" label="Column with predicted RT" type="text" value="rtp" optional="false"/>
     </inputs>
     <outputs>
-        <data format="h5" name="output1" label="Filtered RT" from_work_dir="output_file"/>
+        <data format="tsv" name="filtered" label="Filtered compounds" from_work_dir="filtered_file"/>
+        <data format="tsv" name="dropped" label="Dropped compounds" from_work_dir="dropped_file"/>
     </outputs>
     <tests>
-        <test expect_num_outputs="1">
-            <param name="filtering_mode" value="absolute"/>
+        <test expect_num_outputs="2">
+            <param name="filtering_mode" value="order"/>
             <param name="tolerance" value="30"/>
-            <param name="input_smiles" value="input_rt_filter.h5"/>
-            <output name="output1" file="output_rt_filter.h5" ftype="h5" compare="sim_size" delta="50"/>
+            <param name="input" value="annotations-rtp.tsv"/>
+            <output name="filtered" file="annotations-good.tsv" ftype="tsv" compare="sim_size" delta_frac=".05"/>
+            <output name="dropped" file="annotations-bad.tsv" ftype="tsv" compare="sim_size" delta_frac=".05"/>
         </test>
     </tests>
     <help><![CDATA[
