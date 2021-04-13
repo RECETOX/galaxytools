@@ -2,14 +2,12 @@ import argparse
 import sys
 
 from matchms import calculate_scores
+from matchms.filtering import add_precursor_mz
 from matchms.importing import load_from_msp
 from matchms.similarity import (
     CosineGreedy,
     CosineHungarian,
-    FingerprintSimilarity,
-    IntersectMz,
     ModifiedCosine,
-    ParentMassMatch
 )
 from pandas import DataFrame
 
@@ -23,30 +21,29 @@ def main(argv):
     parser.add_argument("similarity_metric", type=str, help='Metric to use for matching.')
     parser.add_argument("output_filename_scores", type=str, help="Path where to store the output .csv scores.")
     parser.add_argument("output_filename_matches", type=str, help="Path where to store the output .csv matches.")
+    parser.add_argument("tolerance", type=float, help="Tolerance to use for peak matching.")
+    parser.add_argument("mz_power", type=float, help="The power to raise mz to in the cosine function.")
+    parser.add_argument("intensity_power", type=float, help="The power to raise intensity to in the cosine function.")
 
     args = parser.parse_args()
 
+    reference_spectra = load_from_msp(args.references_filename)
+    queries_spectra =load_from_msp(args.queries_filename)
+
     if args.similarity_metric == 'CosineGreedy':
-        similarity_metric = CosineGreedy()
+        similarity_metric = CosineGreedy(args.tolerance, args.mz_power, args.intensity_power)
     elif args.similarity_metric == 'CosineHungarian':
-        similarity_metric = CosineHungarian()
-    elif args.similarity_metric == 'FingerprintSimilarity':
-        similarity_metric = FingerprintSimilarity()
-    elif args.similarity_metric == 'IntersectMz':
-        similarity_metric = IntersectMz()
+        similarity_metric = CosineHungarian(args.tolerance, args.mz_power, args.intensity_power)
     elif args.similarity_metric == 'ModifiedCosine':
-        similarity_metric = ModifiedCosine()
+        similarity_metric = ModifiedCosine(args.tolerance, args.mz_power, args.intensity_power)
+        reference_spectra = map(add_precursor_mz, reference_spectra)
+        queries_spectra = map(add_precursor_mz, queries_spectra)
     else:
-        similarity_metric = ParentMassMatch()
-
-    reference_spectra = [
-        spectrum for spectrum in load_from_msp(args.references_filename)
-    ]
-    queries_spectra = [spectrum for spectrum in load_from_msp(args.queries_filename)]
-
+        return -1
+    
     scores = calculate_scores(
-        references=reference_spectra,
-        queries=queries_spectra,
+        references=list(reference_spectra),
+        queries=list(queries_spectra),
         similarity_function=similarity_metric,
     )
 
