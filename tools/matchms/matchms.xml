@@ -21,7 +21,7 @@
         </param>
 
         <section name="algorithm" title="Algorithm Parameters" expanded="true">    
-            <param label="tolerance" name="tolerance" type="float" value="0.1" help="Peaks will be considered a match when less than tolerance apart." />
+            <param label="tolerance" name="tolerance" type="float" value="0.1" help="Peaks will be considered a match when less than tolerance apart. Absolute m/z value, not in ppm." />
             <param label="mz_power" name="mz_power" type="float" value="0.0" help="The power to raise mz to in the cosine function." />
             <param label="intensity_power" name="intensity_power" type="float" value="1.0" help="The power to raise intensity to in the cosine function." />
         </section>
