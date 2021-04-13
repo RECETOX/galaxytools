@@ -28,7 +28,7 @@ def main(argv):
     args = parser.parse_args()
 
     reference_spectra = load_from_msp(args.references_filename)
-    queries_spectra =load_from_msp(args.queries_filename)
+    queries_spectra = load_from_msp(args.queries_filename)
 
     if args.similarity_metric == 'CosineGreedy':
         similarity_metric = CosineGreedy(args.tolerance, args.mz_power, args.intensity_power)
@@ -40,7 +40,7 @@ def main(argv):
         queries_spectra = map(add_precursor_mz, queries_spectra)
     else:
         return -1
-    
+
     scores = calculate_scores(
         references=list(reference_spectra),
         queries=list(queries_spectra),
