@@ -10,7 +10,7 @@
     ]]></command>
 
     <configfiles>
-        <configfile name="run_script">
+        <configfile name="run_script"><![CDATA[
             #set file_str = str("', '").join([str($f) for $f in $files])
 
             x <- apLCMS::hybrid(
@@ -46,7 +46,7 @@
 
             apLCMS::save_peaks_to_hdf('$peaks', x)
             apLCMS::save_known_table_to_hdf('$updated_known_table', x\$updated_known_table) ## NOTE the \ because we want cheetah to ignore the $ character
-        </configfile>
+        ]]></configfile>
     </configfiles>
 
     <expand macro="inputs">

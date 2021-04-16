@@ -10,7 +10,7 @@
     ]]></command>
 
     <configfiles>
-        <configfile name="run_script">
+        <configfile name="run_script"><![CDATA[
             #set file_str = str("', '").join([str($f) for $f in $files])
 
             x <- apLCMS::unsupervised(
@@ -42,7 +42,7 @@
             )
 
             apLCMS::save_peaks_to_hdf('$peaks', x)
-        </configfile>
+        ]]></configfile>
     </configfiles>
 
     <expand macro="inputs">
