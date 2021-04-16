@@ -1,4 +1,4 @@
-<tool id="aplcms_unsupervised" name="apLCMS - Unsupervised" version="@TOOL_VERSION@+galaxy2">
+<tool id="aplcms_unsupervised" name="apLCMS - Unsupervised" version="@TOOL_VERSION@+galaxy3">
     <macros>
         <import>aplcms_macros.xml</import>
     </macros>
