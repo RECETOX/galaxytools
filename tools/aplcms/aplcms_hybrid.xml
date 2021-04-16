@@ -6,42 +6,48 @@
     <expand macro="requirements" />
 
     <command detect_errors="aggressive"><![CDATA[
-        #set file_str = str("', '").join([str($f) for $f in $files])
-
-        Rscript
-            -e "x <- apLCMS::hybrid(
-                    files = c('$file_str'),
-                    known_table = apLCMS::load_known_table_from_hdf('$known_table'),
-                    min_exp = $noise_filtering.min_exp,
-                    min_pres = $noise_filtering.min_pres,
-                    min_run = $noise_filtering.min_run,
-                    mz_tol = $noise_filtering.mz_tol,
-                    baseline_correct = $noise_filtering.baseline_correct,
-                    baseline_correct_noise_percentile = $noise_filtering.baseline_correct_noise_percentile,
-                    intensity_weighted = $noise_filtering.intensity_weighted,
-                    shape_model = '$feature_detection.shape_model',
-                    BIC_factor = $feature_detection.BIC_factor,
-                    peak_estim_method = '$feature_detection.peak_estim_method',
-                    min_bandwidth = $feature_detection.min_bandwidth,
-                    max_bandwidth = $feature_detection.max_bandwidth,
-                    sd_cut = c($feature_detection.sd_cut_min, $feature_detection.sd_cut_max),
-                    sigma_ratio_lim = c($feature_detection.sigma_ratio_lim_min, $feature_detection.sigma_ratio_lim_max),
-                    component_eliminate = $feature_detection.component_eliminate,
-                    moment_power = $feature_detection.moment_power,
-                    align_chr_tol = $peak_alignment.align_chr_tol,
-                    align_mz_tol = $peak_alignment.align_mz_tol,
-                    max_align_mz_diff = $peak_alignment.max_align_mz_diff,
-                    match_tol_ppm = $history_db.match_tol_ppm,
-                    new_feature_min_count = $history_db.new_feature_min_count,
-                    recover_mz_range = $weak_signal_recovery.recover_mz_range,
-                    recover_chr_range = $weak_signal_recovery.recover_chr_range,
-                    use_observed_range = $weak_signal_recovery.use_observed_range,
-                    recover_min_count = $weak_signal_recovery.recover_min_count,
-                    cluster = as.integer(\${GALAXY_SLOTS:-1})
-                )"
-            -e "apLCMS::save_peaks_to_hdf('$peaks', x)"
-            -e "apLCMS::save_known_table_to_hdf('$updated_known_table', x\\$updated_known_table)" ## NOTE the double \\ because we want cheetah and bash to ignore the $ character
+        Rscript ${run_script}
     ]]></command>
+
+    <configfiles>
+        <configfile name="run_script">
+            #set file_str = str("', '").join([str($f) for $f in $files])
+
+            x <- apLCMS::hybrid(
+                files = c('$file_str'),
+                known_table = apLCMS::load_known_table_from_hdf('$known_table'),
+                min_exp = $noise_filtering.min_exp,
+                min_pres = $noise_filtering.min_pres,
+                min_run = $noise_filtering.min_run,
+                mz_tol = $noise_filtering.mz_tol,
+                baseline_correct = $noise_filtering.baseline_correct,
+                baseline_correct_noise_percentile = $noise_filtering.baseline_correct_noise_percentile,
+                intensity_weighted = $noise_filtering.intensity_weighted,
+                shape_model = '$feature_detection.shape_model',
+                BIC_factor = $feature_detection.BIC_factor,
+                peak_estim_method = '$feature_detection.peak_estim_method',
+                min_bandwidth = $feature_detection.min_bandwidth,
+                max_bandwidth = $feature_detection.max_bandwidth,
+                sd_cut = c($feature_detection.sd_cut_min, $feature_detection.sd_cut_max),
+                sigma_ratio_lim = c($feature_detection.sigma_ratio_lim_min, $feature_detection.sigma_ratio_lim_max),
+                component_eliminate = $feature_detection.component_eliminate,
+                moment_power = $feature_detection.moment_power,
+                align_chr_tol = $peak_alignment.align_chr_tol,
+                align_mz_tol = $peak_alignment.align_mz_tol,
+                max_align_mz_diff = $peak_alignment.max_align_mz_diff,
+                match_tol_ppm = $history_db.match_tol_ppm,
+                new_feature_min_count = $history_db.new_feature_min_count,
+                recover_mz_range = $weak_signal_recovery.recover_mz_range,
+                recover_chr_range = $weak_signal_recovery.recover_chr_range,
+                use_observed_range = $weak_signal_recovery.use_observed_range,
+                recover_min_count = $weak_signal_recovery.recover_min_count,
+                cluster = as.integer(Sys.getenv('GALAXY_SLOTS', unset = 1))
+            )
+
+            apLCMS::save_peaks_to_hdf('$peaks', x)
+            apLCMS::save_known_table_to_hdf('$updated_known_table', x\$updated_known_table) ## NOTE the \ because we want cheetah to ignore the $ character
+        </configfile>
+    </configfiles>
 
     <expand macro="inputs">
         <expand macro="history_db" />
