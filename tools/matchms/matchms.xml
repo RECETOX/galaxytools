@@ -1,4 +1,4 @@
-<tool id="matchms" name="matchMS" version="0.8.2+galaxy2">
+<tool id="matchms" name="matchMS" version="0.8.2+galaxy3">
     <requirements>
         <requirement type="package" version="0.8.2">matchms</requirement>
         <requirement type="package" version="1.1.4">pandas</requirement>
@@ -9,8 +9,8 @@
     </environment_variables>
 
     <command detect_errors="exit_code"><![CDATA[
-        python3 ${__tool_directory__}/matchms_wrapper.py "$references" "$queries" "$similarity_metric" "$similarity_scores" "$similarity_matches"
-    ]]>    </command>
+        python3 ${__tool_directory__}/matchms_wrapper.py "$references" "$queries" "$similarity_metric" "$similarity_scores" "$similarity_matches" "$algorithm.tolerance" "$algorithm.mz_power" "$algorithm.intensity_power"
+    ]]> </command>
 
     <inputs>
         <param label="Reference spectra" name="references" type="data" format="msp" help="Reference mass spectra to match against as library." />
@@ -18,8 +18,13 @@
         <param label="Similarity metric" name="similarity_metric" type="select" display="radio" help="Similarity metric to use for score computation.">
             <option value="CosineGreedy" selected="true">CosineGreedy</option>
             <option value="CosineHungarian">CosineHungarian</option>
-            <option value="IntersectMz">IntersectMz</option>
         </param>
+
+        <section name="algorithm" title="Algorithm Parameters" expanded="true">    
+            <param label="tolerance" name="tolerance" type="float" value="0.1" help="Peaks will be considered a match when less than tolerance apart. Absolute m/z value, not in ppm." />
+            <param label="mz_power" name="mz_power" type="float" value="0.0" help="The power to raise mz to in the cosine function." />
+            <param label="intensity_power" name="intensity_power" type="float" value="1.0" help="The power to raise intensity to in the cosine function." />
+        </section>
     </inputs>
 
     <outputs>
@@ -63,8 +68,6 @@
         +-----------+---------------+--------+-----------+
         | RAMClustR | Mass spectra  | msp    | queries   |
         +-----------+---------------+--------+-----------+
-
-        RAMClustR outputs a collection of **msp** files which can be matched to a library (.msp) using a similarity score computed in matchMS.
 
     Downstream Tools
         The **output** is a csv which contains the similarity score and second csv containing the number of matched peaks.
