@@ -37,7 +37,7 @@
             <param name="min_run" type="float" value="12"
                    label="min_run"
                    help="The minimum length of elution time for a series of signals grouped by m/z to be considered a peak." />
-            <param name="mz_tol" type="float" value="1e-05"
+            <param name="mz_tol" type="float" value="10"
                    label="mz_tol"
                    help="The m/z tolerance level for the grouping of data points. This value is expressed as the fraction of the m/z value. This value, multiplied by the m/z value, becomes the cutoff level. The recommended value is the machine's nominal accuracy level. Divide the ppm value by 1e6. For FTMS, 1e-5 is recommended." />
             <param name="baseline_correct" type="float" value="0" label="baseline_correct"
