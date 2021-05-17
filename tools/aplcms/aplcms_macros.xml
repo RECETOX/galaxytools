@@ -102,7 +102,7 @@
                    help="The retention time tolerance level for peak alignment. The default is NA, which allows the program to search for the tolerance level based on the data." />
             <param name="align_mz_tol" type="float" optional="true"
                    label="align_mz_tol (optional)"
-                   help="The m/z tolerance level for peak alignment. The default is NA, which allows the program to search for the tolerance level based on the data. This value is expressed as the percentage of the m/z value. This value, multiplied by the m/z value, becomes the cutoff level." />
+                   help="The m/z tolerance level for peak alignment. The default is NA, which allows the program to search for the tolerance level based on the data. The tolerance is given in absolute numbers, not scaled, i.e. for 10ppm tolerance enter '1e-05'. This value, multiplied by the m/z value, becomes the cutoff level." />
             <param name="max_align_mz_diff" type="float" value="0.01"
                    label="max_align_mz_diff"
                    help="As the m/z tolerance is expressed in relative terms (ppm), it may not be suitable when the m/z range is wide. This parameter limits the tolerance in absolute terms. It mostly influences feature matching in higher m/z range." />
