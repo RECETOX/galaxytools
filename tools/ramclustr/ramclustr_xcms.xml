@@ -60,13 +60,23 @@
 
     <tests>
         <test>
-            <param name="input_xcms" value="xcmsObj_v1.rdata.xcms.fillpeaks" ftype="rdata.xcms.fillpeaks"/>
+            <param name="input_xcms" value="xcmsObj_1.rdata.xcms.fillpeaks" ftype="rdata.xcms.fillpeaks"/>
             <output name="result" file="ramclustObj_xcms_1.rdata" ftype="RData" compare="sim_size" delta="100"/>
             <output_collection name="mass_spectra" type="list">
                 <element name="fill" file="fill_xcms_1.msp" ftype="msp" checksum="md5$d53ed06d6f888a88ff321f833e29bb47"/>
             </output_collection>
             <output name="method_metadata" file="metadata_xcms_1.txt" ftype="txt" checksum="md5$81db28b08860988e3966f585b0f44b0f"/>
             <output name="spec_abundance" file="spec_abundance_xcms_1.csv" ftype="csv" compare="sim_size" delta="100"/>
+        </test>
+        <test>
+            <param name="input_xcms" value="xcmsObj_2.rdata.xcms.fillpeaks" ftype="rdata.xcms.fillpeaks"/>
+            <param name="batch_order_qc" value="sample_metadata_xcms_2.csv" ftype="csv" />
+            <output name="result" file="ramclustObj_xcms_2.rdata" ftype="RData" compare="sim_size" delta="100"/>
+            <output_collection name="mass_spectra" type="list">
+                <element name="fill" file="fill_xcms_2.msp" ftype="msp" lines_diff="10"/>
+            </output_collection>
+            <output name="method_metadata" file="metadata_xcms_2.txt" ftype="txt" checksum="md5$286e4aa53c38c99e92202584d7407406"/>
+            <output name="spec_abundance" file="spec_abundance_xcms_2.csv" ftype="csv" compare="sim_size" delta="100"/>
         </test>
     </tests>
 
