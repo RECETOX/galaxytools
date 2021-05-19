@@ -11,6 +11,7 @@
         <expand macro="parameters_csv" />
         <expand macro="parameters_required" />
         <expand macro="parameters_optional_csv" />
+        <expand macro="parameters_optional_metadata" />
     </inputs>
 
     <command detect_errors="aggressive"><![CDATA[
@@ -43,6 +44,9 @@
                 #end if
                 #if $optional.fftempdir
                     fftempdir = $optional.fftempdir,
+                #end if
+                #if $metadata.batch_order_qc
+                    metadata = "$metadata.batch_order_qc"
                 #end if
                 )'
             -e 'store_output(x, "$result", "$method_metadata", $required.merge_msp, "$spec_abundance")'
