@@ -63,7 +63,7 @@
 
     <tests>
         <test>
-            <param name="ms" value="csv_test-input.csv" ftype="csv"/>
+            <param name="ms" value="csv_test-input_1_2.csv" ftype="csv"/>
             <param name="sample_name_column" value="1"/>
             <param name="feature_delimiter" value="_"/>
             <param name="retention_time_column" value="2"/>
@@ -85,11 +85,24 @@
             <param name="replace_zeros" value="True"/>
             <param name="Merge MSP Files" value="True"/>
             <param name="maxt" value="1"/>
-            <output name="result" file="ramclustR-csv_object.RData"/>
-            <output name="spec_abundance" file="spec-abundance_csv.csv" ftype="csv"/>
-            <output name="method_metadata" file="metadata_csv.txt" ftype="txt"/>
+            <output name="result" file="ramclustObj_csv_1.rdata"/>
+            <output name="spec_abundance" file="spec_abundance_csv_1.csv" ftype="csv"/>
+            <output name="method_metadata" file="metadata_csv_1.txt" ftype="txt"/>
             <output_collection name="mass_spectra" type="list">
-                <element name="fill" file="test-spectra_csv.msp" ftype="msp"/>
+                <element name="fill" file="spectra_csv_1.msp" ftype="msp"/>
+            </output_collection>
+        </test>
+        <test>
+            <param name="ms" value="csv_test-input_1_2.csv" ftype="csv"/>
+            <param name="sample_name_column" value="1"/>
+            <param name="feature_delimiter" value="_"/>
+            <param name="retention_time_column" value="2"/>
+            <param name="batch_order_qc" value="sample_metadata_csv_2.csv" ftype="csv" />
+            <output name="result" file="ramclustObj_csv_2.rdata"/>
+            <output name="spec_abundance" file="spec_abundance_csv_2.csv" ftype="csv"/>
+            <output name="method_metadata" file="metadata_csv_2.txt" ftype="txt"/>
+            <output_collection name="mass_spectra" type="list">
+                <element name="fill" file="spectra_csv_2.msp" ftype="msp" lines_diff="10"/>
             </output_collection>
         </test>
     </tests>
