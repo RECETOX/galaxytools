@@ -11,21 +11,21 @@ store_output <- function(
 }
 
 read_metadata <- function(filename) {
-    data<-read.csv(filename, header=TRUE,stringsAsFactors=FALSE)
+    data <- read.csv(filename, header=TRUE, stringsAsFactors=FALSE)
 
-    if(!"qc" %in% colnames(data)) {
-        if("sampleType" %in% colnames(data)) {
+    if (!"qc" %in% colnames(data)) {
+        if ("sampleType" %in% colnames(data)) {
             data$qc <- ifelse(data$sampleType == "qc", TRUE, FALSE)
         }
     }
 
-    if(!"order" %in% colnames(data)) {
-        if("injectionOrder" %in% colnames(data)) {
+    if (!"order" %in% colnames(data)) {
+        if ("injectionOrder" %in% colnames(data)) {
             names(data)[names(data)=="injectionOrder"] <- "order"
         }
     }
 
-    return (data)
+    return(data)
 }
 
 ramclustr_xcms <- function(
@@ -56,7 +56,7 @@ ramclustr_xcms <- function(
     order <- NULL
     qc <- NULL
 
-    if(!is.null(metadata_file)) {
+    if (!is.null(metadata_file)) {
         metadata <- read_metadata(metadata_file)
         batch <- metadata$batch
         order <- metadata$order
@@ -124,7 +124,7 @@ ramclustr_csv <- function(
     order <- NULL
     qc <- NULL
 
-    if(!is.null(metadata_file)) {
+    if (!is.null(metadata_file)) {
         metadata <- read_metadata(metadata_file)
         batch <- metadata$batch
         order <- metadata$order
