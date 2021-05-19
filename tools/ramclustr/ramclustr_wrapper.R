@@ -11,7 +11,7 @@ store_output <- function(
 }
 
 read_metadata <- function(filename) {
-    data <- read.csv(filename, header=TRUE, stringsAsFactors=FALSE)
+    data <- read.csv(filename, header = TRUE, stringsAsFactors = FALSE)
 
     if (!"qc" %in% colnames(data)) {
         if ("sampleType" %in% colnames(data)) {
@@ -21,7 +21,7 @@ read_metadata <- function(filename) {
 
     if (!"order" %in% colnames(data)) {
         if ("injectionOrder" %in% colnames(data)) {
-            names(data)[names(data)=="injectionOrder"] <- "order"
+            names(data)[names(data) == "injectionOrder"] <- "order"
         }
     }
 
