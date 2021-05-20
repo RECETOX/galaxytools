@@ -13,8 +13,13 @@
     ]]> </command>
 
     <inputs>
-        <param label="Reference spectra" name="references" type="data" format="msp" help="Reference mass spectra to match against as library." />
         <param label="Queries spectra" name="queries" type="data" format="msp" help="Query mass spectra to match against references." />
+        <conditional name="symmetric">
+            <param name="is_symmetric" label="Symmetric" type="boolean" truevalue="TRUE" falsevalue="FALSE" checked="false" />
+        <when value="FALSE">
+            <param label="Reference spectra" name="references" type="data" format="msp" help="Reference mass spectra to match against as library." />
+        </when>
+        </conditional>
         <param label="Similarity metric" name="similarity_metric" type="select" display="radio" help="Similarity metric to use for score computation.">
             <option value="CosineGreedy" selected="true">CosineGreedy</option>
             <option value="CosineHungarian">CosineHungarian</option>
