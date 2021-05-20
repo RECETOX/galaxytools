@@ -9,7 +9,11 @@
     </environment_variables>
 
     <command detect_errors="exit_code"><![CDATA[
+    #if $symmetric.is_symmetric
+        python3 ${__tool_directory__}/matchms_wrapper.py "$queries" "$queries" "$similarity_metric" "$similarity_scores" "$similarity_matches" "$algorithm.tolerance" "$algorithm.mz_power" "$algorithm.intensity_power"
+    #else
         python3 ${__tool_directory__}/matchms_wrapper.py "$references" "$queries" "$similarity_metric" "$similarity_scores" "$similarity_matches" "$algorithm.tolerance" "$algorithm.mz_power" "$algorithm.intensity_power"
+    #end if
     ]]> </command>
 
     <inputs>
