@@ -26,12 +26,13 @@ def main(argv):
     parser.add_argument("intensity_power", type=float, help="The power to raise intensity to in the cosine function.")
 
     args = parser.parse_args()
-    queries_spectra = load_from_msp(args.queries_filename)
+
+    queries_spectra = list(load_from_msp(args.queries_filename))
     if(args.references_filename):
-        reference_spectra = load_from_msp(args.references_filename)
+        reference_spectra = list(load_from_msp(args.references_filename))
         symmetric = False
     else:
-        reference_spectra = queries_spectra
+        reference_spectra = queries_spectra.copy()
         symmetric = True
 
     if args.similarity_metric == 'CosineGreedy':
