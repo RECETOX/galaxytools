@@ -18,6 +18,7 @@
         <param label="Similarity metric" name="similarity_metric" type="select" display="radio" help="Similarity metric to use for score computation.">
             <option value="CosineGreedy" selected="true">CosineGreedy</option>
             <option value="CosineHungarian">CosineHungarian</option>
+            <option value="ModifiedCosine">ModifiedCosine </option>
         </param>
 
         <section name="algorithm" title="Algorithm Parameters" expanded="true">    
