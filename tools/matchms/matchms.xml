@@ -71,6 +71,13 @@
             <output name="similarity_scores" file="scores_rcx_rcx_modified.csv" ftype="csv"/>
             <output name="similarity_matches" file="matches_rcx_rcx_modified.csv" ftype="csv"/>
         </test>
+        <test>
+            <param name="queries" value="fill.msp" ftype="msp"/>
+            <param name="similarity_metric" value="CosineHungarian"/>
+            <param name="is_symmetric" value="TRUE"/>
+            <output name="similarity_scores" file="scores_fill_symmetric_hungarian.csv" ftype="csv" />
+            <output name="similarity_matches" file="matches_fill_symmetric_hungarian.csv" ftype="csv" />
+        </test>
     </tests>
 
     <help><![CDATA[
