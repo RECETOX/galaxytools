@@ -15,7 +15,7 @@ from pandas import DataFrame
 def main(argv):
     parser = argparse.ArgumentParser(description="Compute MSP similarity scores")
     parser.add_argument(
-    "--ref", type=str, dest="references_filename", help="Path to reference MSP library."
+        "--ref", type=str, dest="references_filename", help="Path to reference MSP library."
     )
     parser.add_argument("queries_filename", type=str, help="Path to query spectra.")
     parser.add_argument("similarity_metric", type=str, help='Metric to use for matching.')
@@ -50,7 +50,7 @@ def main(argv):
         references=list(reference_spectra),
         queries=list(queries_spectra),
         similarity_function=similarity_metric,
-        is_symmetric = symmetric
+        is_symmetric=symmetric
     )
 
     query_names = [spectra.metadata['name'] for spectra in scores.queries]
