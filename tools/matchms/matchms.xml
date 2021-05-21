@@ -64,6 +64,13 @@
             <output name="similarity_scores" file="rcx_fill_cosine_hungarian.csv" ftype="csv" checksum="md5$e4063294e0f70e0e966a252ec43a1537"/>
             <output name="similarity_matches" file="matches_rcx_fill_hungarian.csv" ftype="csv" checksum="md5$4aadb19c261fa41907d80f2d326055b6"/>
         </test>
+        <test>
+            <param name="references" value="recetox_gc-ei_ms_20201028.msp" ftype="msp"/>
+            <param name="queries" value="recetox_gc-ei_ms_20201028.msp" ftype="msp"/>
+            <param name="similarity_metric" value="ModifiedCosine"/>
+            <output name="similarity_scores" file="scores_rcx_rcx_modified.csv" ftype="csv"/>
+            <output name="similarity_matches" file="matches_rcx_rcx_modified.csv" ftype="csv"/>
+        </test>
     </tests>
 
     <help><![CDATA[
