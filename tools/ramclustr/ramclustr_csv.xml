@@ -1,4 +1,4 @@
-<tool id="ramclustr_csv" name="RAMClustR (CSV)" version="@TOOL_VERSION@+galaxy0">
+<tool id="ramclustr_csv" name="RAMClustR (CSV)" version="@TOOL_VERSION@+galaxy1">
     <macros>
         <import>ramclustr_macros.xml</import>
     </macros>
