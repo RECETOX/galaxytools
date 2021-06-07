@@ -84,10 +84,8 @@
 
     <xml name="parameters_optional_metadata">
         <section name="metadata" title="Optional Metadata" expanded="false">
-            <param label="batch" name="batch" type="integer" optional="true" help="vector with length equal to number of injections in xset or csv file" />
-            <param label="order" name="order" type="integer" optional="true" help="vector with length equal to number of injections in xset or csv file" />
-            <param label="qc" name="qc" type="boolean" truevalue="TRUE" falsevalue="FALSE" optional="true" help=" vector with length equal to number of injections in xset or csv file.  " />
-            <param label="ExpDes" name="ExpDes" type="data" format="RData" optional="true" help=" an R object created by R ExpDes object: data used for record keeping and labelling msp spectral output" />
+            <param label="metadata" name="batch_order_qc" type="data" format="csv" optional="true" help="CSV with sample names (or indices, currently not handled) on rows and columns with: batch number ('batch'), position in sequence ('order') and whether it is a qc sample or not ('qc' with true/false OR 'sampleType' with 'sample/qc/blank')." />
+            <!-- <param label="ExpDes" name="ExpDes" type="data" format="RData" optional="true" help=" an R object created by R ExpDes object: data used for record keeping and labelling msp spectral output" /> -->
         </section>
     </xml>
 

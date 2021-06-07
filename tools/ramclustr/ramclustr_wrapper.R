@@ -10,6 +10,24 @@ store_output <- function(
     write.csv(ramclustr_obj$SpecAbund, file = output_spec_abundance, row.names = TRUE)
 }
 
+read_metadata <- function(filename) {
+    data <- read.csv(filename, header = TRUE, stringsAsFactors = FALSE)
+
+    if (!"qc" %in% colnames(data)) {
+        if ("sampleType" %in% colnames(data)) {
+            data$qc <- ifelse(data$sampleType == "qc", TRUE, FALSE)
+        }
+    }
+
+    if (!"order" %in% colnames(data)) {
+        if ("injectionOrder" %in% colnames(data)) {
+            names(data)[names(data) == "injectionOrder"] <- "order"
+        }
+    }
+
+    return(data)
+}
+
 ramclustr_xcms <- function(
     input_xcms,
     sr,
@@ -29,9 +47,21 @@ ramclustr_xcms <- function(
     replace_zeros,
     st = NULL,
     maxt = NULL,
-    fftempdir = NULL
+    fftempdir = NULL,
+    metadata_file = NULL
 ) {
     obj <- load(input_xcms)
+
+    batch <- NULL
+    order <- NULL
+    qc <- NULL
+
+    if (!is.null(metadata_file)) {
+        metadata <- read_metadata(metadata_file)
+        batch <- metadata$batch
+        order <- metadata$order
+        qc <- metadata$qc
+    }
 
     x <- RAMClustR::ramclustR(
         xcmsObj = xdata,
@@ -53,7 +83,10 @@ ramclustr_xcms <- function(
         cor.method = cor_method,
         rt.only.low.n = rt_only_low_n,
         fftempdir = fftempdir,
-        replace.zeros = replace_zeros
+        replace.zeros = replace_zeros,
+        batch = batch,
+        order = order,
+        qc = qc
         )
     return(x)
 }
@@ -81,10 +114,22 @@ ramclustr_csv <- function(
     replace_zeros,
     st = NULL,
     maxt = NULL,
-    fftempdir = NULL
+    fftempdir = NULL,
+    metadata_file = NULL
 ) {
     if (!file.exists(idmsms))
         idmsms <- NULL
+
+    batch <- NULL
+    order <- NULL
+    qc <- NULL
+
+    if (!is.null(metadata_file)) {
+        metadata <- read_metadata(metadata_file)
+        batch <- metadata$batch
+        order <- metadata$order
+        qc <- metadata$qc
+    }
 
     x <- RAMClustR::ramclustR(
         ms = ms,
@@ -110,7 +155,10 @@ ramclustr_csv <- function(
         cor.method = cor_method,
         rt.only.low.n = rt_only_low_n,
         fftempdir = fftempdir,
-        replace.zeros = replace_zeros
+        replace.zeros = replace_zeros,
+        batch = batch,
+        order = order,
+        qc = qc
         )
         return(x)
 }
