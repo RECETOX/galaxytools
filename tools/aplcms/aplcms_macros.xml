@@ -1,9 +1,9 @@
 <macros>
-    <token name="@TOOL_VERSION@">6.6.6</token>
+    <token name="@TOOL_VERSION@">6.6.8-recetox0</token>
 
     <xml name="requirements">
         <requirements>
-            <container type="docker">recetox/aplcms:6.6.6-recetox2</container>
+            <requirement type="package" version="0">r-recetox-aplcms</requirement>
         </requirements>
     </xml>
 
