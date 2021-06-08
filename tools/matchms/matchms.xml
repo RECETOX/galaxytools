@@ -1,4 +1,4 @@
-<tool id="matchms" name="matchMS" version="0.9.0+galaxy0">
+<tool id="matchms" name="matchMS" version="0.9.0+galaxy1">
     <requirements>
         <requirement type="package" version="0.9.0">matchms</requirement>
         <requirement type="package" version="1.1.4">pandas</requirement>
@@ -9,15 +9,25 @@
     </environment_variables>
 
     <command detect_errors="exit_code"><![CDATA[
-        python3 ${__tool_directory__}/matchms_wrapper.py "$references" "$queries" "$similarity_metric" "$similarity_scores" "$similarity_matches" "$algorithm.tolerance" "$algorithm.mz_power" "$algorithm.intensity_power"
+    #if $symmetric.is_symmetric
+        python3 ${__tool_directory__}/matchms_wrapper.py "$queries" "$similarity_metric" "$similarity_scores" "$similarity_matches" "$algorithm.tolerance" "$algorithm.mz_power" "$algorithm.intensity_power"
+    #else
+        python3 ${__tool_directory__}/matchms_wrapper.py --ref "$references" "$queries" "$similarity_metric" "$similarity_scores" "$similarity_matches" "$algorithm.tolerance" "$algorithm.mz_power" "$algorithm.intensity_power"
+    #end if
     ]]> </command>
 
     <inputs>
-        <param label="Reference spectra" name="references" type="data" format="msp" help="Reference mass spectra to match against as library." />
         <param label="Queries spectra" name="queries" type="data" format="msp" help="Query mass spectra to match against references." />
+        <conditional name="symmetric">
+            <param name="is_symmetric" label="Symmetric" type="boolean" truevalue="TRUE" falsevalue="FALSE" checked="false" />
+        <when value="FALSE">
+            <param label="Reference spectra" name="references" type="data" format="msp" help="Reference mass spectra to match against as library." />
+        </when>
+        </conditional>
         <param label="Similarity metric" name="similarity_metric" type="select" display="radio" help="Similarity metric to use for score computation.">
             <option value="CosineGreedy" selected="true">CosineGreedy</option>
             <option value="CosineHungarian">CosineHungarian</option>
+            <option value="ModifiedCosine">ModifiedCosine </option>
         </param>
 
         <section name="algorithm" title="Algorithm Parameters" expanded="true">    
@@ -53,6 +63,20 @@
             <param name="similarity_metric" value="CosineHungarian"/>
             <output name="similarity_scores" file="rcx_fill_cosine_hungarian.csv" ftype="csv" checksum="md5$e4063294e0f70e0e966a252ec43a1537"/>
             <output name="similarity_matches" file="matches_rcx_fill_hungarian.csv" ftype="csv" checksum="md5$4aadb19c261fa41907d80f2d326055b6"/>
+        </test>
+        <test>
+            <param name="references" value="recetox_gc-ei_ms_20201028.msp" ftype="msp"/>
+            <param name="queries" value="recetox_gc-ei_ms_20201028.msp" ftype="msp"/>
+            <param name="similarity_metric" value="ModifiedCosine"/>
+            <output name="similarity_scores" file="scores_rcx_rcx_modified.csv" ftype="csv"/>
+            <output name="similarity_matches" file="matches_rcx_rcx_modified.csv" ftype="csv"/>
+        </test>
+        <test>
+            <param name="queries" value="fill.msp" ftype="msp"/>
+            <param name="similarity_metric" value="CosineHungarian"/>
+            <param name="is_symmetric" value="TRUE"/>
+            <output name="similarity_scores" file="scores_fill_symmetric_hungarian.csv" ftype="csv" />
+            <output name="similarity_matches" file="matches_fill_symmetric_hungarian.csv" ftype="csv" />
         </test>
     </tests>
 
