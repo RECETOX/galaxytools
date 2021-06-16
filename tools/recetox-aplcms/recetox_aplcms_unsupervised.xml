@@ -1,4 +1,4 @@
-<tool id="_recetox_aplcms_unsupervised" name="apLCMS Unsupervised" version="@TOOL_VERSION@+galaxy4">
+<tool id="_recetox_aplcms_unsupervised" name="apLCMS Unsupervised" version="@TOOL_VERSION@+galaxy0">
     <macros>
         <import>aplcms_macros.xml</import>
     </macros>
