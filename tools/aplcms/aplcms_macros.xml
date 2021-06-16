@@ -3,7 +3,10 @@
 
     <xml name="requirements">
         <requirements>
-            <container type="docker">recetox/aplcms:6.6.6-recetox2</container>
+            <requirement type="set_environment">R_SCRIPT_PATH</requirement>
+            <requirement type="package" version="4.1.0">R</requirement>
+            <requirement type="package" version="4.0.1">r-arrow</requirement>
+            <requirement type="package" version="0.9.0">recetox-aplcms</requirement>
         </requirements>
     </xml>
 
@@ -124,6 +127,13 @@
                    label="recover_min_count"
                    help="The minimum number of raw data points to be considered as a true feature." />
         </section>
+    </xml>
+
+    <xml name="unsupervised_outputs">
+        <data name="recovered_feature_sample_table" format="parquet" label="${tool.name} final_peaks on ${on_string}" />
+        <data name="aligned_feature_sample_table" format="parquet" label="${tool.name} aligned_peaks on ${on_string}" hidden="true" />
+        <data name="corrected_features" format="parquet" label="${tool.name} corrected_features on ${on_string}" hidden="true" />
+        <data name="extracted_features" format="parquet" label="${tool.name} extracted_features on ${on_string}" hidden="true" />
     </xml>
 
     <token name="@GENERAL_HELP@">

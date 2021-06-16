@@ -1,4 +1,4 @@
-<tool id="aplcms_unsupervised" name="apLCMS - Unsupervised" version="@TOOL_VERSION@+galaxy3">
+<tool id="aplcms_unsupervised" name="apLCMS Unsupervised" version="@TOOL_VERSION@+galaxy3">
     <macros>
         <import>aplcms_macros.xml</import>
     </macros>
@@ -6,15 +6,17 @@
     <expand macro="requirements" />
 
     <command detect_errors="aggressive"><![CDATA[
-        Rscript ${run_script}
+        Rscript  -e source("main.R") -e 'source("${run_script}")'
     ]]></command>
 
     <configfiles>
         <configfile name="run_script"><![CDATA[
-            #set file_str = str("', '").join([str($f) for $f in $files])
+            #set filenames_str = str("', '").join([str($f) for $f in $files])
 
-            x <- apLCMS::unsupervised(
-                files = c('$file_str'),
+            unsupervised_main(
+                sample_files = c('$filenames_str'),
+                aligned_file = '${aligned_feature_sample_table}',
+                recovered_file = '${recovered_feature_sample_table}',
                 min_exp = $noise_filtering.min_exp,
                 min_pres = $noise_filtering.min_pres,
                 min_run = $noise_filtering.min_run,
@@ -40,8 +42,6 @@
                 recover_min_count = $weak_signal_recovery.recover_min_count,
                 cluster = as.integer(Sys.getenv('GALAXY_SLOTS', unset = 1))
             )
-
-            apLCMS::save_peaks_to_hdf('$peaks', x)
         ]]></configfile>
     </configfiles>
 
@@ -53,13 +53,13 @@
     </expand>
 
     <outputs>
-        <data name="peaks" format="h5" />
+        <expand macro="unsupervised_outputs" />
     </outputs>
 
     <tests>
         <test>
             <param name="files" value="mbr_test0.mzml,mbr_test1.mzml,mbr_test2.mzml" ftype="mzml"/>
-            <output name="peaks" file="peaks_unsupervised.h5" ftype="h5" compare="sim_size" delta="1000"/>
+            <output name="recovered_feature_sample_table" file="recovered_feature_sample_table.parquet" ftype="parquet" compare="sim_size" delta="1000"/>
         </test>
     </tests>
 

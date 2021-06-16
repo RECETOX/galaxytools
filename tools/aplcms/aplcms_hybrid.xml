@@ -6,16 +6,20 @@
     <expand macro="requirements" />
 
     <command detect_errors="aggressive"><![CDATA[
-        Rscript ${run_script}
+        Rscript  -e source("main.R") -e 'source("${run_script}")'
     ]]></command>
 
     <configfiles>
         <configfile name="run_script"><![CDATA[
-            #set file_str = str("', '").join([str($f) for $f in $files])
+            #set filenames_str = str("', '").join([str($f) for $f in $files])
 
-            x <- apLCMS::hybrid(
-                files = c('$file_str'),
-                known_table = apLCMS::load_known_table_from_hdf('$known_table'),
+            hybrid_main(
+                sample_files = c('$filenames_str'),
+                known_table_file = '${known_table}',
+                updated_known_table_file = '${updated_known_table}',
+                pairing_file = '${feature_known_table_pairing}',
+                aligned_file = '${aligned_feature_sample_table}',
+                recovered_file = '${recovered_feature_sample_table}',
                 min_exp = $noise_filtering.min_exp,
                 min_pres = $noise_filtering.min_pres,
                 min_run = $noise_filtering.min_run,
@@ -43,9 +47,6 @@
                 recover_min_count = $weak_signal_recovery.recover_min_count,
                 cluster = as.integer(Sys.getenv('GALAXY_SLOTS', unset = 1))
             )
-
-            apLCMS::save_peaks_to_hdf('$peaks', x)
-            apLCMS::save_known_table_to_hdf('$updated_known_table', x\$updated_known_table) ## NOTE the \ because we want cheetah to ignore the $ character
         ]]></configfile>
     </configfiles>
 
@@ -58,15 +59,16 @@
     </expand>
 
     <outputs>
-        <data name="peaks" format="h5" />
-        <data name="updated_known_table" format="h5" />
+        <expand macro="unsupervised_outputs" />
+        <data name="updated_known_table" format="parquet" />
+        <data name="feature_known_table_pairing" format="tabular" />
     </outputs>
 
     <tests>
         <test>
             <param name="files" value="mbr_test0.mzml,mbr_test1.mzml,mbr_test2.mzml" ftype="mzml"/>
-            <param name="known_table" value="known_table.h5" ftype="h5"/>
-            <output name="peaks" file="peaks_hybrid.h5" ftype="h5" compare="sim_size" delta="1000"/>
+            <param name="known_table" value="known_table.parquet" ftype="parquet"/>
+            <output name="recovered_feature_sample_table" file="recovered_feature_sample_table.parquet" ftype="parquet" compare="sim_size" delta="1000"/>
         </test>
     </tests>
 
