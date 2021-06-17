@@ -1,4 +1,5 @@
 <tool id="_recetox_aplcms_unsupervised" name="apLCMS Unsupervised" version="@TOOL_VERSION@+galaxy0">
+    <description>generate a feature table from LC/MS spectra</description>
     <macros>
         <import>aplcms_macros.xml</import>
     </macros>

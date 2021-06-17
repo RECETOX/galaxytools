@@ -1,5 +1,5 @@
 owner: recetox
-remote_repository_url: "https://github.com/RECETOX/galaxytools/tree/master/tools/recetox-aplcms"
+remote_repository_url: "https://github.com/RECETOX/galaxytools/tree/master/tools/recetox_aplcms"
 homepage_url: "https://github.com/RECETOX/recetox-aplcms"
 categories:
   - Metabolomics
