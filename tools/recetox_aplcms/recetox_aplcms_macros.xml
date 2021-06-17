@@ -6,7 +6,7 @@
             <requirement type="set_environment">R_SCRIPT_PATH</requirement>
             <requirement type="package" version="4.1.0">R</requirement>
             <requirement type="package" version="4.0.1">r-arrow</requirement>
-            <requirement type="package" version="0.9.3">recetox-aplcms</requirement>
+            <requirement type="package" version="0.9.3">r-recetox-aplcms</requirement>
         </requirements>
     </xml>
 
