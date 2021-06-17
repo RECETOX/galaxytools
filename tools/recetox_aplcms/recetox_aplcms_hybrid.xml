@@ -61,8 +61,8 @@
 
     <outputs>
         <expand macro="unsupervised_outputs" />
-        <data name="updated_known_table" format="parquet" />
-        <data name="feature_known_table_pairing" format="tabular" />
+        <data name="updated_known_table" format="parquet" label="${tool.name} updated_known_table on ${on_string}" />
+        <data name="feature_known_table_pairing" format="tabular" label="${tool.name} feature_known_table_pairing on ${on_string}" hidden="true" />
     </outputs>
 
     <tests>

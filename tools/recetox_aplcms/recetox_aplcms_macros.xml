@@ -130,8 +130,8 @@
     </xml>
 
     <xml name="unsupervised_outputs">
-        <data name="recovered_feature_sample_table" format="parquet" label="${tool.name} final_peaks on ${on_string}" />
-        <data name="aligned_feature_sample_table" format="parquet" label="${tool.name} aligned_peaks on ${on_string}" hidden="true" />
+        <data name="recovered_feature_sample_table" format="parquet" label="${tool.name} recovered_feature_sample_table on ${on_string}" />
+        <data name="aligned_feature_sample_table" format="parquet" label="${tool.name} aligned_feature_sample_table on ${on_string}" hidden="true" />
         <data name="corrected_features" format="parquet" label="${tool.name} corrected_features on ${on_string}" hidden="true" />
         <data name="extracted_features" format="parquet" label="${tool.name} extracted_features on ${on_string}" hidden="true" />
     </xml>
