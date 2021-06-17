@@ -1,6 +1,7 @@
 library(recetox.aplcms)
 
 save_extracted_features <- function (df, filename) {
+  df <- as.data.frame(df)
   columns <- c('mz', 'pos', 'sd1', 'sd2', 'area')
   arrow::write_parquet(df[columns], filename)
 }
