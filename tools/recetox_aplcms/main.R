@@ -32,14 +32,18 @@ save_pairing <- function(df, filename) {
 }
 
 save_extracted_features_as_collection <- function (dfs, filenames) {
-  filenames <- tools::file_path_sans_ext(filenames)
-  filenames <- paste0('extracted-', filenames, '.parquet')
+  filenames <- tools::file_path_sans_ext(basename(filenames))
+  filenames <- paste0(filenames, '.parquet')
+  filenames <- file.path('extracted', filenames)
+  dir.create('extracted')
   mapply(save_extracted_features, dfs, filenames)
 }
 
 save_corrected_features_as_collection <- function (dfs, filenames) {
-  filenames <- tools::file_path_sans_ext(filenames)
-  filenames <- paste0('corrected-', filenames, '.parquet')
+  filenames <- tools::file_path_sans_ext(basename(filenames))
+  filenames <- paste0(filenames, '.parquet')
+  filenames <- file.path('corrected', filenames)
+  dir.create('corrected')
   mapply(save_extracted_features, dfs, filenames)
 }
 
