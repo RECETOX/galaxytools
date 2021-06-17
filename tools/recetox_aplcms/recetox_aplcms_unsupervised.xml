@@ -7,7 +7,7 @@
     <expand macro="requirements" />
 
     <command detect_errors="aggressive"><![CDATA[
-        Rscript  -e source("main.R") -e 'source("${run_script}")'
+        Rscript  -e 'source("main.R")' -e 'source("${run_script}")'
     ]]></command>
 
     <configfiles>
