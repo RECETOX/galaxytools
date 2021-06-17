@@ -1,3 +1,5 @@
+library(recetox.aplcms)
+
 save_extracted_features <- function (df, filename) {
   columns <- c('mz', 'pos', 'sd1', 'sd2', 'area')
   arrow::write_parquet(df[columns], filename)
@@ -41,9 +43,9 @@ save_corrected_features_as_collection <- function (dfs, filenames) {
 }
 
 unsupervised_main <- function (sample_files, aligned_file, recovered_file, ...) {
-  sample_files <- apLCMS::sort_samples_by_acquisition_number(sample_files)
+  sample_files <- sort_samples_by_acquisition_number(sample_files)
 
-  res <- apLCMS::unsupervised(filenames = sample_files, ...)
+  res <- unsupervised(filenames = sample_files, ...)
 
   save_extracted_features_as_collection(res$extracted_features, sample_files)
   save_corrected_features_as_collection(res$corrected_features, sample_files)
@@ -53,10 +55,10 @@ unsupervised_main <- function (sample_files, aligned_file, recovered_file, ...) 
 }
 
 hybrid_main <- function (sample_files, known_table_file, updated_known_table_file, pairing_file, aligned_file, recovered_file, ...) {
-  sample_files <- apLCMS::sort_samples_by_acquisition_number(sample_files)
+  sample_files <- sort_samples_by_acquisition_number(sample_files)
 
   known <- read_known_table(known_table_file)
-  res <- apLCMS::hybrid(filenames = sample_files, known_table = known, ...)
+  res <- hybrid(filenames = sample_files, known_table = known, ...)
 
   save_known_table(res$updated_known_table, updated_known_table_file)
   save_pairing(res$features_known_table_pairing, pairing_file)
