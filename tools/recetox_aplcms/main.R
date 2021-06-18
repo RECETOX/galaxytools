@@ -31,7 +31,7 @@ save_pairing <- function(df, filename) {
   write.table(df, filename, row.names = FALSE, col.names = c("new", "old"))
 }
 
-save_extracted_features_as_collection <- function(dfs, filenames) {
+save_all_extracted_features <- function(dfs, filenames) {
   filenames <- tools::file_path_sans_ext(basename(filenames))
   filenames <- paste0(filenames, ".parquet")
   filenames <- file.path("extracted", filenames)
@@ -39,7 +39,7 @@ save_extracted_features_as_collection <- function(dfs, filenames) {
   mapply(save_extracted_features, dfs, filenames)
 }
 
-save_corrected_features_as_collection <- function(dfs, filenames) {
+save_all_corrected_features <- function(dfs, filenames) {
   filenames <- tools::file_path_sans_ext(basename(filenames))
   filenames <- paste0(filenames, ".parquet")
   filenames <- file.path("corrected", filenames)
@@ -52,8 +52,8 @@ unsupervised_main <- function(sample_files, aligned_file, recovered_file, ...) {
 
   res <- unsupervised(filenames = sample_files, ...)
 
-  save_extracted_features_as_collection(res$extracted_features, sample_files)
-  save_corrected_features_as_collection(res$corrected_features, sample_files)
+  save_all_extracted_features(res$extracted_features, sample_files)
+  save_all_corrected_features(res$corrected_features, sample_files)
 
   save_feature_sample_table(res$aligned_feature_sample_table, aligned_file)
   save_feature_sample_table(res$recovered_feature_sample_table, recovered_file)
@@ -68,8 +68,8 @@ hybrid_main <- function(sample_files, known_table_file, updated_known_table_file
   save_known_table(res$updated_known_table, updated_known_table_file)
   save_pairing(res$features_known_table_pairing, pairing_file)
 
-  save_extracted_features_as_collection(res$extracted_features, sample_files)
-  save_corrected_features_as_collection(res$corrected_features, sample_files)
+  save_all_extracted_features(res$extracted_features, sample_files)
+  save_all_corrected_features(res$corrected_features, sample_files)
 
   save_feature_sample_table(res$aligned_feature_sample_table, aligned_file)
   save_feature_sample_table(res$recovered_feature_sample_table, recovered_file)
