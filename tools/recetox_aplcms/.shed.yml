@@ -1,0 +1,18 @@
+owner: recetox
+remote_repository_url: "https://github.com/RECETOX/galaxytools/tree/master/tools/recetox_aplcms"
+homepage_url: "https://github.com/RECETOX/recetox-aplcms"
+categories:
+  - Metabolomics
+repositories:
+  recetox_aplcms_unsupervised:
+    description: "Generate a feature table from a batch of LC/MS spectra using apLCMS's Unsupervised method."
+    include:
+      - recetox_aplcms_unsupervised.xml
+      - recetox_aplcms_macros.xml
+      - test-data
+  recetox_aplcms_hybrid:
+    description: "Generate a feature table from a batch of LC/MS spectra using apLCMS's Hybrid method."
+    include:
+      - recetox_aplcms_hybrid.xml
+      - recetox_aplcms_macros.xml
+      - test-data
