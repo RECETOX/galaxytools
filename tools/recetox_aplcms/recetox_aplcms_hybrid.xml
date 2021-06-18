@@ -7,12 +7,18 @@
     <expand macro="requirements" />
 
     <command detect_errors="aggressive"><![CDATA[
+        sh ${symlink_inputs} &&
         Rscript  -e 'source("${__tool_directory__}/main.R")' -e 'source("${run_script}")'
     ]]></command>
 
     <configfiles>
+        <configfile name="symlink_inputs">
+            #for $infile in $files
+                ln -s '${infile}' '${infile.element_identifier}'
+            #end for
+        </configfile>
         <configfile name="run_script"><![CDATA[
-            #set filenames_str = str("', '").join([str($f) for $f in $files])
+            #set filenames_str = str("', '").join([str($f.element_identifier) for $f in $files])
 
             hybrid_main(
                 sample_files = c('$filenames_str'),
