@@ -31,19 +31,19 @@ save_pairing <- function(df, filename) {
   write.table(df, filename, row.names = FALSE, col.names = c("new", "old"))
 }
 
-save_extracted_features_as_collection <- function (dfs, filenames) {
+save_extracted_features_as_collection <- function(dfs, filenames) {
   filenames <- tools::file_path_sans_ext(basename(filenames))
-  filenames <- paste0(filenames, '.parquet')
-  filenames <- file.path('extracted', filenames)
-  dir.create('extracted')
+  filenames <- paste0(filenames, ".parquet")
+  filenames <- file.path("extracted", filenames)
+  dir.create("extracted")
   mapply(save_extracted_features, dfs, filenames)
 }
 
-save_corrected_features_as_collection <- function (dfs, filenames) {
+save_corrected_features_as_collection <- function(dfs, filenames) {
   filenames <- tools::file_path_sans_ext(basename(filenames))
-  filenames <- paste0(filenames, '.parquet')
-  filenames <- file.path('corrected', filenames)
-  dir.create('corrected')
+  filenames <- paste0(filenames, ".parquet")
+  filenames <- file.path("corrected", filenames)
+  dir.create("corrected")
   mapply(save_extracted_features, dfs, filenames)
 }
 
