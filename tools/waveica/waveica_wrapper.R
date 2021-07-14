@@ -11,6 +11,10 @@ waveica <- function(
 
     # get input from the Galaxy, preprocess data
     data <- read.csv(data, header = TRUE, row.names = "sample_name")
+
+    # sort data by injection order
+    data <- data[order(data$injectionOrder, decreasing = FALSE), ]
+    
     data <- preprocess_data(data)
 
     # remove blanks from dataset
@@ -41,8 +45,7 @@ waveica <- function(
 
 # Sort data, set numerical values for groups
 preprocess_data <- function(data) {
-    # sort data by injection order
-    data <- data[order(data$injectionOrder, decreasing = FALSE), ]
+
 
     data$class[data$class == "blank"] <- 0
     data$class[data$class == "sample"] <- 1
