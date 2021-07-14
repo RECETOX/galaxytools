@@ -10,7 +10,7 @@ waveica <- function(
 ) {
 
     # get input from the Galaxy, preprocess data
-    data <- read.csv(data, header = TRUE, row.names = "sample_name")
+    data <- read.csv(data, header = TRUE, row.names = "sampleName")
 
     # sort data by injection order
     data <- data[order(data$injectionOrder, decreasing = FALSE), ]
