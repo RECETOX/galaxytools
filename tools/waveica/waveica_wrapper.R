@@ -14,8 +14,8 @@ waveica <- function(
 
     # sort data by injection order
     data <- data[order(data$injectionOrder, decreasing = FALSE), ]
-    
-    data <- preprocess_data(data)
+
+    data <- enumerate_groups(data)
 
     # remove blanks from dataset
     if (exclude_blanks) {
@@ -43,13 +43,12 @@ waveica <- function(
 }
 
 
-# Sort data, set numerical values for groups
-preprocess_data <- function(data) {
+# Match group labels with [blank/sample/qc] and enumerate them
+enumerate_groups <- function(data) {
 
-
-    data$class[data$class == "blank"] <- 0
-    data$class[data$class == "sample"] <- 1
-    data$class[data$class == "QC"] <- 2
+    data$sampleType[grepl("blank", tolower(data$sampleType))] <- 0
+    data$sampleType[grepl("sample", tolower(data$sampleType))] <- 1
+    data$sampleType[grepl("qc", tolower(data$sampleType))] <- 2
 
     return(data)
 }
