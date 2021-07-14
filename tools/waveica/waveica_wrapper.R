@@ -70,7 +70,7 @@ get_wf <- function(wavelet_filter, wavelet_length) {
 # Exclude blanks from a dataframe
 exclude_group <- function(data) {
     row_idx_to_exclude <- which(data$class %in% 0)
-    if (length(row_idx_to_exclude) > 1) {
+    if (length(row_idx_to_exclude) > 0) {
         data_without_blanks <- data[-c(row_idx_to_exclude), ]
         msg <- paste("Blank samples have been excluded from the dataframe.\n")
         cat(msg)
