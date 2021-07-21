@@ -18,7 +18,7 @@ def main():
     # Concatenate "mz" and "rt" columns; select relevant columns; pivot the table
     featureTable["mz_rt"] = featureTable["mz"].astype(str) + "_" + featureTable["rt"].astype(str)
     featureTable = featureTable[["sample", "mz_rt", "sample_intensity"]]
-    featureTable = pd.pivot_table(featureTable, columns="mz_rt", index="sample")
+    featureTable = pd.pivot_table(featureTable, columns="mz_rt", index="sample", values="sample_intensity")
     
     try:
         featureTable.to_csv(args.output, sep=',')
