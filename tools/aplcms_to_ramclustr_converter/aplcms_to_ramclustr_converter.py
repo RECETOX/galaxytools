@@ -39,12 +39,7 @@ def format_table(ramclustr_data):
 
 
 def main():
-    try:
-        aplcms_table = pd.read_hdf(args.dataframe, args.table, errors='None')
-    except KeyError:
-        msg = "Selected table does not exist in HDF dataframe"
-        print(msg, file=sys.stderr)
-        sys.exit(1)
+    featureTable = pd.read_parquet(args.dataframe)
 
     ramclustr_data = extract_data(aplcms_table)
     ramclustr_table = format_table(ramclustr_data)
