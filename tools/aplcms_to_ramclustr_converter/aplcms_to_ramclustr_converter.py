@@ -40,6 +40,11 @@ def format_table(ramclustr_data):
 
 def main():
     featureTable = pd.read_parquet(args.dataframe)
+    
+    # Concatenate "mz" and "rt" columns; select relevant columns; pivot the table
+    featureTable["mz_rt"] = featureTable["mz"].astype(str) + "_" + featureTable["rt"].astype(str)
+    featureTable = featureTable[["sample", "mz_rt", "sample_intensity"]]
+    featureTable = pd.pivot_table(featureTable, columns="mz_rt", index="sample")
 
     ramclustr_data = extract_data(aplcms_table)
     ramclustr_table = format_table(ramclustr_data)
