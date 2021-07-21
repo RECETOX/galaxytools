@@ -16,9 +16,8 @@
     </outputs>
     <tests>
         <test>
-            <param name="hdf_dataframe" value="test-input.h5" ftype="h5"/>
-            <param name="table_name" value="peaks"/>
-            <output name="out_file" file="test-output.csv" ftype="csv"/>
+            <param name="aplcms_dataframe" value="input.parquet" ftype="parquet"/>
+            <output name="out_file" file="output.csv" ftype="csv"/>
         </test>
     </tests>
     <help><![CDATA[
