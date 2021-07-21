@@ -4,17 +4,10 @@ homepage_url: "https://rdrr.io/cran/RAMClustR/"
 categories:
   - Metabolomics
 repositories:
-  ramclustr_xcms:
-    description: "A feature clustering algorithm for non-targeted mass spectrometric metabolomics data using peaks detected using XCMS."
+  ramclustr:
+    description: "A feature clustering algorithm for non-targeted mass spectrometric metabolomics data using peaks detected using XCMS or using MS1 and MS2 spectra."
     include:
-      - ramclustr_xcms.xml
-      - ramclustr_wrapper.R
-      - ramclustr_macros.xml
-      - test-data
-  ramclustr_csv:
-    description: "A feature clustering algorithm for non-targeted mass spectrometric metabolomics data using MS1 and MS2 spectra."
-    include:
-      - ramclustr_csv.xml
+      - ramclustr.xml
       - ramclustr_wrapper.R
       - ramclustr_macros.xml
       - test-data
