@@ -58,11 +58,11 @@ def main(argv):
 
     # Write scores to dataframe
     dataframe_scores = DataFrame(data=[entry["score"] for entry in scores.scores], index=reference_names, columns=query_names)
-    dataframe_scores.to_csv(args.output_filename_scores, sep=';')
+    dataframe_scores.to_csv(args.output_filename_scores, sep='\t')
 
     # Write number of matches to dataframe
     dataframe_matches = DataFrame(data=[entry["matches"] for entry in scores.scores], index=reference_names, columns=query_names)
-    dataframe_matches.to_csv(args.output_filename_matches, sep=';')
+    dataframe_matches.to_csv(args.output_filename_matches, sep='\t')
     return 0
 
 
