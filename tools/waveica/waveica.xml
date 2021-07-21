@@ -1,4 +1,4 @@
-<tool id="waveica" name="WaveICA" version="0.1.0+galaxy0" python_template_version="3.5">
+<tool id="waveica" name="WaveICA" version="0.1.0+galaxy1" python_template_version="3.5">
 
     <description>removal of batch effects for untargeted metabolomics data</description>
     
