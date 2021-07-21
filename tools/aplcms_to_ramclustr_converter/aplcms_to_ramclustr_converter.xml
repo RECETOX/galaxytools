@@ -12,7 +12,7 @@
         <param name="aplcms_dataframe" type="data" format="parquet" label="apLCMS Dataframe"/>
     </inputs>
     <outputs>
-        <data format="csv" name="out_file" label="Feature-by-sample ${aplcms_dataframe.name} table"/>
+        <data format="csv" name="out_file" label="Feature-by-sample ${aplcms_dataframe.name} table (csv)"/>
     </outputs>
     <tests>
         <test>
