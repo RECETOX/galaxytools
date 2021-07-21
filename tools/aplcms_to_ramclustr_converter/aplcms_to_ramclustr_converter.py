@@ -48,10 +48,13 @@ def main():
 
     ramclustr_data = extract_data(aplcms_table)
     ramclustr_table = format_table(ramclustr_data)
-
-    ramclustr_table.to_csv(args.output, sep=',')
-    msg = "Table '{}' of HDF dataset is converted to csv for RamClutsR".format(args.table)
-    print(msg, file=sys.stdout)
+    
+    try:
+        featureTable.to_csv(args.output, sep=',')
+        msg = f"Dataset of {len(featureTable)} samples is converted to a feature-by-sample table"
+        print(msg, file=sys.stdout)
+    except:
+        print("Could not write the data", file=sys.stdout)
 
 
 if __name__ == "__main__":
