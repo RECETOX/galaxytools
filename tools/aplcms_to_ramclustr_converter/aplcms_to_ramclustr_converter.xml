@@ -3,7 +3,7 @@
     <requirements>
         <requirement type="package" version="3.7">python</requirement>
         <requirement type="package" version="1.1.5">pandas</requirement>
-        <requirement type="package" version="3.6.1">pytables</requirement>
+        <requirement type="package" version="4.0.0">pyarrow</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
         python $__tool_directory__/aplcms_to_ramclustr_converter.py --dataframe '${aplcms_dataframe}' '${out_file}'
