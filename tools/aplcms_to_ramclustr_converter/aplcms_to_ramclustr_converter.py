@@ -8,7 +8,6 @@ import pandas as pd
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--dataframe", help="Name of hdf dataframe")
-parser.add_argument("--table", help="Name of a table in the dataframe")
 parser.add_argument('output')
 args = parser.parse_args()
 

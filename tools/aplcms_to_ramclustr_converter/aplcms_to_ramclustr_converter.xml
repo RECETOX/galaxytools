@@ -6,14 +6,10 @@
         <requirement type="package" version="3.6.1">pytables</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
-        python $__tool_directory__/aplcms_to_ramclustr_converter.py --dataframe '${hdf_dataframe}' --table '${table_name}' '${out_file}'
+        python $__tool_directory__/aplcms_to_ramclustr_converter.py --dataframe '${hdf_dataframe}' '${out_file}'
     ]]></command>
     <inputs>
         <param name="hdf_dataframe" type="data" format="h5" label="apLCMS Dataset"/>
-        <param name="table_name" type="select" label="Table Name">
-            <option value="peaks">peaks</option>
-            <option value="aligned_peaks">aligned peaks</option>
-        </param>
     </inputs>
     <outputs>
         <data format="csv" name="out_file" label="CSV with ${table_name} from ${hdf_dataframe.name}"/>
