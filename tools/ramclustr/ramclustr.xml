@@ -53,7 +53,7 @@
                     metadata_file = "${filetype.metadata.batch_order_qc}",
                 #end if
                 )'
-            -e 'store_output(x, "$result", "$method_metadata", $required.merge_msp, "$spec_abundance")'
+            -e 'store_output(x, "$result", "$method_metadata", $filetype.required.merge_msp, "$spec_abundance")'
     ]]>
     </command>
 
