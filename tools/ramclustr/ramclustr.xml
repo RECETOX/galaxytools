@@ -10,7 +10,7 @@
     <command detect_errors="aggressive"><![CDATA[
         Rscript
             -e 'source("${__tool_directory__}/ramclustr_wrapper.R")'
-            #if $filetype.type_choice:
+            #if $filetype.type_choice == "xcms":
             -e 'x <- ramclustr_xcms(
                 input_xcms = "$filetype.input_xcms",
             #else:
@@ -36,12 +36,12 @@
                 cor_method = "$filetype.required.cor_method",
                 rt_only_low_n = $filetype.required.rt_only_low_n,
                 replace_zeros = $filetype.required.replace_zeros,
-            #if $filetype.type_choice:
+            #if $filetype.type_choice == "xcms":
                 #if $filetype.optional.st
                     st = $filetype.optional.st,
                 #end if
             #else:
-                st = $ms_csv.st,
+                st = $filetype.ms_csv.st,
             #end if
                 #if $filetype.optional.maxt
                     maxt = $filetype.optional.maxt,
@@ -60,16 +60,16 @@
     <inputs>
         <conditional name="filetype">
             <param name="type_choice" type="select" label="Choose input format:">
-                <option value="False" selected="true">XCMS</option>
-                <option value="True">CSV</option>
+                <option value="xcms" selected="true">XCMS</option>
+                <option value="csv">CSV</option>
             </param>
-            <when value="False">
+            <when value="xcms">
                 <param name="input_xcms" label="input_xcms" type="data" format="rdata.xcms.fillpeaks" help=": containing grouped feature data for clustering by ramclustR" />
                 <expand macro="parameters_required" />
                 <expand macro="parameters_optional_xcms" />
                 <expand macro="parameters_optional_metadata" />
             </when>
-            <when value="True">
+            <when value="csv">
                 <expand macro="parameters_csv" />
                 <expand macro="parameters_required" />
                 <expand macro="parameters_optional_csv" />
@@ -87,9 +87,8 @@
 
     <tests>
         <test>
-            <conditional name="filetype">
-                <param name="input_xcms" value="xcmsObj_1.rdata.xcms.fillpeaks" ftype="rdata.xcms.fillpeaks"/>
-            </conditional>
+            <param name="type_choice" value="xcms"/>
+            <param name="input_xcms" value="xcmsObj_1.rdata.xcms.fillpeaks" ftype="rdata.xcms.fillpeaks"/>
             <output name="result" file="ramclustObj_xcms_1.rdata" ftype="RData" compare="sim_size" delta="100"/>
             <output_collection name="mass_spectra" type="list">
                 <element name="fill" file="fill_xcms_1.msp" ftype="msp" checksum="md5$d53ed06d6f888a88ff321f833e29bb47"/>
@@ -98,10 +97,9 @@
             <output name="spec_abundance" file="spec_abundance_xcms_1.csv" ftype="csv" compare="sim_size" delta="100"/>
         </test>
         <test>
-            <conditional name="filetype">
-                <param name="input_xcms" value="xcmsObj_2.rdata.xcms.fillpeaks" ftype="rdata.xcms.fillpeaks"/>
-                <param name="batch_order_qc" value="sample_metadata_xcms_2.csv" ftype="csv" />
-            </conditional>
+            <param name="type_choice" value="xcms"/>
+            <param name="input_xcms" value="xcmsObj_2.rdata.xcms.fillpeaks" ftype="rdata.xcms.fillpeaks"/>
+            <param name="batch_order_qc" value="sample_metadata_xcms_2.csv" ftype="csv" />
             <output name="result" file="ramclustObj_xcms_2.rdata" ftype="RData" compare="sim_size" delta="200"/>
             <output_collection name="mass_spectra" type="list">
                 <element name="fill" file="fill_xcms_2.msp" ftype="msp" lines_diff="10"/>
@@ -110,30 +108,29 @@
             <output name="spec_abundance" file="spec_abundance_xcms_2.csv" ftype="csv" compare="sim_size" delta="100"/>
         </test>
         <test>
-            <conditional name="filetype">
-                <param name="ms" value="csv_test-input_1_2.csv" ftype="csv"/>
-                <param name="sample_name_column" value="1"/>
-                <param name="feature_delimiter" value="_"/>
-                <param name="retention_time_column" value="2"/>
-                <param name="st" value="5.0"/>
-                <param name="sr" value="0.5"/>
-                <param name="deepSplit" value="False"/>
-                <param name="blocksize" value="1000"/>
-                <param name="mult" value="1"/>
-                <param name="hmax" value="0.3"/>
-                <param name="collapse" value="True"/>
-                <param name="usePheno" value="True"/>
-                <param name="normalize" value="none"/>
-                <param name="qc_inj_range" value="20"/>
-                <param name="minModuleSize" value="2"/>
-                <param name="linkage" value="average"/>
-                <param name="mzdec" value="3"/>
-                <param name="cor_method" value="pearson"/>
-                <param name="rt_only_low_n" value="True"/>
-                <param name="replace_zeros" value="True"/>
-                <param name="Merge MSP Files" value="True"/>
-                <param name="maxt" value="1"/>
-            </conditional>
+            <param name="type_choice" value="csv"/>
+            <param name="ms" value="csv_test-input_1_2.csv" ftype="csv"/>
+            <param name="sample_name_column" value="1"/>
+            <param name="feature_delimiter" value="_"/>
+            <param name="retention_time_column" value="2"/>
+            <param name="st" value="5.0"/>
+            <param name="sr" value="0.5"/>
+            <param name="deepSplit" value="False"/>
+            <param name="blocksize" value="1000"/>
+            <param name="mult" value="1"/>
+            <param name="hmax" value="0.3"/>
+            <param name="collapse" value="True"/>
+            <param name="usePheno" value="True"/>
+            <param name="normalize" value="none"/>
+            <param name="qc_inj_range" value="20"/>
+            <param name="minModuleSize" value="2"/>
+            <param name="linkage" value="average"/>
+            <param name="mzdec" value="3"/>
+            <param name="cor_method" value="pearson"/>
+            <param name="rt_only_low_n" value="True"/>
+            <param name="replace_zeros" value="True"/>
+            <param name="Merge MSP Files" value="True"/>
+            <param name="maxt" value="1"/>
             <output name="result" file="ramclustObj_csv_1.rdata"/>
             <output name="spec_abundance" file="spec_abundance_csv_1.csv" ftype="csv"/>
             <output name="method_metadata" file="metadata_csv_1.txt" ftype="txt"/>
@@ -142,13 +139,12 @@
             </output_collection>
         </test>
         <test>
-            <conditional name="filetype">
-                <param name="ms" value="csv_test-input_1_2.csv" ftype="csv"/>
-                <param name="sample_name_column" value="1"/>
-                <param name="feature_delimiter" value="_"/>
-                <param name="retention_time_column" value="2"/>
-                <param name="batch_order_qc" value="sample_metadata_csv_2.csv" ftype="csv" />
-            </conditional>
+            <param name="type_choice" value="csv"/>
+            <param name="ms" value="csv_test-input_1_2.csv" ftype="csv"/>
+            <param name="sample_name_column" value="1"/>
+            <param name="feature_delimiter" value="_"/>
+            <param name="retention_time_column" value="2"/>
+            <param name="batch_order_qc" value="sample_metadata_csv_2.csv" ftype="csv" />
             <output name="result" file="ramclustObj_csv_2.rdata"/>
             <output name="spec_abundance" file="spec_abundance_csv_2.csv" ftype="csv"/>
             <output name="method_metadata" file="metadata_csv_2.txt" ftype="txt"/>
@@ -179,7 +175,7 @@
         | ???   | Feature Table with MS2 | csv    | idmsms     |
         +-------+------------------------+--------+------------+
 
-        The tool takes a **csv** table as input which has to fulfill the following requirements
+        Alternatively, the tool takes a **csv** table as input which has to fulfill the following requirements
 
         (1) no more than one sample (or file) name column and one feature name row;
         (2) feature names that contain the mass and retention times, separated by a constant delimiter; and
