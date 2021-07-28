@@ -7,7 +7,7 @@ import pandas as pd
 
 
 parser = argparse.ArgumentParser()
-parser.add_argument("--dataframe", help="Name of hdf dataframe")
+parser.add_argument("--dataframe", help="Parquet dataframe")
 parser.add_argument('output')
 args = parser.parse_args()
 
@@ -24,8 +24,10 @@ def main():
         featureTable.to_csv(args.output, sep=',')
         msg = f"Dataset of {len(featureTable)} samples is converted to a feature-by-sample table"
         print(msg, file=sys.stdout)
+        return 0
     except Exception:
         print("Could not write the data", file=sys.stdout)
+        return 1
 
 
 if __name__ == "__main__":
