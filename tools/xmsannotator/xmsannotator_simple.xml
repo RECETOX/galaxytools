@@ -2,7 +2,7 @@
     <macros>
         <import>xmsannotator_macros.xml</import>
     </macros>
-
+    <expand macro="creator"/>
     <requirements>
         <container type="docker">@DOCKER_IMAGE@</container>
     </requirements>
