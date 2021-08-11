@@ -1,13 +1,9 @@
 <macros>
-    <token name="@TOOL_VERSION@">1.3.2</token>
-    <token name="@DOCKER_IMAGE@">recetox/xmsannotator:1.3.2-recetox3</token>
-
-    <xml name="creator">
-        <creator>
-            <organization
-                url="https://www.recetox.muni.cz/"
-                name="RECETOX MUNI" />
-        </creator>
+    <token name="@TOOL_VERSION@">0.9.0</token>
+    <xml name="requirements">
+        <requirements>
+            <requirement type="package" version="0.9.0">r-recetox-xmsannotator</requirement>
+        </requirements>
     </xml>
 
     <xml name="inputs">
@@ -45,7 +41,16 @@
         </param>
         <yield/>
     </xml>
+    <token name="@HELP@">
+        <![CDATA[
+        Annotate the peak intensity table (e.g. from an apLCMS run) with compounds from the compounds database
+        using advanced methods.
 
+        The annotation process generates all possible compound-adduct pairs and matches those pairs to the measured
+        peaks. A compound-adduct pair is pronounced as a match to a certain peak when the difference of their masses are
+        withing some tolerance.
+        ]]>
+    </token>
     <xml name="citations">
         <citation type="doi">10.1021/acs.analchem.6b01214</citation>
     </xml>
