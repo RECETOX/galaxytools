@@ -1,12 +1,10 @@
-<tool id="xmsannotator_simple" name="xMSannotator (simple)" version="@TOOL_VERSION@+galaxy3">
+<tool id="recetox_xmsannotator_simple" name="RECETOX xMSannotator simple" version="@TOOL_VERSION@+galaxy0">
+    <description>annotate peak intensity table</description>
     <macros>
-        <import>xmsannotator_macros.xml</import>
+        <import>macros.xml</import>
     </macros>
     <expand macro="creator"/>
-    <requirements>
-        <container type="docker">@DOCKER_IMAGE@</container>
-    </requirements>
-
+    <expand macro="requirements" />
     <command detect_errors="aggressive"><![CDATA[
         Rscript $wrapper
     ]]></command>
@@ -39,13 +37,11 @@
         <expand macro="outputs"/>
     </outputs>
 
-    <help><![CDATA[
-        Annotate the peak intensity table (such as outputted from apLCMS) with compounds from the compounds database.
-
-        The annotation process generates all possible compound-adduct pairs and matches those pairs to the measured
-        peaks. A compound-adduct pair is pronounced as a match to a certain peak when the difference of their masses are
-        withing some tolerance.
-    ]]></help>
+    <help>        
+        <![CDATA[
+        @HELP@
+        ]]>
+    </help>
 
     <citations>
         <expand macro="citations"/>

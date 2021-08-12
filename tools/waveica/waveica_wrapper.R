@@ -10,8 +10,12 @@ waveica <- function(
 ) {
 
     # get input from the Galaxy, preprocess data
-    data <- read.csv(data, header = TRUE, row.names = "sample_name")
-    data <- preprocess_data(data)
+    data <- read.csv(data, header = TRUE, row.names = "sampleName")
+
+    # sort data by injection order
+    data <- data[order(data$injectionOrder, decreasing = FALSE), ]
+
+    data <- enumerate_groups(data)
 
     # remove blanks from dataset
     if (exclude_blanks) {
@@ -39,14 +43,12 @@ waveica <- function(
 }
 
 
-# Sort data, set numerical values for groups
-preprocess_data <- function(data) {
-    # sort data by injection order
-    data <- data[order(data$injectionOrder, decreasing = FALSE), ]
+# Match group labels with [blank/sample/qc] and enumerate them
+enumerate_groups <- function(data) {
 
-    data$class[data$class == "blank"] <- 0
-    data$class[data$class == "sample"] <- 1
-    data$class[data$class == "QC"] <- 2
+    data$sampleType[grepl("blank", tolower(data$sampleType))] <- 0
+    data$sampleType[grepl("sample", tolower(data$sampleType))] <- 1
+    data$sampleType[grepl("qc", tolower(data$sampleType))] <- 2
 
     return(data)
 }
@@ -68,7 +70,7 @@ get_wf <- function(wavelet_filter, wavelet_length) {
 # Exclude blanks from a dataframe
 exclude_group <- function(data) {
     row_idx_to_exclude <- which(data$class %in% 0)
-    if (length(row_idx_to_exclude) > 1) {
+    if (length(row_idx_to_exclude) > 0) {
         data_without_blanks <- data[-c(row_idx_to_exclude), ]
         msg <- paste("Blank samples have been excluded from the dataframe.\n")
         cat(msg)
