@@ -3,14 +3,12 @@
     <macros>
         <import>recetox_aplcms_macros.xml</import>
     </macros>
-
     <expand macro="requirements" />
-
     <command detect_errors="aggressive"><![CDATA[
         sh ${symlink_inputs} &&
         Rscript  -e 'source("${__tool_directory__}/main.R")' -e 'source("${run_script}")'
     ]]></command>
-
+    <expand macro="creator" />
     <configfiles>
         <configfile name="symlink_inputs">
             #for $infile in $files
