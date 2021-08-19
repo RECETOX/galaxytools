@@ -25,6 +25,7 @@
             A list of retention time and retention index pairs.
             Expected columns for RT (oneof): ['rt', 'retention_time'].
             Expected columns for RI (oneof): ['carbon_number', 'ri', 'retention_index'].
+            Retention time is expected to be in seconds.
             ]]></help>
         </param>
         <param name="query" type="data" format="csv,tsv,msp">
@@ -32,6 +33,7 @@
             <help><![CDATA[
             A list of compounds with retention times for which to compute the retention index.
             Expected columns for RT (oneof): ['rt', 'retention_time'].
+            Retention time is expected to be in seconds.
             ]]></help>
         </param>
         <param label="Computation method" name="method" type="select" display="radio" help="Computation method to use.">
@@ -43,6 +45,16 @@
     <outputs>
         <data label="RI using $method of ${query.element_identifier}" name="output" format_source="query" />
     </outputs>
+
+    <tests>
+        <test>
+            <param name="query" value="aplcms_aligned_peaks.csv" ftype="csv" />
+            <param name="reference" value="Alkanes_20210325.csv" ftype="csv" />
+            <param name="method" value="kovats" />
+            <output name="output" file="results.csv" ftype="csv"/>
+        </test>
+    </tests>
+
     <help>
         <![CDATA[
         @HELP@
