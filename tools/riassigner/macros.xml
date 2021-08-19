@@ -1,0 +1,15 @@
+<macros>
+    <token name="@TOOL_VERSION@">0.2.0</token>
+    <xml name="requirements">
+        <requirements>
+            <requirement type="package" version="0.2.0">riassigner</requirement>
+        </requirements>
+    </xml>
+    <xml name="creator">
+        <creator>
+            <organization
+                url="https://www.recetox.muni.cz/"
+                name="RECETOX MUNI" />
+        </creator>
+    </xml>
+</macros>

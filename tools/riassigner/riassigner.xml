@@ -1,0 +1,21 @@
+<tool id="riassigner" name="RIAssigner" version="@TOOL_VERSION@+galaxy0" python_template_version="3.5">
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="creator"/>
+    <expand macro="requirements" />
+
+    <command detect_errors="exit_code"><![CDATA[
+        TODO: Fill in command template.
+    ]]></command>
+
+    <inputs>
+    </inputs>
+
+    <outputs>
+    </outputs>
+    
+    <help><![CDATA[
+        TODO: Fill in help.
+    ]]></help>
+</tool>
