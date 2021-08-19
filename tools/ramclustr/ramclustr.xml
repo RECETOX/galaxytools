@@ -128,7 +128,7 @@
             <param name="type_choice" value="csv"/>
             <param name="ms" value="test3_csv_test-input_1_2.csv" ftype="csv"/>
             <param name="batch_order_qc" value="test4_sample_metadata_csv_2.csv" ftype="csv" />
-            <output name="result" file="test4_ramclustObj_csv_2.rdata"/>
+            <output name="result" file="test4_ramclustObj_csv_2.rdata" ftype="RData" compare="sim_size" delta="200"/>
             <output name="spec_abundance" file="test4_spec_abundance_csv_2.csv" ftype="csv"/>
             <output name="method_metadata" file="test4_metadata_csv_2.txt" ftype="txt"/>
             <output_collection name="mass_spectra" type="list">
