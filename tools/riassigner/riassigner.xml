@@ -5,17 +5,40 @@
     <expand macro="creator"/>
     <expand macro="requirements" />
 
+    <configfiles>
+        <configfile name="symlink_inputs">
+            ln -s '${query}' '${query.element_identifier}'
+            ln -s '${reference}' '${reference.element_identifier}'
+        </configfile>
+    </configfiles>
+
     <command detect_errors="exit_code"><![CDATA[
-        TODO: Fill in command template.
+        sh ${symlink_inputs} &&
+        python -m RIAssigner --reference "$reference.element_identifier" --query "$query.element_identifier" --method "$method" --output "output.${query.ext}" &&
+        \cp -r 'output.${query.ext}' '${output}'
     ]]></command>
 
     <inputs>
+        <param name="reference" type="data" format="csv,tsv,msp">
+            <label>Reference compound list</label>
+            <help><![CDATA[ A list of retention time and retention index pairs. ]]></help>
+        </param>
+        <param name="query" type="data" format="csv,tsv,msp">
+            <label>Query compound list</label>
+            <help><![CDATA[ A list of compounds with retention times for which to compute the retention index. ]]></help>
+        </param>
+        <param label="Computation method" name="method" type="select" display="radio" help="Computation method to use.">
+            <option value="kovats" selected="true">Kovats</option>
+            <option value="cubicspline">CubicSpline </option>
+        </param>
     </inputs>
 
     <outputs>
+        <data label="Retention indices of ${on_string}" name="output" format_source="query" />
     </outputs>
-    
-    <help><![CDATA[
-        TODO: Fill in help.
-    ]]></help>
+    <help>
+        <![CDATA[
+        @HELP@
+        ]]>
+    </help>
 </tool>
