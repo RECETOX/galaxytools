@@ -21,20 +21,27 @@
     <inputs>
         <param name="reference" type="data" format="csv,tsv,msp">
             <label>Reference compound list</label>
-            <help><![CDATA[ A list of retention time and retention index pairs. ]]></help>
+            <help><![CDATA[
+            A list of retention time and retention index pairs.
+            Expected columns for RT (oneof): ['rt', 'retention_time'].
+            Expected columns for RI (oneof): ['carbon_number', 'ri', 'retention_index'].
+            ]]></help>
         </param>
         <param name="query" type="data" format="csv,tsv,msp">
             <label>Query compound list</label>
-            <help><![CDATA[ A list of compounds with retention times for which to compute the retention index. ]]></help>
+            <help><![CDATA[
+            A list of compounds with retention times for which to compute the retention index.
+            Expected columns for RT (oneof): ['rt', 'retention_time'].
+            ]]></help>
         </param>
         <param label="Computation method" name="method" type="select" display="radio" help="Computation method to use.">
             <option value="kovats" selected="true">Kovats</option>
-            <option value="cubicspline">CubicSpline </option>
+            <!-- <option value="cubicspline">CubicSpline </option> -->
         </param>
     </inputs>
 
     <outputs>
-        <data label="Retention indices of ${on_string}" name="output" format_source="query" />
+        <data label="RI using $method of ${query.element_identifier}" name="output" format_source="query" />
     </outputs>
     <help>
         <![CDATA[
