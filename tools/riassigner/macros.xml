@@ -1,0 +1,21 @@
+<macros>
+    <token name="@TOOL_VERSION@">0.2.0</token>
+    <xml name="requirements">
+        <requirements>
+            <requirement type="package" version="0.2.0">riassigner</requirement>
+        </requirements>
+    </xml>
+    <xml name="creator">
+        <creator>
+            <organization
+                url="https://www.recetox.muni.cz/"
+                name="RECETOX MUNI" />
+        </creator>
+    </xml>
+
+    <token name="@HELP@">
+        <![CDATA[
+        RIAssigner can be used to read data from .msp, .csv and .tsv files using matchms and pandas and to compute the retention indices for the data. A reference list of retention indexed compounds (traditionally an Alkane series) with retention times is used to compute the RI for a query dataset of retention time values using the van den Dool method or by using cubic spline based interpolation.
+        ]]>
+    </token>
+</macros>

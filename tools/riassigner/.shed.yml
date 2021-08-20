@@ -1,0 +1,12 @@
+owner: recetox
+remote_repository_url: "https://github.com/RECETOX/galaxytools/tree/master/tools/riassigner"
+homepage_url: "https://github.com/RECETOX/RIAssigner"
+categories:
+  - Metabolomics
+repositories:
+  riassigner:
+    description: "RIAssigner is a python tool for retention index (RI) computation for GC-MS data."
+
+    include:
+      - riassigner.xml
+      - macros.xml

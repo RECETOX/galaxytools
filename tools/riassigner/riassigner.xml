@@ -1,0 +1,64 @@
+<tool id="riassigner" name="RIAssigner" version="@TOOL_VERSION@+galaxy0" python_template_version="3.5">
+    <description>compute retention indices</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="creator"/>
+    <expand macro="requirements" />
+
+    <command detect_errors="exit_code"><![CDATA[
+        sh ${symlink_inputs} &&
+        python -m RIAssigner --reference "$reference.element_identifier" --query "$query.element_identifier" --method "$method" --output "output.${query.ext}" &&
+        cp -r 'output.${query.ext}' '${output}'
+    ]]></command>
+
+    <configfiles>
+        <configfile name="symlink_inputs">
+            ln -s '${query}' '${query.element_identifier}'
+            ln -s '${reference}' '${reference.element_identifier}'
+        </configfile>
+    </configfiles>
+
+    <inputs>
+        <param name="reference" type="data" format="csv,tsv,msp">
+            <label>Reference compound list</label>
+            <help><![CDATA[
+            A list of retention time and retention index pairs.
+            Expected columns for RT (oneof): ['rt', 'retention_time'].
+            Expected columns for RI (oneof): ['carbon_number', 'ri', 'retention_index'].
+            Retention time is expected to be in seconds.
+            ]]></help>
+        </param>
+        <param name="query" type="data" format="csv,tsv,msp">
+            <label>Query compound list</label>
+            <help><![CDATA[
+            A list of compounds with retention times for which to compute the retention index.
+            Expected columns for RT (oneof): ['rt', 'retention_time'].
+            Retention time is expected to be in seconds.
+            ]]></help>
+        </param>
+        <param label="Computation method" name="method" type="select" display="radio" help="Computation method to use.">
+            <option value="kovats" selected="true">Kovats</option>
+            <!-- <option value="cubicspline">CubicSpline </option> -->
+        </param>
+    </inputs>
+
+    <outputs>
+        <data label="RI using $method of ${query.element_identifier}" name="output" format_source="query" />
+    </outputs>
+
+    <tests>
+        <test>
+            <param name="query" value="aplcms_aligned_peaks.csv" ftype="csv" />
+            <param name="reference" value="Alkanes_20210325.csv" ftype="csv" />
+            <param name="method" value="kovats" />
+            <output name="output" file="results.csv" ftype="csv"/>
+        </test>
+    </tests>
+
+    <help>
+        <![CDATA[
+        @HELP@
+        ]]>
+    </help>
+</tool>
