@@ -1,9 +1,16 @@
 <tool id="riassigner" name="RIAssigner" version="@TOOL_VERSION@+galaxy0" python_template_version="3.5">
+    <description>compute retention indices</description>
     <macros>
         <import>macros.xml</import>
     </macros>
     <expand macro="creator"/>
     <expand macro="requirements" />
+
+    <command detect_errors="exit_code"><![CDATA[
+        sh ${symlink_inputs} &&
+        python -m RIAssigner --reference "$reference.element_identifier" --query "$query.element_identifier" --method "$method" --output "output.${query.ext}" &&
+        cp -r 'output.${query.ext}' '${output}'
+    ]]></command>
 
     <configfiles>
         <configfile name="symlink_inputs">
@@ -11,12 +18,6 @@
             ln -s '${reference}' '${reference.element_identifier}'
         </configfile>
     </configfiles>
-
-    <command detect_errors="exit_code"><![CDATA[
-        sh ${symlink_inputs} &&
-        python -m RIAssigner --reference "$reference.element_identifier" --query "$query.element_identifier" --method "$method" --output "output.${query.ext}" &&
-        \cp -r 'output.${query.ext}' '${output}'
-    ]]></command>
 
     <inputs>
         <param name="reference" type="data" format="csv,tsv,msp">
