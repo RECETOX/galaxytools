@@ -9,8 +9,7 @@
     <expand macro="creator"/>
 
     <command detect_errors="exit_code"><![CDATA[
-        sh ${symlink_inputs} &&
-        python -m RIAssigner --reference "$reference_section.reference.element_identifier" "$reference_section.reference.ext" "$reference_section.reference_rt_units" --query "$query_section.query.element_identifier" "$query_section.query.ext" "$query_section.query_rt_units" --method "$method" --output "output.${query_section.query.ext}" &&
+        python -m RIAssigner --reference "$reference_section.reference" "$reference_section.reference.ext" "$reference_section.reference_rt_units" --query "$query_section.query" "$query_section.query.ext" "$query_section.query_rt_units" --method "$method" --output "output.${query_section.query.ext}" &&
         cp -r 'output.${query_section.query.ext}' '${output}'
         ]]>
     </command>
