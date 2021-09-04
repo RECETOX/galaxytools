@@ -14,13 +14,6 @@
         ]]>
     </command>
 
-    <configfiles>
-        <configfile name="symlink_inputs">
-            ln -s '${query_section.query}' '${query_section.query.element_identifier}'
-            ln -s '${reference_section.reference}' '${reference_section.reference.element_identifier}'
-        </configfile>
-    </configfiles>
-
     <inputs>
         <section name="query_section" title="Query dataset" expanded="true">
             <param name="query" type="data" format="csv,tsv,msp">
