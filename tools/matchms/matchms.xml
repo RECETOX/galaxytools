@@ -36,6 +36,13 @@
             <param label="mz_power" name="mz_power" type="float" value="0.0" help="The power to raise mz to in the cosine function." />
             <param label="intensity_power" name="intensity_power" type="float" value="1.0" help="The power to raise intensity to in the cosine function." />
         </section>
+        <param name="default_filters" label="Default Filters" type="boolean" truevalue="True" falsevalue="False" checked="true"
+            help="Apply default filters (make_charge_int, make_ionmode_lowercase, set_ionmode_na_when_missing, add_compound_name,
+             derive_adduct_from_name, derive_formula_from_name, clean_compound_name, add_precursor_mz, derive_ionmode, correct_charge)."
+        />
+        <param name="normalize_intensities" label="Normalize Intensities" type="boolean" truevalue="True" falsevalue="False" checked="true" 
+            help="Filter to normalize intensities."/>
+
     </inputs>
 
     <outputs>
