@@ -2,7 +2,7 @@ import argparse
 import sys
 
 from matchms import calculate_scores
-from matchms.filtering import add_precursor_mz
+from matchms.filtering import add_precursor_mz, default_filters, normalize_intensities
 from matchms.importing import load_from_msp
 from matchms.similarity import (
     CosineGreedy,
@@ -24,6 +24,8 @@ def main(argv):
     parser.add_argument("tolerance", type=float, help="Tolerance to use for peak matching.")
     parser.add_argument("mz_power", type=float, help="The power to raise mz to in the cosine function.")
     parser.add_argument("intensity_power", type=float, help="The power to raise intensity to in the cosine function.")
+    parser.add_argument("default_filters", type=bool, help="Whether to apply the default filters or not.")
+    parser.add_argument("normalize_intensities", type=bool, help="Whether to normalize intensities or not.")
 
     args = parser.parse_args()
 
@@ -34,6 +36,14 @@ def main(argv):
     else:
         reference_spectra = queries_spectra.copy()
         symmetric = True
+
+    if(args.default_filters):
+        queries_spectra = list(map(default_filters, queries_spectra))
+        reference_spectra = list(map(default_filters, reference_spectra))
+
+    if(args.normalize_intensities):
+        queries_spectra = list(map(normalize_intensities, queries_spectra))
+        reference_spectra = list(map(normalize_intensities, reference_spectra))
 
     if args.similarity_metric == 'CosineGreedy':
         similarity_metric = CosineGreedy(args.tolerance, args.mz_power, args.intensity_power)
