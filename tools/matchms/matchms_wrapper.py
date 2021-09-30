@@ -14,24 +14,21 @@ from pandas import DataFrame
 
 def main(argv):
     parser = argparse.ArgumentParser(description="Compute MSP similarity scores")
-    parser.add_argument(
-        "--ref", type=str, dest="references_filename", help="Path to reference MSP library."
-    )
+    parser.add_argument("-f", dest="default_filters", action='store_true', help="Apply default filters")
+    parser.add_argument("-n", dest="normalize_intensities", action='store_true', help="Normalize intensities.")
+    parser.add_argument("references_filename", type=str, help="Path to reference MSP library.")
     parser.add_argument("queries_filename", type=str, help="Path to query spectra.")
     parser.add_argument("similarity_metric", type=str, help='Metric to use for matching.')
-    parser.add_argument("output_filename_scores", type=str, help="Path where to store the output .csv scores.")
-    parser.add_argument("output_filename_matches", type=str, help="Path where to store the output .csv matches.")
     parser.add_argument("tolerance", type=float, help="Tolerance to use for peak matching.")
     parser.add_argument("mz_power", type=float, help="The power to raise mz to in the cosine function.")
     parser.add_argument("intensity_power", type=float, help="The power to raise intensity to in the cosine function.")
-    parser.add_argument("default_filters", type=bool, help="Whether to apply the default filters or not.")
-    parser.add_argument("normalize_intensities", type=bool, help="Whether to normalize intensities or not.")
-
+    parser.add_argument("output_filename_scores", type=str, help="Path where to store the output .csv scores.")
+    parser.add_argument("output_filename_matches", type=str, help="Path where to store the output .csv matches.")
     args = parser.parse_args()
 
     queries_spectra = list(load_from_msp(args.queries_filename))
+    reference_spectra = list(load_from_msp(args.references_filename))
     if(args.references_filename):
-        reference_spectra = list(load_from_msp(args.references_filename))
         symmetric = False
     else:
         reference_spectra = queries_spectra.copy()
