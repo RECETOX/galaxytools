@@ -34,13 +34,15 @@ def main(argv):
         reference_spectra = queries_spectra.copy()
         symmetric = True
 
-    if(args.default_filters):
-        queries_spectra = list(map(default_filters, queries_spectra))
-        reference_spectra = list(map(default_filters, reference_spectra))
+    if(args.default_filters == True):
+        print("Applying default filters...")
+        queries_spectra = map(default_filters, queries_spectra)
+        reference_spectra = map(default_filters, reference_spectra)
 
-    if(args.normalize_intensities):
-        queries_spectra = list(map(normalize_intensities, queries_spectra))
-        reference_spectra = list(map(normalize_intensities, reference_spectra))
+    if(args.normalize_intensities == True):
+        print("Normalizing intensities...")
+        queries_spectra = map(normalize_intensities, queries_spectra)
+        reference_spectra = map(normalize_intensities, reference_spectra)
 
     if args.similarity_metric == 'CosineGreedy':
         similarity_metric = CosineGreedy(args.tolerance, args.mz_power, args.intensity_power)
@@ -53,6 +55,7 @@ def main(argv):
     else:
         return -1
 
+    print("Calculating scores...")
     scores = calculate_scores(
         references=list(reference_spectra),
         queries=list(queries_spectra),
@@ -60,6 +63,11 @@ def main(argv):
         is_symmetric=symmetric
     )
 
+    write_outputs(args, scores)
+    return 0
+
+def write_outputs(args, scores):
+    print("Storing outputs...")
     query_names = [spectra.metadata['name'] for spectra in scores.queries]
     reference_names = [spectra.metadata['name'] for spectra in scores.references]
 
@@ -70,7 +78,6 @@ def main(argv):
     # Write number of matches to dataframe
     dataframe_matches = DataFrame(data=[entry["matches"] for entry in scores.scores], index=reference_names, columns=query_names)
     dataframe_matches.to_csv(args.output_filename_matches, sep='\t')
-    return 0
 
 
 if __name__ == "__main__":
