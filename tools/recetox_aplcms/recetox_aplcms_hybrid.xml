@@ -73,7 +73,7 @@
         <test>
             <param name="known_table" value="known_table.parquet" ftype="parquet" />
             <param name="files" value="mbr_test0.mzml,mbr_test1.mzml,mbr_test2.mzml" ftype="mzml" />
-            <output name="recovered_feature_sample_table" file="hybrid_recovered_feature_sample_table.parquet" ftype="parquet" compare="sim_size" delta="500" />
+            <output name="recovered_feature_sample_table" file="hybrid_recovered_feature_sample_table.parquet" ftype="parquet" />
         </test>
     </tests>
 

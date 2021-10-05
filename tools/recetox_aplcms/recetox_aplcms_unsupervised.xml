@@ -64,7 +64,7 @@
     <tests>
         <test>
             <param name="files" value="mbr_test0.mzml,mbr_test1.mzml,mbr_test2.mzml" ftype="mzml" />
-            <output name="recovered_feature_sample_table" file="unsupervised_recovered_feature_sample_table.parquet" ftype="parquet" compare="sim_size" delta="150" />
+            <output name="recovered_feature_sample_table" file="unsupervised_recovered_feature_sample_table.parquet" ftype="parquet"/>
         </test>
     </tests>
 
