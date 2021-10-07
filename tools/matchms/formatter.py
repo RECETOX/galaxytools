@@ -27,15 +27,12 @@ def filter_thresholds(data, t_score, t_matches):
     filtered = filtered[filtered['matches'] > t_matches]
     return filtered
 
-def load_data(scores_filename, matches_filename):    
+def load_data(scores_filename, matches_filename):
     matches = read_csv(matches_filename, sep=';', index_col=0)
     scores = read_csv(scores_filename, sep=';', index_col=0)
 
-    
     scores_long = create_long_table(scores, 'score')
     matches_long = create_long_table(matches, 'matches')
     
     combined = join_df(matches_long, scores_long, on = ['compound'], how = 'inner')
     return combined
-
-
