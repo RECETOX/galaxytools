@@ -85,6 +85,7 @@
             <param name="references" value="recetox_gc-ei_ms_20201028.msp" ftype="msp"/>
             <param name="queries" value="fill.msp" ftype="msp"/>
             <param name="similarity_metric" value="CosineHungarian"/>
+            <param name="default_filters" value="TRUE" />
             <output name="similarity_scores" file="scores_test3_out.tsv" ftype="tsv" checksum="md5$1341369778036e0a267ff723f8cfca9c"/>
             <output name="similarity_matches" file="matches_test3_out.tsv" ftype="tsv" checksum="md5$28dc16ce45105234437e53d59e240046"/>
         </test>
@@ -107,16 +108,16 @@
             <param name="queries" value="recetox_gc-ei_ms_20201028.msp" ftype="msp"/>
             <param name="similarity_metric" value="ModifiedCosine"/>
             <param name="normalize_intensities" value="TRUE"/>
-            <output name="similarity_scores" file="scores_test4_out.tsv" ftype="tsv"/>
-            <output name="similarity_matches" file="matches_test4_out.tsv" ftype="tsv"/>
+            <output name="similarity_scores" file="scores_test6_out.tsv" ftype="tsv"/>
+            <output name="similarity_matches" file="matches_test6_out.tsv" ftype="tsv"/>
         </test>
             <test>
             <param name="references" value="recetox_gc-ei_ms_20201028.msp" ftype="msp"/>
             <param name="queries" value="fill.msp" ftype="msp"/>
             <param name="normalize_intensities" value="TRUE"/>
             <param name="similarity_metric" value="CosineHungarian"/>
-            <output name="similarity_scores" file="scores_test3_out.tsv" ftype="tsv" checksum="md5$1341369778036e0a267ff723f8cfca9c"/>
-            <output name="similarity_matches" file="matches_test3_out.tsv" ftype="tsv" checksum="md5$28dc16ce45105234437e53d59e240046"/>
+            <output name="similarity_scores" file="scores_test7_out.tsv" ftype="tsv"/>
+            <output name="similarity_matches" file="matches_test7_out.tsv" ftype="tsv"/>
         </test>
     </tests>
 
