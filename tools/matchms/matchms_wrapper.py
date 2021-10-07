@@ -34,12 +34,12 @@ def main(argv):
         reference_spectra = queries_spectra.copy()
         symmetric = True
 
-    if(args.default_filters == True):
+    if args.default_filters is True:
         print("Applying default filters...")
         queries_spectra = map(default_filters, queries_spectra)
         reference_spectra = map(default_filters, reference_spectra)
 
-    if(args.normalize_intensities == True):
+    if args.normalize_intensities is True:
         print("Normalizing intensities...")
         queries_spectra = map(normalize_intensities, queries_spectra)
         reference_spectra = map(normalize_intensities, reference_spectra)
@@ -65,6 +65,7 @@ def main(argv):
 
     write_outputs(args, scores)
     return 0
+
 
 def write_outputs(args, scores):
     print("Storing outputs...")
