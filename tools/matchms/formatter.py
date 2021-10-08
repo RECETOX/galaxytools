@@ -63,8 +63,9 @@ def get_top_k_data(ctx, k):
 
 
 @cli.resultcallback()
-def write_output(result, scores_filename, matches_filename, output_filename):
-    result.to_csv(output_filename, sep="\t")
+def write_output(result: DataFrame, scores_filename, matches_filename, output_filename):
+    result = result.reset_index().rename(columns={'level_0': 'query', 'compound': 'reference'})
+    result.to_csv(output_filename, sep="\t", index=False)
 
 
 if __name__ == '__main__':
