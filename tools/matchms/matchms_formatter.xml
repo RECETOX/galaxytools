@@ -1,0 +1,56 @@
+<tool id="matchms_formatter" name="matchms output formatter" version="0.1.0" python_template_version="3.5">
+    <description>reformat output tables of matchms</description>
+
+    <requirements>
+        <requirement type="package" version="1.1.4">pandas</requirement>
+        <requirement type="package" version="8.0.1">click</requirement>
+    </requirements>
+
+    <command detect_errors="aggressive"><![CDATA[
+        sh ${matchms_formatter_cli}
+    ]]></command>
+
+    <configfiles>
+        <configfile name="matchms_formatter_cli">
+            python3 ${__tool_directory__}/formatter.py \
+            --sf "$scores" \
+            --mf "$matches" \
+            --o "$output" \
+            $method.selection \
+            #if $method.selection == "get-thresholded-data"
+                --st $method.scores_threshold \
+                --mt $method.matches_threshold
+            #else
+                --k $method.k
+            #end if
+        </configfile>
+    </configfiles>
+
+    <inputs>
+        <param label="Scores Table" name="scores" type="data" format="tsv" help="Scores output table." />
+        <param label="Matches Table" name="matches" type="data" format="tsv" help="Scores output table." />
+
+        <conditional name="method">
+            <param name="selection" type="select" label="Formatting method">
+                <option value="get-thresholded-data" selected="true">Thresholding</option>
+                <option value="get-top-k-data">Top K Matches</option>
+            </param>
+            <when value="get-thresholded-data">
+                <param label="Scores Threshold" name="scores_threshold" type="float" value="0.6" min="0.0" max="1.0"
+                help="Threshold for matching score." />
+                <param label="Matches Threshold" name="matches_threshold" type="integer" value="3" min="0"
+                help="Threshold for number of matches ions." />
+            </when>
+            <when value="get-top-k-data">
+                <param label="Top K" name="k" type="integer" value="5" help="K for top k match selection." />
+            </when>
+        </conditional>
+
+    </inputs>
+    <outputs>
+        <data label="Output Table" name="output" format="tsv" />
+    </outputs>
+    <help><![CDATA[
+        TODO: Fill in help.
+    ]]></help>
+</tool>
