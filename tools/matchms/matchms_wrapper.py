@@ -35,11 +35,11 @@ def main(argv):
         reference_spectra = queries_spectra.copy()
         symmetric = True
 
-    if (args.similarity_metric == 'CosineGreedy'):
+    if args.similarity_metric == 'CosineGreedy':
         similarity_metric = CosineGreedy(args.tolerance, args.mz_power, args.intensity_power)
-    elif (args.similarity_metric == 'CosineHungarian'):
+    elif args.similarity_metric == 'CosineHungarian':
         similarity_metric = CosineHungarian(args.tolerance, args.mz_power, args.intensity_power)
-    elif (args.similarity_metric == 'ModifiedCosine'):
+    elif args.similarity_metric == 'ModifiedCosine':
         similarity_metric = ModifiedCosine(args.tolerance, args.mz_power, args.intensity_power)
         reference_spectra = map(add_precursor_mz, reference_spectra)
         queries_spectra = map(add_precursor_mz, queries_spectra)
