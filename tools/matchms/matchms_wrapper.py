@@ -16,7 +16,8 @@ def main(argv):
     parser = argparse.ArgumentParser(description="Compute MSP similarity scores")
     parser.add_argument("-f", dest="default_filters", action='store_true', help="Apply default filters")
     parser.add_argument("-n", dest="normalize_intensities", action='store_true', help="Normalize intensities.")
-    parser.add_argument("references_filename", type=str, help="Path to reference MSP library.")
+    parser.add_argument("-s", dest="symmetric", action='store_true', help="Computation is symmetric.")
+    parser.add_argument("--ref", dest="references_filename", type=str, help="Path to reference MSP library.")
     parser.add_argument("queries_filename", type=str, help="Path to query spectra.")
     parser.add_argument("similarity_metric", type=str, help='Metric to use for matching.')
     parser.add_argument("tolerance", type=float, help="Tolerance to use for peak matching.")
@@ -27,22 +28,20 @@ def main(argv):
     args = parser.parse_args()
 
     queries_spectra = list(load_from_msp(args.queries_filename))
-    reference_spectra = list(load_from_msp(args.references_filename))
-    if(args.references_filename):
-        symmetric = False
+    if args.symmetric:
+        reference_spectra = []
     else:
-        reference_spectra = queries_spectra.copy()
-        symmetric = True
+        reference_spectra = list(load_from_msp(args.references_filename))
 
     if args.default_filters is True:
         print("Applying default filters...")
-        queries_spectra = map(default_filters, queries_spectra)
-        reference_spectra = map(default_filters, reference_spectra)
+        queries_spectra = list(map(default_filters, queries_spectra))
+        reference_spectra = list(map(default_filters, reference_spectra))
 
     if args.normalize_intensities is True:
         print("Normalizing intensities...")
-        queries_spectra = map(normalize_intensities, queries_spectra)
-        reference_spectra = map(normalize_intensities, reference_spectra)
+        queries_spectra = list(map(normalize_intensities, queries_spectra))
+        reference_spectra = list(map(normalize_intensities, reference_spectra))
 
     if args.similarity_metric == 'CosineGreedy':
         similarity_metric = CosineGreedy(args.tolerance, args.mz_power, args.intensity_power)
@@ -50,17 +49,17 @@ def main(argv):
         similarity_metric = CosineHungarian(args.tolerance, args.mz_power, args.intensity_power)
     elif args.similarity_metric == 'ModifiedCosine':
         similarity_metric = ModifiedCosine(args.tolerance, args.mz_power, args.intensity_power)
-        reference_spectra = map(add_precursor_mz, reference_spectra)
-        queries_spectra = map(add_precursor_mz, queries_spectra)
+        reference_spectra = list(map(add_precursor_mz, reference_spectra))
+        queries_spectra = list(map(add_precursor_mz, queries_spectra))
     else:
         return -1
 
     print("Calculating scores...")
     scores = calculate_scores(
-        references=list(reference_spectra),
-        queries=list(queries_spectra),
+        references=queries_spectra if args.symmetric else reference_spectra,
+        queries=queries_spectra,
         similarity_function=similarity_metric,
-        is_symmetric=symmetric
+        is_symmetric=args.symmetric
     )
 
     write_outputs(args, scores)

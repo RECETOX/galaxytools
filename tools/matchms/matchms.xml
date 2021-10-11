@@ -19,9 +19,9 @@
             $default_filters \
             $normalize_intensities \
             #if $symmetric.is_symmetric
-                "$queries" \
+                -s \
             #else
-                "$references" \
+                --ref "$references" \
             #end if
             "$queries" \
             "$similarity_metric" \
