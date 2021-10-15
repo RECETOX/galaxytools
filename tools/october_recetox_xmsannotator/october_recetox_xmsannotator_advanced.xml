@@ -14,9 +14,7 @@
             library(xmsannotator)
 
             annotation <- advanced_annotation(
-            #if $peak_table.is_of_type("h5")
-                peak_table = load_peak_table_hdf("${peak_table}"),
-            #elif $peak_table.is_of_type("parquet")
+            #if $peak_table.is_of_type("parquet")
                 peak_table = load_peak_table_parquet("${peak_table}"),
             #end if
                 adduct_table = load_adduct_table_parquet("${adduct_table}"),

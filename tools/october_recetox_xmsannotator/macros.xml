@@ -13,7 +13,7 @@
         </creator>
     </xml>
     <xml name="inputs">
-        <param name="peak_table" type="data" format="csv,h5,parquet">
+        <param name="peak_table" type="data" format="csv,parquet">
             <label>Peak table</label>
             <help><![CDATA[
                 A peak-intensity table such as outputted from apLCMS.
