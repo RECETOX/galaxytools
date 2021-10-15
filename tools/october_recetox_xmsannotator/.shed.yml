@@ -5,12 +5,12 @@ categories:
   - Metabolomics
 repositories:
   october_recetox_xmsannotator_simple:
-    description: "TEST PROTOTYPE"
+    description: "TEST PROTOTYPE - simple"
     include:
       - october_recetox_xmsannotator_simple.xml
       - macros.xml
   october_recetox_xmsannotator_advanced:
-    description: "TEST PROTOTYPE"
+    description: "TEST PROTOTYPE - advanced"
     include:
       - october_recetox_xmsannotator_advanced.xml
       - macros.xml
