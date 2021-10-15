@@ -4,13 +4,8 @@ homepage_url: "https://github.com/RECETOX/recetox-xMSannotator"
 categories:
   - Metabolomics
 repositories:
-  october_recetox_xmsannotator_simple:
-    description: "TEST PROTOTYPE - simple"
-    include:
-      - october_recetox_xmsannotator_simple.xml
-      - macros.xml
   october_recetox_xmsannotator_advanced:
-    description: "TEST PROTOTYPE - advanced"
+    description: "TEST PROTOTYPE - advanced annotation"
     include:
       - october_recetox_xmsannotator_advanced.xml
       - macros.xml
