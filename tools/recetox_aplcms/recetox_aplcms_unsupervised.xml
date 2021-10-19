@@ -22,6 +22,7 @@
                 sample_files = c('$filenames_str'),
                 aligned_file = '${aligned_feature_sample_table}',
                 recovered_file = '${recovered_feature_sample_table}',
+                out_format = '$output_format.out_format',
                 min_exp = $noise_filtering.min_exp,
                 min_pres = $noise_filtering.min_pres,
                 min_run = $noise_filtering.min_run,
@@ -55,6 +56,7 @@
         <expand macro="feature_detection" />
         <expand macro="peak_alignment" />
         <expand macro="weak_signal_recovery" />
+        <expand macro="output_format" />
     </expand>
 
     <outputs>
@@ -65,6 +67,13 @@
         <test>
             <param name="files" value="mbr_test0.mzml,mbr_test1.mzml,mbr_test2.mzml" ftype="mzml" />
             <output name="recovered_feature_sample_table" file="unsupervised_recovered_feature_sample_table.parquet" ftype="parquet"/>
+        </test>
+        <test>
+            <param name="files" value="mbr_test0.mzml,mbr_test1.mzml,mbr_test2.mzml" ftype="mzml" />
+            <section name="output_format">
+                <param name="out_format" value="recetox" />
+            </section>
+            <output name="recovered_feature_sample_table" file="unsupervised.recetox.parquet" ftype="parquet"/>
         </test>
     </tests>
 
