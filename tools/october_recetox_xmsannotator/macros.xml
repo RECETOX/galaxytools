@@ -18,6 +18,8 @@
             <help><![CDATA[
                 A peak-intensity table such as outputted from apLCMS.
                 The file is required to contain the fields <em>mz</em> and <em>rt</em>.
+                Columns for feature intensity in a sample have to start with <em>intensity</em>.
+
             ]]></help>
         </param>
         <param name="compound_table" type="data" format="csv,parquet">

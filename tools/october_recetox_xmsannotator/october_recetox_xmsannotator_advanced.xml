@@ -11,7 +11,8 @@
 
     <configfiles>
         <configfile name="wrapper"><![CDATA[
-            library(xmsannotator)
+            library(recetox.xmsannotator)
+
 
             annotation <- advanced_annotation(
             #if $peak_table.is_of_type("parquet")
@@ -45,7 +46,8 @@
             <param name="time_tolerance" type="float" value="10" min="0">
                 <label>Retention time tolerance [s]</label>
                 <help>
-                    Retention time tolerance in seconds for finding peaks derived from the same parent metabolite.
+                    Retention time tolerance in seconds for finding peaks derived from the same parent compound.
+
                 </help>
             </param>
         </expand>
@@ -88,7 +90,8 @@
                 </help>
             </param>
             <param name="expected_adducts" type="data" format="csv" optional="true">
-                <label>Expected adducts</label>
+                <label>Expected adducts (optional)</label>
+
                 <help>
                     Require the presence of certain adducts for a high confidence match. By default, at least the
                     presence of an M+H adduct is required for a high confidence match.
