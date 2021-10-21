@@ -5,6 +5,7 @@
             <requirement type="package" version="4.1.0">r-base</requirement>
             <requirement type="package" version="4.0.1">r-arrow</requirement>
             <requirement type="package" version="0.9.3">r-recetox-aplcms</requirement>
+            <requirement type="package" version="1.0.7">r-dplyr</requirement>
         </requirements>
     </xml>
 
@@ -19,7 +20,7 @@
             <param name="files" type="data" format="mzdata,mzml,mzxml,netcdf" multiple="true" min="3" label="data"
                    help="Mass spectrometry files for peak extraction." />
             <yield />
-        </inputs>
+       </inputs>
     </xml>
 
     <xml name="history_db">
@@ -131,6 +132,11 @@
                    label="recover_min_count"
                    help="The minimum number of raw data points to be considered as a true feature." />
         </section>
+    </xml>
+    <xml name="output_format">
+       <section name="output_format" title="Output Format">
+              <param name="out_format" type="boolean" checked="false" truevalue="recetox" falsevalue="original" label="Use custom RECETOX output format?" />
+       </section>
     </xml>
 
     <xml name="unsupervised_outputs">

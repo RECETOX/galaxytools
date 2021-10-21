@@ -1,4 +1,4 @@
-<tool id="recetox_aplcms_hybrid" name="RECETOX apLCMS Hybrid" version="@TOOL_VERSION@+galaxy1">
+<tool id="recetox_aplcms_hybrid" name="RECETOX apLCMS Hybrid" version="@TOOL_VERSION@+galaxy2">
     <description>generate a feature table from LC/MS spectra</description>
     <macros>
         <import>recetox_aplcms_macros.xml</import>
@@ -25,6 +25,7 @@
                 pairing_file = '${feature_known_table_pairing}',
                 aligned_file = '${aligned_feature_sample_table}',
                 recovered_file = '${recovered_feature_sample_table}',
+                out_format = '$output_format.out_format',
                 min_exp = $noise_filtering.min_exp,
                 min_pres = $noise_filtering.min_pres,
                 min_run = $noise_filtering.min_run,
@@ -61,6 +62,7 @@
         <expand macro="feature_detection" />
         <expand macro="peak_alignment" />
         <expand macro="weak_signal_recovery" />
+        <expand macro="output_format" />
     </expand>
 
     <outputs>
@@ -74,6 +76,14 @@
             <param name="known_table" value="known_table.parquet" ftype="parquet" />
             <param name="files" value="mbr_test0.mzml,mbr_test1.mzml,mbr_test2.mzml" ftype="mzml" />
             <output name="recovered_feature_sample_table" file="hybrid_recovered_feature_sample_table.parquet" ftype="parquet" />
+        </test>
+        <test>
+            <param name="known_table" value="known_table.parquet" ftype="parquet" />
+            <param name="files" value="mbr_test0.mzml,mbr_test1.mzml,mbr_test2.mzml" ftype="mzml" />
+            <section name="output_format">
+                <param name="out_format" value="recetox" />
+            </section>
+            <output name="recovered_feature_sample_table" file="hybrid.recetox.parquet" ftype="parquet" />
         </test>
     </tests>
 

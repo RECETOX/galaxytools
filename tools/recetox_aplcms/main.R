@@ -1,4 +1,5 @@
 library(recetox.aplcms)
+library(dplyr)
 
 save_extracted_features <- function(df, filename) {
   df <- as.data.frame(df)
@@ -6,9 +7,35 @@ save_extracted_features <- function(df, filename) {
   arrow::write_parquet(df[columns], filename)
 }
 
-save_feature_sample_table <- function(df, filename) {
+save_aligned_feature_table <- function(df, filename) {
   columns <- c("feature", "mz", "rt", "sample", "sample_rt", "sample_intensity")
   arrow::write_parquet(df[columns], filename)
+}
+
+save_recovered_feature_table <- function(df, filename, out_format) {
+  columns <- c("feature", "mz", "rt", "sample", "sample_rt", "sample_intensity")
+  if (out_format == "recetox") {
+    peak_table <- df[columns]
+    recetox_peak_table <- rcx_aplcms_to_rcx_xmsannotator(peak_table)
+    arrow::write_parquet(recetox_peak_table, filename)
+  } else {
+    arrow::write_parquet(df[columns], filename)
+  }
+}
+
+rcx_aplcms_to_rcx_xmsannotator <- function(peak_table) {
+    col_base <- c("feature", "mz", "rt")
+    output_table <- peak_table %>% distinct(across(any_of(col_base)))
+
+    for (level in levels(peak_table$sample)) {
+        subdata <- peak_table %>%
+            filter(sample == level) %>%
+            select(any_of(c(col_base, "sample_intensity"))) %>%
+            rename(!!level := "sample_intensity")
+        output_table <- inner_join(output_table, subdata, by = col_base)
+    }
+    output_table <- output_table %>% rename(peak = feature)
+    return(output_table)
 }
 
 known_table_columns <- function() {
@@ -47,7 +74,7 @@ save_all_corrected_features <- function(dfs, filenames) {
   mapply(save_extracted_features, dfs, filenames)
 }
 
-unsupervised_main <- function(sample_files, aligned_file, recovered_file, ...) {
+unsupervised_main <- function(sample_files, aligned_file, recovered_file, out_format, ...) {
   sample_files <- sort_samples_by_acquisition_number(sample_files)
 
   res <- unsupervised(filenames = sample_files, ...)
@@ -55,11 +82,11 @@ unsupervised_main <- function(sample_files, aligned_file, recovered_file, ...) {
   save_all_extracted_features(res$extracted_features, sample_files)
   save_all_corrected_features(res$corrected_features, sample_files)
 
-  save_feature_sample_table(res$aligned_feature_sample_table, aligned_file)
-  save_feature_sample_table(res$recovered_feature_sample_table, recovered_file)
+  save_aligned_feature_table(res$aligned_feature_sample_table, aligned_file)
+  save_recovered_feature_table(res$recovered_feature_sample_table, recovered_file, out_format)
 }
 
-hybrid_main <- function(sample_files, known_table_file, updated_known_table_file, pairing_file, aligned_file, recovered_file, ...) {
+hybrid_main <- function(sample_files, known_table_file, updated_known_table_file, pairing_file, aligned_file, recovered_file, out_format, ...) {
   sample_files <- sort_samples_by_acquisition_number(sample_files)
 
   known <- read_known_table(known_table_file)
@@ -71,6 +98,6 @@ hybrid_main <- function(sample_files, known_table_file, updated_known_table_file
   save_all_extracted_features(res$extracted_features, sample_files)
   save_all_corrected_features(res$corrected_features, sample_files)
 
-  save_feature_sample_table(res$aligned_feature_sample_table, aligned_file)
-  save_feature_sample_table(res$recovered_feature_sample_table, recovered_file)
+  save_aligned_feature_table(res$aligned_feature_sample_table, aligned_file)
+  save_recovered_feature_table(res$recovered_feature_sample_table, recovered_file, out_format)
 }
