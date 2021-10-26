@@ -1,5 +1,5 @@
 import click
-from pandas import read_csv, DataFrame
+from pandas import DataFrame, read_csv
 
 
 def create_long_table(data: DataFrame, value_id: str):
