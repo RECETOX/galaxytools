@@ -2,11 +2,32 @@ import click
 from pandas import DataFrame, read_csv
 
 
-def create_long_table(data: DataFrame, value_id: str):
+def create_long_table(data: DataFrame, value_id: str) -> DataFrame:
+    """Convert the table from compact into long format.
+    See DataFrame.melt(...).
+
+    Args:
+        data (DataFrame): The data table to convert
+        value_id (str): The name to assign to the added column through conversion to long format.
+
+    Returns:
+        DataFrame: Table in long format.
+    """
     return data.transpose().melt(ignore_index=False, var_name='compound', value_name=value_id)
 
 
 def join_df(x: DataFrame, y: DataFrame, on=[], how="inner") -> DataFrame:
+    """Shortcut functions to join to dataframes on columns and index
+
+    Args:
+        x (DataFrame): Table X
+        y (DataFrame): Table Y
+        on (list, optional): Columns on which to join. Defaults to [].
+        how (str, optional): Join method, see DataFrame.join(...). Defaults to "inner".
+
+    Returns:
+        DataFrame: Joined dataframe.
+    """
     df_x = x.set_index([x.index] + on)
     df_y = y.set_index([y.index] + on)
     combined = df_x.join(df_y, how=how)
@@ -14,16 +35,44 @@ def join_df(x: DataFrame, y: DataFrame, on=[], how="inner") -> DataFrame:
 
 
 def get_top_k_matches(data: DataFrame, k: int) -> DataFrame:
+    """Function to get top k matches from dataframe with scores.
+
+    Args:
+        data (DataFrame): A table with score column.
+        k (int): Number of top scores to retrieve.
+
+    Returns:
+        DataFrame: Table containing only the top k best matches for each compound.
+    """
     return data.groupby(level=0, group_keys=False).apply(DataFrame.nlargest, n=k, columns=['score'])
 
 
 def filter_thresholds(data: DataFrame, t_score: float, t_matches: float) -> DataFrame:
+    """Filter a dataframe with scores and matches to only contain values above specified thresholds.
+
+    Args:
+        data (DataFrame): Table to filter.
+        t_score (float): Score threshold.
+        t_matches (float): Matches threshold.
+
+    Returns:
+        DataFrame: Filtered dataframe.
+    """
     filtered = data[data['score'] > t_score]
     filtered = filtered[filtered['matches'] > t_matches]
     return filtered
 
 
 def load_data(scores_filename: str, matches_filename: str) -> DataFrame:
+    """Load data from filenames and join on compound id.
+
+    Args:
+        scores_filename (str): Path to scores table.
+        matches_filename (str): Path to matches table.
+
+    Returns:
+        DataFrame: Joined dataframe on compounds containing scores an matches in long format.
+    """
     matches = read_csv(matches_filename, sep='\t', index_col=0)
     scores = read_csv(scores_filename, sep='\t', index_col=0)
 
