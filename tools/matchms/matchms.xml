@@ -10,12 +10,28 @@
     </environment_variables>
 
     <command detect_errors="exit_code"><![CDATA[
-    #if $symmetric.is_symmetric
-        python3 ${__tool_directory__}/matchms_wrapper.py "$queries" "$similarity_metric" "$similarity_scores" "$similarity_matches" "$algorithm.tolerance" "$algorithm.mz_power" "$algorithm.intensity_power"
-    #else
-        python3 ${__tool_directory__}/matchms_wrapper.py --ref "$references" "$queries" "$similarity_metric" "$similarity_scores" "$similarity_matches" "$algorithm.tolerance" "$algorithm.mz_power" "$algorithm.intensity_power"
-    #end if
+        sh ${matchms_python_cli}
     ]]> </command>
+
+    <configfiles>
+        <configfile name="matchms_python_cli">
+            python3 ${__tool_directory__}/matchms_wrapper.py \
+            $default_filters \
+            $normalize_intensities \
+            #if $symmetric.is_symmetric
+                -s \
+            #else
+                --ref "$references" \
+            #end if
+            "$queries" \
+            "$similarity_metric" \
+            "$algorithm.tolerance" \
+            "$algorithm.mz_power" \
+            "$algorithm.intensity_power" \
+            "$similarity_scores" \
+            "$similarity_matches"
+        </configfile>
+    </configfiles>
 
     <inputs>
         <param label="Queries spectra" name="queries" type="data" format="msp" help="Query mass spectra to match against references." />
@@ -36,6 +52,13 @@
             <param label="mz_power" name="mz_power" type="float" value="0.0" help="The power to raise mz to in the cosine function." />
             <param label="intensity_power" name="intensity_power" type="float" value="1.0" help="The power to raise intensity to in the cosine function." />
         </section>
+        <param name="default_filters" label="Default Filters" type="boolean" truevalue="-f" falsevalue="" checked="false"
+            help="Apply default filters (make_charge_int, make_ionmode_lowercase, set_ionmode_na_when_missing, add_compound_name,
+             derive_adduct_from_name, derive_formula_from_name, clean_compound_name, add_precursor_mz, derive_ionmode, correct_charge)."
+        />
+        <param name="normalize_intensities" label="Normalize Intensities" type="boolean" truevalue="-n" falsevalue="" checked="false" 
+            help="Filter to normalize intensities."/>
+
     </inputs>
 
     <outputs>
@@ -62,6 +85,7 @@
             <param name="references" value="recetox_gc-ei_ms_20201028.msp" ftype="msp"/>
             <param name="queries" value="fill.msp" ftype="msp"/>
             <param name="similarity_metric" value="CosineHungarian"/>
+            <param name="default_filters" value="TRUE" />
             <output name="similarity_scores" file="scores_test3_out.tsv" ftype="tsv" checksum="md5$1341369778036e0a267ff723f8cfca9c"/>
             <output name="similarity_matches" file="matches_test3_out.tsv" ftype="tsv" checksum="md5$28dc16ce45105234437e53d59e240046"/>
         </test>
@@ -78,6 +102,22 @@
             <param name="is_symmetric" value="TRUE"/>
             <output name="similarity_scores" file="scores_test5_out.tsv" ftype="tsv"/>
             <output name="similarity_matches" file="matches_test5_out.tsv" ftype="tsv"/>
+        </test>
+        <test>
+            <param name="references" value="recetox_gc-ei_ms_20201028.msp" ftype="msp"/>
+            <param name="queries" value="recetox_gc-ei_ms_20201028.msp" ftype="msp"/>
+            <param name="similarity_metric" value="ModifiedCosine"/>
+            <param name="normalize_intensities" value="TRUE"/>
+            <output name="similarity_scores" file="scores_test6_out.tsv" ftype="tsv"/>
+            <output name="similarity_matches" file="matches_test6_out.tsv" ftype="tsv"/>
+        </test>
+            <test>
+            <param name="references" value="recetox_gc-ei_ms_20201028.msp" ftype="msp"/>
+            <param name="queries" value="fill.msp" ftype="msp"/>
+            <param name="normalize_intensities" value="TRUE"/>
+            <param name="similarity_metric" value="CosineHungarian"/>
+            <output name="similarity_scores" file="scores_test7_out.tsv" ftype="tsv"/>
+            <output name="similarity_matches" file="matches_test7_out.tsv" ftype="tsv"/>
         </test>
     </tests>
 
