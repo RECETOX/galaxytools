@@ -7,7 +7,7 @@ def create_long_table(data: DataFrame, value_id: str) -> DataFrame:
     See DataFrame.melt(...).
 
     Args:
-        data (DataFrame): The data table to convert
+        data (DataFrame): The data table to convert.
         value_id (str): The name to assign to the added column through conversion to long format.
 
     Returns:
