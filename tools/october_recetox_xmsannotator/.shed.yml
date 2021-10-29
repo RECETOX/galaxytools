@@ -1,0 +1,11 @@
+owner: recetox
+remote_repository_url: "https://github.com/RECETOX/galaxytools/tree/master/tools/recetox-xmsannotator"
+homepage_url: "https://github.com/RECETOX/recetox-xMSannotator"
+categories:
+  - Metabolomics
+repositories:
+  october_recetox_xmsannotator_advanced:
+    description: "TEST PROTOTYPE - advanced annotation"
+    include:
+      - october_recetox_xmsannotator_advanced.xml
+      - macros.xml
