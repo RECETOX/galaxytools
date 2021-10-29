@@ -36,6 +36,9 @@
                 The database is required to contain <em>adduct</em>, <em>charge</em>, <em>mass</em>, and <em>n_molecules</em>.
             ]]></help>
         </param>
+        <param name="adduct_weights" type="data" format="csv" optional="true">
+            <label>adduct_weights</label>
+        </param>
     </xml>
 
     <xml name="outputs">
