@@ -1,4 +1,4 @@
-<tool id="october_recetox_xmsannotator_advanced" name="OCTOBER RECETOX xMSannotator advanced" version="@TOOL_VERSION@+galaxy0">
+<tool id="october_recetox_xmsannotator_advanced" name="OCTOBER RECETOX xMSannotator advanced" version="@TOOL_VERSION@+galaxy1">
     <description>annotate peak intensity table including scores and confidence levels</description>
     <macros>
         <import>macros.xml</import>
