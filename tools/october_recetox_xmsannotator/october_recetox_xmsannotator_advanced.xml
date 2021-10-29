@@ -13,7 +13,6 @@
         <configfile name="wrapper"><![CDATA[
             library(recetox.xmsannotator)
 
-
             annotation <- advanced_annotation(
             #if $peak_table.is_of_type("parquet")
                 peak_table = load_peak_table_parquet("${peak_table}"),
@@ -26,14 +25,22 @@
                 min_cluster_size = as.integer($clustering.min_cluster_size),
                 deep_split = as.integer($clustering.deep_split),
                 network_type = "$clustering.network_type",
-            #if $scoring.expected_adducts
-                expected_adducts = load_expected_adducts_csv("${scoring.expected_adducts}"),
-            #end if
-            #if $scoring.boost_compounds
-                boost_compounds = load_boost_compounds_csv("${scoring.boost_compounds}"),
-            #end if
+            ## #if $scoring.expected_adducts
+            ##     expected_adducts = load_expected_adducts_csv("${scoring.expected_adducts}"),
+            ## #end if
+            ## #if $scoring.boost_compounds
+            ##     boost_compounds = load_boost_compounds_csv("${scoring.boost_compounds}"),
+            ## #end if
                 redundancy_filtering = $scoring.redundancy_filtering,
-                n_workers = n_workers
+                n_workers = n_workers,
+            ## new params
+                intensity_deviation_tolerance = as.double($intensity_deviation_tolerance),
+                mass_defect_tolerance = as.double($mass_defect_tolerance),
+                mass_defect_precision = as.double($mass_defect_precision),
+                peak_rt_width = as.integer($peak_rt_width),
+                maximum_isotopes = as.integer($maximum_isotopes),
+                min_ions_per_chemical = as.integer($min_ions_per_chemical),
+                filter_by = "$filter_by"
             )
 
             save_parquet(data = annotation, file = "${annotation_parquet}")
@@ -89,22 +96,22 @@
                     cluster. Otherwise, do not account for cluster membership.
                 </help>
             </param>
-            <param name="expected_adducts" type="data" format="csv" optional="true">
+            <!-- <param name="expected_adducts" type="data" format="csv" optional="true">
                 <label>Expected adducts (optional)</label>
 
                 <help>
                     Require the presence of certain adducts for a high confidence match. By default, at least the
                     presence of an M+H adduct is required for a high confidence match.
                 </help>
-            </param>
-            <param name="boost_compounds" type="data" format="csv" optional="true">
+            </param> -->
+            <!-- <param name="boost_compounds" type="data" format="csv" optional="true">
                 <label>Validated compounds score boosting (optional)</label>
                 <help>
                     Table of previously validated compounds to boost their scores and confidence levels.
                     The 1st column of the table must contain IDs of compounds.
                     The optional 2nd and 3rd columns may contain mz values and retention times.
                 </help>
-            </param>
+            </param> -->
             <param name="min_isp" type="integer" min="0" value="1">
                 <label>Minimum number of expected isotopes</label>
                 <help>
@@ -122,6 +129,29 @@
                 <help>Whether to filter out low-scored multiple matcher or not.</help>
             </param>
         </section>
+        <param name="intensity_deviation_tolerance" type="float" value="0.1">
+            <label>intensity_deviation_tolerance</label>
+        </param>
+        <param name="mass_defect_tolerance" type="float" value="0.1">
+            <label>mass_defect_tolerance</label>
+        </param>
+        <param name="mass_defect_precision" type="float" value="0.01">
+            <label>mass_defect_precision</label>
+        </param>
+        <param name="peak_rt_width" type="integer" value="1">
+            <label>peak_rt_width</label>
+        </param>
+        <param name="maximum_isotopes" type="integer" value="10">
+            <label>maximum_isotopes</label>
+        </param>
+        <param name="min_ions_per_chemical" type="integer" value="2">
+            <label>min_ions_per_chemical</label>
+        </param>
+        <param name="filter_by" type="text" value="c('M-H', 'M+H')">
+            <!-- turn sanitizer off for prototype, TODO refactor this for production -->
+            <sanitizer sanitize="false"></sanitizer>
+            <label>filter_by</label>
+        </param>
     </inputs>
 
     <outputs>
