@@ -17,7 +17,7 @@
             #if $peak_table.is_of_type("parquet")
                 peak_table = load_peak_table_parquet("${peak_table}"),
             #end if
-            ## adduct_table = load_adduct_table_parquet("${adduct_table}"),
+                adduct_table = load_adduct_table_parquet("${adduct_table}"),
                 adduct_weights = as.data.frame(read.csv("${adduct_weights}")),
                 compound_table = load_compound_table_parquet("${compound_table}"),
                 mass_tolerance = 1e-6 * ${mass_tolerance_ppm},
