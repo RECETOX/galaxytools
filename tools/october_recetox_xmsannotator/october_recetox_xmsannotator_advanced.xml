@@ -1,4 +1,4 @@
-<tool id="october_recetox_xmsannotator_advanced" name="OCTOBER RECETOX xMSannotator advanced" version="@TOOL_VERSION@+galaxy2">
+<tool id="october_recetox_xmsannotator_advanced" name="OCTOBER RECETOX xMSannotator advanced" version="@TOOL_VERSION@+galaxy3">
     <description>annotate peak intensity table including scores and confidence levels</description>
     <macros>
         <import>macros.xml</import>
@@ -34,7 +34,7 @@
                 peak_rt_width = as.integer($peak_rt_width),
                 maximum_isotopes = as.integer($maximum_isotopes),
                 min_ions_per_chemical = as.integer($min_ions_per_chemical),
-                filter_by = "$filter_by"
+                filter_by = $filter_by
             )
             save_parquet(data = annotation, file = "${annotation_parquet}")
         ]]></configfile>
