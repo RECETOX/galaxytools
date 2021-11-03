@@ -10,10 +10,17 @@ waveica <- function(
 ) {
 
     # get input from the Galaxy, preprocess data
-    data <- read.csv(data, header = TRUE, row.names = "sampleName")
+    data <- read.csv(data, header = TRUE)
+
+    required_columns <- c("sampleName", "class", "sampleType", "injectionOrder", "batch")
+    if (!all(required_columns %in% colnames(data))) {
+        stop("Error: missing metadata!
+Check that the following columns are present in your dataset: [sampleName, class, sampleType, injectionOrder, batch]")
+    }
 
     # sort data by injection order
     data <- data[order(data$injectionOrder, decreasing = FALSE), ]
+
 
     data <- enumerate_groups(data)
 
