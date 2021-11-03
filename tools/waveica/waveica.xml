@@ -21,7 +21,7 @@
                 exclude_blanks = $optional_parameters.exclude_blanks
             )'
 
-            -e 'store_data(normalized_data,"$normalized_features")'
+            -e 'store_data(normalized_data,"$normalized_data")'
     ]]></command>
 
     <inputs>
@@ -89,19 +89,19 @@
     </inputs>
 
     <outputs>
-        <data name="normalized_features" format="tsv" />
+        <data name="normalized_data" format="tsv" />
     </outputs>
 
     <tests>
         <test>
-            <param name="data" value="features-test.csv" ftype="csv" />
+            <param name="data" value="input_data.csv" ftype="csv" />
             <param name="wavelet_filter" value="d" />
             <param name="filter_length" value="2" />
             <param name="k" value="20" />
             <param name="t" value="0.05" />
             <param name="t2" value="0.05" />
             <param name="alpha" value="0" />
-            <output name="normalized_features" file="features-normalized.tsv" /> 
+            <output name="normalized_data" file="normalized_data.tsv" /> 
         </test>
     </tests>
 
