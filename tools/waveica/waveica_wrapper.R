@@ -38,14 +38,14 @@ Check that the following columns are present in your dataset: [sampleName, class
         alpha = alpha
         )
 
-
+    data[, -c(1:5)] <- features
 
     # remove blanks from dataset
     if (exclude_blanks) {
         data <- exclude_group(data, group)
     }
 
-    return(normalized_data)
+    return(data)
 }
 
 
