@@ -72,8 +72,8 @@
                     Network type parameter affects how the network's adjacency matrix is created from the correlation
                     matrix (see WGCNA package documentation).
                 </help>
-                <option value="signed"/>
-                <option value="unsigned" selected="true"/>
+                <option value="signed">signed</option>
+                <option value="unsigned" selected="true">unsigned</option>
             </param>
         </section>
         <section name="scoring" title="Scoring" expanded="true">
