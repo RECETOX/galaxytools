@@ -21,16 +21,13 @@ Check that the following columns are present in your dataset: [sampleName, class
     # sort data by injection order
     data <- data[order(data$injectionOrder, decreasing = FALSE), ]
 
-    group <- enumerate_groups(data$sampleType)
-
-
     # separate data into features, batch and group
-    features <- data[, -c(1:4)]
-    group <- data$sampleType
+    features <- data[, -c(1:5)]
+    group <- enumerate_groups(data$sampleType)
     batch <- data$batch
 
     # run WaveICA
-    normalized_data <- WaveICA::WaveICA(
+    features <- WaveICA::WaveICA(
         data = features,
         wf = get_wf(wavelet_filter, wavelet_length),
         batch = batch,
@@ -40,6 +37,8 @@ Check that the following columns are present in your dataset: [sampleName, class
         t2 = t2,
         alpha = alpha
         )
+
+
 
     # remove blanks from dataset
     if (exclude_blanks) {
