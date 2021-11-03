@@ -390,7 +390,7 @@ jobs:
   # deploy the tools to the toolsheds (first TTS for testing)
   deploy:
     name: Deploy
-    needs: [setup, lint, flake8, lintr, combine_outputs]
+    needs: [setup, lint, flake8, lintr]
     strategy:
       matrix:
         python-version: ['3.7']
