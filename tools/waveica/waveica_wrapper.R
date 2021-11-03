@@ -23,10 +23,6 @@ Check that the following columns are present in your dataset: [sampleName, class
 
     group <- enumerate_groups(data$sampleType)
 
-    # remove blanks from dataset
-    if (exclude_blanks) {
-        data <- exclude_group(data)
-    }
 
     # separate data into features, batch and group
     features <- data[, -c(1:4)]
@@ -44,6 +40,11 @@ Check that the following columns are present in your dataset: [sampleName, class
         t2 = t2,
         alpha = alpha
         )
+
+    # remove blanks from dataset
+    if (exclude_blanks) {
+        data <- exclude_group(data, group)
+    }
 
     return(normalized_data)
 }
@@ -74,12 +75,11 @@ get_wf <- function(wavelet_filter, wavelet_length) {
 
 
 # Exclude blanks from a dataframe
-exclude_group <- function(data) {
-    row_idx_to_exclude <- which(data$class %in% 0)
+exclude_group <- function(data, group) {
+    row_idx_to_exclude <- which(group %in% 0)
     if (length(row_idx_to_exclude) > 0) {
         data_without_blanks <- data[-c(row_idx_to_exclude), ]
-        msg <- paste("Blank samples have been excluded from the dataframe.\n")
-        cat(msg)
+        cat("Blank samples have been excluded from the dataframe.\n")
         return(data_without_blanks)
         }
     else {
