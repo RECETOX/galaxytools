@@ -21,8 +21,7 @@ Check that the following columns are present in your dataset: [sampleName, class
     # sort data by injection order
     data <- data[order(data$injectionOrder, decreasing = FALSE), ]
 
-
-    data <- enumerate_groups(data)
+    group <- enumerate_groups(data$sampleType)
 
     # remove blanks from dataset
     if (exclude_blanks) {
@@ -51,13 +50,13 @@ Check that the following columns are present in your dataset: [sampleName, class
 
 
 # Match group labels with [blank/sample/qc] and enumerate them
-enumerate_groups <- function(data) {
+enumerate_groups <- function(group) {
 
-    data$sampleType[grepl("blank", tolower(data$sampleType))] <- 0
-    data$sampleType[grepl("sample", tolower(data$sampleType))] <- 1
-    data$sampleType[grepl("qc", tolower(data$sampleType))] <- 2
+    group[grepl("blank", tolower(group))] <- 0
+    group[grepl("sample", tolower(group))] <- 1
+    group[grepl("qc", tolower(group))] <- 2
 
-    return(data)
+    return(group)
 }
 
 
