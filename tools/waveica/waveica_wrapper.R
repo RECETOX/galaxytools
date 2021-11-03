@@ -84,6 +84,6 @@ exclude_group <- function(data) {
 
 # Store output of WaveICA in a tsv file
 store_data <- function(normalized_data, output) {
-    write.table(normalized_data, file = output, sep = "\t", col.names = NA)
+    write.table(normalized_data$data_wave, file = output, sep = "\t", col.names = NA)
     cat("Normalization has been completed.\n")
 }
