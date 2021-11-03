@@ -24,7 +24,7 @@ waveica <- function(
 
     # separate data into features, batch and group
     features <- data[, -c(1:4)]
-    group <- as.numeric(data$class)
+    group <- data$sampleType
     batch <- data$batch
 
     # run WaveICA
