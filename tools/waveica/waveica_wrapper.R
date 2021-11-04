@@ -26,7 +26,8 @@ Make sure that the following columns are present in your dataframe: [sampleName,
     data <- data[order(data$injectionOrder, decreasing = FALSE), ]
 
     # separate data into features, batch and group
-    features <- data[, -c(1:5)]
+    feature_columns <- colnames(data)[!colnames(data) %in% required_columns]
+    features <- data[, feature_columns]
     group <- enumerate_groups(data$sampleType)
     batch <- data$batch
 
@@ -42,7 +43,7 @@ Make sure that the following columns are present in your dataframe: [sampleName,
         alpha = alpha
         )
 
-    data[, -c(1:5)] <- features$data_wave
+    data[, feature_columns] <- features$data_wave
 
     # remove blanks from dataset
     if (exclude_blanks) {
