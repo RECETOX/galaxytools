@@ -84,7 +84,7 @@
             <param type="float" value="0" name="alpha" label="Alpha" help="the trade-off value between the independence of samples and those of variables and should be between 0 and 1"/>
         </section>
         <section name="optional_parameters" expanded="true" title="Optional Parameters">
-            <param name="exclude_blanks" type="boolean" checked="true" truevalue="TRUE" falsevalue="FALSE" label="Remove blanks" help="Excludes blank samples from the output" />
+            <param name="exclude_blanks" type="boolean" checked="false" truevalue="TRUE" falsevalue="FALSE" label="Remove blanks" help="Excludes blank samples from the output" />
         </section>
     </inputs>
 
@@ -102,6 +102,12 @@
             <param name="t2" value="0.05" />
             <param name="alpha" value="0" />
             <output name="normalized_data" file="normalized_data.tsv" /> 
+        </test>
+        <test expect_failure="true">
+            <param name="data" value="na_data.csv" ftype="csv" />
+        </test>
+        <test expect_failure="true">
+            <param name="data" value="incomplete_metadata_data.csv" ftype="csv" />
         </test>
     </tests>
 
