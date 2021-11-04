@@ -13,9 +13,13 @@ waveica <- function(
     data <- read.csv(data, header = TRUE)
 
     required_columns <- c("sampleName", "class", "sampleType", "injectionOrder", "batch")
-    if (!all(required_columns %in% colnames(data))) {
+    if (anyNA(data)) {
+        stop("Error: dataframe cannot contain NULL values!
+Make sure that your dataframe does not contain empty cells")
+    }
+    else if (!all(required_columns %in% colnames(data))) {
         stop("Error: missing metadata!
-Check that the following columns are present in your dataset: [sampleName, class, sampleType, injectionOrder, batch]")
+Make sure that the following columns are present in your dataframe: [sampleName, class, sampleType, injectionOrder, batch]")
     }
 
     # sort data by injection order
