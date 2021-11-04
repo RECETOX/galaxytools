@@ -116,19 +116,21 @@
 
         Removal of batch effects for large-scale untargeted metabolomics data based on wavelet analysis. The WaveICA R package provides a new algorithm to removing batch effects for metabolomics data.
         
-        The input is Sample-by-matrix table which must include: 
+        The input is a feature-intensity table with metadata in the following format: 
 
-        1. Injection order of samples
-
-        2. Types of the samples denoted as "blank", "sample" or "QC"
-
-        3. Batch numbers
-
-        4. Features data
-
-        **Documentation**
-
-        See original repository for further information: https://github.com/dengkuistat/WaveICA
+        +--------------+--------+------------+----------------+-------+-----------+----------+----------+-----+
+        | sampleName   | class  | sampleType | injectionOrder | batch | feature1  | feature2 | feature3 | ... |
+        +==============+========+============+================+=======+===========+==========+==========+=====+
+        | QC1          | sample | QC         | 1              | 1     | 228520.06 | 35646729 |  2386897 | ... |
+        +--------------+--------+------------+----------------+-------+-----------+----------+----------+-----+
+        | some_sample1 | sample | sample     | 2              | 1     |  90217.38 | 35735702 |  2456291 | ... |
+        +--------------+--------+------------+----------------+-------+-----------+----------+----------+-----+
+        | ...          | ...    | ...        | ...            | ...   | ...       | ...      | ...      | ... |
+        +--------------+--------+------------+----------------+-------+-----------+----------+----------+-----+
+           
+        + **sampleType** column accepts three possible values: [QC, sample, blank] (case insensitive); 
+        + **class** column is used to separate samples into different categories (e.g., positive/negative). The column accepts any values.
+        + the **output** is the same table with corrected feature intensities.
 
     ]]></help>
 
