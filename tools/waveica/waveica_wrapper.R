@@ -38,7 +38,7 @@ Check that the following columns are present in your dataset: [sampleName, class
         alpha = alpha
         )
 
-    data[, -c(1:5)] <- features
+    data[, -c(1:5)] <- features$data_wave
 
     # remove blanks from dataset
     if (exclude_blanks) {
@@ -89,6 +89,6 @@ exclude_group <- function(data, group) {
 
 # Store output of WaveICA in a tsv file
 store_data <- function(data, output) {
-    write.table(data$data_wave, file = output, sep = "\t", col.names = NA)
+    write.table(data, file = output, sep = "\t", col.names = NA)
     cat("Normalization has been completed.\n")
 }
