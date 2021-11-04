@@ -23,7 +23,9 @@ Make sure that the following columns are present in your dataframe: [sampleName,
     }
 
     # sort data by injection order
-    data <- data[order(data$injectionOrder, decreasing = FALSE), ]
+    data <- data[order(data[, "batch"],
+                       data[, "injectionOrder"],
+                       decreasing = FALSE), ]
 
     # separate data into features, batch and group
     feature_columns <- colnames(data)[!colnames(data) %in% required_columns]
