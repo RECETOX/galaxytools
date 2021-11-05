@@ -25,10 +25,10 @@
     ]]></command>
 
     <inputs>
-        <param type="data" name="data" label="Features table" format="csv" help=""/>
+        <param type="data" name="data" label="Feature table" format="csv" help=""/>
         <section name="parameters" title="Normalization Parameters" expanded="True">
             <conditional name="wf">
-                <param type="select" name="wavelet_filter" label="Wavelet transform filter" help="wavelet function and filter length (see wt.filter of R Wavelet package for more details)">
+                <param type="select" name="wavelet_filter" label="Wavelet transform filter" help="wavelet function and filter length [1]    (see footnotes for more details)">
                     <option value="d" selected="True">Daubechies</option>
                     <option value="la" >Least Asymetric</option>
                     <option value="bl" >Best Localized</option>
@@ -81,7 +81,7 @@
  should be between 0 and 1"/>
             <param type="float" value="0.05" name="t2" label="Group-assosiation threshold" help="threshold to consider a component associate with the group,
  should be between 0 and 1"/>
-            <param type="float" value="0" name="alpha" label="Alpha" help="trade-off value between the independence of samples and those of variables, should be between 0 and 1"/>
+            <param type="float" value="0" name="alpha" label="Alpha" help="trade-off value between the independence of samples (temporal ICA) and variables (spatial ICA), should be between 0 and 1"/>
         </section>
         <section name="optional_parameters" expanded="true" title="Optional Parameters">
             <param name="exclude_blanks" type="boolean" checked="false" truevalue="TRUE" falsevalue="FALSE" label="Remove blanks" help="Excludes blank samples from the output" />
@@ -133,6 +133,9 @@
         + **sampleType** column accepts three possible values: [QC, sample, blank] (case insensitive).
         + **class** column is used to denote a biological group of a sample (e.g., positive/negative species). The column accepts any values.
         + the **output** is the same table with corrected feature intensities.
+
+        .. rubric:: **Footnotes**
+        .. [1] for details on wavelet filter parameters refer to R `wavelets::wt.filter <https://www.rdocumentation.org/packages/wavelets/versions/0.3-0.2/topics/wt.filter>`_;
 
     ]]></help>
 
