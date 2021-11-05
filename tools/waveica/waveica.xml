@@ -131,7 +131,7 @@
 
         + the input table must not contain missing values. Missing intensities must be filled with 0.
         + **sampleType** column accepts three possible values: [QC, sample, blank] (case insensitive).
-        + **class** column is used to separate samples into different categories (e.g., positive/negative species). The column accepts any values.
+        + **class** column is used to denote a biological group of a sample (e.g., positive/negative species). The column accepts any values.
         + the **output** is the same table with corrected feature intensities.
 
     ]]></help>
