@@ -28,7 +28,7 @@
         <param type="data" name="data" label="Feature table" format="csv" help=""/>
         <section name="parameters" title="Normalization Parameters" expanded="True">
             <conditional name="wf">
-                <param type="select" name="wavelet_filter" label="Wavelet transform filter" help="wavelet function and filter length [1]    (see footnotes for more details)">
+                <param type="select" name="wavelet_filter" label="Wavelet transform filter" help="wavelet function and filter length [1] (see footnotes for more details)">
                     <option value="d" selected="True">Daubechies</option>
                     <option value="la" >Least Asymetric</option>
                     <option value="bl" >Best Localized</option>
