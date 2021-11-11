@@ -29,7 +29,7 @@ Make sure that the following columns are present in your dataframe: [sampleName,
     # separate data into features, batch and group
     feature_columns <- colnames(data)[!colnames(data) %in% required_columns]
     features <- data[, feature_columns]
-    group <- enumerate_groups(data$sampleType)
+    group <- enumerate_groups(as.character(data$sampleType))
     batch <- data$batch
 
     # run WaveICA
