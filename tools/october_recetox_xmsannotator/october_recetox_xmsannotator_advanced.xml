@@ -1,4 +1,4 @@
-<tool id="october_recetox_xmsannotator_advanced" name="OCTOBER RECETOX xMSannotator advanced" version="@TOOL_VERSION@+galaxy3">
+<tool id="october_recetox_xmsannotator_advanced" name="OCTOBER RECETOX xMSannotator advanced" version="@TOOL_VERSION@+galaxy5">
     <description>annotate peak intensity table including scores and confidence levels</description>
     <macros>
         <import>macros.xml</import>
@@ -13,10 +13,15 @@
         <configfile name="wrapper"><![CDATA[
             library(recetox.xmsannotator)
 
+            peak_table = arrow::read_parquet("${peak_table}")
+            if("peak" %in% colnames(peak_table)) {
+              if(!is.integer(peak_table\$peak)) {
+                peak_table\$peak <- as.integer(peak_table\$peak)
+              }
+            }
+
             annotation <- advanced_annotation(
-            #if $peak_table.is_of_type("parquet")
-                peak_table = load_peak_table_parquet("${peak_table}"),
-            #end if
+                peak_table = peak_table,
                 adduct_table = load_adduct_table_parquet("${adduct_table}"),
                 adduct_weights = as.data.frame(read.csv("${adduct_weights}")),
                 compound_table = load_compound_table_parquet("${compound_table}"),
