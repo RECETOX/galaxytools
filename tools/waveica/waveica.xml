@@ -1,9 +1,9 @@
-<tool id="waveica" name="WaveICA" version="0.1.0+galaxy2" python_template_version="3.5">
+<tool id="waveica" name="WaveICA" version="0.1.0+galaxy3" python_template_version="3.5">
 
     <description>removal of batch effects for untargeted metabolomics data</description>
     
     <requirements>
-        <container type="docker">recetox/waveica:0.1.0-recetox0</container>
+        <requirement type="package" version="0.1.0">r-recetox-waveica</requirement>
     </requirements>
 
     <command detect_errors="aggressive"><![CDATA[
