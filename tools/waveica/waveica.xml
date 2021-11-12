@@ -3,7 +3,7 @@
     <description>removal of batch effects for untargeted metabolomics data</description>
     
     <requirements>
-        <container type="docker">recetox/waveica:0.1.0-recetox0</container>
+        <requirement type="package" version="0.1.0">r-recetox-waveica</requirement>
     </requirements>
 
     <command detect_errors="aggressive"><![CDATA[
