@@ -19,7 +19,7 @@
 
     <inputs>
         <param label="Input spectra file" name="input_file" type="data" format="msp" help="Path to query spectra file in MSP format." />
-        <param name="services" type="select" label="Available services" multiple="true" display="checkboxes">
+        <param name="services" type="select" label="Available services" multiple="true" display="checkboxes" optional="true">
             <option value="PubChem">PubChem</option>
             <option value="CTS">CTS</option>
             <option value="CIR">CIR</option>

@@ -21,7 +21,7 @@ def main(argv):
     app.curate_spectra()
 
     # specify requested services
-    services = eval(args.services)
+    services = args.services.split(',')
 
     # execute without jobs parameter to run all possible jobs
     asyncio.run(app.annotate_spectra(services))
