@@ -1,0 +1,45 @@
+<tool id="msmetaenhancer" name="MSMetaEnhancer" version="0.1.0+galaxy0">
+    <description>annotate MS data</description>
+    <requirements>
+        <requirement type="package" version="0.1.0">msmetaenhancer</requirement>
+    </requirements>
+
+    <command detect_errors="exit_code"><![CDATA[
+        sh ${msmetaenhancer_python_cli}
+    ]]> </command>
+
+    <configfiles>
+        <configfile name="msmetaenhancer_python_cli">
+            python3 ${__tool_directory__}/msmetaenhancer_wrapper.py \
+            --input_file "$input_file" \
+            --output_file "$output_file" \
+            --services "$services"
+        </configfile>
+    </configfiles>
+
+    <inputs>
+        <param label="Input spectra file" name="input_file" type="data" format="msp" help="Path to query spectra file in MSP format." />
+        <param name="services" type="select" label="Available services" multiple="true" display="checkboxes">
+            <option value="PubChem">PubChem</option>
+            <option value="CTS">CTS</option>
+            <option value="CIR">CIR</option>
+            <option value="NLM">NLM</option>
+        </param>
+    </inputs>
+
+    <outputs>
+        <data label="Output spectra file" name="output_file" format="msp" />
+    </outputs>
+
+    <help><![CDATA[
+    Documentation
+        For documentation of the tool see https://msmetaenhancer.readthedocs.io/.
+
+    Upstream Tools
+        TBD
+
+    Downstream Tools
+        TBD
+    ]]></help>
+
+</tool>
