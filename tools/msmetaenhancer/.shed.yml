@@ -1,0 +1,12 @@
+owner: recetox
+remote_repository_url: "https://github.com/RECETOX/galaxytools/tree/master/tools/msmetaenhanceer"
+homepage_url: "https://github.com/RECETOX/MSMetaEnhancer"
+categories:
+  - Metabolomics
+repositories:
+  riassigner:
+    description: "MSMetaEnhancer is a python tool for annotation of MS data."
+    include:
+      - msmetaenhanceer.xml
+      - msmetaenhanceer_wrapper.py
+      - test-data
