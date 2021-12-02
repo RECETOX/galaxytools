@@ -38,7 +38,7 @@
 
     <tests>
         <test>
-            <param name="data" value="input_data.csv" ftype="csv" />
+            <param name="data" value="input_data_nobatch.csv" ftype="csv" />
             <param name="wavelet_filter" value="d" />
             <param name="filter_length" value="2" />
             <param name="k" value="20" />
