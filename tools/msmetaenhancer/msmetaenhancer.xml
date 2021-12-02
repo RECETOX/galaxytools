@@ -31,6 +31,14 @@
         <data label="Output spectra file" name="output_file" format="msp" />
     </outputs>
 
+    <tests>
+        <test>
+            <param name="input_file" value="sample.msp" ftype="msp" />
+            <param name="services" value="PubChem,CTS,CIR,NLM"/>
+            <output name="output_file" file="sample_out.msp" ftype="msp"/>
+        </test>
+    </tests>
+
     <help><![CDATA[
     Documentation
         For documentation of the tool see https://msmetaenhancer.readthedocs.io/.
