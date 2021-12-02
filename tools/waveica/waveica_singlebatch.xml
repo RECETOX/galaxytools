@@ -46,12 +46,6 @@
             <param name="cutoff" value="0" />
             <output name="normalized_data" file="normalized_data_nobatch.tsv" /> 
         </test>
-        <test expect_failure="true">
-            <param name="data" value="na_data.csv" ftype="csv" />
-        </test>
-        <test expect_failure="true">
-            <param name="data" value="incomplete_metadata_data.csv" ftype="csv" />
-        </test>
     </tests>
 
     <help><![CDATA[
