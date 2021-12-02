@@ -1,0 +1,115 @@
+<tool id="waveica_singlebatch" name="WaveICA (single batch)" version="0.2.0+galaxy0" python_template_version="3.5">
+
+    <description>removal of batch effects for untargeted metabolomics data without brach information</description>
+    
+    <requirements>
+        <requirement type="package" version="0.2.0">r-recetox-waveica</requirement>
+    </requirements>
+
+    <command detect_errors="aggressive"><![CDATA[
+        Rscript
+            -e 'source("${__tool_directory__}/waveica_wrapper.R")'
+
+            -e 'normalized_data <- waveica_singlebatch(
+                data = "$data",
+                wavelet_filter = "$wf.wavelet_filter",
+                wavelet_length = "$wf.wavelet_length",
+                k = $k,
+                alpha = $alpha,
+                cutoff = $cutoff,
+                exclude_blanks = $exclude_blanks
+            )'
+
+            -e 'store_data(normalized_data,"$normalized_data")'
+    ]]></command>
+
+    <inputs>
+        <param type="data" name="data" label="Feature table" format="csv" help=""/>
+        <conditional name="wf">
+            <param type="select" name="wavelet_filter" label="Wavelet transform filter" help="wavelet function and filter length [1] (see footnotes for more details)">
+                <option value="d" selected="True">Daubechies</option>
+                <option value="la" >Least Asymetric</option>
+                <option value="bl" >Best Localized</option>
+                <option value="c" >Coiflet</option>
+            </param>
+            <when value="d">
+                <param name="wavelet_length" type="select" label="filter length">
+                    <option value="2" selected="True">2</option>
+                    <option value="4">4</option>
+                    <option value="6">6</option>
+                    <option value="8">8</option>
+                    <option value="10">10</option>
+                    <option value="12">12</option>
+                    <option value="14">14</option>
+                    <option value="16">16</option>
+                    <option value="18">18</option>
+                    <option value="20">20</option>
+                </param>
+            </when>
+            <when value="la">
+                <param name="wavelet_length" type="select" label="filter length">
+                    <option value="8">8</option>
+                    <option value="10">10</option>
+                    <option value="12">12</option>
+                    <option value="14">14</option>
+                    <option value="16">16</option>
+                    <option value="18">18</option>
+                    <option value="20">20</option>
+                </param>
+            </when>
+            <when value="bl">
+                <param name="wavelet_length" type="select" label="filter length">
+                    <option value="14">14</option>
+                    <option value="18">18</option>
+                    <option value="20">20</option>
+                </param>
+            </when>
+            <when value="c">
+                <param name="wavelet_length" type="select" label="filter length">
+                    <option value="6">6</option>
+                    <option value="12">12</option>
+                    <option value="18">18</option>
+                    <option value="24">24</option>
+                    <option value="30">30</option>
+                </param>
+            </when>
+        </conditional>
+        <param type="integer" value="20" name="k" label="Number of components to decompose" help="maximal component that ICA decomposes"/>
+        <param type="float" value="0" name="alpha" label="Alpha" help="trade-off value between the independence of samples (temporal ICA) and variables (spatial ICA), should be between 0 and 1"/>
+        <param type="float" value="0.1" name="cutoff" label="Cutoff" help="threshold of the variation explained by the injection order for independent components, should be between 0 and 1"/>
+        <param name="exclude_blanks" type="boolean" checked="false" truevalue="TRUE" falsevalue="FALSE" label="Remove blanks" help="Excludes blank samples from the output" />
+    </inputs>
+
+    <outputs>
+        <data name="normalized_data" format="tsv" />
+    </outputs>
+
+    <tests>
+        <test>
+            <param name="data" value="input_data.csv" ftype="csv" />
+            <param name="wavelet_filter" value="d" />
+            <param name="filter_length" value="2" />
+            <param name="k" value="20" />
+            <param name="alpha" value="0" />
+            <param name="cutoff" value="0" />
+            <output name="normalized_data" file="normalized_data_nobatch.tsv" /> 
+        </test>
+        <test expect_failure="true">
+            <param name="data" value="na_data.csv" ftype="csv" />
+        </test>
+        <test expect_failure="true">
+            <param name="data" value="incomplete_metadata_data.csv" ftype="csv" />
+        </test>
+    </tests>
+
+    <help><![CDATA[
+        .. rubric:: **Footnotes**
+        .. [1] for details on wavelet filter parameters refer to R `wavelets::wt.filter <https://www.rdocumentation.org/packages/wavelets/versions/0.3-0.2/topics/wt.filter>`_;
+
+    ]]></help>
+
+    <citations>
+        <citation type="doi">10.1016/j.aca.2019.02.010</citation>
+    </citations>
+
+</tool>
