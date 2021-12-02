@@ -2,7 +2,8 @@
     <macros>
         <import>waveica_macros.xml</import>
     </macros>
-    
+    <expand macro="creator" />
+
     <description>removal of batch effects for untargeted metabolomics data</description>
     
     <expand macro="requirements" />

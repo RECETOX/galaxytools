@@ -1,4 +1,11 @@
 <macros>
+    <xml name="creator">
+        <creator>
+            <organization
+                url="https://www.recetox.muni.cz"
+                name="RECETOX MUNI" />
+        </creator>
+    </xml>
     <xml name="requirements">
         <requirements>
             <requirement type="package" version="0.2.0">r-recetox-waveica</requirement>
