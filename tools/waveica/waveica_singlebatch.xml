@@ -30,7 +30,7 @@
         <expand macro="wf" />
         <expand macro="k" />
         <expand macro="alpha" />
-        <param type="float" value="0.1" name="cutoff" label="Cutoff" help="threshold of the variation explained by the injection order for independent components, should be between 0 and 1"/>
+        <param type="float" value="0" name="cutoff" label="Cutoff" help="threshold of the variation explained by the injection order for independent components, should be between 0 and 1"/>
         <expand macro="exclude_blanks" />
     </inputs>
 
