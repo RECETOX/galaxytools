@@ -11,13 +11,7 @@ waveica <- function(data,
   data <- read.csv(data, header = TRUE)
 
   required_columns <- c("sampleName", "class", "sampleType", "injectionOrder", "batch")
-  if (anyNA(data)) {
-    stop("Error: dataframe cannot contain NULL values!
-Make sure that your dataframe does not contain empty cells")
-  } else if (!all(required_columns %in% colnames(data))) {
-    stop("Error: missing metadata!
-Make sure that the following columns are present in your dataframe: [sampleName, class, sampleType, injectionOrder, batch]")
-  }
+  verify_input_dataframe(data, required_columns)
 
   # sort data by injection order
   data <- data[order(data[, "batch"],
@@ -67,8 +61,7 @@ waveica_singlebatch <- function(data,
 
   required_columns <- c("sampleName", "class", "sampleType", "injectionOrder")
   optional_columns <- c("batch")
-
-  verify_input(data)
+  verify_input_dataframe(data, required_columns)
 
   data <- sort_by_injection_order(data)
 
@@ -94,6 +87,17 @@ waveica_singlebatch <- function(data,
   }
 
   return(data)
+}
+
+
+verify_input_dataframe <- function(data, required_columns) {
+  if (anyNA(data)) {
+    stop("Error: dataframe cannot contain NULL values!
+Make sure that your dataframe does not contain empty cells")
+  } else if (!all(required_columns %in% colnames(data))) {    
+    stop("Error: missing metadata!
+Make sure that the following columns are present in your dataframe: ", paste(required_columns, collapse = ", "))
+  }
 }
 
 
