@@ -105,7 +105,7 @@ verify_input_dataframe <- function(data, required_columns) {
   if (anyNA(data)) {
     stop("Error: dataframe cannot contain NULL values!
 Make sure that your dataframe does not contain empty cells")
-  } else if (!all(required_columns %in% colnames(data))) {    
+  } else if (!all(required_columns %in% colnames(data))) {
     stop("Error: missing metadata!
 Make sure that the following columns are present in your dataframe: ", paste(required_columns, collapse = ", "))
   }

@@ -1,17 +1,18 @@
-name: waveica
 owner: recetox
 repositories:
   waveica:
     description: Removal of batch effects for untargeted metabolomics data.
     include:
       - waveica.xml
+      - waveica_macros.xml
   waveica_singlebatch:
     description: Removal of batch effects for untargeted metabolomics data without batch information.
     include:
       - waveica_singlebatch.xml
+      - waveica_macros.xml
 long_description: Removal of batch effects for large-scale untargeted metabolomics data based on wavelet analysis.
-homepage_url: "https://github.com/dengkuistat/WaveICA/"
 remote_repository_url: "https://github.com/RECETOX/galaxytools/tree/master/tools/waveica"
+homepage_url: "https://github.com/dengkuistat/WaveICA/"
 categories:
   - Metabolomics
 type: unrestricted

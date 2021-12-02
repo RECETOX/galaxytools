@@ -1,9 +1,9 @@
 <tool id="waveica_singlebatch" name="WaveICA (single batch)" version="@TOOL_VERSION@+galaxy0" python_template_version="3.5">
+    <description>removal of batch effects for untargeted metabolomics data without brach information</description>
     <macros>
         <import>waveica_macros.xml</import>
     </macros>
     <expand macro="creator" />
-    <description>removal of batch effects for untargeted metabolomics data without brach information</description>
     
     <requirements>
             <requirement type="package" version="@TOOL_VERSION@">r-recetox-waveica</requirement>
