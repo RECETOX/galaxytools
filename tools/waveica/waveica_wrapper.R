@@ -54,6 +54,49 @@ Make sure that the following columns are present in your dataframe: [sampleName,
 }
 
 
+waveica_singlebatch <- function(data,
+                                wavelet_filter,
+                                wavelet_length,
+                                k,
+                                alpha,
+                                cutoff,
+                                exclude_blanks) {
+
+  # get input from the Galaxy, preprocess data
+  data <- read.csv(data, header = TRUE)
+
+  required_columns <- c("sampleName", "class", "sampleType", "injectionOrder")
+  optional_columns <- c("batch")
+
+  verify_input(data)
+
+  data <- sort_by_injection_order(data)
+
+  feature_columns <- colnames(data)[!colnames(data) %in% c(required_columns, optional_columns)]
+  features <- data[, feature_columns]
+  injection_order <- data$injectionOrder
+
+  # run WaveICA
+  features <- recetox.waveica::waveica_nonbatchwise(
+    data = features,
+    wf = get_wf(wavelet_filter, wavelet_length),
+    injection_order = injection_order,
+    K = k,
+    alpha = alpha,
+    cutoff = cutoff
+  )
+
+  data[, feature_columns] <- features
+
+  # remove blanks from dataset
+  if (exclude_blanks) {
+    data <- exclude_group(data, group)
+  }
+
+  return(data)
+}
+
+
 # Match group labels with [blank/sample/qc] and enumerate them
 enumerate_groups <- function(group) {
   group[grepl("blank", tolower(group))] <- 0
