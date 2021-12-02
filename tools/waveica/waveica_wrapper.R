@@ -22,7 +22,7 @@ waveica <- function(data,
   batch <- data$batch
 
   # run WaveICA
-  features <- WaveICA::WaveICA(
+  features <- recetox.waveica::waveica(
     data = features,
     wf = get_wf(wavelet_filter, wavelet_length),
     batch = batch,
@@ -33,7 +33,7 @@ waveica <- function(data,
     alpha = alpha
   )
 
-  data[, feature_columns] <- features$data_wave
+  data[, feature_columns] <- features
 
   # remove blanks from dataset
   if (exclude_blanks) {
