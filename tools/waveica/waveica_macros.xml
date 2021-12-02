@@ -1,0 +1,76 @@
+<macros>
+    <xml name="requirements">
+        <requirements>
+            <requirement type="package" version="0.2.0">r-recetox-waveica</requirement>
+        </requirements>
+    </xml>
+    <xml name="data">
+        <param type="data" name="data" label="Feature table" format="csv" help=""/>
+    </xml>
+    <xml name="k">
+        <param type="integer" value="20" name="k" label="Number of components to decompose" help="maximal component that ICA decomposes"/>
+    </xml>
+    <xml name="alpha">
+        <param type="float" value="0" name="alpha" label="Alpha" help="trade-off value between the independence of samples (temporal ICA) and variables (spatial ICA), should be between 0 and 1"/>
+    </xml>
+    <xml name="exclude_blanks">
+        <param name="exclude_blanks" type="boolean" checked="false" truevalue="TRUE" falsevalue="FALSE" label="Remove blanks" help="Excludes blank samples from the output" />
+    </xml>
+    <xml name="wf">
+        <conditional name="wf">
+            <param type="select" name="wavelet_filter" label="Wavelet transform filter" help="wavelet function and filter length [1] (see footnotes for more details)">
+                <option value="d" selected="True">Daubechies</option>
+                <option value="la" >Least Asymetric</option>
+                <option value="bl" >Best Localized</option>
+                <option value="c" >Coiflet</option>
+            </param>
+            <when value="d">
+                <param name="wavelet_length" type="select" label="filter length">
+                    <option value="2" selected="True">2</option>
+                    <option value="4">4</option>
+                    <option value="6">6</option>
+                    <option value="8">8</option>
+                    <option value="10">10</option>
+                    <option value="12">12</option>
+                    <option value="14">14</option>
+                    <option value="16">16</option>
+                    <option value="18">18</option>
+                    <option value="20">20</option>
+                </param>
+            </when>
+            <when value="la">
+                <param name="wavelet_length" type="select" label="filter length">
+                    <option value="8">8</option>
+                    <option value="10">10</option>
+                    <option value="12">12</option>
+                    <option value="14">14</option>
+                    <option value="16">16</option>
+                    <option value="18">18</option>
+                    <option value="20">20</option>
+                </param>
+            </when>
+            <when value="bl">
+                <param name="wavelet_length" type="select" label="filter length">
+                    <option value="14">14</option>
+                    <option value="18">18</option>
+                    <option value="20">20</option>
+                </param>
+            </when>
+            <when value="c">
+                <param name="wavelet_length" type="select" label="filter length">
+                    <option value="6">6</option>
+                    <option value="12">12</option>
+                    <option value="18">18</option>
+                    <option value="24">24</option>
+                    <option value="30">30</option>
+                </param>
+            </when>
+        </conditional>
+    </xml>
+
+    <xml name="outputs">
+        <outputs>
+            <data name="normalized_data" format="tsv" />
+        </outputs>
+    </xml>
+</macros>
