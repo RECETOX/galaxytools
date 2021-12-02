@@ -77,6 +77,8 @@
         +---------------+--------+------------+----------------+-------+------------+--------------+-------------+-------------+-----+
 
 
+        + The required columns are **sampleName**, **class**, **sampleType**, **injectionOrder**, and **batch** plus the **features** that you want to normalize. 
+        + The presence of any additional columns (except features) will result in incorrect batch correction or job failure. 
         + the input table must not contain missing values. Missing intensities must be filled with 0.
         + **sampleType** column accepts three possible values: [QC, sample, blank] (case insensitive).
         + **class** column is used to denote a biological group of a sample (e.g., positive/negative species). The column accepts any values.
