@@ -1,15 +1,12 @@
 <macros>
+    <token name="@TOOL_VERSION@">0.2.0</token>
+
     <xml name="creator">
         <creator>
             <organization
                 url="https://www.recetox.muni.cz"
                 name="RECETOX MUNI" />
         </creator>
-    </xml>
-    <xml name="requirements">
-        <requirements>
-            <requirement type="package" version="0.2.0">r-recetox-waveica</requirement>
-        </requirements>
     </xml>
     <xml name="data">
         <param type="data" name="data" label="Feature table" format="csv" help=""/>
