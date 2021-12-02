@@ -13,11 +13,7 @@ waveica <- function(data,
   required_columns <- c("sampleName", "class", "sampleType", "injectionOrder", "batch")
   verify_input_dataframe(data, required_columns)
 
-  # sort data by injection order
-  data <- data[order(data[, "batch"],
-    data[, "injectionOrder"],
-    decreasing = FALSE
-  ), ]
+  data <- sort_by_injection_order(data)
 
   # separate data into features, batch and group
   feature_columns <- colnames(data)[!colnames(data) %in% required_columns]
@@ -86,6 +82,21 @@ waveica_singlebatch <- function(data,
     data <- exclude_group(data, group)
   }
 
+  return(data)
+}
+
+
+sort_by_injection_order <- function(data) {
+  if ("batch" %in% colnames(data)) {
+    data <- data[order(data[, "batch"],
+      data[, "injectionOrder"],
+      decreasing = FALSE
+    ), ]
+  } else {
+    data <- data[order(data[, "injectionOrder"],
+      decreasing = FALSE
+    ), ]
+  }
   return(data)
 }
 
