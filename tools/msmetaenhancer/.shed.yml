@@ -4,9 +4,9 @@ homepage_url: "https://github.com/RECETOX/MSMetaEnhancer"
 categories:
   - Metabolomics
 repositories:
-  riassigner:
+  msmetaenhancer:
     description: "MSMetaEnhancer is a python tool for annotation of MS data."
     include:
-      - msmetaenhanceer.xml
-      - msmetaenhanceer_wrapper.py
+      - msmetaenhancer.xml
+      - msmetaenhancer_wrapper.py
       - test-data
