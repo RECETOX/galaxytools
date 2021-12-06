@@ -1,8 +1,8 @@
 import argparse
-import sys
 import asyncio
-from tempfile import NamedTemporaryFile
+import sys
 from shutil import copy
+from tempfile import NamedTemporaryFile
 
 
 from MSMetaEnhancer import Application
