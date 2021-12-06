@@ -1,0 +1,47 @@
+<macros>
+    <token name="@TOOL_VERSION@">0.1.0</token>
+    <xml name="creator">
+        <creator>
+            <organization
+                url="https://www.recetox.muni.cz/"
+                name="RECETOX MUNI" />
+        </creator>
+    </xml>
+    <help><![CDATA[
+    Documentation
+
+    -- if no jobs are specified, all possible ones will be executed in (pseudo) random order
+
+        For detailed documentation of the tool see https://msmetaenhancer.readthedocs.io/.
+    ]]></help>
+
+    <xml name="job_options">
+        <option value="('PubChem', 'inchi', 'formula')">PubChem: inchi -> formula</option>
+        <option value="('PubChem', 'inchi', 'inchikey')">PubChem: inchi -> inchikey</option>
+        <option value="('PubChem', 'inchi', 'iupac_name')">PubChem: inchi -> iupac_name</option>
+        <option value="('PubChem', 'inchi', 'smiles')">PubChem: inchi -> smiles</option>
+        <option value="('PubChem', 'name', 'formula')">PubChem: name -> formula</option>
+        <option value="('PubChem', 'name', 'inchi')">PubChem: name -> inchi</option>
+        <option value="('PubChem', 'name', 'inchikey')">PubChem: name -> inchikey</option>
+        <option value="('PubChem', 'name', 'iupac_name')">PubChem: name -> iupac_name</option>
+        <option value="('PubChem', 'name', 'smiles')">PubChem: name -> smiles</option>
+        <option value="('CIR', 'casno', 'smiles')">CIR: casno -> smiles</option>
+        <option value="('CIR', 'inchikey', 'casno')">CIR: inchikey -> casno</option>
+        <option value="('CIR', 'inchikey', 'formula')">CIR: inchikey -> formula</option>
+        <option value="('CIR', 'inchikey', 'inchi')">CIR: inchikey -> inchi</option>
+        <option value="('CIR', 'inchikey', 'smiles')">CIR: inchikey -> smiles</option>
+        <option value="('CIR', 'smiles', 'inchikey')">CIR: smiles -> inchikey</option>
+        <option value="('CTS', 'casno', 'inchikey')">CTS: casno -> inchikey</option>
+        <option value="('CTS', 'inchikey', 'inchi')">CTS: inchikey -> inchi</option>
+        <option value="('CTS', 'inchikey', 'iupac_name')">CTS: inchikey -> iupac_name</option>
+        <option value="('CTS', 'inchikey', 'name')">CTS: inchikey -> name</option>
+        <option value="('CTS', 'name', 'inchikey')">CTS: name -> inchikey</option>
+        <option value="('NLM', 'inchikey', 'casno')">NLM: inchikey -> casno</option>
+        <option value="('NLM', 'inchikey', 'formula')">NLM: inchikey -> formula</option>
+        <option value="('NLM', 'inchikey', 'name')">NLM: inchikey -> name</option>
+        <option value="('NLM', 'name', 'casno')">NLM: name -> casno</option>
+        <option value="('NLM', 'name', 'formula')">NLM: name -> formula</option>
+        <option value="('NLM', 'name', 'inchikey')">NLM: name -> inchikey</option>
+    </xml>
+
+</macros>

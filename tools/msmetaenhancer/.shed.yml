@@ -10,3 +10,4 @@ repositories:
       - msmetaenhancer.xml
       - msmetaenhancer_wrapper.py
       - test-data
+      - macros.xml
