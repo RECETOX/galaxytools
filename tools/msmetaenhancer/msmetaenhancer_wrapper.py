@@ -12,7 +12,7 @@ def main(argv):
     parser = argparse.ArgumentParser(description="Annotate MSP file.")
     parser.add_argument("--input_file", type=str, help="Path to query spectra file in MSP format.")
     parser.add_argument("--output_file", type=str, help="Path to output spectra file.")
-    parser.add_argument("--services", type=str, help="Sequence of services to be used.")
+    parser.add_argument("--jobs", type=str, help="Sequence of conversion jobs to be used.")
     args = parser.parse_args()
 
     app = Application()
@@ -23,11 +23,15 @@ def main(argv):
     # curate given metadata
     app.curate_spectra()
 
-    # specify requested services
-    services = args.services.split(',')
+    # specify requested services and jobs
+    services = ['PubChem', 'CTS', 'CIR', 'NLM']
 
-    # execute without jobs parameter to run all possible jobs
-    asyncio.run(app.annotate_spectra(services))
+    if len(args.jobs) != 0:
+        jobs = list(eval(args.jobs))
+        asyncio.run(app.annotate_spectra(services, jobs))
+    else:
+        # execute without jobs parameter to run all possible jobs
+        asyncio.run(app.annotate_spectra(services))
 
     # export .msp file
     temp_file = NamedTemporaryFile(suffix=".msp")

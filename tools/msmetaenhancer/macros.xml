@@ -7,13 +7,24 @@
                 name="RECETOX MUNI" />
         </creator>
     </xml>
-    <help><![CDATA[
+    <token name="@HELP@">
+        <![CDATA[
     Documentation
 
-    -- if no jobs are specified, all possible ones will be executed in (pseudo) random order
+        The tool executes a series of conversion jobs on a given mass spectra file.
+
+        The jobs specify service, source and target attribute, meaning that the service will use the source attribute
+        to determine the target attribute. For example, the job `PubChem: inchi -> smiles` uses PubChem to convert
+        InChI to SMILES.
+
+        The performance can be adjusted by specifying the order of jobs (Order-specific conversion jobs section), which
+        can influence the result. Alternatively, jobs can also be selected without specifying the order
+        (Random order conversion jobs section). Both approaches can be combined. If no jobs are specified,
+        all possible jobs will be executed in (pseudo) random order.
 
         For detailed documentation of the tool see https://msmetaenhancer.readthedocs.io/.
-    ]]></help>
+    ]]>
+    </token>
 
     <xml name="job_options">
         <option value="('PubChem', 'inchi', 'formula')">PubChem: inchi -> formula</option>

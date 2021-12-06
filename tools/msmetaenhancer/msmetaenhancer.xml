@@ -1,8 +1,13 @@
 <tool id="msmetaenhancer" name="MSMetaEnhancer" version="0.1.0+galaxy0">
     <description>annotate MS data</description>
+    <options sanitize="False"/>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
     <requirements>
-        <requirement type="package" version="0.1.0">msmetaenhancer</requirement>
+        <requirement type="package" version="@TOOL_VERSION@">msmetaenhancer</requirement>
     </requirements>
+    <expand macro="creator"/>
 
     <command detect_errors="exit_code"><![CDATA[
         sh ${msmetaenhancer_python_cli}
@@ -13,22 +18,37 @@
             python3 ${__tool_directory__}/msmetaenhancer_wrapper.py \
             --input_file "$input_file" \
             --output_file "$output_file" \
-            --services "$services"
+            #if len($ordered_jobs) != 0:
+                #set ordered_jobs = ",".join([str($job.ordered_jobs_select) for $job in $ordered_jobs]) + ","
+            #else:
+                #set ordered_jobs = ""
+            #end if
+            #if $jobs != 'None':
+                #set random_jobs = str($jobs)
+            #else:
+                #set random_jobs = ""
+            #end if
+            #set all_jobs = str($ordered_jobs) + str($random_jobs)
+            --jobs "$all_jobs"
         </configfile>
     </configfiles>
 
     <inputs>
         <param label="Input spectra file" name="input_file" type="data" format="msp" help="Path to query spectra file in MSP format." />
-        <param name="services" type="select" label="Available services" multiple="true" display="checkboxes" optional="true">
-            <option value="PubChem">PubChem</option>
-            <option value="CTS">CTS</option>
-            <option value="CIR">CIR</option>
-            <option value="NLM">NLM</option>
+
+        <repeat name="ordered_jobs" title="Order-specific conversion jobs">
+            <param name="ordered_jobs_select" type="select" label="Available conversion jobs" multiple="false" optional="true">
+                <expand macro="job_options" />
+            </param>
+        </repeat>
+
+        <param name="jobs" type="select" label="Random order conversion jobs" multiple="true" optional="true">
+            <expand macro="job_options" />
         </param>
     </inputs>
 
     <outputs>
-        <data label="Output spectra file" name="output_file" format="msp" />
+        <data label="MSMetaEnhancer on ${on_string}" name="output_file" format="msp" />
     </outputs>
 
     <tests>
@@ -39,15 +59,10 @@
         </test>
     </tests>
 
-    <help><![CDATA[
-    Documentation
-        For documentation of the tool see https://msmetaenhancer.readthedocs.io/.
-
-    Upstream Tools
-        TBD
-
-    Downstream Tools
-        TBD
-    ]]></help>
+    <help>
+        <![CDATA[
+        @HELP@
+        ]]>
+    </help>
 
 </tool>
