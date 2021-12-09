@@ -1,4 +1,4 @@
-<tool id="msmetaenhancer" name="MSMetaEnhancer" version="0.1.0+galaxy0">
+<tool id="msmetaenhancer" name="MSMetaEnhancer" version="@TOOL_VERSION@+galaxy0">
     <description>annotate MS data</description>
     <options sanitize="False"/>
     <macros>
@@ -34,7 +34,7 @@
     </configfiles>
 
     <inputs>
-        <param label="Input spectra file" name="input_file" type="data" format="msp" help="Path to query spectra file in MSP format." />
+        <param label="Input spectra file" name="input_file" type="data" format="msp" help="Dataset with spectra in MSP format." />
 
         <repeat name="ordered_jobs" title="Order-specific conversion jobs">
             <param name="ordered_jobs_select" type="select" label="Available conversion jobs" multiple="false" optional="true">
@@ -54,7 +54,6 @@
     <tests>
         <test>
             <param name="input_file" value="sample.msp" ftype="msp" />
-            <param name="services" value="PubChem,CTS,CIR,NLM"/>
             <output name="output_file" file="sample_out.msp" ftype="msp"/>
         </test>
     </tests>
