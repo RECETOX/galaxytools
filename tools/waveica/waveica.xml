@@ -91,7 +91,8 @@
     <help><![CDATA[
         **Description**
 
-        Removal of batch effects for large-scale untargeted metabolomics data based on wavelet analysis. The WaveICA R package provides a new algorithm to removing batch effects for metabolomics data.
+        Removal of batch effects for large-scale untargeted metabolomics data based on wavelet analysis and independent component analysis. 
+        The WaveICA method uses the time trend of samples over the injection order, decomposes the original data into new multi-scale features, extracts and removes the batch effect resulting in normalized intensities across samples.
         
         The input is an intensity-by-feature table with metadata in the following format: 
 
