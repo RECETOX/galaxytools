@@ -27,32 +27,32 @@
     </token>
 
     <xml name="job_options">
-        <option value="('PubChem', 'inchi', 'formula')">PubChem: inchi -> formula</option>
-        <option value="('PubChem', 'inchi', 'inchikey')">PubChem: inchi -> inchikey</option>
-        <option value="('PubChem', 'inchi', 'iupac_name')">PubChem: inchi -> iupac_name</option>
-        <option value="('PubChem', 'inchi', 'smiles')">PubChem: inchi -> smiles</option>
-        <option value="('PubChem', 'name', 'formula')">PubChem: name -> formula</option>
-        <option value="('PubChem', 'name', 'inchi')">PubChem: name -> inchi</option>
-        <option value="('PubChem', 'name', 'inchikey')">PubChem: name -> inchikey</option>
-        <option value="('PubChem', 'name', 'iupac_name')">PubChem: name -> iupac_name</option>
-        <option value="('PubChem', 'name', 'smiles')">PubChem: name -> smiles</option>
-        <option value="('CIR', 'casno', 'smiles')">CIR: casno -> smiles</option>
-        <option value="('CIR', 'inchikey', 'casno')">CIR: inchikey -> casno</option>
-        <option value="('CIR', 'inchikey', 'formula')">CIR: inchikey -> formula</option>
-        <option value="('CIR', 'inchikey', 'inchi')">CIR: inchikey -> inchi</option>
-        <option value="('CIR', 'inchikey', 'smiles')">CIR: inchikey -> smiles</option>
-        <option value="('CIR', 'smiles', 'inchikey')">CIR: smiles -> inchikey</option>
-        <option value="('CTS', 'casno', 'inchikey')">CTS: casno -> inchikey</option>
-        <option value="('CTS', 'inchikey', 'inchi')">CTS: inchikey -> inchi</option>
-        <option value="('CTS', 'inchikey', 'iupac_name')">CTS: inchikey -> iupac_name</option>
-        <option value="('CTS', 'inchikey', 'name')">CTS: inchikey -> name</option>
-        <option value="('CTS', 'name', 'inchikey')">CTS: name -> inchikey</option>
-        <option value="('NLM', 'inchikey', 'casno')">NLM: inchikey -> casno</option>
-        <option value="('NLM', 'inchikey', 'formula')">NLM: inchikey -> formula</option>
-        <option value="('NLM', 'inchikey', 'name')">NLM: inchikey -> name</option>
-        <option value="('NLM', 'name', 'casno')">NLM: name -> casno</option>
-        <option value="('NLM', 'name', 'formula')">NLM: name -> formula</option>
-        <option value="('NLM', 'name', 'inchikey')">NLM: name -> inchikey</option>
+        <option value="('inchi', 'formula', 'PubChem')">PubChem: inchi -> formula</option>
+        <option value="('inchi', 'inchikey', 'PubChem')">PubChem: inchi -> inchikey</option>
+        <option value="('inchi', 'iupac_name', 'PubChem')">PubChem: inchi -> iupac_name</option>
+        <option value="('inchi', 'smiles', 'PubChem')">PubChem: inchi -> smiles</option>
+        <option value="('name', 'formula', 'PubChem')">PubChem: name -> formula</option>
+        <option value="('name', 'inchi', 'PubChem')">PubChem: name -> inchi</option>
+        <option value="('name', 'inchikey', 'PubChem')">PubChem: name -> inchikey</option>
+        <option value="('name', 'iupac_name', 'PubChem')">PubChem: name -> iupac_name</option>
+        <option value="('name', 'smiles', 'PubChem')">PubChem: name -> smiles</option>
+        <option value="('casno', 'smiles', 'CIR')">CIR: casno -> smiles</option>
+        <option value="('inchikey', 'casno', 'CIR')">CIR: inchikey -> casno</option>
+        <option value="('inchikey', 'formula', 'CIR')">CIR: inchikey -> formula</option>
+        <option value="('inchikey', 'inchi', 'CIR')">CIR: inchikey -> inchi</option>
+        <option value="('inchikey', 'smiles', 'CIR')">CIR: inchikey -> smiles</option>
+        <option value="('smiles', 'inchikey', 'CIR')">CIR: smiles -> inchikey</option>
+        <option value="('casno', 'inchikey', 'CTS')">CTS: casno -> inchikey</option>
+        <option value="('inchikey', 'inchi', 'CTS')">CTS: inchikey -> inchi</option>
+        <option value="('inchikey', 'iupac_name', 'CTS')">CTS: inchikey -> iupac_name</option>
+        <option value="('inchikey', 'name', 'CTS')">CTS: inchikey -> name</option>
+        <option value="('name', 'inchikey', 'CTS')">CTS: name -> inchikey</option>
+        <option value="('inchikey', 'casno', 'NLM')">NLM: inchikey -> casno</option>
+        <option value="('inchikey', 'formula', 'NLM')">NLM: inchikey -> formula</option>
+        <option value="('inchikey', 'name', 'NLM')">NLM: inchikey -> name</option>
+        <option value="('name', 'casno', 'NLM')">NLM: name -> casno</option>
+        <option value="('name', 'formula', 'NLM')">NLM: name -> formula</option>
+        <option value="('name', 'inchikey', 'NLM')">NLM: name -> inchikey</option>
     </xml>
 
 </macros>
