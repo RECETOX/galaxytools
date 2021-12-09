@@ -12,29 +12,47 @@
         Rscript
             -e 'source("${__tool_directory__}/waveica_wrapper.R")'
 
+            #if $batch_correction.mode == "batchwise":
             -e 'normalized_data <- waveica(
                 data = "$data",
                 wavelet_filter = "$wf.wavelet_filter",
                 wavelet_length = "$wf.wavelet_length",
                 k = $k,
-                t = $t,
-                t2 = $t2,
+                t = $batch_correction.t,
+                t2 = $batch_correction.t2,
                 alpha = $alpha,
                 exclude_blanks = $exclude_blanks
             )'
+            #else if $batch_correction.mode == "single_batch":
+            -e 'normalized_data <- waveica_singlebatch(
+                data = "$data",
+                wavelet_filter = "$wf.wavelet_filter",
+                wavelet_length = "$wf.wavelet_length",
+                k = $k,
+                alpha = $alpha,
+                cutoff = $batch_correction.cutoff,
+                exclude_blanks = $exclude_blanks
+            )'
+            #end if
 
             -e 'store_data(normalized_data,"$normalized_data")'
     ]]></command>
 
     <inputs>
-        <expand macro="data" />
+        <expand macro="general_parameters" />
         <expand macro="wf" />
-        <expand macro="k" />
-        <param type="float" value="0.05" name="t" label="Batch-association threshold" help="threshold to consider a component associate with the batch,
- should be between 0 and 1"/>
-        <param type="float" value="0.05" name="t2" label="Group-association threshold" help="threshold to consider a component associate with the group,
- should be between 0 and 1"/>
-        <expand macro="alpha" />
+        <conditional name="batch_correction">
+            <param name="mode" type="select" label="Batch correction mode" help="'multiple batches' takes into account inter- and intrabatch intensity drift; 'single batch' relies only on the injection order of the samples and requires no batch information [2]">
+                <option value="batchwise" selected="true">Multiple batches</option>
+                <option value="single_batch">Single batch (or no batch information)</option>
+            </param>
+            <when value="batchwise">
+                <expand macro="batchwise_parameters" />
+            </when> 
+            <when value="single_batch">
+                <expand macro="singlebatch_parameters" />
+            </when>
+        </conditional>
         <expand macro="exclude_blanks" />
     </inputs>
 
@@ -43,6 +61,7 @@
     <tests>
         <test>
             <param name="data" value="input_data.csv" ftype="csv" />
+            <param name="mode" value="batchwise" />
             <param name="wavelet_filter" value="d" />
             <param name="filter_length" value="2" />
             <param name="k" value="20" />
@@ -50,6 +69,16 @@
             <param name="t2" value="0.05" />
             <param name="alpha" value="0" />
             <output name="normalized_data" file="normalized_data.tsv" /> 
+        </test>
+        <test>
+            <param name="data" value="input_data_nobatch.csv" ftype="csv" />
+            <param name="mode" value="single_batch" />
+            <param name="wavelet_filter" value="d" />
+            <param name="filter_length" value="2" />
+            <param name="k" value="20" />
+            <param name="alpha" value="0" />
+            <param name="cutoff" value="0" />
+            <output name="normalized_data" file="normalized_data_nobatch.tsv" /> 
         </test>
         <test expect_failure="true">
             <param name="data" value="na_data.csv" ftype="csv" />
@@ -77,7 +106,8 @@
         +---------------+--------+------------+----------------+-------+------------+--------------+-------------+-------------+-----+
 
 
-        + The required columns are **sampleName**, **class**, **sampleType**, **injectionOrder**, and **batch** plus the **features** that you want to normalize. 
+        + The required columns are **sampleName**, **class**, **sampleType**, **injectionOrder**, and the **features** that you want to normalize. 
+        + The **batch** column is required if batch correction mode is **Multiple batches** and optional otherwise.
         + The presence of any additional columns (except features) will result in incorrect batch correction or job failure. 
         + the input table must not contain missing values. Missing intensities must be filled with 0.
         + **sampleType** column accepts three possible values: [QC, sample, blank] (case insensitive).
@@ -85,12 +115,15 @@
         + the **output** is the same table with corrected feature intensities.
 
         .. rubric:: **Footnotes**
-        .. [1] for details on wavelet filter parameters refer to R `wavelets::wt.filter <https://www.rdocumentation.org/packages/wavelets/versions/0.3-0.2/topics/wt.filter>`_;
+        .. [1] for details on wavelet-filter parameters refer to R `wavelets::wt.filter <https://www.rdocumentation.org/packages/wavelets/versions/0.3-0.2/topics/wt.filter>`_;
+        .. [2] when using 'Multiple batches', please cite the WaveICA (2019) paper; else, cite WaveICA 2.0 (2021) paper;
 
+    
     ]]></help>
 
     <citations>
         <citation type="doi">10.1016/j.aca.2019.02.010</citation>
+        <citation type="doi">10.1007/s11306-021-01839-7</citation>
     </citations>
 
 </tool>

@@ -8,14 +8,19 @@
                 name="RECETOX MUNI" />
         </creator>
     </xml>
-    <xml name="data">
+    <xml name="general_parameters">
         <param type="data" name="data" label="Feature table" format="csv" help=""/>
-    </xml>
-    <xml name="k">
         <param type="integer" value="20" name="k" label="Number of components to decompose" help="maximal component that ICA decomposes"/>
-    </xml>
-    <xml name="alpha">
         <param type="float" value="0" name="alpha" label="Alpha" help="trade-off value between the independence of samples (temporal ICA) and variables (spatial ICA), should be between 0 and 1"/>
+    </xml>
+    <xml name="batchwise_parameters">
+        <param type="float" value="0.05" name="t" label="Batch-association threshold" help="threshold to consider a component associate with the batch,
+        should be between 0 and 1"/>
+        <param type="float" value="0.05" name="t2" label="Group-association threshold" help="threshold to consider a component associate with the group,
+        should be between 0 and 1"/>
+    </xml>
+    <xml name="singlebatch_parameters">
+        <param type="float" value="0" name="cutoff" label="Cutoff" help="threshold of the variation explained by the injection order for independent components, should be between 0 and 1"/>
     </xml>
     <xml name="exclude_blanks">
         <param name="exclude_blanks" type="boolean" checked="false" truevalue="TRUE" falsevalue="FALSE" label="Remove blanks" help="Excludes blank samples from the output" />
