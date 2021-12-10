@@ -34,15 +34,15 @@
     </configfiles>
 
     <inputs>
-        <param label="Input spectra file" name="input_file" type="data" format="msp" help="Dataset with spectra in MSP format." />
+        <param label="Input spectra dataset" name="input_file" type="data" format="msp" />
 
-        <repeat name="ordered_jobs" title="Order-specific conversion jobs">
-            <param name="ordered_jobs_select" type="select" label="Available conversion jobs" multiple="false" optional="true">
+        <repeat name="ordered_jobs" title="Ordered conversions">
+            <param name="ordered_jobs_select" type="select" label="Available conversions" multiple="false" optional="true">
                 <expand macro="job_options" />
             </param>
         </repeat>
 
-        <param name="jobs" type="select" label="Random order conversion jobs" multiple="true" optional="true">
+        <param name="jobs" type="select" label="Other conversions" multiple="true" optional="true">
             <expand macro="job_options" />
         </param>
     </inputs>
