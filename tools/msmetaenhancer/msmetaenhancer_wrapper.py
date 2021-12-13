@@ -27,7 +27,10 @@ def main(argv):
     services = ['PubChem', 'CTS', 'CIR', 'NLM']
 
     if len(args.jobs) != 0:
-        jobs = list(eval(args.jobs))
+        jobs = []
+        for job in args.jobs.split(","):
+            if len(job) != 0:
+                jobs.append(job.split())
         asyncio.run(app.annotate_spectra(services, jobs))
     else:
         # execute without jobs parameter to run all possible jobs
