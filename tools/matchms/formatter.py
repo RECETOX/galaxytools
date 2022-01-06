@@ -113,8 +113,11 @@ def get_top_k_data(ctx, k):
 
 @cli.resultcallback()
 def write_output(result: DataFrame, scores_filename, matches_filename, output_filename):
+    input_file = read_csv(scores_filename, sep=None, iterator=True)
+    sep = input_file._engine.data.dialect.delimiter
+
     result = result.reset_index().rename(columns={'level_0': 'query', 'compound': 'reference'})
-    result.to_csv(output_filename, sep="\t", index=False)
+    result.to_csv(output_filename, sep=sep, index=False)
 
 
 if __name__ == '__main__':
