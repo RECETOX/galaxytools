@@ -73,8 +73,8 @@ def load_data(scores_filename: str, matches_filename: str) -> DataFrame:
     Returns:
         DataFrame: Joined dataframe on compounds containing scores an matches in long format.
     """
-    matches = read_csv(matches_filename, sep='\t', index_col=0)
-    scores = read_csv(scores_filename, sep='\t', index_col=0)
+    matches = read_csv(matches_filename, sep=None, index_col=0)
+    scores = read_csv(scores_filename, sep=None, index_col=0)
 
     scores_long = create_long_table(scores, 'score')
     matches_long = create_long_table(matches, 'matches')
