@@ -1,8 +1,6 @@
 import argparse
 import asyncio
 import sys
-from shutil import copy
-from tempfile import NamedTemporaryFile
 
 
 from MSMetaEnhancer import Application
@@ -37,12 +35,7 @@ def main(argv):
         asyncio.run(app.annotate_spectra(services))
 
     # export .msp file
-    temp_file = NamedTemporaryFile(suffix=".msp")
-    app.save_spectra(temp_file.name, file_format="msp")
-
-    # copy it to actual location
-    copy(temp_file.name, args.output_file)
-    temp_file.close()
+    app.save_spectra(args.output_file, file_format="msp")
     return 0
 
 
