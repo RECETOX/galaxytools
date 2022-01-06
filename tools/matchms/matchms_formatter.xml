@@ -31,8 +31,8 @@
     </configfiles>
 
     <inputs>
-        <param label="Scores Table" name="scores" type="data" format="tsv" help="Scores output table." />
-        <param label="Matches Table" name="matches" type="data" format="tsv" help="Scores output table." />
+        <param label="Scores Table" name="scores" type="data" format="table,csv,tsv" help="Scores output table." />
+        <param label="Matches Table" name="matches" type="data" format="table,csv,tsv" help="Scores output table." />
 
         <conditional name="method">
             <param name="selection" type="select" label="Formatting method">
@@ -52,7 +52,7 @@
 
     </inputs>
     <outputs>
-        <data label="${tool.name} (${method.selection}) on ${on_string}" name="output" format="tsv" />
+        <data label="${tool.name} (${method.selection}) on ${on_string}" name="output" format_source="scores" metadata_source="scores" />
     </outputs>
 
     <tests>
