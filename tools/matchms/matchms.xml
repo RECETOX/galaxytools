@@ -68,7 +68,7 @@
 
     <tests>
         <test>
-            <param name="references" value="fill.msp" ftype="msp"/>
+            <param name="references" value="fill.mgf" ftype="mgf"/>
             <param name="queries" value="fill.msp" ftype="msp"/>
             <param name="similarity_metric" value="CosineGreedy"/>
             <output name="similarity_scores" file="scores_test1_out.tsv" ftype="tsv" checksum="md5$1aff8d0777e2f4e565be2b1b393547ef"/>
