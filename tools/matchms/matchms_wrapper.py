@@ -3,7 +3,7 @@ import sys
 
 from matchms import calculate_scores
 from matchms.filtering import add_precursor_mz, default_filters, normalize_intensities
-from matchms.importing import load_from_msp, load_from_mgf
+from matchms.importing import load_from_mgf, load_from_msp
 from matchms.similarity import (
     CosineGreedy,
     CosineHungarian,
