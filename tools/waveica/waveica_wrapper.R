@@ -11,19 +11,9 @@ waveica <- function(data,
   data <- read.csv(data, header = TRUE)
 
   required_columns <- c("sampleName", "class", "sampleType", "injectionOrder", "batch")
-  if (anyNA(data)) {
-    stop("Error: dataframe cannot contain NULL values!
-Make sure that your dataframe does not contain empty cells")
-  } else if (!all(required_columns %in% colnames(data))) {
-    stop("Error: missing metadata!
-Make sure that the following columns are present in your dataframe: [sampleName, class, sampleType, injectionOrder, batch]")
-  }
+  verify_input_dataframe(data, required_columns)
 
-  # sort data by injection order
-  data <- data[order(data[, "batch"],
-    data[, "injectionOrder"],
-    decreasing = FALSE
-  ), ]
+  data <- sort_by_injection_order(data)
 
   # separate data into features, batch and group
   feature_columns <- colnames(data)[!colnames(data) %in% required_columns]
@@ -32,7 +22,7 @@ Make sure that the following columns are present in your dataframe: [sampleName,
   batch <- data$batch
 
   # run WaveICA
-  features <- WaveICA::WaveICA(
+  features <- recetox.waveica::waveica(
     data = features,
     wf = get_wf(wavelet_filter, wavelet_length),
     batch = batch,
@@ -43,7 +33,7 @@ Make sure that the following columns are present in your dataframe: [sampleName,
     alpha = alpha
   )
 
-  data[, feature_columns] <- features$data_wave
+  data[, feature_columns] <- features
 
   # remove blanks from dataset
   if (exclude_blanks) {
@@ -51,6 +41,74 @@ Make sure that the following columns are present in your dataframe: [sampleName,
   }
 
   return(data)
+}
+
+
+waveica_singlebatch <- function(data,
+                                wavelet_filter,
+                                wavelet_length,
+                                k,
+                                alpha,
+                                cutoff,
+                                exclude_blanks) {
+
+  # get input from the Galaxy, preprocess data
+  data <- read.csv(data, header = TRUE)
+
+  required_columns <- c("sampleName", "class", "sampleType", "injectionOrder")
+  optional_columns <- c("batch")
+  verify_input_dataframe(data, required_columns)
+
+  data <- sort_by_injection_order(data)
+
+  feature_columns <- colnames(data)[!colnames(data) %in% c(required_columns, optional_columns)]
+  features <- data[, feature_columns]
+  injection_order <- data$injectionOrder
+
+  # run WaveICA
+  features <- recetox.waveica::waveica_nonbatchwise(
+    data = features,
+    wf = get_wf(wavelet_filter, wavelet_length),
+    injection_order = injection_order,
+    K = k,
+    alpha = alpha,
+    cutoff = cutoff
+  )
+
+  data[, feature_columns] <- features
+
+  # remove blanks from dataset
+  if (exclude_blanks) {
+    data <- exclude_group(data, group)
+  }
+
+  return(data)
+}
+
+
+sort_by_injection_order <- function(data) {
+  if ("batch" %in% colnames(data)) {
+    data <- data[order(data[, "batch"],
+      data[, "injectionOrder"],
+      decreasing = FALSE
+    ), ]
+  } else {
+    data <- data[order(data[, "injectionOrder"],
+      decreasing = FALSE
+    ), ]
+  }
+  return(data)
+}
+
+
+verify_input_dataframe <- function(data, required_columns) {
+  if (anyNA(data)) {
+    stop("Error: dataframe cannot contain NULL values!
+Make sure that your dataframe does not contain empty cells")
+  } else if (!all(required_columns %in% colnames(data))) {
+    stop("Error: missing metadata!
+Make sure that the following columns are present in your dataframe: ", paste(required_columns, collapse = ", "))
+  }
 }
 
 

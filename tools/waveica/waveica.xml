@@ -1,96 +1,67 @@
-<tool id="waveica" name="WaveICA" version="0.1.0+galaxy3" python_template_version="3.5">
-
+<tool id="waveica" name="WaveICA" version="@TOOL_VERSION@+galaxy0" python_template_version="3.5">
     <description>removal of batch effects for untargeted metabolomics data</description>
+    <macros>
+        <import>waveica_macros.xml</import>
+    </macros>
+    <expand macro="creator" />
     
     <requirements>
-        <requirement type="package" version="0.1.0">r-recetox-waveica</requirement>
+            <requirement type="package" version="@TOOL_VERSION@">r-recetox-waveica</requirement>
     </requirements>
-
     <command detect_errors="aggressive"><![CDATA[
         Rscript
             -e 'source("${__tool_directory__}/waveica_wrapper.R")'
 
+            #if $batch_correction.mode == "batchwise":
             -e 'normalized_data <- waveica(
                 data = "$data",
                 wavelet_filter = "$wf.wavelet_filter",
                 wavelet_length = "$wf.wavelet_length",
                 k = $k,
-                t = $t,
-                t2 = $t2,
+                t = $batch_correction.t,
+                t2 = $batch_correction.t2,
                 alpha = $alpha,
                 exclude_blanks = $exclude_blanks
             )'
+            #else if $batch_correction.mode == "single_batch":
+            -e 'normalized_data <- waveica_singlebatch(
+                data = "$data",
+                wavelet_filter = "$wf.wavelet_filter",
+                wavelet_length = "$wf.wavelet_length",
+                k = $k,
+                alpha = $alpha,
+                cutoff = $batch_correction.cutoff,
+                exclude_blanks = $exclude_blanks
+            )'
+            #end if
 
             -e 'store_data(normalized_data,"$normalized_data")'
     ]]></command>
 
     <inputs>
-        <param type="data" name="data" label="Feature table" format="csv" help=""/>
-        <conditional name="wf">
-            <param type="select" name="wavelet_filter" label="Wavelet transform filter" help="wavelet function and filter length [1] (see footnotes for more details)">
-                <option value="d" selected="True">Daubechies</option>
-                <option value="la" >Least Asymetric</option>
-                <option value="bl" >Best Localized</option>
-                <option value="c" >Coiflet</option>
+        <expand macro="general_parameters" />
+        <expand macro="wf" />
+        <conditional name="batch_correction">
+            <param name="mode" type="select" label="Batch correction mode" help="'multiple batches' takes into account inter- and intrabatch intensity drift; 'single batch' relies only on the injection order of the samples and requires no batch information [2]">
+                <option value="batchwise" selected="true">Multiple batches</option>
+                <option value="single_batch">Single batch (or no batch information)</option>
             </param>
-            <when value="d">
-                <param name="wavelet_length" type="select" label="filter length">
-                    <option value="2" selected="True">2</option>
-                    <option value="4">4</option>
-                    <option value="6">6</option>
-                    <option value="8">8</option>
-                    <option value="10">10</option>
-                    <option value="12">12</option>
-                    <option value="14">14</option>
-                    <option value="16">16</option>
-                    <option value="18">18</option>
-                    <option value="20">20</option>
-                </param>
-            </when>
-            <when value="la">
-                <param name="wavelet_length" type="select" label="filter length">
-                    <option value="8">8</option>
-                    <option value="10">10</option>
-                    <option value="12">12</option>
-                    <option value="14">14</option>
-                    <option value="16">16</option>
-                    <option value="18">18</option>
-                    <option value="20">20</option>
-                </param>
-            </when>
-            <when value="bl">
-                <param name="wavelet_length" type="select" label="filter length">
-                    <option value="14">14</option>
-                    <option value="18">18</option>
-                    <option value="20">20</option>
-                </param>
-            </when>
-            <when value="c">
-                <param name="wavelet_length" type="select" label="filter length">
-                    <option value="6">6</option>
-                    <option value="12">12</option>
-                    <option value="18">18</option>
-                    <option value="24">24</option>
-                    <option value="30">30</option>
-                </param>
+            <when value="batchwise">
+                <expand macro="batchwise_parameters" />
+            </when> 
+            <when value="single_batch">
+                <expand macro="singlebatch_parameters" />
             </when>
         </conditional>
-        <param type="integer" value="20" name="k" label="Number of components to decompose" help="maximal component that ICA decomposes"/>
-        <param type="float" value="0.05" name="t" label="Batch-association threshold" help="threshold to consider a component associate with the batch,
- should be between 0 and 1"/>
-        <param type="float" value="0.05" name="t2" label="Group-association threshold" help="threshold to consider a component associate with the group,
- should be between 0 and 1"/>
-        <param type="float" value="0" name="alpha" label="Alpha" help="trade-off value between the independence of samples (temporal ICA) and variables (spatial ICA), should be between 0 and 1"/>
-        <param name="exclude_blanks" type="boolean" checked="false" truevalue="TRUE" falsevalue="FALSE" label="Remove blanks" help="Excludes blank samples from the output" />
+        <expand macro="exclude_blanks" />
     </inputs>
 
-    <outputs>
-        <data name="normalized_data" format="tsv" />
-    </outputs>
+    <expand macro="outputs" />
 
     <tests>
         <test>
             <param name="data" value="input_data.csv" ftype="csv" />
+            <param name="mode" value="batchwise" />
             <param name="wavelet_filter" value="d" />
             <param name="filter_length" value="2" />
             <param name="k" value="20" />
@@ -98,6 +69,16 @@
             <param name="t2" value="0.05" />
             <param name="alpha" value="0" />
             <output name="normalized_data" file="normalized_data.tsv" /> 
+        </test>
+        <test>
+            <param name="data" value="input_data_nobatch.csv" ftype="csv" />
+            <param name="mode" value="single_batch" />
+            <param name="wavelet_filter" value="d" />
+            <param name="filter_length" value="2" />
+            <param name="k" value="20" />
+            <param name="alpha" value="0" />
+            <param name="cutoff" value="0" />
+            <output name="normalized_data" file="normalized_data_nobatch.tsv" /> 
         </test>
         <test expect_failure="true">
             <param name="data" value="na_data.csv" ftype="csv" />
@@ -110,7 +91,8 @@
     <help><![CDATA[
         **Description**
 
-        Removal of batch effects for large-scale untargeted metabolomics data based on wavelet analysis. The WaveICA R package provides a new algorithm to removing batch effects for metabolomics data.
+        Removal of batch effects for large-scale untargeted metabolomics data based on wavelet analysis and independent component analysis. 
+        The WaveICA method uses the time trend of samples over the injection order, decomposes the original data into new multi-scale features, extracts and removes the batch effect resulting in normalized intensities across samples.
         
         The input is an intensity-by-feature table with metadata in the following format: 
 
@@ -125,18 +107,24 @@
         +---------------+--------+------------+----------------+-------+------------+--------------+-------------+-------------+-----+
 
 
+        + The required columns are **sampleName**, **class**, **sampleType**, **injectionOrder**, and the **features** that you want to normalize. 
+        + The **batch** column is required if batch correction mode is **Multiple batches** and optional otherwise.
+        + The presence of any additional columns (except features) will result in incorrect batch correction or job failure. 
         + the input table must not contain missing values. Missing intensities must be filled with 0.
         + **sampleType** column accepts three possible values: [QC, sample, blank] (case insensitive).
         + **class** column is used to denote a biological group of a sample (e.g., positive/negative species). The column accepts any values.
         + the **output** is the same table with corrected feature intensities.
 
         .. rubric:: **Footnotes**
-        .. [1] for details on wavelet filter parameters refer to R `wavelets::wt.filter <https://www.rdocumentation.org/packages/wavelets/versions/0.3-0.2/topics/wt.filter>`_;
+        .. [1] for details on wavelet-filter parameters refer to R `wavelets::wt.filter <https://www.rdocumentation.org/packages/wavelets/versions/0.3-0.2/topics/wt.filter>`_;
+        .. [2] when using 'Multiple batches', please cite the WaveICA (2019) paper; else, cite WaveICA 2.0 (2021) paper;
 
+    
     ]]></help>
 
     <citations>
         <citation type="doi">10.1016/j.aca.2019.02.010</citation>
+        <citation type="doi">10.1007/s11306-021-01839-7</citation>
     </citations>
 
 </tool>
