@@ -22,8 +22,10 @@
                 -s \
             #else
                 --ref "$references" \
+                --ref_format "$references.ext" \
             #end if
             "$queries" \
+            "$queries.ext" \
             "$similarity_metric" \
             "$algorithm.tolerance" \
             "$algorithm.mz_power" \
