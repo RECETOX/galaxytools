@@ -1,4 +1,4 @@
-<tool id="matchms" name="matchMS" version="0.9.2+galaxy0">
+<tool id="matchms" name="matchMS" version="0.9.2+galaxy1">
     <description>calculate the similarity score and matched peaks</description>
     <requirements>
         <requirement type="package" version="0.9.2">matchms</requirement>
@@ -22,8 +22,10 @@
                 -s \
             #else
                 --ref "$references" \
+                --ref_format "$references.ext" \
             #end if
             "$queries" \
+            "$queries.ext" \
             "$similarity_metric" \
             "$algorithm.tolerance" \
             "$algorithm.mz_power" \
@@ -34,11 +36,11 @@
     </configfiles>
 
     <inputs>
-        <param label="Queries spectra" name="queries" type="data" format="msp" help="Query mass spectra to match against references." />
+        <param label="Queries spectra" name="queries" type="data" format="msp,mgf" help="Query mass spectra to match against references." />
         <conditional name="symmetric">
             <param name="is_symmetric" label="Symmetric" type="boolean" truevalue="TRUE" falsevalue="FALSE" checked="false" />
         <when value="FALSE">
-            <param label="Reference spectra" name="references" type="data" format="msp" help="Reference mass spectra to match against as library." />
+            <param label="Reference spectra" name="references" type="data" format="msp,mgf" help="Reference mass spectra to match against as library." />
         </when>
         </conditional>
         <param label="Similarity metric" name="similarity_metric" type="select" display="radio" help="Similarity metric to use for score computation.">
@@ -47,7 +49,7 @@
             <option value="ModifiedCosine">ModifiedCosine </option>
         </param>
 
-        <section name="algorithm" title="Algorithm Parameters" expanded="true">    
+        <section name="algorithm" title="Algorithm Parameters" expanded="true">
             <param label="tolerance" name="tolerance" type="float" value="0.1" help="Peaks will be considered a match when less than tolerance apart. Absolute m/z value, not in ppm." />
             <param label="mz_power" name="mz_power" type="float" value="0.0" help="The power to raise mz to in the cosine function." />
             <param label="intensity_power" name="intensity_power" type="float" value="1.0" help="The power to raise intensity to in the cosine function." />
@@ -68,7 +70,7 @@
 
     <tests>
         <test>
-            <param name="references" value="fill.msp" ftype="msp"/>
+            <param name="references" value="fill.mgf" ftype="mgf"/>
             <param name="queries" value="fill.msp" ftype="msp"/>
             <param name="similarity_metric" value="CosineGreedy"/>
             <output name="similarity_scores" file="scores_test1_out.tsv" ftype="tsv" checksum="md5$1aff8d0777e2f4e565be2b1b393547ef"/>

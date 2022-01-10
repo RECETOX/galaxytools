@@ -3,7 +3,7 @@ import sys
 
 from matchms import calculate_scores
 from matchms.filtering import add_precursor_mz, default_filters, normalize_intensities
-from matchms.importing import load_from_msp
+from matchms.importing import load_from_mgf, load_from_msp
 from matchms.similarity import (
     CosineGreedy,
     CosineHungarian,
@@ -17,21 +17,34 @@ def main(argv):
     parser.add_argument("-f", dest="default_filters", action='store_true', help="Apply default filters")
     parser.add_argument("-n", dest="normalize_intensities", action='store_true', help="Normalize intensities.")
     parser.add_argument("-s", dest="symmetric", action='store_true', help="Computation is symmetric.")
-    parser.add_argument("--ref", dest="references_filename", type=str, help="Path to reference MSP library.")
+    parser.add_argument("--ref", dest="references_filename", type=str, help="Path to reference spectra library.")
+    parser.add_argument("--ref_format", dest="references_format", type=str, help="Reference spectra library file format.")
     parser.add_argument("queries_filename", type=str, help="Path to query spectra.")
+    parser.add_argument("queries_format", type=str, help="Query spectra file format.")
     parser.add_argument("similarity_metric", type=str, help='Metric to use for matching.')
     parser.add_argument("tolerance", type=float, help="Tolerance to use for peak matching.")
     parser.add_argument("mz_power", type=float, help="The power to raise mz to in the cosine function.")
     parser.add_argument("intensity_power", type=float, help="The power to raise intensity to in the cosine function.")
-    parser.add_argument("output_filename_scores", type=str, help="Path where to store the output .csv scores.")
-    parser.add_argument("output_filename_matches", type=str, help="Path where to store the output .csv matches.")
+    parser.add_argument("output_filename_scores", type=str, help="Path where to store the output .tsv scores.")
+    parser.add_argument("output_filename_matches", type=str, help="Path where to store the output .tsv matches.")
     args = parser.parse_args()
 
-    queries_spectra = list(load_from_msp(args.queries_filename))
+    if args.queries_format == 'msp':
+        queries_spectra = list(load_from_msp(args.queries_filename))
+    elif args.queries_format == 'mgf':
+        queries_spectra = list(load_from_mgf(args.queries_filename))
+    else:
+        raise ValueError(f'File format {args.queries_format} not supported for query spectra.')
+
     if args.symmetric:
         reference_spectra = []
     else:
-        reference_spectra = list(load_from_msp(args.references_filename))
+        if args.references_format == 'msp':
+            reference_spectra = list(load_from_msp(args.references_filename))
+        elif args.references_format == 'mgf':
+            reference_spectra = list(load_from_mgf(args.references_filename))
+        else:
+            raise ValueError(f'File format {args.references_format} not supported for reference spectra library.')
 
     if args.default_filters is True:
         print("Applying default filters...")
