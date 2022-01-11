@@ -1,0 +1,55 @@
+<macros>
+    <token name="@TOOL_VERSION@">0.1.2</token>
+    <xml name="creator">
+        <creator>
+            <organization
+                url="https://www.recetox.muni.cz/"
+                name="RECETOX MUNI" />
+        </creator>
+    </xml>
+    <token name="@HELP@">
+        <![CDATA[
+        MSMetaEnhancer will fetch and update various metadata included in your spectra .msp dataset.
+        It does so through a series of conversions ran on all entries in a given file. These conversions fetch
+        metadata from various online services. If no conversions are specified, all possible jobs will be executed in an arbitrary order.
+
+        Every conversion specifies `service`, `source` and `target` attributes. This can be read as the `service` will receive the `source` attribute
+        and based on that determines the `target` attribute. For example, the conversion `PubChem: inchi -> smiles` uses PubChem to convert
+        InChI to SMILES.
+
+        The execution speed and results themselves can be affected by specifying the conversions, or their order.
+
+        For detailed documentation of the tool please visit https://msmetaenhancer.readthedocs.io/.
+    ]]>
+    </token>
+
+    <xml name="job_options">
+        <option value="inchi formula PubChem">PubChem: inchi -> formula</option>
+        <option value="inchi inchikey PubChem">PubChem: inchi -> inchikey</option>
+        <option value="inchi iupac_name PubChem">PubChem: inchi -> iupac_name</option>
+        <option value="inchi smiles PubChem">PubChem: inchi -> smiles</option>
+        <option value="name formula PubChem">PubChem: name -> formula</option>
+        <option value="name inchi PubChem">PubChem: name -> inchi</option>
+        <option value="name inchikey PubChem">PubChem: name -> inchikey</option>
+        <option value="name iupac_name PubChem">PubChem: name -> iupac_name</option>
+        <option value="name smiles PubChem">PubChem: name -> smiles</option>
+        <option value="casno smiles CIR">CIR: casno -> smiles</option>
+        <option value="inchikey casno CIR">CIR: inchikey -> casno</option>
+        <option value="inchikey formula CIR">CIR: inchikey -> formula</option>
+        <option value="inchikey inchi CIR">CIR: inchikey -> inchi</option>
+        <option value="inchikey smiles CIR">CIR: inchikey -> smiles</option>
+        <option value="smiles inchikey CIR">CIR: smiles -> inchikey</option>
+        <option value="casno inchikey CTS">CTS: casno -> inchikey</option>
+        <option value="inchikey inchi CTS">CTS: inchikey -> inchi</option>
+        <option value="inchikey iupac_name CTS">CTS: inchikey -> iupac_name</option>
+        <option value="inchikey name CTS">CTS: inchikey -> name</option>
+        <option value="name inchikey CTS">CTS: name -> inchikey</option>
+        <option value="inchikey casno NLM">NLM: inchikey -> casno</option>
+        <option value="inchikey formula NLM">NLM: inchikey -> formula</option>
+        <option value="inchikey name NLM">NLM: inchikey -> name</option>
+        <option value="name casno NLM">NLM: name -> casno</option>
+        <option value="name formula NLM">NLM: name -> formula</option>
+        <option value="name inchikey NLM">NLM: name -> inchikey</option>
+    </xml>
+
+</macros>
