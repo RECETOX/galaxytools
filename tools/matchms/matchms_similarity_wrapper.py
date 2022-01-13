@@ -11,6 +11,20 @@ from matchms.similarity import (
 from pandas import DataFrame
 
 
+def convert_precursor_mz(spectrum):
+    """
+    Precursor m/z must be present for ModifiedCosine similarity metric
+    and it needs to be converted to float.
+    """
+    if "precursor_mz" in spectrum.metadata:
+        metadata = spectrum.metadata
+        metadata["precursor_mz"] = float(metadata["precursor_mz"])
+        spectrum.metadata = metadata
+        return spectrum
+    else:
+        raise ValueError("Precursor_mz missing. Apply 'add_precursor_mz' filter first.")
+
+
 def main(argv):
     parser = argparse.ArgumentParser(description="Compute MSP similarity scores")
     parser.add_argument("-s", dest="symmetric", action='store_true', help="Computation is symmetric.")
@@ -49,6 +63,8 @@ def main(argv):
         similarity_metric = CosineHungarian(args.tolerance, args.mz_power, args.intensity_power)
     elif args.similarity_metric == 'ModifiedCosine':
         similarity_metric = ModifiedCosine(args.tolerance, args.mz_power, args.intensity_power)
+        reference_spectra = list(map(convert_precursor_mz, reference_spectra))
+        queries_spectra = list(map(convert_precursor_mz, queries_spectra))
     else:
         return -1
 
