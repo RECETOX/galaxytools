@@ -51,7 +51,7 @@
 
         <conditional name="default_filters">
             <param name="is_true" label="Apply default filters" type="boolean" truevalue="TRUE" falsevalue="FALSE" checked="false"
-                   help="Collection of filters that are considered default and that do no require any (factory) arguments.\n See https://matchms.readthedocs.io/en/latest/api/matchms.filtering.html#matchms.filtering.default_filters for details."/>
+                   help="Collection of filters that are considered default and that do no require any (factory) arguments."/>
         </conditional>
 
         <conditional name="clean_metadata">

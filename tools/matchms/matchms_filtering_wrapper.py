@@ -54,14 +54,14 @@ def main(argv):
             spectrum = select_by_relative_intensity(spectrum, args.from_intensity, args.to_intensity)
 
         if args.mz_range:
-            spectra = select_by_mz(spectrum, args.from_mz, args.to_mz)
+            spectrum = select_by_mz(spectrum, args.from_mz, args.to_mz)
 
         filtered_spectra.append(spectrum)
 
     if args.spectra_format == 'msp':
-        save_as_msp(spectra, args.output)
+        save_as_msp(filtered_spectra, args.output)
     else:
-        save_as_mgf(spectra, args.output)
+        save_as_mgf(filtered_spectra, args.output)
 
     return 0
 
