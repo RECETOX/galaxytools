@@ -1,4 +1,4 @@
-<tool id="matchms_formatter" name="matchms output formatter" version="0.1.0+galaxy0" python_template_version="3.5">
+<tool id="matchms_formatter" name="matchms output formatter" version="0.1.0+galaxy1" python_template_version="3.5">
     <description>reformat output tables of matchms</description>
 
     <creator>
@@ -31,8 +31,8 @@
     </configfiles>
 
     <inputs>
-        <param label="Scores Table" name="scores" type="data" format="csv,tsv" help="Scores output table." />
-        <param label="Matches Table" name="matches" type="data" format="csv,tsv" help="Scores output table." />
+        <param label="Scores Table" name="scores" type="data" format="csv,tabular,tsv" help="Scores output table." />
+        <param label="Matches Table" name="matches" type="data" format="csv,tabular,tsv" help="Scores output table." />
 
         <conditional name="method">
             <param name="selection" type="select" label="Formatting method">
