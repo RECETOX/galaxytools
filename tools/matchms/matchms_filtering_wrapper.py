@@ -29,6 +29,13 @@ def main(argv):
     parser.add_argument("--to_mz", type=float, help="Upper bound for m/z  filter")
     args = parser.parse_args()
 
+    if not args.normalise_intensities or \
+            args.default_filters or \
+            args.clean_metadata or \
+            args.relative_intensity or \
+            args.mz_range:
+        raise ValueError('No filter selected.')
+
     if args.spectra_format == 'msp':
         spectra = list(load_from_msp(args.spectra))
     elif args.queries_format == 'mgf':
