@@ -13,7 +13,7 @@ from pandas import DataFrame
 
 def convert_precursor_mz(spectrum):
     """
-    Check the presence of precursor m/z since it is needed for ModifiedCosine similarity metric. Convert to float if 
+    Check the presence of precursor m/z since it is needed for ModifiedCosine similarity metric. Convert to float if
     needed, raise error if missing.
     """
 

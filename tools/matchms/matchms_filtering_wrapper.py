@@ -1,11 +1,11 @@
 import argparse
 import sys
 
-from matchms.filtering import default_filters, normalize_intensities, select_by_relative_intensity, select_by_mz
-from matchms.filtering import add_compound_name, add_fingerprint, add_losses, add_parent_mass, add_precursor_mz, \
-                              add_retention_index, add_retention_time, clean_compound_name
-from matchms.importing import load_from_mgf, load_from_msp
 from matchms.exporting import save_as_mgf, save_as_msp
+from matchms.filtering import add_compound_name, add_fingerprint, add_losses, add_parent_mass, add_precursor_mz,\
+    add_retention_index, add_retention_time, clean_compound_name
+from matchms.filtering import default_filters, normalize_intensities, select_by_mz, select_by_relative_intensity
+from matchms.importing import load_from_mgf, load_from_msp
 
 
 def main(argv):
