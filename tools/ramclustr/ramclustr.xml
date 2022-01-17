@@ -14,11 +14,17 @@
     <command detect_errors="aggressive"><![CDATA[
         Rscript
             -e 'source("${__tool_directory__}/ramclustr_wrapper.R")'
+            -e 'output <- source("${ramclustr_method}")'
+            -e 'store_output(output, "$result", "$method_metadata", $filetype.required.merge_msp, "$spec_abundance")'
+    ]]>
+    </command>
+    <configfiles>
+        <configfile name="ramclustr_method">
             #if $filetype.type_choice == "xcms":
-            -e 'x <- ramclustr_xcms(
+            ramclustr_xcms(
                 input_xcms = "$filetype.input_xcms",
             #else:
-            -e 'x <- ramclustr_csv(
+            ramclustr_csv(
                 ms="$filetype.ms_csv.ms",
                 idmsms="$filetype.ms_csv.idmsms",
                 feature_delimiter="$filetype.ms_csv.feature_delimiter",
@@ -56,10 +62,9 @@
                 #if $filetype.metadata.batch_order_qc
                     metadata_file = "${filetype.metadata.batch_order_qc}",
                 #end if
-                )'
-            -e 'store_output(x, "$result", "$method_metadata", $filetype.required.merge_msp, "$spec_abundance")'
-    ]]>
-    </command>
+            )
+        </configfile>
+    </configfiles>
     <inputs>
         <conditional name="filetype">
             <param name="type_choice" type="select" label="Choose input format:">
