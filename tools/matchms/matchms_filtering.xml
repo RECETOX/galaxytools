@@ -6,7 +6,7 @@
     </requirements>
 
     <environment_variables>
-        <environment_variable name="MPLCONFIGDIR">/tmp</environment_variable>
+        <environment_variable name="MPLCONFIGDIR">\$_GALAXY_JOB_TMP_DIR</environment_variable>
     </environment_variables>
 
     <command detect_errors="exit_code"><![CDATA[

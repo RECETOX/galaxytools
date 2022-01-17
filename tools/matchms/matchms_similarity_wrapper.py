@@ -13,9 +13,10 @@ from pandas import DataFrame
 
 def convert_precursor_mz(spectrum):
     """
-    Precursor m/z must be present for ModifiedCosine similarity metric
-    and it needs to be converted to float.
+    Check the presence of precursor m/z since it is needed for ModifiedCosine similarity metric. Convert to float if 
+    needed, raise error if missing.
     """
+
     if "precursor_mz" in spectrum.metadata:
         metadata = spectrum.metadata
         metadata["precursor_mz"] = float(metadata["precursor_mz"])
