@@ -14,55 +14,56 @@
     <command detect_errors="aggressive"><![CDATA[
         Rscript
             -e 'source("${__tool_directory__}/ramclustr_wrapper.R")'
-            -e 'output <- source("${ramclustr_method}")'
-            -e 'store_output(output, "$result", "$method_metadata", $filetype.required.merge_msp, "$spec_abundance")'
+            -e 'source("${ramclustr_method}")'
     ]]>
     </command>
     <configfiles>
         <configfile name="ramclustr_method">
-            #if $filetype.type_choice == "xcms":
-            ramclustr_xcms(
-                input_xcms = "$filetype.input_xcms",
-            #else:
-            ramclustr_csv(
-                ms="$filetype.ms_csv.ms",
-                idmsms="$filetype.ms_csv.idmsms",
-                feature_delimiter="$filetype.ms_csv.feature_delimiter",
-                sample_name_column = $filetype.ms_csv.sample_name_column,
-                retention_time_column= $filetype.ms_csv.retention_time_column,
-            #end if
-                sr = $filetype.required.sr,
-                deep_split = $filetype.required.deepSplit,
-                block_size = $filetype.required.blocksize,
-                mult = $filetype.required.mult,
-                hmax = $filetype.required.hmax,
-                collapse = $filetype.required.collapse,
-                use_pheno = $filetype.required.usePheno,
-                qc_inj_range = $filetype.required.qc_inj_range,
-                normalize = "$filetype.required.normalize",
-                min_module_size = $filetype.required.minModuleSize,
-                linkage = "$filetype.required.linkage",
-                mzdec = $filetype.required.mzdec,
-                cor_method = "$filetype.required.cor_method",
-                rt_only_low_n = $filetype.required.rt_only_low_n,
-                replace_zeros = $filetype.required.replace_zeros,
-            #if $filetype.type_choice == "xcms":
-                #if $filetype.optional.st
-                    st = $filetype.optional.st,
+            store_output(
+                #if $filetype.type_choice == "xcms":
+                ramclustr_xcms(
+                    input_xcms = "$filetype.input_xcms",
+                #else:
+                ramclustr_csv(
+                    ms="$filetype.ms_csv.ms",
+                    idmsms="$filetype.ms_csv.idmsms",
+                    feature_delimiter="$filetype.ms_csv.feature_delimiter",
+                    sample_name_column = $filetype.ms_csv.sample_name_column,
+                    retention_time_column= $filetype.ms_csv.retention_time_column,
                 #end if
-            #else:
-                st = $filetype.ms_csv.st,
-            #end if
-                #if $filetype.optional.maxt
-                    maxt = $filetype.optional.maxt,
+                    sr = $filetype.required.sr,
+                    deep_split = $filetype.required.deepSplit,
+                    block_size = $filetype.required.blocksize,
+                    mult = $filetype.required.mult,
+                    hmax = $filetype.required.hmax,
+                    collapse = $filetype.required.collapse,
+                    use_pheno = $filetype.required.usePheno,
+                    qc_inj_range = $filetype.required.qc_inj_range,
+                    normalize = "$filetype.required.normalize",
+                    min_module_size = $filetype.required.minModuleSize,
+                    linkage = "$filetype.required.linkage",
+                    mzdec = $filetype.required.mzdec,
+                    cor_method = "$filetype.required.cor_method",
+                    rt_only_low_n = $filetype.required.rt_only_low_n,
+                    replace_zeros = $filetype.required.replace_zeros,
+                #if $filetype.type_choice == "xcms":
+                    #if $filetype.optional.st
+                        st = $filetype.optional.st,
+                    #end if
+                #else:
+                    st = $filetype.ms_csv.st,
                 #end if
-                #if $filetype.optional.fftempdir
-                    fftempdir = $filetype.optional.fftempdir,
-                #end if
-                #if $filetype.metadata.batch_order_qc
-                    metadata_file = "${filetype.metadata.batch_order_qc}",
-                #end if
-            )
+                    #if $filetype.optional.maxt
+                        maxt = $filetype.optional.maxt,
+                    #end if
+                    #if $filetype.optional.fftempdir
+                        fftempdir = $filetype.optional.fftempdir,
+                    #end if
+                    #if $filetype.metadata.batch_order_qc
+                        metadata_file = "${filetype.metadata.batch_order_qc}",
+                    #end if
+                ),
+            "$result", "$method_metadata", $filetype.required.merge_msp, "$spec_abundance")
         </configfile>
     </configfiles>
     <inputs>
