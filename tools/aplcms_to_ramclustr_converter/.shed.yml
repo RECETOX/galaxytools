@@ -5,6 +5,7 @@ include:
   - aplcms_to_ramclustr_converter.xml
   - aplcms_to_ramclustr_converter.py
   - test-data
+  - macros.xml
 homepage_url: https://github.com/RECETOX/galaxytools/
 long_description: Tool to convert parquet table from apLCMS output to csv input for RamClustR
 name: aplcms_to_ramclustr_converter
