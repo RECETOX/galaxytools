@@ -1,0 +1,289 @@
+<macros>
+    <token name="@TOOL_VERSION@">1.2.2</token>
+
+    <xml name="creator">
+        <creator>
+            <person
+                givenName="Helge"
+                familyName="Hecht"
+                url="https://github.com/hechth"
+                identifier="0000-0001-6744-996X" />
+            <organization
+                url="https://www.recetox.muni.cz/"
+                name="RECETOX MUNI"/>
+        </creator>
+    </xml>
+
+    <xml name="parameters_csv">
+        <section name="ms_csv" title="Input MS Data as CSV" expanded="true">
+            <param label="ms" name="ms" type="data" format="csv"
+                   help="Features as columns, rows as samples. Column header mz_rt"/>
+            <param label="idmsms" name="idmsms" type="data" format="csv" optional="true"
+                   help="Optional idMSMS / MSe csv data.  same dim and names as ms required"/>
+            <param label="sample_name_column" name="sample_name_column" type="integer" value="1"
+                   help="Which column from the csv file contains sample names?"/>
+            <param label="feature_delimiter" name="feature_delimiter" type="text" value="_"
+                   help="Only required if ms input is set! How feature mz and rt are delimited in csv import column header e.g. ='-'"/>
+            <param label="retention_time_column" name="retention_time_column" type="integer" value="2"
+                   help="Which position in delimited column header represents the retention time (csv only)"/>
+            <param label="st" name="st" type="float" value="1" help="Sigma t - time similarity decay value.
+                   A recommended starting point is half the value of your average chromatographic peak width at half max (seconds))."/>
+        </section>
+    </xml>
+
+    <xml name="parameters_excluded">
+        <param label="MStag" name="MStag" type="text" optional="true"
+               help="Character string in 'taglocation' to designat MS / MSe files e.g. '01.cdf'"/>
+        <param label="idMSMStag" name="idMSMStag" type="text" optional="true"
+               help="Character string in 'taglocation' to designat idMSMS / MSe files e.g. '02.cdf'"/>
+        <param label="taglocation" name="taglocation" type="text" value="filepaths"
+               help="'filepaths' by default, 'phenoData[,1]' is another option. refers to xcms slot"/>
+    </xml>
+
+    <xml name="parameters_required">
+        <section name="required" title="Required Parameters" expanded="true">
+            <param label="sr" name="sr" type="float" value="0.5" help="Sigma r - correlational similarity decay value"/>
+            <param label="deepSplit" name="deepSplit" type="boolean" truevalue="TRUE" falsevalue="FALSE" checked="false"
+                   help="Controls how agressively the HCA tree is cut - see ?cutreeDynamicTree"/>
+            <param label="blocksize" name="blocksize" type="integer" value="2000"
+                   help="Number of features (scans?) processed in one block  =1000,"/>
+            <param label="mult" name="mult" type="integer" value="5"
+                   help="Internal value, can be used to influence processing speed/ram usage"/>
+            <param label="hmax" name="hmax" type="float" value="0.3"
+                   help="Precut the tree at this height, default 0.3 - see ?cutreeDynamicTree"/>
+            <param label="collapse" name="collapse" type="boolean" truevalue="TRUE" falsevalue="FALSE" checked="true"
+                   help="Reduce feature intensities to spectrum intensities?"/>
+            <param label="usePheno" name="usePheno" type="boolean" truevalue="TRUE" falsevalue="FALSE" checked="true"
+                   help="Transfer phenotype data from XCMS object to SpecAbund dataset?"/>
+            <!--
+            Currently not forwarded because the MSP is exported always manually afterwards
+            <param label="mspout" name="mspout" type="boolean" truevalue="TRUE" falsevalue="FALSE" checked="true" help="write msp formatted spectra to file?" />
+            -->
+            <param label="normalize" name="normalize" type="select" display="radio"
+                   help="Either 'none', 'TIC', 'quantile', or 'batch.qc' normalization of feature intensities.  see batch.qc overview in details. ">
+                <option value="none" selected="true">none</option>
+                <option value="TIC">TIC</option>
+                <option value="quantile">quantile</option>
+                <option value="batch.qc">batch.qc</option>
+            </param>
+            <param label="qc_inj_range" name="qc_inj_range" type="integer" value="20"
+                   help="How many injections around each injection are to be scanned for presence of QC samples when
+                         using batch.qc normalization? A good rule of thumb is between 1 and 3 times the typical
+                         injection span between QC injections. i.e. if you inject QC ever 7 samples, set this to
+                         between 7 and 21. Smaller values provide more local precision but make normalization sensitive
+                         to individual poor outliers (though these are first removed using the boxplot function outlier
+                         detection), while wider values provide less local precision in normalization but better
+                         stability to individual peak areas."/>
+
+            <param label="minModuleSize" name="minModuleSize" type="integer" value="2"
+                   help="How many features must be part of a cluster to be returned? default = 2"/>
+            <param label="linkage" name="linkage" type="select" display="radio" value="average"
+                   help="Hierarchical clustering linkage method - see ?hclust">
+                <option value="average" selected="true">average</option>
+                <option value="ward.D">ward.D</option>
+                <option value="ward.D2">ward.D2</option>
+                <option value="single">single</option>
+                <option value="complete">complete</option>
+                <option value="mcquitty">mcquitty</option>
+                <option value="median">median</option>
+                <option value="centroid">centroid</option>
+            </param>
+
+            <param label="mzdec" name="mzdec" type="integer" value="3"
+                   help="Number of decimal places used in printing m/z values"/>
+            <param label="cor_method" name="cor_method" type="select" display="radio" value="pearson"
+                   help="Which correlational method used to calculate 'r' - see ?cor">
+                <option value="pearson" selected="true">pearson</option>
+                <option value="everything">everything</option>
+                <option value="spearman">spearman</option>
+                <option value="kendall">kendall</option>
+            </param>
+
+            <param label="rt_only_low_n" name="rt_only_low_n" type="boolean" truevalue="TRUE" falsevalue="FALSE"
+                   checked="true"
+                   help="At low injection numbers, correlational relationships of peak intensities may be unreliable.
+                   By defualt ramclustR will simply ignore the correlational r value and cluster on retention time alone.
+                   If you wish to use correlation with at n less than 5, set this value to FALSE."/>
+            <param label="replace_zeros" name="replace_zeros" type="boolean" truevalue="TRUE" falsevalue="FALSE"
+                   checked="true"
+                   help="NA, NaN, and Inf values are replaced with zero, and zero values are sometimes returned from
+                   peak peaking. When TRUE, zero values will be replaced with a small amount of noise, with noise level
+                   set based on the detected signal intensities for that feature. "/>
+            <param label="Merge MSP Files" name="merge_msp" type="boolean" truevalue="TRUE" falsevalue="FALSE"
+                   checked="true" help="Whether to merge all msp in one file or export one msp per spectra"/>
+        </section>
+    </xml>
+
+    <xml name="parameters_optional_xcms">
+        <section name="optional" title="Optional Parameters" expanded="false">
+            <param label="st" name="st" type="float" optional="true" help="Sigma t - time similarity decay value.
+                   A recommended starting point is half the value of your average chromatographic peak width at half max (seconds))."/>
+            <param label="fftempdir" name="fftempdir" type="text" optional="true"
+                   help="Valid path: if there are file size limitations on the default ff pacakge temp directory -
+                   getOptions('fftempdir') - you can change the directory used as the fftempdir with this option."/>
+            <param label="maxt" name="maxt" type="integer" optional="true"
+                   help="Maximum time difference to calculate retention similarity for - all values beyond this are assigned similarity of zero"/>
+        </section>
+    </xml>
+
+    <xml name="parameters_optional_csv">
+        <section name="optional" title="Optional Parameters" expanded="false">
+            <param label="fftempdir" name="fftempdir" type="text" optional="true"
+                   help="Valid path: if there are file size limitations on the default ff pacakge temp directory -
+                   getOptions('fftempdir') - you can change the directory used as the fftempdir with this option."/>
+            <param label="maxt" name="maxt" type="integer" optional="true"
+                   help="Maximum time difference to calculate retention similarity for - all values beyond this are assigned similarity of zero"/>
+        </section>
+    </xml>
+
+    <xml name="parameters_optional_metadata">
+        <section name="metadata" title="Optional Metadata" expanded="false">
+            <param label="metadata" name="batch_order_qc" type="data" format="csv" optional="true"
+                   help="CSV with sample names (or indices, currently not handled) on rows and columns with: batch
+                   number ('batch'), position in sequence ('order') and whether it is a qc sample or not
+                   ('qc' with true/false OR 'sampleType' with 'sample/qc/blank')."/>
+            <!-- <param label="ExpDes" name="ExpDes" type="data" format="RData" optional="true" help=" an R object created by R ExpDes object: data used for record keeping and labelling msp spectral output" /> -->
+        </section>
+    </xml>
+
+    <xml name="parameters_define_experiment">
+        <section name="define_experiment" title="Define Experiment" expanded="false">
+            <param label="Experiment" name="experiment" type="text" help="Experiment name, no spaces"/>
+            <param label="Species" name="species" type="text" help="Species name"/>
+            <param label="Sample" name="sample" type="text" help="Sample type"/>
+            <param label="Contributor" name="contributor" type="text"
+                   help="Individual and/or organizational affiliation"/>
+            <param label="Platform" name="platform" type="select" display="radio" help="Platform">
+                <option value="GC-MS" selected="true">GC-MS</option>
+                <option value="LC-MS">LC-MS</option>
+            </param>
+        </section>
+    </xml>
+
+    <xml name="output_msp">
+        <collection label="Mass spectra from ${tool.name} on ${on_string}" name="mass_spectra" type="list">
+            <discover_datasets pattern="__name_and_ext__" directory="spectra" recurse="true" ext="msp"/>
+        </collection>
+    </xml>
+
+    <xml name="citations">
+        <citations>
+            <!-- Example of annotating a citation using a BibTex entry. -->
+            <citation type="bibtex">
+                @article{Broeckling2014e,
+                abstract = {Metabolomic data are frequently acquired using chromatographically coupled mass spectrometry
+                (MS) platforms. For such datasets, the first step in data analysis relies on feature detection, where a
+                feature is defined by a mass and retention time. While a feature typically is derived from a single
+                compound, a spectrum of mass signals is more a more-accurate representation of the mass spectrometric
+                signal for a given metabolite. Here, we report a novel feature grouping method that operates in an
+                unsupervised manner to group signals from MS data into spectra without relying on predictability of the
+                in-source phenomenon. We additionally address a fundamental bottleneck in metabolomics, annotation of MS
+                level signals, by incorporating indiscriminant MS/MS (idMS/MS) data implicitly: feature detection is
+                performed on both MS and idMS/MS data, and feature-feature relationships are determined simultaneously
+                from the MS and idMS/MS data. This approach facilitates identification of metabolites using in-source MS
+                and/or idMS/MS spectra from a single experiment, reduces quantitative analytical variation compared to
+                single-feature measures, and decreases false positive annotations of unpredictable phenomenon as novel
+                compounds. This tool is released as a freely available R package, called RAMClustR, and is sufficiently
+                versatile to group features from any chromatographic-spectrometric platform or feature-finding software.
+                {\textcopyright} 2014 American Chemical Society.},
+                author = {Broeckling, C. D. and Afsar, F. A. and Neumann, S. and Ben-Hur, A. and Prenni, J. E.},
+                doi = {10.1021/ac501530d},
+                issn = {15206882},
+                journal = {Analytical Chemistry},
+                number = {14},
+                pages = {6812--6817},
+                pmid = {24927477},
+                title = {{RAMClust: A novel feature clustering method enables spectral-matching-based annotation for
+                metabolomics data}},
+                volume = {86},
+                year = {2014}
+                }
+            </citation>
+        </citations>
+    </xml>
+
+    <token name="@HELP@">
+        <![CDATA[
+            Documentation
+                    For documentation on the tool see https://github.com/cbroeckl/RAMClustR/blob/master/vignettes/RAMClustR.Rmd
+
+                Upstream Tools
+                    +-------+----------------------+----------------------+------------+
+                    | Name  | Output File          | Format               | Parameter  |
+                    +=======+======================+======================+============+
+                    | xcms  | xset.fillPeaks.RData | rdata.xcms.fillpeaks | xcmsObj    |
+                    +-------+----------------------+----------------------+------------+
+
+                    The tool takes an **xcmsSet** object as input and extracts all relevant information.
+
+                    +-------+------------------------+--------+------------+
+                    | Name  | Output File            | Format | Parameter  |
+                    +=======+========================+========+============+
+                    | ???   | Feature Table with MS1 | csv    | ms         |
+                    +-------+------------------------+--------+------------+
+                    | ???   | Feature Table with MS2 | csv    | idmsms     |
+                    +-------+------------------------+--------+------------+
+
+                    Alternatively, the tool takes a **csv** table as input which has to fulfill the following requirements
+
+                    (1) no more than one sample (or file) name column and one feature name row;
+                    (2) feature names that contain the mass and retention times, separated by a constant delimiter; and
+                    (3) features in columns and samples in rows.
+
+                Downstream Tools
+                    +---------+--------------+----------------------+
+                    | Name    | Output File  | Format               |
+                    +=========+==============+======================+
+                    | matchMS | Mass Spectra | collection (tgz/msp) |
+                    +---------+--------------+----------------------+
+
+        @GENERAL_HELP@
+        ]]>
+    </token>
+
+    <token name="@GENERAL_HELP@">
+        Background
+            Metabolomics
+                Metabolomics is frequently performed using chromatographically coupled mass spectrometry, with gas
+                chromatography, liquid chromatography, and capillary electrophoresis being the most frequently utilized
+                methods of separation. The coupling of chromatography to mass spectrometry is enabled with an
+                appropriate ionization source - electron impact (EI) for gas phase separations and electrospray
+                ionization (ESI) for liquid phase separations. XCMS is a commonly used tool to detect all the signals
+                from a metabolomics dataset, generating aligned features, where a feature is represented by a mass and
+                retention time. Each feature is presumed to derive from a single compound. However, each compound is
+                represented by several features. With any ionization method, isotopic peaks will be observed reflective
+                of the elemental composition of the analyte. In EI, fragmentation is a byproduct of ionization, and has
+                driven the generation of large mass spectral libraries. In ESI, in-source fragmentation frequently
+                occurs, the magnitude of which is compound dependent, with more labile compounds being more prone to
+                in-source fragmentation. ESI can also product multiple adduct forms (protonated, potassiated, sodiated,
+                ammoniated...), and can produce multimers (i.e. [2M+H]+, [3M+K]+, etc) and multiple charged species
+                ([M+2H]++). This can become further complicated by considering combinations of these phenomena. For
+                example [2M+3H]+++ (triply charged dimer) or an in-source fragment of a dimer.
+
+            RAMClustR approach
+                RAMClustR was designed to group features designed from the same compound using an approach which is
+                __1.__ unsupervised, __2.__ platform agnosic, and __3.__ devoid of curated rules, as the depth of
+                understanding of these processes is insufficent to enable accurate curation/prediction of all phenomenon
+                that may occur. We acheive this by making two assumptions. The first is that two features derived
+                from the same compound with have (approximately) the same retention time. The second is that two
+                features derived from the same compound will have (approximately) the same quantitative trend across
+                all samples in the xcms sample set. From these assumptions, we can calculate a retention time
+                similarity score and a correlational similarity score for each feature pair. A high similarity score
+                for both retention time and correlation indicates a strong probability that two features derive from
+                the same compound. Since both conditions must be met, the product of the two similarity scores provides
+                the best approximatio of the total similarity score - i.e. a feature pair with retention time similarity
+                of 1 and correlational similarity of 0 is unlikely to derive from one compound - 1 x 0 = 0, the final
+                similarity score is zero, indicating the two features represent two different compounds. Similarly, a
+                feature pair with retention time similarity of 0 and correlational similarity of 1 is unlikely to derive
+                from one compound - 0 x 1 = 0. Alternatively - a feature pair with retention time similarity of 1 and
+                correlational similarity of 1 is likely to derive from one compound - 1 x 1 = 1.
+
+        The RAMClustR algorithm is built on creating similarity scores for all pairs of features, submitting
+        this score matrix for heirarchical clustering, and then cutting the resulting dendrogram into neat
+        chunks using the dynamicTreeCut package - where each 'chunk' of the dendrogram results in a group of
+        features likely to be derived from a single compound. Importantly, this is acheived without looking for
+        specific phenomenon (i.e. sodiation), meaning that grouping can be performed on any dataset, whether it
+        is poisitive or negative ionization mode, EI or ESI, LC-MS GC-MS or CE-MS, in-source fragment or complex
+        adduction event, and predictable or unpredictable signals.
+    </token>
+</macros>
