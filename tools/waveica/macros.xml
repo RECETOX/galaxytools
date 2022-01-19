@@ -3,11 +3,17 @@
 
     <xml name="creator">
         <creator>
+            <person
+                givenName="Maksym"
+                familyName="Skoryk"
+                url="https://github.com/maximskorik"
+                identifier="0000-0003-2056-8018" />
             <organization
-                url="https://www.recetox.muni.cz"
+                url="https://www.recetox.muni.cz/"
                 name="RECETOX MUNI" />
         </creator>
     </xml>
+
     <xml name="general_parameters">
         <param type="data" name="data" label="Feature table" format="csv" help=""/>
         <param type="integer" value="20" name="k" label="Number of components to decompose" help="maximal component that ICA decomposes"/>
@@ -82,4 +88,39 @@
             <data name="normalized_data" format="tsv" />
         </outputs>
     </xml>
+
+    <token name="@HELP@"><![CDATA[
+        **Description**
+
+        Removal of batch effects for large-scale untargeted metabolomics data based on wavelet analysis and independent
+        component analysis. The WaveICA method uses the time trend of samples over the injection order, decomposes the
+        original data into new multi-scale features, extracts and removes the batch effect resulting in normalized
+        intensities across samples.
+
+        The input is an intensity-by-feature table with metadata in the following format:
+
+        +---------------+--------+------------+----------------+-------+------------+--------------+-------------+-------------+-----+
+        | sampleName    | class  | sampleType | injectionOrder | batch | M85T34     | M86T41       | M86T518     | M86T539     | ... |
+        +===============+========+============+================+=======+============+==============+=============+=============+=====+
+        | VT_160120_002 | sample | sample     | 1              | 1     | 228520.064 | 35646729.215 | 2386896.979 | 1026645.836 | ... |
+        +---------------+--------+------------+----------------+-------+------------+--------------+-------------+-------------+-----+
+        | QC1           | sample | QC         | 2              | 1     | 90217.384  | 35735702.457 | 2456290.696 | 1089246.460 | ... |
+        +---------------+--------+------------+----------------+-------+------------+--------------+-------------+-------------+-----+
+        | ...           | ...    | ...        | ...            | ...   | ...        | ...          | ...         | ...         | ... |
+        +---------------+--------+------------+----------------+-------+------------+--------------+-------------+-------------+-----+
+
+
+        + The required columns are **sampleName**, **class**, **sampleType**, **injectionOrder**, and the **features** that you want to normalize.
+        + The **batch** column is required if batch correction mode is **Multiple batches** and optional otherwise.
+        + The presence of any additional columns (except features) will result in incorrect batch correction or job failure.
+        + the input table must not contain missing values. Missing intensities must be filled with 0.
+        + **sampleType** column accepts three possible values: [QC, sample, blank] (case insensitive).
+        + **class** column is used to denote a biological group of a sample (e.g., positive/negative species). The column accepts any values.
+        + the **output** is the same table with corrected feature intensities.
+
+        .. rubric:: **Footnotes**
+        .. [1] for details on wavelet-filter parameters refer to R `wavelets::wt.filter <https://www.rdocumentation.org/packages/wavelets/versions/0.3-0.2/topics/wt.filter>`_;
+        .. [2] when using 'Multiple batches', please cite the WaveICA (2019) paper; else, cite WaveICA 2.0 (2021) paper;
+    ]]>
+    </token>
 </macros>
