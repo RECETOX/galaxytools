@@ -8,6 +8,11 @@
                 familyName="Usman"
                 url="https://github.com/smartx-usman"
                 identifier="0000-0002-9598-0704" />
+            <person
+                givenName="Aleš"
+                familyName="Křenek"
+                url="https://github.com/ljocha"
+                identifier="0000-0002-3395-3196" />
             <organization
                 url="https://www.recetox.muni.cz/"
                 name="RECETOX MUNI" />

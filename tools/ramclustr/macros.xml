@@ -8,6 +8,21 @@
                 familyName="Hecht"
                 url="https://github.com/hechth"
                 identifier="0000-0001-6744-996X" />
+            <person
+                givenName="Maksym"
+                familyName="Skoryk"
+                url="https://github.com/maximskorik"
+                identifier="0000-0003-2056-8018" />
+            <person
+                givenName="Matej"
+                familyName="Troják"
+                url="https://github.com/xtrojak"
+                identifier="0000-0003-0841-2707" />
+            <person
+                givenName="Martin"
+                familyName="Čech"
+                url="https://github.com/martenson"
+                identifier="0000-0002-9318-1781" />
             <organization
                 url="https://www.recetox.muni.cz/"
                 name="RECETOX MUNI"/>

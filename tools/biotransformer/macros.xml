@@ -6,6 +6,10 @@
                 familyName="Čech"
                 url="https://github.com/martenson"
                 identifier="0000-0002-9318-1781" />
+            <person
+                givenName="Karolína"
+                familyName="Trachtová"
+                url="https://github.com/trachtok" />
             <organization
                 url="https://www.recetox.muni.cz/"
                 name="RECETOX MUNI" />

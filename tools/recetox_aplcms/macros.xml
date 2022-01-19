@@ -16,6 +16,11 @@
                 familyName="Čech"
                 url="https://github.com/martenson"
                 identifier="0000-0002-9318-1781" />
+            <person
+                givenName="Jiří"
+                familyName="Novotný"
+                url="https://github.com/xtracko"
+                identifier="0000-0001-5449-3523" />
             <organization
                 url="https://www.recetox.muni.cz/"
                 name="RECETOX MUNI"/>
