@@ -1,0 +1,82 @@
+<macros>
+    <token name="@TOOL_VERSION@">3.0.0</token>
+
+    <xml name="creator">
+        <creator>
+            <person
+                givenName="Karolína"
+                familyName="Trachtová"
+                url="https://github.com/trachtok" />
+            <organization
+                url="https://www.recetox.muni.cz/"
+                name="RECETOX MUNI" />
+        </creator>
+    </xml>
+
+    <token name="@HELP@">
+        <![CDATA[
+        RMassBank workflow - part I and II
+            This is implementation of RMassBank workflow (Bioconductor R package) based on publication by Stravs et al. 2013.
+
+            Original RMassBank package is used to process tandem MS files and build MassBank records. Functions include
+            automated extraction of tandem MS spectra, formula assignment to tandem MS fragments, recalibration of tandem
+            MS spectra with assigned fragments, spectrum cleanup, automated retrieval of compound information from Internet
+            databases, and export to MassBank records.
+
+            This script is a full pipeline of RmassBank that loads settings file, compounds list, infolist and input .mzML
+            files (one or multiple) and goes through all 8 steps of data-preprocessing referenced in RMassBank's
+            Bioconductor manual (Mass spectrometry workflow, function msmsWorkflow()) and all steps of MassBank record
+            generation (MassBank record workflow, function mbWorkflow()). To make it easier for user, based on template
+            of settings required by RMassBank package the corresponding settings file is created as well
+            (see section Settings file).
+
+            User's inputs:
+                - *compounds list* **(must have suffix .csv)** - separator must be ',', required columns: ID, Name_deu, Name_Eng, Name, SMILES, RT, CAS
+                - *mode* - either **pH** (positive H) specifies [M+H]+ OR **pNa** specifies [M+Na]+ OR **pM** specifies [M]+ OR **mFA** specify [M-H]- and [M+FA]-
+                - *input mzML files* - files for RMassBank package must have specific naming, each filename should be in format: xxxxxxxx_1234_xxx.mzXML where the xxx denotes anything and 1234 is compound ID (must be stated in ID column of compound csv file).
+                - *infolist* **(must have suffix .csv)** - separator must be ',', columns (required columns are **bold**): '' (column name empty, values are numbers from 1 to n=number of chemicals), OK, id, dbcas, dbname_d, dbname_e, dataused, COMMENT.CONFIDENCE, COMMENT.EAWAG_UCHEM_ID, **CH$NAME1**, CH$NAME2, CH$NAME3, CH$COMPOUND_CLASS, **CH$FORMULA**, **CH$EXACT_MASS**, **CH$SMILES**, **CH$IUPAC**, CH$LINK.CAS, CH$LINK.CHEBI, CH$LINK.HMDB, CH$LINK.KEGG, CH$LINK.LIPIDMAPS, CH$LINK.PUBCHEM, **CH$LINK.INCHIKEY**, CH$LINK.CHEMSPIDER
+                - *settings parameters* - either filled in Galaxy or the whole settings file can be uploaded and used to run the RMassBank workflow
+
+            Galaxy outputs:
+                - CSV file with failed peaks (empty if there were no failed peaks)
+                - PDF plot showing performance of the recalibration
+                - Full R environment (.RData) that should be used as an input for RMassBank workflow - part II
+                - R environment with re-analyzed spectra (_RA.RData, see RMassBank manual for more information)
+                - R environment with refiltered spectra (_RF.RData, see RMassBank manual for more information)
+                - *zipped folder* with records ready to be uploaded to MassBank database
+                - *settings file* used to run the RMassBank
+
+                For more information about the data-preprocessing and record generation of the RMassBank pipeline, please refer
+                to `Bioconductor manual <https://www.bioconductor.org/packages/release/bioc/html/RMassBank.html>`_ for RMassBank.
+
+            Settings file
+                In the original RMassBank R package, user has to specify multiple parameters via the settings file. To make
+                life easier for users of this tool, most of the parameters can be specified in the Galaxy intrface for this
+                tool and are automatically filled in the settings template that can is then used for RMassBank workflow.
+                If the user wants to supply his/her own settings files, that is also possible. Path to OpenBabel will be
+                automatically filled no matter what is the original specification in the supplied settings file.
+
+                For all parameters, please refer to the manual for RMassBank at `Bioconductor website
+                <https://www.bioconductor.org/packages/release/bioc/html/RMassBank.html>`_ .
+
+            Parameters that can only be changed manually are:
+                - *deprofile:* leave empty if input data are already in centroid mode (usuall case), otherwise use one of the values from deprofile.spline, deprofile.fwhm or deprofile.localMax to convert the input $
+                - *babeldir:* do not change this if the settings file is to be further used in Galaxy
+                - *annotations:* several fields containg information about author, used instrument etc.
+                - *spectraList:* list of data-dependent scans in their order (relative to the parent scan), for annotation of the MassBank records
+                - *electronicNoise:* list of known electronic noise peaks
+                - *recalibrator:* custom recalibration function
+                - *titleFormat:* defines the title format
+
+                **All parameters are more thoroughly described in the created settings file, which can be edited in any simple
+                text editor.**
+
+                **NOTE:** In case of manual editing of the settings file, do not indent with TAB characters! Use only spaces.
+
+        Authors of RMassBank: Michael Stravs, Emma Schymanski, Steffen Neumann, Erik Mueller, with contributions
+        from Tobias Schulze.
+
+        RMassBank maintainer: at Eawag (massbank@eawag.ch)
+        ]]>
+    </token>
+</macros>

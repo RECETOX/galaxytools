@@ -1,324 +1,263 @@
-<tool id="rmassbank" name="RMassBank" version="3.0.0+galaxy0">
-  <requirements>
-     <requirement type="package" version="3.7">python</requirement>
-     <requirement type="package" version="2.4.1">openbabel</requirement>
-     <requirement type="package" version="3.0.0">bioconductor-rmassbank</requirement>
-     <requirement type="package" version="3.1.1">r-gplots</requirement>
-     <requirement type="package" version="3.0">zip</requirement>
-  </requirements>
-  <stdio>
-    <exit_code range="1:" />
-    <exit_code range=":-1" />
-  </stdio>
-  <command><![CDATA[ 
- #for $infile in $param_in:      
-    ln -s '${infile}' '${infile.element_identifier}' &&
- #end for
-  
- ln -s '${compounds}' '${compounds.element_identifier}' &&
+<tool id="rmassbank" name="RMassBank" version="@TOOL_VERSION@+galaxy0">
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="creator"/>
 
- mkdir -p ./infolists &&
- ln -s $infolist ./infolists/${infolist.element_identifier} &&
+    <requirements>
+        <requirement type="package" version="3.7">python</requirement>
+        <requirement type="package" version="2.4.1">openbabel</requirement>
+        <requirement type="package" version="3.0.0">bioconductor-rmassbank</requirement>
+        <requirement type="package" version="3.1.1">r-gplots</requirement>
+        <requirement type="package" version="3.0">zip</requirement>
+    </requirements>
+    <stdio>
+        <exit_code range="1:"/>
+        <exit_code range=":-1"/>
+    </stdio>
+    <command><![CDATA[
+         #for $infile in $param_in:
+            ln -s '${infile}' '${infile.element_identifier}' &&
+         #end for
 
- #if $select_settings.setting_file == "template"
-   python3 '${__tool_directory__}/createSettingsFile.py'
-   '${__tool_directory__}/mysettings.ini'
-   '${select_settings.general_param.rtMargin}'
-   '${select_settings.general_param.rtShift}'
-   '${select_settings.general_param.use_version}'
-   '${select_settings.general_param.use_rean_peaks}'
-   '${select_settings.general_param.add_annotation}'
-   '${select_settings.shifts.pH}'
-   '${select_settings.shifts.pM}'
-   '${select_settings.shifts.pNa}'
-   '${select_settings.shifts.mH}'
-   '${select_settings.shifts.mFA}'
-   '${select_settings.noise_recalibration.electronicNoiseWidth}'
-   '${select_settings.noise_recalibration.recalibrateBy}'
-   '${select_settings.noise_recalibration.recalibrateMS1}'
-   '${select_settings.noise_recalibration.recalibrateMS1Window}'
-   '${select_settings.noise_recalibration.multiplicityFilter}'
-   '${select_settings.data_filtering.ppmHighMass}'
-   '${select_settings.data_filtering.ppmLowMass}'
-   '${select_settings.data_filtering.massRangeDivision}'
-   '${select_settings.data_filtering.ppmFine}'
-   '${select_settings.data_filtering.prelimCut}'
-   '${select_settings.data_filtering.prelimCutRatio}'
-   '${select_settings.data_filtering.fineCut}'
-   '${select_settings.data_filtering.fineCutRatio}'
-   '${select_settings.data_filtering.specOkLimit}'
-   '${select_settings.data_filtering.dbeMinLimit}'
-   '${select_settings.data_filtering.satelliteMzLimit}'
-   '${select_settings.data_filtering.satelliteIntLimit}'
-   '${select_settings.raw_settings.ppmFine}'
-   '${select_settings.raw_settings.mzCoarse}'
-   '${select_settings.raw_settings.fillPrecursorScan}'
-   \$(echo `which babel` | sed s/babel//)
-   '${select_settings.general_param.include_sp_tags}'
-   '${select_settings.raw_settings.unknownMass}'
-   &&
- #else
-   python3 '${__tool_directory__}/addBabelPath.py' 
-   '${select_settings.setting_file_ext}'
-   \$(echo `which babel` | sed s/babel//)
-   &&   
- #end if
+         ln -s '${compounds}' '${compounds.element_identifier}' &&
 
- Rscript '${__tool_directory__}/rmassbank.r' 
-  mysettings_galaxy.ini
-  '${compounds.element_identifier}'
-  '${mode}'
-  ./infolists
-  #for $infile in $param_in:
-    '${infile.element_identifier}'
-  #end for
- &&
- 
- mv mysettings_galaxy.ini $outputINI &&
- mv results_RA.RData $rafile &&
- mv results_RF.RData $rffile &&
- mv Rplots.pdf $pdfplot &&
- mv results.RData $fllrdata &&
- zip -r mb_records.zip XX &&
- mv mb_records.zip $output &&
+         mkdir -p ./infolists &&
+         ln -s $infolist ./infolists/${infolist.element_identifier} &&
 
- [ ! -f ./results_Failpeaks.csv ] && touch ./results_Failpeaks.csv &&
- mv results_Failpeaks.csv $csvfile
-   ]]>
-  </command>
-  <inputs>
-    <param name="param_in" type="data" format="mzML" multiple="true" label="Input mzML files."/>
-    <param format="csv" name="compounds" type="data" label="Compound list in CSV format."/>
-    <param format="csv" name="infolist" type="data" label="Infolist in CSV format."/>
-    <param name="mode" type="text" label="Mode for RMassBank pipeline."/>
- 
-    <conditional name="select_settings">
-       <param name="setting_file" type="select" label="Choose the source if you want to generate settings file or you will supply with your own settings file.">
-          <option value="template" selected="true">Generate settings file for me</option>
-          <option value="external">Use external settings file</option>
-       </param>
-       <when value="template">
+         #if $select_settings.setting_file == "template"
+           python3 '${__tool_directory__}/createSettingsFile.py'
+           '${__tool_directory__}/mysettings.ini'
+           '${select_settings.general_param.rtMargin}'
+           '${select_settings.general_param.rtShift}'
+           '${select_settings.general_param.use_version}'
+           '${select_settings.general_param.use_rean_peaks}'
+           '${select_settings.general_param.add_annotation}'
+           '${select_settings.shifts.pH}'
+           '${select_settings.shifts.pM}'
+           '${select_settings.shifts.pNa}'
+           '${select_settings.shifts.mH}'
+           '${select_settings.shifts.mFA}'
+           '${select_settings.noise_recalibration.electronicNoiseWidth}'
+           '${select_settings.noise_recalibration.recalibrateBy}'
+           '${select_settings.noise_recalibration.recalibrateMS1}'
+           '${select_settings.noise_recalibration.recalibrateMS1Window}'
+           '${select_settings.noise_recalibration.multiplicityFilter}'
+           '${select_settings.data_filtering.ppmHighMass}'
+           '${select_settings.data_filtering.ppmLowMass}'
+           '${select_settings.data_filtering.massRangeDivision}'
+           '${select_settings.data_filtering.ppmFine}'
+           '${select_settings.data_filtering.prelimCut}'
+           '${select_settings.data_filtering.prelimCutRatio}'
+           '${select_settings.data_filtering.fineCut}'
+           '${select_settings.data_filtering.fineCutRatio}'
+           '${select_settings.data_filtering.specOkLimit}'
+           '${select_settings.data_filtering.dbeMinLimit}'
+           '${select_settings.data_filtering.satelliteMzLimit}'
+           '${select_settings.data_filtering.satelliteIntLimit}'
+           '${select_settings.raw_settings.ppmFine}'
+           '${select_settings.raw_settings.mzCoarse}'
+           '${select_settings.raw_settings.fillPrecursorScan}'
+           \$(echo `which babel` | sed s/babel//)
+           '${select_settings.general_param.include_sp_tags}'
+           '${select_settings.raw_settings.unknownMass}'
+           &&
+         #else
+           python3 '${__tool_directory__}/addBabelPath.py'
+           '${select_settings.setting_file_ext}'
+           \$(echo `which babel` | sed s/babel//)
+           &&
+         #end if
 
-          <section name="general_param" title="Setting of general parameters.">         
-            <param name="rtMargin" type="float" value="0.4" label="Deviation (in minutes) allowed the for retention time."/>
-            <param name="rtShift" type="float" value="0.0" label="Systematic retention time shift."/>
-            <param name="use_version" type="select" value="2" label="Which MassBank record version to use; version 2 is advised.">
-               <option value="2" selected="true">2</option>
-               <option value="1">1</option>
+         Rscript '${__tool_directory__}/rmassbank.r'
+          mysettings_galaxy.ini
+          '${compounds.element_identifier}'
+          '${mode}'
+          ./infolists
+          #for $infile in $param_in:
+            '${infile.element_identifier}'
+          #end for
+         &&
+
+         mv mysettings_galaxy.ini $outputINI &&
+         mv results_RA.RData $rafile &&
+         mv results_RF.RData $rffile &&
+         mv Rplots.pdf $pdfplot &&
+         mv results.RData $fllrdata &&
+         zip -r mb_records.zip XX &&
+         mv mb_records.zip $output &&
+
+         [ ! -f ./results_Failpeaks.csv ] && touch ./results_Failpeaks.csv &&
+         mv results_Failpeaks.csv $csvfile
+        ]]>
+    </command>
+    <inputs>
+        <param name="param_in" type="data" format="mzML" multiple="true" label="Input mzML files."/>
+        <param format="csv" name="compounds" type="data" label="Compound list in CSV format."/>
+        <param format="csv" name="infolist" type="data" label="Infolist in CSV format."/>
+        <param name="mode" type="text" label="Mode for RMassBank pipeline."/>
+
+        <conditional name="select_settings">
+            <param name="setting_file" type="select"
+                   label="Choose the source if you want to generate settings file or you will supply with your own settings file.">
+                <option value="template" selected="true">Generate settings file for me</option>
+                <option value="external">Use external settings file</option>
             </param>
-            <param name="use_rean_peaks" type="select" value="TRUE" label="Include reanalyzed peaks?">
-              <option value="TRUE" selected="true">TRUE</option>
-              <option value="FALSE">FALSE</option>
-            </param>
-            <param name="add_annotation" type="select" value="TRUE" label="Annotate the spectra files with (putative) molecular formulas for fragments?">
-              <option value="TRUE" selected="true">TRUE</option>
-              <option value="FALSE">FALSE</option>
-            </param>
-            <param name="include_sp_tags" type="select" value="FALSE" label="Include sp tags?">
-              <option value="FALSE" selected="true">FALSE</option>
-              <option value="TRUE">TRUE</option>
-            </param>
-         </section>
+            <when value="template">
 
-         <section name="shifts" title="Shifts of the starting points for RMassBank accession numbers.">
-            <param name="pH" type="integer" value="0" label="pH ([M+H]+: accession numbers 1-14) "/>
-            <param name="pM" type="integer" value="16" label="pM ([M]+: 17-30)"/>
-            <param name="pNa" type="integer" value="32" label="pNa ([M+Na]+: 33-46)"/>
-            <param name="mH" type="integer" value="50" label="mH ([M-H]-: 51-64)"/>
-            <param name="mFA" type="integer" value="66" label="mFA ([M+FA]-: 67-80)"/>
-         </section>
+                <section name="general_param" title="Setting of general parameters.">
+                    <param name="rtMargin" type="float" value="0.4"
+                           label="Deviation (in minutes) allowed the for retention time."/>
+                    <param name="rtShift" type="float" value="0.0" label="Systematic retention time shift."/>
+                    <param name="use_version" type="select" value="2"
+                           label="Which MassBank record version to use; version 2 is advised.">
+                        <option value="2" selected="true">2</option>
+                        <option value="1">1</option>
+                    </param>
+                    <param name="use_rean_peaks" type="select" value="TRUE" label="Include reanalyzed peaks?">
+                        <option value="TRUE" selected="true">TRUE</option>
+                        <option value="FALSE">FALSE</option>
+                    </param>
+                    <param name="add_annotation" type="select" value="TRUE"
+                           label="Annotate the spectra files with (putative) molecular formulas for fragments?">
+                        <option value="TRUE" selected="true">TRUE</option>
+                        <option value="FALSE">FALSE</option>
+                    </param>
+                    <param name="include_sp_tags" type="select" value="FALSE" label="Include sp tags?">
+                        <option value="FALSE" selected="true">FALSE</option>
+                        <option value="TRUE">TRUE</option>
+                    </param>
+                </section>
 
-         <section name="noise_recalibration" title="Noise and recalibration settings">
-            <param name="electronicNoiseWidth" type="float" value="0.3" label="Exclusion width of electronic noise peaks (from unmatched peaks, prior to reanalysis)."/>
-            <param name="recalibrateBy" type="select" value="dppm" label="Recalibration settings:">
-              <option value="dppm" selected="true">dppm</option>
-              <option value="dmz">dmz</option>
-            </param>
-            <param name="recalibrateMS1" type="select" value="common" label="Recalibrate MS1:">
-              <option value="common" selected="true">with common curve</option>
-              <option value="separate">separately</option>
-              <option value="none">none (do not recalibrate)</option>
-            </param>
-            <param name="recalibrateMS1Window" type="integer" value="15" label="Window width to look for MS1 peaks to recalibrate (in ppm integer values):"/>
-            <param name="multiplicityFilter" type="integer" value="2" label="Define the multiplicity filtering level, default is 2 (peak occurs at least twice, set this to 1 if you want to turn this option off, set this to anything > 2 if you want harder filtering"/>
-         </section>
+                <section name="shifts" title="Shifts of the starting points for RMassBank accession numbers.">
+                    <param name="pH" type="integer" value="0" label="pH ([M+H]+: accession numbers 1-14) "/>
+                    <param name="pM" type="integer" value="16" label="pM ([M]+: 17-30)"/>
+                    <param name="pNa" type="integer" value="32" label="pNa ([M+Na]+: 33-46)"/>
+                    <param name="mH" type="integer" value="50" label="mH ([M-H]-: 51-64)"/>
+                    <param name="mFA" type="integer" value="66" label="mFA ([M+FA]-: 67-80)"/>
+                </section>
 
-         <section name="data_filtering" title="Data filtering settings">
-             <param name="ppmHighMass" type="integer" value="10" label="ppmHighMass"/>
-             <param name="ppmLowMass" type="integer" value="15" label="ppmLowMass"/>
-             <param name="massRangeDivision" type="integer" value="120" label="massRangeDivision"/>
-             <param name="ppmFine" type="integer" value="5" label="ppmFine"/>
-             <param name="prelimCut" type="integer" value="1000" label="prelimCut"/>
-             <param name="prelimCutRatio" type="float" value="0.0" label="prelimCutRatio"/>
-             <param name="fineCut" type="float" value="0.0" label="fineCut"/>
-             <param name="fineCutRatio" type="float" value="0.0" label="fineCutRatio"/>
-             <param name="specOkLimit" type="integer" value="1000" label="specOkLimit"/>
-             <param name="dbeMinLimit" type="float" value="-0.5" label="dbeMinLimit"/>
-             <param name="satelliteMzLimit" type="float" value="0.5" label="satelliteMzLimit"/>
-             <param name="satelliteIntLimit" type="float" value="0.05" label="satelliteIntLimit"/>
-         </section>
-         
-         <section name="raw_settings" title="Degine raw MS retrieval settings">
-             <param name="ppmFine" type="integer" value="10" label="ppmFine"/>
-             <param name="mzCoarse" type="float" value="0.5" label="mzCoarse"/>
-             <param name="fillPrecursorScan" type="select" value="FALSE" label="fillPrecursorScan (FALSE for 'good' mzML files which have all the info needed)">
-               <option value="TRUE">TRUE</option>
-               <option value="FALSE" selected="true">FALSE</option>
-             </param>
-             <param name="unknownMass" type="select" value="charged" label="Select how to treat unknown compound masses.">
-               <option value="charged" selected="true">charged</option>
-               <option value="neutral">neutral</option>
-             </param>
-          </section>
-       </when>
-       <when value="external">
-          <param name="setting_file_ext" type="data" format="txt" label="Settings file"/>
-       </when>
-    </conditional>
+                <section name="noise_recalibration" title="Noise and recalibration settings">
+                    <param name="electronicNoiseWidth" type="float" value="0.3"
+                           label="Exclusion width of electronic noise peaks (from unmatched peaks, prior to reanalysis)."/>
+                    <param name="recalibrateBy" type="select" value="dppm" label="Recalibration settings:">
+                        <option value="dppm" selected="true">dppm</option>
+                        <option value="dmz">dmz</option>
+                    </param>
+                    <param name="recalibrateMS1" type="select" value="common" label="Recalibrate MS1:">
+                        <option value="common" selected="true">with common curve</option>
+                        <option value="separate">separately</option>
+                        <option value="none">none (do not recalibrate)</option>
+                    </param>
+                    <param name="recalibrateMS1Window" type="integer" value="15"
+                           label="Window width to look for MS1 peaks to recalibrate (in ppm integer values):"/>
+                    <param name="multiplicityFilter" type="integer" value="2"
+                           label="Define the multiplicity filtering level, default is 2 (peak occurs at least twice,
+                           set this to 1 if you want to turn this option off, set this to anything > 2 if you want harder filtering"/>
+                </section>
 
-  </inputs>   
-  
-<outputs>
-    <data format="txt" name="outputINI" label="mysettings_galaxy.ini"/>
-    <data format="csv" name="csvfile" label="CSV file with failed peaks."/>
-    <data format="pdf" name="pdfplot" label="PDF plot."/>
-    <data format="rdata" name="fllrdata" label="Full R environment."/>
-    <data format="rdata" name="rafile" label="RData file with re-analyzed spectra (_RA.RData)."/>
-    <data format="rdata" name="rffile" label="RData file with refiltered spectra (_RF.RData)."/>
-    <data format="zip" name="output" label="Zipped folder with results."/>
-  </outputs>
-  <tests>
-    <test>
-      <param  name="compounds" value="compoundList.csv"/>
-      <param name="infolist" value="infolist.csv"/>
-      <param name="mode" value="pH"/>
-      <param name="param_in" value="1_3_Trifluoromethylphenyl_piperazin_2819_pos.mzML"/>
-      <param name="rtMargin" value="0.4"/>
-      <param name="rtShift" value="0.0"/>
-      <param name="use_version" value="2"/>
-      <param name="use_rean_peaks" value="TRUE"/>
-      <param name="add_annotation" value="TRUE"/>
-      <param name="include_sp_tags" value="FALSE"/>
-      <param name="pH" value="0"/>
-      <param name="pM" value="16"/>
-      <param name="pNa" value="32"/>
-      <param name="mH" value="50"/>
-      <param name="mFA" value="66"/>
-      <param name="electronicNoiseWidth" value="0.3"/>
-      <param name="recalibrateBy" value="dppm"/>
-      <param name="recalibrateMS1" value="common"/>
-      <param name="recalibrateMS1Window" value="15"/>
-      <param name="multiplicityFilter" value="2"/>
-      <param name="ppmHighMass" value="10"/>
-      <param name="ppmLowMass" value="15"/>
-      <param name="massRangeDivision" value="120"/>
-      <param name="ppmFine"  value="5"/>
-      <param name="prelimCut" value="1000"/>
-      <param name="prelimCutRatio" value="0.0"/>
-      <param name="fineCut" value="0.0"/>
-      <param name="fineCutRatio" value="0.0"/>
-      <param name="specOkLimit" value="1000"/>
-      <param name="dbeMinLimit" value="-0.5"/>
-      <param name="satelliteMzLimit" value="0.5"/>
-      <param name="satelliteIntLimit" value="0.05"/>
-      <param name="ppmFine" value="5"/>
-      <param name="mzCoarse" value="0.5"/>
-      <param name="fillPrecursorScan" value="FALSE"/>
-      <param name="unknownMass" value="charged"/>
-      <output name="outputINI" value="mysettings_galaxy.ini" ftype="txt" lines_diff="2"/>
-      <output name="csvfile" value="failedPeaks.csv" ftype="csv" lines_diff="1"/>
-      <output name="pdfplot" value="plot.pdf" compare="sim_size" delta_frac="0.1"/>
-      <output name="fllrdata" value="resultsFull.RData" compare="sim_size" delta_frac="0.1"/>
-      <output name="rafile" value="results_RA.RData" compare="sim_size" delta_frac="0.1"/>
-      <output name="rffile" value="results_RF.RData" compare="sim_size" delta_frac="0.1"/>
-      <output name="output" value="output.zip" compare="sim_size" delta_frac="0.1"/>
-    </test>
-  </tests>
-  <help>
-<![CDATA[
-==================================
-RMassBank workflow - part I and II
-==================================
+                <section name="data_filtering" title="Data filtering settings">
+                    <param name="ppmHighMass" type="integer" value="10" label="ppmHighMass"/>
+                    <param name="ppmLowMass" type="integer" value="15" label="ppmLowMass"/>
+                    <param name="massRangeDivision" type="integer" value="120" label="massRangeDivision"/>
+                    <param name="ppmFine" type="integer" value="5" label="ppmFine"/>
+                    <param name="prelimCut" type="integer" value="1000" label="prelimCut"/>
+                    <param name="prelimCutRatio" type="float" value="0.0" label="prelimCutRatio"/>
+                    <param name="fineCut" type="float" value="0.0" label="fineCut"/>
+                    <param name="fineCutRatio" type="float" value="0.0" label="fineCutRatio"/>
+                    <param name="specOkLimit" type="integer" value="1000" label="specOkLimit"/>
+                    <param name="dbeMinLimit" type="float" value="-0.5" label="dbeMinLimit"/>
+                    <param name="satelliteMzLimit" type="float" value="0.5" label="satelliteMzLimit"/>
+                    <param name="satelliteIntLimit" type="float" value="0.05" label="satelliteIntLimit"/>
+                </section>
 
-This is implementation of RMassBank workflow (Bioconductor R package) based on publication by Stravs et al. 2013. 
+                <section name="raw_settings" title="Degine raw MS retrieval settings">
+                    <param name="ppmFine" type="integer" value="10" label="ppmFine"/>
+                    <param name="mzCoarse" type="float" value="0.5" label="mzCoarse"/>
+                    <param name="fillPrecursorScan" type="select" value="FALSE"
+                           label="fillPrecursorScan (FALSE for 'good' mzML files which have all the info needed)">
+                        <option value="TRUE">TRUE</option>
+                        <option value="FALSE" selected="true">FALSE</option>
+                    </param>
+                    <param name="unknownMass" type="select" value="charged"
+                           label="Select how to treat unknown compound masses.">
+                        <option value="charged" selected="true">charged</option>
+                        <option value="neutral">neutral</option>
+                    </param>
+                </section>
+            </when>
+            <when value="external">
+                <param name="setting_file_ext" type="data" format="txt" label="Settings file"/>
+            </when>
+        </conditional>
 
-Original RMassBank package is used to process tandem MS files and build MassBank records. Functions include automated extraction of tandem MS spectra, formula assignment to tandem MS fragments, recalibration of tandem MS spectra with assigned fragments, spectrum cleanup, automated retrieval of compound information from Internet databases, and export to MassBank records.
+    </inputs>
 
-This script is a full pipeline of RmassBank that loads settings file, compounds list, infolist and input .mzML files (one or multiple) and goes through all 8 steps of data-preprocessing referenced in RMassBank's Bioconductor manual (Mass spectrometry workflow, function msmsWorkflow()) and all steps of MassBank record generation (MassBank record workflow, function mbWorkflow()). To make it easier for user, based on template of settings required by RMassBank package the corresponding settings file is created as well (see section Settings file).
+    <outputs>
+        <data format="txt" name="outputINI" label="mysettings_galaxy.ini"/>
+        <data format="csv" name="csvfile" label="CSV file with failed peaks."/>
+        <data format="pdf" name="pdfplot" label="PDF plot."/>
+        <data format="rdata" name="fllrdata" label="Full R environment."/>
+        <data format="rdata" name="rafile" label="RData file with re-analyzed spectra (_RA.RData)."/>
+        <data format="rdata" name="rffile" label="RData file with refiltered spectra (_RF.RData)."/>
+        <data format="zip" name="output" label="Zipped folder with results."/>
+    </outputs>
+    <tests>
+        <test>
+            <param name="compounds" value="compoundList.csv"/>
+            <param name="infolist" value="infolist.csv"/>
+            <param name="mode" value="pH"/>
+            <param name="param_in" value="1_3_Trifluoromethylphenyl_piperazin_2819_pos.mzML"/>
+            <param name="rtMargin" value="0.4"/>
+            <param name="rtShift" value="0.0"/>
+            <param name="use_version" value="2"/>
+            <param name="use_rean_peaks" value="TRUE"/>
+            <param name="add_annotation" value="TRUE"/>
+            <param name="include_sp_tags" value="FALSE"/>
+            <param name="pH" value="0"/>
+            <param name="pM" value="16"/>
+            <param name="pNa" value="32"/>
+            <param name="mH" value="50"/>
+            <param name="mFA" value="66"/>
+            <param name="electronicNoiseWidth" value="0.3"/>
+            <param name="recalibrateBy" value="dppm"/>
+            <param name="recalibrateMS1" value="common"/>
+            <param name="recalibrateMS1Window" value="15"/>
+            <param name="multiplicityFilter" value="2"/>
+            <param name="ppmHighMass" value="10"/>
+            <param name="ppmLowMass" value="15"/>
+            <param name="massRangeDivision" value="120"/>
+            <param name="ppmFine" value="5"/>
+            <param name="prelimCut" value="1000"/>
+            <param name="prelimCutRatio" value="0.0"/>
+            <param name="fineCut" value="0.0"/>
+            <param name="fineCutRatio" value="0.0"/>
+            <param name="specOkLimit" value="1000"/>
+            <param name="dbeMinLimit" value="-0.5"/>
+            <param name="satelliteMzLimit" value="0.5"/>
+            <param name="satelliteIntLimit" value="0.05"/>
+            <param name="ppmFine" value="5"/>
+            <param name="mzCoarse" value="0.5"/>
+            <param name="fillPrecursorScan" value="FALSE"/>
+            <param name="unknownMass" value="charged"/>
+            <output name="outputINI" value="mysettings_galaxy.ini" ftype="txt" lines_diff="2"/>
+            <output name="csvfile" value="failedPeaks.csv" ftype="csv" lines_diff="1"/>
+            <output name="pdfplot" value="plot.pdf" compare="sim_size" delta_frac="0.1"/>
+            <output name="fllrdata" value="resultsFull.RData" compare="sim_size" delta_frac="0.1"/>
+            <output name="rafile" value="results_RA.RData" compare="sim_size" delta_frac="0.1"/>
+            <output name="rffile" value="results_RF.RData" compare="sim_size" delta_frac="0.1"/>
+            <output name="output" value="output.zip" compare="sim_size" delta_frac="0.1"/>
+        </test>
+    </tests>
 
-User's inputs:
+    <help>
+        <![CDATA[
+        @HELP@
+        ]]>
+    </help>
 
-- *compounds list* **(must have suffix .csv)** - separator must be ',', required columns: ID, Name_deu, Name_Eng, Name, SMILES, RT, CAS
-
-- *mode* - either **pH** (positive H) specifies [M+H]+ OR **pNa** specifies [M+Na]+ OR **pM** specifies [M]+ OR **mFA** specify [M-H]- and [M+FA]-
-
-- *input mzML files* - files for RMassBank package must have specific naming, each filename should be in format: xxxxxxxx_1234_xxx.mzXML where the xxx denotes anything and 1234 is compound ID (must be stated in ID column of compound csv file). 
-
-- *infolist* **(must have suffix .csv)** - separator must be ',', columns (required columns are **bold**): '' (column name empty, values are numbers from 1 to n=number of chemicals), OK, id, dbcas, dbname_d, dbname_e, dataused, COMMENT.CONFIDENCE, COMMENT.EAWAG_UCHEM_ID, **CH$NAME1**, CH$NAME2, CH$NAME3, CH$COMPOUND_CLASS, **CH$FORMULA**, **CH$EXACT_MASS**, **CH$SMILES**, **CH$IUPAC**, CH$LINK.CAS, CH$LINK.CHEBI, CH$LINK.HMDB, CH$LINK.KEGG, CH$LINK.LIPIDMAPS, CH$LINK.PUBCHEM, **CH$LINK.INCHIKEY**, CH$LINK.CHEMSPIDER
-
-- *settings parameters* - either filled in Galaxy or the whole settings file can be uploaded and used to run the RMassBank workflow
-
-Galaxy outputs:
-
-- CSV file with failed peaks (empty if there were no failed peaks)
-
-- PDF plot showing performance of the recalibration
-
-- Full R environment (.RData) that should be used as an input for RMassBank workflow - part II
-
-- R environment with re-analyzed spectra (_RA.RData, see RMassBank manual for more information)
-
-- R environment with refiltered spectra (_RF.RData, see RMassBank manual for more information)
-
-- *zipped folder* with records ready to be uploaded to MassBank database
-
-- *settings file* used to run the RMassBank
-
-For more information about the data-preprocessing and record generation of the RMassBank pipeline, please refer to `Bioconductor manual <https://www.bioconductor.org/packages/release/bioc/html/RMassBank.html>`_ for RMassBank.
-
----------------------------------------------------
-
-=============
-Settings file
-=============
-
-In the original RMassBank R package, user has to specify multiple parameters via the settings file. To make life easier for users of this tool, most of the parameters can be specified in the Galaxy intrface for this tool and are automatically filled in the settings template that can is then used for RMassBank workflow. If th user wants to supply his/her own settings files, that is also possible. Path to OpenBabel will be automatically filled no matter what is the original specification in the supplied settings file.
-
-For all parameters, please refer to the manual for RMassBank at `Bioconductor website <https://www.bioconductor.org/packages/release/bioc/html/RMassBank.html>`_ .
-
-Parameters that can only be changed manually are:
-
-- *deprofile:* leave empty if input data are already in centroid mode (usuall case), otherwise use one of the values from deprofile.spline, deprofile.fwhm or deprofile.localMax to convert the input $
-
-- *babeldir:* do not change this if the settings file is to be further used in Galaxy
-
-- *annotations:* several fields containg information about author, used instrument etc.
-
-- *spectraList:* list of data-dependent scans in their order (relative to the parent scan), for annotation of the MassBank records
-
-- *electronicNoise:* list of known electronic noise peaks
-
-- *recalibrator:* custom recalibration function
-
-- *titleFormat:* defines the title format
-
-**All parameters are more thoroughly described in the created settings file, which can be edited in any simple text editor.**
-
-**NOTE:** In case of manual editing of the settings file, do not indent with TAB characters! Use only spaces.
-
----------------------------------------------------
-
-Author: Karolína Trachtová (k.trachtova@gmail.com) 
-
-Authors of RMassBank: Michael Stravs, Emma Schymanski, Steffen Neumann, Erik Mueller, with contributions from Tobias Schulze.
-
-RMassBank maintainer: at Eawag (massbank@eawag.ch)
-
-Author of the Galaxy wrapper: Karolína Trachtová (k.trachtova@gmail.com)
-]]>
-  </help>
-  <citations>
-    <citation type="doi">https://onlinelibrary.wiley.com/doi/full/10.1002/jms.3131</citation>
-  </citations>
+    <citations>
+        <citation type="doi">https://onlinelibrary.wiley.com/doi/full/10.1002/jms.3131</citation>
+    </citations>
 </tool>
 
