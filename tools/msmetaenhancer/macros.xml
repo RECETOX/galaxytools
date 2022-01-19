@@ -1,12 +1,19 @@
 <macros>
     <token name="@TOOL_VERSION@">0.1.2</token>
+
     <xml name="creator">
         <creator>
+            <person
+                givenName="Matej"
+                familyName="Troják"
+                url="https://github.com/xtrojak"
+                identifier="0000-0003-0841-2707" />
             <organization
                 url="https://www.recetox.muni.cz/"
                 name="RECETOX MUNI" />
         </creator>
     </xml>
+
     <token name="@HELP@">
         <![CDATA[
         MSMetaEnhancer will fetch and update various metadata included in your spectra .msp dataset.
