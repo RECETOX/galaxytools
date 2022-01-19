@@ -138,8 +138,6 @@
     <help>
         <![CDATA[
         @HELP@
-        Then, a score and a confidence level is assigned to each match based on peak correlation
-        clustering, metabolite pathway associations, adducts expectations, and isotope conformations.
         ]]>
     </help>
 
