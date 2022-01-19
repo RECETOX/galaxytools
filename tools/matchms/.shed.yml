@@ -10,8 +10,11 @@ repositories:
       - matchms.xml
       - matchms_wrapper.py
       - test-data
+      - macros.xml
   matchms_formatter:
     description: "Tool to reformat output tables of matchms."
     include:
       - matchms_formatter.xml
       - formatter.py
+      - test-data
+      - macros.xml

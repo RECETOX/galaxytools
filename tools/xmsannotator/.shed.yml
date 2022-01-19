@@ -8,9 +8,9 @@ repositories:
     description: "Annotate peak table with metabolites"
     include:
       - xmsannotator_simple.xml
-      - xmsannotator_macros.xml
+      - macros.xml
   xmsannotator_advanced:
     description: "Annotate peak table with metabolites"
     include:
       - xmsannotator_advanced.xml
-      - xmsannotator_macros.xml
+      - macros.xml
