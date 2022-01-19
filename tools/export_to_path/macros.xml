@@ -1,0 +1,19 @@
+<macros>
+    <xml name="creator">
+        <creator>
+            <person
+                givenName="Martin"
+                familyName="Čech"
+                url="https://github.com/martenson"
+                identifier="0000-0002-9318-1781" />
+            <organization
+                url="https://www.recetox.muni.cz/"
+                name="RECETOX MUNI" />
+        </creator>
+    </xml>
+    <token name="@HELP@">
+        <![CDATA[
+            Simple tool to copy datasets to a directory on the cluster.
+        ]]>
+    </token>
+</macros>
