@@ -4,6 +4,11 @@
 
     <xml name="creator">
         <creator>
+            <person
+                givenName="Jiří"
+                familyName="Novotný"
+                url="https://github.com/xtracko"
+                identifier="0000-0001-5449-3523" />
             <organization
                 url="https://www.recetox.muni.cz/"
                 name="RECETOX MUNI" />
@@ -49,4 +54,15 @@
     <xml name="citations">
         <citation type="doi">10.1021/acs.analchem.6b01214</citation>
     </xml>
+
+    <token name="@HELP@">
+        <![CDATA[
+        Annotate the peak intensity table (e.g. from an apLCMS run) with compounds from the compounds database
+        using advanced methods.
+
+        The annotation process generates all possible compound-adduct pairs and matches those pairs to the measured
+        peaks. A compound-adduct pair is pronounced as a match to a certain peak when the difference of their masses are
+        withing some tolerance.
+        ]]>
+    </token>
 </macros>

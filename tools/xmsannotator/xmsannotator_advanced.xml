@@ -1,6 +1,6 @@
 <tool id="xmsannotator_advanced" name="xMSannotator (advanced)" version="@TOOL_VERSION@+galaxy4">
     <macros>
-        <import>xmsannotator_macros.xml</import>
+        <import>macros.xml</import>
     </macros>
     <expand macro="creator"/>
     <requirements>
@@ -129,15 +129,13 @@
         <expand macro="outputs"/>
     </outputs>
 
-    <help><![CDATA[
-        Annotate the peak intensity table (such as outputted from apLCMS) with compounds from the compounds database
-        using advanced methods.
-
-        The annotation process generates all possible compound-adduct pairs and matches those pairs to the measured
-        peaks. A compound-adduct pair is pronounced as a match to a certain peak when the difference of their masses are
-        withing some tolerance. Then, a score and a confidence level is assigned to each match based on peak correlation
+    <help>
+        <![CDATA[
+        @HELP@
+        Then, a score and a confidence level is assigned to each match based on peak correlation
         clustering, metabolite pathway associations, adducts expectations, and isotope conformations.
-    ]]></help>
+        ]]>
+    </help>
 
     <citations>
         <expand macro="citations"/>
