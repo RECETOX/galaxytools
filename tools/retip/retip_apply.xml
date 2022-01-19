@@ -3,6 +3,8 @@
     <macros>
         <import>macros.xml</import>
     </macros>
+    <expand macro="creator"/>
+
     <expand macro="requirements"/>
     <command detect_errors="exit_code"><![CDATA[
             #if $input_smiles.is_of_type('tabular')
@@ -17,10 +19,12 @@
         <param name="model_h5" label="Select Model.h5 Dataset" type="data" format="h5" optional="false"/>
         <param format="tabular,h5" name="input_smiles" type="data" label="Select Input Smiles tsv or h5 Dataset"
                optional="false"/>
-	<param name="smiles_col" type="text" label="Name of input column with SMILES" optional="true" value="qsar_smiles"/>
-	<param name="name_col" type="text" label="Name of input column with some unique identifier" optional="true" value="recetox_cid"/>
-	<param name="ids" type="text" label="Input H5 dataset" optional="true" value="/annotations"/>
-	<param name="ods" type="text" label="Output H5 dataset" optional="true" value="/annotations"/>
+        <param name="smiles_col" type="text" label="Name of input column with SMILES" optional="true"
+               value="qsar_smiles"/>
+        <param name="name_col" type="text" label="Name of input column with some unique identifier" optional="true"
+               value="recetox_cid"/>
+        <param name="ids" type="text" label="Input H5 dataset" optional="true" value="/annotations"/>
+        <param name="ods" type="text" label="Output H5 dataset" optional="true" value="/annotations"/>
     </inputs>
     <outputs>
         <data format_source="input_smiles" name="output_good" label="Predicted RT" from_work_dir="output_file"/>
@@ -44,12 +48,13 @@
             <output name="output_bad" file="bad.h5" ftype="h5" compare="sim_size" delta="50"/>
         </test>
     </tests>
-    <help><![CDATA[
-.. class:: infomark
+    <help>
+        <![CDATA[
+        .. class:: infomark
 
-This tool is used for **Retention Time Prediction** on a whole database.
+        This tool is used for **Retention Time Prediction** on a whole database.
 
-@HELP@
+        @HELP@
         ]]>
     </help>
     <expand macro="citations"/>
