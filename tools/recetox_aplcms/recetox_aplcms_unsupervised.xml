@@ -1,14 +1,16 @@
 <tool id="recetox_aplcms_unsupervised" name="RECETOX apLCMS Unsupervised" version="@TOOL_VERSION@+galaxy2">
     <description>generate a feature table from LC/MS spectra</description>
     <macros>
-        <import>recetox_aplcms_macros.xml</import>
+        <import>macros.xml</import>
     </macros>
-    <expand macro="requirements" />
+    <expand macro="creator"/>
+
+    <expand macro="requirements"/>
     <command detect_errors="aggressive"><![CDATA[
         sh ${symlink_inputs} &&
         Rscript  -e 'source("${__tool_directory__}/main.R")' -e 'source("${run_script}")'
     ]]></command>
-    <expand macro="creator" />
+    <expand macro="creator"/>
     <configfiles>
         <configfile name="symlink_inputs">
             #for $infile in $files
@@ -52,37 +54,37 @@
     </configfiles>
 
     <expand macro="inputs">
-        <expand macro="noise_filtering" />
-        <expand macro="feature_detection" />
-        <expand macro="peak_alignment" />
-        <expand macro="weak_signal_recovery" />
-        <expand macro="output_format" />
+        <expand macro="noise_filtering"/>
+        <expand macro="feature_detection"/>
+        <expand macro="peak_alignment"/>
+        <expand macro="weak_signal_recovery"/>
+        <expand macro="output_format"/>
     </expand>
 
     <outputs>
-        <expand macro="unsupervised_outputs" />
+        <expand macro="unsupervised_outputs"/>
     </outputs>
 
     <tests>
         <test>
-            <param name="files" value="mbr_test0.mzml,mbr_test1.mzml,mbr_test2.mzml" ftype="mzml" />
-            <output name="recovered_feature_sample_table" file="unsupervised_recovered_feature_sample_table.parquet" ftype="parquet"/>
+            <param name="files" value="mbr_test0.mzml,mbr_test1.mzml,mbr_test2.mzml" ftype="mzml"/>
+            <output name="recovered_feature_sample_table" file="unsupervised_recovered_feature_sample_table.parquet"
+                    ftype="parquet"/>
         </test>
         <test>
-            <param name="files" value="mbr_test0.mzml,mbr_test1.mzml,mbr_test2.mzml" ftype="mzml" />
+            <param name="files" value="mbr_test0.mzml,mbr_test1.mzml,mbr_test2.mzml" ftype="mzml"/>
             <section name="output_format">
-                <param name="out_format" value="recetox" />
+                <param name="out_format" value="recetox"/>
             </section>
             <output name="recovered_feature_sample_table" file="unsupervised.recetox.parquet" ftype="parquet"/>
         </test>
     </tests>
 
     <help>
-        This is the Unsupervised version of apLCMS which is not relying on any existing knowledge about metabolites or
-        any historically detected features. For such functionality please use the Hybrid version of apLCMS.
-
-        @GENERAL_HELP@
+        <![CDATA[
+            @HELP_unsupervised@
+        ]]>
     </help>
 
-    <expand macro="citations" />
+    <expand macro="citations"/>
 </tool>
