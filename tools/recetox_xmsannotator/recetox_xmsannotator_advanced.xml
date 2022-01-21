@@ -53,8 +53,8 @@
         </expand>
         <section name="clustering" title="Clustering">
             <param name="correlation_method" type="select" display="radio" label="Correlation method">
-                <option value="pearson" selected="true"/>
-                <option value="spearman"/>
+                <option value="pearson" selected="true">pearson</option>
+                <option value="spearman">spearman</option>
             </param>
             <param name="correlation_threshold" type="float" value="0.7">
                 <label>Correlation threshold</label>
