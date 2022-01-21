@@ -1,4 +1,4 @@
-<tool id="matchms_formatter" name="matchms output formatter" version="@TOOL_VERSION@+galaxy0" python_template_version="3.5">
+<tool id="matchms_formatter" name="matchms output formatter" version="0.1.1" python_template_version="3.5">
     <description>reformat output tables of matchms</description>
 
     <macros>
