@@ -1,5 +1,9 @@
 <tool id="matchms_filtering" name="matchMS filtering" version="@TOOL_VERSION@+galaxy0">
     <description>calculate the similarity score and matched peaks</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="creator"/>
     <requirements>
         <requirement type="package" version="@TOOL_VERSION@">matchms</requirement>
         <requirement type="package" version="1.1.4">pandas</requirement>
