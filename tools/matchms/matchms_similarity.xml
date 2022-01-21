@@ -1,4 +1,4 @@
-<tool id="matchms" name="matchMS" version="@TOOL_VERSION@+galaxy1">
+<tool id="matchms" name="matchMS similarity" version="@TOOL_VERSION@+galaxy1">
     <description>calculate the similarity score and matched peaks</description>
 
     <macros>
@@ -21,9 +21,7 @@
 
     <configfiles>
         <configfile name="matchms_python_cli">
-            python3 ${__tool_directory__}/matchms_wrapper.py \
-            $default_filters \
-            $normalize_intensities \
+            python3 ${__tool_directory__}/matchms_similarity_wrapper.py \
             #if $symmetric.is_symmetric
             -s \
             #else
@@ -113,8 +111,8 @@
                     checksum="md5$28dc16ce45105234437e53d59e240046"/>
         </test>
         <test>
-            <param name="references" value="recetox_gc-ei_ms_20201028.msp" ftype="msp"/>
-            <param name="queries" value="recetox_gc-ei_ms_20201028.msp" ftype="msp"/>
+            <param name="references" value="recetox_gc-ei_ms_20201028_with_precursor_mz.msp" ftype="msp"/>
+            <param name="queries" value="recetox_gc-ei_ms_20201028_with_precursor_mz.msp" ftype="msp"/>
             <param name="similarity_metric" value="ModifiedCosine"/>
             <output name="similarity_scores" file="scores_test4_out.tsv" ftype="tsv"/>
             <output name="similarity_matches" file="matches_test4_out.tsv" ftype="tsv"/>

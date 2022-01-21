@@ -2,7 +2,6 @@ import argparse
 import sys
 
 from matchms import calculate_scores
-from matchms.filtering import add_precursor_mz, default_filters, normalize_intensities
 from matchms.importing import load_from_mgf, load_from_msp
 from matchms.similarity import (
     CosineGreedy,
@@ -12,10 +11,23 @@ from matchms.similarity import (
 from pandas import DataFrame
 
 
+def convert_precursor_mz(spectrum):
+    """
+    Check the presence of precursor m/z since it is needed for ModifiedCosine similarity metric. Convert to float if
+    needed, raise error if missing.
+    """
+
+    if "precursor_mz" in spectrum.metadata:
+        metadata = spectrum.metadata
+        metadata["precursor_mz"] = float(metadata["precursor_mz"])
+        spectrum.metadata = metadata
+        return spectrum
+    else:
+        raise ValueError("Precursor_mz missing. Apply 'add_precursor_mz' filter first.")
+
+
 def main(argv):
     parser = argparse.ArgumentParser(description="Compute MSP similarity scores")
-    parser.add_argument("-f", dest="default_filters", action='store_true', help="Apply default filters")
-    parser.add_argument("-n", dest="normalize_intensities", action='store_true', help="Normalize intensities.")
     parser.add_argument("-s", dest="symmetric", action='store_true', help="Computation is symmetric.")
     parser.add_argument("--ref", dest="references_filename", type=str, help="Path to reference spectra library.")
     parser.add_argument("--ref_format", dest="references_format", type=str, help="Reference spectra library file format.")
@@ -46,24 +58,14 @@ def main(argv):
         else:
             raise ValueError(f'File format {args.references_format} not supported for reference spectra library.')
 
-    if args.default_filters is True:
-        print("Applying default filters...")
-        queries_spectra = list(map(default_filters, queries_spectra))
-        reference_spectra = list(map(default_filters, reference_spectra))
-
-    if args.normalize_intensities is True:
-        print("Normalizing intensities...")
-        queries_spectra = list(map(normalize_intensities, queries_spectra))
-        reference_spectra = list(map(normalize_intensities, reference_spectra))
-
     if args.similarity_metric == 'CosineGreedy':
         similarity_metric = CosineGreedy(args.tolerance, args.mz_power, args.intensity_power)
     elif args.similarity_metric == 'CosineHungarian':
         similarity_metric = CosineHungarian(args.tolerance, args.mz_power, args.intensity_power)
     elif args.similarity_metric == 'ModifiedCosine':
         similarity_metric = ModifiedCosine(args.tolerance, args.mz_power, args.intensity_power)
-        reference_spectra = list(map(add_precursor_mz, reference_spectra))
-        queries_spectra = list(map(add_precursor_mz, queries_spectra))
+        reference_spectra = list(map(convert_precursor_mz, reference_spectra))
+        queries_spectra = list(map(convert_precursor_mz, queries_spectra))
     else:
         return -1
 
