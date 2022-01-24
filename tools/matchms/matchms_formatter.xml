@@ -63,7 +63,7 @@
             <param name="selection" value="get-thresholded-data"/>
             <param name="scores_threshold" value="0.4"/>
             <param name="matches_threshold" value="2"/>
-            <output name="output" file="test2_threshold_formatting.tsv" ftype="tsv"
+            <output name="output" file="formatter/test2_threshold_formatting.tsv" ftype="tsv" 
                     checksum="md5$8929cdac47252da638f066261ffc16b7"/>
         </test>
         <test>
@@ -71,7 +71,7 @@
             <param name="matches" value="matches_test2_out.tsv" ftype="tsv"/>
             <param name="selection" value="get-top-k-data"/>
             <param name="k" value="3"/>
-            <output name="output" file="test2_topk_formatting.tsv" ftype="tsv"
+            <output name="output" file="formatter/test2_topk_formatting.tsv" ftype="tsv"
                     checksum="md5$a9186721aa2df2f9dbdef5021aa6bc26"/>
         </test>
     </tests>
