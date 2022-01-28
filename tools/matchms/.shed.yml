@@ -10,15 +10,18 @@ repositories:
       - matchms_similarity.xml
       - matchms_similarity_wrapper.py
       - test-data
-repositories:
+      - macros.xml
   matchms_filtering:
     description: "Filter and normalize mass spectrometry data (MS/MS)."
     include:
       - matchms_filtering.xml
       - matchms_filtering_wrapper.py
       - test-data/filtering
+      - macros.xml
   matchms_formatter:
     description: "Tool to reformat output tables of matchms."
     include:
       - matchms_formatter.xml
       - formatter.py
+      - test-data
+      - macros.xml

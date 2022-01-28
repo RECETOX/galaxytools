@@ -1,5 +1,9 @@
 <tool id="aplcms_to_ramclustr_converter" name="apLCMS to RamClustR converter" version="0.1.0+galaxy0" python_template_version="3.5">
     <description>converts apLCMS parquet output to RamClustR csv input</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="creator"/>
     <requirements>
         <requirement type="package" version="1.1.5">pandas</requirement>
         <requirement type="package" version="4.0.0">pyarrow</requirement>
@@ -19,13 +23,9 @@
             <output name="out_file" file="output.csv" ftype="csv"/>
         </test>
     </tests>
-    <help><![CDATA[
-        Tool to convert apLCMS output to csv file formated in accordance to RamClustR (CSV) input requirements.
-
-        **Workflow position**
-
-        - Upstream tool: `apLCMS <https://github.com/RECETOX/galaxytools/tree/master/tools/recetox_aplcms>`_  Unsupervised or Hybrid
-
-        - Downstream tool: `RamClustR <https://github.com/RECETOX/galaxytools/tree/master/tools/ramclustr>`_ (CSV)
-    ]]></help>
+    <help>
+        <![CDATA[
+        @HELP@
+        ]]>
+    </help>
 </tool>

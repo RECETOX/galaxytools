@@ -8,13 +8,13 @@ repositories:
     description: "Generate a feature table from a batch of LC/MS spectra using apLCMS's Unsupervised method."
     include:
       - recetox_aplcms_unsupervised.xml
-      - recetox_aplcms_macros.xml
       - main.R
       - test-data
+      - macros.xml
   recetox_aplcms_hybrid:
     description: "Generate a feature table from a batch of LC/MS spectra using apLCMS's Hybrid method."
     include:
       - recetox_aplcms_hybrid.xml
-      - recetox_aplcms_macros.xml
       - main.R
       - test-data
+      - macros.xml

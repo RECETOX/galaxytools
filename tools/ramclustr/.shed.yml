@@ -9,5 +9,5 @@ repositories:
     include:
       - ramclustr.xml
       - ramclustr_wrapper.R
-      - ramclustr_macros.xml
       - test-data
+      - macros.xml

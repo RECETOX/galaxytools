@@ -1,20 +1,8 @@
 <tool id="query" name="Query" version="@TOOL_VERSION@">
     <macros>
-        <token name="@TOOL_VERSION@">0.1</token>
-        <xml name="formats">
-            <option value="csv">csv</option>
-            <option value="tsv">tsv</option>
-            <option value="h5">h5</option>
-            <option value="feather">feather</option>
-            <option value="parquet">parquet</option>
-            <option value="sqlite">sqlite</option>
-        </xml>
-        <xml name="internal_name" token_format="">
-            <when value="@FORMAT@">
-                <param name="name" type="text" help="Specify the format's internal name of the table."/>
-            </when>
-        </xml>
+        <import>macros.xml</import>
     </macros>
+    <expand macro="creator"/>
 
     <requirements>
         <requirement type="package">click</requirement>
@@ -80,14 +68,16 @@
             </param>
             <param name="name" type="text" optional="true">
                 <label>Table name</label>
-                <help>Choose an unique name for the table which then you may use in the SQL Query. By default tables will be named as: t0, t1, ...</help>
+                <help>Choose an unique name for the table which then you may use in the SQL Query.
+                    By default tables will be named as: t0, t1, ...</help>
             </param>
         </repeat>
         <param name="query" type="text" area="true">
             <label>SQL Query</label>
             <help>
                 Type an arbitrary SQL SELECT to perform on the input tables. The input tables may be referred by their given names.
-                An example query is SELECT employees.name AS employee, emails.value AS email FROM one JOIN b ON employees.id = emails.employee, provided that the input tables are named employees and emails.
+                An example query is SELECT employees.name AS employee, emails.value AS email FROM one JOIN b ON employees.id = emails.employee,
+                provided that the input tables are named employees and emails.
             </help>
         </param>
         <conditional name="result">

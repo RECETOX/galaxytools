@@ -53,8 +53,8 @@
         </expand>
         <section name="clustering" title="Clustering">
             <param name="correlation_method" type="select" display="radio" label="Correlation method">
-                <option value="pearson" selected="true"/>
-                <option value="spearman"/>
+                <option value="pearson" selected="true">pearson</option>
+                <option value="spearman">spearman</option>
             </param>
             <param name="correlation_threshold" type="float" value="0.7">
                 <label>Correlation threshold</label>
@@ -77,8 +77,8 @@
                     Network type parameter affects how the network's adjacency matrix is created from the correlation
                     matrix (see WGCNA package documentation).
                 </help>
-                <option value="signed"/>
-                <option value="unsigned" selected="true"/>
+                <option value="signed">signed</option>
+                <option value="unsigned" selected="true">unsigned</option>
             </param>
         </section>
         <section name="scoring" title="Scoring" expanded="true">

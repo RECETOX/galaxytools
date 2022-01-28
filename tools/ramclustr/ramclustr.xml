@@ -1,16 +1,14 @@
 <tool id="ramclustr" name="RAMClustR" version="@TOOL_VERSION@+galaxy0">
     <macros>
-        <import>ramclustr_macros.xml</import>
+        <import>macros.xml</import>
     </macros>
-    <creator>
-        <organization
-            url="https://www.recetox.muni.cz/"
-            name="RECETOX MUNI" />
-    </creator>
+    <expand macro="creator"/>
+
     <requirements>
         <requirement type="package" version="@TOOL_VERSION@">r-ramclustr</requirement>
         <requirement type="package" version="3.14.0">bioconductor-xcms</requirement>
     </requirements>
+
     <command detect_errors="aggressive"><![CDATA[
         Rscript
             -e 'source("${__tool_directory__}/ramclustr_wrapper.R")'
@@ -73,7 +71,7 @@
                 <option value="csv">CSV</option>
             </param>
             <when value="xcms">
-                <param name="input_xcms" label="input_xcms" type="data" format="rdata.xcms.fillpeaks" help=": containing grouped feature data for clustering by ramclustR" />
+                <param name="input_xcms" label="input_xcms" type="data" format="rdata.xcms.fillpeaks" help="Grouped feature data for clustering by ramclustR" />
                 <expand macro="parameters_required" />
                 <expand macro="parameters_optional_xcms" />
                 <expand macro="parameters_optional_metadata" />
@@ -144,40 +142,9 @@
     </tests>
 
     <help>
-    Documentation
-        For documentation on the tool see https://github.com/cbroeckl/RAMClustR/blob/master/vignettes/RAMClustR.Rmd
-
-    Upstream Tools
-        +-------+----------------------+----------------------+------------+
-        | Name  | Output File          | Format               | Parameter  |
-        +=======+======================+======================+============+
-        | xcms  | xset.fillPeaks.RData | rdata.xcms.fillpeaks | xcmsObj    |
-        +-------+----------------------+----------------------+------------+
-
-        The tool takes an **xcmsSet** object as input and extracts all relevant information.
-
-        +-------+------------------------+--------+------------+
-        | Name  | Output File            | Format | Parameter  |
-        +=======+========================+========+============+
-        | ???   | Feature Table with MS1 | csv    | ms         |
-        +-------+------------------------+--------+------------+
-        | ???   | Feature Table with MS2 | csv    | idmsms     |
-        +-------+------------------------+--------+------------+
-
-        Alternatively, the tool takes a **csv** table as input which has to fulfill the following requirements
-
-        (1) no more than one sample (or file) name column and one feature name row;
-        (2) feature names that contain the mass and retention times, separated by a constant delimiter; and
-        (3) features in columns and samples in rows.
-
-    Downstream Tools
-        +---------+--------------+----------------------+
-        | Name    | Output File  | Format               |
-        +=========+==============+======================+
-        | matchMS | Mass Spectra | collection (tgz/msp) |
-        +---------+--------------+----------------------+
-
-    @GENERAL_HELP@
+        <![CDATA[
+            @HELP@
+        ]]>
     </help>
 
     <expand macro="citations" />
