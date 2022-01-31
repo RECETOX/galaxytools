@@ -302,4 +302,18 @@
         is poisitive or negative ionization mode, EI or ESI, LC-MS GC-MS or CE-MS, in-source fragment or complex
         adduction event, and predictable or unpredictable signals.
     </token>
+
+        <token name="@HELP_experiment@">
+        <![CDATA[
+            Create an Experimental Design specification for RAMClustR experiment.
+
+            Downstream Tools
+                +-----------+-----------------------+--------+
+                | Name      | Output File           | Format |
+                +===========+=======================+========+
+                | RAMClustR | Experiment definition | csv    |
+                +-----------+-----------------------+--------+
+
+        ]]>
+    </token>
 </macros>
