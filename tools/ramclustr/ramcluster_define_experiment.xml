@@ -16,7 +16,7 @@
             --sample "$design.sample" \
             --contributer "$design.contributor" \
             --platform "$platform.platform_choice.choice" \
-            #if $platform.platform_choice.choice == "gcms":
+            #if $platform.platform_choice.choice == "GC-MS":
                 --chrominst "$platform.platform_choice.chrominst" \
                 --msinst "$platform.platform_choice.msinst" \
                 --column "$platform.platform_choice.column" \
@@ -45,6 +45,7 @@
                 --conevol "$platform.platform_choice.conevol" \
                 --MSlevs "$platform.platform_choice.MSlevs" \
             #end if
+            --output_file "$RAMClustR_experiment"
         </configfile>
     </configfiles>
     <inputs>
@@ -60,10 +61,10 @@
         <section name="platform" title="Platform" expanded="true">
             <conditional name="platform_choice">
                 <param name="choice" type="select" label="Choose platform:">
-                    <option value="gcms" selected="true">GC-MS</option>
-                    <option value="lsms">LC-MS</option>
+                    <option value="GC-MS" selected="true">GC-MS</option>
+                    <option value="LS-MS">LC-MS</option>
                 </param>
-                <when value="gcms">
+                <when value="GC-MS">
                     <param name="chrominst" type="text" label="Model of GC instrument."/>
                     <param name="msinst" type="text" label="Model of MS instrument."/>
                     <param name="column" type="text" label="Column description."/>
@@ -94,7 +95,7 @@
                     </param>
                     <param name="MSlevs" type="float"  value="1" label="Number of levels of energy acquired - 1 typically."/>
                 </when>
-                <when value="lsms">
+                <when value="LS-MS">
                     <param name="chrominst" type="text" label="Model of LC instrument."/>
                     <param name="msinst" type="text" label="Model of MS instrument."/>
                     <param name="column" type="text" label="Column description."/>
@@ -127,7 +128,7 @@
     </inputs>
 
     <outputs>
-        <data label="RAMClustR experiment definition" name="RAMClustR experiment" format="csv" />
+        <data label="RAMClustR experiment definition" name="RAMClustR_experiment" format="csv" />
     </outputs>
 
     <tests>
