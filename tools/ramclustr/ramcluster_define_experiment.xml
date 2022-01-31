@@ -62,7 +62,7 @@
             <conditional name="platform_choice">
                 <param name="choice" type="select" label="Choose platform:">
                     <option value="GC-MS" selected="true">GC-MS</option>
-                    <option value="LS-MS">LC-MS</option>
+                    <option value="LC-MS">LC-MS</option>
                 </param>
                 <when value="GC-MS">
                     <param name="chrominst" type="text" label="Model of GC instrument."/>
@@ -95,7 +95,7 @@
                     </param>
                     <param name="MSlevs" type="float"  value="1" label="Number of levels of energy acquired - 1 typically."/>
                 </when>
-                <when value="LS-MS">
+                <when value="LC-MS">
                     <param name="chrominst" type="text" label="Model of LC instrument."/>
                     <param name="msinst" type="text" label="Model of MS instrument."/>
                     <param name="column" type="text" label="Column description."/>

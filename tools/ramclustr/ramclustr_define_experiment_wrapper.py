@@ -75,8 +75,6 @@ def main(argv):
         for arg in general:
             csv_writer.writerow(["Experiment", args[arg], ARGUMENTS[arg]["help"]])
 
-        print(args["platform"])
-
         if args["platform"] == "GC-MS":
             write_gcms(csv_writer, args)
             write_lcms(csv_writer, args, fill=False)
