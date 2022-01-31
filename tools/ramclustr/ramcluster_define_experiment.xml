@@ -22,9 +22,9 @@
                 --column "$platform.platform_choice.column" \
                 --InletTemp "$platform.platform_choice.InletTemp" \
                 --TransferTemp "$platform.platform_choice.TransferTemp" \
-                --mstype "$platform.platform_choice.mstype" \
+                --mstype "$platform.platform_choice.gc_mstype" \
                 --msmode "$platform.platform_choice.msmode" \
-                --ionization "$platform.platform_choice.ionization" \
+                --ionization "$platform.platform_choice.gc_ionization" \
                 --msscanrange "$platform.platform_choice.msscanrange" \
                 --scantime "$platform.platform_choice.scantime" \
                 --deriv "$platform.platform_choice.deriv" \
@@ -37,9 +37,9 @@
                 --solvB "$platform.platform_choice.solvB" \
                 --CE1 "$platform.platform_choice.CE1" \
                 --CE2 "$platform.platform_choice.CE2" \
-                --mstype "$platform.platform_choice.mstype" \
+                --mstype "$platform.platform_choice.lc_mstype" \
                 --msmode "$platform.platform_choice.msmode" \
-                --ionization "$platform.platform_choice.ionization" \
+                --ionization "$platform.platform_choice.lc_ionization" \
                 --colgas "$platform.platform_choice.colgas" \
                 --msscanrange "$platform.platform_choice.msscanrange" \
                 --conevol "$platform.platform_choice.conevol" \
@@ -70,7 +70,7 @@
                     <param name="column" type="text" label="Column description."/>
                     <param name="InletTemp" type="text" label="Temperature of inlet."/>
                     <param name="TransferTemp" type="text" label="Temperature of GC to MS transfer line."/>
-                    <param name="mstype" type="select" label="Type of mass spectrometer:">
+                    <param name="gc_mstype" type="select" label="Type of mass spectrometer:">
                         <option value="QQQ" selected="true">QQQ</option>
                         <option value="TOF">TOF</option>
                         <option value="QTOF">QTOF</option>
@@ -81,7 +81,7 @@
                         <option value="positive" selected="true">positive</option>
                         <option value="negative">negative</option>
                     </param>
-                    <param name="ionization" type="select" label="Ionization:">
+                    <param name="gc_ionization" type="select" label="Ionization:">
                         <option value="EI" selected="true">EI</option>
                         <option value="AP">AP</option>
                         <option value="CI">CI</option>
@@ -103,7 +103,7 @@
                     <param name="solvB" type="text" label="Solvent B composition."/>
                     <param name="CE1" type="text" label="Collision energy of acquisition of MS data."/>
                     <param name="CE2" type="text" label="Collision energy of acquisition for MSe/idMSMS data (when applicable)."/>
-                    <param name="mstype" type="select" label="Type of mass spectrometer:">
+                    <param name="lc_mstype" type="select" label="Type of mass spectrometer:">
                         <option value="QQQ" selected="true">QQQ</option>
                         <option value="TOF">TOF</option>
                         <option value="QTOF">QTOF</option>
@@ -114,7 +114,7 @@
                         <option value="positive" selected="true">positive</option>
                         <option value="negative">negative</option>
                     </param>
-                    <param name="ionization" type="select" label="Ionization:">
+                    <param name="lc_ionization" type="select" label="Ionization:">
                         <option value="ESI" selected="true">ESI</option>
                         <option value="APCI">APCI</option>
                     </param>
@@ -132,12 +132,65 @@
     </outputs>
 
     <tests>
-
+        <test><!-- TEST 1 -->
+            <section name="design">
+                <param name="exp_name" value="experiment_gc"/>
+                <param name="species" value="mus musculus"/>
+                <param name="sample" value="serum"/>
+                <param name="contributor" value="recetox"/>
+            </section>
+            <section name="platform">
+                <section name="platform_choice">
+                    <param name="choice" value="GC-MS"/>
+                    <param name="chrominst" value="ISQ 7000"/>
+                    <param name="msinst" value="ISQ7K-VPI"/>
+                    <param name="column" value="These columns enable analysis of ppm levels of amines without column priming"/>
+                    <param name="InletTemp" value="33"/>
+                    <param name="TransferTemp" value="23"/>
+                    <param name="gc_mstype" value="QTOF"/>
+                    <param name="msmode" value="positive"/>
+                    <param name="gc_ionization" value="AP"/>
+                    <param name="msscanrange" value="100"/>
+                    <param name="scantime" value="0.2"/>
+                    <param name="deriv" value="TMS"/>
+                    <param name="MSlevs" value="1.0"/>
+                </section>
+            </section>
+            <output name="RAMClustR_experiment" file="gc-ramclustr-define-experiment.csv" ftype="csv"/>
+        </test>
+        <test><!-- TEST 2 -->
+            <section name="design">
+                <param name="exp_name" value="experiment_lc"/>
+                <param name="species" value="mus musculus"/>
+                <param name="sample" value="serum"/>
+                <param name="contributor" value="recetox"/>
+            </section>
+            <section name="platform">
+                <section name="platform_choice">
+                    <param name="choice" value="LC-MS"/>
+                    <param name="chrominst" value="UltiMateX 3000 BioRS System"/>
+                    <param name="msinst" value="FSN04-10000"/>
+                    <param name="column" value="These columns enable analysis of ppm levels of amines without column priming"/>
+                    <param name="solvA" value="H20"/>
+                    <param name="solvB" value="CO2"/>
+                    <param name="CE1" value="50"/>
+                    <param name="CE2" value="100"/>
+                    <param name="lc_mstype" value="Q"/>
+                    <param name="msmode" value="negative"/>
+                    <param name="lc_ionization" value="ESI"/>
+                    <param name="colgas" value="He"/>
+                    <param name="msscanrange" value="1000"/>
+                    <param name="conevol" value="12"/>
+                    <param name="MSlevs" value="1.0"/>
+                </section>
+            </section>
+            <output name="RAMClustR_experiment" file="lc-ramclustr-define-experiment.csv" ftype="csv"/>
+        </test>
     </tests>
 
     <help>
         <![CDATA[
-            @HELP@
+            @HELP_experiment@
         ]]>
     </help>
 

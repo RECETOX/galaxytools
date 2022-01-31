@@ -1,0 +1,38 @@
+parameter,Value,Description
+,,
+Experimental Design,,
+exp_name,experiment_gc,"Experiment name, no spaces."
+species,mus musculus,Genus species from which samples are derived.
+sample,serum,"Type of sample (e.g., serum, leaf)."
+contributer,recetox,Your or your PI's name.
+platform,GC-MS,Either GC-MS or LC-MS.
+,,
+GC-MS,,
+chrominst,ISQ 7000,Model of LC/GC instrument.
+msinst,ISQ7K-VPI,Model of MS instrument.
+column,These columns enable analysis of ppm levels of amines without column priming,Column description.
+InletTemp,33,Temperature of inlet.
+TransferTemp,23,Temperature of GC to MS transfer line.
+mstype,QTOF,"Type of mass spectrometer (one of QQQ, TOF, QTOF, Orbi, Q)."
+msmode,positive,Positive or negative ion mode.
+ionization,AP,"Ionization (EI, AP, or CI)."
+msscanrange,100,Scan range used for acquisition.
+scantime,0.2,Time for each full scan spectrum (e.g. 0.2 seconds).
+deriv,TMS,"Derivitization (TMS, TBDMS, or None)."
+MSlevs,1.0,Number of levels of energy acquired - 1 typically.
+,,
+LC-MS,,
+chrominst,fill,Model of LC/GC instrument.
+msinst,fill,Model of MS instrument.
+column,fill,Column description.
+solvA,fill,Solvent A composition.
+solvB,fill,Solvent B composition.
+CE1,fill,Collision energy of acquisition of MS data.
+CE2,fill,Collision energy of acquisition for MSe/idMSMS data (when applicable).
+mstype,fill,"Type of mass spectrometer (one of QQQ, TOF, QTOF, Orbi, Q)."
+msmode,fill,Positive or negative ion mode.
+ionization,fill,"Ionization (EI, AP, or CI)."
+colgas,fill,Gas used for collisional dissociation.
+msscanrange,fill,Scan range used for acquisition.
+conevol,fill,Cone voltage used for acquisition.
+MSlevs,fill,Number of levels of energy acquired - 1 typically.

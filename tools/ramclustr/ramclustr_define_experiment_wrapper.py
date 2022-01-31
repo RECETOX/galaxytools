@@ -73,7 +73,7 @@ def main(argv):
 
         general = ["exp_name", "species", "sample", "contributer", "platform"]
         for arg in general:
-            csv_writer.writerow(["Experiment", args[arg], ARGUMENTS[arg]["help"]])
+            csv_writer.writerow([arg, args[arg], ARGUMENTS[arg]["help"]])
 
         if args["platform"] == "GC-MS":
             write_gcms(csv_writer, args)
