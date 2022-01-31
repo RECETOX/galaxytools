@@ -1,0 +1,144 @@
+<tool id="ramclustr_define_experiment" name="RAMClustR define experiment" version="1.0.0+galaxy0">
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="creator"/>
+
+    <command detect_errors="exit_code"><![CDATA[
+        sh ${ramclustr_define_experiment_cli}
+    ]]>
+    </command>
+    <configfiles>
+        <configfile name="ramclustr_define_experiment_cli">
+            python3 ${__tool_directory__}/ramclustr_define_experiment_wrapper.py \
+            --exp_name "$design.exp_name" \
+            --species "$design.species" \
+            --sample "$design.sample" \
+            --contributer "$design.contributor" \
+            --platform "$platform.platform_choice.choice" \
+            #if $platform.platform_choice.choice == "gcms":
+                --chrominst "$platform.chrominst" \
+                --msinst "$platform.msinst" \
+                --column "$platform.column" \
+                --InletTemp "$platform.InletTemp" \
+                --TransferTemp "$platform.TransferTemp" \
+                --mstype "$platform.mstype" \
+                --msmode "$platform.msmode" \
+                --ionization "$platform.ionization" \
+                --msscanrange "$platform.msscanrange" \
+                --scantime "$platform.scantime" \
+                --deriv "$platform.deriv" \
+                --MSlevs "$platform.MSlevs" \
+            #else:
+                --chrominst "$platform.chrominst" \
+                --msinst "$platform.msinst" \
+                --column "$platform.column" \
+                --solvA "$platform.solvA" \
+                --solvB "$platform.solvB" \
+                --CE1 "$platform.CE1" \
+                --CE2 "$platform.CE2" \
+                --mstype "$platform.mstype" \
+                --msmode "$platform.msmode" \
+                --ionization "$platform.ionization" \
+                --colgas "$platform.colgas" \
+                --msscanrange "$platform.msscanrange" \
+                --conevol "$platform.conevol" \
+                --MSlevs "$platform.MSlevs" \
+            #end if
+        </configfile>
+    </configfiles>
+    <inputs>
+        <section name="design" title="Experimental Design" expanded="true">
+            <param name="exp_name" type="text" label="Experiment name (no spaces).">
+                <validator type="empty_field"/>
+            </param>
+            <param name="species" type="text" label="Genus species from which samples are derived."/>
+            <param name="sample" type="text" label="Type of sample (e.g., serum, leaf)."/>
+            <param name="contributor" type="text" label="Your or your PI's name."/>
+        </section>
+
+        <section name="platform" title="Platform" expanded="true">
+            <conditional name="platform_choice">
+                <param name="choice" type="select" label="Choose platform:">
+                    <option value="gcms" selected="true">GC-MS</option>
+                    <option value="lsms">LC-MS</option>
+                </param>
+                <when value="gcms">
+                    <param name="chrominst" type="text" label="Model of GC instrument."/>
+                    <param name="msinst" type="text" label="Model of MS instrument."/>
+                    <param name="column" type="text" label="Column description."/>
+                    <param name="InletTemp" type="text" label="Temperature of inlet."/>
+                    <param name="TransferTemp" type="text" label="Temperature of GC to MS transfer line."/>
+                    <param name="mstype" type="select" label="Type of mass spectrometer:">
+                        <option value="QQQ" selected="true">QQQ</option>
+                        <option value="TOF">TOF</option>
+                        <option value="QTOF">QTOF</option>
+                        <option value="Orbi">Orbi</option>
+                        <option value="Q">Q</option>
+                    </param>
+                    <param name="msmode" type="select" label="Ion mode:">
+                        <option value="positive" selected="true">positive</option>
+                        <option value="negative">negative</option>
+                    </param>
+                    <param name="ionization" type="select" label="Ionization:">
+                        <option value="EI" selected="true">EI</option>
+                        <option value="AP">AP</option>
+                        <option value="CI">CI</option>
+                    </param>
+                    <param name="msscanrange" type="text" label="Scan range used for acquisition."/>
+                    <param name="scantime" type="float" value="0.2" label="Time for each full scan spectrum (e.g. 0.2 seconds)."/>
+                    <param name="deriv" type="select" label="Derivitization:">
+                        <option value="TMS" selected="true">TMS</option>
+                        <option value="TBDMS">TBDMS</option>
+                        <option value="None">None</option>
+                    </param>
+                    <param name="MSlevs" type="float"  value="1" label="Number of levels of energy acquired - 1 typically."/>
+                </when>
+                <when value="lsms">
+                    <param name="chrominst" type="text" label="Model of LC instrument."/>
+                    <param name="msinst" type="text" label="Model of MS instrument."/>
+                    <param name="column" type="text" label="Column description."/>
+                    <param name="solvA" type="text" label="Solvent A composition."/>
+                    <param name="solvB" type="text" label="Solvent B composition."/>
+                    <param name="CE1" type="text" label="Collision energy of acquisition of MS data."/>
+                    <param name="CE2" type="text" label="Collision energy of acquisition for MSe/idMSMS data (when applicable)."/>
+                    <param name="mstype" type="select" label="Type of mass spectrometer:">
+                        <option value="QQQ" selected="true">QQQ</option>
+                        <option value="TOF">TOF</option>
+                        <option value="QTOF">QTOF</option>
+                        <option value="Orbi">Orbi</option>
+                        <option value="Q">Q</option>
+                    </param>
+                    <param name="msmode" type="select" label="Ion mode:">
+                        <option value="positive" selected="true">positive</option>
+                        <option value="negative">negative</option>
+                    </param>
+                    <param name="ionization" type="select" label="Ionization:">
+                        <option value="ESI" selected="true">ESI</option>
+                        <option value="APCI">APCI</option>
+                    </param>
+                    <param name="colgas" type="text" label="Gas used for collisional dissociation."/>
+                    <param name="msscanrange" type="text" label="Scan range used for acquisition."/>
+                    <param name="conevol" type="text" label="Cone voltage used for acquisition."/>
+                    <param name="MSlevs" type="float" value="1" label="number of levels of energy in XCMS object data - 1 typically."/>
+                </when>
+            </conditional>
+        </section>
+    </inputs>
+
+    <outputs>
+        <data label="RAMClustR experiment definition" name="RAMClustR experiment" format="csv" />
+    </outputs>
+
+    <tests>
+
+    </tests>
+
+    <help>
+        <![CDATA[
+            @HELP@
+        ]]>
+    </help>
+
+    <expand macro="citations" />
+</tool>
