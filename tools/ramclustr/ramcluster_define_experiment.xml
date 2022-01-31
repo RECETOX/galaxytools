@@ -17,33 +17,33 @@
             --contributer "$design.contributor" \
             --platform "$platform.platform_choice.choice" \
             #if $platform.platform_choice.choice == "gcms":
-                --chrominst "$platform.chrominst" \
-                --msinst "$platform.msinst" \
-                --column "$platform.column" \
-                --InletTemp "$platform.InletTemp" \
-                --TransferTemp "$platform.TransferTemp" \
-                --mstype "$platform.mstype" \
-                --msmode "$platform.msmode" \
-                --ionization "$platform.ionization" \
-                --msscanrange "$platform.msscanrange" \
-                --scantime "$platform.scantime" \
-                --deriv "$platform.deriv" \
-                --MSlevs "$platform.MSlevs" \
+                --chrominst "$platform.platform_choice.chrominst" \
+                --msinst "$platform.platform_choice.msinst" \
+                --column "$platform.platform_choice.column" \
+                --InletTemp "$platform.platform_choice.InletTemp" \
+                --TransferTemp "$platform.platform_choice.TransferTemp" \
+                --mstype "$platform.platform_choice.mstype" \
+                --msmode "$platform.platform_choice.msmode" \
+                --ionization "$platform.platform_choice.ionization" \
+                --msscanrange "$platform.platform_choice.msscanrange" \
+                --scantime "$platform.platform_choice.scantime" \
+                --deriv "$platform.platform_choice.deriv" \
+                --MSlevs "$platform.platform_choice.MSlevs" \
             #else:
-                --chrominst "$platform.chrominst" \
-                --msinst "$platform.msinst" \
-                --column "$platform.column" \
-                --solvA "$platform.solvA" \
-                --solvB "$platform.solvB" \
-                --CE1 "$platform.CE1" \
-                --CE2 "$platform.CE2" \
-                --mstype "$platform.mstype" \
-                --msmode "$platform.msmode" \
-                --ionization "$platform.ionization" \
-                --colgas "$platform.colgas" \
-                --msscanrange "$platform.msscanrange" \
-                --conevol "$platform.conevol" \
-                --MSlevs "$platform.MSlevs" \
+                --chrominst "$platform.platform_choice.chrominst" \
+                --msinst "$platform.platform_choice.msinst" \
+                --column "$platform.platform_choice.column" \
+                --solvA "$platform.platform_choice.solvA" \
+                --solvB "$platform.platform_choice.solvB" \
+                --CE1 "$platform.platform_choice.CE1" \
+                --CE2 "$platform.platform_choice.CE2" \
+                --mstype "$platform.platform_choice.mstype" \
+                --msmode "$platform.platform_choice.msmode" \
+                --ionization "$platform.platform_choice.ionization" \
+                --colgas "$platform.platform_choice.colgas" \
+                --msscanrange "$platform.platform_choice.msscanrange" \
+                --conevol "$platform.platform_choice.conevol" \
+                --MSlevs "$platform.platform_choice.MSlevs" \
             #end if
         </configfile>
     </configfiles>
