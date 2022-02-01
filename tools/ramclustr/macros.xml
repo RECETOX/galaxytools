@@ -158,7 +158,7 @@
                    help="CSV with sample names (or indices, currently not handled) on rows and columns with: batch
                    number ('batch'), position in sequence ('order') and whether it is a qc sample or not
                    ('qc' with true/false OR 'sampleType' with 'sample/qc/blank')."/>
-             <param label="Experiment definition" name="ExpDes" type="data" format="csv" optional="true" help="Definition of experimental design in CSV format." />
+             <param label="Experimental design" name="ExpDes" type="data" format="csv" optional="true" help="Definition of experimental design in CSV format." />
         </section>
     </xml>
 
@@ -210,11 +210,13 @@
                     For documentation on the tool see https://github.com/cbroeckl/RAMClustR/blob/master/vignettes/RAMClustR.Rmd
 
                 Upstream Tools
-                    +-------+----------------------+----------------------+------------+
-                    | Name  | Output File          | Format               | Parameter  |
-                    +=======+======================+======================+============+
-                    | xcms  | xset.fillPeaks.RData | rdata.xcms.fillpeaks | xcmsObj    |
-                    +-------+----------------------+----------------------+------------+
+                    +------------------------------+-------------------------------+----------------------+---------------------+
+                    | Name                         | Output File                   | Format               | Parameter           |
+                    +==============================+===============================+======================+=====================+
+                    | xcms                         | xset.fillPeaks.RData          | rdata.xcms.fillpeaks | xcmsObj             |
+                    +------------------------------+-------------------------------+----------------------+---------------------+
+                    | RAMClustR define experiment  | Table with experiment details | csv                  | Experimental design |
+                    +------------------------------+-------------------------------+----------------------+---------------------+
 
                     The tool takes an **xcmsSet** object as input and extracts all relevant information.
 
