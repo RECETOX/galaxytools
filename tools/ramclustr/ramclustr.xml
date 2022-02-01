@@ -61,7 +61,7 @@
                         metadata_file = "${filetype.metadata.batch_order_qc}",
                     #end if
                     #if $filetype.metadata.ExpDes
-                        ExpDes = "${filetype.metadata.ExpDes}"
+                        exp_design = "${filetype.metadata.ExpDes}"
                     #end if
                 ),
             "$result", "$method_metadata", $filetype.required.merge_msp, "$spec_abundance")
