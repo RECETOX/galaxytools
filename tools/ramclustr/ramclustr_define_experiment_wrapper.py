@@ -45,6 +45,7 @@ def write_gcms(csv_writer, args, fill=True):
     for arg in gcms:
         csv_writer.writerow([arg, get_value(args, arg, fill=fill), ARGUMENTS[arg]["help"]])
 
+
 def write_lcms(csv_writer, args, fill=True):
     csv_writer.writerow(["", "", ""])
     csv_writer.writerow(["LC-MS", "", ""])
@@ -68,7 +69,7 @@ def main(argv):
         csv_writer = csv.writer(csvfile, delimiter=',')
 
         csv_writer.writerow(["parameter", "Value", "Description"])
-        csv_writer.writerow(["","",""])
+        csv_writer.writerow(["", "", ""])
         csv_writer.writerow(["Experimental Design", "", ""])
 
         general = ["Experiment", "Species", "Sample", "Contributer", "platform"]
