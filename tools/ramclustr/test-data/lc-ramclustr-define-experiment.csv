@@ -1,10 +1,10 @@
 parameter,Value,Description
 ,,
 Experimental Design,,
-exp_name,experiment_lc,"Experiment name, no spaces."
-species,mus musculus,Genus species from which samples are derived.
-sample,serum,"Type of sample (e.g., serum, leaf)."
-contributer,recetox,Your or your PI's name.
+Experiment,experiment_lc,"Experiment name, no spaces."
+Species,mus musculus,Genus species from which samples are derived.
+Sample,serum,"Type of sample (e.g., serum, leaf)."
+Contributer,recetox,Your or your PI's name.
 platform,LC-MS,Either GC-MS or LC-MS.
 ,,
 GC-MS,,

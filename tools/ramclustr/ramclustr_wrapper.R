@@ -11,7 +11,7 @@ store_output <- function(
 }
 
 load_experiment_definition <- function(filename) {
-    experiment <- RAMClustR::defineExperiment(filename)
+    experiment <- RAMClustR::defineExperiment(csv = filename)
     return(experiment)
 }
 

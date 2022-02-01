@@ -4,10 +4,10 @@ import sys
 
 
 ARGUMENTS = {
-    "exp_name": {"help": "Experiment name, no spaces.", "type": str},
-    "species": {"help": "Genus species from which samples are derived.", "type": str},
-    "sample": {"help": "Type of sample (e.g., serum, leaf).", "type": str},
-    "contributer": {"help": "Your or your PI's name.", "type": str},
+    "Experiment": {"help": "Experiment name, no spaces.", "type": str},
+    "Species": {"help": "Genus species from which samples are derived.", "type": str},
+    "Sample": {"help": "Type of sample (e.g., serum, leaf).", "type": str},
+    "Contributer": {"help": "Your or your PI's name.", "type": str},
     "platform": {"help": "Either GC-MS or LC-MS.", "type": str},
     "chrominst": {"help": "Model of LC/GC instrument.", "type": str},
     "msinst": {"help": "Model of MS instrument.", "type": str},
@@ -71,7 +71,7 @@ def main(argv):
         csv_writer.writerow(["","",""])
         csv_writer.writerow(["Experimental Design", "", ""])
 
-        general = ["exp_name", "species", "sample", "contributer", "platform"]
+        general = ["Experiment", "Species", "Sample", "Contributer", "platform"]
         for arg in general:
             csv_writer.writerow([arg, args[arg], ARGUMENTS[arg]["help"]])
 
