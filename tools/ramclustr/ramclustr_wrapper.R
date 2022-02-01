@@ -54,7 +54,7 @@ ramclustr_xcms <- function(
     maxt = NULL,
     fftempdir = NULL,
     metadata_file = NULL,
-    ExpDes = NULL
+    exp_design = NULL
 ) {
     obj <- load(input_xcms)
 
@@ -71,8 +71,8 @@ ramclustr_xcms <- function(
 
     experiment <- NULL
 
-    if (!is.null(ExpDes)) {
-        experiment <- load_experiment_definition(ExpDes)
+    if (!is.null(exp_design)) {
+        experiment <- load_experiment_definition(exp_design)
     }
 
     x <- RAMClustR::ramclustR(
@@ -129,7 +129,7 @@ ramclustr_csv <- function(
     maxt = NULL,
     fftempdir = NULL,
     metadata_file = NULL,
-    ExpDes = NULL
+    exp_design = NULL
 ) {
     if (!file.exists(idmsms))
         idmsms <- NULL
@@ -147,8 +147,8 @@ ramclustr_csv <- function(
 
     experiment <- NULL
 
-    if (!is.null(ExpDes)) {
-        experiment <- load_experiment_definition(ExpDes)
+    if (!is.null(exp_design)) {
+        experiment <- load_experiment_definition(exp_design)
     }
 
     x <- RAMClustR::ramclustR(
