@@ -99,10 +99,10 @@
         <test><!-- TEST 1 -->
             <param name="type_choice" value="xcms"/>
             <param name="input_xcms" value="test1_xcmsObj_1.rdata.xcms.fillpeaks" ftype="rdata.xcms.fillpeaks"/>
-            <param name="ExpDes" file="lc-ramclustr-define-experiment.csv" ftype="csv"/>
+            <param name="ExpDes" value="lc-ramclustr-define-experiment.csv" ftype="csv"/>
             <output name="result" file="test1_ramclustObj_xcms_1.rdata" ftype="RData" compare="sim_size" delta="200"/>
             <output_collection name="mass_spectra" type="list">
-                <element name="fill" file="test1_fill_xcms_1.msp" ftype="msp"/>
+                <element name="experiment_lc" file="test1_fill_xcms_1.msp" ftype="msp"/>
             </output_collection>
             <output name="method_metadata" file="test1_metadata_xcms_1.txt" ftype="txt"/>
             <output name="spec_abundance" file="test1_spec_abundance_xcms_1.csv" ftype="csv" compare="sim_size" delta="100"/>
