@@ -11,10 +11,10 @@
     <configfiles>
         <configfile name="ramclustr_define_experiment_cli">
             python3 ${__tool_directory__}/ramclustr_define_experiment_wrapper.py \
-            --exp_name "$design.exp_name" \
-            --species "$design.species" \
-            --sample "$design.sample" \
-            --contributer "$design.contributor" \
+            --Experiment "$design.Experiment" \
+            --Species "$design.Species" \
+            --Sample "$design.Sample" \
+            --Contributer "$design.Contributor" \
             --platform "$platform.platform_choice.choice" \
             #if $platform.platform_choice.choice == "GC-MS":
                 --chrominst "$platform.platform_choice.chrominst" \
@@ -50,12 +50,12 @@
     </configfiles>
     <inputs>
         <section name="design" title="Experimental Design" expanded="true">
-            <param name="exp_name" type="text" label="Experiment name (no spaces).">
+            <param name="Experiment" type="text" label="Experiment name (no spaces).">
                 <validator type="empty_field"/>
             </param>
-            <param name="species" type="text" label="Genus species from which samples are derived."/>
-            <param name="sample" type="text" label="Type of sample (e.g., serum, leaf)."/>
-            <param name="contributor" type="text" label="Your or your PI's name."/>
+            <param name="Species" type="text" label="Genus species from which samples are derived."/>
+            <param name="Sample" type="text" label="Type of sample (e.g., serum, leaf)."/>
+            <param name="Contributor" type="text" label="Your or your PI's name."/>
         </section>
 
         <section name="platform" title="Platform" expanded="true">
@@ -134,10 +134,10 @@
     <tests>
         <test><!-- TEST 1 -->
             <section name="design">
-                <param name="exp_name" value="experiment_gc"/>
-                <param name="species" value="mus musculus"/>
-                <param name="sample" value="serum"/>
-                <param name="contributor" value="recetox"/>
+                <param name="Experiment" value="experiment_gc"/>
+                <param name="Species" value="mus musculus"/>
+                <param name="Sample" value="serum"/>
+                <param name="Contributor" value="recetox"/>
             </section>
             <section name="platform">
                 <section name="platform_choice">
@@ -160,10 +160,10 @@
         </test>
         <test><!-- TEST 2 -->
             <section name="design">
-                <param name="exp_name" value="experiment_lc"/>
-                <param name="species" value="mus musculus"/>
-                <param name="sample" value="serum"/>
-                <param name="contributor" value="recetox"/>
+                <param name="Experiment" value="experiment_lc"/>
+                <param name="Species" value="mus musculus"/>
+                <param name="Sample" value="serum"/>
+                <param name="Contributor" value="recetox"/>
             </section>
             <section name="platform">
                 <section name="platform_choice">
