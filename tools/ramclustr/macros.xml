@@ -158,21 +158,7 @@
                    help="CSV with sample names (or indices, currently not handled) on rows and columns with: batch
                    number ('batch'), position in sequence ('order') and whether it is a qc sample or not
                    ('qc' with true/false OR 'sampleType' with 'sample/qc/blank')."/>
-            <!-- <param label="ExpDes" name="ExpDes" type="data" format="RData" optional="true" help=" an R object created by R ExpDes object: data used for record keeping and labelling msp spectral output" /> -->
-        </section>
-    </xml>
-
-    <xml name="parameters_define_experiment">
-        <section name="define_experiment" title="Define Experiment" expanded="false">
-            <param label="Experiment" name="experiment" type="text" help="Experiment name, no spaces"/>
-            <param label="Species" name="species" type="text" help="Species name"/>
-            <param label="Sample" name="sample" type="text" help="Sample type"/>
-            <param label="Contributor" name="contributor" type="text"
-                   help="Individual and/or organizational affiliation"/>
-            <param label="Platform" name="platform" type="select" display="radio" help="Platform">
-                <option value="GC-MS" selected="true">GC-MS</option>
-                <option value="LC-MS">LC-MS</option>
-            </param>
+             <param label="Experiment definition" name="ExpDes" type="data" format="csv" optional="true" help="Definition of experimental design in CSV format." />
         </section>
     </xml>
 

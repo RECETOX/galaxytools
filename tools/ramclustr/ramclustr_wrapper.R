@@ -10,6 +10,11 @@ store_output <- function(
     write.csv(ramclustr_obj$SpecAbund, file = output_spec_abundance, row.names = TRUE)
 }
 
+load_experiment_definition <- function(filename) {
+    experiment <- RAMClustR::defineExperiment(filename)
+    return(experiment)
+}
+
 read_metadata <- function(filename) {
     data <- read.csv(filename, header = TRUE, stringsAsFactors = FALSE)
 
@@ -48,7 +53,8 @@ ramclustr_xcms <- function(
     st = NULL,
     maxt = NULL,
     fftempdir = NULL,
-    metadata_file = NULL
+    metadata_file = NULL,
+    ExpDes = NULL
 ) {
     obj <- load(input_xcms)
 
@@ -61,6 +67,12 @@ ramclustr_xcms <- function(
         batch <- metadata$batch
         order <- metadata$order
         qc <- metadata$qc
+    }
+
+    experiment <- NULL
+
+    if (!is.null(ExpDes)) {
+        experiment <- load_experiment_definition(ExpDes)
     }
 
     x <- RAMClustR::ramclustR(
@@ -86,7 +98,8 @@ ramclustr_xcms <- function(
         replace.zeros = replace_zeros,
         batch = batch,
         order = order,
-        qc = qc
+        qc = qc,
+        ExpDes = experiment
         )
     return(x)
 }
@@ -115,7 +128,8 @@ ramclustr_csv <- function(
     st = NULL,
     maxt = NULL,
     fftempdir = NULL,
-    metadata_file = NULL
+    metadata_file = NULL,
+    ExpDes = NULL
 ) {
     if (!file.exists(idmsms))
         idmsms <- NULL
@@ -129,6 +143,12 @@ ramclustr_csv <- function(
         batch <- metadata$batch
         order <- metadata$order
         qc <- metadata$qc
+    }
+
+    experiment <- NULL
+
+    if (!is.null(ExpDes)) {
+        experiment <- load_experiment_definition(ExpDes)
     }
 
     x <- RAMClustR::ramclustR(
@@ -158,7 +178,8 @@ ramclustr_csv <- function(
         replace.zeros = replace_zeros,
         batch = batch,
         order = order,
-        qc = qc
+        qc = qc,
+        ExpDes = experiment
         )
         return(x)
 }
