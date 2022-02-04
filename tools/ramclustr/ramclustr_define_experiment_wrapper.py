@@ -63,7 +63,7 @@ def main(argv):
         parser.add_argument(f"--{arg}", type=ARGUMENTS[arg]["type"], help=ARGUMENTS[arg]["help"])
 
     parser.add_argument("--output_file", type=str, help="Path to output csv file.")
-    args = parser.parse_args().__dict__
+    args = vars(parser.parse_args())
 
     with open(args["output_file"], "w") as csvfile:
         csv_writer = csv.writer(csvfile, delimiter=',')
