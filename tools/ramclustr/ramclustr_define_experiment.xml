@@ -1,4 +1,4 @@
-<tool id="ramclustr_define_experiment" name="RAMClustR define experiment" version="1.0.0+galaxy0">
+<tool id="ramclustr_define_experiment" name="RAMClustR define experiment" version="1.0.0">
     <macros>
         <import>macros.xml</import>
     </macros>
