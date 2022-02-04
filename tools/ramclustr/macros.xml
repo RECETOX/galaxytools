@@ -158,21 +158,7 @@
                    help="CSV with sample names (or indices, currently not handled) on rows and columns with: batch
                    number ('batch'), position in sequence ('order') and whether it is a qc sample or not
                    ('qc' with true/false OR 'sampleType' with 'sample/qc/blank')."/>
-            <!-- <param label="ExpDes" name="ExpDes" type="data" format="RData" optional="true" help=" an R object created by R ExpDes object: data used for record keeping and labelling msp spectral output" /> -->
-        </section>
-    </xml>
-
-    <xml name="parameters_define_experiment">
-        <section name="define_experiment" title="Define Experiment" expanded="false">
-            <param label="Experiment" name="experiment" type="text" help="Experiment name, no spaces"/>
-            <param label="Species" name="species" type="text" help="Species name"/>
-            <param label="Sample" name="sample" type="text" help="Sample type"/>
-            <param label="Contributor" name="contributor" type="text"
-                   help="Individual and/or organizational affiliation"/>
-            <param label="Platform" name="platform" type="select" display="radio" help="Platform">
-                <option value="GC-MS" selected="true">GC-MS</option>
-                <option value="LC-MS">LC-MS</option>
-            </param>
+             <param label="Experimental design" name="ExpDes" type="data" format="csv" optional="true" help="Definition of experimental design in CSV format." />
         </section>
     </xml>
 
@@ -224,11 +210,13 @@
                     For documentation on the tool see https://github.com/cbroeckl/RAMClustR/blob/master/vignettes/RAMClustR.Rmd
 
                 Upstream Tools
-                    +-------+----------------------+----------------------+------------+
-                    | Name  | Output File          | Format               | Parameter  |
-                    +=======+======================+======================+============+
-                    | xcms  | xset.fillPeaks.RData | rdata.xcms.fillpeaks | xcmsObj    |
-                    +-------+----------------------+----------------------+------------+
+                    +------------------------------+-------------------------------+----------------------+---------------------+
+                    | Name                         | Output File                   | Format               | Parameter           |
+                    +==============================+===============================+======================+=====================+
+                    | xcms                         | xset.fillPeaks.RData          | rdata.xcms.fillpeaks | xcmsObj             |
+                    +------------------------------+-------------------------------+----------------------+---------------------+
+                    | RAMClustR define experiment  | Table with experiment details | csv                  | Experimental design |
+                    +------------------------------+-------------------------------+----------------------+---------------------+
 
                     The tool takes an **xcmsSet** object as input and extracts all relevant information.
 
@@ -301,5 +289,19 @@
         specific phenomenon (i.e. sodiation), meaning that grouping can be performed on any dataset, whether it
         is poisitive or negative ionization mode, EI or ESI, LC-MS GC-MS or CE-MS, in-source fragment or complex
         adduction event, and predictable or unpredictable signals.
+    </token>
+
+        <token name="@HELP_experiment@">
+        <![CDATA[
+            Create an Experimental Design specification for RAMClustR experiment.
+
+            Downstream Tools
+                +-----------+-----------------------+--------+
+                | Name      | Output File           | Format |
+                +===========+=======================+========+
+                | RAMClustR | Experiment definition | csv    |
+                +-----------+-----------------------+--------+
+
+        ]]>
     </token>
 </macros>
