@@ -63,8 +63,8 @@
             <option value="spearman">spearman</option>
             <option value="kendall">kendall</option>
         </param>
-        <param label="Maximum RT difference" name="maxt" type="integer" optional="true"
-               help="Maximum difference to calculate RT similarity - values beyond this are assigned zero similarity (optional)."/>
+        <param label="Maximum RT difference" name="maxt" value="60" type="float"
+               help="Maximum difference to calculate RT similarity - values beyond this are assigned zero similarity."/>
     </xml>
 
     <xml name="main_parameters">
