@@ -42,12 +42,12 @@
                    help="Only required if ms input is set! How feature mz and rt are delimited in csv import column header e.g. ='-'"/>
             <param label="retention_time_column" name="retention_time_column" type="integer" value="2"
                    help="Which position in delimited column header represents the retention time (csv only)"/>
-
         </section>
     </xml>
 
     <xml name="parameters_xcms">
         <section name="xcms" title="Input MS Data as XCMS" expanded="true">
+            <param name="input_xcms" label="input_xcms" type="data" format="rdata.xcms.fillpeaks" help="Grouped feature data for clustering by ramclustR" />
             <param label="usePheno" name="usePheno" type="boolean" truevalue="TRUE" falsevalue="FALSE" checked="true"
                    help="Transfer phenotype data from XCMS object to Spec abundance file."/>
         </section>
@@ -65,12 +65,12 @@
                 <option value="spearman">spearman</option>
                 <option value="kendall">kendall</option>
             </param>
-            <param label="maxt" name="maxt" type="integer" value="60"
-                   help="Maximum time difference to calculate retention similarity for - all values beyond this are assigned similarity of zero"/>
+            <param label="Maximum RT difference" name="maxt" type="integer" value="60"
+                   help="Maximum difference to calculate RT similarity - values beyond this are assigned similarity of zero."/>
         </section>
 
         <section name="clustering" title="Clustering" expanded="true">
-            <param label="linkage" name="linkage" type="select" display="radio"
+            <param label="Clustering linkage method" name="linkage" type="select" display="radio"
                    help="Hierarchical clustering linkage method - see ?hclust">
                 <option value="average" selected="true">average</option>
                 <option value="ward.D">ward.D</option>
@@ -81,38 +81,38 @@
                 <option value="median">median</option>
                 <option value="centroid">centroid</option>
             </param>
-            <param label="minModuleSize" name="minModuleSize" type="integer" value="2"
-                   help="How many features must be part of a cluster to be returned?"/>
-            <param label="hmax" name="hmax" type="float" value="0.3"
+            <param label="Minimal cluster size" name="minModuleSize" type="integer" value="2"
+                   help="Minimal size (number of features) of a cluster."/>
+            <param label="Maximal tree height" name="hmax" type="float" value="0.3"
                    help="Cut the HCA tree at this height, see ?cutreeDynamicTree for details."/>
-            <param label="deepSplit" name="deepSplit" type="boolean" truevalue="TRUE" falsevalue="FALSE" checked="false"
+            <param label="Use deepSplit" name="deepSplit" type="boolean" truevalue="TRUE" falsevalue="FALSE" checked="false"
                    help="Check to produce more smaller clusters, uncheck for fewer bigger clusters, see ?cutreeDynamicTree for details."/>
         </section>
 
         <section name="normalisation" title="Normalisation" expanded="true">
             <conditional name="normalisation_method">
-                <param label="Normalize" name="normalize" type="select" display="radio"
-                       help="Either 'none', 'TIC', 'quantile', or 'batch.qc' normalization of feature intensities.  see batch.qc overview in details. ">
+                <param label="Normalisation method" name="normalize" type="select" display="radio"
+                       help="Either 'none', 'TIC', 'quantile', or 'batch.qc' normalization of feature intensities. see batch.qc overview in details. ">
                     <option value="none" selected="true">none</option>
                     <option value="TIC">TIC</option>
                     <option value="quantile">quantile</option>
                     <option value="batch.qc">batch.qc</option>
                 </param>
                 <when value="batch.qc">
-                    <param label="metadata" name="batch_order_qc" type="data" format="csv" optional="true"
+                    <param label="Metadata details" name="batch_order_qc" type="data" format="csv" optional="true"
                            help="CSV with sample names (or indices, currently not handled) on rows and columns with:
                            batch number ('batch'), position in sequence ('order') and whether it is a qc sample or not
                            ('qc' with true/false OR 'sampleType' with 'sample/qc/blank')."/>
+                    <param label="QC injection range" name="qc_inj_range" type="integer" value="20"
+                             help="How many injections around each injection are to be scanned for presence of QC samples when
+                             using batch.qc normalization? A good rule of thumb is between 1 and 3 times the typical
+                             injection span between QC injections. i.e. if you inject QC ever 7 samples, set this to
+                             between 7 and 21. Smaller values provide more local precision but make normalization sensitive
+                             to individual poor outliers (though these are first removed using the boxplot function outlier
+                             detection), while wider values provide less local precision in normalization but better
+                             stability to individual peak areas."/>
                 </when>
             </conditional>
-            <param label="qc_inj_range" name="qc_inj_range" type="integer" value="20"
-                   help="How many injections around each injection are to be scanned for presence of QC samples when
-                         using batch.qc normalization? A good rule of thumb is between 1 and 3 times the typical
-                         injection span between QC injections. i.e. if you inject QC ever 7 samples, set this to
-                         between 7 and 21. Smaller values provide more local precision but make normalization sensitive
-                         to individual poor outliers (though these are first removed using the boxplot function outlier
-                         detection), while wider values provide less local precision in normalization but better
-                         stability to individual peak areas."/>
         </section>
 
         <section name="performance" title="Performance">
@@ -122,7 +122,7 @@
                    help="Factor to scale blocksize to influence processing speed."/>
         </section>
 
-        <section name="MSP output" title="msp_output">
+        <section name="msp_output_details" title="MSP output">
             <param label="Merge MSP Files" name="merge_msp" type="boolean" truevalue="TRUE" falsevalue="FALSE"
                    checked="true" help="Whether to merge all msp in one file or export one msp per spectra"/>
             <param label="m/z decimal places" name="mzdec" type="integer" value="3"
@@ -136,7 +136,6 @@
         <section name="extras" title="Extras">
             <param label="Collapse values" name="collapse" type="boolean" truevalue="TRUE" falsevalue="FALSE" checked="true"
                    help="Feature quantitative values are collapsed into spectra quantitative values."/>
-
             <param label="RT only low n" name="rt_only_low_n" type="boolean" truevalue="TRUE" falsevalue="FALSE"
                    checked="true"
                    help="At low injection numbers, correlational relationships of peak intensities may be unreliable.
