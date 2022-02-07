@@ -47,7 +47,7 @@
 
     <xml name="parameters_xcms">
         <section name="xcms" title="Input MS Data as XCMS" expanded="true">
-            <param name="input_xcms" label="input XCMS" type="data" format="rdata.xcms.fillpeaks"
+            <param name="input_xcms" label="Input XCMS" type="data" format="rdata.xcms.fillpeaks"
                    help="Grouped feature data for clustering." />
             <param label="Preserve phenotype" name="usePheno" type="boolean" truevalue="TRUE" falsevalue="FALSE" checked="true"
                    help="Transfer phenotype data from XCMS object to Spec abundance file."/>
@@ -55,21 +55,19 @@
     </xml>
 
     <xml name="parameters_required">
-        <section name="required" title="Required Parameters" expanded="true">
-            <param label="Sigma t" name="st" type="float" value="1" help="Retention time similarity.
-                   A recommended starting point is half the value of your average chromatographic peak width at half max (seconds))."/>
-            <param label="Sigma r" name="sr" type="float" value="0.5" help="Correlational similarity between features."/>
-            <param label="Correlation method" name="cor_method" type="select" display="radio"
-                   help="Choose correlational method to be used - see ?cor for details.">
-                <option value="pearson" selected="true">pearson</option>
-                <option value="everything">everything</option>
-                <option value="spearman">spearman</option>
-                <option value="kendall">kendall</option>
-            </param>
-            <param label="Maximum RT difference" name="maxt" type="integer" value="60"
-                   help="Maximum difference to calculate RT similarity - values beyond this are assigned zero similarity."/>
-        </section>
+        <param label="Sigma r" name="sr" type="float" value="0.5" help="Correlational similarity between features."/>
+        <param label="Correlation method" name="cor_method" type="select" display="radio"
+               help="Choose correlational method to be used - see ?cor for details.">
+            <option value="pearson" selected="true">pearson</option>
+            <option value="everything">everything</option>
+            <option value="spearman">spearman</option>
+            <option value="kendall">kendall</option>
+        </param>
+        <param label="Maximum RT difference" name="maxt" type="integer" optional="true"
+               help="Maximum difference to calculate RT similarity - values beyond this are assigned zero similarity (optional)."/>
+    </xml>
 
+    <xml name="main_parameters">
         <section name="clustering" title="Clustering" expanded="true">
             <param label="Clustering linkage method" name="linkage" type="select" display="radio"
                    help="Choose hierarchical clustering linkage method - see ?hclust for details.">
