@@ -1,11 +1,7 @@
 store_output <- function(
     ramclustr_obj,
-    output_filename,
-    output_method_metadata,
     output_merge_msp,
     output_spec_abundance) {
-    save(ramclustr_obj, file = output_filename)
-    RAMClustR::write.methods(ramclustr_obj, output_method_metadata)
     RAMClustR::write.msp(ramclustr_obj, one.file = output_merge_msp)
     write.csv(ramclustr_obj$SpecAbund, file = output_spec_abundance, row.names = TRUE)
 }

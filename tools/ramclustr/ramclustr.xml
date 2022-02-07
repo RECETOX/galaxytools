@@ -59,7 +59,8 @@
                         exp_design = "${$extras.ExpDes}"
                     #end if
                 ),
-            "$result", "$method_metadata", $msp_output_details.merge_msp, "$spec_abundance")
+                $msp_output_details.merge_msp,
+                "$spec_abundance")
         </configfile>
     </configfiles>
     <inputs>
@@ -89,33 +90,29 @@
     </inputs>
 
     <outputs>
-        <data label="${tool.name} on ${on_string}" name="result" format="RData" />
         <data label="Spec Abundance of ${on_string}" name="spec_abundance" format="csv" />
-        <data label="Metadata for ${tool.name} on ${on_string}" name="method_metadata" format="txt"/>
         <expand macro="output_msp"/>
     </outputs>
 
     <tests>
-<!--        <test>&lt;!&ndash; TEST 1 &ndash;&gt;-->
-<!--            <section name="filetype">-->
-<!--                <param name="type_choice" value="xcms"/>-->
-<!--                <section name="xcms">-->
-<!--                    <param name="input_xcms" value="test1_xcmsObj_1.rdata.xcms.fillpeaks" ftype="rdata.xcms.fillpeaks"/>-->
-<!--                </section>-->
-<!--                <section name="required">-->
-<!--                    <param name="maxt" value="259.8"/>-->
-<!--                </section>-->
-<!--            </section>-->
-<!--            <section name="extras">-->
-<!--                <param name="ExpDes" value="lc-ramclustr-define-experiment.csv" ftype="csv"/>-->
-<!--            </section>-->
-<!--            <output name="result" file="test1_ramclustObj_xcms_1.rdata" ftype="RData" compare="sim_size" delta="200"/>-->
-<!--            <output_collection name="mass_spectra" type="list">-->
-<!--                <element name="experiment_lc" file="test1_fill_xcms_1.msp" ftype="msp"/>-->
-<!--            </output_collection>-->
-<!--            <output name="method_metadata" file="test1_metadata_xcms_1.txt" ftype="txt"/>-->
-<!--            <output name="spec_abundance" file="test1_spec_abundance_xcms_1.csv" ftype="csv" compare="sim_size" delta="100"/>-->
-<!--        </test>-->
+        <test><!-- TEST 1 -->
+            <section name="filetype">
+                <param name="type_choice" value="xcms"/>
+                <section name="xcms">
+                    <param name="input_xcms" value="test1_xcmsObj_1.rdata.xcms.fillpeaks" ftype="rdata.xcms.fillpeaks"/>
+                </section>
+                <section name="required">
+                    <param name="maxt" value="259.8"/>
+                </section>
+            </section>
+            <section name="extras">
+                <param name="ExpDes" value="lc-ramclustr-define-experiment.csv" ftype="csv"/>
+            </section>
+            <output_collection name="mass_spectra" type="list">
+                <element name="experiment_lc" file="test1_fill_xcms_1.msp" ftype="msp"/>
+            </output_collection>
+            <output name="spec_abundance" file="test1_spec_abundance_xcms_1.csv" ftype="csv" compare="sim_size" delta="100"/>
+        </test>
         <test><!-- TEST 2 -->
             <section name="filetype">
                 <param name="type_choice" value="xcms"/>
@@ -131,49 +128,42 @@
                     <param name="batch_order_qc" value="test2_sample_metadata_xcms_2.csv" ftype="csv" />
                 </section>
             </section>
-            <output name="result" file="test2_ramclustObj_xcms_2.rdata" ftype="RData" compare="sim_size" delta="200"/>
             <output_collection name="mass_spectra" type="list">
                 <element name="fill" file="test2_fill_xcms_2.msp" ftype="msp" compare="diff" lines_diff="10"/>
             </output_collection>
-            <output name="method_metadata" file="test2_metadata_xcms_2.txt" ftype="txt"/>
             <output name="spec_abundance" file="test2_spec_abundance_xcms_2.csv" ftype="csv" compare="sim_size" delta="100"/>
         </test>
-<!--        <test>&lt;!&ndash; TEST 3 &ndash;&gt;-->
-<!--            <section name="filetype">-->
-<!--                <param name="type_choice" value="csv"/>-->
-<!--                <section name="ms_csv">-->
-<!--                    <param name="ms" value="test3_csv_test-input_1_2.csv" ftype="csv"/>-->
-<!--                </section>-->
-<!--                <section name="required">-->
-<!--                    <param name="st" value="5.0"/>-->
-<!--                    <param name="maxt" value="1"/>-->
-<!--                </section>-->
-<!--            </section>-->
-<!--            <section name="performance">-->
-<!--                <param name="blocksize" value="1000"/>-->
-<!--                <param name="mult" value="1"/>-->
-<!--            </section>-->
-<!--            <output name="result" file="test3_ramclustObj_csv_1.rdata" ftype="RData" compare="sim_size" delta="200"/>-->
-<!--            <output name="spec_abundance" file="test3_spec_abundance_csv_1.csv" ftype="csv"/>-->
-<!--            <output name="method_metadata" file="test3_metadata_csv_1.txt" ftype="txt"/>-->
-<!--            <output_collection name="mass_spectra" type="list">-->
-<!--                <element name="fill" file="test3_spectra_csv_1.msp" ftype="msp"/>-->
-<!--            </output_collection>-->
-<!--        </test>-->
-<!--        <test>&lt;!&ndash; TEST 4 &ndash;&gt;-->
-<!--            <section name="filetype">-->
-<!--                <param name="type_choice" value="csv"/>-->
-<!--                <section name="ms_csv">-->
-<!--                    <param name="ms" value="test3_csv_test-input_1_2.csv" ftype="csv"/>-->
-<!--                </section>-->
-<!--            </section>-->
-<!--            <output name="result" file="test4_ramclustObj_csv_2.rdata" ftype="RData" compare="sim_size" delta="200"/>-->
-<!--            <output name="spec_abundance" file="test4_spec_abundance_csv_2.csv" ftype="csv"/>-->
-<!--            <output name="method_metadata" file="test4_metadata_csv_2.txt" ftype="txt"/>-->
-<!--            <output_collection name="mass_spectra" type="list">-->
-<!--                <element name="fill" file="test4_spectra_csv_2.msp" ftype="msp" lines_diff="10"/>-->
-<!--            </output_collection>-->
-<!--        </test>-->
+        <test><!-- TEST 3 -->
+            <section name="filetype">
+                <param name="type_choice" value="csv"/>
+                <section name="ms_csv">
+                    <param name="ms" value="test3_csv_test-input_1_2.csv" ftype="csv"/>
+                </section>
+                <section name="required">
+                    <param name="st" value="5.0"/>
+                    <param name="maxt" value="1"/>
+                </section>
+            </section>
+            <section name="performance">
+                <param name="blocksize" value="1000"/>
+                <param name="mult" value="1"/>
+            </section>
+            <output name="spec_abundance" file="test3_spec_abundance_csv_1.csv" ftype="csv"/>
+            <output_collection name="mass_spectra" type="list">
+                <element name="fill" file="test3_spectra_csv_1.msp" ftype="msp"/>
+            </output_collection>
+        </test>
+        <test><!-- TEST 4 -->
+            <section name="filetype">
+                <param name="type_choice" value="csv"/>
+                <section name="ms_csv">
+                    <param name="ms" value="test3_csv_test-input_1_2.csv" ftype="csv"/>
+                </section>
+            </section>
+            <output_collection name="mass_spectra" type="list">
+                <element name="fill" file="test4_spectra_csv_2.msp" ftype="msp" lines_diff="10"/>
+            </output_collection>
+        </test>
     </tests>
 
     <help>
