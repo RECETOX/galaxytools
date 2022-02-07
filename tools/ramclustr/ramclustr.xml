@@ -74,18 +74,13 @@
                 <option value="csv">CSV</option>
             </param>
             <when value="xcms">
-                <param name="input_xcms" label="input_xcms" type="data" format="rdata.xcms.fillpeaks" help="Grouped feature data for clustering by ramclustR" />
-                <expand macro="parameters_required" />
-                <expand macro="parameters_optional_xcms" />
-                <expand macro="parameters_optional_metadata" />
+                <expand macro="parameters_xcms" />
             </when>
             <when value="csv">
                 <expand macro="parameters_csv" />
-                <expand macro="parameters_required" />
-                <expand macro="parameters_optional_csv" />
-                <expand macro="parameters_optional_metadata" />
             </when>
         </conditional>
+        <expand macro="parameters_required" />
     </inputs>
 
     <outputs>
