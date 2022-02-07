@@ -39,7 +39,7 @@
                         st = $filetype.required.st,
                     #end if
                     cor_method = "$filetype.required.cor_method",
-                     #if $filetype.required.maxt
+                    #if $filetype.required.maxt
                         maxt = $filetype.required.maxt,
                     #end if
                     linkage = "$clustering.linkage",
@@ -162,9 +162,6 @@
                 <section name="ms_csv">
                     <param name="ms" value="test3_csv_test-input_1_2.csv" ftype="csv"/>
                 </section>
-            </section>
-            <section name="normalisation_method">
-                <param name="batch_order_qc" value="test4_sample_metadata_csv_2.csv" ftype="csv" />
             </section>
             <output name="result" file="test4_ramclustObj_csv_2.rdata" ftype="RData" compare="sim_size" delta="200"/>
             <output name="spec_abundance" file="test4_spec_abundance_csv_2.csv" ftype="csv"/>
