@@ -32,46 +32,47 @@
 
     <xml name="parameters_csv">
         <section name="ms_csv" title="Input MS Data as CSV" expanded="true">
-            <param label="ms" name="ms" type="data" format="csv"
-                   help="Features as columns, rows as samples. Column header mz_rt"/>
-            <param label="idmsms" name="idmsms" type="data" format="csv" optional="true"
-                   help="Optional idMSMS / MSe csv data.  same dim and names as ms required"/>
-            <param label="sample_name_column" name="sample_name_column" type="integer" value="1"
-                   help="Which column from the csv file contains sample names?"/>
-            <param label="feature_delimiter" name="feature_delimiter" type="text" value="_"
-                   help="Only required if ms input is set! How feature mz and rt are delimited in csv import column header e.g. ='-'"/>
-            <param label="retention_time_column" name="retention_time_column" type="integer" value="2"
-                   help="Which position in delimited column header represents the retention time (csv only)"/>
+            <param label="Input CSV" name="ms" type="data" format="csv"
+                   help="Features as columns, rows as samples. Column header in format mz[feature delimiter]rt."/>
+            <param label="Feature delimiter" name="feature_delimiter" type="text" value="_"
+                   help="How feature m/z and RT are delimited in csv import column header (e.g. 'mz_rt')."/>
+            <param label="idMSMS" name="idmsms" type="data" format="csv" optional="true"
+                   help="Optional idMSMS / MSe csv data. Same dimension and names as in input CSV are required."/>
+            <param label="Sample name column" name="sample_name_column" type="integer" value="1"
+                   help="Index of column containing sample names in CSV file."/>
+            <param label="Retention time column" name="retention_time_column" type="integer" value="2"
+                   help="Index of column containing the retention time."/>
         </section>
     </xml>
 
     <xml name="parameters_xcms">
         <section name="xcms" title="Input MS Data as XCMS" expanded="true">
-            <param name="input_xcms" label="input_xcms" type="data" format="rdata.xcms.fillpeaks" help="Grouped feature data for clustering by ramclustR" />
-            <param label="usePheno" name="usePheno" type="boolean" truevalue="TRUE" falsevalue="FALSE" checked="true"
+            <param name="input_xcms" label="input XCMS" type="data" format="rdata.xcms.fillpeaks"
+                   help="Grouped feature data for clustering." />
+            <param label="Preserve phenotype" name="usePheno" type="boolean" truevalue="TRUE" falsevalue="FALSE" checked="true"
                    help="Transfer phenotype data from XCMS object to Spec abundance file."/>
         </section>
     </xml>
 
     <xml name="parameters_required">
         <section name="required" title="Required Parameters" expanded="true">
-            <param label="Sigma t" name="st" type="float" value="1" help="Sigma t - retention time similarity.
+            <param label="Sigma t" name="st" type="float" value="1" help="Retention time similarity.
                    A recommended starting point is half the value of your average chromatographic peak width at half max (seconds))."/>
-            <param label="Sigma r" name="sr" type="float" value="0.5" help="Sigma r - correlational similarity between features."/>
+            <param label="Sigma r" name="sr" type="float" value="0.5" help="Correlational similarity between features."/>
             <param label="Correlation method" name="cor_method" type="select" display="radio"
-                   help="Which correlational method used to calculate 'r' - see ?cor">
+                   help="Choose correlational method to be used - see ?cor for details.">
                 <option value="pearson" selected="true">pearson</option>
                 <option value="everything">everything</option>
                 <option value="spearman">spearman</option>
                 <option value="kendall">kendall</option>
             </param>
             <param label="Maximum RT difference" name="maxt" type="integer" value="60"
-                   help="Maximum difference to calculate RT similarity - values beyond this are assigned similarity of zero."/>
+                   help="Maximum difference to calculate RT similarity - values beyond this are assigned zero similarity."/>
         </section>
 
         <section name="clustering" title="Clustering" expanded="true">
             <param label="Clustering linkage method" name="linkage" type="select" display="radio"
-                   help="Hierarchical clustering linkage method - see ?hclust">
+                   help="Choose hierarchical clustering linkage method - see ?hclust for details.">
                 <option value="average" selected="true">average</option>
                 <option value="ward.D">ward.D</option>
                 <option value="ward.D2">ward.D2</option>
@@ -84,7 +85,7 @@
             <param label="Minimal cluster size" name="minModuleSize" type="integer" value="2"
                    help="Minimal size (number of features) of a cluster."/>
             <param label="Maximal tree height" name="hmax" type="float" value="0.3"
-                   help="Cut the HCA tree at this height, see ?cutreeDynamicTree for details."/>
+                   help="Cut the Hierarchical Cluster Analysis tree at this height, see ?cutreeDynamicTree for details."/>
             <param label="Use deepSplit" name="deepSplit" type="boolean" truevalue="TRUE" falsevalue="FALSE" checked="false"
                    help="Check to produce more smaller clusters, uncheck for fewer bigger clusters, see ?cutreeDynamicTree for details."/>
         </section>
@@ -92,7 +93,7 @@
         <section name="normalisation" title="Normalisation" expanded="true">
             <conditional name="normalisation_method">
                 <param label="Normalisation method" name="normalize" type="select" display="radio"
-                       help="Either 'none', 'TIC', 'quantile', or 'batch.qc' normalization of feature intensities. see batch.qc overview in details. ">
+                       help="Choose method for normalization of feature intensities.">
                     <option value="none" selected="true">none</option>
                     <option value="TIC">TIC</option>
                     <option value="quantile">quantile</option>
@@ -101,11 +102,11 @@
                 <when value="batch.qc">
                     <param label="Metadata details" name="batch_order_qc" type="data" format="csv" optional="true"
                            help="CSV with sample names (or indices, currently not handled) on rows and columns with:
-                           batch number ('batch'), position in sequence ('order') and whether it is a qc sample or not
+                           batch number ('batch'), position in sequence ('order'), and whether it is a QC sample or not
                            ('qc' with true/false OR 'sampleType' with 'sample/qc/blank')."/>
                     <param label="QC injection range" name="qc_inj_range" type="integer" value="20"
-                             help="How many injections around each injection are to be scanned for presence of QC samples when
-                             using batch.qc normalization? A good rule of thumb is between 1 and 3 times the typical
+                             help="How many injections around each injection are to be scanned for presence of QC samples?
+                             A good rule of thumb is between 1 and 3 times the typical
                              injection span between QC injections. i.e. if you inject QC ever 7 samples, set this to
                              between 7 and 21. Smaller values provide more local precision but make normalization sensitive
                              to individual poor outliers (though these are first removed using the boxplot function outlier
@@ -124,7 +125,7 @@
 
         <section name="msp_output_details" title="MSP output">
             <param label="Merge MSP Files" name="merge_msp" type="boolean" truevalue="TRUE" falsevalue="FALSE"
-                   checked="true" help="Whether to merge all msp in one file or export one msp per spectra"/>
+                   checked="true" help="Merge all MSP in one file or export one MSP per spectra."/>
             <param label="m/z decimal places" name="mzdec" type="integer" value="3"
                    help="Number of decimal places used in printing m/z values."/>
             <!--
