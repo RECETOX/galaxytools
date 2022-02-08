@@ -46,7 +46,6 @@ ramclustr_xcms <- function(
     block_size,
     mult,
     mzdec,
-    collapse,
     rt_only_low_n,
     replace_zeros,
     exp_design = NULL
@@ -79,7 +78,6 @@ ramclustr_xcms <- function(
         blocksize = block_size,
         mult = mult,
         hmax = hmax,
-        collapse = collapse,
         usePheno = use_pheno,
         mspout = FALSE,
         qc.inj.range = qc_inj_range,
@@ -116,7 +114,6 @@ ramclustr_csv <- function(
     block_size,
     mult,
     mzdec,
-    collapse,
     rt_only_low_n,
     replace_zeros,
     exp_design = NULL
@@ -151,7 +148,6 @@ ramclustr_csv <- function(
         blocksize = block_size,
         mult = mult,
         hmax = hmax,
-        collapse = collapse,
         mspout = FALSE,
         qc.inj.range = qc_inj_range,
         normalize = normalize,

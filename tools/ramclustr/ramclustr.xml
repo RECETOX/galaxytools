@@ -49,7 +49,6 @@
                     block_size = $performance.blocksize,
                     mult = $performance.mult,
                     mzdec = $msp_output_details.mzdec,
-                    collapse = "$extras.collapse",
                     rt_only_low_n = $extras.rt_only_low_n,
                     replace_zeros = $extras.replace_zeros,
                     #if $extras.ExpDes:

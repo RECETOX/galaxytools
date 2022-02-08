@@ -127,8 +127,6 @@
         </section>
 
         <section name="extras" title="Extras">
-            <param label="Collapse values" name="collapse" type="boolean" truevalue="TRUE" falsevalue="FALSE" checked="true"
-                   help="Feature quantitative values are collapsed into spectra quantitative values."/>
             <param label="RT only low n" name="rt_only_low_n" type="boolean" truevalue="TRUE" falsevalue="FALSE"
                    checked="true"
                    help="At low injection numbers, correlational relationships of peak intensities may be unreliable.
