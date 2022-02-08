@@ -102,9 +102,6 @@ ramclustr_xcms <- function(
 ramclustr_csv <- function(
     ms,
     idmsms,
-    sample_name_column,
-    feature_delimiter,
-    retention_time_column,
     sr,
     st,
     cor_method,
@@ -147,9 +144,6 @@ ramclustr_csv <- function(
     x <- RAMClustR::ramclustR(
         ms = ms,
         idmsms = idmsms,
-        featdelim = feature_delimiter,
-        timepos = retention_time_column,
-        sampNameCol = sample_name_column,
         st = st,
         maxt = maxt,
         sr = sr,

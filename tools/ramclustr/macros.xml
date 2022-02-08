@@ -34,14 +34,8 @@
         <section name="ms_csv" title="Input MS Data as CSV" expanded="true">
             <param label="Input CSV" name="ms" type="data" format="csv"
                    help="Features as columns, rows as samples. Column header in format mz[feature delimiter]rt."/>
-            <param label="Feature delimiter" name="feature_delimiter" type="text" value="_"
-                   help="How feature m/z and RT are delimited in csv import column header (e.g. 'mz_rt')."/>
             <param label="idMSMS" name="idmsms" type="data" format="csv" optional="true"
                    help="Optional idMSMS / MSe csv data. Same dimension and names as in input CSV are required."/>
-            <param label="Sample name column" name="sample_name_column" type="integer" value="1"
-                   help="Index of column containing sample names in CSV file."/>
-            <param label="Retention time column" name="retention_time_column" type="integer" value="2"
-                   help="Index of column containing the retention time."/>
         </section>
     </xml>
 

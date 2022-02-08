@@ -26,9 +26,6 @@
                 ramclustr_csv(
                     ms = "$filetype.ms_csv.ms",
                     idmsms = "$filetype.ms_csv.idmsms",
-                    feature_delimiter = "$filetype.ms_csv.feature_delimiter",
-                    sample_name_column = $filetype.ms_csv.sample_name_column,
-                    retention_time_column = $filetype.ms_csv.retention_time_column,
                 #end if
                     sr = $filetype.required.sr,
                     #if $filetype.type_choice == "xcms":
