@@ -169,6 +169,11 @@
     <help>
         <![CDATA[
             @HELP@
+
+        .. rubric:: **Footnotes**
+        .. [1] Correlation, Variance and Covariance - `stats::cor <https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/cor>`_
+        .. [2] Hierarchical Clustering - `stats::hclust <https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/hclust>`_
+        .. [3] Dynamic Dendrogram Pruning Based on Dendrogram Only - `dynamicTreeCut::cutreeDynamicTree <https://www.rdocumentation.org/packages/dynamicTreeCut/versions/1.63-1/topics/cutreeDynamicTree>`_
         ]]>
     </help>
 
