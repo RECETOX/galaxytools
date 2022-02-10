@@ -104,9 +104,7 @@
             <section name="extras">
                 <param name="ExpDes" value="lc-ramclustr-define-experiment.csv" ftype="csv"/>
             </section>
-            <output_collection name="mass_spectra" type="list">
-                <element name="experiment_lc" file="test1_fill_xcms_1.msp" ftype="msp"/>
-            </output_collection>
+            <output name="mass_spectra_merged" file="test1_fill_xcms_1.msp" ftype="msp"/>
             <output name="spec_abundance" file="test1_spec_abundance_xcms_1.csv" ftype="csv" compare="sim_size" delta="100"/>
         </test>
         <test><!-- TEST 2 -->
@@ -124,9 +122,7 @@
                     <param name="batch_order_qc" value="test2_sample_metadata_xcms_2.csv" ftype="csv" />
                 </section>
             </section>
-            <output_collection name="mass_spectra" type="list">
-                <element name="fill" file="test2_fill_xcms_2.msp" ftype="msp" compare="diff" lines_diff="10"/>
-            </output_collection>
+            <output name="mass_spectra_merged" file="test2_fill_xcms_2.msp" ftype="msp" compare="diff" lines_diff="10"/>
             <output name="spec_abundance" file="test2_spec_abundance_xcms_2.csv" ftype="csv" compare="sim_size" delta="100"/>
         </test>
         <test><!-- TEST 3 -->
@@ -144,10 +140,8 @@
                 <param name="blocksize" value="1000"/>
                 <param name="mult" value="1"/>
             </section>
+            <output name="mass_spectra_merged" file="test3_spectra_csv_1.msp" ftype="msp"/>
             <output name="spec_abundance" file="test3_spec_abundance_csv_1.csv" ftype="csv"/>
-            <output_collection name="mass_spectra" type="list">
-                <element name="fill" file="test3_spectra_csv_1.msp" ftype="msp"/>
-            </output_collection>
         </test>
         <test><!-- TEST 4 -->
             <section name="filetype">
@@ -156,9 +150,7 @@
                     <param name="ms" value="test3_csv_test-input_1_2.csv" ftype="csv"/>
                 </section>
             </section>
-            <output_collection name="mass_spectra" type="list">
-                <element name="fill" file="test4_spectra_csv_2.msp" ftype="msp" lines_diff="10"/>
-            </output_collection>
+            <output name="mass_spectra_merged" file="test4_spectra_csv_2.msp" ftype="msp" lines_diff="10"/>
         </test>
     </tests>
 

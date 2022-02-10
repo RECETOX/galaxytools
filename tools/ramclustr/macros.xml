@@ -143,9 +143,14 @@
     </xml>
 
     <xml name="output_msp">
-        <collection label="Mass spectra from ${tool.name} on ${on_string}" name="mass_spectra" type="list">
-            <discover_datasets pattern="__name_and_ext__" directory="spectra" recurse="true" ext="msp"/>
-        </collection>
+       <collection label="Mass spectra from ${tool.name} on ${on_string}" name="mass_spectra_collection" type="list">
+           <discover_datasets pattern="__name_and_ext__" directory="spectra" recurse="true" ext="msp"/>
+           <filter>not msp_output_details['merge_msp']</filter>
+       </collection>
+       <data label="Mass spectra from ${tool.name} on ${on_string}" name="mass_spectra_merged" format="msp">
+           <discover_datasets pattern="__name_and_ext__" directory="spectra" recurse="true" ext="msp"/>
+           <filter>msp_output_details['merge_msp']</filter>
+       </data>
     </xml>
 
     <xml name="citations">
