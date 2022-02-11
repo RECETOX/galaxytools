@@ -33,7 +33,7 @@
     <xml name="parameters_csv">
         <section name="ms_csv" title="Input MS Data as CSV" expanded="true">
             <param label="Input CSV" name="ms" type="data" format="csv"
-                   help="Features as columns, rows as samples. Column header in format mz[feature delimiter]rt."/>
+                   help="Features as columns, rows as samples. Column header in format mz_rt."/>
             <param label="idMSMS" name="idmsms" type="data" format="csv" optional="true"
                    help="Optional idMSMS / MSe csv data. Same dimension and names as in input CSV are required."/>
         </section>
