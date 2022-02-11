@@ -118,7 +118,7 @@
         <section name="msp_output_details" title="MSP output">
             <param label="Merge MSP Files" name="merge_msp" type="boolean" truevalue="TRUE" falsevalue="FALSE"
                    checked="true" help="Merge all MSP in one file or export one MSP per spectra."/>
-            <param label="m/z decimal places" name="mzdec" type="integer" value="3"
+            <param label="m/z decimal places" name="mzdec" type="integer" value="6"
                    help="Number of decimal places used in printing m/z values."/>
             <!--
             Currently not forwarded because the MSP is exported always manually afterwards
