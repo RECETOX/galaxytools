@@ -8,8 +8,8 @@ store_output <- function(
 
     if (!is.null(msp_file)) {
         exp.name <- ramclustr_obj$ExpDes[[1]][which(row.names(ramclustr_obj$ExpDes[[1]]) == "Experiment"), 1]
-        filename <- paste(exp.name, ".msp", sep = "")
-        file.rename(from = file.path("spectra/", filename), to = file.path(dirname(msp_file), basename(msp_file)))
+        filename <- paste("spectra/", exp.name, ".msp", sep = "")
+        file.copy(from = filename, to = msp_file, overwrite = TRUE)
     }
 }
 
