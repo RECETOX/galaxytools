@@ -56,7 +56,13 @@
                     #end if
                 ),
                 $msp_output_details.merge_msp,
-                "$spec_abundance")
+                "$spec_abundance",
+            #if $msp_output_details.merge_msp:
+                "$mass_spectra_merged"
+            #else:
+                NULL
+            #end if
+                )
         </configfile>
     </configfiles>
     <inputs>
