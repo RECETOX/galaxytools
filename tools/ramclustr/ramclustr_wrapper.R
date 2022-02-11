@@ -7,9 +7,9 @@ store_output <- function(
     write.csv(ramclustr_obj$SpecAbund, file = output_spec_abundance, row.names = TRUE)
 
     if (!is.null(msp_file)) {
-        exp.name <- ramclustr_obj$ExpDes[[1]][which(row.names(ramclustr_obj$ExpDes[[1]]) == "Experiment"),1]
-        filename = paste(exp.name, '.msp', sep="")
-        file.rename(from = file.path('spectra/', filename), to = file.path(dirname(msp_file), basename(msp_file)))
+        exp.name <- ramclustr_obj$ExpDes[[1]][which(row.names(ramclustr_obj$ExpDes[[1]]) == "Experiment"), 1]
+        filename <- paste(exp.name, ".msp", sep = "")
+        file.rename(from = file.path("spectra/", filename), to = file.path(dirname(msp_file), basename(msp_file)))
     }
 }
 
