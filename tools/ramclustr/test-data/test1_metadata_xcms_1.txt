@@ -1,9 +1,0 @@
-Raw mass spectrometry data were processed using an R based workflow for feature detection, retention time alignment, feature grouping, peak filling, feature clustering. XCMS(v.3.14.0)was used for feature detection and retention time alighment. Processing was performed using R(v.R Core Team 2021). Feature data was input as an xcms object with ramclustR parameter settings of  st = 12.99 sr = 0.5 and maxt = 259.8.RAMClustR (version 1.2.2) was utilized to cluster features into spectra (Broeckling 2014). The feature similarity matrix was clustered using fastcluster package heirarchical clustering method using the average method. The dendrogram was cut using the cutreeDynamicTree function from the dynamicTreeCut package.  Cutting parameters were set to minModuleSize = 2, hmax = 0.3, and deepSplit = FALSE. 
- 
- 1041 features were collapsed into 174 spectra.
- 
-(Broeckling 2014):  Broeckling CD, Afsar FA, Neumann S, Ben-Hur A, Prenni JE. RAMClust: a novel feature clustering method enables spectral-matching-based annotation for metabolomics data. Anal Chem. 2014. 86(14):6812-7.
-
-R Core Team:  R Core Team (2021). R: A Language and Environment for Statistical Computing. R Foundation for Statistical Computing, Vienna, Austria, https://www.R-project.org/.
-
-R Core Team (2021). R: A Language and Environment for Statistical Computing. R Foundation for Statistical Computing, Vienna, Austria, https://www.R-project.org/.

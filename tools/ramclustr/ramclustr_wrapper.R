@@ -1,13 +1,16 @@
 store_output <- function(
     ramclustr_obj,
-    output_filename,
-    output_method_metadata,
     output_merge_msp,
-    output_spec_abundance) {
-    save(ramclustr_obj, file = output_filename)
-    RAMClustR::write.methods(ramclustr_obj, output_method_metadata)
+    output_spec_abundance,
+    msp_file) {
     RAMClustR::write.msp(ramclustr_obj, one.file = output_merge_msp)
     write.csv(ramclustr_obj$SpecAbund, file = output_spec_abundance, row.names = TRUE)
+
+    if (!is.null(msp_file)) {
+        exp.name <- ramclustr_obj$ExpDes[[1]][which(row.names(ramclustr_obj$ExpDes[[1]]) == "Experiment"), 1]
+        filename <- paste("spectra/", exp.name, ".msp", sep = "")
+        file.copy(from = filename, to = msp_file, overwrite = TRUE)
+    }
 }
 
 load_experiment_definition <- function(filename) {
@@ -35,25 +38,23 @@ read_metadata <- function(filename) {
 
 ramclustr_xcms <- function(
     input_xcms,
+    use_pheno,
     sr,
+    st = NULL,
+    cor_method,
+    maxt,
+    linkage,
+    min_module_size,
+    hmax,
     deep_split,
+    normalize,
+    metadata_file = NULL,
+    qc_inj_range,
     block_size,
     mult,
-    hmax,
-    collapse,
-    use_pheno,
-    qc_inj_range,
-    normalize,
-    min_module_size,
-    linkage,
     mzdec,
-    cor_method,
     rt_only_low_n,
     replace_zeros,
-    st = NULL,
-    maxt = NULL,
-    fftempdir = NULL,
-    metadata_file = NULL,
     exp_design = NULL
 ) {
     obj <- load(input_xcms)
@@ -84,7 +85,6 @@ ramclustr_xcms <- function(
         blocksize = block_size,
         mult = mult,
         hmax = hmax,
-        collapse = collapse,
         usePheno = use_pheno,
         mspout = FALSE,
         qc.inj.range = qc_inj_range,
@@ -94,7 +94,7 @@ ramclustr_xcms <- function(
         mzdec = mzdec,
         cor.method = cor_method,
         rt.only.low.n = rt_only_low_n,
-        fftempdir = fftempdir,
+        fftempdir = NULL,
         replace.zeros = replace_zeros,
         batch = batch,
         order = order,
@@ -107,28 +107,22 @@ ramclustr_xcms <- function(
 ramclustr_csv <- function(
     ms,
     idmsms,
-    sample_name_column,
-    feature_delimiter,
-    retention_time_column,
     sr,
+    st,
+    cor_method,
+    maxt,
+    linkage,
+    min_module_size,
+    hmax,
     deep_split,
+    normalize,
+    metadata_file = NULL,
+    qc_inj_range,
     block_size,
     mult,
-    hmax,
-    collapse,
-    use_pheno,
-    qc_inj_range,
-    normalize,
-    min_module_size,
-    linkage,
     mzdec,
-    cor_method,
     rt_only_low_n,
     replace_zeros,
-    st = NULL,
-    maxt = NULL,
-    fftempdir = NULL,
-    metadata_file = NULL,
     exp_design = NULL
 ) {
     if (!file.exists(idmsms))
@@ -154,9 +148,6 @@ ramclustr_csv <- function(
     x <- RAMClustR::ramclustR(
         ms = ms,
         idmsms = idmsms,
-        featdelim = feature_delimiter,
-        timepos = retention_time_column,
-        sampNameCol = sample_name_column,
         st = st,
         maxt = maxt,
         sr = sr,
@@ -164,8 +155,6 @@ ramclustr_csv <- function(
         blocksize = block_size,
         mult = mult,
         hmax = hmax,
-        collapse = collapse,
-        usePheno = use_pheno,
         mspout = FALSE,
         qc.inj.range = qc_inj_range,
         normalize = normalize,
@@ -174,7 +163,7 @@ ramclustr_csv <- function(
         mzdec = mzdec,
         cor.method = cor_method,
         rt.only.low.n = rt_only_low_n,
-        fftempdir = fftempdir,
+        fftempdir = NULL,
         replace.zeros = replace_zeros,
         batch = batch,
         order = order,

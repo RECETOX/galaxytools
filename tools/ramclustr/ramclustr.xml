@@ -20,51 +20,49 @@
             store_output(
                 #if $filetype.type_choice == "xcms":
                 ramclustr_xcms(
-                    input_xcms = "$filetype.input_xcms",
+                    input_xcms = "$filetype.xcms.input_xcms",
+                    use_pheno = $filetype.xcms.usePheno,
                 #else:
                 ramclustr_csv(
-                    ms="$filetype.ms_csv.ms",
-                    idmsms="$filetype.ms_csv.idmsms",
-                    feature_delimiter="$filetype.ms_csv.feature_delimiter",
-                    sample_name_column = $filetype.ms_csv.sample_name_column,
-                    retention_time_column= $filetype.ms_csv.retention_time_column,
+                    ms = "$filetype.ms_csv.ms",
+                    idmsms = "$filetype.ms_csv.idmsms",
                 #end if
                     sr = $filetype.required.sr,
-                    deep_split = $filetype.required.deepSplit,
-                    block_size = $filetype.required.blocksize,
-                    mult = $filetype.required.mult,
-                    hmax = $filetype.required.hmax,
-                    collapse = $filetype.required.collapse,
-                    use_pheno = $filetype.required.usePheno,
-                    qc_inj_range = $filetype.required.qc_inj_range,
-                    normalize = "$filetype.required.normalize",
-                    min_module_size = $filetype.required.minModuleSize,
-                    linkage = "$filetype.required.linkage",
-                    mzdec = $filetype.required.mzdec,
+                    #if $filetype.type_choice == "xcms":
+                        #if $filetype.required.st
+                            st = $filetype.required.st,
+                        #end if
+                    #else:
+                        st = $filetype.required.st,
+                    #end if
                     cor_method = "$filetype.required.cor_method",
-                    rt_only_low_n = $filetype.required.rt_only_low_n,
-                    replace_zeros = $filetype.required.replace_zeros,
-                #if $filetype.type_choice == "xcms":
-                    #if $filetype.optional.st
-                        st = $filetype.optional.st,
+                    maxt = $filetype.required.maxt,
+                    linkage = "$clustering.linkage",
+                    min_module_size = $clustering.minModuleSize,
+                    hmax = $clustering.hmax,
+                    deep_split = "$clustering.deepSplit",
+                    normalize = "$normalisation.normalisation_method.normalize",
+                    #if "$normalisation.normalisation_method.normalize" == "batch.qc":
+                        metadata_file = "$normalisation.normalisation_method.batch_order_qc",
+                        qc_inj_range = $normalisation.normalisation_method.qc_inj_range,
                     #end if
-                #else:
-                    st = $filetype.ms_csv.st,
-                #end if
-                    #if $filetype.optional.maxt
-                        maxt = $filetype.optional.maxt,
-                    #end if
-                    #if $filetype.optional.fftempdir
-                        fftempdir = $filetype.optional.fftempdir,
-                    #end if
-                    #if $filetype.metadata.batch_order_qc
-                        metadata_file = "${filetype.metadata.batch_order_qc}",
-                    #end if
-                    #if $filetype.metadata.ExpDes
-                        exp_design = "${filetype.metadata.ExpDes}"
+                    block_size = $performance.blocksize,
+                    mult = $performance.mult,
+                    mzdec = $msp_output_details.mzdec,
+                    rt_only_low_n = $extras.rt_only_low_n,
+                    replace_zeros = $extras.replace_zeros,
+                    #if $extras.ExpDes:
+                        exp_design = "${$extras.ExpDes}"
                     #end if
                 ),
-            "$result", "$method_metadata", $filetype.required.merge_msp, "$spec_abundance")
+                $msp_output_details.merge_msp,
+                "$spec_abundance",
+            #if $msp_output_details.merge_msp:
+                "$mass_spectra_merged"
+            #else:
+                NULL
+            #end if
+                )
         </configfile>
     </configfiles>
     <inputs>
@@ -74,80 +72,102 @@
                 <option value="csv">CSV</option>
             </param>
             <when value="xcms">
-                <param name="input_xcms" label="input_xcms" type="data" format="rdata.xcms.fillpeaks" help="Grouped feature data for clustering by ramclustR" />
-                <expand macro="parameters_required" />
-                <expand macro="parameters_optional_xcms" />
-                <expand macro="parameters_optional_metadata" />
+                <expand macro="parameters_xcms" />
+                <section name="required" title="General parameters" expanded="true">
+                    <param label="Sigma t" name="st" type="float" optional="true" help="Retention time similarity (optional).
+                           A recommended starting point is half the value of your average chromatographic peak width at half max (seconds))."/>
+                    <expand macro="parameters_required" />
+                </section>
             </when>
             <when value="csv">
                 <expand macro="parameters_csv" />
-                <expand macro="parameters_required" />
-                <expand macro="parameters_optional_csv" />
-                <expand macro="parameters_optional_metadata" />
+                <section name="required" title="General parameters" expanded="true">
+                    <param label="Sigma t" name="st" type="float" value="1" help="Retention time similarity.
+                           A recommended starting point is half the value of your average chromatographic peak width at half max (seconds))."/>
+                    <expand macro="parameters_required" />
+                </section>
             </when>
         </conditional>
+        <expand macro="main_parameters" />
     </inputs>
 
     <outputs>
-        <data label="${tool.name} on ${on_string}" name="result" format="RData" />
         <data label="Spec Abundance of ${on_string}" name="spec_abundance" format="csv" />
-        <data label="Metadata for ${tool.name} on ${on_string}" name="method_metadata" format="txt"/>
         <expand macro="output_msp"/>
     </outputs>
 
     <tests>
         <test><!-- TEST 1 -->
-            <param name="type_choice" value="xcms"/>
-            <param name="input_xcms" value="test1_xcmsObj_1.rdata.xcms.fillpeaks" ftype="rdata.xcms.fillpeaks"/>
-            <param name="ExpDes" value="lc-ramclustr-define-experiment.csv" ftype="csv"/>
-            <output name="result" file="test1_ramclustObj_xcms_1.rdata" ftype="RData" compare="sim_size" delta="200"/>
-            <output_collection name="mass_spectra" type="list">
-                <element name="experiment_lc" file="test1_fill_xcms_1.msp" ftype="msp"/>
-            </output_collection>
-            <output name="method_metadata" file="test1_metadata_xcms_1.txt" ftype="txt"/>
+            <section name="filetype">
+                <param name="type_choice" value="xcms"/>
+                <section name="xcms">
+                    <param name="input_xcms" value="test1_xcmsObj_1.rdata.xcms.fillpeaks" ftype="rdata.xcms.fillpeaks"/>
+                </section>
+                <section name="required">
+                    <param name="maxt" value="259.8"/>
+                </section>
+            </section>
+            <section name="extras">
+                <param name="ExpDes" value="lc-ramclustr-define-experiment.csv" ftype="csv"/>
+            </section>
+            <output name="mass_spectra_merged" file="test1_fill_xcms_1.msp" ftype="msp"/>
             <output name="spec_abundance" file="test1_spec_abundance_xcms_1.csv" ftype="csv" compare="sim_size" delta="100"/>
         </test>
         <test><!-- TEST 2 -->
-            <param name="type_choice" value="xcms"/>
-            <param name="input_xcms" value="test2_xcmsObj_2.rdata.xcms.fillpeaks" ftype="rdata.xcms.fillpeaks"/>
-            <param name="batch_order_qc" value="test2_sample_metadata_xcms_2.csv" ftype="csv" />
-            <output name="result" file="test2_ramclustObj_xcms_2.rdata" ftype="RData" compare="sim_size" delta="200"/>
-            <output_collection name="mass_spectra" type="list">
-                <element name="fill" file="test2_fill_xcms_2.msp" ftype="msp" compare="diff" lines_diff="10"/>
-            </output_collection>
-            <output name="method_metadata" file="test2_metadata_xcms_2.txt" ftype="txt"/>
+            <section name="filetype">
+                <param name="type_choice" value="xcms"/>
+                <section name="xcms">
+                    <param name="input_xcms" value="test2_xcmsObj_2.rdata.xcms.fillpeaks" ftype="rdata.xcms.fillpeaks"/>
+                </section>
+                <section name="required">
+                    <param name="maxt" value="78.4"/>
+                </section>
+            </section>
+            <section name="normalisation">
+                <section name="normalisation_method">
+                    <param name="batch_order_qc" value="test2_sample_metadata_xcms_2.csv" ftype="csv" />
+                </section>
+            </section>
+            <output name="mass_spectra_merged" file="test2_fill_xcms_2.msp" ftype="msp" compare="diff" lines_diff="10"/>
             <output name="spec_abundance" file="test2_spec_abundance_xcms_2.csv" ftype="csv" compare="sim_size" delta="100"/>
         </test>
         <test><!-- TEST 3 -->
-            <param name="type_choice" value="csv"/>
-            <param name="ms" value="test3_csv_test-input_1_2.csv" ftype="csv"/>
-            <param name="st" value="5.0"/>
-            <param name="blocksize" value="1000"/>
-            <param name="mult" value="1"/>
-            <param name="maxt" value="1"/>
-            <output name="result" file="test3_ramclustObj_csv_1.rdata" ftype="RData" compare="sim_size" delta="200"/>
+            <section name="filetype">
+                <param name="type_choice" value="csv"/>
+                <section name="ms_csv">
+                    <param name="ms" value="test3_csv_test-input_1_2.csv" ftype="csv"/>
+                </section>
+                <section name="required">
+                    <param name="st" value="5.0"/>
+                    <param name="maxt" value="1"/>
+                </section>
+            </section>
+            <section name="performance">
+                <param name="blocksize" value="1000"/>
+                <param name="mult" value="1"/>
+            </section>
+            <output name="mass_spectra_merged" file="test3_spectra_csv_1.msp" ftype="msp"/>
             <output name="spec_abundance" file="test3_spec_abundance_csv_1.csv" ftype="csv"/>
-            <output name="method_metadata" file="test3_metadata_csv_1.txt" ftype="txt"/>
-            <output_collection name="mass_spectra" type="list">
-                <element name="fill" file="test3_spectra_csv_1.msp" ftype="msp"/>
-            </output_collection>
         </test>
         <test><!-- TEST 4 -->
-            <param name="type_choice" value="csv"/>
-            <param name="ms" value="test3_csv_test-input_1_2.csv" ftype="csv"/>
-            <param name="batch_order_qc" value="test4_sample_metadata_csv_2.csv" ftype="csv" />
-            <output name="result" file="test4_ramclustObj_csv_2.rdata" ftype="RData" compare="sim_size" delta="200"/>
-            <output name="spec_abundance" file="test4_spec_abundance_csv_2.csv" ftype="csv"/>
-            <output name="method_metadata" file="test4_metadata_csv_2.txt" ftype="txt"/>
-            <output_collection name="mass_spectra" type="list">
-                <element name="fill" file="test4_spectra_csv_2.msp" ftype="msp" lines_diff="10"/>
-            </output_collection>
+            <section name="filetype">
+                <param name="type_choice" value="csv"/>
+                <section name="ms_csv">
+                    <param name="ms" value="test3_csv_test-input_1_2.csv" ftype="csv"/>
+                </section>
+            </section>
+            <output name="mass_spectra_merged" file="test4_spectra_csv_2.msp" ftype="msp" lines_diff="10"/>
         </test>
     </tests>
 
     <help>
         <![CDATA[
             @HELP@
+
+        .. rubric:: **Footnotes**
+        .. [1] Correlation, Variance and Covariance - `stats::cor <https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/cor>`_
+        .. [2] Hierarchical Clustering - `stats::hclust <https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/hclust>`_
+        .. [3] Dynamic Dendrogram Pruning Based on Dendrogram Only - `dynamicTreeCut::cutreeDynamicTree <https://www.rdocumentation.org/packages/dynamicTreeCut/versions/1.63-1/topics/cutreeDynamicTree>`_
         ]]>
     </help>
 
