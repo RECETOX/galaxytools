@@ -1,4 +1,4 @@
-<tool id="ramclustr" name="RAMClustR" version="@TOOL_VERSION@+galaxy2">
+<tool id="ramclustr" name="RAMClustR" version="@TOOL_VERSION@+galaxy1">
     <macros>
         <import>macros.xml</import>
     </macros>
