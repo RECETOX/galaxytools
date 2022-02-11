@@ -1,9 +1,10 @@
-<tool id="matchms_formatter" name="matchms output formatter" version="0.1.0+galaxy1" python_template_version="3.5">
+<tool id="matchms_formatter" name="matchms output formatter" version="0.1.1" python_template_version="3.5">
     <description>reformat output tables of matchms</description>
 
-    <creator>
-        <organization url="https://www.recetox.muni.cz/" name="RECETOX MUNI" />
-    </creator>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="creator"/>
 
     <requirements>
         <requirement type="package" version="1.1.4">pandas</requirement>
@@ -22,10 +23,10 @@
             --o "$output" \
             $method.selection \
             #if $method.selection == "get-thresholded-data"
-                --st $method.scores_threshold \
-                --mt $method.matches_threshold
+            --st $method.scores_threshold \
+            --mt $method.matches_threshold
             #else
-                --k $method.k
+            --k $method.k
             #end if
         </configfile>
     </configfiles>
@@ -34,6 +35,7 @@
         <param label="Scores Table" name="scores" type="data" format="csv,tabular,tsv" help="Scores output table." />
         <param label="Matches Table" name="matches" type="data" format="csv,tabular,tsv" help="Scores output table." />
 
+
         <conditional name="method">
             <param name="selection" type="select" label="Formatting method">
                 <option value="get-thresholded-data" selected="true">Thresholding</option>
@@ -41,18 +43,18 @@
             </param>
             <when value="get-thresholded-data">
                 <param label="Scores Threshold" name="scores_threshold" type="float" value="0.6" min="0.0" max="1.0"
-                help="Threshold for matching score." />
+                       help="Threshold for matching score."/>
                 <param label="Matches Threshold" name="matches_threshold" type="integer" value="3" min="0"
-                help="Threshold for number of matches ions." />
+                       help="Threshold for number of matches ions."/>
             </when>
             <when value="get-top-k-data">
-                <param label="Top K" name="k" type="integer" value="5" help="K for top k match selection." />
+                <param label="Top K" name="k" type="integer" value="5" help="K for top k match selection."/>
             </when>
         </conditional>
 
     </inputs>
     <outputs>
-        <data label="${tool.name} (${method.selection}) on ${on_string}" name="output" format_source="scores" />
+        <data label="${tool.name} (${method.selection}) on ${on_string}" name="output" format_source="scores"/>
     </outputs>
 
     <tests>
@@ -62,14 +64,16 @@
             <param name="selection" value="get-thresholded-data"/>
             <param name="scores_threshold" value="0.4"/>
             <param name="matches_threshold" value="2"/>
-            <output name="output" file="test2_threshold_formatting.tsv" ftype="tsv" checksum="md5$8929cdac47252da638f066261ffc16b7"/>
+            <output name="output" file="formatter/test2_threshold_formatting.tsv" ftype="tsv" 
+                    checksum="md5$8929cdac47252da638f066261ffc16b7"/>
         </test>
         <test>
             <param name="scores" value="scores_test2_out.tsv" ftype="tsv"/>
             <param name="matches" value="matches_test2_out.tsv" ftype="tsv"/>
             <param name="selection" value="get-top-k-data"/>
             <param name="k" value="3"/>
-            <output name="output" file="test2_topk_formatting.tsv" ftype="tsv" checksum="md5$a9186721aa2df2f9dbdef5021aa6bc26"/>
+            <output name="output" file="formatter/test2_topk_formatting.tsv" ftype="tsv"
+                    checksum="md5$a9186721aa2df2f9dbdef5021aa6bc26"/>
         </test>
     </tests>
 

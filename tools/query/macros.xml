@@ -1,0 +1,32 @@
+<macros>
+    <token name="@TOOL_VERSION@">0.1</token>
+
+    <xml name="creator">
+        <creator>
+            <person
+                givenName="Jiří"
+                familyName="Novotný"
+                url="https://github.com/xtracko"
+                identifier="0000-0001-5449-3523" />
+            <organization
+                url="https://www.recetox.muni.cz/"
+                email="GalaxyToolsDevelopmentandDeployment@space.muni.cz"
+                name="RECETOX MUNI" />
+        </creator>
+    </xml>
+
+    <xml name="formats">
+        <option value="csv">csv</option>
+        <option value="tsv">tsv</option>
+        <option value="h5">h5</option>
+        <option value="feather">feather</option>
+        <option value="parquet">parquet</option>
+        <option value="sqlite">sqlite</option>
+    </xml>
+
+    <xml name="internal_name" token_format="">
+        <when value="@FORMAT@">
+            <param name="name" type="text" help="Specify the format's internal name of the table."/>
+        </when>
+    </xml>
+</macros>

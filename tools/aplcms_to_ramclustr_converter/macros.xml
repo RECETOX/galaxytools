@@ -1,0 +1,31 @@
+<macros>
+    <xml name="creator">
+        <creator>
+            <person
+                givenName="Martin"
+                familyName="Čech"
+                url="https://github.com/martenson"
+                identifier="0000-0002-9318-1781" />
+            <person
+                givenName="Maksym"
+                familyName="Skoryk"
+                url="https://github.com/maximskorik"
+                identifier="0000-0003-2056-8018" />
+            <organization
+                url="https://www.recetox.muni.cz/"
+                email="GalaxyToolsDevelopmentandDeployment@space.muni.cz"
+                name="RECETOX MUNI" />
+        </creator>
+    </xml>
+    <token name="@HELP@">
+        <![CDATA[
+            Tool to convert apLCMS output to csv file formated in accordance to RamClustR (CSV) input requirements.
+
+            **Workflow position**
+
+            - Upstream tool: `apLCMS <https://github.com/RECETOX/galaxytools/tree/master/tools/recetox_aplcms>`_  Unsupervised or Hybrid
+
+            - Downstream tool: `RamClustR <https://github.com/RECETOX/galaxytools/tree/master/tools/ramclustr>`_ (CSV)
+        ]]>
+    </token>
+</macros>

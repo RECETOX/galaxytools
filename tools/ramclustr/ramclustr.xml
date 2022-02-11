@@ -1,65 +1,72 @@
-<tool id="ramclustr" name="RAMClustR" version="@TOOL_VERSION@+galaxy0">
+<tool id="ramclustr" name="RAMClustR" version="@TOOL_VERSION@+galaxy1">
     <macros>
-        <import>ramclustr_macros.xml</import>
+        <import>macros.xml</import>
     </macros>
-    <creator>
-        <organization
-            url="https://www.recetox.muni.cz/"
-            name="RECETOX MUNI" />
-    </creator>
+    <expand macro="creator"/>
+
     <requirements>
         <requirement type="package" version="@TOOL_VERSION@">r-ramclustr</requirement>
         <requirement type="package" version="3.14.0">bioconductor-xcms</requirement>
     </requirements>
+
     <command detect_errors="aggressive"><![CDATA[
         Rscript
             -e 'source("${__tool_directory__}/ramclustr_wrapper.R")'
-            #if $filetype.type_choice == "xcms":
-            -e 'x <- ramclustr_xcms(
-                input_xcms = "$filetype.input_xcms",
-            #else:
-            -e 'x <- ramclustr_csv(
-                ms="$filetype.ms_csv.ms",
-                idmsms="$filetype.ms_csv.idmsms",
-                feature_delimiter="$filetype.ms_csv.feature_delimiter",
-                sample_name_column = $filetype.ms_csv.sample_name_column,
-                retention_time_column= $filetype.ms_csv.retention_time_column,
-            #end if
-                sr = $filetype.required.sr,
-                deep_split = $filetype.required.deepSplit,
-                block_size = $filetype.required.blocksize,
-                mult = $filetype.required.mult,
-                hmax = $filetype.required.hmax,
-                collapse = $filetype.required.collapse,
-                use_pheno = $filetype.required.usePheno,
-                qc_inj_range = $filetype.required.qc_inj_range,
-                normalize = "$filetype.required.normalize",
-                min_module_size = $filetype.required.minModuleSize,
-                linkage = "$filetype.required.linkage",
-                mzdec = $filetype.required.mzdec,
-                cor_method = "$filetype.required.cor_method",
-                rt_only_low_n = $filetype.required.rt_only_low_n,
-                replace_zeros = $filetype.required.replace_zeros,
-            #if $filetype.type_choice == "xcms":
-                #if $filetype.optional.st
-                    st = $filetype.optional.st,
-                #end if
-            #else:
-                st = $filetype.ms_csv.st,
-            #end if
-                #if $filetype.optional.maxt
-                    maxt = $filetype.optional.maxt,
-                #end if
-                #if $filetype.optional.fftempdir
-                    fftempdir = $filetype.optional.fftempdir,
-                #end if
-                #if $filetype.metadata.batch_order_qc
-                    metadata_file = "${filetype.metadata.batch_order_qc}",
-                #end if
-                )'
-            -e 'store_output(x, "$result", "$method_metadata", $filetype.required.merge_msp, "$spec_abundance")'
+            -e 'source("${ramclustr_method}")'
     ]]>
     </command>
+    <configfiles>
+        <configfile name="ramclustr_method">
+            store_output(
+                #if $filetype.type_choice == "xcms":
+                ramclustr_xcms(
+                    input_xcms = "$filetype.input_xcms",
+                #else:
+                ramclustr_csv(
+                    ms="$filetype.ms_csv.ms",
+                    idmsms="$filetype.ms_csv.idmsms",
+                    feature_delimiter="$filetype.ms_csv.feature_delimiter",
+                    sample_name_column = $filetype.ms_csv.sample_name_column,
+                    retention_time_column= $filetype.ms_csv.retention_time_column,
+                #end if
+                    sr = $filetype.required.sr,
+                    deep_split = $filetype.required.deepSplit,
+                    block_size = $filetype.required.blocksize,
+                    mult = $filetype.required.mult,
+                    hmax = $filetype.required.hmax,
+                    collapse = $filetype.required.collapse,
+                    use_pheno = $filetype.required.usePheno,
+                    qc_inj_range = $filetype.required.qc_inj_range,
+                    normalize = "$filetype.required.normalize",
+                    min_module_size = $filetype.required.minModuleSize,
+                    linkage = "$filetype.required.linkage",
+                    mzdec = $filetype.required.mzdec,
+                    cor_method = "$filetype.required.cor_method",
+                    rt_only_low_n = $filetype.required.rt_only_low_n,
+                    replace_zeros = $filetype.required.replace_zeros,
+                #if $filetype.type_choice == "xcms":
+                    #if $filetype.optional.st
+                        st = $filetype.optional.st,
+                    #end if
+                #else:
+                    st = $filetype.ms_csv.st,
+                #end if
+                    #if $filetype.optional.maxt
+                        maxt = $filetype.optional.maxt,
+                    #end if
+                    #if $filetype.optional.fftempdir
+                        fftempdir = $filetype.optional.fftempdir,
+                    #end if
+                    #if $filetype.metadata.batch_order_qc
+                        metadata_file = "${filetype.metadata.batch_order_qc}",
+                    #end if
+                    #if $filetype.metadata.ExpDes
+                        exp_design = "${filetype.metadata.ExpDes}"
+                    #end if
+                ),
+            "$result", "$method_metadata", $filetype.required.merge_msp, "$spec_abundance")
+        </configfile>
+    </configfiles>
     <inputs>
         <conditional name="filetype">
             <param name="type_choice" type="select" label="Choose input format:">
@@ -67,7 +74,7 @@
                 <option value="csv">CSV</option>
             </param>
             <when value="xcms">
-                <param name="input_xcms" label="input_xcms" type="data" format="rdata.xcms.fillpeaks" help=": containing grouped feature data for clustering by ramclustR" />
+                <param name="input_xcms" label="input_xcms" type="data" format="rdata.xcms.fillpeaks" help="Grouped feature data for clustering by ramclustR" />
                 <expand macro="parameters_required" />
                 <expand macro="parameters_optional_xcms" />
                 <expand macro="parameters_optional_metadata" />
@@ -92,9 +99,10 @@
         <test><!-- TEST 1 -->
             <param name="type_choice" value="xcms"/>
             <param name="input_xcms" value="test1_xcmsObj_1.rdata.xcms.fillpeaks" ftype="rdata.xcms.fillpeaks"/>
+            <param name="ExpDes" value="lc-ramclustr-define-experiment.csv" ftype="csv"/>
             <output name="result" file="test1_ramclustObj_xcms_1.rdata" ftype="RData" compare="sim_size" delta="200"/>
             <output_collection name="mass_spectra" type="list">
-                <element name="fill" file="test1_fill_xcms_1.msp" ftype="msp"/>
+                <element name="experiment_lc" file="test1_fill_xcms_1.msp" ftype="msp"/>
             </output_collection>
             <output name="method_metadata" file="test1_metadata_xcms_1.txt" ftype="txt"/>
             <output name="spec_abundance" file="test1_spec_abundance_xcms_1.csv" ftype="csv" compare="sim_size" delta="100"/>
@@ -138,40 +146,9 @@
     </tests>
 
     <help>
-    Documentation
-        For documentation on the tool see https://github.com/cbroeckl/RAMClustR/blob/master/vignettes/RAMClustR.Rmd
-
-    Upstream Tools
-        +-------+----------------------+----------------------+------------+
-        | Name  | Output File          | Format               | Parameter  |
-        +=======+======================+======================+============+
-        | xcms  | xset.fillPeaks.RData | rdata.xcms.fillpeaks | xcmsObj    |
-        +-------+----------------------+----------------------+------------+
-
-        The tool takes an **xcmsSet** object as input and extracts all relevant information.
-
-        +-------+------------------------+--------+------------+
-        | Name  | Output File            | Format | Parameter  |
-        +=======+========================+========+============+
-        | ???   | Feature Table with MS1 | csv    | ms         |
-        +-------+------------------------+--------+------------+
-        | ???   | Feature Table with MS2 | csv    | idmsms     |
-        +-------+------------------------+--------+------------+
-
-        Alternatively, the tool takes a **csv** table as input which has to fulfill the following requirements
-
-        (1) no more than one sample (or file) name column and one feature name row;
-        (2) feature names that contain the mass and retention times, separated by a constant delimiter; and
-        (3) features in columns and samples in rows.
-
-    Downstream Tools
-        +---------+--------------+----------------------+
-        | Name    | Output File  | Format               |
-        +=========+==============+======================+
-        | matchMS | Mass Spectra | collection (tgz/msp) |
-        +---------+--------------+----------------------+
-
-    @GENERAL_HELP@
+        <![CDATA[
+            @HELP@
+        ]]>
     </help>
 
     <expand macro="citations" />

@@ -1,0 +1,157 @@
+<tool id="matchms_filtering" name="matchMS filtering" version="@TOOL_VERSION@+galaxy0">
+    <description>filter and normalize mass spectrometry data</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="creator"/>
+    <requirements>
+        <requirement type="package" version="@TOOL_VERSION@">matchms</requirement>
+        <requirement type="package" version="1.1.4">pandas</requirement>
+    </requirements>
+
+    <environment_variables>
+        <environment_variable name="MPLCONFIGDIR">\$_GALAXY_JOB_TMP_DIR</environment_variable>
+    </environment_variables>
+
+    <command detect_errors="exit_code"><![CDATA[
+        sh ${matchms_python_cli}
+    ]]> </command>
+
+    <configfiles>
+        <configfile name="matchms_python_cli">
+            python3 ${__tool_directory__}/matchms_filtering_wrapper.py \
+            --spectra "$spectra" \
+            --spectra_format "$spectra.ext" \
+            #if $normalise_intensities.is_true
+                -normalise_intensities \
+            #end if
+            #if $default_filters.is_true
+                -default_filters \
+            #end if
+            #if $clean_metadata.is_true
+                -clean_metadata \
+            #end if
+            #if $relative_intensity.is_true
+                -relative_intensity \
+                --from_intensity "$relative_intensity.from_intensity" \
+                --to_intensity "$relative_intensity.to_intensity" \
+            #end if
+            #if $mz_range.is_true
+                -mz_range \
+                --from_mz "$mz_range.from_mz" \
+                --to_mz "$mz_range.to_mz" \
+            #end if
+            --output "$output"
+        </configfile>
+    </configfiles>
+
+    <inputs>
+        <param label="Spectra file" name="spectra" type="data" format="msp,mgf" help="Mass spectra file to be filtered." />
+
+        <conditional name="normalise_intensities">
+            <param name="is_true" label="Normalize intensities" type="boolean" truevalue="TRUE" falsevalue="FALSE" checked="false"
+                   help="Normalize intensities of peaks (and losses) to unit height."/>
+        </conditional>
+
+        <conditional name="default_filters">
+            <param name="is_true" label="Apply default filters" type="boolean" truevalue="TRUE" falsevalue="FALSE" checked="false"
+                   help="Collection of filters that are considered default and that do no require any (factory) arguments."/>
+        </conditional>
+
+        <conditional name="clean_metadata">
+            <param name="is_true" label="Clean metadata" type="boolean" truevalue="TRUE" falsevalue="FALSE" checked="false"
+                   help="Apply all adding and cleaning filters if possible, so that the spectra have canonical metadata." />
+        </conditional>
+
+        <conditional name="relative_intensity">
+            <param name="is_true" label="Filter relative intensity" type="boolean" truevalue="TRUE" falsevalue="FALSE" checked="false"
+                   help="Keep only peaks within set relative intensity range (keep if maximum >= intensity >= minimum)." />
+            <when value="TRUE">
+                <param label="Minimum intensity" name="from_intensity" optional="true" type="float" help="Lower bound for intensity filter." />
+                <param label="Maximum intensity" name="to_intensity" optional="true" type="float" help="Upper bound for intensity filter." />
+            </when>
+        </conditional>
+
+        <conditional name="mz_range">
+            <param name="is_true" label="Filter m/z range" type="boolean" truevalue="TRUE" falsevalue="FALSE" checked="false"
+                   help="Keep only peaks between set m/z range (keep if maximum >= m/z >= minimum)." />
+            <when value="TRUE">
+                <param label="Minimum m/z" name="from_mz" optional="true" type="float" help="Lower bound for m/z filter." />
+                <param label="Maximum m/z" name="to_mz" optional="true" type="float" help="Upper bound for m/z filter." />
+            </when>
+        </conditional>
+
+    </inputs>
+
+    <outputs>
+        <data label="${tool.name} on ${on_string}" name="output" format_source="spectra" />
+    </outputs>
+
+    <tests>
+        <test>
+            <param name="spectra" value="filtering/input.msp" ftype="msp"/>
+            <section name="normalise_intensities">
+                <param name="is_true" value="TRUE"/>
+            </section>
+            <output name="output" file="filtering/normalise_intensities.msp" ftype="msp"/>
+        </test>
+        <test>
+            <param name="spectra" value="filtering/input.msp" ftype="msp"/>
+            <section name="default_filters">
+                <param name="is_true" value="TRUE"/>
+            </section>
+            <output name="output" file="filtering/default_filters.msp" ftype="msp"/>
+        </test>
+        <test>
+            <param name="spectra" value="filtering/input.msp" ftype="msp"/>
+            <section name="clean_metadata">
+                <param name="is_true" value="TRUE"/>
+            </section>
+            <output name="output" file="filtering/clean_metadata.msp" ftype="msp"/>
+        </test>
+        <test>
+            <param name="spectra" value="filtering/input.msp" ftype="msp"/>
+            <section name="normalise_intensities">
+                <param name="is_true" value="TRUE"/>
+            </section>
+            <section name="relative_intensity">
+                <param name="is_true" value="TRUE"/>
+                <param name="from_intensity" value="0.3"/>
+                <param name="to_intensity" value="0.9"/>
+            </section>
+            <output name="output" file="filtering/relative_intensity.msp" ftype="msp"/>
+        </test>
+        <test>
+            <param name="spectra" value="filtering/input.msp" ftype="msp"/>
+            <section name="mz_range">
+                <param name="is_true" value="TRUE"/>
+                <param name="from_mz" value="300"/>
+                <param name="to_mz" value="800"/>
+            </section>
+            <output name="output" file="filtering/mz_range.msp" ftype="msp"/>
+        </test>
+    </tests>
+
+    <help><![CDATA[
+    Documentation
+        For documentation on the tool see https://github.com/matchms/matchms/blob/master/README.rst and https://matchms.readthedocs.io/en/latest/.
+
+    Upstream Tools
+        +-----------+---------------+--------+-----------+
+        | Name      | Output File   | Format | Parameter |
+        +===========+===============+========+===========+
+        | RAMClustR | Mass spectra  | msp    | references|
+        +-----------+---------------+--------+-----------+
+        | RAMClustR | Mass spectra  | msp    | queries   |
+        +-----------+---------------+--------+-----------+
+
+    Downstream Tools
+        The output is an msp file after applying the specified filters.
+    ]]></help>
+
+
+    <citations>
+        <citation type="doi">10.5281/zenodo.4589154</citation>
+        <citation type="doi">10.21105/joss.02411</citation>
+    </citations>
+</tool>

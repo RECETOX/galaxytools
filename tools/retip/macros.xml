@@ -1,5 +1,25 @@
 <macros>
     <token name="@TOOL_VERSION@">0.5.4</token>
+
+    <xml name="creator">
+        <creator>
+            <person
+                givenName="Muhammad"
+                familyName="Usman"
+                url="https://github.com/smartx-usman"
+                identifier="0000-0002-9598-0704" />
+            <person
+                givenName="Aleš"
+                familyName="Křenek"
+                url="https://github.com/ljocha"
+                identifier="0000-0002-3395-3196" />
+            <organization
+                url="https://www.recetox.muni.cz/"
+                email="GalaxyToolsDevelopmentandDeployment@space.muni.cz"
+                name="RECETOX MUNI" />
+        </creator>
+    </xml>
+
     <xml name="requirements">
         <requirements>
             <container type="docker">recetox/retip:@TOOL_VERSION@-recetox4</container>
@@ -11,27 +31,27 @@
         </citations>
     </xml>
     <token name="@HELP@"><![CDATA[
-**Retip** is an R package for predicting Retention Time (RT) for small molecules in a high pressure liquid
-chromatography (HPLC) Mass Spectrometry analysis. Retention time calculation can be useful in identifying
-unknowns and removing false positive annotations. It uses five different machine learning algorithms to built a
-stable, accurate and fast RT prediction model:
+        **Retip** is an R package for predicting Retention Time (RT) for small molecules in a high pressure liquid
+        chromatography (HPLC) Mass Spectrometry analysis. Retention time calculation can be useful in identifying
+        unknowns and removing false positive annotations. It uses five different machine learning algorithms to built a
+        stable, accurate and fast RT prediction model:
 
-- Random Forest: a decision tree algorithms
-- BRNN: Bayesian Regularized Neural Network
-- XGBoost: an extreme Gradient Boosting for tree algorithms
-- lightGBM: a gradient boosting framework that uses tree based learning algorithms.
-- Keras: a high-level neural networks API for Tensorflow
+        - Random Forest: a decision tree algorithms
+        - BRNN: Bayesian Regularized Neural Network
+        - XGBoost: an extreme Gradient Boosting for tree algorithms
+        - lightGBM: a gradient boosting framework that uses tree based learning algorithms.
+        - Keras: a high-level neural networks API for Tensorflow
 
-Retip also includes useful biochemical databases like: BMDB, ChEBI, DrugBank, ECMDB, FooDB, HMDB, KNApSAcK,
-PlantCyc, SMPDB, T3DB, UNPD, YMDB and STOFF.
+        Retip also includes useful biochemical databases like: BMDB, ChEBI, DrugBank, ECMDB, FooDB, HMDB, KNApSAcK,
+        PlantCyc, SMPDB, T3DB, UNPD, YMDB and STOFF.
 
-**Get started**
+        **Get started**
 
-To use Retip, a user needs to prepare a compound retention time library. The input file
-needs compound Name, InChiKey, SMILES code and experimental retention time information for each compound.
-The input must be a CSV file. Retip will use this input file to build a the model and will predict
-retention times for other biochemical databases or an input query list of compounds. It is suggested that
-the file has at least 300 compounds to build a good retention time prediction model.
+        To use Retip, a user needs to prepare a compound retention time library. The input file
+        needs compound Name, InChiKey, SMILES code and experimental retention time information for each compound.
+        The input must be a CSV file. Retip will use this input file to build a the model and will predict
+        retention times for other biochemical databases or an input query list of compounds. It is suggested that
+        the file has at least 300 compounds to build a good retention time prediction model.
     ]]>
     </token>
 </macros>

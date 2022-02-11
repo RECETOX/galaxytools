@@ -1,0 +1,129 @@
+<tool id="matchms" name="matchMS similarity" version="@TOOL_VERSION@+galaxy1">
+    <description>calculate the similarity score and matched peaks</description>
+
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="creator"/>
+
+    <requirements>
+        <requirement type="package" version="@TOOL_VERSION@">matchms</requirement>
+        <requirement type="package" version="1.1.4">pandas</requirement>
+    </requirements>
+
+    <environment_variables>
+        <environment_variable name="MPLCONFIGDIR">/tmp</environment_variable>
+    </environment_variables>
+
+    <command detect_errors="exit_code"><![CDATA[
+        sh ${matchms_python_cli}
+    ]]> </command>
+
+    <configfiles>
+        <configfile name="matchms_python_cli">
+            python3 ${__tool_directory__}/matchms_similarity_wrapper.py \
+            #if $symmetric.is_symmetric
+            -s \
+            #else
+            --ref "$references" \
+            --ref_format "$references.ext" \
+            #end if
+            "$queries" \
+            "$queries.ext" \
+            "$similarity_metric" \
+            "$algorithm.tolerance" \
+            "$algorithm.mz_power" \
+            "$algorithm.intensity_power" \
+            "$similarity_scores" \
+            "$similarity_matches"
+        </configfile>
+    </configfiles>
+
+    <inputs>
+        <param label="Queries spectra" name="queries" type="data" format="msp,mgf"
+               help="Query mass spectra to match against references."/>
+        <conditional name="symmetric">
+            <param name="is_symmetric" label="Symmetric" type="boolean" truevalue="TRUE" falsevalue="FALSE"
+                   checked="false"/>
+            <when value="FALSE">
+                <param label="Reference spectra" name="references" type="data" format="msp,mgf"
+                       help="Reference mass spectra to match against as library."/>
+            </when>
+        </conditional>
+        <param label="Similarity metric" name="similarity_metric" type="select" display="radio"
+               help="Similarity metric to use for score computation.">
+            <option value="CosineGreedy" selected="true">CosineGreedy</option>
+            <option value="CosineHungarian">CosineHungarian</option>
+            <option value="ModifiedCosine">ModifiedCosine</option>
+        </param>
+
+        <section name="algorithm" title="Algorithm Parameters" expanded="true">
+            <param label="tolerance" name="tolerance" type="float" value="0.1"
+                   help="Peaks will be considered a match when less than tolerance apart. Absolute m/z value, not in ppm."/>
+            <param label="mz_power" name="mz_power" type="float" value="0.0"
+                   help="The power to raise mz to in the cosine function."/>
+            <param label="intensity_power" name="intensity_power" type="float" value="1.0"
+                   help="The power to raise intensity to in the cosine function."/>
+        </section>
+    </inputs>
+
+    <outputs>
+        <data label="$similarity_metric scores of ${on_string}" name="similarity_scores" format="tsv"/>
+        <data label="$similarity_metric matches of ${on_string}" name="similarity_matches" format="tsv"/>
+    </outputs>
+
+    <tests>
+        <test>
+            <param name="references" value="similarity/fill.mgf" ftype="mgf"/>
+            <param name="queries" value="similarity/fill.msp" ftype="msp"/>
+            <param name="similarity_metric" value="CosineGreedy"/>
+            <output name="similarity_scores" file="similarity/scores_test1_out.tsv" ftype="tsv"
+                    checksum="md5$1aff8d0777e2f4e565be2b1b393547ef"/>
+            <output name="similarity_matches" file="similarity/matches_test1_out.tsv" ftype="tsv"
+                    checksum="md5$aab26ef4a0e80a53699832db72c06340"/>
+        </test>
+        <test>
+            <param name="references" value="similarity/recetox_gc-ei_ms_20201028.msp" ftype="msp"/>
+            <param name="queries" value="similarity/fill.msp" ftype="msp"/>
+            <param name="similarity_metric" value="CosineGreedy"/>
+            <output name="similarity_scores" file="scores_test2_out.tsv" ftype="tsv"
+                    checksum="md5$d2a5a01d9980636ce6a246d68834b84e"/>
+            <output name="similarity_matches" file="matches_test2_out.tsv" ftype="tsv"
+                    checksum="md5$28dc16ce45105234437e53d59e240046"/>
+        </test>
+        <test>
+            <param name="references" value="similarity/recetox_gc-ei_ms_20201028.msp" ftype="msp"/>
+            <param name="queries" value="similarity/fill.msp" ftype="msp"/>
+            <param name="similarity_metric" value="CosineHungarian"/>
+            <output name="similarity_scores" file="similarity/scores_test3_out.tsv" ftype="tsv"
+                    checksum="md5$1341369778036e0a267ff723f8cfca9c"/>
+            <output name="similarity_matches" file="similarity/matches_test3_out.tsv" ftype="tsv"
+                    checksum="md5$28dc16ce45105234437e53d59e240046"/>
+        </test>
+        <test>
+            <param name="references" value="similarity/recetox_gc-ei_ms_20201028_with_precursor_mz.msp" ftype="msp"/>
+            <param name="queries" value="similarity/recetox_gc-ei_ms_20201028_with_precursor_mz.msp" ftype="msp"/>
+            <param name="similarity_metric" value="ModifiedCosine"/>
+            <output name="similarity_scores" file="similarity/scores_test4_out.tsv" ftype="tsv"/>
+            <output name="similarity_matches" file="similarity/matches_test4_out.tsv" ftype="tsv"/>
+        </test>
+        <test>
+            <param name="queries" value="similarity/fill.msp" ftype="msp"/>
+            <param name="similarity_metric" value="CosineHungarian"/>
+            <param name="is_symmetric" value="TRUE"/>
+            <output name="similarity_scores" file="similarity/scores_test5_out.tsv" ftype="tsv"/>
+            <output name="similarity_matches" file="similarity/matches_test5_out.tsv" ftype="tsv"/>
+        </test>
+    </tests>
+
+    <help>
+        <![CDATA[
+            @HELP_matchms@
+        ]]>
+    </help>
+
+    <citations>
+        <citation type="doi">10.5281/zenodo.4589154</citation>
+        <citation type="doi">10.21105/joss.02411</citation>
+    </citations>
+</tool>

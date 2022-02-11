@@ -7,6 +7,7 @@ repositories:
       - waveica_macros.xml
       - waveica_wrapper.R
       - test-data
+      - macros.xml
 long_description: Removal of batch effects for large-scale untargeted metabolomics data based on wavelet analysis.
 remote_repository_url: "https://github.com/RECETOX/galaxytools/tree/master/tools/waveica"
 homepage_url: "https://github.com/RECETOX/WaveICA"
