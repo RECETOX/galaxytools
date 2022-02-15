@@ -1,5 +1,5 @@
 <macros>
-    <token name="@TOOL_VERSION@">0.1.2</token>
+    <token name="@TOOL_VERSION@">0.1.3</token>
 
     <xml name="creator">
         <creator>
@@ -32,26 +32,29 @@
     </token>
 
     <xml name="job_options">
+        <option value="inchi canonical_smiles PubChem">PubChem: inchi -> canonical_smiles</option>
         <option value="inchi formula PubChem">PubChem: inchi -> formula</option>
         <option value="inchi inchikey PubChem">PubChem: inchi -> inchikey</option>
+        <option value="inchi isomeric_smiles PubChem">PubChem: inchi -> isomeric_smiles</option>
         <option value="inchi iupac_name PubChem">PubChem: inchi -> iupac_name</option>
-        <option value="inchi smiles PubChem">PubChem: inchi -> smiles</option>
+        <option value="name canonical_smiles PubChem">PubChem: name -> canonical_smiles</option>
         <option value="name formula PubChem">PubChem: name -> formula</option>
         <option value="name inchi PubChem">PubChem: name -> inchi</option>
         <option value="name inchikey PubChem">PubChem: name -> inchikey</option>
+        <option value="name isomeric_smiles PubChem">PubChem: name -> isomeric_smiles</option>
         <option value="name iupac_name PubChem">PubChem: name -> iupac_name</option>
-        <option value="name smiles PubChem">PubChem: name -> smiles</option>
-        <option value="casno smiles CIR">CIR: casno -> smiles</option>
-        <option value="inchikey casno CIR">CIR: inchikey -> casno</option>
-        <option value="inchikey formula CIR">CIR: inchikey -> formula</option>
-        <option value="inchikey inchi CIR">CIR: inchikey -> inchi</option>
-        <option value="inchikey smiles CIR">CIR: inchikey -> smiles</option>
-        <option value="smiles inchikey CIR">CIR: smiles -> inchikey</option>
         <option value="casno inchikey CTS">CTS: casno -> inchikey</option>
         <option value="inchikey inchi CTS">CTS: inchikey -> inchi</option>
         <option value="inchikey iupac_name CTS">CTS: inchikey -> iupac_name</option>
         <option value="inchikey name CTS">CTS: inchikey -> name</option>
         <option value="name inchikey CTS">CTS: name -> inchikey</option>
+        <option value="casno smiles CIR">CIR: casno -> smiles</option>
+        <option value="inchi smiles CIR">CIR: inchi -> smiles</option>
+        <option value="inchikey casno CIR">CIR: inchikey -> casno</option>
+        <option value="inchikey formula CIR">CIR: inchikey -> formula</option>
+        <option value="inchikey inchi CIR">CIR: inchikey -> inchi</option>
+        <option value="inchikey smiles CIR">CIR: inchikey -> smiles</option>
+        <option value="smiles inchikey CIR">CIR: smiles -> inchikey</option>
         <option value="inchikey casno NLM">NLM: inchikey -> casno</option>
         <option value="inchikey formula NLM">NLM: inchikey -> formula</option>
         <option value="inchikey name NLM">NLM: inchikey -> name</option>
