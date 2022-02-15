@@ -11,9 +11,10 @@ def main(argv):
     parser.add_argument("--input_file", type=str, help="Path to query spectra file in MSP format.")
     parser.add_argument("--output_file", type=str, help="Path to output spectra file.")
     parser.add_argument("--jobs", type=str, help="Sequence of conversion jobs to be used.")
+    parser.add_argument("--log_file", type=str, help="Path to log with details of the annotation process.")
     args = parser.parse_args()
 
-    app = Application()
+    app = Application(log_file=args.log_file)
 
     # import .msp file
     app.load_spectra(args.input_file, file_format='msp')

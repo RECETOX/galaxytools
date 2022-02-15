@@ -19,6 +19,9 @@
             python3 ${__tool_directory__}/msmetaenhancer_wrapper.py \
             --input_file "$input_file" \
             --output_file "$output_file" \
+            #if $options.output_log:
+            --log_file "$log_file"\
+            #end if
             #if len($ordered_jobs) != 0:
                 #set ordered_jobs = ",".join([str($job.ordered_jobs_select) for $job in $ordered_jobs]) + ","
             #else:
@@ -46,10 +49,18 @@
         <param name="jobs" type="select" label="Other conversions" multiple="true" optional="true">
             <expand macro="job_options" />
         </param>
+
+        <section name="options" title="Options">
+            <param label="Save the log file" name="output_log" type="boolean" truevalue="TRUE" falsevalue="FALSE"
+                   checked="false" help="Preserve a log with details about the annotation process."/>
+        </section>
     </inputs>
 
     <outputs>
         <data label="MSMetaEnhancer on ${on_string}" name="output_file" format="msp" />
+        <data label="Log of MSMetaEnhancer on ${on_string}" name="log_file" format="txt">
+           <filter>options['output_log']</filter>
+       </data>
     </outputs>
 
     <tests>
