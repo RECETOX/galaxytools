@@ -51,8 +51,8 @@
         </param>
 
         <section name="options" title="Options">
-            <param label="Output log file" name="output_log" type="boolean" truevalue="TRUE" falsevalue="FALSE"
-                   checked="false" help="Output log with details of the annotation process."/>
+            <param label="Save the log file" name="output_log" type="boolean" truevalue="TRUE" falsevalue="FALSE"
+                   checked="false" help="Preserve a log with details about the annotation process."/>
         </section>
     </inputs>
 
