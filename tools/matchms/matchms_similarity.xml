@@ -101,8 +101,8 @@
                     checksum="md5$28dc16ce45105234437e53d59e240046"/>
         </test>
         <test>
-            <param name="references" value="similarity/recetox_gc-ei_ms_20201028_with_precursor_mz.msp" ftype="msp"/>
-            <param name="queries" value="similarity/recetox_gc-ei_ms_20201028_with_precursor_mz.msp" ftype="msp"/>
+            <param name="references" value="similarity/recetox_gc-ei_ms_20201028.msp" ftype="msp"/>
+            <param name="queries" value="similarity/recetox_gc-ei_ms_20201028.msp" ftype="msp"/>
             <param name="similarity_metric" value="ModifiedCosine"/>
             <output name="similarity_scores" file="similarity/scores_test4_out.tsv" ftype="tsv"/>
             <output name="similarity_matches" file="similarity/matches_test4_out.tsv" ftype="tsv"/>

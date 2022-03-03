@@ -111,9 +111,6 @@
         </test>
         <test>
             <param name="spectra" value="filtering/input.msp" ftype="msp"/>
-            <section name="normalise_intensities">
-                <param name="is_true" value="TRUE"/>
-            </section>
             <section name="relative_intensity">
                 <param name="is_true" value="TRUE"/>
                 <param name="from_intensity" value="0.3"/>

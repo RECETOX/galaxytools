@@ -83,8 +83,8 @@ def main(argv):
 
 def write_outputs(args, scores):
     print("Storing outputs...")
-    query_names = [spectra.metadata['name'] for spectra in scores.queries]
-    reference_names = [spectra.metadata['name'] for spectra in scores.references]
+    query_names = [spectra.metadata['compound_name'] for spectra in scores.queries]
+    reference_names = [spectra.metadata['compound_name'] for spectra in scores.references]
 
     # Write scores to dataframe
     dataframe_scores = DataFrame(data=[entry["score"] for entry in scores.scores], index=reference_names, columns=query_names)
