@@ -1,4 +1,4 @@
-<tool id="matchms" name="matchMS similarity" version="@TOOL_VERSION@+galaxy1">
+<tool id="matchms" name="matchMS similarity" version="@TOOL_VERSION@+galaxy1" python_template_version="3.8">
     <description>calculate the similarity score and matched peaks</description>
 
     <macros>
@@ -7,8 +7,9 @@
     <expand macro="creator"/>
 
     <requirements>
-        <requirement type="package" version="@TOOL_VERSION@">matchms</requirement>
         <requirement type="package" version="1.1.4">pandas</requirement>
+        <requirement type="package" version="0.55.1">numba</requirement>
+        <requirement type="package" version="@TOOL_VERSION@">matchms</requirement>
     </requirements>
 
     <environment_variables>
@@ -22,6 +23,9 @@
     <configfiles>
         <configfile name="matchms_python_cli">
             python3 ${__tool_directory__}/matchms_similarity_wrapper.py \
+            #if $ri_filtering.is_true
+            -r $ri_filtering.tolerance \
+            #end if 
             #if $symmetric.is_symmetric
             -s \
             #else
@@ -65,6 +69,15 @@
             <param label="intensity_power" name="intensity_power" type="float" value="1.0"
                    help="The power to raise intensity to in the cosine function."/>
         </section>
+
+        <conditional name="ri_filtering">
+            <param name="is_true" label="Apply RI filtering" type="boolean" truevalue="TRUE" falsevalue="FALSE"
+                   checked="false"/>
+            <when value="TRUE">
+            <param label="tolerance" name="tolerance" type="float" value="60"
+                   help="Peaks will be considered a match when less than tolerance apart."/>
+            </when>
+        </conditional>
     </inputs>
 
     <outputs>
@@ -113,6 +126,15 @@
             <param name="is_symmetric" value="TRUE"/>
             <output name="similarity_scores" file="similarity/scores_test5_out.tsv" ftype="tsv"/>
             <output name="similarity_matches" file="similarity/matches_test5_out.tsv" ftype="tsv"/>
+        </test>
+        <test>
+            <param name="references" value="similarity/recetox_gc-ei_ms_20201028.msp" ftype="msp"/>
+            <param name="queries" value="similarity/fill2.msp" ftype="msp"/>
+            <param name="ri_filtering.is_true" value="TRUE" />
+            <param name="ri_filtering.tolerance" value="60.0" />
+            <param name="similarity_metric" value="CosineGreedy"/>
+            <output name="similarity_scores" file="similarity/scores_test6_out.tsv" ftype="tsv"/>
+            <output name="similarity_matches" file="similarity/matches_test6_out.tsv" ftype="tsv"/>       
         </test>
     </tests>
 

@@ -1,14 +1,12 @@
 import argparse
 import sys
 
+import numpy as np
+from pandas import DataFrame
+
 from matchms import calculate_scores
 from matchms.importing import load_from_mgf, load_from_msp
-from matchms.similarity import (
-    CosineGreedy,
-    CosineHungarian,
-    ModifiedCosine,
-)
-from pandas import DataFrame
+from matchms.similarity import CosineGreedy, CosineHungarian, MetadataMatch, ModifiedCosine
 
 
 def convert_precursor_mz(spectrum):
@@ -28,6 +26,7 @@ def convert_precursor_mz(spectrum):
 
 def main(argv):
     parser = argparse.ArgumentParser(description="Compute MSP similarity scores")
+    parser.add_argument("-r", dest="ri_tolerance", type=float, help="Use RI filtering with given tolerance.")
     parser.add_argument("-s", dest="symmetric", action='store_true', help="Computation is symmetric.")
     parser.add_argument("--ref", dest="references_filename", type=str, help="Path to reference spectra library.")
     parser.add_argument("--ref_format", dest="references_format", type=str, help="Reference spectra library file format.")
@@ -76,6 +75,11 @@ def main(argv):
         similarity_function=similarity_metric,
         is_symmetric=args.symmetric
     )
+
+    if args.ri_tolerance is not None:
+        print("RI filtering with tolerance ", args.ri_tolerance)
+        ri_matches = calculate_scores(reference_spectra, queries_spectra, MetadataMatch("retention_index", "difference", args.ri_tolerance)).scores
+        scores.scores["score"] = np.where(ri_matches, scores.scores["score"], 0.0)
 
     write_outputs(args, scores)
     return 0
