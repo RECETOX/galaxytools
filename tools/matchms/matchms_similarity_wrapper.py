@@ -2,11 +2,10 @@ import argparse
 import sys
 
 import numpy as np
-from pandas import DataFrame
-
 from matchms import calculate_scores
 from matchms.importing import load_from_mgf, load_from_msp
 from matchms.similarity import CosineGreedy, CosineHungarian, MetadataMatch, ModifiedCosine
+from pandas import DataFrame
 
 
 def convert_precursor_mz(spectrum):
