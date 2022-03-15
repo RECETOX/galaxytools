@@ -1,7 +1,7 @@
 name: Galaxy Tool Linting and Tests for push and PR
 on: [push, pull_request]
 env:
-  GALAXY_FORK: galaxyproject
+  GALAXY_FORK: RECETOX
   GALAXY_BRANCH: release_22.01
   MAX_CHUNKS: 4
   MAX_FILE_SIZE: 1M
@@ -343,7 +343,7 @@ jobs:
   deploy:
     name: Deploy
     needs: [setup, lint, flake8, lintr, combine_outputs]
-    if: ${{ (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main' ) && github.repository_owner == 'galaxyproject' }}
+    if: ${{ (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main' ) && github.repository_owner == 'RECETOX' }}
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -369,13 +369,13 @@ jobs:
         shed-target: testtoolshed
         shed-key: ${{ secrets.TTS_API_KEY }}
       continue-on-error: true
-    - name: Deploy on toolshed
-      uses: galaxyproject/planemo-ci-action@v1
-      with:
-        mode: deploy
-        repository-list: ${{ needs.setup.outputs.repository-list }}
-        shed-target: toolshed
-        shed-key: ${{ secrets.TS_API_KEY }}
+    # - name: Deploy on toolshed
+    #   uses: galaxyproject/planemo-ci-action@v1
+    #   with:
+    #     mode: deploy
+    #     repository-list: ${{ needs.setup.outputs.repository-list }}
+    #     shed-target: toolshed
+    #     shed-key: ${{ secrets.TS_API_KEY }}
 
   determine-success:
     name: Check workflow success
