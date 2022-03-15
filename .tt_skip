@@ -1,2 +1,7 @@
 tools/biotransformer
 tools/export_to_path
+tools/rmassbank
+tools/retip
+tools/october_recetox_xmsannotator
+tools/recetox_xmsannotator
+tools/query
