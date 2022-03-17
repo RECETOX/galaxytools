@@ -369,13 +369,13 @@ jobs:
         shed-target: testtoolshed
         shed-key: ${{ secrets.TTS_API_KEY }}
       continue-on-error: true
-    # - name: Deploy on toolshed
-    #   uses: galaxyproject/planemo-ci-action@v1
-    #   with:
-    #     mode: deploy
-    #     repository-list: ${{ needs.setup.outputs.repository-list }}
-    #     shed-target: toolshed
-    #     shed-key: ${{ secrets.TS_API_KEY }}
+    - name: Deploy on toolshed
+      uses: galaxyproject/planemo-ci-action@v1
+      with:
+        mode: deploy
+        repository-list: ${{ needs.setup.outputs.repository-list }}
+        shed-target: toolshed
+        shed-key: ${{ secrets.TS_API_KEY }}
 
   determine-success:
     name: Check workflow success
