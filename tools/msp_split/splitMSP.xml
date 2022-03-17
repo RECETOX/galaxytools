@@ -1,0 +1,39 @@
+<tool id="splitMSP" name="split spectra" version="0.1.0" python_template_version="3.5">
+    <description>Split MSP spectra file</description>
+    <requirements>
+         <requirement type="package" version="0.14.0">matchms</requirement>
+    </requirements>
+    <command detect_errors="exit_code"><![CDATA[
+        python3  $__tool_directory__/splitMSP.py 
+        --filename '$msp_input'
+        --outdir   'output' 
+    ]]></command>
+    <inputs>
+        <param type="data" name="msp_input" format="msp" />
+    </inputs>
+    <outputs>
+        <collection  format="msp" name="sample" type="list">
+            <discover_datasets pattern="__designation_and_ext__" ext="msp" directory="output"/>
+        </collection >
+    </outputs>
+    <tests>
+        <test>
+            <param name="msp_input" value="sample_input.msp"  />
+            <output_collection name="sample" type="list">
+                <element name="1-NITROPYRENE"         file="1-NITROPYRENE.msp"         ftype="msp" compare="contains"/>
+                <element name="3,5-DICHLOROPHENOL"    file="3,5-DICHLOROPHENOL.msp"    ftype="msp" compare="contains"/>
+                <element name="3,4-DICHLOROPHENOL"    file="3,4-DICHLOROPHENOL.msp"    ftype="msp" compare="contains"/>
+                <element name="2,6-DICHLOROPHENOL"    file="2,6-DICHLOROPHENOL.msp"    ftype="msp" compare="contains"/>
+                <element name="2,5-DICHLOROPHENOL"    file="2,5-DICHLOROPHENOL.msp"    ftype="msp" compare="contains"/>
+                <element name="2,4-DINITROPHENOL"     file="2,4-DINITROPHENOL.msp"     ftype="msp" compare="contains"/>
+                <element name="2,4-DICHLOROPHENOL"    file="2,4-DICHLOROPHENOL.msp"    ftype="msp" compare="contains"/>
+                <element name="2,4,6-TRICHLOROPHENOL" file="2,4,6-TRICHLOROPHENOL.msp" ftype="msp" compare="contains"/>
+                <element name="2,4,5-TRICHLOROPHENOL" file="2,4,5-TRICHLOROPHENOL.msp" ftype="msp" compare="contains"/>
+                <element name="2,3-DICHLOROPHENOL"    file="2,3-DICHLOROPHENOL.msp"    ftype="msp" compare="contains"/>
+            </output_collection>
+        </test>
+    </tests> 
+    <help><![CDATA[
+        All good
+    ]]></help>
+</tool>
