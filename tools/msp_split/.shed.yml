@@ -1,0 +1,13 @@
+owner: recetox
+remote_repository_url: "https://github.com/RECETOX/galaxytools/tree/master/tools/msp_split"
+homepage_url: "https://github.com/RECETOX/msp_split"
+categories:
+  - Metabolomics
+repositories:
+  msp_split:
+    description: "split msp spectra."
+
+    include:
+      - splitMSP.xml
+      - splitMSP.py
+      - test-data
