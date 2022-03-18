@@ -1,6 +1,6 @@
 owner: recetox
 remote_repository_url: "https://github.com/RECETOX/galaxytools/tree/master/tools/msp_split"
-homepage_url: "https://github.com/RECETOX/msp_split"
+homepage_url: "https://github.com/RECETOX/galaxytools"
 categories:
   - Metabolomics
 repositories:
