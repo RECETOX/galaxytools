@@ -45,7 +45,7 @@
 
             **Mass tolerance for metabolite identification** (default is 0.01).
 
-            **Output of BioTransformer** with CSV as an input are 3 CSV files. One without any filtering, second with filtered
+            **Output of BioTransformer** with CSV as an input are 3 TSV files. One without any filtering, second with filtered
             duplicates based on 6 columns (InChI, InChIKey, Synonyms, Molecular formula, Major Isotope Mass, AlogP) and third with
             filtered duplicates based on 3 columns (Molecular formula, Major Isotope Mass, AlogP).
 
