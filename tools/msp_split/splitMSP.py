@@ -1,11 +1,21 @@
 import argparse
 import os
+from typing import List
 
 from matchms.exporting import save_as_msp
 from matchms.importing import load_from_msp
+from matchms import Spectrum
 
 
-def read_spectra(filename):
+def read_spectra(filename: str) -> List[Spectrum]:
+    """Read spectra from file
+
+    Args:
+        filename (str): Path to .msp file from which to load the spectra
+
+    Returns:
+        List[Spectrum]: Spectra contained in the file
+    """
     return list(load_from_msp(filename, False))
 
 
