@@ -8,8 +8,8 @@ from openbabel import openbabel, pybel
 openbabel.obErrorLog.StopLogging()
 
 
-# function for translating inchi to smiles
 def InchiToSmiles(df):
+    '''Translate inchi to smiles'''
     sm = []
     for item in df['InChI']:
         tmp = pybel.readstring("inchi", item)
@@ -34,9 +34,6 @@ out_df1 = pandas.DataFrame()  # all results
 out_df2 = pandas.DataFrame()  # filtered results based on 6 columns
 out_df3 = pandas.DataFrame()  # filtered results based on 3 columns
 
-tmp2 = pandas.DataFrame()
-tmp3 = pandas.DataFrame()
-
 smList1 = []  # list with smiles string
 smList2 = []
 smList3 = []
@@ -46,16 +43,17 @@ for _, (smiles,) in in_df.iterrows():
         if not re.search(r'\.', smiles):
             subprocess.run(executable + argv + ["-ismi", smiles] + ["-ocsv", out.name])
             try:
-                tmp2 = pandas.read_csv(out.name)
-                tmp3 = pandas.read_csv(out.name)
-                tmp2.drop_duplicates(inplace=True, subset=["InChI", "InChIKey", "Synonyms", "Molecular formula", "Major Isotope Mass", "ALogP"])
-                tmp3.drop_duplicates(inplace=True, subset=["Molecular formula", "Major Isotope Mass", "ALogP"])
+                bio_out = pandas.read_csv(out.name)
+                tmp2 = bio_out.drop_duplicates(subset=["InChI", "InChIKey", "Synonyms", "Molecular formula", "Major Isotope Mass", "ALogP"])
+                tmp3 = bio_out.drop_duplicates(subset=["Molecular formula", "Major Isotope Mass", "ALogP"])
+
+                smList1.append([smiles] * bio_out.shape[0])
                 smList2.append([smiles] * tmp2.shape[0])
                 smList3.append([smiles] * tmp3.shape[0])
-                out_df1 = pandas.concat([out_df1, pandas.read_csv(out.name)])
+
+                out_df1 = pandas.concat([out_df1, bio_out])
                 out_df2 = pandas.concat([out_df2, tmp2])
                 out_df3 = pandas.concat([out_df3, tmp3])
-                smList1.append([smiles] * pandas.read_csv(out.name).shape[0])
             except pandas.errors.EmptyDataError:
                 continue
         else:
