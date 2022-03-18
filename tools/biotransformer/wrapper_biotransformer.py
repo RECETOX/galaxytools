@@ -22,10 +22,6 @@ executable = ["biotransformer"]
 argv = sys.argv[1:]
 icsv = argv.pop(argv.index("-icsv") + 1)
 argv.remove("-icsv")
-
-if "-ocsv" not in argv:
-    sys.stderr.write("excpected -ocsv parameter\n")
-    sys.exit(1)
 ocsv = argv.pop(argv.index("-ocsv") + 1)
 argv.remove("-ocsv")
 ocsv_dup = argv.pop(argv.index("-ocsvDup") + 1)
