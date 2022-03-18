@@ -5,7 +5,7 @@ categories:
   - Metabolomics
 repositories:
   msp_split:
-    description: "split msp spectra."
+    description: "Utility tool to split an `msp` file into the individual records, creating a collection with one record per item."
 
     include:
       - splitMSP.xml
