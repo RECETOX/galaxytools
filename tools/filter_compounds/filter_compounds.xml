@@ -1,9 +1,7 @@
 <tool id="filter_orgmet_anorg" name="Filter organometallics and/or anorganics" version="@TOOL_VERSION@+galaxy@GALAXY_VERSION@">
     <description>from a library of compounds</description>
-    <!--parallelism method="multi" split_inputs="infile" split_mode="to_size" split_size="50000" shared_inputs="" merge_outputs="outfile"></parallelism-->
     <macros>
         <import>macros.xml</import>
-        <token name="@GALAXY_VERSION@">0</token>
     </macros>
     <expand macro="creator"/>
     <expand macro="requirements"/>
