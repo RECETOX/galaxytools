@@ -1,4 +1,5 @@
 <macros>
+    <token name="@TOOL_VERSION@">3.0</token>
     <xml name="creator">
         <creator>
             <person
@@ -22,7 +23,7 @@
             as well as the soil/aquatic microbiota. BioTransformer also assists scientists in metabolite identification,
             based on the metabolism prediction.
 
-            BioTransformer is offered to the public as a freely acessible software package under the GNU License GPL v2.1.
+            BioTransformer is offered to the public as a freely acessible software package under the GNU License GPL v3.
 
             Users are free to copy and redistribute the material in any medium or format. Moreover, they could modify, and
             build upon the material under the condition that they must give appropriate credit, provide links to the license,

@@ -18,7 +18,6 @@ def InchiToSmiles(df):
 
 
 executable = ["biotransformer"]
-# executable_r = ["Rscript", "inchi_to_smiles.r"]
 
 argv = sys.argv[1:]
 if "-icsv" in argv:
@@ -73,7 +72,7 @@ if "-icsv" in argv:
     out_df1.insert(0, "SMILES query", smList1)
     out_df1.drop_duplicates(inplace=True)
     out_df1.insert(1, "SMILES target", InchiToSmiles(out_df1))
-    out_df1.to_csv(ocsv)
+    out_df1.to_csv(ocsv, sep ='\t')
 
     out_df2.insert(0, "SMILES query", smList2)
     out_df3.insert(0, "SMILES query", smList3)
@@ -82,8 +81,8 @@ if "-icsv" in argv:
     out_df2.insert(1, "SMILES target", InchiToSmiles(out_df2))
     out_df3.insert(1, "SMILES target", InchiToSmiles(out_df3))
     # out_df.drop_duplicates(inplace=True, subset=["InChI", "InChIKey", "Synonyms", "Molecular formula", "Major Isotope Mass", "ALogP"])
-    out_df2.to_csv(ocsv_dup)
-    out_df3.to_csv(ocsv_dup2)
+    out_df2.to_csv(ocsv_dup, sep ='\t')
+    out_df3.to_csv(ocsv_dup2, sep ='\t')
 else:
     # code = subprocess.run(executable + argv).returncode
     # sys.exit(code)
