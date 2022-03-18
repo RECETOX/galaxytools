@@ -7,10 +7,9 @@
         <requirement type="package" version="1.1.5">biotransformer</requirement>
         <requirement type="package" version="3.1.1">openbabel</requirement>
         <requirement type="package" version="1.1.1">pandas</requirement>
-        <requirement type="package" version="3.7">python</requirement>
     </requirements>
     <command><![CDATA[
-        python3 '${__tool_directory__}/wrapper_biotransformer.py'
+        python '${__tool_directory__}/wrapper_biotransformer.py'
          -k $k
          -b $b
          -s $steps
