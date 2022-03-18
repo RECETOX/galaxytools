@@ -2,9 +2,9 @@ import argparse
 import os
 from typing import List
 
+from matchms import Spectrum
 from matchms.exporting import save_as_msp
 from matchms.importing import load_from_msp
-from matchms import Spectrum
 
 
 def read_spectra(filename: str) -> List[Spectrum]:
