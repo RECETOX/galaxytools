@@ -1,5 +1,5 @@
 <macros>
-    <token name="@TOOL_VERSION@">0.1.3</token>
+    <token name="@TOOL_VERSION@">0.2.0</token>
 
     <xml name="creator">
         <creator>
@@ -32,22 +32,28 @@
     </token>
 
     <xml name="job_options">
-        <option value="inchi canonical_smiles PubChem">PubChem: inchi -> canonical_smiles</option>
-        <option value="inchi formula PubChem">PubChem: inchi -> formula</option>
-        <option value="inchi inchikey PubChem">PubChem: inchi -> inchikey</option>
-        <option value="inchi isomeric_smiles PubChem">PubChem: inchi -> isomeric_smiles</option>
-        <option value="inchi iupac_name PubChem">PubChem: inchi -> iupac_name</option>
-        <option value="name canonical_smiles PubChem">PubChem: name -> canonical_smiles</option>
-        <option value="name formula PubChem">PubChem: name -> formula</option>
-        <option value="name inchi PubChem">PubChem: name -> inchi</option>
-        <option value="name inchikey PubChem">PubChem: name -> inchikey</option>
-        <option value="name isomeric_smiles PubChem">PubChem: name -> isomeric_smiles</option>
-        <option value="name iupac_name PubChem">PubChem: name -> iupac_name</option>
+        <option value="canonical_smiles mw RDKit">RDKit: canonical_smiles -> mw</option>
+        <option value="isomeric_smiles mw RDKit">RDKit: isomeric_smiles -> mw</option>
+        <option value="smiles mw RDKit">RDKit: smiles -> mw</option>
+        <option value="compound_name canonical_smiles IDSM">IDSM: compound_name -> canonical_smiles</option>
+        <option value="compound_name formula IDSM">IDSM: compound_name -> formula</option>
+        <option value="compound_name inchi IDSM">IDSM: compound_name -> inchi</option>
+        <option value="compound_name inchikey IDSM">IDSM: compound_name -> inchikey</option>
+        <option value="compound_name isomeric_smiles IDSM">IDSM: compound_name -> isomeric_smiles</option>
+        <option value="compound_name iupac_name IDSM">IDSM: compound_name -> iupac_name</option>
+        <option value="inchi canonical_smiles IDSM">IDSM: inchi -> canonical_smiles</option>
+        <option value="inchi formula IDSM">IDSM: inchi -> formula</option>
+        <option value="inchi inchikey IDSM">IDSM: inchi -> inchikey</option>
+        <option value="inchi isomeric_smiles IDSM">IDSM: inchi -> isomeric_smiles</option>
+        <option value="inchi iupac_name IDSM">IDSM: inchi -> iupac_name</option>
+        <option value="iupac_name inchi IDSM">IDSM: iupac_name -> inchi</option>
+        <option value="casno inchi CTS">CTS: casno -> inchi</option>
         <option value="casno inchikey CTS">CTS: casno -> inchikey</option>
+        <option value="compound_name inchikey CTS">CTS: compound_name -> inchikey</option>
+        <option value="hmdbid inchi CTS">CTS: hmdbid -> inchi</option>
+        <option value="inchikey compound_name CTS">CTS: inchikey -> compound_name</option>
         <option value="inchikey inchi CTS">CTS: inchikey -> inchi</option>
         <option value="inchikey iupac_name CTS">CTS: inchikey -> iupac_name</option>
-        <option value="inchikey name CTS">CTS: inchikey -> name</option>
-        <option value="name inchikey CTS">CTS: name -> inchikey</option>
         <option value="casno smiles CIR">CIR: casno -> smiles</option>
         <option value="inchi smiles CIR">CIR: inchi -> smiles</option>
         <option value="inchikey casno CIR">CIR: inchikey -> casno</option>
@@ -55,12 +61,46 @@
         <option value="inchikey inchi CIR">CIR: inchikey -> inchi</option>
         <option value="inchikey smiles CIR">CIR: inchikey -> smiles</option>
         <option value="smiles inchikey CIR">CIR: smiles -> inchikey</option>
+        <option value="compound_name casno NLM">NLM: compound_name -> casno</option>
+        <option value="compound_name formula NLM">NLM: compound_name -> formula</option>
+        <option value="compound_name inchikey NLM">NLM: compound_name -> inchikey</option>
         <option value="inchikey casno NLM">NLM: inchikey -> casno</option>
+        <option value="inchikey compound_name NLM">NLM: inchikey -> compound_name</option>
         <option value="inchikey formula NLM">NLM: inchikey -> formula</option>
-        <option value="inchikey name NLM">NLM: inchikey -> name</option>
-        <option value="name casno NLM">NLM: name -> casno</option>
-        <option value="name formula NLM">NLM: name -> formula</option>
-        <option value="name inchikey NLM">NLM: name -> inchikey</option>
+        <option value="compound_name canonical_smiles PubChem">PubChem: compound_name -> canonical_smiles</option>
+        <option value="compound_name formula PubChem">PubChem: compound_name -> formula</option>
+        <option value="compound_name inchi PubChem">PubChem: compound_name -> inchi</option>
+        <option value="compound_name inchikey PubChem">PubChem: compound_name -> inchikey</option>
+        <option value="compound_name isomeric_smiles PubChem">PubChem: compound_name -> isomeric_smiles</option>
+        <option value="compound_name iupac_name PubChem">PubChem: compound_name -> iupac_name</option>
+        <option value="inchi canonical_smiles PubChem">PubChem: inchi -> canonical_smiles</option>
+        <option value="inchi formula PubChem">PubChem: inchi -> formula</option>
+        <option value="inchi inchikey PubChem">PubChem: inchi -> inchikey</option>
+        <option value="inchi isomeric_smiles PubChem">PubChem: inchi -> isomeric_smiles</option>
+        <option value="inchi iupac_name PubChem">PubChem: inchi -> iupac_name</option>
+        <option value="inchi pubchemid PubChem">PubChem: inchi -> pubchemid</option>
+        <option value="pubchemid hmdbid PubChem">PubChem: pubchemid -> hmdbid</option>
+        <option value="pubchemid inchi PubChem">PubChem: pubchemid -> inchi</option>
+        <option value="chebiid chemspiderid BridgeDB">BridgeDB: chebiid -> chemspiderid</option>
+        <option value="chebiid hmdbid BridgeDB">BridgeDB: chebiid -> hmdbid</option>
+        <option value="chebiid pubchemid BridgeDB">BridgeDB: chebiid -> pubchemid</option>
+        <option value="chebiid wikidataid BridgeDB">BridgeDB: chebiid -> wikidataid</option>
+        <option value="chemspiderid chebiid BridgeDB">BridgeDB: chemspiderid -> chebiid</option>
+        <option value="chemspiderid hmdbid BridgeDB">BridgeDB: chemspiderid -> hmdbid</option>
+        <option value="chemspiderid pubchemid BridgeDB">BridgeDB: chemspiderid -> pubchemid</option>
+        <option value="chemspiderid wikidataid BridgeDB">BridgeDB: chemspiderid -> wikidataid</option>
+        <option value="hmdbid chebiid BridgeDB">BridgeDB: hmdbid -> chebiid</option>
+        <option value="hmdbid chemspiderid BridgeDB">BridgeDB: hmdbid -> chemspiderid</option>
+        <option value="hmdbid pubchemid BridgeDB">BridgeDB: hmdbid -> pubchemid</option>
+        <option value="hmdbid wikidataid BridgeDB">BridgeDB: hmdbid -> wikidataid</option>
+        <option value="pubchemid chebiid BridgeDB">BridgeDB: pubchemid -> chebiid</option>
+        <option value="pubchemid chemspiderid BridgeDB">BridgeDB: pubchemid -> chemspiderid</option>
+        <option value="pubchemid hmdbid BridgeDB">BridgeDB: pubchemid -> hmdbid</option>
+        <option value="pubchemid wikidataid BridgeDB">BridgeDB: pubchemid -> wikidataid</option>
+        <option value="wikidataid chebiid BridgeDB">BridgeDB: wikidataid -> chebiid</option>
+        <option value="wikidataid chemspiderid BridgeDB">BridgeDB: wikidataid -> chemspiderid</option>
+        <option value="wikidataid hmdbid BridgeDB">BridgeDB: wikidataid -> hmdbid</option>
+        <option value="wikidataid pubchemid BridgeDB">BridgeDB: wikidataid -> pubchemid</option>
     </xml>
 
 </macros>
