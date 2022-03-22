@@ -23,7 +23,7 @@ def main(argv):
     app.curate_spectra()
 
     # specify requested services and jobs
-    services = ['PubChem', 'CTS', 'CIR', 'NLM']
+    services = ['PubChem', 'CTS', 'CIR', 'NLM', 'RDKit', 'IDSM', 'BridgeDB']
 
     if len(args.jobs) != 0:
         jobs = []
