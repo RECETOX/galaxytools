@@ -66,6 +66,7 @@
     <tests>
         <test>
             <param name="input_file" value="sample.msp" ftype="msp" />
+            <param name="jobs" value="compound_name inchi PubChem,inchi canonical_smiles PubChem"/>
             <output name="output_file" file="sample_out.msp" ftype="msp"/>
         </test>
     </tests>
