@@ -1,4 +1,4 @@
-<tool id="matchms_formatter" name="matchms output formatter" version="0.1.2" python_template_version="3.5">
+<tool id="matchms_formatter" name="matchms output formatter" version="0.1.3" python_template_version="3.5">
     <description>reformat output tables of matchms</description>
 
     <macros>
@@ -64,7 +64,7 @@
             <param name="selection" value="get-thresholded-data"/>
             <param name="scores_threshold" value="0.4"/>
             <param name="matches_threshold" value="2"/>
-            <output name="output" file="formatter/test2_threshold_formatting.tsv" ftype="tsv" 
+            <output name="output" file="formatter/test2_threshold_formatting.tsv" ftype="tsv"
                     checksum="md5$8929cdac47252da638f066261ffc16b7"/>
         </test>
         <test>

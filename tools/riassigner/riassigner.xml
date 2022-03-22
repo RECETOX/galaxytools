@@ -1,4 +1,4 @@
-<tool id="riassigner" name="RIAssigner" version="@TOOL_VERSION@+galaxy0" profile="19.05">
+<tool id="riassigner" name="RIAssigner" version="@TOOL_VERSION@+galaxy1" profile="19.05">
     <description>compute retention indices</description>
     <macros>
         <import>macros.xml</import>

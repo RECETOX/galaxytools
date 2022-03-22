@@ -1,5 +1,5 @@
-<tool id="aplcms_to_ramclustr_converter" name="apLCMS to RamClustR converter" version="0.1.0+galaxy0" python_template_version="3.5">
-    <description>converts apLCMS parquet output to RamClustR csv input</description>
+<tool id="aplcms_to_ramclustr_converter" name="apLCMS to RamClustR converter" version="0.1.0+galaxy1" python_template_version="3.5">
+    <description>converts apLCMS output to RamClustR input</description>
     <macros>
         <import>macros.xml</import>
     </macros>
@@ -15,7 +15,7 @@
         <param name="aplcms_dataframe" type="data" format="parquet" label="apLCMS Dataframe"/>
     </inputs>
     <outputs>
-        <data format="csv" name="out_file" label="Feature-by-sample ${aplcms_dataframe.name} table (csv)"/>
+        <data format="csv" name="out_file" label="Feature-by-sample ${aplcms_dataframe.name} table"/>
     </outputs>
     <tests>
         <test>

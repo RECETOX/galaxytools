@@ -1,4 +1,4 @@
-<tool id="recetox_aplcms_unsupervised" name="RECETOX apLCMS Unsupervised" version="@TOOL_VERSION@+galaxy2">
+<tool id="recetox_aplcms_unsupervised" name="RECETOX apLCMS Unsupervised" version="@TOOL_VERSION@+galaxy3">
     <description>generate a feature table from LC/MS spectra</description>
     <macros>
         <import>macros.xml</import>

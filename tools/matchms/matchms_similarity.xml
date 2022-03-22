@@ -1,4 +1,4 @@
-<tool id="matchms" name="matchMS similarity" version="@TOOL_VERSION@+galaxy0" python_template_version="3.8">
+<tool id="matchms" name="matchMS similarity" version="@TOOL_VERSION@+galaxy1" python_template_version="3.8">
     <description>calculate the similarity score and matched peaks</description>
 
     <macros>
@@ -25,7 +25,7 @@
             python3 ${__tool_directory__}/matchms_similarity_wrapper.py \
             #if $ri_filtering.is_true
             -r $ri_filtering.tolerance \
-            #end if 
+            #end if
             #if $symmetric.is_symmetric
             -s \
             #else
@@ -134,7 +134,7 @@
             <param name="ri_filtering.tolerance" value="60.0" />
             <param name="similarity_metric" value="CosineGreedy"/>
             <output name="similarity_scores" file="similarity/scores_test6_out.tsv" ftype="tsv"/>
-            <output name="similarity_matches" file="similarity/matches_test6_out.tsv" ftype="tsv"/>       
+            <output name="similarity_matches" file="similarity/matches_test6_out.tsv" ftype="tsv"/>
         </test>
     </tests>
 
