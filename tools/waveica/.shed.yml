@@ -4,7 +4,6 @@ repositories:
     description: Removal of batch effects for untargeted metabolomics data.
     include:
       - waveica.xml
-      - waveica_macros.xml
       - waveica_wrapper.R
       - test-data
       - macros.xml
