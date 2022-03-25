@@ -20,7 +20,7 @@
          <requirement type="package" version="0.14.0">matchms</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
-        python3  $__tool_directory__/splitMSP.py 
+        python3  '$__tool_directory__/splitMSP.py'
         --filename '$msp_input'
         --outdir   'output' 
     ]]></command>
