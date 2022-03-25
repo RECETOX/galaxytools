@@ -20,20 +20,20 @@ def read_spectra(filename: str) -> List[Spectrum]:
 
 
 def get_spectra_names(spectra: list) -> List[str]:
-    """Read the keyword 'compound_name' from a spectra. 
-
+    """Read the keyword 'compound_name' from a spectra.
     Args:
         spectra (list): List of individual spectra.
-
+    
     Returns:
-        List[str]: List with 'compoud_names' of individual spectra.
+        List[str]: List with 'compoud_name' of individual spectra.
     """
     return [x.get("compound_name") for x in spectra]
 
 
+
 def make_outdir(outdir: str):
     """Create destination directory.
-
+    
     Args:
         outdir (str): Path to destination directory where split spectra files are generated.
     """
