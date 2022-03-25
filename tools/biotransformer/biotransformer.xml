@@ -1,4 +1,4 @@
-<tool id="biotransformer" name="BioTransformer" version="@TOOL_VERSION@+galaxy0">
+<tool id="biotransformer" name="BioTransformer" version="@TOOL_VERSION@+galaxy1">
     <macros>
         <import>macros.xml</import>
     </macros>
@@ -8,7 +8,7 @@
         <requirement type="package" version="3.1.1">openbabel</requirement>
         <requirement type="package" version="1.1.1">pandas</requirement>
     </requirements>
-    <command><![CDATA[
+    <command detect_errors="aggressive"><![CDATA[
         python3 '${__tool_directory__}/wrapper_biotransformer.py'
          -k $k
          -b $b

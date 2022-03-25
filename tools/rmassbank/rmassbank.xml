@@ -1,4 +1,4 @@
-<tool id="rmassbank" name="RMassBank" version="@TOOL_VERSION@+galaxy0">
+<tool id="rmassbank" name="RMassBank" version="@TOOL_VERSION@+galaxy1">
     <macros>
         <import>macros.xml</import>
     </macros>
@@ -15,7 +15,7 @@
         <exit_code range="1:"/>
         <exit_code range=":-1"/>
     </stdio>
-    <command><![CDATA[
+    <command detect_errors="aggressive"><![CDATA[
          #for $infile in $param_in:
             ln -s '${infile}' '${infile.element_identifier}' &&
          #end for
