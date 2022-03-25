@@ -26,7 +26,7 @@
     ]]></command>
     <inputs>
         <param type="data" name="msp_input" format="msp" 
-               help="Use keyword 'Name' to identify individual spectra."/>
+               help="Use keyword 'compound_name' to identify individual spectra."/>
     </inputs>
     <outputs>
         <collection  format="msp" name="sample" type="list">
