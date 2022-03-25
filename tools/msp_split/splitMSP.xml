@@ -1,4 +1,20 @@
-<tool id="splitMSP" name="split spectra" version="0.1.0" python_template_version="3.5">
+<tool id="splitmsp" name="Split MSP Spectra" version="0.1.0" python_template_version="3.5">
+    <creator>
+        <person
+            givenName="Wudmir"
+            familyName="Rojas"
+            url="https://github.com/wverastegui"
+            identifier="0000-0001-7036-9987" />
+        <person
+            givenName="Helge"
+            familyName="Hecht"
+            url="https://github.com/hechth"
+            identifier="0000-0001-6744-996X" />
+        <organization
+            url="https://www.recetox.muni.cz/"
+            email="GalaxyToolsDevelopmentandDeployment@space.muni.cz"
+            name="RECETOX MUNI"/>
+    </creator>
     <description>Split MSP spectra file</description>
     <requirements>
          <requirement type="package" version="0.14.0">matchms</requirement>
@@ -9,7 +25,8 @@
         --outdir   'output' 
     ]]></command>
     <inputs>
-        <param type="data" name="msp_input" format="msp" />
+        <param type="data" name="msp_input" format="msp" 
+               help="Use keyword 'Name' to identify individual spectra."/>
     </inputs>
     <outputs>
         <collection  format="msp" name="sample" type="list">
@@ -20,20 +37,20 @@
         <test>
             <param name="msp_input" value="sample_input.msp"  />
             <output_collection name="sample" type="list">
-                <element name="1-NITROPYRENE"         file="1-NITROPYRENE.msp"         ftype="msp" compare="contains"/>
-                <element name="3,5-DICHLOROPHENOL"    file="3,5-DICHLOROPHENOL.msp"    ftype="msp" compare="contains"/>
-                <element name="3,4-DICHLOROPHENOL"    file="3,4-DICHLOROPHENOL.msp"    ftype="msp" compare="contains"/>
-                <element name="2,6-DICHLOROPHENOL"    file="2,6-DICHLOROPHENOL.msp"    ftype="msp" compare="contains"/>
-                <element name="2,5-DICHLOROPHENOL"    file="2,5-DICHLOROPHENOL.msp"    ftype="msp" compare="contains"/>
-                <element name="2,4-DINITROPHENOL"     file="2,4-DINITROPHENOL.msp"     ftype="msp" compare="contains"/>
-                <element name="2,4-DICHLOROPHENOL"    file="2,4-DICHLOROPHENOL.msp"    ftype="msp" compare="contains"/>
-                <element name="2,4,6-TRICHLOROPHENOL" file="2,4,6-TRICHLOROPHENOL.msp" ftype="msp" compare="contains"/>
-                <element name="2,4,5-TRICHLOROPHENOL" file="2,4,5-TRICHLOROPHENOL.msp" ftype="msp" compare="contains"/>
-                <element name="2,3-DICHLOROPHENOL"    file="2,3-DICHLOROPHENOL.msp"    ftype="msp" compare="contains"/>
+                <element name="1NITROPYRENE"         file="1NITROPYRENE.msp"         ftype="msp" compare="contains"/>
+                <element name="35DICHLOROPHENOL"     file="35DICHLOROPHENOL.msp"     ftype="msp" compare="contains"/>
+                <element name="34DICHLOROPHENOL"     file="34DICHLOROPHENOL.msp"     ftype="msp" compare="contains"/>
+                <element name="26DICHLOROPHENOL"     file="26DICHLOROPHENOL.msp"     ftype="msp" compare="contains"/>
+                <element name="25DICHLOROPHENOL"     file="25DICHLOROPHENOL.msp"     ftype="msp" compare="contains"/>
+                <element name="24DINITROPHENOL"      file="24DINITROPHENOL.msp"      ftype="msp" compare="contains"/>
+                <element name="24DICHLOROPHENOL"     file="24DICHLOROPHENOL.msp"     ftype="msp" compare="contains"/>
+                <element name="246TRICHLOROPHENOL"   file="246TRICHLOROPHENOL.msp"   ftype="msp" compare="contains"/>
+                <element name="245TRICHLOROPHENOL"   file="245TRICHLOROPHENOL.msp"   ftype="msp" compare="contains"/>
+                <element name="23DICHLOROPHENOL"     file="23DICHLOROPHENOL.msp"     ftype="msp" compare="contains"/>
             </output_collection>
         </test>
     </tests> 
     <help><![CDATA[
-        All good
+        Splitmsp handles input/output files in MSP format using the matchms.importing and matchms.exporting modules (https://matchms.readthedocs.io/en/latest/index.html).
     ]]></help>
 </tool>
