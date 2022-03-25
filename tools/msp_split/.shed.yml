@@ -1,0 +1,13 @@
+owner: recetox
+remote_repository_url: "https://github.com/RECETOX/galaxytools/tree/master/tools/msp_split"
+homepage_url: "https://github.com/RECETOX/galaxytools"
+categories:
+  - Metabolomics
+repositories:
+  msp_split:
+    description: "Utility tool to split an `msp` file into the individual records, creating a collection with one record per item."
+
+    include:
+      - splitMSP.xml
+      - splitMSP.py
+      - test-data
