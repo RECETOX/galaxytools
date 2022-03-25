@@ -24,7 +24,7 @@ def get_spectra_names(spectra: list) -> List[str]:
 
     Args:
         spectra (list): List of individual spectra.
-    
+
     Returns:
         List[str]: List with 'compoud_name' of individual spectra.
     """
