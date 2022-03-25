@@ -16,7 +16,7 @@ def read_spectra(filename: str) -> List[Spectrum]:
     Returns:
         List[Spectrum]: Spectra contained in the file.
     """
-    return list(load_from_msp(filename, False))
+    return list(load_from_msp(filename, True))
 
 
 def get_spectra_names(spectra: list) -> List[str]:
