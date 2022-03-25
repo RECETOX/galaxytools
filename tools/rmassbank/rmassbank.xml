@@ -1,4 +1,4 @@
-<tool id="rmassbank" name="RMassBank" version="@TOOL_VERSION@+galaxy0">
+<tool id="rmassbank" name="RMassBank" version="@TOOL_VERSION@+galaxy1">
     <macros>
         <import>macros.xml</import>
     </macros>
