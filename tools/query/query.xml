@@ -13,7 +13,7 @@
         <requirement type="package" version="3.7">python</requirement>
     </requirements>
 
-    <command><![CDATA[
+    <command detect_errors="aggressive"><![CDATA[
         python '$__tool_directory__/query.py'
             $config
     ]]></command>

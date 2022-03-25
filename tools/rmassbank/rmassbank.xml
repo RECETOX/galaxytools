@@ -15,7 +15,7 @@
         <exit_code range="1:"/>
         <exit_code range=":-1"/>
     </stdio>
-    <command><![CDATA[
+    <command detect_errors="aggressive"><![CDATA[
          #for $infile in $param_in:
             ln -s '${infile}' '${infile.element_identifier}' &&
          #end for
