@@ -88,5 +88,3 @@ filename = args.filename
 
 if __name__ == "__main__":
     split_spectra(filename, outdir)
-else:
-    print('Do nothing')
