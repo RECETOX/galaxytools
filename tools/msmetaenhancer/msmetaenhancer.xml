@@ -8,7 +8,6 @@
 
     <requirements>
         <requirement type="package" version="@TOOL_VERSION@">msmetaenhancer</requirement>
-        <requirement type="package" version="0.14.0">matchms</requirement>
     </requirements>
 
     <command detect_errors="exit_code"><![CDATA[
