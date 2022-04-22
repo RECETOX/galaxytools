@@ -24,12 +24,43 @@
         <configfile name="run_script"><![CDATA[
             #set filenames_str = str("', '").join([str($f.element_identifier) for $f in $files])
 
-            two_step_hybrid_main(...)
+            two_step_hybrid_main(
+                sample_files = c('$filenames_str'),
+                known_table_file = '${known_table}',
+                aligned_file = '${aligned_feature_sample_table}',
+                recovered_file = '${recovered_feature_sample_table}',
+                out_format = '$output_format.out_format',
+                cluster = as.integer(Sys.getenv('GALAXY_SLOTS', unset = 1)),
+                min.pres = $noise_filtering.min_pres,
+                min.run = $noise_filtering.min_run,
+                mz.tol = $noise_filtering.mz_tol,
+                baseline.correct.noise.percentile = $noise_filtering.baseline_correct_noise_percentile,
+                intensity.weighted = $noise_filtering.intensity_weighted,
+                shape.model = '$feature_detection.shape_model',
+                peak.estim.method = '$feature_detection.peak_estim_method',
+                BIC.factor = $feature_detection.BIC_factor,
+                min.bw = $feature_detection.min_bandwidth,
+                max.bw = $feature_detection.max_bandwidth,
+                sd.cut = c($feature_detection.sd_cut_min, $feature_detection.sd_cut_max),
+                sigma.ratio.lim = c($feature_detection.sigma_ratio_lim_min, $feature_detection.sigma_ratio_lim_max),
+                component.eliminate = $feature_detection.component_eliminate,
+                moment.power = $feature_detection.moment_power,
+                align.chr.tol = $peak_alignment.align_chr_tol,
+                align.mz.tol = $peak_alignment.align_mz_tol,
+                max.align.mz.diff = $peak_alignment.max_align_mz_diff,
+                pre.process = TODO,
+                recover.mz.range = $weak_signal_recovery.recover_mz_range,
+                recover.chr.range = $weak_signal_recovery.recover_chr_range,
+                use.observed.range = $weak_signal_recovery.use_observed_range,
+                recover.min.count = $weak_signal_recovery.recover_min_count,
+                match.tol.ppm = TODO,
+                new.feature.min.count = $history_db.new_feature_min_count,
+            )
         ]]></configfile>
     </configfiles>
 
     <expand macro="inputs">
-        <param name="metadata" type="data" format="csv" label="metadata" help="A csv table with two columns, where first column contains sample names and second a number of a batch that the sample is a part of."/>
+        <param name="metadata" type="data" format="csv" label="metadata" help="A csv table with two columns, where the first column contains sample names and the second batch labels for each sample."/>
         <expand macro="history_db"/>
         <section name="noise_filtering" title="Noise filtering and peak detection">
             <param name="min_pres" type="float" value="0.5"
