@@ -106,9 +106,9 @@ two_step_hybrid_main <- function(sample_files, known_table_file, aligned_file, r
   sample_files <- sort_samples_by_acquisition_number(sample_files)
   
   known <- read_known_table(known_table_file)
-  res <- two.step.hybrid(filenames = sample_files, known_table = known, work_dir = getwd(), ...)
+  res <- two.step.hybrid(filenames = sample_files, known.table = known, work_dir = getwd(), ...)
 
-  save_all_corrected_features(res$corrected_features, sample_files)
-  save_aligned_feature_table(res$aligned_feature_sample_table, aligned_file)
+  # save_all_corrected_features(res$corrected_features, sample_files)
+  # save_aligned_feature_table(res$aligned_feature_sample_table, aligned_file)
   save_recovered_feature_table(res$recovered_feature_sample_table, recovered_file, out_format)
 }
