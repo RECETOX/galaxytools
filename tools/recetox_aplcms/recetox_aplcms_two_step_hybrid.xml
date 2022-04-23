@@ -31,10 +31,16 @@
                 recovered_file = '${recovered_feature_sample_table}',
                 out_format = '$output_format.out_format',
                 cluster = as.integer(Sys.getenv('GALAXY_SLOTS', unset = 1)),
+                min.within.batch.prop.detect = $multibatch_processing.min_within_batch_prop_detect,
+                min.within.batch.prop.report = $multibatch_processing.min_within_batch_prop_report,
+                min.batch.prop = $multibatch_processing.min_batch_prop,
+                batch.align.mz.tol = $multibatch_processing.batch_align_mz_tol,
+                batch.align.chr.tol = $multibatch_processing.batch_align_chr_tol,
                 min.pres = $noise_filtering.min_pres,
                 min.run = $noise_filtering.min_run,
                 mz.tol = $noise_filtering.mz_tol,
                 baseline.correct.noise.percentile = $noise_filtering.baseline_correct_noise_percentile,
+                baseline_correct = $noise_filtering.baseline_correct,
                 intensity.weighted = $noise_filtering.intensity_weighted,
                 shape.model = '$feature_detection.shape_model',
                 peak.estim.method = '$feature_detection.peak_estim_method',
@@ -45,16 +51,15 @@
                 sigma.ratio.lim = c($feature_detection.sigma_ratio_lim_min, $feature_detection.sigma_ratio_lim_max),
                 component.eliminate = $feature_detection.component_eliminate,
                 moment.power = $feature_detection.moment_power,
-                align.chr.tol = $peak_alignment.align_chr_tol,
                 align.mz.tol = $peak_alignment.align_mz_tol,
+                align.chr.tol = $peak_alignment.align_chr_tol,
                 max.align.mz.diff = $peak_alignment.max_align_mz_diff,
-                pre.process = TODO,
                 recover.mz.range = $weak_signal_recovery.recover_mz_range,
                 recover.chr.range = $weak_signal_recovery.recover_chr_range,
                 use.observed.range = $weak_signal_recovery.use_observed_range,
                 recover.min.count = $weak_signal_recovery.recover_min_count,
-                match.tol.ppm = TODO,
-                new.feature.min.count = $history_db.new_feature_min_count,
+                match.tol.ppm = $history_db.match_tol_ppm,
+                new.feature.min.count = $history_db.new_feature_min_count
             )
         ]]></configfile>
     </configfiles>
@@ -62,28 +67,11 @@
     <expand macro="inputs">
         <param name="metadata" type="data" format="csv" label="metadata" help="A csv table with two columns, where the first column contains sample names and the second batch labels for each sample."/>
         <expand macro="history_db"/>
-        <section name="noise_filtering" title="Noise filtering and peak detection">
-            <param name="min_pres" type="float" value="0.5"
-                   label="min_pres"
-                   help="The minimum proportion of presence in the time period for a series of signals grouped by m/z to be considered a peak." />
-            <param name="min_run" type="float" value="12"
-                   label="min_run"
-                   help="The minimum length of elution time for a series of signals grouped by m/z to be considered a peak." />
-            <param name="mz_tol" type="float" value="1e-05"
-                   label="mz_tol"
-                   help="The m/z tolerance level for the grouping of data points. This value is expressed as the fraction of the m/z value. This value, multiplied by the m/z value, becomes the cutoff level. The recommended value is the machine's nominal accuracy level. Divide the ppm value by 1e6. For FTMS, 1e-5 is recommended." />
-            <param name="baseline_correct" type="float" value="0" label="baseline_correct"
-                   help="After grouping the observations, the highest intensity in each group is found. If the highest is lower than this value, the entire group will be deleted. The default value is NA, in which case the program uses a percentile of the height of the noise groups. If given a value, the value will be used as the threshold, and baseline.correct.noise.percentile will be ignored." />
-            <param name="baseline_correct_noise_percentile" type="float" value="0.05"
-                   label="baseline_correct_noise_percentile"
-                   help="The percentile of signal strength of those EIC that don't pass the run filter, to be used as the baseline threshold of signal strength." />
-            <param name="intensity_weighted" type="boolean" checked="false" truevalue="TRUE" falsevalue="FALSE"
-                   label="intensity_weighted"
-                   help="Whether to weight the local density by signal intensities in initial peak detection." />
-        </section>
+        <expand macro="noise_filtering" />
         <expand macro="feature_detection"/>
         <expand macro="peak_alignment"/>
         <expand macro="weak_signal_recovery"/>
+        <expand macro="multibatch_processing"/>
         <expand macro="output_format"/>
     </expand>
 
@@ -95,6 +83,7 @@
         <test>
             <param name="known_table" value="known_table.parquet" ftype="parquet"/>
             <param name="files" value="mbr_test0.mzml,mbr_test1.mzml,mbr_test2.mzml,mbr_test0_copy.mzml" ftype="mzml"/>
+            <param name="metadata" value="two_step_hybrid_info.csv" ftype="csv"/>
             <section name="output_format">
                 <param name="out_format" value="recetox"/>
             </section>
