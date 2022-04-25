@@ -2,7 +2,7 @@ import argparse
 import asyncio
 import sys
 
-
+from matchms import set_matchms_logger_level
 from MSMetaEnhancer import Application
 
 
@@ -16,8 +16,13 @@ def main(argv):
 
     app = Application(log_file=args.log_file)
 
+    # set matchms logging level to avoid extensive messages in stdout while reading file
+    set_matchms_logger_level("ERROR")
     # import .msp file
     app.load_spectra(args.input_file, file_format='msp')
+
+    # set matchms logging level back to warning
+    set_matchms_logger_level("WARNING")
 
     # curate given metadata
     app.curate_spectra()
