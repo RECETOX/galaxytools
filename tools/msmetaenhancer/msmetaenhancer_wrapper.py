@@ -12,9 +12,11 @@ def main(argv):
     parser.add_argument("--output_file", type=str, help="Path to output spectra file.")
     parser.add_argument("--jobs", type=str, help="Sequence of conversion jobs to be used.")
     parser.add_argument("--log_file", type=str, help="Path to log with details of the annotation process.")
+    parser.add_argument("--log_level", type=str, default='info',
+                        help="Severity of log messages  present in the log file.")
     args = parser.parse_args()
 
-    app = Application(log_file=args.log_file)
+    app = Application(log_level=args.log_level, log_file=args.log_file)
 
     # set matchms logging level to avoid extensive messages in stdout while reading file
     set_matchms_logger_level("ERROR")
