@@ -27,7 +27,6 @@
             two_step_hybrid_main(
                 sample_files = c('$filenames_str'),
                 known_table_file = '${known_table}',
-                aligned_file = '${aligned_feature_sample_table}',
                 recovered_file = '${recovered_feature_sample_table}',
                 out_format = '$output_format.out_format',
                 metadata = '${metadata}',
@@ -77,7 +76,7 @@
     </expand>
 
     <outputs>
-        <expand macro="unsupervised_outputs"/>
+        <data name="recovered_feature_sample_table" format="parquet" label="${tool.name} recovered_feature_sample_table on ${on_string}" />
     </outputs>
 
     <tests>
@@ -88,7 +87,7 @@
             <section name="output_format">
                 <param name="out_format" value="recetox"/>
             </section>
-            <output name="recovered_feature_sample_table" file="hybrid.recetox.parquet" ftype="parquet"/>
+            <output name="recovered_feature_sample_table" file="two_step_hybrid.recetox.parquet" ftype="parquet"/>
         </test>
     </tests>
 
