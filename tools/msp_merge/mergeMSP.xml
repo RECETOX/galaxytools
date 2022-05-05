@@ -1,0 +1,49 @@
+<tool id="mergemsp" name="Merge MSP Spectra" version="0.1.0" python_template_version="3.5">
+   <creator>
+        <person
+            givenName="Wudmir"
+            familyName="Rojas"
+            url="https://github.com/wverastegui"
+            identifier="0000-0001-7036-9987" />
+        <person
+            givenName="Helge"
+            familyName="Hecht"
+            url="https://github.com/hechth"
+            identifier="0000-0001-6744-996X" />
+        <organization
+            url="https://www.recetox.muni.cz/"
+            email="GalaxyToolsDevelopmentandDeployment@space.muni.cz"
+            name="RECETOX MUNI"/>
+    </creator>
+    <description>Merge MSP Spectra files</description>
+    <requirements>
+         <requirement type="package" version="0.14.0">matchms</requirement>
+    </requirements>
+    <command detect_errors="exit_code"><![CDATA[
+       #set newinput = str("' '").join([str($f) for $f in $input])
+        python3  $__tool_directory__/mergeMSP.py
+        --filenames    '$newinput'
+        --outfilename  '$outfile'
+    ]]></command>
+    <inputs>
+        <param name="input" type="data" format="msp" multiple="true"/>
+    </inputs>
+    <outputs>
+        <data name="outfile" format="msp" />
+    </outputs>
+    <tests>
+         <test>
+            <param name="input">
+              <collection type="paired">
+                <element name="input" value="1-NITROPYRENE.msp"/>
+                <element name="input" value="2,3-DICHLOROPHENOL.msp"/>
+                <element name="input" value="2,4-DICHLOROPHENOL.msp"/>
+              </collection>
+            </param>
+            <output name="outfile" file="sample_output.msp" ftype="msp" />
+        </test>
+    </tests> 
+    <help><![CDATA[
+        Mergemsp handles input/output files in MSP format using the matchms.importing and matchms.exporting modules (https://matchms.readthedocs.io/en/latest/index.html).
+    ]]></help>
+</tool>
