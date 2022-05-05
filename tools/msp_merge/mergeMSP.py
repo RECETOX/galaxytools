@@ -3,8 +3,9 @@ from itertools import chain
 from typing import List
 
 from matchms import Spectrum
-from matchms.importing import load_from_msp
 from matchms.exporting import save_as_msp
+from matchms.importing import load_from_msp
+
 
 
 
