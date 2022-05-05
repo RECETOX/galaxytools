@@ -1,0 +1,13 @@
+owner: recetox
+remote_repository_url: "https://github.com/RECETOX/galaxytools/tree/master/tools/msp_merge"
+homepage_url: "https://github.com/RECETOX/galaxytools"
+categories:
+  - Metabolomics
+repositories:
+  msp_merge:
+    description: "Utility tool to merge `msp` individual spectrum files into a collection of spectra in a single file."
+
+    include:
+      - mergeMSP.xml
+      - mergeMSP.py
+      - test-data
