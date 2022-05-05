@@ -7,8 +7,6 @@ from matchms.exporting import save_as_msp
 from matchms.importing import load_from_msp
 
 
-
-
 def read_spectra(filenames: str) -> List[Spectrum]:
     """Read spectra from files.
 
