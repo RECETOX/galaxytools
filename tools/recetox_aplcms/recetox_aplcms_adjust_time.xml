@@ -38,7 +38,7 @@
                 do.plot = FALSE
             )
 
-            df <- as.data.frame(features)
+            df <- as.data.frame(corrected)
             arrow::write_parquet(df, "$feature_sample_table")
         ]]></configfile>
     </configfiles>
