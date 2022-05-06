@@ -1,4 +1,4 @@
-<tool id="msmetaenhancer" name="MSMetaEnhancer" version="@TOOL_VERSION@+galaxy1">
+<tool id="msmetaenhancer" name="MSMetaEnhancer" version="@TOOL_VERSION@+galaxy0">
     <description>annotate MS data</description>
 
     <macros>
@@ -19,8 +19,9 @@
             python3 ${__tool_directory__}/msmetaenhancer_wrapper.py \
             --input_file "$input_file" \
             --output_file "$output_file" \
-            #if $options.output_log:
-            --log_file "$log_file"\
+            #if $options.logging.output_log:
+            --log_file "$log_file" \
+            --log_level "$options.logging.log_level" \
             #end if
             #if len($ordered_jobs) != 0:
                 #set ordered_jobs = ",".join([str($job.ordered_jobs_select) for $job in $ordered_jobs]) + ","
@@ -51,15 +52,25 @@
         </param>
 
         <section name="options" title="Options">
-            <param label="Save the log file" name="output_log" type="boolean" truevalue="TRUE" falsevalue="FALSE"
-                   checked="false" help="Preserve a log with details about the annotation process."/>
+            <conditional name="logging">
+                <param label="Save the log file" name="output_log" type="boolean" truevalue="TRUE" falsevalue="FALSE"
+                       checked="false" help="Preserve a log with details about the annotation process."/>
+                <when value="TRUE">
+                    <param name="log_level" type="select" label="Log level"
+                           help="Severity of log messages  present in the log file.">
+                        <option value="error">ERROR</option>
+                        <option value="warning">WARNING</option>
+                        <option value="info" selected="true">INFO</option>
+                    </param>
+                </when>
+            </conditional>
         </section>
     </inputs>
 
     <outputs>
         <data label="MSMetaEnhancer on ${on_string}" name="output_file" format="msp" />
         <data label="Log of MSMetaEnhancer on ${on_string}" name="log_file" format="txt">
-           <filter>options['output_log']</filter>
+           <filter>options['logging']['output_log']</filter>
        </data>
     </outputs>
 
