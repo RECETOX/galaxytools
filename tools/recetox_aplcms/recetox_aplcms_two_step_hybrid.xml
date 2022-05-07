@@ -100,7 +100,7 @@
     <help>
     </help>
 
-    <citations>
+    <expand macro="citations">
         <citation type="doi">10.1038/s41598-020-70850-0</citation>
-    </citations>
+    </expand>
 </tool>
