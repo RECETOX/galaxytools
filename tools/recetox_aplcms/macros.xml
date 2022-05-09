@@ -207,9 +207,15 @@
         ]]>
     </token>
 
-    <token name="@HELP_two-step-hybrid">
+    <token name="@HELP_two-step-hybrid@">
         <![CDATA[
-            TODO
+              This is the **Two-Step Hybrid** version of **apLCMS**. This tool is improved upon the Hybrid version by accounting for the batch
+              effects in multi-batch experiments. As in the Hybrid version, this tool incorporates the knowledge of known metabolites and
+              historically detected features on the same machinery to help detect and quantify lower-intensity peaks.
+
+              **CAUTION**: To use such knowledge, especially historical data, you must keep using (1) the same chromatography
+              system (otherwise the retention time will not match), and (2) the same type of samples with similar extraction
+              technique, such as human serum.
 
             @GENERAL_HELP@
         ]]>

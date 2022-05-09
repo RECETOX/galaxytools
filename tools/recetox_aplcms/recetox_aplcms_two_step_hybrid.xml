@@ -98,6 +98,9 @@
     </tests>
 
     <help>
+        <![CDATA[
+            @HELP_two-step-hybrid@
+        ]]>
     </help>
 
     <expand macro="citations">
