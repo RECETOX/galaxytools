@@ -27,6 +27,7 @@
             two_step_hybrid_main(
                 sample_files = c('$filenames_str'),
                 known_table_file = '${known_table}',
+                updated_known_table_file = '${updated_known_table}',
                 recovered_file = '${recovered_feature_sample_table}',
                 aligned_file = '${aligned_feature_sample_table}',
                 out_format = '$output_format.out_format',
