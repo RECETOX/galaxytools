@@ -5,7 +5,7 @@ categories:
   - Metabolomics
 repositories:
   msp_merge:
-    description: "Utility tool to merge `msp` individual spectrum files into a collection of spectra in a single file."
+    description: "Utility tool to merge  individual `msp` spectra files in a collection into a single file."
 
     include:
       - mergeMSP.xml
