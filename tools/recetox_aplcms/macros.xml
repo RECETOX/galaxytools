@@ -1,10 +1,10 @@
 <macros>
-    <token name="@TOOL_VERSION@">0.9.5</token>
+    <token name="@TOOL_VERSION@">0.9.4</token>
     <xml name="requirements">
         <requirements>
             <requirement type="package" version="4.1.0">r-base</requirement>
             <requirement type="package" version="4.0.1">r-arrow</requirement>
-            <requirement type="package" version="0.9.5">r-recetox-aplcms</requirement>
+            <requirement type="package" version="0.9.4">r-recetox-aplcms</requirement>
             <requirement type="package" version="1.0.7">r-dplyr</requirement>
         </requirements>
     </xml>
