@@ -39,7 +39,7 @@
             )
 
             df <- as.data.frame(corrected)
-            arrow::write_parquet(df, "$feature_sample_table")
+            arrow::write_parquet(df, "$corrected_feature_sample_table")
         ]]></configfile>
     </configfiles>
 
@@ -55,15 +55,14 @@
     </inputs>
 
     <outputs>
-        <data name="feature_sample_table" format="parquet" label="${tool.name} on ${on_string}" />
+        <data name="corrected_feature_sample_table" format="parquet" label="${tool.name} on ${on_string}" />
     </outputs>
 
     <tests>
         <test>
             <param name="files" ftype="parquet"
                    value="extracted_features_0.parquet,extracted_features_1.parquet,extracted_features_2.parquet"/>
-            <output name="recovered_feature_sample_table" file="unsupervised_recovered_feature_sample_table.parquet"
-                    ftype="parquet"/>
+            <output name="corrected_feature_sample_table" file="corrected_feature_sample_table.parquet" ftype="parquet"/>
         </test>
     </tests>
 
