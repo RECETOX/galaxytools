@@ -44,6 +44,6 @@
         </test>
     </tests> 
     <help><![CDATA[
-        Mergemsp handles input/output files in MSP format using the matchms.importing and matchms.exporting modules (https://matchms.readthedocs.io/en/latest/index.html).
+        MergeMSP handles input/output files in MSP format using the matchms.importing and matchms.exporting modules (https://matchms.readthedocs.io/en/latest/index.html).
     ]]></help>
 </tool>
