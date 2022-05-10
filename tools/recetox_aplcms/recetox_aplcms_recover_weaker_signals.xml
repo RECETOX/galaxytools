@@ -1,0 +1,100 @@
+<tool id="recetox_aplcms_recover_weaker_signals" name="RECETOX apLCMS - recover weaker signals" version="@TOOL_VERSION@+galaxy0">
+    <description>recover weaker signals from LC/MS spectra</description>
+    <macros>
+        <import>macros.xml</import>
+        <import>macros_split.xml</import>
+    </macros>
+    <expand macro="creator"/>
+
+    <expand macro="requirements"/>
+    <command detect_errors="aggressive"><![CDATA[
+        sh ${symlink_inputs} &&
+        Rscript -e 'source("${__tool_directory__}/utils.R")' -e 'source("${run_script}")'
+    ]]></command>
+    <configfiles>
+        <configfile name="symlink_inputs">
+            #for $infile in $ms_files
+                ln -s '${infile}' '${infile.element_identifier}'
+            #end for
+            #for $infile in $extracted_files
+                ln -s '${infile}' '${infile.element_identifier}'
+            #end for
+            ln -s '${corrected_file}' '${corrected_file.element_identifier}'
+            ln -s '${aligned_file}' '${aligned_file.element_identifier}'
+        </configfile>
+        <configfile name="run_script"><![CDATA[
+            #set filenames_str = str("', '").join([str($f.element_identifier) for $f in $ms_files])
+            filenames <- c('$filenames_str')
+
+            extracted <-
+
+            corrected <- arrow::read_parquet("$parquet_file")
+
+            aligned <-
+
+            recovered <- recover_weaker_signals(
+                cluster = cluster,
+                filenames = filenames,
+                extracted_features = extracted,
+                corrected_features = corrected,
+                aligned_rt_crosstab = aligned$rt_crosstab,
+                aligned_int_crosstab = aligned$int_crosstab,
+                original_mz_tolerance = mz_tol,
+                aligned_mz_tolerance = aligned$mz_tolerance,
+                aligned_rt_tolerance = aligned$rt_tolerance,
+                mz_range = recover_mz_range,
+                rt_range = recover_chr_range,
+                use_observed_range = use_observed_range,
+                min_bandwidth = min_bandwidth,
+                max_bandwidth = max_bandwidth,
+                recover_min_count = recover_min_count
+            )
+
+            df <- as.data.frame(aligned)
+            arrow::write_parquet(df, "$aligned_feature_sample_table")
+        ]]></configfile>
+    </configfiles>
+
+    <inputs>
+        <param name="ms_files" type="data" format="mzdata,mzml,mzxml,netcdf" multiple="true" min="2" label="Input data"
+               help="Mass spectrometry file for peak extraction." />
+        <param name="extracted_files" type="data" format="parquet" multiple="true" min="2" label="Input extracted feature samples"
+               help="Mass spectrometry files containing feature samples." />
+        <param name="corrected_file" type="data" format="parquet" label="Input corrected feature samples"
+               help="Mass spectrometry file containing corrected feature samples." />
+        <param name="aligned_file" type="data" format="parquet" label="Input aligned feature samples"
+               help="Mass spectrometry file containing aligned feature samples." />
+
+        <param name="mz_tol" type="float" value="1e-05" label="mz_tol"
+               help="The m/z tolerance level for the grouping of data points. This value is expressed as the
+               fraction of the m/z value. This value, multiplied by the m/z value, becomes the cutoff level.
+               The recommended value is the machine's nominal accuracy level. Divide the ppm value by 1e6.
+               For FTMS, 1e-5 is recommended." />
+        <param name="min_exp" type="integer" min="1" value="2" label="min_exp"
+               help="If a feature is to be included in the final feature table, it must be present in at least this number of spectra." />
+        <expand macro="peak_alignment"/>
+    </inputs>
+
+    <outputs>
+        <expand macro="unsupervised_outputs"/>
+    </outputs>
+
+    <tests>
+        <test>
+            <param name="ms_files" value="mbr_test0.mzml,mbr_test1.mzml,mbr_test2.mzml" ftype="mzml"/>
+            <param name="parquet_file" ftype="parquet" value="corrected_feature_sample_table.parquet"/>
+            <output name="aligned_feature_sample_table" file="aligned_feature_sample_table.parquet"
+                    ftype="parquet"/>
+        </test>
+    </tests>
+
+    <help>
+        <![CDATA[
+            This is a tool which runs apLCMS alignment of features.
+
+            @GENERAL_HELP@
+        ]]>
+    </help>
+
+    <expand macro="citations"/>
+</tool>
