@@ -8,12 +8,10 @@
 
     <expand macro="requirements"/>
     <command detect_errors="aggressive"><![CDATA[
-        Rscript -e 'source("${run_script}")'
+        Rscript -e 'source("${__tool_directory__}/utils.R")' -e 'source("${run_script}")'
     ]]></command>
     <configfiles>
         <configfile name="run_script"><![CDATA[
-            library(recetox.aplcms)
-
             profile <- proc.cdf(
                 filename = "$file",
                 min.pres = $noise_filtering.min_pres,

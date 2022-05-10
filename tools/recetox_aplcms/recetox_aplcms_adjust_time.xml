@@ -9,7 +9,7 @@
     <expand macro="requirements"/>
     <command detect_errors="aggressive"><![CDATA[
         sh ${symlink_inputs} &&
-        Rscript -e 'source("${run_script}")'
+        Rscript -e 'source("${__tool_directory__}/utils.R")' -e 'source("${run_script}")'
     ]]></command>
     <configfiles>
         <configfile name="symlink_inputs">
@@ -18,8 +18,6 @@
             #end for
         </configfile>
         <configfile name="run_script"><![CDATA[
-            library(recetox.aplcms)
-
             #set filenames_str = str("', '").join([str($f.element_identifier) for $f in $files])
             files_list <- c('$filenames_str')
 
