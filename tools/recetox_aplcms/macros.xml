@@ -11,6 +11,7 @@
 
     <xml name="creator">
         <creator>
+            <yield />  
             <person
                 givenName="Martin"
                 familyName="Čech"
