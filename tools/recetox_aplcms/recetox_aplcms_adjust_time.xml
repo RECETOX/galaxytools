@@ -24,6 +24,7 @@
             files_list <- c('$filenames_str')
 
             extracted_features <- lapply(files_list, arrow::read_parquet)
+            extracted_features <- lapply(extracted_features, as.matrix)
 
             corrected <- adjust.time(
                 features = extracted_features,
