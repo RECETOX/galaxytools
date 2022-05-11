@@ -15,14 +15,14 @@ def read_spectra(filenames: str) -> List[Spectrum]:
 
     Returns:
         List[Spectrum]: Spectra stored in the file.
-    """    
+    """
     spectra = list(chain(*[load_from_msp(file) for file in filenames]))
     return spectra
 
 
 listarg = argparse.ArgumentParser()
-listarg.add_argument('--filenames', nargs='+', type=str) 
-listarg.add_argument('--outfilename', type=str) 
+listarg.add_argument('--filenames', nargs='+', type=str)
+listarg.add_argument('--outfilename', type=str)
 args = listarg.parse_args()
 
 if __name__ == "__main__":
