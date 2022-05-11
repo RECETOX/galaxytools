@@ -6,7 +6,6 @@ categories:
 repositories:
   msp_merge:
     description: "Utility tool to merge  individual `msp` spectra files in a collection into a single file."
-
     include:
       - mergeMSP.xml
       - mergeMSP.py
