@@ -20,27 +20,6 @@ def read_spectra(filenames: str) -> List[Spectrum]:
     return spectra
 
 
-def write_spectra(filenames, outfilename):    
-    """Generates MSP file with the merged spectra.
-
-    Args:
-        filenames   (str): Paths to MSP files from which to load each spectrum.
-        outfilename (str): Path to MSP file with merged spectra.
-    """    
-    spectra = read_spectra(filenames)
-    save_as_msp(spectra, outfilename)
-
-
-def merge_spectra(filenames, outfilename):
-    """Save MSP file containing merged spectra.
-
-    Args:
-        filenames   (str): Paths to MSP files from which to load each spectrum.
-        outfilename (str): Path to MSP file with merged spectra.
-    """    
-    return write_spectra(filenames, outfilename)
-
-
 listarg = argparse.ArgumentParser()
 listarg.add_argument('--filenames', nargs='+', type=str) 
 listarg.add_argument('--outfilename', type=str) 
@@ -49,4 +28,5 @@ outfilename = args.outfilename
 filenames = args.filenames
 
 if __name__ == "__main__":
-    merge_spectra(filenames, outfilename)
+    spectra = read_spectra(filenames)
+    save_as_msp(spectra, outfilename)
