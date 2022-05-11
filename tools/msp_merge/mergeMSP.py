@@ -24,9 +24,7 @@ listarg = argparse.ArgumentParser()
 listarg.add_argument('--filenames', nargs='+', type=str) 
 listarg.add_argument('--outfilename', type=str) 
 args = listarg.parse_args()
-outfilename = args.outfilename
-filenames = args.filenames
 
 if __name__ == "__main__":
-    spectra = read_spectra(filenames)
-    save_as_msp(spectra, outfilename)
+    spectra = read_spectra(args.filenames)
+    save_as_msp(spectra, args.outfilename)
