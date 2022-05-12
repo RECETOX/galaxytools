@@ -46,3 +46,11 @@ as_feature_sample_table <- function(rt_crosstab, int_crosstab) {
   data <- merge(feature_table, data, by = 'feature')
   data
 }
+
+save_data_as_parquet_files <- function(data, subdir) {
+  dir.create(subdir)
+  for (i in 0:(length(data)-1)) {
+    filename <- file.path(subdir, paste0(subdir, "_features_", i, ".parquet"))
+    arrow::write_parquet(as.data.frame(data[i+1]), filename)
+  }
+}
