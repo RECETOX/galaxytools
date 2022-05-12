@@ -61,3 +61,12 @@ save_data_as_parquet_files <- function(data, subdir) {
     arrow::write_parquet(as.data.frame(data[i+1]), filename)
   }
 }
+
+save_aligned_features <- function(aligned, rt_file, int_file, tol_file) {
+  arrow::write_parquet(as.data.frame(aligned$rt_crosstab), rt_file)
+  arrow::write_parquet(as.data.frame(aligned$int_crosstab), int_file)
+
+  mz_tolerance <- c(aligned$mz_tolerance)
+  rt_tolerance <- c(aligned$rt_tolerance)
+  arrow::write_parquet(data.frame(mz_tolerance, rt_tolerance), tol_file)
+}
