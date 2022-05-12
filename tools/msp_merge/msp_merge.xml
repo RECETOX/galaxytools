@@ -1,4 +1,4 @@
-<tool id="mergemsp" name="Merge MSP Spectra" version="0.1.0" python_template_version="3.5">
+<tool id="msp_merge" name="Merge MSP Spectra" version="0.1.0" python_template_version="3.5">
    <creator>
         <person
             givenName="Wudmir"
@@ -21,7 +21,7 @@
     </requirements>
     <command detect_errors="aggressive"><![CDATA[
        #set newinput = str("' '").join([str($f) for $f in $input])
-        python3  $__tool_directory__/mergeMSP.py
+        python3  $__tool_directory__/msp_merge.py
         --filenames    '$newinput'
         --outfilename  '$outfile'
     ]]></command>
@@ -44,6 +44,6 @@
         </test>
     </tests> 
     <help><![CDATA[
-        MergeMSP handles input/output files in MSP format using the matchms.importing and matchms.exporting modules (https://matchms.readthedocs.io/en/latest/index.html).
+        MSPmerge handles input/output files in MSP format using the matchms.importing and matchms.exporting modules (https://matchms.readthedocs.io/en/latest/index.html).
     ]]></help>
 </tool>
