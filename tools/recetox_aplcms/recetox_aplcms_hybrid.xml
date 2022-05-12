@@ -62,7 +62,7 @@
         <expand macro="noise_filtering">
             <param name="min_exp" type="integer" min="1" value="2"
             label="min_exp"
-            help="If a feature is to be included in the final feature table, it must be present in at least this number of spectra." />
+            help="If a feature is to be included in the final feature table, it must be present in at least this number of samples." />
         </expand>
         <expand macro="feature_detection"/>
         <expand macro="peak_alignment"/>
