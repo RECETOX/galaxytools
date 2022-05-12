@@ -35,7 +35,7 @@
                 metadata = '${metadata}',
                 cluster = as.integer(Sys.getenv('GALAXY_SLOTS', unset = 1)),
                 min.within.batch.prop.detect = $multibatch_processing.min_within_batch_prop_detect,
-                min.within.batch.prop.report = $multibatch_processing.min_within_batch_prop_report,
+                min.within.batch.prop.report = $multibatch_processing.min_within_batch_prop_detect,
                 min.batch.prop = $multibatch_processing.min_batch_prop,
                 batch.align.mz.tol = $multibatch_processing.batch_align_mz_tol,
                 batch.align.chr.tol = $multibatch_processing.batch_align_chr_tol,

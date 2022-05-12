@@ -149,10 +149,7 @@
         <section name="multibatch_processing" title="Multibatch processing">
             <param name="min_within_batch_prop_detect" type="float" min="0" max="1" value="0.1"
                    label="minimum_batchwise_prop_detect"
-                   help="The minimum proportion of samples in a batch that must have a given feature. The features that are less abundant than the value won't be extracted." />
-            <param name="min_within_batch_prop_report" type="float" min="0" max="1" value="0.5"
-                   label="minimum_batchwise_prop_report"
-                   help="The minimum proportion of samples in a batch that must have a given feature. The features that are less abundant than the value won't be reported in the final output." />
+                   help="The minimum detection frequency (relative) of a feature for it to be included in the final feature table." />
             <param name="min_batch_prop" type="float" min="0" max="1" value="0.5"
                    label="minimum_batch_prop"
                    help="The minimum proportion of batches that must have a given feature. The features that are less abundant than the value won't be reported." />
