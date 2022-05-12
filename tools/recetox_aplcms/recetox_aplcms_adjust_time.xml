@@ -19,10 +19,7 @@
         </configfile>
         <configfile name="run_script"><![CDATA[
             #set filenames_str = str("', '").join([str($f.element_identifier) for $f in $files])
-            files_list <- sort_samples_by_acquisition_number(c('$filenames_str'))
-
-            extracted_features <- lapply(files_list, arrow::read_parquet)
-            extracted_features <- lapply(extracted_features, as.matrix)
+            extracted_features <- load_features(c('$filenames_str'))
 
             corrected <- adjust.time(
                 features = extracted_features,

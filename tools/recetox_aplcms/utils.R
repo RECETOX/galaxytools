@@ -47,6 +47,13 @@ as_feature_sample_table <- function(rt_crosstab, int_crosstab) {
   data
 }
 
+load_features <- function(files) {
+    files_list <- sort_samples_by_acquisition_number(files)
+    features <- lapply(files_list, arrow::read_parquet)
+    features <- lapply(features, as.matrix)
+    return(features)
+}
+
 save_data_as_parquet_files <- function(data, subdir) {
   dir.create(subdir)
   for (i in 0:(length(data)-1)) {
