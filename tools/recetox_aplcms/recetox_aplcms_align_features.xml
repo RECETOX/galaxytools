@@ -69,7 +69,7 @@
         <test>
             <param name="ms_files" value="mbr_test0.mzml,mbr_test1.mzml,mbr_test2.mzml" ftype="mzml"/>
             <param name="corrected_files" ftype="parquet"
-                   value="corrected/corrected_features_0.parquet,corrected/corrected_features_1.parquet,corrected/corrected_features_2.parquet"/>
+                   value="corrected_expected/corrected_features_0.parquet,corrected_expected/corrected_features_1.parquet,corrected_expected/corrected_features_2.parquet"/>
             <output name="tolerances" file="tolerances.parquet" ftype="parquet"/>
             <output name="rt_cross_table" file="rt_cross_table.parquet" ftype="parquet"/>
             <output name="int_cross_table" file="int_cross_table.parquet" ftype="parquet"/>
