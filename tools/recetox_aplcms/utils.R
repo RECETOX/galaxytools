@@ -70,3 +70,62 @@ save_aligned_features <- function(aligned, rt_file, int_file, tol_file) {
   rt_tolerance <- c(aligned$rt_tolerance)
   arrow::write_parquet(data.frame(mz_tolerance, rt_tolerance), tol_file)
 }
+
+load_aligned_features <- function(rt_file, int_file, tol_file) {
+  rt_cross_table <- arrow::read_parquet(rt_file)
+  int_cross_table <- arrow::read_parquet(int_file)
+  tolerances_table <- arrow::read_parquet(tol_file)
+
+  result <- list()
+  result$mz_tolerance <- tolerances_table$mz_tolerance
+  result$rt_tolerance <- tolerances_table$rt_tolerance
+  result$rt_crosstab <- rt_cross_table
+  result$int_crosstab <- int_cross_table
+  return(result)
+}
+
+recover_signals <- function(cluster,
+                            filenames,
+                            extracted,
+                            corrected,
+                            aligned,
+                            mz_tol,
+                            mz_range,
+                            rt_range,
+                            use_observed_range,
+                            min_bandwidth,
+                            max_bandwidth,
+                            recover_min_count) {
+
+  if (!is(cluster, 'cluster')) {
+    cluster <- parallel::makeCluster(cluster)
+    on.exit(parallel::stopCluster(cluster))
+  }
+
+  recovered <- recover_weaker_signals(
+    cluster = cluster,
+    filenames = filenames,
+    extracted_features = extracted,
+    corrected_features = corrected,
+    aligned_rt_crosstab = aligned$rt_crosstab,
+    aligned_int_crosstab = aligned$int_crosstab,
+    original_mz_tolerance = mz_tol,
+    aligned_mz_tolerance = aligned$mz_tolerance,
+    aligned_rt_tolerance = aligned$rt_tolerance,
+    mz_range = mz_range,
+    rt_range = rt_range,
+    use_observed_range = use_observed_range,
+    min_bandwidth = min_bandwidth,
+    max_bandwidth = max_bandwidth,
+    recover_min_count = recover_min_count
+  )
+  return(recovered)
+}
+
+create_feature_sample_table <- function(features) {
+  table <- as_feature_sample_table(
+      rt_crosstab = features$rt_crosstab,
+      int_crosstab = features$int_crosstab
+  )
+  return(table)
+}

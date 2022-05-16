@@ -9,7 +9,7 @@
     <expand macro="requirements"/>
     <command detect_errors="aggressive"><![CDATA[
         sh ${symlink_inputs} &&
-        Rscript -e 'source("${__tool_directory__}/utils.R")' -e 'source("${run_script}")'
+        Rscript -e 'source("${__tool_directory__}/utils.R")' -e 'source("${__tool_directory__}/main.R")' -e 'source("${run_script}")'
     ]]></command>
     <configfiles>
         <configfile name="symlink_inputs">
@@ -19,39 +19,44 @@
             #for $infile in $extracted_files
                 ln -s '${infile}' '${infile.element_identifier}'
             #end for
-            ln -s '${corrected_file}' '${corrected_file.element_identifier}'
-            ln -s '${aligned_file}' '${aligned_file.element_identifier}'
+            #for $infile in $corrected_files
+                ln -s '${infile}' '${infile.element_identifier}'
+            #end for
+            ln -s '${tolerances_file}' '${tolerances_file.element_identifier}'
+            ln -s '${rt_cross_table_file}' '${rt_cross_table_file.element_identifier}'
+            ln -s '${int_cross_table_file}' '${int_cross_table_file.element_identifier}'
         </configfile>
         <configfile name="run_script"><![CDATA[
-            #set filenames_str = str("', '").join([str($f.element_identifier) for $f in $ms_files])
-            filenames <- c('$filenames_str')
+            #set filenames = str("', '").join([str($f.element_identifier) for $f in $ms_files])
+            filenames <- c('$filenames')
 
-            extracted <-
+            #set extracted_files = str("', '").join([str($f.element_identifier) for $f in $extracted_files])
+            extracted <- load_features(c('$extracted_files'))
 
-            corrected <- arrow::read_parquet("$parquet_file")
+            #set corrected_files = str("', '").join([str($f.element_identifier) for $f in $corrected_files])
+            corrected <- load_features(c('$corrected_files'))
 
-            aligned <-
+            aligned <- load_aligned_features('$rt_cross_table_file', '$int_cross_table_file', '$tolerances_file')
 
-            recovered <- recover_weaker_signals(
-                cluster = cluster,
-                filenames = filenames,
-                extracted_features = extracted,
-                corrected_features = corrected,
-                aligned_rt_crosstab = aligned$rt_crosstab,
-                aligned_int_crosstab = aligned$int_crosstab,
-                original_mz_tolerance = mz_tol,
-                aligned_mz_tolerance = aligned$mz_tolerance,
-                aligned_rt_tolerance = aligned$rt_tolerance,
-                mz_range = recover_mz_range,
-                rt_range = recover_chr_range,
-                use_observed_range = use_observed_range,
-                min_bandwidth = min_bandwidth,
-                max_bandwidth = max_bandwidth,
-                recover_min_count = recover_min_count
+            cluster <- as.integer(Sys.getenv('GALAXY_SLOTS', unset = 1))
+
+            recovered <- recover_signals(filenames,
+                                         extracted,
+                                         corrected,
+                                         aligned,
+                                         $mz_tol,
+                                         $weak_signal_recovery.recover_mz_range,
+                                         $weak_signal_recovery.recover_chr_range,
+                                         $weak_signal_recovery.use_observed_range,
+                                         $min_bandwidth,
+                                         $max_bandwidth,
+                                         $weak_signal_recovery.recover_min_count
             )
 
-            df <- as.data.frame(aligned)
-            arrow::write_parquet(df, "$aligned_feature_sample_table")
+            aligned_feature_sample_table <- create_feature_sample_table(aligned)
+            recovered_feature_sample_table <- create_feature_sample_table(recovered)
+
+            save_all_results(recovered, filenames, '${aligned_feature_sample_table}', '${recovered_feature_sample_table}', '$output_format.out_format')
         ]]></configfile>
     </configfiles>
 
@@ -60,19 +65,22 @@
                help="Mass spectrometry file for peak extraction." />
         <param name="extracted_files" type="data" format="parquet" multiple="true" min="2" label="Input extracted feature samples"
                help="Mass spectrometry files containing feature samples." />
-        <param name="corrected_file" type="data" format="parquet" label="Input corrected feature samples"
+        <param name="corrected_files" type="data" format="parquet" multiple="true" min="2" label="Input corrected feature samples"
                help="Mass spectrometry file containing corrected feature samples." />
-        <param name="aligned_file" type="data" format="parquet" label="Input aligned feature samples"
-               help="Mass spectrometry file containing aligned feature samples." />
-
+        <param name="tolerances_file" type="data" format="parquet" label="Input tolerances" help="TBD"/>
+        <param name="rt_cross_table_file" type="data" format="parquet" label="Input rt cross table" help="TBD"/>
+        <param name="int_cross_table_file" type="data" format="parquet" label="Input int cross table" help="TBD"/>
         <param name="mz_tol" type="float" value="1e-05" label="mz_tol"
                help="The m/z tolerance level for the grouping of data points. This value is expressed as the
                fraction of the m/z value. This value, multiplied by the m/z value, becomes the cutoff level.
                The recommended value is the machine's nominal accuracy level. Divide the ppm value by 1e6.
                For FTMS, 1e-5 is recommended." />
-        <param name="min_exp" type="integer" min="1" value="2" label="min_exp"
-               help="If a feature is to be included in the final feature table, it must be present in at least this number of spectra." />
-        <expand macro="peak_alignment"/>
+        <param name="min_bandwidth" type="float" optional="true" label="min_bandwidth (optional)"
+               help="The minimum bandwidth to use in the kernel smoother." />
+        <param name="max_bandwidth" type="float" optional="true" label="max_bandwidth (optional)"
+               help="The maximum bandwidth to use in the kernel smoother." />
+        <expand macro="weak_signal_recovery"/>
+        <expand macro="output_format"/>
     </inputs>
 
     <outputs>
@@ -80,17 +88,12 @@
     </outputs>
 
     <tests>
-        <test>
-            <param name="ms_files" value="mbr_test0.mzml,mbr_test1.mzml,mbr_test2.mzml" ftype="mzml"/>
-            <param name="parquet_file" ftype="parquet" value="corrected_feature_sample_table.parquet"/>
-            <output name="aligned_feature_sample_table" file="aligned_feature_sample_table.parquet"
-                    ftype="parquet"/>
-        </test>
+
     </tests>
 
     <help>
         <![CDATA[
-            This is a tool which runs apLCMS alignment of features.
+            This is a tool which runs apLCMS recovery of weaker signals.
 
             @GENERAL_HELP@
         ]]>
