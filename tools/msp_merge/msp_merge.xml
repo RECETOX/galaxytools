@@ -26,18 +26,18 @@
         --outfilename  '$outfile'
     ]]></command>
     <inputs>
-        <param name="nfile" type="data" format="msp" multiple="true"/>
+        <param name="input" type="data" format="msp" multiple="true"/>
     </inputs>
     <outputs>
         <data name="outfile" format="msp" />
     </outputs>
     <tests>
          <test>
-            <param name="nfile" value="1-NITROPYRENE.msp,23-DICHLOROPHENOL.msp,24-DICHLOROPHENOL.msp" ftype="msp"/>
+            <param name="input" value="1-NITROPYRENE.msp,23-DICHLOROPHENOL.msp,24-DICHLOROPHENOL.msp" ftype="msp"/>
             <output name="outfile" file="sample_output.msp" ftype="msp" />
         </test>
         <test>
-            <param name="nfile">
+            <param name="input">
               <collection type="list">
                 <element name="elem1" value="1-NITROPYRENE.msp"/>
                 <element name="elem2" value="23-DICHLOROPHENOL.msp"/>
