@@ -84,23 +84,80 @@ load_aligned_features <- function(rt_file, int_file, tol_file) {
   return(result)
 }
 
+recover_weaker_signals <- function(
+  cluster,
+  filenames,
+  extracted_features,
+  corrected_features,
+  aligned_rt_crosstab,
+  aligned_int_crosstab,
+  original_mz_tolerance,
+  aligned_mz_tolerance,
+  aligned_rt_tolerance,
+  mz_range,
+  rt_range,
+  use_observed_range,
+  min_bandwidth,
+  max_bandwidth,
+  recover_min_count
+) {
+  clusterExport(cluster, c('recover.weaker'))
+  clusterEvalQ(cluster, library("splines"))
+
+  recovered <- parLapply(cluster, seq_along(filenames), function(i) {
+    recover.weaker(
+      loc = i,
+      filename = filenames[[i]],
+      this.f1 = extracted_features[[i]],
+      this.f2 = corrected_features[[i]],
+      pk.times = aligned_rt_crosstab,
+      aligned.ftrs = aligned_int_crosstab,
+      orig.tol = original_mz_tolerance,
+      align.mz.tol = aligned_mz_tolerance,
+      align.chr.tol = aligned_rt_tolerance,
+      mz.range = mz_range,
+      chr.range = rt_range,
+      use.observed.range = use_observed_range,
+      bandwidth = 0.5,
+      min.bw = min_bandwidth,
+      max.bw = max_bandwidth,
+      recover.min.count = recover_min_count
+    )
+  })
+
+  feature_table <- aligned_rt_crosstab[, 1:4]
+  rt_crosstab <- cbind(feature_table, sapply(recovered, function(x) x$this.times))
+  int_crosstab <- cbind(feature_table, sapply(recovered, function(x) x$this.ftrs))
+
+  feature_names <- rownames(feature_table)
+  sample_names <- colnames(aligned_rt_crosstab[, -(1:4)])
+
+  list(
+    extracted_features = lapply(recovered, function(x) x$this.f1),
+    corrected_features = lapply(recovered, function(x) x$this.f2),
+    rt_crosstab = as_feature_crosstab(feature_names, sample_names, rt_crosstab),
+    int_crosstab = as_feature_crosstab(feature_names, sample_names, int_crosstab)
+  )
+}
+
 recover_signals <- function(cluster,
                             filenames,
                             extracted,
                             corrected,
                             aligned,
-                            mz_tol,
-                            mz_range,
-                            rt_range,
-                            use_observed_range,
-                            min_bandwidth,
-                            max_bandwidth,
-                            recover_min_count) {
-
+                            mz_tol = 1e-05,
+                            mz_range = NA,
+                            rt_range = NA,
+                            use_observed_range = TRUE,
+                            min_bandwidth = NA,
+                            max_bandwidth = NA,
+                            recover_min_count = 3) {
   if (!is(cluster, 'cluster')) {
     cluster <- parallel::makeCluster(cluster)
     on.exit(parallel::stopCluster(cluster))
   }
+  
+  clusterExport(cluster, c('extracted', 'corrected', 'aligned'))
 
   recovered <- recover_weaker_signals(
     cluster = cluster,

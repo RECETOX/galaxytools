@@ -78,7 +78,9 @@ unsupervised_main <- function(sample_files, aligned_file, recovered_file, out_fo
   sample_files <- sort_samples_by_acquisition_number(sample_files)
 
   res <- unsupervised(filenames = sample_files, ...)
-  save_all_results(res, sample_files, aligned_file, recovered_file, out_format)
+
+  save_all_features(res, sample_files)
+  save_all_feature_tables(res$aligned_feature_sample_table, res$recovered_feature_sample_table, aligned_file, recovered_file, out_format)
 }
 
 hybrid_main <- function(sample_files, known_table_file, updated_known_table_file, pairing_file, aligned_file, recovered_file, out_format, ...) {
@@ -90,13 +92,20 @@ hybrid_main <- function(sample_files, known_table_file, updated_known_table_file
   save_known_table(res$updated_known_table, updated_known_table_file)
   save_pairing(res$features_known_table_pairing, pairing_file)
 
-  save_all_results(res, sample_files, aligned_file, recovered_file, out_format)
+  save_all_features(res, sample_files)
+  save_all_feature_tables(res$aligned_feature_sample_table, res$recovered_feature_sample_table, aligned_file, recovered_file, out_format)
 }
 
-save_all_results <- function(result, sample_files, aligned_file, recovered_file, out_format) {
+save_all_features <- function(result, sample_files) {
   save_all_extracted_features(result$extracted_features, sample_files)
   save_all_corrected_features(result$corrected_features, sample_files)
+}
 
-  save_aligned_feature_table(result$aligned_feature_sample_table, aligned_file)
-  save_recovered_feature_table(result$recovered_feature_sample_table, recovered_file, out_format)
+save_all_feature_tables <- function(aligned_feature_sample_table,
+                                    recovered_feature_sample_table,
+                                    aligned_file,
+                                    recovered_file,
+                                    out_format) {
+  save_aligned_feature_table(aligned_feature_sample_table, aligned_file)
+  save_recovered_feature_table(recovered_feature_sample_table, recovered_file, out_format)
 }
