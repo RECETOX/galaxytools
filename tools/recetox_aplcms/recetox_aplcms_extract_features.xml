@@ -57,15 +57,15 @@
     <tests>
         <test>
             <param name="file" value="mbr_test0.mzml" ftype="mzml"/>
-            <output name="feature_sample_table" file="extracted_features_0.parquet" ftype="parquet"/>
+            <output name="feature_sample_table" file="extracted_expected/extracted_0.parquet" ftype="parquet"/>
         </test>
         <test>
             <param name="file" value="mbr_test1.mzml" ftype="mzml"/>
-            <output name="feature_sample_table" file="extracted_features_1.parquet" ftype="parquet"/>
+            <output name="feature_sample_table" file="extracted_expected/extracted_1.parquet" ftype="parquet"/>
         </test>
         <test>
             <param name="file" value="mbr_test2.mzml" ftype="mzml"/>
-            <output name="feature_sample_table" file="extracted_features_2.parquet" ftype="parquet"/>
+            <output name="feature_sample_table" file="extracted_expected/extracted_2.parquet" ftype="parquet"/>
         </test>
     </tests>
 

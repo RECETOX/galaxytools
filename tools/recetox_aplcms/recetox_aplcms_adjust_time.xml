@@ -59,11 +59,11 @@
     <tests>
         <test>
             <param name="files" ftype="parquet"
-                   value="extracted_expected/extracted_features_0.parquet,extracted_expected/extracted_features_1.parquet,extracted_expected/extracted_features_2.parquet"/>
+                   value="extracted_expected/extracted_0.parquet,extracted_expected/extracted_1.parquet,extracted_expected/extracted_2.parquet"/>
             <output_collection name="corrected_feature_sample_tables" type="list">
-                <element name="corrected_features_0.parquet" file="corrected_expected/corrected_features_0.parquet" ftype="parquet"/>
-                <element name="corrected_features_1.parquet" file="corrected_expected/corrected_features_1.parquet" ftype="parquet"/>
-                <element name="corrected_features_2.parquet" file="corrected_expected/corrected_features_2.parquet" ftype="parquet"/>
+                <element name="corrected_features_0.parquet" file="corrected_expected/corrected_0.parquet" ftype="parquet"/>
+                <element name="corrected_features_1.parquet" file="corrected_expected/corrected_1.parquet" ftype="parquet"/>
+                <element name="corrected_features_2.parquet" file="corrected_expected/corrected_2.parquet" ftype="parquet"/>
             </output_collection>
         </test>
     </tests>
