@@ -20,24 +20,24 @@
          <requirement type="package" version="0.14.0">matchms</requirement>
     </requirements>
     <command detect_errors="aggressive"><![CDATA[
-       #set newinput = str("' '").join([str($f) for $f in $input])
+       #set newinput = str("' '").join([str($f) for $f in $files])
         python3  $__tool_directory__/msp_merge.py
         --filenames    '$newinput'
         --outfilename  '$outfile'
     ]]></command>
     <inputs>
-        <param name="input" type="data" format="msp" multiple="true"/>
+        <param name="files" type="data" format="msp" multiple="true"/>
     </inputs>
     <outputs>
         <data name="outfile" format="msp" />
     </outputs>
     <tests>
          <test>
-            <param name="input" value="1-NITROPYRENE.msp,23-DICHLOROPHENOL.msp,24-DICHLOROPHENOL.msp" ftype="msp"/>
+            <param name="files" value="1-NITROPYRENE.msp,23-DICHLOROPHENOL.msp,24-DICHLOROPHENOL.msp" ftype="msp"/>
             <output name="outfile" file="sample_output.msp" ftype="msp" />
         </test>
         <test>
-            <param name="input">
+            <param name="files">
               <collection type="list">
                 <element name="elem1" value="1-NITROPYRENE.msp"/>
                 <element name="elem2" value="23-DICHLOROPHENOL.msp"/>
