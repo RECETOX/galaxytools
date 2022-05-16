@@ -26,7 +26,7 @@
         --outfilename  '$outfile'
     ]]></command>
     <inputs>
-        <param name="filen" type="data" format="msp" multiple="true"/>
+        <param name="nfile" type="data" format="msp" multiple="true"/>
     </inputs>
     <outputs>
         <data name="outfile" format="msp" />
