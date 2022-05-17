@@ -10,7 +10,7 @@
             url="https://github.com/maximskorik"
             identifier="0000-0003-2056-8018" />
     </expand>
-    
+
     <expand macro="requirements"/>
     <command detect_errors="aggressive"><![CDATA[
         sh ${symlink_inputs} &&
@@ -85,7 +85,7 @@
     <tests>
         <test>
             <param name="known_table" value="known_table.parquet" ftype="parquet"/>
-            <param name="files" value="mbr_test0.mzml,mbr_test1.mzml,mbr_test2.mzml,mbr_test0_copy.mzml" ftype="mzml"/>
+            <param name="files" value="mbr_test0.mzml,mbr_test1.mzml,mbr_test2.mzml,mbr_test4.mzml" ftype="mzml"/>
             <param name="metadata" value="two_step_hybrid_info.csv" ftype="csv"/>
             <param name="moment_power" value="2"/>
             <param name="sd_cut_max" value="100"/>
