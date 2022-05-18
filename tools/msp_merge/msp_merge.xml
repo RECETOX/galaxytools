@@ -36,16 +36,6 @@
             <param name="files" value="1-NITROPYRENE.msp,23-DICHLOROPHENOL.msp,24-DICHLOROPHENOL.msp" ftype="msp"/>
             <output name="outfile" file="sample_output.msp" ftype="msp" />
         </test>
-        <test>
-            <param name="files">
-              <collection type="list">
-                <element name="elem1" value="1-NITROPYRENE.msp"/>
-                <element name="elem2" value="23-DICHLOROPHENOL.msp"/>
-                <element name="elem3" value="24-DICHLOROPHENOL.msp"/>
-              </collection>
-            </param>
-            <output name="outfile" file="sample_output.msp" ftype="msp" />
-        </test>
     </tests> 
     <help><![CDATA[
         MSPmerge handles input/output files in MSP format using the matchms.importing and matchms.exporting modules (https://matchms.readthedocs.io/en/latest/index.html).
