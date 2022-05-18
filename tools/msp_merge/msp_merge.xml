@@ -19,7 +19,7 @@
     <requirements>
          <requirement type="package" version="0.14.0">matchms</requirement>
     </requirements>
-    <command detect_errors="aggressive"><![CDATA[
+    <command detect_errors="exit_code"><![CDATA[
        #set newinput = str("' '").join([str($f) for $f in $files])
         python3  $__tool_directory__/msp_merge.py
         --filenames    '$newinput'
