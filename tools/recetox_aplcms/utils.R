@@ -17,14 +17,14 @@ get_sample_name <- function(filename) {
 }
 
 as_feature_crosstab <- function(feature_names, sample_names, data) {
-  colnames(data) <- c('mz', 'rt', 'mz_min', 'mz_max', sample_names)
+  colnames(data) <- c("mz", "rt", "mz_min", "mz_max", sample_names)
   rownames(data) <- feature_names
   as.data.frame(data)
 }
 
 as_feature_sample_table <- function(rt_crosstab, int_crosstab) {
   feature_names <- rownames(rt_crosstab)
-  sample_names <- colnames(rt_crosstab)[-(1:4)]
+  sample_names <- colnames(rt_crosstab)[- (1:4)]
 
   feature_table <- data.frame(
     feature = feature_names,
@@ -33,17 +33,17 @@ as_feature_sample_table <- function(rt_crosstab, int_crosstab) {
   )
 
   # series of conversions to produce a table type from data.frame
-  rt_crosstab <- as.table(as.matrix(rt_crosstab[, -(1:4)]))
-  int_crosstab <- as.table(as.matrix(int_crosstab[, -(1:4)]))
+  rt_crosstab <- as.table(as.matrix(rt_crosstab[, - (1:4)]))
+  int_crosstab <- as.table(as.matrix(int_crosstab[, - (1:4)]))
 
   crosstab_axes <- list(feature = feature_names, sample = sample_names)
   dimnames(rt_crosstab) <- dimnames(int_crosstab) <- crosstab_axes
 
-  x <- as.data.frame(rt_crosstab, responseName = 'sample_rt')
-  y <- as.data.frame(int_crosstab, responseName = 'sample_intensity')
+  x <- as.data.frame(rt_crosstab, responseName = "sample_rt")
+  y <- as.data.frame(int_crosstab, responseName = "sample_intensity")
 
-  data <- merge(x, y, by = c('feature', 'sample'))
-  data <- merge(feature_table, data, by = 'feature')
+  data <- merge(x, y, by = c("feature", "sample"))
+  data <- merge(feature_table, data, by = "feature")
   data
 }
 
@@ -56,9 +56,9 @@ load_features <- function(files) {
 
 save_data_as_parquet_files <- function(data, subdir) {
   dir.create(subdir)
-  for (i in 0:(length(data)-1)) {
+  for (i in 0:(length(data) - 1)) {
     filename <- file.path(subdir, paste0(subdir, "_features_", i, ".parquet"))
-    arrow::write_parquet(as.data.frame(data[i+1]), filename)
+    arrow::write_parquet(as.data.frame(data[i + 1]), filename)
   }
 }
 
@@ -101,7 +101,7 @@ recover_weaker_signals <- function(
   max_bandwidth,
   recover_min_count
 ) {
-  clusterExport(cluster, c('recover.weaker'))
+  clusterExport(cluster, c("recover.weaker"))
   clusterEvalQ(cluster, library("splines"))
 
   recovered <- parLapply(cluster, seq_along(filenames), function(i) {
@@ -130,7 +130,7 @@ recover_weaker_signals <- function(
   int_crosstab <- cbind(feature_table, sapply(recovered, function(x) x$this.ftrs))
 
   feature_names <- rownames(feature_table)
-  sample_names <- colnames(aligned_rt_crosstab[, -(1:4)])
+  sample_names <- colnames(aligned_rt_crosstab[, - (1:4)])
 
   list(
     extracted_features = lapply(recovered, function(x) x$this.f1),
@@ -152,12 +152,12 @@ recover_signals <- function(cluster,
                             min_bandwidth = NA,
                             max_bandwidth = NA,
                             recover_min_count = 3) {
-  if (!is(cluster, 'cluster')) {
+  if (!is(cluster, "cluster")) {
     cluster <- parallel::makeCluster(cluster)
     on.exit(parallel::stopCluster(cluster))
   }
-  
-  clusterExport(cluster, c('extracted', 'corrected', 'aligned'))
+
+  clusterExport(cluster, c("extracted", "corrected", "aligned"))
 
   recovered <- recover_weaker_signals(
     cluster = cluster,
