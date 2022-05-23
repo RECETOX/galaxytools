@@ -22,9 +22,6 @@
             #for $infile in $corrected_files
                 ln -s '${infile}' '${infile.element_identifier}'
             #end for
-            ln -s '${tolerances_file}' '${tolerances_file.element_identifier}'
-            ln -s '${rt_cross_table_file}' '${rt_cross_table_file.element_identifier}'
-            ln -s '${int_cross_table_file}' '${int_cross_table_file.element_identifier}'
         </configfile>
         <configfile name="run_script"><![CDATA[
             #set filenames = str("', '").join([str($f.element_identifier) for $f in $ms_files])
