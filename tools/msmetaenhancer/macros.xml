@@ -1,5 +1,5 @@
 <macros>
-    <token name="@TOOL_VERSION@">0.2.2</token>
+    <token name="@TOOL_VERSION@">0.2.3</token>
 
     <xml name="creator">
         <creator>
@@ -83,23 +83,33 @@
         <option value="pubchemid inchi PubChem">PubChem: pubchemid -> inchi</option>
         <option value="chebiid chemspiderid BridgeDB">BridgeDB: chebiid -> chemspiderid</option>
         <option value="chebiid hmdbid BridgeDB">BridgeDB: chebiid -> hmdbid</option>
+        <option value="chebiid keggid BridgeDB">BridgeDB: chebiid -> keggid</option>
         <option value="chebiid pubchemid BridgeDB">BridgeDB: chebiid -> pubchemid</option>
         <option value="chebiid wikidataid BridgeDB">BridgeDB: chebiid -> wikidataid</option>
         <option value="chemspiderid chebiid BridgeDB">BridgeDB: chemspiderid -> chebiid</option>
         <option value="chemspiderid hmdbid BridgeDB">BridgeDB: chemspiderid -> hmdbid</option>
+        <option value="chemspiderid keggid BridgeDB">BridgeDB: chemspiderid -> keggid</option>
         <option value="chemspiderid pubchemid BridgeDB">BridgeDB: chemspiderid -> pubchemid</option>
         <option value="chemspiderid wikidataid BridgeDB">BridgeDB: chemspiderid -> wikidataid</option>
         <option value="hmdbid chebiid BridgeDB">BridgeDB: hmdbid -> chebiid</option>
         <option value="hmdbid chemspiderid BridgeDB">BridgeDB: hmdbid -> chemspiderid</option>
+        <option value="hmdbid keggid BridgeDB">BridgeDB: hmdbid -> keggid</option>
         <option value="hmdbid pubchemid BridgeDB">BridgeDB: hmdbid -> pubchemid</option>
         <option value="hmdbid wikidataid BridgeDB">BridgeDB: hmdbid -> wikidataid</option>
+        <option value="keggid chebiid BridgeDB">BridgeDB: keggid -> chebiid</option>
+        <option value="keggid chemspiderid BridgeDB">BridgeDB: keggid -> chemspiderid</option>
+        <option value="keggid hmdbid BridgeDB">BridgeDB: keggid -> hmdbid</option>
+        <option value="keggid pubchemid BridgeDB">BridgeDB: keggid -> pubchemid</option>
+        <option value="keggid wikidataid BridgeDB">BridgeDB: keggid -> wikidataid</option>
         <option value="pubchemid chebiid BridgeDB">BridgeDB: pubchemid -> chebiid</option>
         <option value="pubchemid chemspiderid BridgeDB">BridgeDB: pubchemid -> chemspiderid</option>
         <option value="pubchemid hmdbid BridgeDB">BridgeDB: pubchemid -> hmdbid</option>
+        <option value="pubchemid keggid BridgeDB">BridgeDB: pubchemid -> keggid</option>
         <option value="pubchemid wikidataid BridgeDB">BridgeDB: pubchemid -> wikidataid</option>
         <option value="wikidataid chebiid BridgeDB">BridgeDB: wikidataid -> chebiid</option>
         <option value="wikidataid chemspiderid BridgeDB">BridgeDB: wikidataid -> chemspiderid</option>
         <option value="wikidataid hmdbid BridgeDB">BridgeDB: wikidataid -> hmdbid</option>
+        <option value="wikidataid keggid BridgeDB">BridgeDB: wikidataid -> keggid</option>
         <option value="wikidataid pubchemid BridgeDB">BridgeDB: wikidataid -> pubchemid</option>
     </xml>
 
