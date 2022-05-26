@@ -18,3 +18,10 @@ repositories:
       - main.R
       - test-data
       - macros.xml
+  recetox_aplcms_two_step_hybrid:
+    description: "Generate a feature table from LC/MS spectra of multibatch experiment using apLCMS's Two-Step Hybrid method."
+    include:
+      - recetox_aplcms_two_step_hybrid.xml
+      - main.R
+      - test-data
+      - macros.xml

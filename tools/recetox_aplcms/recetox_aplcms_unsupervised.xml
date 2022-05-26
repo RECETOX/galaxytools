@@ -53,7 +53,11 @@
     </configfiles>
 
     <expand macro="inputs">
-        <expand macro="noise_filtering"/>
+        <expand macro="noise_filtering">
+            <param name="min_exp" type="integer" min="1" value="2"
+            label="min_exp"
+            help="If a feature is to be included in the final feature table, it must be present in at least this number of samples." />
+        </expand>
         <expand macro="feature_detection"/>
         <expand macro="peak_alignment"/>
         <expand macro="weak_signal_recovery"/>
@@ -61,7 +65,14 @@
     </expand>
 
     <outputs>
-        <expand macro="unsupervised_outputs"/>
+        <expand macro="unsupervised_outputs">
+            <collection  name="extracted_features" type="list" label="${tool.name} extracted_features on ${on_string}">
+                <discover_datasets pattern="__designation__" directory="extracted" format="parquet" />
+            </collection >
+            <collection  name="corrected_features" type="list" label="${tool.name} corrected_features on ${on_string}">
+                <discover_datasets pattern="__designation__" directory="corrected" format="parquet" />
+            </collection >
+        </expand>
     </outputs>
 
     <tests>
