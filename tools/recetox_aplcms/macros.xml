@@ -4,7 +4,7 @@
         <requirements>
             <requirement type="package" version="4.1.0">r-base</requirement>
             <requirement type="package" version="4.0.1">r-arrow</requirement>
-            <requirement type="package" version="0.9.3">r-recetox-aplcms</requirement>
+            <requirement type="package" version="@TOOL_VERSION@">r-recetox-aplcms</requirement>
             <requirement type="package" version="1.0.7">r-dplyr</requirement>
         </requirements>
     </xml>
