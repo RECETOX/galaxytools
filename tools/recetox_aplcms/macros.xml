@@ -11,6 +11,7 @@
 
     <xml name="creator">
         <creator>
+            <yield />  
             <person
                 givenName="Maksym"
                 familyName="Skoryk"
@@ -59,9 +60,7 @@
 
     <xml name="noise_filtering">
         <section name="noise_filtering" title="Noise filtering and peak detection">
-            <param name="min_exp" type="integer" min="1" value="2"
-                   label="min_exp"
-                   help="If a feature is to be included in the final feature table, it must be present in at least this number of spectra." />
+            <yield />
             <param name="min_pres" type="float" value="0.5"
                    label="min_pres"
                    help="The minimum proportion of presence in the time period for a series of signals grouped by m/z to be considered a peak." />
@@ -156,6 +155,22 @@
                    help="The minimum number of raw data points to be considered as a true feature." />
         </section>
     </xml>
+    <xml name="multibatch_processing">
+        <section name="multibatch_processing" title="Multibatch processing">
+            <param name="min_within_batch_prop_detect" type="float" min="0" max="1" value="0.1"
+                   label="minimum_batchwise_prop_detect"
+                   help="The minimum detection frequency (relative) of a feature for it to be included in the final feature table." />
+            <param name="min_batch_prop" type="float" min="0" max="1" value="0.5"
+                   label="minimum_batch_prop"
+                   help="The minimum proportion of batches that must have a given feature. The features that are less abundant than the value won't be reported." />
+            <param name="batch_align_mz_tol" type="float" min="0" value="0.00001"
+                   label="batch_align_mz_tol"
+                   help="The m/z tolerance level for peak alignment within batch." />
+            <param name="batch_align_chr_tol" type="float" min="0" value="50.0"
+                   label="batch_align_chr_tol"
+                   help="The retention time tolerance level for peak alignment within batch." />
+        </section>
+    </xml>
     <xml name="output_format">
        <section name="output_format" title="Output Format">
               <param name="out_format" type="boolean" checked="false" truevalue="recetox" falsevalue="original" label="Use custom RECETOX output format?" />
@@ -165,12 +180,8 @@
     <xml name="unsupervised_outputs">
         <data name="recovered_feature_sample_table" format="parquet" label="${tool.name} recovered_feature_sample_table on ${on_string}" />
         <data name="aligned_feature_sample_table" format="parquet" label="${tool.name} aligned_feature_sample_table on ${on_string}" hidden="true" />
-        <collection  name="corrected_features" type="list" label="${tool.name} corrected_features on ${on_string}">
-            <discover_datasets pattern="__designation__" directory="corrected" format="parquet" />
-        </collection >
-        <collection  name="extracted_features" type="list" label="${tool.name} extracted_features on ${on_string}">
-            <discover_datasets pattern="__designation__" directory="extracted" format="parquet" />
-        </collection >
+        <data name="updated_known_table" format="parquet" label="${tool.name} updated_known_table on ${on_string}"/>
+        <yield />
     </xml>
 
     <xml name="citations">
@@ -179,6 +190,7 @@
             <citation type="doi">10.1186/1471-2105-11-559</citation>
             <citation type="doi">10.1021/pr301053d</citation>
             <citation type="doi">10.1093/bioinformatics/btu430</citation>
+            <yield />
         </citations>
     </xml>
 
@@ -199,6 +211,20 @@
         <![CDATA[
             This is the Unsupervised version of apLCMS which is not relying on any existing knowledge about metabolites or
             any historically detected features. For such functionality please use the Hybrid version of apLCMS.
+
+            @GENERAL_HELP@
+        ]]>
+    </token>
+
+    <token name="@HELP_two-step-hybrid@">
+        <![CDATA[
+              This is the **Two-Step Hybrid** version of **apLCMS**. This tool is improved upon the Hybrid version by accounting for the batch
+              effects in multi-batch experiments. As in the Hybrid version, this tool incorporates the knowledge of known metabolites and
+              historically detected features on the same machinery to help detect and quantify lower-intensity peaks.
+
+              **CAUTION**: To use such knowledge, especially historical data, you must keep using (1) the same chromatography
+              system (otherwise the retention time will not match), and (2) the same type of samples with similar extraction
+              technique, such as human serum.
 
             @GENERAL_HELP@
         ]]>
