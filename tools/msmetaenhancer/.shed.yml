@@ -11,4 +11,3 @@ repositories:
       - msmetaenhancer_wrapper.py
       - test-data
       - macros.xml
-      - macros_split.xml
