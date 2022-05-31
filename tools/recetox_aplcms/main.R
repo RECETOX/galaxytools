@@ -27,7 +27,7 @@ rcx_aplcms_to_rcx_xmsannotator <- function(peak_table) {
     col_base <- c("feature", "mz", "rt")
     output_table <- peak_table %>% distinct(across(any_of(col_base)))
 
-    for (level in levels(peak_table$sample)) {
+    for (level in levels(factor(peak_table$sample))) {
         subdata <- peak_table %>%
             filter(sample == level) %>%
             select(any_of(c(col_base, "sample_intensity"))) %>%
@@ -108,4 +108,16 @@ save_all_feature_tables <- function(aligned_feature_sample_table,
                                     out_format) {
   save_aligned_feature_table(aligned_feature_sample_table, aligned_file)
   save_recovered_feature_table(recovered_feature_sample_table, recovered_file, out_format)
+}
+
+two_step_hybrid_main <- function(sample_files, known_table_file, updated_known_table_file, recovered_file, aligned_file, out_format, metadata, ...) {
+  sample_files <- sort_samples_by_acquisition_number(sample_files)
+  metadata <- read.table(metadata, sep = ",", header = TRUE)
+
+  known_table <- read_known_table(known_table_file)
+  res <- two.step.hybrid(filenames = sample_files, known.table = known_table, work_dir = getwd(), metadata = metadata, ...)
+
+  save_known_table(res$known_table, updated_known_table_file)
+  save_aligned_feature_table(res$aligned_features, aligned_file)
+  save_recovered_feature_table(res$final_features, recovered_file, out_format)
 }
