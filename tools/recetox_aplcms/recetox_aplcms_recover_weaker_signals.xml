@@ -95,9 +95,9 @@
                    value="extracted_expected/extracted_0.parquet,extracted_expected/extracted_1.parquet,extracted_expected/extracted_2.parquet"/>
             <param name="corrected_files" ftype="parquet"
                    value="corrected_expected/corrected_0.parquet,corrected_expected/corrected_1.parquet,corrected_expected/corrected_2.parquet"/>
-            <param name="tolerances" file="tolerances.parquet" ftype="parquet"/>
-            <param name="rt_cross_table" file="rt_cross_table.parquet" ftype="parquet"/>
-            <param name="int_cross_table" file="int_cross_table.parquet" ftype="parquet"/>
+            <param name="tolerances" value="tolerances.parquet" ftype="parquet"/>
+            <param name="rt_cross_table" value="rt_cross_table.parquet" ftype="parquet"/>
+            <param name="int_cross_table" value="int_cross_table.parquet" ftype="parquet"/>
 
             <output name="recovered_feature_sample_table" ftype="parquet"
                     file="unsupervised_output/unsupervised_recovered_feature_sample_table.parquet"/>
