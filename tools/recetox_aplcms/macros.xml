@@ -1,4 +1,4 @@
-<xml>
+<macros>
     <token name="@TOOL_VERSION@">0.9.4</token>
     <xml name="requirements">
         <requirements>
