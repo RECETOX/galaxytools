@@ -79,7 +79,9 @@
     </expand>
 
     <outputs>
-        <expand macro="unsupervised_outputs"/>
+        <expand macro="unsupervised_outputs">
+            <data name="updated_known_table" format="parquet" label="${tool.name} updated_known_table on ${on_string}"/>
+        </expand>
     </outputs>
 
     <tests>
