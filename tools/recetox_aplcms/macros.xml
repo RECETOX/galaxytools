@@ -11,7 +11,6 @@
 
     <xml name="creator">
         <creator>
-            <yield />  
             <person
                 givenName="Maksym"
                 familyName="Skoryk"
@@ -180,7 +179,6 @@
     <xml name="unsupervised_outputs">
         <data name="recovered_feature_sample_table" format="parquet" label="${tool.name} recovered_feature_sample_table on ${on_string}" />
         <data name="aligned_feature_sample_table" format="parquet" label="${tool.name} aligned_feature_sample_table on ${on_string}" hidden="true" />
-        <data name="updated_known_table" format="parquet" label="${tool.name} updated_known_table on ${on_string}"/>
         <yield />
     </xml>
 

@@ -3,13 +3,7 @@
     <macros>
         <import>macros.xml</import>
     </macros>
-    <expand macro="creator">
-        <person
-            givenName="Maksym"
-            familyName="Skoryk"
-            url="https://github.com/maximskorik"
-            identifier="0000-0003-2056-8018" />
-    </expand>
+    <expand macro="creator"/>
 
     <expand macro="requirements"/>
     <command detect_errors="aggressive"><![CDATA[
@@ -79,7 +73,9 @@
     </expand>
 
     <outputs>
-        <expand macro="unsupervised_outputs"/>
+        <expand macro="unsupervised_outputs">
+            <data name="updated_known_table" format="parquet" label="${tool.name} updated_known_table on ${on_string}"/>
+        </expand>
     </outputs>
 
     <tests>
