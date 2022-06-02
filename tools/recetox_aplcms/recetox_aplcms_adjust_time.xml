@@ -1,5 +1,5 @@
 <tool id="recetox_aplcms_adjust_time" name="RECETOX apLCMS - adjust time" version="@TOOL_VERSION@+galaxy0">
-    <description>extract features from LC/MS spectra</description>
+    <description>corrects the retention time of features from LC/MS spectra</description>
     <macros>
         <import>macros.xml</import>
         <import>macros_split.xml</import>
@@ -40,7 +40,7 @@
 
     <inputs>
         <param name="files" type="data" format="parquet" multiple="true" min="2" label="Input data"
-               help="Mass spectrometry files containing feature samples." />
+               help="Mass spectrometry sample-wise feature tables." />
         <param name="mz_tol" type="float" value="1e-05" label="mz_tol"
                help="The m/z tolerance level for the grouping of data points. This value is expressed as the
                fraction of the m/z value. This value, multiplied by the m/z value, becomes the cutoff level.
@@ -50,8 +50,8 @@
     </inputs>
 
     <outputs>
-        <collection name="corrected_feature_sample_tables" type="list"
-                    label="${tool.name} corrected_feature_sample_tables on ${on_string}">
+        <collection name="corrected_feature_tables" type="list"
+                    label="${tool.name} corrected_feature_tables on ${on_string}">
             <discover_datasets pattern="__designation__" directory="corrected" format="parquet" />
         </collection>
     </outputs>
@@ -60,7 +60,7 @@
         <test>
             <param name="files" ftype="parquet"
                    value="extracted_expected/extracted_0.parquet,extracted_expected/extracted_1.parquet,extracted_expected/extracted_2.parquet"/>
-            <output_collection name="corrected_feature_sample_tables" type="list">
+            <output_collection name="corrected_feature_tables" type="list">
                 <element name="corrected_features_0.parquet" file="corrected_expected/corrected_0.parquet" ftype="parquet"/>
                 <element name="corrected_features_1.parquet" file="corrected_expected/corrected_1.parquet" ftype="parquet"/>
                 <element name="corrected_features_2.parquet" file="corrected_expected/corrected_2.parquet" ftype="parquet"/>
@@ -70,7 +70,7 @@
 
     <help>
         <![CDATA[
-            This is a tool which runs apLCMS adjustment of time.
+            This is a tool which runs apLCMS adjustment of retention times.
 
             @GENERAL_HELP@
         ]]>
