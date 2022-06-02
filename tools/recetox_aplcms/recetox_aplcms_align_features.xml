@@ -49,11 +49,7 @@
         <param name="corrected_files" type="data" format="parquet"  multiple="true" min="2"
                label="Input corrected feature samples"
                help="Mass spectrometry files containing corrected feature samples." />
-        <param name="mz_tol" type="float" value="1e-05" label="mz_tol"
-               help="The m/z tolerance level for the grouping of data points. This value is expressed as the
-               fraction of the m/z value. This value, multiplied by the m/z value, becomes the cutoff level.
-               The recommended value is the machine's nominal accuracy level. Divide the ppm value by 1e6.
-               For FTMS, 1e-5 is recommended." />
+        <expand macro="mz_tol_macro"/>
         <param name="min_exp" type="integer" min="1" value="2" label="min_exp"
                help="If a feature is to be included in the final feature table, it must be present in at least this number of spectra." />
         <expand macro="peak_alignment"/>

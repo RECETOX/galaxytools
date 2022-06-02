@@ -41,11 +41,7 @@
     <inputs>
         <param name="files" type="data" format="parquet" multiple="true" min="2" label="Input data"
                help="Mass spectrometry sample-wise feature tables." />
-        <param name="mz_tol" type="float" value="1e-05" label="mz_tol"
-               help="The m/z tolerance level for the grouping of data points. This value is expressed as the
-               fraction of the m/z value. This value, multiplied by the m/z value, becomes the cutoff level.
-               The recommended value is the machine's nominal accuracy level. Divide the ppm value by 1e6.
-               For FTMS, 1e-5 is recommended." />
+        <expand macro="mz_tol_macro"/>
         <expand macro="peak_alignment"/>
     </inputs>
 

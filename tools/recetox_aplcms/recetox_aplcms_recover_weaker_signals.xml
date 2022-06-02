@@ -71,11 +71,7 @@
         <param name="tolerances_file" type="data" format="parquet" label="Input tolerances" help="TBD"/>
         <param name="rt_cross_table_file" type="data" format="parquet" label="Input rt cross table" help="TBD"/>
         <param name="int_cross_table_file" type="data" format="parquet" label="Input int cross table" help="TBD"/>
-        <param name="mz_tol" type="float" value="1e-05" label="mz_tol"
-               help="The m/z tolerance level for the grouping of data points. This value is expressed as the
-               fraction of the m/z value. This value, multiplied by the m/z value, becomes the cutoff level.
-               The recommended value is the machine's nominal accuracy level. Divide the ppm value by 1e6.
-               For FTMS, 1e-5 is recommended." />
+        <expand macro="mz_tol_macro"/>
         <param name="min_bandwidth" type="float" optional="true" label="min_bandwidth (optional)"
                help="The minimum bandwidth to use in the kernel smoother." />
         <param name="max_bandwidth" type="float" optional="true" label="max_bandwidth (optional)"

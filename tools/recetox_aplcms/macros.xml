@@ -1,4 +1,4 @@
-<macros>
+<xml>
     <token name="@TOOL_VERSION@">0.9.4</token>
     <xml name="requirements">
         <requirements>
@@ -170,6 +170,15 @@
                    help="The retention time tolerance level for peak alignment within batch." />
         </section>
     </xml>
+
+    <xml name="mz_tol_macro">
+        <param name="mz_tol" type="float" value="1e-05" label="mz_tol"
+               help="The m/z tolerance level for the grouping of data points. This value is expressed as the
+               fraction of the m/z value. This value, multiplied by the m/z value, becomes the cutoff level.
+               The recommended value is the machine's nominal accuracy level. Divide the ppm value by 1e6.
+               For FTMS, 1e-5 is recommended." />
+    </xml>
+
     <xml name="output_format">
        <section name="output_format" title="Output Format">
               <param name="out_format" type="boolean" checked="false" truevalue="recetox" falsevalue="original" label="Use custom RECETOX output format?" />
