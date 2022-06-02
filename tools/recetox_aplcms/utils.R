@@ -84,26 +84,6 @@ load_aligned_features <- function(rt_file, int_file, tol_file) {
   return(result)
 }
 
-recover_weaker_signals <- function(
-  cluster,
-  filenames,
-  extracted_features,
-  corrected_features,
-  aligned_rt_crosstab,
-  aligned_int_crosstab,
-  original_mz_tolerance,
-  aligned_mz_tolerance,
-  aligned_rt_tolerance,
-  mz_range,
-  rt_range,
-  use_observed_range,
-  min_bandwidth,
-  max_bandwidth,
-  recover_min_count
-) {
-  
-}
-
 recover_signals <- function(cluster,
                             filenames,
                             extracted,
