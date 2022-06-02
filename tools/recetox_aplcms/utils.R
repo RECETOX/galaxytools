@@ -4,7 +4,7 @@ align_features <- function(sample_names, ...) {
     aligned <- feature.align(...)
     feature_names <- seq_len(nrow(aligned$pk.times))
 
-list(
+  list(
     mz_tolerance = as.numeric(aligned$mz.tol),
     rt_tolerance = as.numeric(aligned$chr.tol),
     rt_crosstab = as_feature_crosstab(feature_names, sample_names, aligned$pk.times),
@@ -101,43 +101,7 @@ recover_weaker_signals <- function(
   max_bandwidth,
   recover_min_count
 ) {
-  clusterExport(cluster, c("recover.weaker"))
-  clusterEvalQ(cluster, library("splines"))
-
-  recovered <- parLapply(cluster, seq_along(filenames), function(i) {
-    recover.weaker(
-      loc = i,
-      filename = filenames[[i]],
-      this.f1 = extracted_features[[i]],
-      this.f2 = corrected_features[[i]],
-      pk.times = aligned_rt_crosstab,
-      aligned.ftrs = aligned_int_crosstab,
-      orig.tol = original_mz_tolerance,
-      align.mz.tol = aligned_mz_tolerance,
-      align.chr.tol = aligned_rt_tolerance,
-      mz.range = mz_range,
-      chr.range = rt_range,
-      use.observed.range = use_observed_range,
-      bandwidth = 0.5,
-      min.bw = min_bandwidth,
-      max.bw = max_bandwidth,
-      recover.min.count = recover_min_count
-    )
-  })
-
-  feature_table <- aligned_rt_crosstab[, 1:4]
-  rt_crosstab <- cbind(feature_table, sapply(recovered, function(x) x$this.times))
-  int_crosstab <- cbind(feature_table, sapply(recovered, function(x) x$this.ftrs))
-
-  feature_names <- rownames(feature_table)
-  sample_names <- colnames(aligned_rt_crosstab[, - (1:4)])
-
-  list(
-    extracted_features = lapply(recovered, function(x) x$this.f1),
-    corrected_features = lapply(recovered, function(x) x$this.f2),
-    rt_crosstab = as_feature_crosstab(feature_names, sample_names, rt_crosstab),
-    int_crosstab = as_feature_crosstab(feature_names, sample_names, int_crosstab)
-  )
+  
 }
 
 recover_signals <- function(cluster,
@@ -157,26 +121,43 @@ recover_signals <- function(cluster,
     on.exit(parallel::stopCluster(cluster))
   }
 
-  clusterExport(cluster, c("extracted", "corrected", "aligned"))
+  clusterExport(cluster, c("extracted", "corrected", "aligned", "recover.weaker"))
+  clusterEvalQ(cluster, library("splines"))
 
-  recovered <- recover_weaker_signals(
-    cluster = cluster,
-    filenames = filenames,
-    extracted_features = extracted,
-    corrected_features = corrected,
-    aligned_rt_crosstab = aligned$rt_crosstab,
-    aligned_int_crosstab = aligned$int_crosstab,
-    original_mz_tolerance = mz_tol,
-    aligned_mz_tolerance = aligned$mz_tolerance,
-    aligned_rt_tolerance = aligned$rt_tolerance,
-    mz_range = mz_range,
-    rt_range = rt_range,
-    use_observed_range = use_observed_range,
-    min_bandwidth = min_bandwidth,
-    max_bandwidth = max_bandwidth,
-    recover_min_count = recover_min_count
+  recovered <- parLapply(cluster, seq_along(filenames), function(i) {
+    recover.weaker(
+      loc = i,
+      filename = filenames[[i]],
+      this.f1 = extracted[[i]],
+      this.f2 = corrected[[i]],
+      pk.times = aligned$rt_crosstab,
+      aligned.ftrs = aligned$int_crosstab,
+      orig.tol = mz_tol,
+      align.mz.tol = aligned$mz_tolerance,
+      align.chr.tol = aligned$rt_tolerance,
+      mz.range = mz_range,
+      chr.range = rt_range,
+      use.observed.range = use_observed_range,
+      bandwidth = 0.5,
+      min.bw = min_bandwidth,
+      max.bw = max_bandwidth,
+      recover.min.count = recover_min_count
+    )
+  })
+
+  feature_table <- aligned$rt_crosstab[, 1:4]
+  rt_crosstab <- cbind(feature_table, sapply(recovered, function(x) x$this.times))
+  int_crosstab <- cbind(feature_table, sapply(recovered, function(x) x$this.ftrs))
+
+  feature_names <- rownames(feature_table)
+  sample_names <- colnames(aligned$rt_crosstab[, - (1:4)])
+
+  list(
+    extracted_features = lapply(recovered, function(x) x$this.f1),
+    corrected_features = lapply(recovered, function(x) x$this.f2),
+    rt_crosstab = as_feature_crosstab(feature_names, sample_names, rt_crosstab),
+    int_crosstab = as_feature_crosstab(feature_names, sample_names, int_crosstab)
   )
-  return(recovered)
 }
 
 create_feature_sample_table <- function(features) {

@@ -85,19 +85,26 @@
     </inputs>
 
     <outputs>
-        <expand macro="unsupervised_outputs"/>
+        <expand macro="unsupervised_outputs">
+            <collection  name="extracted_features" type="list" label="${tool.name} extracted_features on ${on_string}">
+                <discover_datasets pattern="__designation__" directory="extracted" format="parquet" />
+            </collection >
+            <collection  name="corrected_features" type="list" label="${tool.name} corrected_features on ${on_string}">
+                <discover_datasets pattern="__designation__" directory="corrected" format="parquet" />
+            </collection >
+        </expand>
     </outputs>
 
     <tests>
         <test>
-            <param name="ms_files" value="mbr_test0.mzml,mbr_test1.mzml,mbr_test2.mzml" ftype="mzml"/>
+            <param name="ms_files" value="mbr_test2.mzml,mbr_test1.mzml,mbr_test0.mzml" ftype="mzml"/>
             <param name="extracted_files" ftype="parquet"
-                   value="extracted_expected/extracted_0.parquet,extracted_expected/extracted_1.parquet,extracted_expected/extracted_2.parquet"/>
+                   value="extracted_expected/extracted_2.parquet,extracted_expected/extracted_1.parquet,extracted_expected/extracted_0.parquet"/>
             <param name="corrected_files" ftype="parquet"
-                   value="corrected_expected/corrected_0.parquet,corrected_expected/corrected_1.parquet,corrected_expected/corrected_2.parquet"/>
-            <param name="tolerances" value="tolerances.parquet" ftype="parquet"/>
-            <param name="rt_cross_table" value="rt_cross_table.parquet" ftype="parquet"/>
-            <param name="int_cross_table" value="int_cross_table.parquet" ftype="parquet"/>
+                   value="corrected_expected/corrected_2.parquet,corrected_expected/corrected_1.parquet,corrected_expected/corrected_0.parquet"/>
+            <param name="tolerances_file" value="tolerances.parquet" ftype="parquet"/>
+            <param name="rt_cross_table_file" value="rt_cross_table.parquet" ftype="parquet"/>
+            <param name="int_cross_table_file" value="int_cross_table.parquet" ftype="parquet"/>
 
             <output name="recovered_feature_sample_table" ftype="parquet"
                     file="unsupervised_output/unsupervised_recovered_feature_sample_table.parquet"/>
