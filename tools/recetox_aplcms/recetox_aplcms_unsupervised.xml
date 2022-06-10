@@ -78,7 +78,7 @@
     <tests>
         <test>
             <param name="files" value="mbr_test0.mzml,mbr_test1.mzml,mbr_test2.mzml" ftype="mzml"/>
-            <output name="recovered_feature_sample_table" file="unsupervised_recovered_feature_sample_table.parquet"
+            <output name="recovered_feature_sample_table" file="unsupervised_output/unsupervised_recovered_feature_sample_table.parquet"
                     ftype="parquet"/>
         </test>
         <test>
@@ -86,7 +86,7 @@
             <section name="output_format">
                 <param name="out_format" value="recetox"/>
             </section>
-            <output name="recovered_feature_sample_table" file="unsupervised.recetox.parquet" ftype="parquet"/>
+            <output name="recovered_feature_sample_table" file="unsupervised_output/unsupervised.recetox.parquet" ftype="parquet"/>
         </test>
     </tests>
 

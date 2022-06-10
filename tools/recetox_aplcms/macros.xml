@@ -4,14 +4,23 @@
         <requirements>
             <requirement type="package" version="4.1.0">r-base</requirement>
             <requirement type="package" version="4.0.1">r-arrow</requirement>
-            <requirement type="package" version="0.9.4">r-recetox-aplcms</requirement>
+            <requirement type="package" version="@TOOL_VERSION@">r-recetox-aplcms</requirement>
             <requirement type="package" version="1.0.7">r-dplyr</requirement>
         </requirements>
     </xml>
 
     <xml name="creator">
         <creator>
-            <yield />  
+            <person
+                givenName="Maksym"
+                familyName="Skoryk"
+                url="https://github.com/maximskorik"
+                identifier="0000-0003-2056-8018" />
+            <person
+                givenName="Matej"
+                familyName="Troják"
+                url="https://github.com/xtrojak"
+                identifier="0000-0003-0841-2707" />
             <person
                 givenName="Martin"
                 familyName="Čech"
@@ -161,6 +170,15 @@
                    help="The retention time tolerance level for peak alignment within batch." />
         </section>
     </xml>
+
+    <xml name="mz_tol_macro">
+        <param name="mz_tol" type="float" value="1e-05" label="mz_tol"
+               help="The m/z tolerance level for the grouping of data points. This value is expressed as the
+               fraction of the m/z value. This value, multiplied by the m/z value, becomes the cutoff level.
+               The recommended value is the machine's nominal accuracy level. Divide the ppm value by 1e6.
+               For FTMS, 1e-5 is recommended." />
+    </xml>
+
     <xml name="output_format">
        <section name="output_format" title="Output Format">
               <param name="out_format" type="boolean" checked="false" truevalue="recetox" falsevalue="original" label="Use custom RECETOX output format?" />
@@ -170,7 +188,6 @@
     <xml name="unsupervised_outputs">
         <data name="recovered_feature_sample_table" format="parquet" label="${tool.name} recovered_feature_sample_table on ${on_string}" />
         <data name="aligned_feature_sample_table" format="parquet" label="${tool.name} aligned_feature_sample_table on ${on_string}" hidden="true" />
-        <data name="updated_known_table" format="parquet" label="${tool.name} updated_known_table on ${on_string}"/>
         <yield />
     </xml>
 

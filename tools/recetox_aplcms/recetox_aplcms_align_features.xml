@@ -1,0 +1,84 @@
+<tool id="recetox_aplcms_align_features" name="RECETOX apLCMS - align features" version="@TOOL_VERSION@+galaxy0">
+    <description>align features from LC/MS spectra across samples</description>
+    <macros>
+        <import>macros.xml</import>
+        <import>macros_split.xml</import>
+    </macros>
+    <expand macro="creator"/>
+
+    <expand macro="requirements"/>
+    <command detect_errors="aggressive"><![CDATA[
+        sh ${symlink_inputs} &&
+        Rscript -e 'source("${__tool_directory__}/utils.R")' -e 'source("${run_script}")'
+    ]]></command>
+    <configfiles>
+        <configfile name="symlink_inputs">
+            #for $infile in $ms_files
+                ln -s '${infile}' '${infile.element_identifier}'
+            #end for
+             #for $infile in $corrected_files
+                ln -s '${infile}' '${infile.element_identifier}'
+            #end for
+        </configfile>
+        <configfile name="run_script"><![CDATA[
+            #set filenames_str = str("', '").join([str($f.element_identifier) for $f in $ms_files])
+            files_list <- sort_samples_by_acquisition_number(c('$filenames_str'))
+            sample_names <- get_sample_name(files_list)
+
+            #set corrected_files = str("', '").join([str($f.element_identifier) for $f in $corrected_files])
+            corrected_features <- load_features(c('$corrected_files'))
+
+            aligned <- align_features(
+                sample_names = sample_names,
+                features = corrected_features,
+                min.exp = $min_exp,
+                mz.tol = $peak_alignment.align_mz_tol,
+                chr.tol = $peak_alignment.align_chr_tol,
+                find.tol.max.d = 10 * $mz_tol,
+                max.align.mz.diff = $peak_alignment.max_align_mz_diff,
+                do.plot = FALSE
+            )
+
+            save_aligned_features(aligned, "$rt_cross_table", "$int_cross_table", "$tolerances")
+        ]]></configfile>
+    </configfiles>
+
+    <inputs>
+        <param name="ms_files" type="data" format="mzdata,mzml,mzxml,netcdf" multiple="true" min="2" label="Input data"
+               help="Mass spectrometry file for peak extraction." />
+        <param name="corrected_files" type="data" format="parquet"  multiple="true" min="2"
+               label="Input corrected feature samples"
+               help="Mass spectrometry files containing corrected feature samples." />
+        <expand macro="mz_tol_macro"/>
+        <param name="min_exp" type="integer" min="1" value="2" label="min_exp"
+               help="If a feature is to be included in the final feature table, it must be present in at least this number of spectra." />
+        <expand macro="peak_alignment"/>
+    </inputs>
+
+    <outputs>
+        <data name="tolerances" format="parquet" label="${tool.name} on ${on_string} (tolerances)" />
+        <data name="rt_cross_table" format="parquet" label="${tool.name} on ${on_string} (rt cross table)" />
+        <data name="int_cross_table" format="parquet" label="${tool.name} on ${on_string} (int cross table)" />
+    </outputs>
+
+    <tests>
+        <test>
+            <param name="ms_files" value="mbr_test0.mzml,mbr_test1.mzml,mbr_test2.mzml" ftype="mzml"/>
+            <param name="corrected_files" ftype="parquet"
+                   value="corrected_expected/corrected_0.parquet,corrected_expected/corrected_1.parquet,corrected_expected/corrected_2.parquet"/>
+            <output name="tolerances" file="tolerances.parquet" ftype="parquet"/>
+            <output name="rt_cross_table" file="rt_cross_table.parquet" ftype="parquet"/>
+            <output name="int_cross_table" file="int_cross_table.parquet" ftype="parquet"/>
+        </test>
+    </tests>
+
+    <help>
+        <![CDATA[
+            This is a tool which runs apLCMS alignment of features.
+
+            @GENERAL_HELP@
+        ]]>
+    </help>
+
+    <expand macro="citations"/>
+</tool>

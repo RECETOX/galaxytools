@@ -78,6 +78,7 @@
             <collection  name="corrected_features" type="list" label="${tool.name} corrected_features on ${on_string}">
                 <discover_datasets pattern="__designation__" directory="corrected" format="parquet" />
             </collection >
+            <data name="updated_known_table" format="parquet" label="${tool.name} updated_known_table on ${on_string}"/>
         </expand>
         <data name="feature_known_table_pairing" format="tabular"
               label="${tool.name} feature_known_table_pairing on ${on_string}" hidden="true"/>

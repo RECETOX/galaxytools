@@ -1,0 +1,76 @@
+<tool id="recetox_aplcms_adjust_time" name="RECETOX apLCMS - adjust time" version="@TOOL_VERSION@+galaxy0">
+    <description>corrects the retention time of features from LC/MS spectra</description>
+    <macros>
+        <import>macros.xml</import>
+        <import>macros_split.xml</import>
+    </macros>
+    <expand macro="creator"/>
+
+    <expand macro="requirements"/>
+    <command detect_errors="aggressive"><![CDATA[
+        sh ${symlink_inputs} &&
+        Rscript -e 'source("${__tool_directory__}/utils.R")' -e 'source("${run_script}")'
+    ]]></command>
+    <configfiles>
+        <configfile name="symlink_inputs">
+            #for $infile in $files
+                ln -s '${infile}' '${infile.element_identifier}'
+            #end for
+        </configfile>
+        <configfile name="run_script"><![CDATA[
+            #set filenames_str = str("', '").join([str($f.element_identifier) for $f in $files])
+            extracted_features <- load_features(c('$filenames_str'))
+
+            corrected <- adjust.time(
+                features = extracted_features,
+                #if $peak_alignment.align_mz_tol:
+                    mz.tol = $peak_alignment.align_mz_tol,
+                #end if
+                #if $peak_alignment.align_chr_tol:
+                    chr.tol = $peak_alignment.align_chr_tol,
+                #end if
+                find.tol.max.d = 10 * $mz_tol,
+                max.align.mz.diff = $peak_alignment.max_align_mz_diff,
+                do.plot = FALSE
+            )
+
+            save_data_as_parquet_files(corrected, "corrected")
+        ]]></configfile>
+    </configfiles>
+
+    <inputs>
+        <param name="files" type="data" format="parquet" multiple="true" min="2" label="Input data"
+               help="Mass spectrometry sample-wise feature tables." />
+        <expand macro="mz_tol_macro"/>
+        <expand macro="peak_alignment"/>
+    </inputs>
+
+    <outputs>
+        <collection name="corrected_feature_tables" type="list"
+                    label="${tool.name} corrected_feature_tables on ${on_string}">
+            <discover_datasets pattern="__designation__" directory="corrected" format="parquet" />
+        </collection>
+    </outputs>
+
+    <tests>
+        <test>
+            <param name="files" ftype="parquet"
+                   value="extracted_expected/extracted_0.parquet,extracted_expected/extracted_1.parquet,extracted_expected/extracted_2.parquet"/>
+            <output_collection name="corrected_feature_tables" type="list">
+                <element name="corrected_features_0.parquet" file="corrected_expected/corrected_0.parquet" ftype="parquet"/>
+                <element name="corrected_features_1.parquet" file="corrected_expected/corrected_1.parquet" ftype="parquet"/>
+                <element name="corrected_features_2.parquet" file="corrected_expected/corrected_2.parquet" ftype="parquet"/>
+            </output_collection>
+        </test>
+    </tests>
+
+    <help>
+        <![CDATA[
+            This is a tool which runs apLCMS adjustment of retention times.
+
+            @GENERAL_HELP@
+        ]]>
+    </help>
+
+    <expand macro="citations"/>
+</tool>

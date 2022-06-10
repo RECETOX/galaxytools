@@ -25,3 +25,36 @@ repositories:
       - main.R
       - test-data
       - macros.xml
+  recetox_aplcms_adjust_time:
+    description: "Retention time adjustment step of apLCMS after feature extraction."
+    include:
+      - recetox_aplcms_adjust_time.xml
+      - test-data
+      - macros.xml
+      - macros_split.xml
+      - utils.R
+  recetox_aplcms_extract_features:
+    description: "Initial peak detection & feature extraction step of apLCMS."
+    include:
+      - recetox_aplcms_extract_features.xml
+      - test-data
+      - macros.xml
+      - macros_split.xml
+      - utils.R
+  recetox_aplcms_align_features:
+    description: "Feature alignment step of apLCMS after retention time adjustment."
+    include:
+      - recetox_aplcms_align_features.xml
+      - test-data
+      - macros.xml
+      - macros_split.xml
+      - utils.R
+  recetox_aplcms_recover_weaker_signals:
+    description: "Weaker signal recovery step of apLCMS after feature alignment.."
+    include:
+      - recetox_aplcms_recover_weaker_signals.xml
+      - test-data
+      - macros.xml
+      - macros_split.xml
+      - utils.R
+      - main.R

@@ -1,0 +1,131 @@
+<tool id="recetox_aplcms_recover_weaker_signals" name="RECETOX apLCMS - recover weaker signals" version="@TOOL_VERSION@+galaxy0">
+    <description>recover weaker signals from LC/MS spectra</description>
+    <macros>
+        <import>macros.xml</import>
+        <import>macros_split.xml</import>
+    </macros>
+    <expand macro="creator"/>
+
+    <expand macro="requirements"/>
+    <command detect_errors="aggressive"><![CDATA[
+        sh ${symlink_inputs} &&
+        Rscript -e 'source("${__tool_directory__}/utils.R")' -e 'source("${__tool_directory__}/main.R")' -e 'source("${run_script}")'
+    ]]></command>
+    <configfiles>
+        <configfile name="symlink_inputs">
+            #for $infile in $ms_files
+                ln -s '${infile}' '${infile.element_identifier}'
+            #end for
+            #for $infile in $extracted_files
+                ln -s '${infile}' '${infile.element_identifier}'
+            #end for
+            #for $infile in $corrected_files
+                ln -s '${infile}' '${infile.element_identifier}'
+            #end for
+        </configfile>
+        <configfile name="run_script"><![CDATA[
+            #set filenames = str("', '").join([str($f.element_identifier) for $f in $ms_files])
+            filenames <- sort_samples_by_acquisition_number(c('$filenames'))
+
+            #set extracted_files = str("', '").join([str($f.element_identifier) for $f in $extracted_files])
+            extracted <- load_features(c('$extracted_files'))
+
+            #set corrected_files = str("', '").join([str($f.element_identifier) for $f in $corrected_files])
+            corrected <- load_features(c('$corrected_files'))
+
+            aligned <- load_aligned_features('$rt_cross_table_file', '$int_cross_table_file', '$tolerances_file')
+
+            cluster <- as.integer(Sys.getenv('GALAXY_SLOTS', unset = 1))
+
+            recovered <- recover_signals(cluster,
+                                         filenames,
+                                         extracted,
+                                         corrected,
+                                         aligned,
+                                         $mz_tol,
+                                         $weak_signal_recovery.recover_mz_range,
+                                         $weak_signal_recovery.recover_chr_range,
+                                         $weak_signal_recovery.use_observed_range,
+                                         $min_bandwidth,
+                                         $max_bandwidth,
+                                         $weak_signal_recovery.recover_min_count
+            )
+
+            aligned_feature_sample_table <- create_feature_sample_table(aligned)
+            recovered_feature_sample_table <- create_feature_sample_table(recovered)
+
+            save_all_features(recovered, filenames)
+            save_all_feature_tables(aligned_feature_sample_table, recovered_feature_sample_table,
+                                    '${aligned_feature_sample_table}', '${recovered_feature_sample_table}',
+                                    '$output_format.out_format')
+        ]]></configfile>
+    </configfiles>
+
+    <inputs>
+        <param name="ms_files" type="data" format="mzdata,mzml,mzxml,netcdf" multiple="true" min="2" label="Input data"
+               help="Mass spectrometry file for peak extraction." />
+        <param name="extracted_files" type="data" format="parquet" multiple="true" min="2" label="Input extracted feature samples"
+               help="Mass spectrometry files containing feature samples." />
+        <param name="corrected_files" type="data" format="parquet" multiple="true" min="2" label="Input corrected feature samples"
+               help="Mass spectrometry file containing corrected feature samples." />
+        <param name="tolerances_file" type="data" format="parquet" label="Input tolerances" help="TBD"/>
+        <param name="rt_cross_table_file" type="data" format="parquet" label="Input rt cross table" help="TBD"/>
+        <param name="int_cross_table_file" type="data" format="parquet" label="Input int cross table" help="TBD"/>
+        <expand macro="mz_tol_macro"/>
+        <param name="min_bandwidth" type="float" optional="true" label="min_bandwidth (optional)"
+               help="The minimum bandwidth to use in the kernel smoother." />
+        <param name="max_bandwidth" type="float" optional="true" label="max_bandwidth (optional)"
+               help="The maximum bandwidth to use in the kernel smoother." />
+        <expand macro="weak_signal_recovery"/>
+        <expand macro="output_format"/>
+    </inputs>
+
+    <outputs>
+        <expand macro="unsupervised_outputs">
+            <collection  name="extracted_features" type="list" label="${tool.name} extracted_features on ${on_string}">
+                <discover_datasets pattern="__designation__" directory="extracted" format="parquet" />
+            </collection >
+            <collection  name="corrected_features" type="list" label="${tool.name} corrected_features on ${on_string}">
+                <discover_datasets pattern="__designation__" directory="corrected" format="parquet" />
+            </collection >
+        </expand>
+    </outputs>
+
+    <tests>
+        <test>
+            <param name="ms_files" value="mbr_test2.mzml,mbr_test1.mzml,mbr_test0.mzml" ftype="mzml"/>
+            <param name="extracted_files" ftype="parquet"
+                   value="extracted_expected/extracted_0.parquet,extracted_expected/extracted_1.parquet,extracted_expected/extracted_2.parquet"/>
+            <param name="corrected_files" ftype="parquet"
+                   value="corrected_expected/corrected_0.parquet,corrected_expected/corrected_1.parquet,corrected_expected/corrected_2.parquet"/>
+            <param name="tolerances_file" value="tolerances.parquet" ftype="parquet"/>
+            <param name="rt_cross_table_file" value="rt_cross_table.parquet" ftype="parquet"/>
+            <param name="int_cross_table_file" value="int_cross_table.parquet" ftype="parquet"/>
+
+            <output name="recovered_feature_sample_table" ftype="parquet"
+                    file="unsupervised_output/unsupervised_recovered_feature_sample_table.parquet"/>
+            <output name="aligned_feature_sample_table" ftype="parquet"
+                    file="unsupervised_output/unsupervised_aligned_feature_sample_table.parquet"/>
+            <output_collection name="corrected_features" type="list">
+                <element name="mbr_test0.parquet" file="unsupervised_output/corrected_features_0.parquet" ftype="parquet"/>
+                <element name="mbr_test1.parquet" file="unsupervised_output/corrected_features_1.parquet" ftype="parquet"/>
+                <element name="mbr_test2.parquet" file="unsupervised_output/corrected_features_2.parquet" ftype="parquet"/>
+            </output_collection>
+            <output_collection name="extracted_features" type="list">
+                <element name="mbr_test0.parquet" file="unsupervised_output/extracted_features_0.parquet" ftype="parquet"/>
+                <element name="mbr_test1.parquet" file="unsupervised_output/extracted_features_1.parquet" ftype="parquet"/>
+                <element name="mbr_test2.parquet" file="unsupervised_output/extracted_features_2.parquet" ftype="parquet"/>
+            </output_collection>
+        </test>
+    </tests>
+
+    <help>
+        <![CDATA[
+            This is a tool which runs apLCMS recovery of weaker signals.
+
+            @GENERAL_HELP@
+        ]]>
+    </help>
+
+    <expand macro="citations"/>
+</tool>
