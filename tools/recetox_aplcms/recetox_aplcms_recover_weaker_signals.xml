@@ -1,4 +1,4 @@
-<tool id="recetox_aplcms_recover_weaker_signals" name="RECETOX apLCMS - recover weaker signals" version="@TOOL_VERSION@+galaxy0">
+<tool id="recetox_aplcms_recover_weaker_signals" name="RECETOX apLCMS - recover weaker signals" version="@TOOL_VERSION@+galaxy1">
     <description>recover weaker signals from LC/MS spectra</description>
     <macros>
         <import>macros.xml</import>
@@ -62,12 +62,12 @@
     </configfiles>
 
     <inputs>
-        <param name="ms_files" type="data" format="mzdata,mzml,mzxml,netcdf" multiple="true" min="2" label="Input data"
-               help="Mass spectrometry file for peak extraction." />
-        <param name="extracted_files" type="data" format="parquet" multiple="true" min="2" label="Input extracted feature samples"
-               help="Mass spectrometry files containing feature samples." />
-        <param name="corrected_files" type="data" format="parquet" multiple="true" min="2" label="Input corrected feature samples"
-               help="Mass spectrometry file containing corrected feature samples." />
+        <param name="ms_files" type="data_collection" collection_type="list" format="mzdata,mzml,mzxml,netcdf"
+               label="Input data" help="Mass spectrometry file for peak extraction." />
+        <param name="extracted_files" type="data_collection" collection_type="list" format="parquet"
+               label="Input extracted feature samples" help="Mass spectrometry files containing feature samples." />
+        <param name="corrected_files" type="data_collection" collection_type="list" format="parquet"
+               label="Input corrected feature samples" help="Mass spectrometry file containing corrected feature samples." />
         <param name="tolerances_file" type="data" format="parquet" label="Input tolerances" help="TBD"/>
         <param name="rt_cross_table_file" type="data" format="parquet" label="Input rt cross table" help="TBD"/>
         <param name="int_cross_table_file" type="data" format="parquet" label="Input int cross table" help="TBD"/>
@@ -93,11 +93,27 @@
 
     <tests>
         <test>
-            <param name="ms_files" value="mbr_test2.mzml,mbr_test1.mzml,mbr_test0.mzml" ftype="mzml"/>
-            <param name="extracted_files" ftype="parquet"
-                   value="extracted_expected/extracted_0.parquet,extracted_expected/extracted_1.parquet,extracted_expected/extracted_2.parquet"/>
-            <param name="corrected_files" ftype="parquet"
-                   value="corrected_expected/corrected_0.parquet,corrected_expected/corrected_1.parquet,corrected_expected/corrected_2.parquet"/>
+            <param name="ms_files">
+                <collection type="list">
+                    <element name="mbr_test0.mzml" value="mbr_test0.mzml"/>
+                    <element name="mbr_test1.mzml" value="mbr_test1.mzml"/>
+                    <element name="mbr_test2.mzml" value="mbr_test2.mzml"/>
+                </collection>
+            </param>
+            <param name="extracted_files">
+                <collection type="list">
+                    <element name="extracted_features_0.parquet" value="extracted_expected/extracted_0.parquet"/>
+                    <element name="extracted_features_1.parquet" value="extracted_expected/extracted_1.parquet"/>
+                    <element name="extracted_features_2.parquet" value="extracted_expected/extracted_2.parquet"/>
+                </collection>
+            </param>
+            <param name="corrected_files">
+                <collection type="list">
+                    <element name="corrected_features_0.parquet" value="corrected_expected/corrected_0.parquet"/>
+                    <element name="corrected_features_1.parquet" value="corrected_expected/corrected_1.parquet"/>
+                    <element name="corrected_features_2.parquet" value="corrected_expected/corrected_2.parquet"/>
+                </collection>
+            </param>
             <param name="tolerances_file" value="tolerances.parquet" ftype="parquet"/>
             <param name="rt_cross_table_file" value="rt_cross_table.parquet" ftype="parquet"/>
             <param name="int_cross_table_file" value="int_cross_table.parquet" ftype="parquet"/>
