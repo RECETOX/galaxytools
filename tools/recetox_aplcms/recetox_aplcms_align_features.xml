@@ -1,4 +1,4 @@
-<tool id="recetox_aplcms_align_features" name="RECETOX apLCMS - align features" version="@TOOL_VERSION@+galaxy0">
+<tool id="recetox_aplcms_align_features" name="RECETOX apLCMS - align features" version="@TOOL_VERSION@+galaxy1">
     <description>align features from LC/MS spectra across samples</description>
     <macros>
         <import>macros.xml</import>
@@ -44,9 +44,9 @@
     </configfiles>
 
     <inputs>
-        <param name="ms_files" type="data" format="mzdata,mzml,mzxml,netcdf" multiple="true" min="2" label="Input data"
-               help="Mass spectrometry file for peak extraction." />
-        <param name="corrected_files" type="data" format="parquet"  multiple="true" min="2"
+        <param name="ms_files" type="data_collection" collection_type="list" format="mzdata,mzml,mzxml,netcdf"
+               label="Input data" help="Mass spectrometry file for peak extraction." />
+        <param name="corrected_files" type="data_collection" collection_type="list" format="parquet"
                label="Input corrected feature samples"
                help="Mass spectrometry files containing corrected feature samples." />
         <expand macro="mz_tol_macro"/>
@@ -63,9 +63,20 @@
 
     <tests>
         <test>
-            <param name="ms_files" value="mbr_test0.mzml,mbr_test1.mzml,mbr_test2.mzml" ftype="mzml"/>
-            <param name="corrected_files" ftype="parquet"
-                   value="corrected_expected/corrected_0.parquet,corrected_expected/corrected_1.parquet,corrected_expected/corrected_2.parquet"/>
+            <param name="ms_files">
+                <collection type="list">
+                    <element name="mbr_test0.mzml" value="mbr_test0.mzml"/>
+                    <element name="mbr_test1.mzml" value="mbr_test1.mzml"/>
+                    <element name="mbr_test2.mzml" value="mbr_test2.mzml"/>
+                </collection>
+            </param>
+            <param name="corrected_files">
+                <collection type="list">
+                    <element name="corrected_features_0.parquet" value="corrected_expected/corrected_0.parquet"/>
+                    <element name="corrected_features_1.parquet" value="corrected_expected/corrected_1.parquet"/>
+                    <element name="corrected_features_2.parquet" value="corrected_expected/corrected_2.parquet"/>
+                </collection>
+            </param>
             <output name="tolerances" file="tolerances.parquet" ftype="parquet"/>
             <output name="rt_cross_table" file="rt_cross_table.parquet" ftype="parquet"/>
             <output name="int_cross_table" file="int_cross_table.parquet" ftype="parquet"/>
