@@ -17,7 +17,7 @@
                 ln -s '${infile}' '${infile.element_identifier}'
             #end for
             #for $infile in $extracted_files
-                ln -s '${infile}' '${infile.element_identifier}'
+                ln -s '${infile}' 'extracted_${infile.element_identifier}'
             #end for
             #for $infile in $corrected_files
                 ln -s '${infile}' '${infile.element_identifier}'
@@ -27,7 +27,7 @@
             #set filenames = str("', '").join([str($f.element_identifier) for $f in $ms_files])
             filenames <- sort_samples_by_acquisition_number(c('$filenames'))
 
-            #set extracted_files = str("', '").join([str($f.element_identifier) for $f in $extracted_files])
+            #set extracted_files = str("', '").join(["extracted_" + str($f.element_identifier) for $f in $extracted_files])
             extracted <- load_features(c('$extracted_files'))
 
             #set corrected_files = str("', '").join([str($f.element_identifier) for $f in $corrected_files])
