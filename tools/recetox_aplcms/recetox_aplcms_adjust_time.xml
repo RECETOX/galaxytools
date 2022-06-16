@@ -40,7 +40,7 @@
 
     <inputs>
         <param name="files" type="data_collection" collection_type="list" format="parquet" label="Input data"
-               help="Mass spectrometry sample-wise feature tables." />
+               help="Mass spectrometry sample-wise feature tables collection." />
         <expand macro="mz_tol_macro"/>
         <expand macro="peak_alignment"/>
     </inputs>

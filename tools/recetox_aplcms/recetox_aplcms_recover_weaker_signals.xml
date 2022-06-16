@@ -63,11 +63,11 @@
 
     <inputs>
         <param name="ms_files" type="data_collection" collection_type="list" format="mzdata,mzml,mzxml,netcdf"
-               label="Input data" help="Mass spectrometry file for peak extraction." />
+               label="Input data collection" help="Mass spectrometry file for peak extraction." />
         <param name="extracted_files" type="data_collection" collection_type="list" format="parquet"
-               label="Input extracted feature samples" help="Mass spectrometry files containing feature samples." />
+               label="Input extracted feature samples collection" help="Mass spectrometry files containing feature samples." />
         <param name="corrected_files" type="data_collection" collection_type="list" format="parquet"
-               label="Input corrected feature samples" help="Mass spectrometry file containing corrected feature samples." />
+               label="Input corrected feature samples collection" help="Mass spectrometry file containing corrected feature samples." />
         <param name="tolerances_file" type="data" format="parquet" label="Input tolerances" help="TBD"/>
         <param name="rt_cross_table_file" type="data" format="parquet" label="Input rt cross table" help="TBD"/>
         <param name="int_cross_table_file" type="data" format="parquet" label="Input int cross table" help="TBD"/>

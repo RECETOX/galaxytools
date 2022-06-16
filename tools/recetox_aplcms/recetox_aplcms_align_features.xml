@@ -45,9 +45,9 @@
 
     <inputs>
         <param name="ms_files" type="data_collection" collection_type="list" format="mzdata,mzml,mzxml,netcdf"
-               label="Input data" help="Mass spectrometry file for peak extraction." />
+               label="Input data collection" help="Mass spectrometry file for peak extraction." />
         <param name="corrected_files" type="data_collection" collection_type="list" format="parquet"
-               label="Input corrected feature samples"
+               label="Input corrected feature samples collection"
                help="Mass spectrometry files containing corrected feature samples." />
         <expand macro="mz_tol_macro"/>
         <param name="min_exp" type="integer" min="1" value="2" label="min_exp"
