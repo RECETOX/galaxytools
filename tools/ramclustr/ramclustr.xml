@@ -1,4 +1,5 @@
 <tool id="ramclustr" name="RAMClustR" version="@TOOL_VERSION@+galaxy0">
+    <description>feature clustering algorithm for non-targeted mass spec data</description>
     <macros>
         <import>macros.xml</import>
     </macros>
