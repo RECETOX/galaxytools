@@ -1,0 +1,72 @@
+<tool id="recetox_aplcms_augment_known_features" name="RECETOX apLCMS - augment known features" version="@TOOL_VERSION@+galaxy1">
+    <description>Augment aligned features with known features table</description>
+    <macros>
+        <import>macros.xml</import>
+        <import>macros_split.xml</import>
+    </macros>
+    <expand macro="creator"/>
+
+    <expand macro="requirements"/>
+    <command detect_errors="aggressive"><![CDATA[
+        sh ${symlink_inputs} &&
+        Rscript -e 'source("${__tool_directory__}/utils.R")' -e 'source("${run_script}")'
+    ]]></command>
+    <configfiles>
+        <configfile name="symlink_inputs">
+		set -x
+                ln -s '${aligned_rt}' '${aligned_rt.element_identifier}'
+                ln -s '${aligned_int}' '${aligned_int.element_identifier}'
+                ln -s '${aligned_tol}' '${aligned_tol.element_identifier}' 
+                ln -s '${known_features}' '${known_features.element_identifier}'
+        </configfile>
+        <configfile name="run_script"><![CDATA[
+		aligned <- load_aligned_features('${aligned_rt.element_identifier}', '${aligned_int.element_identifier}', '${aligned_tol.element_identifier}')
+		known_table <- read_known_table('${known_features.element_identifier}')
+		merged <- call_augment_with_known_features(
+			aligned = aligned,
+			known_table = known_table,
+			match_tol_ppm = $match_tol_ppm
+		)
+		save_augmented_features(merged,'${augmented_rt}', '${augmented_int}', '${augmented_tol}')
+        ]]></configfile>
+    </configfiles>
+
+    <inputs>
+	<param name="aligned_rt" type="data" format="parquet" label="Aligned features RT" help="Table of features, output of align-features step, typically"/>
+	<param name="aligned_int" type="data" format="parquet" label="Aligned features intensity" help="Table of features, output of align-features step, typically"/>
+	<param name="aligned_tol" type="data" format="parquet" label="Aligned features tolerance" help="Table of features, output of align-features step, typically"/>
+	<param name="known_features" type="data" format="parquet" label="Known feature table" help="Table of known features, accumulated output of previous apLCMS runs, typically"/>
+
+	<param name="match_tol_ppm" type="integer" optional="true" min="0" label="match_tol_ppm (optional)"
+		help="The ppm tolerance to match identified features to known metabolites/features." />
+    </inputs>
+
+    <outputs>
+	<data name="augmented_rt" format="parquet" label="${tool.name} augmented features RT on ${on_string}"/>
+	<data name="augmented_int" format="parquet" label="${tool.name} augmented features intensities on ${on_string}"/>
+	<data name="augmented_tol" format="parquet" label="${tool.name} augmented features tolerance on ${on_string}"/>
+    </outputs>
+
+    <tests>
+        <test>
+		<param name="aligned_rt" value="rt_cross_table.parquet"/>
+		<param name="aligned_int" value="int_cross_table.parquet"/>
+		<param name="aligned_tol" value="tolerances.parquet"/>
+		<param name="known_features" value="known_table.parquet"/>
+
+		<output name="augmented_rt" file="aug_rt_crosstab.parquet"/>
+		<output name="augmented_int" file="aug_int_crosstab.parquet"/>
+		<output name="augmented_tol" file="aug_tol_crosstab.parquet"/>
+        </test>
+    </tests>
+
+    <help>
+        <![CDATA[
+            This is a tool which runs apLCMS augmentation of aligned features with known feature table.
+
+            @GENERAL_HELP@
+        ]]>
+    </help>
+
+    <expand macro="citations"/>
+</tool>
