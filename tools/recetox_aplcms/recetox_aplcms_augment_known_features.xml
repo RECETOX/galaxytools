@@ -14,14 +14,14 @@
     <configfiles>
         <configfile name="symlink_inputs">
 		set -x
-                ln -s '${aligned_rt}' '${aligned_rt.element_identifier}'
-                ln -s '${aligned_int}' '${aligned_int.element_identifier}'
-                ln -s '${aligned_tol}' '${aligned_tol.element_identifier}' 
-                ln -s '${known_features}' '${known_features.element_identifier}'
+                ln -s '${aligned_rt}' aligned_rt.parquet
+                ln -s '${aligned_int}' aligned_int.parquet
+                ln -s '${aligned_tol}' tolerances.parquet
+                ln -s '${known_features}' known_features.parquet
         </configfile>
         <configfile name="run_script"><![CDATA[
-		aligned <- load_aligned_features('${aligned_rt.element_identifier}', '${aligned_int.element_identifier}', '${aligned_tol.element_identifier}')
-		known_table <- read_known_table('${known_features.element_identifier}')
+		aligned <- load_aligned_features('aligned_rt.parquet', 'aligned_int.parquet', 'tolerances.parquet')
+		known_table <- read_known_table('known_features.parquet')
 		merged <- call_augment_with_known_features(
 			aligned = aligned,
 			known_table = known_table,
