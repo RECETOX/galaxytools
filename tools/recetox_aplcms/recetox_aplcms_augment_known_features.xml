@@ -22,12 +22,12 @@
         <configfile name="run_script"><![CDATA[
 		aligned <- load_aligned_features('aligned_rt.parquet', 'aligned_int.parquet', 'tolerances.parquet')
 		known_table <- read_known_table('known_features.parquet')
-		merged <- call_augment_with_known_features(
+		merged <- augment_with_known_features(
 			aligned = aligned,
 			known_table = known_table,
 			match_tol_ppm = $match_tol_ppm
 		)
-		save_augmented_features(merged,'${augmented_rt}', '${augmented_int}', '${augmented_tol}')
+		save_aligned_features(merged,'${augmented_rt}', '${augmented_int}', '${augmented_tol}')
         ]]></configfile>
     </configfiles>
 
@@ -37,7 +37,7 @@
 	<param name="aligned_tol" type="data" format="parquet" label="Aligned features tolerance" help="Table of features, output of align-features step, typically"/>
 	<param name="known_features" type="data" format="parquet" label="Known feature table" help="Table of known features, accumulated output of previous apLCMS runs, typically"/>
 
-	<param name="match_tol_ppm" type="integer" optional="true" min="0" label="match_tol_ppm (optional)"
+	<param name="match_tol_ppm" type="integer" value="100" min="0" label="match_tol_ppm)"
 		help="The ppm tolerance to match identified features to known metabolites/features." />
     </inputs>
 

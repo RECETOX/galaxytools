@@ -163,7 +163,3 @@ save_known_table <- function(df, filename) {
 read_known_table <- function(filename) {
   arrow::read_parquet(filename, col_select = known_table_columns())
 }
-
-call_augment_with_known_features <- function(...) {
-	hybrid(...)
-}
