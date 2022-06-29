@@ -11,3 +11,10 @@ repositories:
       - ramclustr_wrapper.R
       - test-data
       - macros.xml
+  ramclustr_define_experiment:
+    description: "Definition of experimental design used for record keeping and writing spectra data."
+    include:
+      - ramclustr_define_experiment.xml
+      - ramclustr_define_experiment_wrapper.py
+      - test-data
+      - macros.xml
