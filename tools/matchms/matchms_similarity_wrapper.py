@@ -4,7 +4,7 @@ import sys
 import numpy as np
 from matchms import calculate_scores
 from matchms.importing import load_from_mgf, load_from_msp
-from matchms.similarity import CosineGreedy, CosineHungarian, MetadataMatch, ModifiedCosine
+from matchms.similarity import CosineGreedy, CosineHungarian, MetadataMatch, ModifiedCosine, NeutralLossesCosine
 from pandas import DataFrame
 
 
@@ -62,6 +62,10 @@ def main(argv):
         similarity_metric = CosineHungarian(args.tolerance, args.mz_power, args.intensity_power)
     elif args.similarity_metric == 'ModifiedCosine':
         similarity_metric = ModifiedCosine(args.tolerance, args.mz_power, args.intensity_power)
+        reference_spectra = list(map(convert_precursor_mz, reference_spectra))
+        queries_spectra = list(map(convert_precursor_mz, queries_spectra))
+    elif args.similarity_metric == 'NeutralLossesCosine':
+        similarity_metric = NeutralLossesCosine(args.tolerance, args.mz_power, args.intensity_power)
         reference_spectra = list(map(convert_precursor_mz, reference_spectra))
         queries_spectra = list(map(convert_precursor_mz, queries_spectra))
     else:
