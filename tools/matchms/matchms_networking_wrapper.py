@@ -8,6 +8,7 @@ from matchms.similarity import SimilarityNetwork
 def main(argv):
     parser = argparse.ArgumentParser(description="Create network-graph from similarity scores.")
     parser.add_argument("scores", type=str, help="Path to matchMS similarity-scores .json file.")
+    parser.add_argument("graph_format", type="str", help="Format of the output similarity network.")
     parser.add_argument("identifier", type=str, help="Unique metadata identifier of each spectrum from which scores are computed.")
     parser.add_argument("top_n", type=int, help="Number of highest-score edges to keep.")
     parser.add_argument("max_links", type=int, help="Maximum number of links to add per node.")
@@ -24,8 +25,8 @@ def main(argv):
         link_method=parser.link_method,
         keep_unconected_nodes=parser.keep_unconnected_nodes)
     network.create_network(scores)
-    network.export_to_file(parser.output_filename)
-    
+    network.export_to_file(filename=parser.output_filename, graph_format=parser.graph_format)
+
     return 0
 
 
