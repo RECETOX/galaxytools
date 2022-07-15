@@ -1,5 +1,5 @@
 <tool id="matchms_networking" name="matchMS networking" version="@TOOL_VERSION@+galaxy0" python_template_version="3.5">
-    <description>Generate similarity network graph from matchMS similarity scores</description>
+    <description>create similarity network graph from matchMS similarity scores</description>
 
     <macros>
         <import>macros.xml</import>
