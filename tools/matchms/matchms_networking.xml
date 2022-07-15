@@ -38,7 +38,7 @@
             sets of individual specta or joined subset of scores between the given pair of spectra. This value has to be higher than the 'Maximum number of links'."/>
         <param label="Maximum number of links per node" name="max_links" type="integer" value="10"
             help="Maximum number of links to add per node."/>
-        <param label="Score cutoff" name="score_cutoff" type="float" value="0.7"
+        <param label="Score cutoff" name="score_cutoff" type="float" value="0.7" min="0.0" max="1.0"
             help="Minimum similarity score value to link two spectra."/>
         <param label="Link method" name="link_method" type="select" display="radio"
             help="Method for computing top N edges for each node.
