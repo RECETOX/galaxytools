@@ -3,6 +3,7 @@
 
     <xml name="creator">
         <creator>
+            <yield/>
             <person
                 givenName="Helge"
                 familyName="Hecht"
