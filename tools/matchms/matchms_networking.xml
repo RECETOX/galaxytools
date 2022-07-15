@@ -73,22 +73,32 @@
     <tests>
         <test>
             <param name="scores" value="networking/scores.json" ftype="json"/>
+            <param name="output_format" value="graphml"/>
+            <param name="identifier_key" value="compound_name"/>
             <output name="similarity_network" file="networking/similarity_network.graphml" ftype="graphml"/>
         </test>
         <test>
             <param name="scores" value="networking/scores.json" ftype="json"/>
+            <param name="output_format" value="cyjs"/>
+            <param name="identifier_key" value="compound_name"/>
             <output name="similarity_network" file="networking/similarity_network.cyjs" ftype="cyjs"/>
         </test>
         <test>
             <param name="scores" value="networking/scores.json" ftype="json"/>
+            <param name="output_format" value="gexf"/>
+            <param name="identifier_key" value="compound_name"/>
             <output name="similarity_network" file="networking/similarity_network.gexf" ftype="gexf"/>
         </test>
         <test>
             <param name="scores" value="networking/scores.json" ftype="json"/>
+            <param name="output_format" value="gml"/>
+            <param name="identifier_key" value="compound_name"/>
             <output name="similarity_network" file="networking/similarity_network.gml" ftype="gml"/>
         </test>
         <test>
             <param name="scores" value="networking/scores.json" ftype="json"/>
+            <param name="output_format" value="json"/>
+            <param name="identifier_key" value="compound_name"/>
             <output name="similarity_network" file="networking/similarity_network.json" ftype="json"/>
         </test>
     </tests>
