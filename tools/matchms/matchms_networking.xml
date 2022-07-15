@@ -30,11 +30,11 @@
 
     <inputs>
         <param label="Similarity scores" name="scores" type="data" format="json"
-            help="MatchMS similarity-scores file."/>
+            help="matchMS similarity-scores file."/>
         <param label="Identifier key" name="identifier_key" type="text"
             help="Unique metadata identifier of each spectrum from which scores are computed."/>
-        <param label="top_n" name="top_n" type="integer" value="20"
-            help="The number of top highest scores edges to keep between a pair of nodes. Depending on 'Link method' parameter the top n edges will be selected either from disjoined
+        <param label="Number of top edges to keep" name="top_n" type="integer" value="20"
+            help="The number of highest-score edges to keep between a pair of nodes. Depending on 'Link method' parameter the top N edges will be selected either from disjoined
             sets of individual specta or joined subset of scores between the given pair of spectra. This value has to be higher than the 'Maximum number of links'."/>
         <param label="Maximum number of links per node" name="max_links" type="integer" value="10"
             help="Maximum number of links to add per node."/>
@@ -43,12 +43,12 @@
         <param label="Link method" name="link_method" type="select" display="radio"
             help="Method for computing top N edges for each node.
             If selected 'Single', top N nodes will be selected from disjoined sets of highest scores for nodes of a given pair (i.e., if a given edge belongs to top N scores of at least one node, it is kept).
-            If selected 'Mutual', top N nodes will be selected from a joined subset of a given spectra pair (i.e., if and only if a given edge belongs to top N scores for both nodes, it is kept).">
+            If selected 'Mutual', top N nodes will be selected from a joined subset of a given spectra pair (i.e., if and only if a given edge belongs to top N scores of both nodes, it is kept).">
             <option value="single" selected="true">Single</option>
             <option value="mutual">Mutual</option>
         </param>
         <param label="Keep unconnected nodes" name="keep_unconnected_nodes" type="boolean" checked="true"
-            help="If set to FALSE all unconnected spectra will be removed."/>
+            help="If set to No all unconnected nodes will be removed."/>
     </inputs>
 
     <outputs>

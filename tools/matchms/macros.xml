@@ -45,7 +45,7 @@
                 matchMS similarity
 
             Downstream Tools
-                The output is a network graph file that can be visualized using graph visualization software (e.g., Cytoscape).
+                The output is a network-graph file that can be visualized using graph visualization software (e.g., Cytoscape).
         ]]>
     </token>
 
