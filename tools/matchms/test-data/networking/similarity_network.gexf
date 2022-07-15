@@ -1,0 +1,166 @@
+<?xml version='1.0' encoding='utf-8'?>
+<gexf xmlns="http://www.gexf.net/1.2draft" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.gexf.net/1.2draft http://www.gexf.net/1.2draft/gexf.xsd" version="1.2">
+  <meta lastmodifieddate="2022-07-15">
+    <creator>NetworkX 2.8.3</creator>
+  </meta>
+  <graph defaultedgetype="undirected" mode="static" name="">
+    <nodes>
+      <node id="C053" label="C053" />
+      <node id="C099" label="C099" />
+      <node id="C007" label="C007" />
+      <node id="C080" label="C080" />
+      <node id="C010" label="C010" />
+      <node id="C063" label="C063" />
+      <node id="C021" label="C021" />
+      <node id="C034" label="C034" />
+      <node id="C057" label="C057" />
+      <node id="C116" label="C116" />
+      <node id="C065" label="C065" />
+      <node id="C039" label="C039" />
+      <node id="C047" label="C047" />
+      <node id="C111" label="C111" />
+      <node id="C054" label="C054" />
+      <node id="C050" label="C050" />
+      <node id="C022" label="C022" />
+      <node id="C004" label="C004" />
+      <node id="C082" label="C082" />
+      <node id="C103" label="C103" />
+      <node id="C044" label="C044" />
+      <node id="C122" label="C122" />
+      <node id="C076" label="C076" />
+      <node id="C136" label="C136" />
+      <node id="C046" label="C046" />
+      <node id="C012" label="C012" />
+      <node id="C081" label="C081" />
+      <node id="C070" label="C070" />
+      <node id="C059" label="C059" />
+      <node id="C124" label="C124" />
+      <node id="C045" label="C045" />
+      <node id="C118" label="C118" />
+      <node id="C097" label="C097" />
+      <node id="C029" label="C029" />
+      <node id="C019" label="C019" />
+      <node id="C132" label="C132" />
+      <node id="C128" label="C128" />
+      <node id="C105" label="C105" />
+      <node id="C092" label="C092" />
+      <node id="C107" label="C107" />
+      <node id="C032" label="C032" />
+      <node id="C056" label="C056" />
+      <node id="C042" label="C042" />
+      <node id="C017" label="C017" />
+      <node id="C101" label="C101" />
+      <node id="C125" label="C125" />
+      <node id="C071" label="C071" />
+      <node id="C126" label="C126" />
+      <node id="C005" label="C005" />
+      <node id="C117" label="C117" />
+      <node id="C121" label="C121" />
+      <node id="C018" label="C018" />
+      <node id="C077" label="C077" />
+      <node id="C028" label="C028" />
+      <node id="C135" label="C135" />
+      <node id="C129" label="C129" />
+      <node id="C089" label="C089" />
+      <node id="C069" label="C069" />
+      <node id="C113" label="C113" />
+      <node id="C055" label="C055" />
+      <node id="C072" label="C072" />
+      <node id="C084" label="C084" />
+      <node id="C109" label="C109" />
+      <node id="C119" label="C119" />
+      <node id="C133" label="C133" />
+      <node id="C094" label="C094" />
+      <node id="C058" label="C058" />
+      <node id="C104" label="C104" />
+      <node id="C088" label="C088" />
+      <node id="C120" label="C120" />
+      <node id="C102" label="C102" />
+      <node id="C115" label="C115" />
+      <node id="C036" label="C036" />
+      <node id="C130" label="C130" />
+      <node id="C074" label="C074" />
+      <node id="C051" label="C051" />
+      <node id="C033" label="C033" />
+      <node id="C060" label="C060" />
+      <node id="C027" label="C027" />
+      <node id="C083" label="C083" />
+      <node id="C100" label="C100" />
+      <node id="C078" label="C078" />
+      <node id="C127" label="C127" />
+      <node id="C106" label="C106" />
+      <node id="C013" label="C013" />
+      <node id="C006" label="C006" />
+      <node id="C009" label="C009" />
+      <node id="C011" label="C011" />
+      <node id="C031" label="C031" />
+      <node id="C003" label="C003" />
+      <node id="C079" label="C079" />
+      <node id="C066" label="C066" />
+      <node id="C026" label="C026" />
+      <node id="C061" label="C061" />
+      <node id="C002" label="C002" />
+      <node id="C043" label="C043" />
+      <node id="C062" label="C062" />
+      <node id="C001" label="C001" />
+      <node id="C008" label="C008" />
+      <node id="C087" label="C087" />
+      <node id="C138" label="C138" />
+      <node id="C016" label="C016" />
+      <node id="C049" label="C049" />
+      <node id="C014" label="C014" />
+      <node id="C112" label="C112" />
+      <node id="C035" label="C035" />
+      <node id="C030" label="C030" />
+      <node id="C020" label="C020" />
+      <node id="C015" label="C015" />
+      <node id="C064" label="C064" />
+      <node id="C025" label="C025" />
+      <node id="C023" label="C023" />
+      <node id="C093" label="C093" />
+      <node id="C048" label="C048" />
+      <node id="C073" label="C073" />
+      <node id="C067" label="C067" />
+      <node id="C068" label="C068" />
+      <node id="C041" label="C041" />
+      <node id="C123" label="C123" />
+      <node id="C098" label="C098" />
+      <node id="C096" label="C096" />
+      <node id="C108" label="C108" />
+      <node id="C075" label="C075" />
+      <node id="C086" label="C086" />
+      <node id="C024" label="C024" />
+      <node id="C085" label="C085" />
+      <node id="C038" label="C038" />
+      <node id="C131" label="C131" />
+      <node id="C114" label="C114" />
+      <node id="C137" label="C137" />
+      <node id="C040" label="C040" />
+      <node id="C091" label="C091" />
+      <node id="C095" label="C095" />
+      <node id="C052" label="C052" />
+      <node id="C090" label="C090" />
+      <node id="C110" label="C110" />
+      <node id="C037" label="C037" />
+      <node id="C134" label="C134" />
+    </nodes>
+    <edges>
+      <edge source="C007" target="C006" id="0" weight="0.8014925775846302" />
+      <edge source="C021" target="C035" id="1" weight="0.9428734604498343" />
+      <edge source="C039" target="C016" id="2" weight="0.7564317649271586" />
+      <edge source="C039" target="C052" id="3" weight="0.7960144037093747" />
+      <edge source="C039" target="C100" id="4" weight="0.9539283268418853" />
+      <edge source="C047" target="C131" id="5" weight="0.8078862396809736" />
+      <edge source="C022" target="C084" id="6" weight="0.7692281053266674" />
+      <edge source="C029" target="C041" id="7" weight="0.924583933152339" />
+      <edge source="C107" target="C079" id="8" weight="0.8333291354750065" />
+      <edge source="C042" target="C110" id="9" weight="0.7027766082598446" />
+      <edge source="C071" target="C084" id="10" weight="0.8145731805028101" />
+      <edge source="C055" target="C123" id="11" weight="0.7926630753496303" />
+      <edge source="C051" target="C098" id="12" weight="0.9200327835982862" />
+      <edge source="C060" target="C014" id="13" weight="0.9716791902824745" />
+      <edge source="C100" target="C016" id="14" weight="0.748120653695443" />
+      <edge source="C100" target="C052" id="15" weight="0.788612255089304" />
+    </edges>
+  </graph>
+</gexf>

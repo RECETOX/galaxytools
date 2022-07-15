@@ -56,6 +56,26 @@
     </outputs>
 
     <tests>
+        <test>
+            <param name="scores" value="networking/scores.json" ftype="json"/>
+            <output name="similarity_network" file="networking/similarity_network.graphml" ftype="graphml"/>
+        </test>
+        <test>
+            <param name="scores" value="networking/scores.json" ftype="json"/>
+            <output name="similarity_network" file="networking/similarity_network.cyjs" ftype="cyjs"/>
+        </test>
+        <test>
+            <param name="scores" value="networking/scores.json" ftype="json"/>
+            <output name="similarity_network" file="networking/similarity_network.gexf" ftype="gexf"/>
+        </test>
+        <test>
+            <param name="scores" value="networking/scores.json" ftype="json"/>
+            <output name="similarity_network" file="networking/similarity_network.gml" ftype="gml"/>
+        </test>
+        <test>
+            <param name="scores" value="networking/scores.json" ftype="json"/>
+            <output name="similarity_network" file="networking/similarity_network.json" ftype="json"/>
+        </test>
     </tests>
 
     <help><![CDATA[
