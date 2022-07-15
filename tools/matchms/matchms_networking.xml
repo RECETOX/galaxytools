@@ -1,0 +1,49 @@
+<tool id="matchms_networking" name="matchMS networking" version="@TOOL_VERSION@+galaxy0" python_template_version="3.5">
+    <description>Generate similarity network graph from matchMS similarity scores</description>
+
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="creator"/>
+
+    <requirements>
+        <requirement type="package" version="@TOOL_VERSION@">matchms</requirement>
+    </requirements>
+
+    <command detect_errors="aggressive"><![CDATA[
+        sh ${matchms_networking_cli}
+    ]]></command>
+
+    <configfiles>
+        <configfile name="matchms_networking_cli">
+            python3 ${__tool_directory__}/matchms_networking_wrapper.py \
+                --scores "$similarity_scores" \
+                --identifier "$identifier_key" \
+                --top_n "$top_n" \
+                --max_links "$max_links" \
+                --score_cutoff "$score_cutoff" \
+                --link_method "$link_method" \
+                --keep_unconnected_nodes "$keep_unconnected_nodes" \
+                --output "$output"
+        </configfile>
+    </configfiles>
+
+    <inputs>
+    </inputs>
+
+    <outputs>
+    </outputs>
+
+    <tests>
+    </tests>
+
+    <help><![CDATA[
+        TODO: Fill in help.
+    ]]></help>
+
+    <citations>
+        <citation type="doi">10.5281/zenodo.4589154</citation>
+        <citation type="doi">10.21105/joss.02411</citation>
+    </citations>
+
+</tool>
