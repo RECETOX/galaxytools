@@ -39,7 +39,6 @@
             "$algorithm.mz_power" \
             "$algorithm.intensity_power" \
             "$similarity_scores" \
-            "$similarity_matches"
         </configfile>
     </configfiles>
 
@@ -81,8 +80,7 @@
     </inputs>
 
     <outputs>
-        <data label="$similarity_metric scores of ${on_string}" name="similarity_scores" format="tsv"/>
-        <data label="$similarity_metric matches of ${on_string}" name="similarity_matches" format="tsv"/>
+        <data label="$similarity_metric scores of ${on_string}" name="similarity_scores" format="json"/>
     </outputs>
 
     <tests>
