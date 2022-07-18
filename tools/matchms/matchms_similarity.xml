@@ -90,42 +90,36 @@
             <param name="references" value="similarity/fill.mgf" ftype="mgf"/>
             <param name="queries" value="similarity/fill.msp" ftype="msp"/>
             <param name="similarity_metric" value="CosineGreedy"/>
-            <output name="similarity_scores" file="similarity/scores_test1_out.tsv" ftype="tsv"
-                    checksum="md5$1aff8d0777e2f4e565be2b1b393547ef"/>
-            <output name="similarity_matches" file="similarity/matches_test1_out.tsv" ftype="tsv"
-                    checksum="md5$aab26ef4a0e80a53699832db72c06340"/>
+            <output name="similarity_scores" file="similarity/scores_test1_out.json" ftype="json"
+                    checksum="md5$62db2b468716462321cb05b7fb72d1d0"/>
         </test>
         <test>
             <param name="references" value="similarity/recetox_gc-ei_ms_20201028.msp" ftype="msp"/>
             <param name="queries" value="similarity/fill.msp" ftype="msp"/>
             <param name="similarity_metric" value="CosineGreedy"/>
-            <output name="similarity_scores" file="scores_test2_out.tsv" ftype="tsv"
-                    checksum="md5$d2a5a01d9980636ce6a246d68834b84e"/>
-            <output name="similarity_matches" file="matches_test2_out.tsv" ftype="tsv"
-                    checksum="md5$28dc16ce45105234437e53d59e240046"/>
+            <output name="similarity_scores" file="scores_test2_out.json" ftype="json"
+                    checksum="md5$22d5d165919c6f41a4be9825bff8eea8"/>
         </test>
         <test>
             <param name="references" value="similarity/recetox_gc-ei_ms_20201028.msp" ftype="msp"/>
             <param name="queries" value="similarity/fill.msp" ftype="msp"/>
             <param name="similarity_metric" value="CosineHungarian"/>
-            <output name="similarity_scores" file="similarity/scores_test3_out.tsv" ftype="tsv"
-                    checksum="md5$1341369778036e0a267ff723f8cfca9c"/>
-            <output name="similarity_matches" file="similarity/matches_test3_out.tsv" ftype="tsv"
-                    checksum="md5$28dc16ce45105234437e53d59e240046"/>
+            <output name="similarity_scores" file="similarity/scores_test3_out.json" ftype="json"
+                    checksum="md5$90892dd621b80cbf891ccfeb6b75fabe"/>
         </test>
         <test>
             <param name="references" value="similarity/recetox_gc-ei_ms_20201028.msp" ftype="msp"/>
             <param name="queries" value="similarity/recetox_gc-ei_ms_20201028.msp" ftype="msp"/>
             <param name="similarity_metric" value="ModifiedCosine"/>
-            <output name="similarity_scores" file="similarity/scores_test4_out.tsv" ftype="tsv"/>
-            <output name="similarity_matches" file="similarity/matches_test4_out.tsv" ftype="tsv"/>
+            <output name="similarity_scores" file="similarity/scores_test4_out.json" ftype="json"
+                checksum="md5$91c4769097813aff379add4664519f3a"/>
         </test>
         <test>
             <param name="queries" value="similarity/fill.msp" ftype="msp"/>
             <param name="similarity_metric" value="CosineHungarian"/>
             <param name="is_symmetric" value="TRUE"/>
-            <output name="similarity_scores" file="similarity/scores_test5_out.tsv" ftype="tsv"/>
-            <output name="similarity_matches" file="similarity/matches_test5_out.tsv" ftype="tsv"/>
+            <output name="similarity_scores" file="similarity/scores_test5_out.json" ftype="json"
+                checksum="md5$81cdfa83cd4c7eb5c3cae59114be3a5f"/>
         </test>
         <test>
             <param name="references" value="similarity/recetox_gc-ei_ms_20201028.msp" ftype="msp"/>
@@ -133,8 +127,8 @@
             <param name="ri_filtering.is_true" value="TRUE" />
             <param name="ri_filtering.tolerance" value="60.0" />
             <param name="similarity_metric" value="CosineGreedy"/>
-            <output name="similarity_scores" file="similarity/scores_test6_out.tsv" ftype="tsv"/>
-            <output name="similarity_matches" file="similarity/matches_test6_out.tsv" ftype="tsv"/>
+            <output name="similarity_scores" file="similarity/scores_test6_out.json" ftype="json"
+                checksum="md5$c56751d2a414a243dceadc35cdc5bd75"/>
         </test>
     </tests>
 
