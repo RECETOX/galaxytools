@@ -8,6 +8,11 @@
                 familyName="Hecht"
                 url="https://github.com/hechth"
                 identifier="0000-0001-6744-996X" />
+            <person
+                givenName="Maksym"
+                familyName="Skoryk"
+                url="https://github.com/maximskorik"
+                identifier="0000-0003-2056-8018" />
             <organization
                 url="https://www.recetox.muni.cz/"
                 email="GalaxyToolsDevelopmentandDeployment@space.muni.cz"
