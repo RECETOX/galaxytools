@@ -1,5 +1,6 @@
 import click
-from pandas import DataFrame, read_csv
+from matchms.importing import scores_from_json
+from pandas import DataFrame
 
 
 def create_long_table(data: DataFrame, value_id: str) -> DataFrame:
@@ -63,18 +64,22 @@ def filter_thresholds(data: DataFrame, t_score: float, t_matches: float) -> Data
     return filtered
 
 
-def load_data(scores_filename: str, matches_filename: str) -> DataFrame:
+def load_data(scores_filename: str) -> DataFrame:
     """Load data from filenames and join on compound id.
 
     Args:
-        scores_filename (str): Path to scores table.
-        matches_filename (str): Path to matches table.
+        scores_filename (str): Path to json file strong serialized scores.
 
     Returns:
         DataFrame: Joined dataframe on compounds containing scores an matches in long format.
     """
-    matches = read_csv(matches_filename, sep=None, index_col=0)
-    scores = read_csv(scores_filename, sep=None, index_col=0)
+    scores_object = scores_from_json(scores_filename)
+
+    query_names = [spectra.metadata['compound_name'] for spectra in scores_object.queries]
+    reference_names = [spectra.metadata['compound_name'] for spectra in scores_object.references]
+
+    scores = DataFrame(scores_object.scores['score'], index=reference_names, columns=query_names)
+    matches = DataFrame(scores_object.scores['matches'], index=reference_names, columns=query_names)
 
     scores_long = create_long_table(scores, 'score')
     matches_long = create_long_table(matches, 'matches')
@@ -85,12 +90,11 @@ def load_data(scores_filename: str, matches_filename: str) -> DataFrame:
 
 @click.group()
 @click.option('--sf', 'scores_filename', type=click.Path(exists=True), required=True)
-@click.option('--mf', 'matches_filename', type=click.Path(exists=True), required=True)
 @click.option('--o', 'output_filename', type=click.Path(writable=True), required=True)
 @click.pass_context
-def cli(ctx, scores_filename, matches_filename, output_filename):
+def cli(ctx, scores_filename, output_filename):
     ctx.ensure_object(dict)
-    ctx.obj['data'] = load_data(scores_filename, matches_filename)
+    ctx.obj['data'] = load_data(scores_filename)
     pass
 
 
@@ -112,12 +116,9 @@ def get_top_k_data(ctx, k):
 
 
 @cli.resultcallback()
-def write_output(result: DataFrame, scores_filename, matches_filename, output_filename):
-    input_file = read_csv(scores_filename, sep=None, iterator=True)
-    sep = input_file._engine.data.dialect.delimiter
-
+def write_output(result: DataFrame, scores_filename, output_filename):
     result = result.reset_index().rename(columns={'level_0': 'query', 'compound': 'reference'})
-    result.to_csv(output_filename, sep=sep, index=False)
+    result.to_csv(output_filename, sep='\t', index=False)
 
 
 if __name__ == '__main__':
