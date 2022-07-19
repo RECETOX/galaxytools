@@ -68,10 +68,10 @@ def load_data(scores_filename: str) -> DataFrame:
     """Load data from filenames and join on compound id.
 
     Args:
-        scores_filename (str): Path to json file strong serialized scores.
+        scores_filename (str): Path to json file with serialized scores.
 
     Returns:
-        DataFrame: Joined dataframe on compounds containing scores an matches in long format.
+        DataFrame: Joined dataframe on compounds containing scores and matches in long format.
     """
     scores_object = scores_from_json(scores_filename)
 

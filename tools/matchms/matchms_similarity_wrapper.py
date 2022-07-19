@@ -34,7 +34,7 @@ def main(argv):
     parser.add_argument("tolerance", type=float, help="Tolerance to use for peak matching.")
     parser.add_argument("mz_power", type=float, help="The power to raise mz to in the cosine function.")
     parser.add_argument("intensity_power", type=float, help="The power to raise intensity to in the cosine function.")
-    parser.add_argument("output_filename_scores", type=str, help="Path where to store the output .tsv scores.")
+    parser.add_argument("output_filename_scores", type=str, help="Path where to store the output .json scores.")
     args = parser.parse_args()
 
     if args.queries_format == 'msp':

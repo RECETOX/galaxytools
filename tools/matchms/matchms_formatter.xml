@@ -32,7 +32,7 @@
     </configfiles>
 
     <inputs>
-        <param label="Scores object" name="scores" type="data" format="json" help="MatchMS Scores object." />
+        <param label="Scores object" name="scores" type="data" format="json" help="MatchMS Scores json file." />
 
 
         <conditional name="method">
