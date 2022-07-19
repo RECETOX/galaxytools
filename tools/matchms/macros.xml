@@ -31,29 +31,18 @@
                 +-----------+---------------+--------+-----------+
 
             Downstream Tools
-                The outputs are two tsv datasets. One containing the similarity scores and the other number of matched peaks.
+                The output is a JSON file containing serialized matchMS Scores object. The file can be processed by **matchMS output formatter**. 
         ]]>
     </token>
 
     <token name="@HELP_formatter@">
         <![CDATA[
             Usage
-                This tool creates user friendly tables from the data matrices produces by matchms.
+                This tool creates user friendly tables from the similarity scores produced by **matchMS similarity**.
                 The tool can be operated on two modes based on (i) thresholds or (ii) top k matches.
 
             Input Table Format
-                The tool expects two data matrices with the format as depicted below.
-                The tool assumes the reference compound labels as row labels and the query labels as column labels (as naturally outputted by matchms).
-
-                +----------+------+------+-----+
-                |          | C001 | C002 | ... |
-                +==========+======+======+=====+
-                | Perylene | 0.1  | 0.0  | ... |
-                +----------+------+------+-----+
-                | Glycine  | 0.5  | 0.34 | ... |
-                +----------+------+------+-----+
-                |   ...    | ...  | ...  | ... |
-                +----------+------+------+-----+
+                The tool expects a JSON file containing serialized matchMS Scores object.
 
             Output Table Format
                 +----------+-----------+---------+--------+
