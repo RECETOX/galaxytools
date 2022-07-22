@@ -1,5 +1,5 @@
 <macros>
-    <token name="@TOOL_VERSION@">0.14.0</token>
+    <token name="@TOOL_VERSION@">0.15.0</token>
 
     <xml name="creator">
         <creator>
@@ -8,6 +8,11 @@
                 familyName="Hecht"
                 url="https://github.com/hechth"
                 identifier="0000-0001-6744-996X" />
+            <person
+                givenName="Zargham"
+                familyName="Ahmad"
+                url="https://github.com/zargham-ahmad"
+                identifier="0000-0002-6096-224X" />
             <organization
                 url="https://www.recetox.muni.cz/"
                 email="GalaxyToolsDevelopmentandDeployment@space.muni.cz"

@@ -1,4 +1,4 @@
-<tool id="matchms" name="matchMS similarity" version="@TOOL_VERSION@+galaxy1" python_template_version="3.8">
+<tool id="matchms" name="matchMS similarity" version="@TOOL_VERSION@+galaxy0" python_template_version="3.8">
     <description>calculate the similarity score and matched peaks</description>
 
     <macros>
@@ -59,6 +59,7 @@
             <option value="CosineGreedy" selected="true">CosineGreedy</option>
             <option value="CosineHungarian">CosineHungarian</option>
             <option value="ModifiedCosine">ModifiedCosine</option>
+            <option value="NeutralLossesCosine">NeutralLossesCosine</option>
         </param>
 
         <section name="algorithm" title="Algorithm Parameters" expanded="true">
@@ -135,6 +136,13 @@
             <param name="similarity_metric" value="CosineGreedy"/>
             <output name="similarity_scores" file="similarity/scores_test6_out.tsv" ftype="tsv"/>
             <output name="similarity_matches" file="similarity/matches_test6_out.tsv" ftype="tsv"/>
+        </test>
+        <test>
+            <param name="references" value="similarity/RECETOX_Exposome_pesticides_HR_MS_20220323.msp" ftype="msp"/>
+            <param name="queries" value="similarity/RECETOX_Exposome_pesticides_HR_MS_20220323.msp" ftype="msp"/>
+            <param name="similarity_metric" value="NeutralLossesCosine"/>
+            <output name="similarity_scores" file="similarity/scores_test7_out.tsv" ftype="tsv"/>
+            <output name="similarity_matches" file="similarity/matches_test7_out.tsv" ftype="tsv"/>
         </test>
     </tests>
 
