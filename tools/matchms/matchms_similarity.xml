@@ -131,8 +131,10 @@
         <test>
             <param name="references" value="similarity/recetox_gc-ei_ms_20201028.msp" ftype="msp"/>
             <param name="queries" value="similarity/fill2.msp" ftype="msp"/>
-            <param name="ri_filtering.is_true" value="TRUE" />
-            <param name="ri_filtering.tolerance" value="60.0" />
+            <conditional name="ri_filtering">
+                <param name="is_true" value="True"></param>
+                <param name="tolerance" value="60.0" />
+            </conditional>
             <param name="similarity_metric" value="CosineGreedy"/>
             <output name="similarity_scores" file="similarity/scores_test6_out.tsv" ftype="tsv"/>
             <output name="similarity_matches" file="similarity/matches_test6_out.tsv" ftype="tsv"/>
