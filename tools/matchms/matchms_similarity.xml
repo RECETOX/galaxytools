@@ -144,6 +144,13 @@
             <output name="similarity_scores" file="similarity/scores_test7_out.tsv" ftype="tsv"/>
             <output name="similarity_matches" file="similarity/matches_test7_out.tsv" ftype="tsv"/>
         </test>
+        <test>
+            <param name="queries" value="similarity/recetox_gc-ei_ms_20201028.msp" ftype="msp"/>
+            <param name="similarity_metric" value="CosineGreedy"/>
+            <param name="is_symmetric" value="TRUE"
+            <output name="similarity_scores" file="similarity/scores_test8_out.tsv" ftype="tsv"/>
+            <output name="similarity_matches" file="similarity/matches_test8_out.tsv" ftype="tsv"/>
+        </test>
     </tests>
 
     <help>
