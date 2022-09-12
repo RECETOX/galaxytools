@@ -82,7 +82,7 @@ def main(argv):
     if args.ri_tolerance is not None:
         print("RI filtering with tolerance ", args.ri_tolerance)
         ri_matches = calculate_scores(reference_spectra, queries_spectra, MetadataMatch("retention_index", "difference", args.ri_tolerance)).scores
-        scores.scores["score"] = np.where(ri_matches, scores.scores["score"], 0.0)
+        scores._scores["score"] = np.where(ri_matches, scores.scores["score"], 0.0)
 
     write_outputs(args, scores)
     return 0
