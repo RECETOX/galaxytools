@@ -1,4 +1,4 @@
-<tool id="matchms" name="matchMS similarity" version="@TOOL_VERSION@+galaxy1" python_template_version="3.8">
+<tool id="matchms" name="matchMS similarity" version="@TOOL_VERSION@+galaxy2" python_template_version="3.8">
     <description>calculate the similarity score and matched peaks</description>
 
     <macros>
@@ -149,7 +149,11 @@
         <test>
             <param name="queries" value="similarity/recetox_gc-ei_ms_20201028.msp" ftype="msp"/>
             <param name="similarity_metric" value="CosineGreedy"/>
-            <param name="is_symmetric" value="TRUE"
+            <param name="is_symmetric" value="TRUE" />
+            <conditional name="ri_filtering">
+                <param name="is_true" value="True"></param>
+                <param name="tolerance" value="60.0" />
+            </conditional>
             <output name="similarity_scores" file="similarity/scores_test8_out.tsv" ftype="tsv"/>
             <output name="similarity_matches" file="similarity/matches_test8_out.tsv" ftype="tsv"/>
         </test>
