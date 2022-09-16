@@ -1,4 +1,57 @@
-waveica <- function(data,
+read_csv <- function(file, metadata) {
+  if (!is.na(metadata)) {
+    ft_table <- read.csv(file, header = TRUE)
+    mt_data <- read.csv(metadata, header = TRUE)
+    data <- merge(mt_data, ft_table)
+  } else {
+    data <- read.csv(file, header = TRUE)
+  }
+
+  return(data)
+}
+
+read_tsv <- function(file, metadata) {
+  if (!is.na(metadata)) {
+    ft_table <- read.csv(file, header = TRUE, sep = "\t")
+    mt_data <- read.csv(metadata, header = TRUE, sep = "\t")
+    data <- merge(mt_data, ft_table)
+  } else {
+    data <- read.csv(file, header = TRUE, sep = "\t")
+  }
+
+  return(data)
+}
+
+read_parquet_file <- function(file, metadata) {
+  if (!is.na(metadata)) {
+    ft_table <- arrow::read_parquet(file)
+    mt_data <- arrow::read_parquet(metadata)
+    data <- merge(mt_data, ft_table)
+  } else {
+    data <- arrow::read_parquet(file)
+  }
+
+  return(data)
+}
+
+write_csv <- function(data, output) {
+  write.csv(data, file = output, row.names = FALSE, quote = FALSE)
+  cat("Normalization has been completed.\n")
+}
+
+write_tsv <- function(data, output) {
+  write.table(data, file = output, sep = "\t", row.names = FALSE, quote = FALSE)
+  cat("Normalization has been completed.\n")
+}
+
+write_parquet_file <- function(data, output) {
+  arrow::write_parquet(data, sink = output)
+  cat("Normalization has been completed.\n")
+}
+
+waveica <- function(file,
+                    metadata = NA,
+                    ext,
                     wavelet_filter,
                     wavelet_length,
                     k,
@@ -8,7 +61,14 @@ waveica <- function(data,
                     exclude_blanks) {
 
   # get input from the Galaxy, preprocess data
-  data <- read.csv(data, header = TRUE)
+
+  if (ext == "csv") {
+    data <- read_csv(file, metadata)
+  } else if (ext == "tsv") {
+    data <- read_tsv(file, metadata)
+  } else {
+    data <- read_parquet_file(file, metadata)
+  }
 
   required_columns <- c("sampleName", "class", "sampleType", "injectionOrder", "batch")
   verify_input_dataframe(data, required_columns)
@@ -44,7 +104,9 @@ waveica <- function(data,
 }
 
 
-waveica_singlebatch <- function(data,
+waveica_singlebatch <- function(file,
+                                metadata = NA,
+                                ext,
                                 wavelet_filter,
                                 wavelet_length,
                                 k,
@@ -53,7 +115,13 @@ waveica_singlebatch <- function(data,
                                 exclude_blanks) {
 
   # get input from the Galaxy, preprocess data
-  data <- read.csv(data, header = TRUE)
+  if (ext == "csv") {
+    data <- read_csv(file, metadata)
+  } else if (ext == "tsv") {
+    data <- read_tsv(file, metadata)
+  } else {
+    data <- read_parquet_file(file, metadata)
+  }
 
   required_columns <- c("sampleName", "class", "sampleType", "injectionOrder")
   optional_columns <- c("batch")
@@ -149,7 +217,13 @@ exclude_group <- function(data, group) {
 
 
 # Store output of WaveICA in a tsv file
-store_data <- function(data, output) {
-  write.table(data, file = output, sep = "\t", row.names = FALSE, quote = FALSE)
-  cat("Normalization has been completed.\n")
+store_data <- function(data, output, ext) {
+  if (ext == "csv") {
+    write_csv(data, output)
+  } else if (ext == "tsv") {
+    write_tsv(data, output)
+  }
+  else {
+    write_parquet_file(data, output)
+  }
 }
