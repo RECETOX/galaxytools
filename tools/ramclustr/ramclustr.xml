@@ -129,7 +129,7 @@
                     <param name="batch_order_qc" value="test2_sample_metadata_xcms_2.csv" ftype="csv" />
                 </section>
             </section>
-            <output name="mass_spectra_merged" file="test2_fill_xcms_2.msp" ftype="msp" compare="diff" lines_diff="10"/>
+            <output name="mass_spectra_merged" file="test2_fill_xcms_2.msp" ftype="msp" compare="diff" lines_diff="20"/>
             <output name="spec_abundance" file="test2_spec_abundance_xcms_2.csv" ftype="csv" compare="sim_size" delta="100"/>
         </test>
         <test><!-- TEST 3 -->
