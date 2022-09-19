@@ -2,7 +2,7 @@ read_csv <- function(file, metadata) {
   if (!is.na(metadata)) {
     ft_table <- read.csv(file, header = TRUE)
     mt_data <- read.csv(metadata, header = TRUE)
-    data <- merge(mt_data, ft_table)
+    data <- merge(mt_data, ft_table, by = "sampleName")
   } else {
     data <- read.csv(file, header = TRUE)
   }
@@ -14,7 +14,7 @@ read_tsv <- function(file, metadata) {
   if (!is.na(metadata)) {
     ft_table <- read.csv(file, header = TRUE, sep = "\t")
     mt_data <- read.csv(metadata, header = TRUE, sep = "\t")
-    data <- merge(mt_data, ft_table)
+    data <- merge(mt_data, ft_table, by = "sampleName")
   } else {
     data <- read.csv(file, header = TRUE, sep = "\t")
   }
@@ -26,7 +26,7 @@ read_parquet_file <- function(file, metadata) {
   if (!is.na(metadata)) {
     ft_table <- arrow::read_parquet(file)
     mt_data <- arrow::read_parquet(metadata)
-    data <- merge(mt_data, ft_table)
+    data <- merge(mt_data, ft_table, by = "sampleName")
   } else {
     data <- arrow::read_parquet(file)
   }
