@@ -222,8 +222,7 @@ store_data <- function(data, output, ext) {
     write_csv(data, output)
   } else if (ext == "tsv") {
     write_tsv(data, output)
-  }
-  else {
+  } else {
     write_parquet_file(data, output)
   }
 }
