@@ -145,7 +145,8 @@
     <expand macro="outputs"/>
 
     <tests>
-        <test>
+        <test><!-- TEST 1 -->
+            <param name="type_choice" value="csv"/>
             <param name="data" value="input_data.csv" ftype="csv"/>
             <param name="mode" value="batchwise"/>
             <param name="wavelet_filter" value="d"/>
@@ -154,7 +155,73 @@
             <param name="t" value="0.05"/>
             <param name="t2" value="0.05"/>
             <param name="alpha" value="0"/>
+            <output name="normalized_data" file="normalized_data.csv"/>
+        </test>
+        <test><!-- TEST 2 -->
+            <param name="type_choice" value="tsv"/>
+            <param name="data" value="input_data.tsv" ftype="tsv"/>
+            <param name="mode" value="batchwise"/>
+            <param name="wavelet_filter" value="d"/>
+            <param name="filter_length" value="2"/>
+            <param name="k" value="20"/>
+            <param name="t" value="0.05"/>
+            <param name="t2" value="0.05"/>
+            <param name="alpha" value="0"/>
             <output name="normalized_data" file="normalized_data.tsv"/>
+        </test>
+        <test><!-- TEST 3 -->
+            <param name="type_choice" value="parquet"/>
+            <param name="data" value="input_data.parquet" ftype="parquet"/>
+            <param name="mode" value="batchwise"/>
+            <param name="wavelet_filter" value="d"/>
+            <param name="filter_length" value="2"/>
+            <param name="k" value="20"/>
+            <param name="t" value="0.05"/>
+            <param name="t2" value="0.05"/>
+            <param name="alpha" value="0"/>
+            <output name="normalized_data" file="normalized_data.parquet"/>
+        </test>
+        <test><!-- TEST 4 -->
+            <param name="input_choice" value="2"/>
+            <param name="type_choice" value="csv"/>
+            <param name="data" value="feature_table.csv" ftype="csv"/>
+            <param name="metadata" value="metadata.csv" ftype="csv"/>
+            <param name="mode" value="batchwise"/>
+            <param name="wavelet_filter" value="d"/>
+            <param name="filter_length" value="2"/>
+            <param name="k" value="20"/>
+            <param name="t" value="0.05"/>
+            <param name="t2" value="0.05"/>
+            <param name="alpha" value="0"/>
+            <output name="normalized_data" file="normalized_data.csv"/>
+        </test>
+        <test><!-- TEST 5 -->
+            <param name="input_choice" value="2"/>
+            <param name="type_choice" value="tsv"/>
+            <param name="data" value="feature_table.tsv" ftype="tsv"/>
+            <param name="metadata" value="metadata.tsv" ftype="tsv"/>
+            <param name="mode" value="batchwise"/>
+            <param name="wavelet_filter" value="d"/>
+            <param name="filter_length" value="2"/>
+            <param name="k" value="20"/>
+            <param name="t" value="0.05"/>
+            <param name="t2" value="0.05"/>
+            <param name="alpha" value="0"/>
+            <output name="normalized_data" file="normalized_data.tsv"/>
+        </test>
+        <test><!-- TEST 6 -->
+            <param name="input_choice" value="2"/>
+            <param name="type_choice" value="parquet"/>
+            <param name="data" value="feature_table.parquet" ftype="parquet"/>
+            <param name="metadata" value="metadata.parquet" ftype="parquet"/>
+            <param name="mode" value="batchwise"/>
+            <param name="wavelet_filter" value="d"/>
+            <param name="filter_length" value="2"/>
+            <param name="k" value="20"/>
+            <param name="t" value="0.05"/>
+            <param name="t2" value="0.05"/>
+            <param name="alpha" value="0"/>
+            <output name="normalized_data" file="normalized_data.parquet"/>
         </test>
         <!-- The following test has different results on three platform I've tried -->
         <!-- <test>
