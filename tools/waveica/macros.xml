@@ -100,7 +100,6 @@
 
     <xml name="outputs">
         <outputs>
-            <!--<data name="normalized_data" format="tsv" /> -->
             <data name="normalized_data" format="csv">
                 <change_format>
                     <when input="$input_num.filetype.type_choice" value="tsv" format="tsv" />
