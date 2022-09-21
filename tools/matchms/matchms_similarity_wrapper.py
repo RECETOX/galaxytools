@@ -47,7 +47,7 @@ def main(argv):
         raise ValueError(f'File format {args.queries_format} not supported for query spectra.')
 
     if args.symmetric:
-        reference_spectra = []
+        reference_spectra = queries_spectra.copy()
     else:
         if args.references_format == 'msp':
             reference_spectra = list(load_from_msp(args.references_filename))
@@ -73,7 +73,7 @@ def main(argv):
 
     print("Calculating scores...")
     scores = calculate_scores(
-        references=queries_spectra if args.symmetric else reference_spectra,
+        references=reference_spectra,
         queries=queries_spectra,
         similarity_function=similarity_metric,
         is_symmetric=args.symmetric
