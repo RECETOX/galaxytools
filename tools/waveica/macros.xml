@@ -20,20 +20,8 @@
         </creator>
     </xml>
 
-    <xml name="parameters_csv">
-        <section name="input_csv" title="Input Feature table as CSV" expanded="true">
-            <param name="data" label="Input CSV" type="data" format="csv" help=""/>
-        </section>
-    </xml>
-    <xml name="parameters_tsv">
-        <section name="input_tsv" title="Input Feature table as TSV" expanded="true">
-            <param name="data" label="Input TSV" type="data" format="tsv" help="" />
-        </section>
-    </xml>
-    <xml name="parameters_parquet">
-        <section name="input_parquet" title="Input Feature table as PARQUET" expanded="true">
-            <param name="data" label="Input PARQUET" type="data" format="parquet" help="" />
-        </section>
+    <xml name="input_data">
+        <param type="data" name="data" label="Feature table" format="csv,tsv,parquet" help=""/>
     </xml>
     <xml name="general_parameters">
         <param type="integer" value="20" name="k" label="Number of components to decompose" help="maximal component that ICA decomposes"/>
@@ -105,14 +93,7 @@
 
     <xml name="outputs">
         <outputs>
-            <data name="normalized_data" format="csv">
-                <change_format>
-                    <when input="$input_num.filetype.type_choice" value="tsv" format="tsv" />
-                </change_format>
-                <change_format>
-                    <when input="$input_num.filetype.type_choice" value="parquet" format="parquet" />
-                </change_format>
-            </data>
+             <data format_source="data" name="normalized_data"/>
         </outputs>
     </xml>
 

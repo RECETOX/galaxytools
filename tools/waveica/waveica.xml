@@ -15,23 +15,13 @@
 
             #if $batch_correction.mode == "batchwise":
             -e 'normalized_data <- waveica(
-                #if $input_num.filetype.type_choice == "csv": 
-                    file = "$input_num.filetype.input_csv.data",
-                    #if $input_num.input_choice == "2":
-                        metadata = "$input_num.filetype.input_csv_metadata.metadata",
-                    #end if
-                #else if $input_num.filetype.type_choice == "tsv":
-                    file = "$input_num.filetype.input_tsv.data",
-                    #if $input_num.input_choice == "2":
-                        metadata = "$input_num.filetype.input_tsv_metadata.metadata",
-                    #end if
+                file = "$input_num.data",
+                #if $input_num.input_choice == "2":
+                    metadata = "$input_num.input_metadata.metadata",
+                    ext = "$input_num.data.ext,$input_num.input_metadata.metadata.ext",
                 #else:
-                    file = "$input_num.filetype.input_parquet.data",
-                    #if $input_num.input_choice == "2":
-                        metadata = "$input_num.filetype.input_parquet_metadata.metadata",
-                    #end if
+                    ext = "$input_num.data.ext",
                 #end if
-                ext = "$input_num.filetype.type_choice",
                 wavelet_filter = "$wf.wavelet_filter",
                 wavelet_length = "$wf.wavelet_length",
                 k = $k,
@@ -41,24 +31,14 @@
                 exclude_blanks = $exclude_blanks
             )'
             #else if $batch_correction.mode == "single_batch":
-            -e 'normalized_data <- waveica_singlebatch(
-                #if $input_num.filetype.type_choice == "csv": 
-                    file = "$input_num.filetype.input_csv.data",
-                    #if $input_num.input_choice == "2":
-                        metadata = "$input_num.filetype.input_csv_metadata.metadata",
-                    #end if
-                #else if $input_num.filetype.type_choice == "tsv": 
-                    file = "$input_num.filetype.input_tsv.data",
-                    #if $input_num.input_choice == "2":
-                        metadata = "$input_num.filetype.input_tsv_metadata.metadata",
-                    #end if
+            -e 'normalized_data <- waveica_singlebatch( 
+                file = "$input_num.data",
+                #if $input_num.input_choice == "2":
+                    metadata = "$input_num.input_metadata.metadata",
+                    ext = "$input_num.data.ext,$input_num.input_metadata.metadata.ext",
                 #else:
-                    file = "$input_num.filetype.input_parquet.data",
-                    #if $input_num.input_choice == "2":
-                        metadata = "$input_num.filetype.input_parquet_metadata.metadata",
-                    #end if
+                    ext = "$input_num.data.ext",
                 #end if
-                ext = "$input_num.filetype.type_choice",
                 wavelet_filter = "$wf.wavelet_filter",
                 wavelet_length = "$wf.wavelet_length",
                 k = $k,
@@ -68,7 +48,7 @@
             )'
             #end if
 
-            -e 'store_data(normalized_data, "$normalized_data", "$input_num.filetype.type_choice")'
+            -e 'store_data(normalized_data, "$normalized_data", "$input_num.data.ext")'
     ]]></command>
 
     <inputs>
@@ -78,49 +58,13 @@
                     <option value="2">2</option>
             </param>
             <when value="1">
-                <conditional name="filetype">
-                    <param name="type_choice" type="select" label="Choose input format:">
-                        <option value="csv" selected="true">CSV</option>
-                        <option value="tsv">TSV</option>
-                        <option value="parquet">PARQUET</option>
-                    </param>
-                    <when value="csv">
-                        <expand macro="parameters_csv" />
-                    </when>
-                    <when value="tsv">
-                        <expand macro="parameters_tsv" />
-                    </when>
-                    <when value="parquet">
-                        <expand macro="parameters_parquet" />
-                    </when>
-                </conditional>
+                <expand macro="input_data"/>
             </when>
             <when value="2">
-                <conditional name="filetype">
-                    <param name="type_choice" type="select" label="Choose input format:">
-                        <option value="csv" selected="true">CSV</option>
-                        <option value="tsv">TSV</option>
-                        <option value="parquet">PARQUET</option>
-                    </param>
-                    <when value="csv">
-                        <expand macro="parameters_csv" />
-                        <section name="input_csv_metadata" title="Input metadata table" expanded="true">
-                            <param name="metadata" label="Input metadata" type="data" format="csv" help="" />
-                        </section>        
-                    </when>
-                    <when value="tsv">
-                        <expand macro="parameters_tsv" />
-                        <section name="input_tsv_metadata" title="Input metadata table" expanded="true">
-                            <param name="metadata" label="Input metadata" type="data" format="tsv" help="" />
-                        </section> 
-                    </when>
-                    <when value="parquet">
-                        <expand macro="parameters_parquet" />
-                        <section name="input_parquet_metadata" title="Input metadata table" expanded="true">
-                            <param name="metadata" label="Input metadata" type="data" format="parquet" help="" />
-                        </section> 
-                    </when>
-                </conditional>
+                <section name="input_metadata" title="Input metadata table" expanded="true">
+                    <param name="metadata" label="Input metadata" type="data" format="csv,tsv,parquet" help="" />
+                </section> 
+                <expand macro="input_data"/>
             </when>
         </conditional>
         <expand macro="general_parameters"/>
@@ -146,7 +90,6 @@
 
     <tests>
         <test><!-- TEST 1 -->
-            <param name="type_choice" value="csv"/>
             <param name="data" value="input_data.csv" ftype="csv"/>
             <param name="mode" value="batchwise"/>
             <param name="wavelet_filter" value="d"/>
@@ -158,7 +101,6 @@
             <output name="normalized_data" file="normalized_data.csv"/>
         </test>
         <test><!-- TEST 2 -->
-            <param name="type_choice" value="tsv"/>
             <param name="data" value="input_data.tsv" ftype="tsv"/>
             <param name="mode" value="batchwise"/>
             <param name="wavelet_filter" value="d"/>
@@ -170,7 +112,6 @@
             <output name="normalized_data" file="normalized_data.tsv"/>
         </test>
         <test><!-- TEST 3 -->
-            <param name="type_choice" value="parquet"/>
             <param name="data" value="input_data.parquet" ftype="parquet"/>
             <param name="mode" value="batchwise"/>
             <param name="wavelet_filter" value="d"/>
@@ -183,7 +124,6 @@
         </test>
         <test><!-- TEST 4 -->
             <param name="input_choice" value="2"/>
-            <param name="type_choice" value="csv"/>
             <param name="data" value="feature_table.csv" ftype="csv"/>
             <param name="metadata" value="metadata.csv" ftype="csv"/>
             <param name="mode" value="batchwise"/>
@@ -197,7 +137,6 @@
         </test>
         <test><!-- TEST 5 -->
             <param name="input_choice" value="2"/>
-            <param name="type_choice" value="tsv"/>
             <param name="data" value="feature_table.tsv" ftype="tsv"/>
             <param name="metadata" value="metadata.tsv" ftype="tsv"/>
             <param name="mode" value="batchwise"/>
@@ -211,9 +150,8 @@
         </test>
         <test><!-- TEST 6 -->
             <param name="input_choice" value="2"/>
-            <param name="type_choice" value="parquet"/>
             <param name="data" value="feature_table.parquet" ftype="parquet"/>
-            <param name="metadata" value="metadata.parquet" ftype="parquet"/>
+            <param name="metadata" value="metadata.csv" ftype="csv"/>
             <param name="mode" value="batchwise"/>
             <param name="wavelet_filter" value="d"/>
             <param name="filter_length" value="2"/>
@@ -221,7 +159,7 @@
             <param name="t" value="0.05"/>
             <param name="t2" value="0.05"/>
             <param name="alpha" value="0"/>
-            <output name="normalized_data" file="normalized_data.parquet"/>
+            <output name="normalized_data" file="normalized_data.parquet" compare="sim_size" delta="200"/>
         </test>
         <!-- The following test has different results on three platform I've tried -->
         <!-- <test>

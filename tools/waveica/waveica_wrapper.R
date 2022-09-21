@@ -1,37 +1,36 @@
-read_csv <- function(file, metadata) {
+read_file <- function(file, metadata, ft_ext, mt_ext) {
+  data <- read_ft_data(file, ft_ext)
+
   if (!is.na(metadata)) {
-    ft_table <- read.csv(file, header = TRUE)
+    mt_data <- read_metadata(metadata, mt_ext)
+    data <- merge(mt_data, data, by = "sampleName")
+  }
+
+  return(data)
+}
+
+read_ft_data <- function(file, ft_ext) {
+  if (ft_ext == "csv") {
+    ft_data <- read.csv(file, header = TRUE)
+  } else if (ft_ext == "tsv") {
+    ft_data <- read.csv(file, header = TRUE, sep = "\t")
+  } else {
+    ft_data <- arrow::read_parquet(file)
+  }
+
+  return(ft_data)
+}
+
+read_metadata <- function(metadata, mt_ext) {
+  if (mt_ext == "csv") {
     mt_data <- read.csv(metadata, header = TRUE)
-    data <- merge(mt_data, ft_table, by = "sampleName")
-  } else {
-    data <- read.csv(file, header = TRUE)
-  }
-
-  return(data)
-}
-
-read_tsv <- function(file, metadata) {
-  if (!is.na(metadata)) {
-    ft_table <- read.csv(file, header = TRUE, sep = "\t")
+  } else if (mt_ext == "tsv") {
     mt_data <- read.csv(metadata, header = TRUE, sep = "\t")
-    data <- merge(mt_data, ft_table, by = "sampleName")
   } else {
-    data <- read.csv(file, header = TRUE, sep = "\t")
-  }
-
-  return(data)
-}
-
-read_parquet_file <- function(file, metadata) {
-  if (!is.na(metadata)) {
-    ft_table <- arrow::read_parquet(file)
     mt_data <- arrow::read_parquet(metadata)
-    data <- merge(mt_data, ft_table, by = "sampleName")
-  } else {
-    data <- arrow::read_parquet(file)
   }
 
-  return(data)
+  return(mt_data)
 }
 
 write_csv <- function(data, output) {
@@ -61,14 +60,12 @@ waveica <- function(file,
                     exclude_blanks) {
 
   # get input from the Galaxy, preprocess data
+  ext <- strsplit(x = ext, split = "\\,")[[1]]
 
-  if (ext == "csv") {
-    data <- read_csv(file, metadata)
-  } else if (ext == "tsv") {
-    data <- read_tsv(file, metadata)
-  } else {
-    data <- read_parquet_file(file, metadata)
-  }
+  ft_ext <- ext[1]
+  mt_ext <- ext[2]
+
+  data <- read_file(file, metadata, ft_ext, mt_ext)
 
   required_columns <- c("sampleName", "class", "sampleType", "injectionOrder", "batch")
   verify_input_dataframe(data, required_columns)
@@ -115,13 +112,12 @@ waveica_singlebatch <- function(file,
                                 exclude_blanks) {
 
   # get input from the Galaxy, preprocess data
-  if (ext == "csv") {
-    data <- read_csv(file, metadata)
-  } else if (ext == "tsv") {
-    data <- read_tsv(file, metadata)
-  } else {
-    data <- read_parquet_file(file, metadata)
-  }
+  ext <- strsplit(x = ext, split = "\\,")[[1]]
+
+  ft_ext <- ext[1]
+  mt_ext <- ext[2]
+
+  data <- read_file(file, metadata, ft_ext, mt_ext)
 
   required_columns <- c("sampleName", "class", "sampleType", "injectionOrder")
   optional_columns <- c("batch")
@@ -215,8 +211,6 @@ exclude_group <- function(data, group) {
   }
 }
 
-
-# Store output of WaveICA in a tsv file
 store_data <- function(data, output, ext) {
   if (ext == "csv") {
     write_csv(data, output)
