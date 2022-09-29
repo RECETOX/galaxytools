@@ -1,51 +1,24 @@
 read_file <- function(file, metadata, ft_ext, mt_ext) {
-  data <- read_ft_data(file, ft_ext)
+  data <- read_data(file, ft_ext)
 
   if (!is.na(metadata)) {
-    mt_data <- read_metadata(metadata, mt_ext)
+    mt_data <- read_data(metadata, mt_ext)
     data <- merge(mt_data, data, by = "sampleName")
   }
 
   return(data)
 }
 
-read_ft_data <- function(file, ft_ext) {
-  if (ft_ext == "csv") {
-    ft_data <- read.csv(file, header = TRUE)
-  } else if (ft_ext == "tsv") {
-    ft_data <- read.csv(file, header = TRUE, sep = "\t")
+read_data <- function(file, ext) {
+  if (ext == "csv") {
+    data <- read.csv(file, header = TRUE)
+  } else if (ext == "tsv") {
+    data <- read.csv(file, header = TRUE, sep = "\t")
   } else {
-    ft_data <- arrow::read_parquet(file)
+    data <- arrow::read_parquet(file)
   }
 
-  return(ft_data)
-}
-
-read_metadata <- function(metadata, mt_ext) {
-  if (mt_ext == "csv") {
-    mt_data <- read.csv(metadata, header = TRUE)
-  } else if (mt_ext == "tsv") {
-    mt_data <- read.csv(metadata, header = TRUE, sep = "\t")
-  } else {
-    mt_data <- arrow::read_parquet(metadata)
-  }
-
-  return(mt_data)
-}
-
-write_csv <- function(data, output) {
-  write.csv(data, file = output, row.names = FALSE, quote = FALSE)
-  cat("Normalization has been completed.\n")
-}
-
-write_tsv <- function(data, output) {
-  write.table(data, file = output, sep = "\t", row.names = FALSE, quote = FALSE)
-  cat("Normalization has been completed.\n")
-}
-
-write_parquet_file <- function(data, output) {
-  arrow::write_parquet(data, sink = output)
-  cat("Normalization has been completed.\n")
+  return(data)
 }
 
 waveica <- function(file,
@@ -99,7 +72,6 @@ waveica <- function(file,
 
   return(data)
 }
-
 
 waveica_singlebatch <- function(file,
                                 metadata = NA,
@@ -213,10 +185,11 @@ exclude_group <- function(data, group) {
 
 store_data <- function(data, output, ext) {
   if (ext == "csv") {
-    write_csv(data, output)
+    write.csv(data, file = output, row.names = FALSE, quote = FALSE)
   } else if (ext == "tsv") {
-    write_tsv(data, output)
+    write.table(data, file = output, sep = "\t", row.names = FALSE, quote = FALSE)
   } else {
-    write_parquet_file(data, output)
+    arrow::write_parquet(data, sink = output)
   }
+  cat("Normalization has been completed.\n")
 }
