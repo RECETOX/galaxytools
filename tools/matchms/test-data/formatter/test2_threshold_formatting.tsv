@@ -2,9 +2,9 @@ query	reference	matches	score
 C007	Benzo[b]naphtho[2,1-d]thiophene	3	0.4302304171927885
 C023	Butylated hydroxytoluene	3	0.4899347755610658
 C016	Drometrizole	3	0.5535081364244014
-C040	Deltamethrin	4	0.5995685829585914
-C040	cis-Cypermethrin_isomer1	3	0.7514936043388737
-C040	cis-Cypermethrin_isomer2	3	0.6205879323732599
+C040	Deltamethrin	4	0.5995685829585913
+C040	cis-Cypermethrin_isomer1	3	0.7514936043388734
+C040	cis-Cypermethrin_isomer2	3	0.6205879323732597
 C043	Carbofuran phenol	3	0.5173781620618291
 C023	Alachlor	4	0.4289634841639738
 C012	Chlorpyrifos	3	0.43976068904478827

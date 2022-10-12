@@ -34,7 +34,6 @@
     <inputs>
         <param label="Scores object" name="scores" type="data" format="json" help="MatchMS Scores json file." />
 
-
         <conditional name="method">
             <param name="selection" type="select" label="Formatting method">
                 <option value="get-thresholded-data" selected="true">Thresholding</option>
@@ -63,14 +62,14 @@
             <param name="scores_threshold" value="0.4"/>
             <param name="matches_threshold" value="2"/>
             <output name="output" file="formatter/test2_threshold_formatting.tsv" ftype="tsv"
-                    checksum="md5$8929cdac47252da638f066261ffc16b7"/>
+                    checksum="md5$ec20df7af3ddba9eca042143e9631a80"/>
         </test>
         <test>
             <param name="scores" value="scores_test2_out.json" ftype="json"/>
             <param name="selection" value="get-top-k-data"/>
             <param name="k" value="3"/>
             <output name="output" file="formatter/test2_topk_formatting.tsv" ftype="tsv"
-                    checksum="md5$a9186721aa2df2f9dbdef5021aa6bc26"/>
+                    checksum="md5$2da38b827fbb6baa1bfd596c24e0e898"/>
         </test>
     </tests>
 
