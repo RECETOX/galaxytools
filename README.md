@@ -1,4 +1,4 @@
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.4471246.svg)](https://doi.org/10.5281/zenodo.4471246)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.6035335.svg)](https://doi.org/10.5281/zenodo.6035335)
 
 # Galaxy tools for Untargeted Mass Spectrometry Analysis
 

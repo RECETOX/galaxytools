@@ -1,4 +1,4 @@
-<tool id="waveica" name="WaveICA" version="@TOOL_VERSION@+galaxy1" python_template_version="3.5">
+<tool id="waveica" name="WaveICA" version="@TOOL_VERSION@+galaxy2" python_template_version="3.5">
     <description>removal of batch effects for untargeted metabolomics data</description>
     <macros>
         <import>macros.xml</import>
@@ -7,6 +7,7 @@
 
     <requirements>
         <requirement type="package" version="@TOOL_VERSION@">r-recetox-waveica</requirement>
+        <requirement type="package" version="8.0.0">r-arrow</requirement>
     </requirements>
     <command detect_errors="aggressive"><![CDATA[
         Rscript
@@ -14,7 +15,13 @@
 
             #if $batch_correction.mode == "batchwise":
             -e 'normalized_data <- waveica(
-                data = "$data",
+                file = "$input_num.data",
+                #if $input_num.input_choice == "2":
+                    metadata = "$input_num.input_metadata.metadata",
+                    ext = "$input_num.data.ext,$input_num.input_metadata.metadata.ext",
+                #else:
+                    ext = "$input_num.data.ext",
+                #end if
                 wavelet_filter = "$wf.wavelet_filter",
                 wavelet_length = "$wf.wavelet_length",
                 k = $k,
@@ -24,8 +31,14 @@
                 exclude_blanks = $exclude_blanks
             )'
             #else if $batch_correction.mode == "single_batch":
-            -e 'normalized_data <- waveica_singlebatch(
-                data = "$data",
+            -e 'normalized_data <- waveica_singlebatch( 
+                file = "$input_num.data",
+                #if $input_num.input_choice == "2":
+                    metadata = "$input_num.input_metadata.metadata",
+                    ext = "$input_num.data.ext,$input_num.input_metadata.metadata.ext",
+                #else:
+                    ext = "$input_num.data.ext",
+                #end if
                 wavelet_filter = "$wf.wavelet_filter",
                 wavelet_length = "$wf.wavelet_length",
                 k = $k,
@@ -35,10 +48,25 @@
             )'
             #end if
 
-            -e 'store_data(normalized_data,"$normalized_data")'
+            -e 'store_data(normalized_data, "$normalized_data", "$input_num.data.ext")'
     ]]></command>
 
     <inputs>
+        <conditional name="input_num">
+            <param name="input_choice" type="select" label="Choose input files:">
+                    <option value="1" selected="true">1</option>
+                    <option value="2">2</option>
+            </param>
+            <when value="1">
+                <expand macro="input_data"/>
+            </when>
+            <when value="2">
+                <section name="input_metadata" title="Input metadata table" expanded="true">
+                    <param name="metadata" label="Input metadata" type="data" format="csv,tsv,parquet" help="" />
+                </section> 
+                <expand macro="input_data"/>
+            </when>
+        </conditional>
         <expand macro="general_parameters"/>
         <expand macro="wf"/>
         <conditional name="batch_correction">
@@ -61,7 +89,7 @@
     <expand macro="outputs"/>
 
     <tests>
-        <test>
+        <test><!-- TEST 1 -->
             <param name="data" value="input_data.csv" ftype="csv"/>
             <param name="mode" value="batchwise"/>
             <param name="wavelet_filter" value="d"/>
@@ -70,7 +98,68 @@
             <param name="t" value="0.05"/>
             <param name="t2" value="0.05"/>
             <param name="alpha" value="0"/>
+            <output name="normalized_data" file="normalized_data.csv"/>
+        </test>
+        <test><!-- TEST 2 -->
+            <param name="data" value="input_data.tsv" ftype="tsv"/>
+            <param name="mode" value="batchwise"/>
+            <param name="wavelet_filter" value="d"/>
+            <param name="filter_length" value="2"/>
+            <param name="k" value="20"/>
+            <param name="t" value="0.05"/>
+            <param name="t2" value="0.05"/>
+            <param name="alpha" value="0"/>
             <output name="normalized_data" file="normalized_data.tsv"/>
+        </test>
+        <test><!-- TEST 3 -->
+            <param name="data" value="input_data.parquet" ftype="parquet"/>
+            <param name="mode" value="batchwise"/>
+            <param name="wavelet_filter" value="d"/>
+            <param name="filter_length" value="2"/>
+            <param name="k" value="20"/>
+            <param name="t" value="0.05"/>
+            <param name="t2" value="0.05"/>
+            <param name="alpha" value="0"/>
+            <output name="normalized_data" file="normalized_data.parquet"/>
+        </test>
+        <test><!-- TEST 4 -->
+            <param name="input_choice" value="2"/>
+            <param name="data" value="feature_table.csv" ftype="csv"/>
+            <param name="metadata" value="metadata.csv" ftype="csv"/>
+            <param name="mode" value="batchwise"/>
+            <param name="wavelet_filter" value="d"/>
+            <param name="filter_length" value="2"/>
+            <param name="k" value="20"/>
+            <param name="t" value="0.05"/>
+            <param name="t2" value="0.05"/>
+            <param name="alpha" value="0"/>
+            <output name="normalized_data" file="normalized_data.csv"/>
+        </test>
+        <test><!-- TEST 5 -->
+            <param name="input_choice" value="2"/>
+            <param name="data" value="feature_table.tsv" ftype="tsv"/>
+            <param name="metadata" value="metadata.tsv" ftype="tsv"/>
+            <param name="mode" value="batchwise"/>
+            <param name="wavelet_filter" value="d"/>
+            <param name="filter_length" value="2"/>
+            <param name="k" value="20"/>
+            <param name="t" value="0.05"/>
+            <param name="t2" value="0.05"/>
+            <param name="alpha" value="0"/>
+            <output name="normalized_data" file="normalized_data.tsv"/>
+        </test>
+        <test><!-- TEST 6 -->
+            <param name="input_choice" value="2"/>
+            <param name="data" value="feature_table.parquet" ftype="parquet"/>
+            <param name="metadata" value="metadata.csv" ftype="csv"/>
+            <param name="mode" value="batchwise"/>
+            <param name="wavelet_filter" value="d"/>
+            <param name="filter_length" value="2"/>
+            <param name="k" value="20"/>
+            <param name="t" value="0.05"/>
+            <param name="t2" value="0.05"/>
+            <param name="alpha" value="0"/>
+            <output name="normalized_data" file="normalized_data.parquet" compare="sim_size" delta="200"/>
         </test>
         <!-- The following test has different results on three platform I've tried -->
         <!-- <test>

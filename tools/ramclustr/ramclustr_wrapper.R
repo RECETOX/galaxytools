@@ -1,10 +1,9 @@
-store_output <- function(
-    ramclustr_obj,
-    output_merge_msp,
-    output_spec_abundance,
-    msp_file) {
+store_output <- function(ramclustr_obj,
+                         output_merge_msp,
+                         output_spec_abundance,
+                         msp_file) {
     RAMClustR::write.msp(ramclustr_obj, one.file = output_merge_msp)
-    write.csv(ramclustr_obj$SpecAbund, file = output_spec_abundance, row.names = TRUE)
+    write.csv(ramclustr_obj$SpecAbund, file = output_spec_abundance, row.names = TRUE, quote = FALSE)
 
     if (!is.null(msp_file)) {
         exp_name <- ramclustr_obj$ExpDes[[1]][which(row.names(ramclustr_obj$ExpDes[[1]]) == "Experiment"), 1]
@@ -36,27 +35,25 @@ read_metadata <- function(filename) {
     return(data)
 }
 
-ramclustr_xcms <- function(
-    input_xcms,
-    use_pheno,
-    sr,
-    st = NULL,
-    cor_method,
-    maxt,
-    linkage,
-    min_module_size,
-    hmax,
-    deep_split,
-    normalize,
-    metadata_file = NULL,
-    qc_inj_range,
-    block_size,
-    mult,
-    mzdec,
-    rt_only_low_n,
-    replace_zeros,
-    exp_design = NULL
-) {
+ramclustr_xcms <- function(input_xcms,
+                           use_pheno,
+                           sr,
+                           st = NULL,
+                           cor_method,
+                           maxt,
+                           linkage,
+                           min_module_size,
+                           hmax,
+                           deep_split,
+                           normalize,
+                           metadata_file = NULL,
+                           qc_inj_range,
+                           block_size,
+                           mult,
+                           mzdec,
+                           rt_only_low_n,
+                           replace_zeros,
+                           exp_design = NULL) {
     obj <- load(input_xcms)
 
     batch <- NULL
@@ -100,33 +97,32 @@ ramclustr_xcms <- function(
         order = order,
         qc = qc,
         ExpDes = experiment
-        )
+    )
     return(x)
 }
 
-ramclustr_csv <- function(
-    ms,
-    idmsms,
-    sr,
-    st,
-    cor_method,
-    maxt,
-    linkage,
-    min_module_size,
-    hmax,
-    deep_split,
-    normalize,
-    metadata_file = NULL,
-    qc_inj_range,
-    block_size,
-    mult,
-    mzdec,
-    rt_only_low_n,
-    replace_zeros,
-    exp_design = NULL
-) {
-    if (!file.exists(idmsms))
+ramclustr_csv <- function(ms,
+                          idmsms,
+                          sr,
+                          st,
+                          cor_method,
+                          maxt,
+                          linkage,
+                          min_module_size,
+                          hmax,
+                          deep_split,
+                          normalize,
+                          metadata_file = NULL,
+                          qc_inj_range,
+                          block_size,
+                          mult,
+                          mzdec,
+                          rt_only_low_n,
+                          replace_zeros,
+                          exp_design = NULL) {
+    if (!file.exists(idmsms)) {
         idmsms <- NULL
+    }
 
     batch <- NULL
     order <- NULL
@@ -169,6 +165,6 @@ ramclustr_csv <- function(
         order = order,
         qc = qc,
         ExpDes = experiment
-        )
-        return(x)
+    )
+    return(x)
 }

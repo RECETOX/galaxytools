@@ -1,4 +1,4 @@
-<tool id="matchms_formatter" name="matchms output formatter" version="0.1.3" python_template_version="3.5">
+<tool id="matchms_formatter" name="matchms output formatter" version="0.1.4" python_template_version="3.5">
     <description>reformat output tables of matchms</description>
 
     <macros>
@@ -53,7 +53,7 @@
 
     </inputs>
     <outputs>
-        <data label="${tool.name} (${method.selection}) on ${on_string}" name="output" format_source="scores"/>
+        <data label="${tool.name} (${method.selection}) on ${on_string}" name="output" format="tsv"/>
     </outputs>
 
     <tests>

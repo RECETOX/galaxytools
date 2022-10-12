@@ -13,6 +13,11 @@
                 familyName="Skoryk"
                 url="https://github.com/maximskorik"
                 identifier="0000-0003-2056-8018" />
+            <person
+                givenName="Zargham"
+                familyName="Ahmad"
+                url="https://github.com/zargham-ahmad"
+                identifier="0000-0002-6096-224X" />
             <organization
                 url="https://www.recetox.muni.cz/"
                 email="GalaxyToolsDevelopmentandDeployment@space.muni.cz"

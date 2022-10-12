@@ -1,6 +1,5 @@
 import click
-from matchms.importing import scores_from_json
-from pandas import DataFrame
+from pandas import DataFrame, read_csv, to_numeric
 
 
 def create_long_table(data: DataFrame, value_id: str) -> DataFrame:
@@ -73,13 +72,8 @@ def load_data(scores_filename: str) -> DataFrame:
     Returns:
         DataFrame: Joined dataframe on compounds containing scores and matches in long format.
     """
-    scores_object = scores_from_json(scores_filename)
-
-    query_names = [spectra.metadata['compound_name'] for spectra in scores_object.queries]
-    reference_names = [spectra.metadata['compound_name'] for spectra in scores_object.references]
-
-    scores = DataFrame(scores_object.scores['score'], index=reference_names, columns=query_names)
-    matches = DataFrame(scores_object.scores['matches'], index=reference_names, columns=query_names)
+    matches = read_csv(matches_filename, sep="\t", index_col=0, header=0).apply(to_numeric)
+    scores = read_csv(scores_filename, sep="\t", index_col=0, header=0).apply(to_numeric)
 
     scores_long = create_long_table(scores, 'score')
     matches_long = create_long_table(matches, 'matches')
@@ -115,10 +109,10 @@ def get_top_k_data(ctx, k):
     return result
 
 
-@cli.result_callback()
-def write_output(result: DataFrame, scores_filename, output_filename):
+@cli.resultcallback()
+def write_output(result: DataFrame, scores_filename, matches_filename, output_filename):
     result = result.reset_index().rename(columns={'level_0': 'query', 'compound': 'reference'})
-    result.to_csv(output_filename, sep='\t', index=False)
+    result.to_csv(output_filename, sep="\t", index=False)
 
 
 if __name__ == '__main__':
