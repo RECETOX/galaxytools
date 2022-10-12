@@ -62,14 +62,14 @@
             <param name="scores_threshold" value="0.4"/>
             <param name="matches_threshold" value="2"/>
             <output name="output" file="formatter/test2_threshold_formatting.tsv" ftype="tsv"
-                    checksum="md5$ec20df7af3ddba9eca042143e9631a80"/>
+                checksum="md5$e07e50127c0d040b217d989fdb62106c"/>
         </test>
         <test>
             <param name="scores" value="scores_test2_out.json" ftype="json"/>
             <param name="selection" value="get-top-k-data"/>
             <param name="k" value="3"/>
             <output name="output" file="formatter/test2_topk_formatting.tsv" ftype="tsv"
-                    checksum="md5$2da38b827fbb6baa1bfd596c24e0e898"/>
+                checksum="md5$11e405e20fd837b0b417d06439473657"/>
         </test>
     </tests>
 
