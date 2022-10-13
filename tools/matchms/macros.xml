@@ -52,10 +52,12 @@
         For documentation on the tool see https://github.com/matchms/matchms/blob/master/README.rst
         and https://matchms.readthedocs.io/en/latest/.
         
-        Upstream Tools
+        **Upstream Tools**
+
         matchMS similarity
         
-        Downstream Tools
+        **Downstream Tools**
+        
         The output is a network-graph file that can be visualized using graph visualization software (e.g., Cytoscape).
         ]]>
     </token>
