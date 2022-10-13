@@ -1,4 +1,29 @@
-waveica <- function(data,
+read_file <- function(file, metadata, ft_ext, mt_ext) {
+  data <- read_data(file, ft_ext)
+
+  if (!is.na(metadata)) {
+    mt_data <- read_data(metadata, mt_ext)
+    data <- merge(mt_data, data, by = "sampleName")
+  }
+
+  return(data)
+}
+
+read_data <- function(file, ext) {
+  if (ext == "csv") {
+    data <- read.csv(file, header = TRUE)
+  } else if (ext == "tsv") {
+    data <- read.csv(file, header = TRUE, sep = "\t")
+  } else {
+    data <- arrow::read_parquet(file)
+  }
+
+  return(data)
+}
+
+waveica <- function(file,
+                    metadata = NA,
+                    ext,
                     wavelet_filter,
                     wavelet_length,
                     k,
@@ -8,7 +33,12 @@ waveica <- function(data,
                     exclude_blanks) {
 
   # get input from the Galaxy, preprocess data
-  data <- read.csv(data, header = TRUE)
+  ext <- strsplit(x = ext, split = "\\,")[[1]]
+
+  ft_ext <- ext[1]
+  mt_ext <- ext[2]
+
+  data <- read_file(file, metadata, ft_ext, mt_ext)
 
   required_columns <- c("sampleName", "class", "sampleType", "injectionOrder", "batch")
   verify_input_dataframe(data, required_columns)
@@ -43,8 +73,9 @@ waveica <- function(data,
   return(data)
 }
 
-
-waveica_singlebatch <- function(data,
+waveica_singlebatch <- function(file,
+                                metadata = NA,
+                                ext,
                                 wavelet_filter,
                                 wavelet_length,
                                 k,
@@ -53,7 +84,12 @@ waveica_singlebatch <- function(data,
                                 exclude_blanks) {
 
   # get input from the Galaxy, preprocess data
-  data <- read.csv(data, header = TRUE)
+  ext <- strsplit(x = ext, split = "\\,")[[1]]
+
+  ft_ext <- ext[1]
+  mt_ext <- ext[2]
+
+  data <- read_file(file, metadata, ft_ext, mt_ext)
 
   required_columns <- c("sampleName", "class", "sampleType", "injectionOrder")
   optional_columns <- c("batch")
@@ -147,9 +183,13 @@ exclude_group <- function(data, group) {
   }
 }
 
-
-# Store output of WaveICA in a tsv file
-store_data <- function(data, output) {
-  write.table(data, file = output, sep = "\t", row.names = FALSE, quote = FALSE)
+store_data <- function(data, output, ext) {
+  if (ext == "csv") {
+    write.csv(data, file = output, row.names = FALSE, quote = FALSE)
+  } else if (ext == "tsv") {
+    write.table(data, file = output, sep = "\t", row.names = FALSE, quote = FALSE)
+  } else {
+    arrow::write_parquet(data, sink = output)
+  }
   cat("Normalization has been completed.\n")
 }

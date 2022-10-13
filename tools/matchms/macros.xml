@@ -1,5 +1,5 @@
 <macros>
-    <token name="@TOOL_VERSION@">0.14.0</token>
+    <token name="@TOOL_VERSION@">0.17.0</token>
 
     <xml name="creator">
         <creator>
@@ -9,6 +9,16 @@
                 familyName="Hecht"
                 url="https://github.com/hechth"
                 identifier="0000-0001-6744-996X" />
+            <person
+                givenName="Maksym"
+                familyName="Skoryk"
+                url="https://github.com/maximskorik"
+                identifier="0000-0003-2056-8018" />
+            <person
+                givenName="Zargham"
+                familyName="Ahmad"
+                url="https://github.com/zargham-ahmad"
+                identifier="0000-0002-6096-224X" />
             <organization
                 url="https://www.recetox.muni.cz/"
                 email="GalaxyToolsDevelopmentandDeployment@space.muni.cz"
@@ -32,7 +42,7 @@
                 +-----------+---------------+--------+-----------+
 
             Downstream Tools
-                The outputs are two tsv datasets. One containing the similarity scores and the other number of matched peaks.
+                The output is a JSON file containing serialized matchMS Scores object. The file can be processed by **matchMS output formatter**. 
         ]]>
     </token>
 
@@ -53,22 +63,11 @@
     <token name="@HELP_formatter@">
         <![CDATA[
             Usage
-                This tool creates user friendly tables from the data matrices produces by matchms.
+                This tool creates user friendly tables from the similarity scores produced by **matchMS similarity**.
                 The tool can be operated on two modes based on (i) thresholds or (ii) top k matches.
 
             Input Table Format
-                The tool expects two data matrices with the format as depicted below.
-                The tool assumes the reference compound labels as row labels and the query labels as column labels (as naturally outputted by matchms).
-
-                +----------+------+------+-----+
-                |          | C001 | C002 | ... |
-                +==========+======+======+=====+
-                | Perylene | 0.1  | 0.0  | ... |
-                +----------+------+------+-----+
-                | Glycine  | 0.5  | 0.34 | ... |
-                +----------+------+------+-----+
-                |   ...    | ...  | ...  | ... |
-                +----------+------+------+-----+
+                The tool expects a JSON file containing serialized matchMS Scores object.
 
             Output Table Format
                 +----------+-----------+---------+--------+

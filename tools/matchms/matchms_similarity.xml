@@ -1,4 +1,4 @@
-<tool id="matchms" name="matchMS similarity" version="@TOOL_VERSION@+galaxy1" python_template_version="3.8">
+<tool id="matchms" name="matchMS similarity" version="@TOOL_VERSION@+galaxy2" python_template_version="3.8">
     <description>calculate the similarity score and matched peaks</description>
 
     <macros>
@@ -39,7 +39,6 @@
             "$algorithm.mz_power" \
             "$algorithm.intensity_power" \
             "$similarity_scores" \
-            "$similarity_matches"
         </configfile>
     </configfiles>
 
@@ -59,6 +58,7 @@
             <option value="CosineGreedy" selected="true">CosineGreedy</option>
             <option value="CosineHungarian">CosineHungarian</option>
             <option value="ModifiedCosine">ModifiedCosine</option>
+            <option value="NeutralLossesCosine">NeutralLossesCosine</option>
         </param>
 
         <section name="algorithm" title="Algorithm Parameters" expanded="true">
@@ -81,8 +81,7 @@
     </inputs>
 
     <outputs>
-        <data label="$similarity_metric scores of ${on_string}" name="similarity_scores" format="tsv"/>
-        <data label="$similarity_metric matches of ${on_string}" name="similarity_matches" format="tsv"/>
+        <data label="$similarity_metric scores of ${on_string}" name="similarity_scores" format="json"/>
     </outputs>
 
     <tests>
@@ -90,51 +89,65 @@
             <param name="references" value="similarity/fill.mgf" ftype="mgf"/>
             <param name="queries" value="similarity/fill.msp" ftype="msp"/>
             <param name="similarity_metric" value="CosineGreedy"/>
-            <output name="similarity_scores" file="similarity/scores_test1_out.tsv" ftype="tsv"
-                    checksum="md5$1aff8d0777e2f4e565be2b1b393547ef"/>
-            <output name="similarity_matches" file="similarity/matches_test1_out.tsv" ftype="tsv"
-                    checksum="md5$aab26ef4a0e80a53699832db72c06340"/>
+            <output name="similarity_scores" file="similarity/scores_test1_out.json" ftype="json"
+                checksum="md5$1219ca51144087bafac9e3f1bd6bbf2d"/>
         </test>
         <test>
             <param name="references" value="similarity/recetox_gc-ei_ms_20201028.msp" ftype="msp"/>
             <param name="queries" value="similarity/fill.msp" ftype="msp"/>
             <param name="similarity_metric" value="CosineGreedy"/>
-            <output name="similarity_scores" file="scores_test2_out.tsv" ftype="tsv"
-                    checksum="md5$d2a5a01d9980636ce6a246d68834b84e"/>
-            <output name="similarity_matches" file="matches_test2_out.tsv" ftype="tsv"
-                    checksum="md5$28dc16ce45105234437e53d59e240046"/>
+            <output name="similarity_scores" file="scores_test2_out.json" ftype="json"
+                checksum="md5$8e306f8bda7b3f86283d314d18f57d92"/>
         </test>
         <test>
             <param name="references" value="similarity/recetox_gc-ei_ms_20201028.msp" ftype="msp"/>
             <param name="queries" value="similarity/fill.msp" ftype="msp"/>
             <param name="similarity_metric" value="CosineHungarian"/>
-            <output name="similarity_scores" file="similarity/scores_test3_out.tsv" ftype="tsv"
-                    checksum="md5$1341369778036e0a267ff723f8cfca9c"/>
-            <output name="similarity_matches" file="similarity/matches_test3_out.tsv" ftype="tsv"
-                    checksum="md5$28dc16ce45105234437e53d59e240046"/>
+            <output name="similarity_scores" file="similarity/scores_test3_out.json" ftype="json"
+            checksum="md5$90892dd621b80cbf891ccfeb6b75fabe"/>
         </test>
         <test>
             <param name="references" value="similarity/recetox_gc-ei_ms_20201028.msp" ftype="msp"/>
             <param name="queries" value="similarity/recetox_gc-ei_ms_20201028.msp" ftype="msp"/>
             <param name="similarity_metric" value="ModifiedCosine"/>
-            <output name="similarity_scores" file="similarity/scores_test4_out.tsv" ftype="tsv"/>
-            <output name="similarity_matches" file="similarity/matches_test4_out.tsv" ftype="tsv"/>
+            <output name="similarity_scores" file="similarity/scores_test4_out.json" ftype="json"
+                checksum="md5$fe06940a1b32f1df0f54ac4adc1eb457"/>
         </test>
         <test>
             <param name="queries" value="similarity/fill.msp" ftype="msp"/>
             <param name="similarity_metric" value="CosineHungarian"/>
             <param name="is_symmetric" value="TRUE"/>
-            <output name="similarity_scores" file="similarity/scores_test5_out.tsv" ftype="tsv"/>
-            <output name="similarity_matches" file="similarity/matches_test5_out.tsv" ftype="tsv"/>
+            <output name="similarity_scores" file="similarity/scores_test5_out.json" ftype="json"
+                checksum="md5$81cdfa83cd4c7eb5c3cae59114be3a5f"/>
         </test>
         <test>
             <param name="references" value="similarity/recetox_gc-ei_ms_20201028.msp" ftype="msp"/>
             <param name="queries" value="similarity/fill2.msp" ftype="msp"/>
-            <param name="ri_filtering.is_true" value="TRUE" />
-            <param name="ri_filtering.tolerance" value="60.0" />
+            <conditional name="ri_filtering">
+                <param name="is_true" value="True"></param>
+                <param name="tolerance" value="60.0" />
+            </conditional>
             <param name="similarity_metric" value="CosineGreedy"/>
-            <output name="similarity_scores" file="similarity/scores_test6_out.tsv" ftype="tsv"/>
-            <output name="similarity_matches" file="similarity/matches_test6_out.tsv" ftype="tsv"/>
+            <output name="similarity_scores" file="similarity/scores_test6_out.json" ftype="json"
+                checksum="md5$b5aede87f755fb8372c746c0dd3ef95f"/>
+        </test>
+        <test>
+            <param name="references" value="similarity/RECETOX_Exposome_pesticides_HR_MS_20220323.msp" ftype="msp"/>
+            <param name="queries" value="similarity/RECETOX_Exposome_pesticides_HR_MS_20220323.msp" ftype="msp"/>
+            <param name="similarity_metric" value="NeutralLossesCosine"/>
+            <output name="similarity_scores" file="similarity/scores_test7_out.json" ftype="json"
+                checksum="md5$13cc3e8f4dd63d0549a736654b34d554"/>
+        </test>
+        <test>
+            <param name="queries" value="similarity/recetox_gc-ei_ms_20201028.msp" ftype="msp"/>
+            <param name="similarity_metric" value="CosineGreedy"/>
+            <param name="is_symmetric" value="TRUE" />
+            <conditional name="ri_filtering">
+                <param name="is_true" value="True"></param>
+                <param name="tolerance" value="60.0" />
+            </conditional>
+            <output name="similarity_scores" file="similarity/scores_test8_out.json" ftype="json"
+                checksum="md5$ff470e81f20a39b5b311ce73a08a5d69"/>
         </test>
     </tests>
 
@@ -145,7 +158,7 @@
     </help>
 
     <citations>
-        <citation type="doi">10.5281/zenodo.4589154</citation>
+        <citation type="doi">10.5281/zenodo.7178586</citation>
         <citation type="doi">10.21105/joss.02411</citation>
     </citations>
 </tool>

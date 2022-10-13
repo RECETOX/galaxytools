@@ -4,7 +4,7 @@ import sys
 import numpy as np
 from matchms import calculate_scores
 from matchms.importing import load_from_mgf, load_from_msp
-from matchms.similarity import CosineGreedy, CosineHungarian, MetadataMatch, ModifiedCosine
+from matchms.similarity import CosineGreedy, CosineHungarian, MetadataMatch, ModifiedCosine, NeutralLossesCosine
 from pandas import DataFrame
 
 
@@ -35,8 +35,7 @@ def main(argv):
     parser.add_argument("tolerance", type=float, help="Tolerance to use for peak matching.")
     parser.add_argument("mz_power", type=float, help="The power to raise mz to in the cosine function.")
     parser.add_argument("intensity_power", type=float, help="The power to raise intensity to in the cosine function.")
-    parser.add_argument("output_filename_scores", type=str, help="Path where to store the output .tsv scores.")
-    parser.add_argument("output_filename_matches", type=str, help="Path where to store the output .tsv matches.")
+    parser.add_argument("output_filename_scores", type=str, help="Path where to store the output .json scores.")
     args = parser.parse_args()
 
     if args.queries_format == 'msp':
@@ -47,7 +46,7 @@ def main(argv):
         raise ValueError(f'File format {args.queries_format} not supported for query spectra.')
 
     if args.symmetric:
-        reference_spectra = []
+        reference_spectra = queries_spectra.copy()
     else:
         if args.references_format == 'msp':
             reference_spectra = list(load_from_msp(args.references_filename))
@@ -64,12 +63,16 @@ def main(argv):
         similarity_metric = ModifiedCosine(args.tolerance, args.mz_power, args.intensity_power)
         reference_spectra = list(map(convert_precursor_mz, reference_spectra))
         queries_spectra = list(map(convert_precursor_mz, queries_spectra))
+    elif args.similarity_metric == 'NeutralLossesCosine':
+        similarity_metric = NeutralLossesCosine(args.tolerance, args.mz_power, args.intensity_power)
+        reference_spectra = list(map(convert_precursor_mz, reference_spectra))
+        queries_spectra = list(map(convert_precursor_mz, queries_spectra))
     else:
         return -1
 
     print("Calculating scores...")
     scores = calculate_scores(
-        references=queries_spectra if args.symmetric else reference_spectra,
+        references=reference_spectra,
         queries=queries_spectra,
         similarity_function=similarity_metric,
         is_symmetric=args.symmetric
@@ -78,24 +81,16 @@ def main(argv):
     if args.ri_tolerance is not None:
         print("RI filtering with tolerance ", args.ri_tolerance)
         ri_matches = calculate_scores(reference_spectra, queries_spectra, MetadataMatch("retention_index", "difference", args.ri_tolerance)).scores
-        scores.scores["score"] = np.where(ri_matches, scores.scores["score"], 0.0)
+        scores._scores["score"] = np.where(ri_matches, scores.scores["score"], 0.0)
 
     write_outputs(args, scores)
     return 0
 
 
 def write_outputs(args, scores):
+    """Write Scores to json file."""
     print("Storing outputs...")
-    query_names = [spectra.metadata['compound_name'] for spectra in scores.queries]
-    reference_names = [spectra.metadata['compound_name'] for spectra in scores.references]
-
-    # Write scores to dataframe
-    dataframe_scores = DataFrame(data=[entry["score"] for entry in scores.scores], index=reference_names, columns=query_names)
-    dataframe_scores.to_csv(args.output_filename_scores, sep='\t')
-
-    # Write number of matches to dataframe
-    dataframe_matches = DataFrame(data=[entry["matches"] for entry in scores.scores], index=reference_names, columns=query_names)
-    dataframe_matches.to_csv(args.output_filename_matches, sep='\t')
+    scores.to_json(args.output_filename_scores)
 
 
 if __name__ == "__main__":
