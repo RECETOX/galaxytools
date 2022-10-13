@@ -35,7 +35,7 @@
         <param label="Network-graph format" name="graph_format" type="select"
             help="Output format of the similarity network.">
             <option value="graphml">graphml</option>
-            <option value="csv">cyjs</option>
+            <option value="cyjs">cyjs</option>
             <option value="gexf">gexf</option>
             <option value="gml">gml</option>
             <option value="json">json</option>
@@ -61,7 +61,15 @@
     </inputs>
 
     <outputs>
-        <data label="Similarity network of ${scores}" name="similarity_network_file" format="graphml,cyjs,gexf,gml,json"/>
+        <data label="Similarity network of ${scores.name}" name="similarity_network_file">
+            <change_format>
+                <when input="graph_format" value="graphml" format="graphml"/>
+                <when input="graph_format" value="cyjs" format="cyjs"/>
+                <when input="graph_format" value="gexf" format="gexf"/>
+                <when input="graph_format" value="gml" format="gml"/>
+                <when input="graph_format" value="json" format="json"/>
+            </change_format>
+        </data>
     </outputs>
 
     <tests>
