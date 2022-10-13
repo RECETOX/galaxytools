@@ -15,18 +15,19 @@ def main(argv):
     parser.add_argument("score_cutoff", type=float, help="Minimum similarity score value to link two spectra.")
     parser.add_argument("link_method", type=str, help="Method for selecting top N edges for each node.")
     parser.add_argument("keep_unconnected_nodes", type=bool, help="Keep unconnected nodes in the network.")
+    args = parser.parse_args()
 
-    scores = load_scores(parser.scores)
+    scores = load_scores(args.scores)
 
-    network = SimilarityNetwork(identifier_key=parser.identifier,
-        top_n=parser.top_n,
-        max_links=parser.max_links,
-        score_cutoff=parser.score_cutoff,
-        link_method=parser.link_method,
-        keep_unconected_nodes=parser.keep_unconnected_nodes)
+    network = SimilarityNetwork(identifier_key=args.identifier,
+        top_n=args.top_n,
+        max_links=args.max_links,
+        score_cutoff=args.score_cutoff,
+        link_method=args.link_method,
+        keep_unconected_nodes=args.keep_unconnected_nodes)
 
     network.create_network(scores)
-    network.export_to_file(filename=parser.output_filename, graph_format=parser.graph_format)
+    network.export_to_file(filename=args.output_filename, graph_format=args.graph_format)
 
     return 0
 
