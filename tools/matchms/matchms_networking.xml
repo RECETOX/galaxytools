@@ -17,15 +17,15 @@
     <configfiles>
         <configfile name="matchms_networking_cli">
             python3 ${__tool_directory__}/matchms_networking_wrapper.py \
-                --scores "$similarity_scores" \
-                --graph_format "$output_format" \
-                --identifier "$identifier_key" \
-                --top_n "$top_n" \
-                --max_links "$max_links" \
-                --score_cutoff "$score_cutoff" \
-                --link_method "$link_method" \
-                --keep_unconnected_nodes "$keep_unconnected_nodes" \
-                --output_filename "$similarity_network_file"
+            --scores "$scores" \
+            --graph_format "$graph_format" \
+            --identifier "$identifier_key" \
+            --top_n "$top_n" \
+            --max_links "$max_links" \
+            --score_cutoff "$score_cutoff" \
+            --link_method "$link_method" \
+            --keep_unconnected_nodes "$keep_unconnected_nodes" \
+            --output_filename "$similarity_network_file"
         </configfile>
     </configfiles>
 
