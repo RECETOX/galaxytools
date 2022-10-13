@@ -1,6 +1,6 @@
 import click
 from matchms.importing import scores_from_json
-from pandas import DataFrame, read_csv, to_numeric
+from pandas import DataFrame
 
 
 def create_long_table(data: DataFrame, value_id: str) -> DataFrame:
