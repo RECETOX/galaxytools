@@ -24,6 +24,7 @@ def main(argv):
         score_cutoff=parser.score_cutoff,
         link_method=parser.link_method,
         keep_unconected_nodes=parser.keep_unconnected_nodes)
+
     network.create_network(scores)
     network.export_to_file(filename=parser.output_filename, graph_format=parser.graph_format)
 
