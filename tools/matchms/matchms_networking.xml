@@ -25,14 +25,14 @@
                 --score_cutoff "$score_cutoff" \
                 --link_method "$link_method" \
                 --keep_unconnected_nodes "$keep_unconnected_nodes" \
-                --output "$similarity_network"
+                --output_filename "$similarity_network_file"
         </configfile>
     </configfiles>
 
     <inputs>
         <param label="Similarity scores" name="scores" type="data" format="json"
             help="matchMS similarity-scores file."/>
-        <param label="Network-graph format" name="output_format" type="select"
+        <param label="Network-graph format" name="graph_format" type="select"
             help="Output format of the similarity network.">
             <option value="graphml">graphml</option>
             <option value="csv">cyjs</option>
@@ -61,7 +61,7 @@
     </inputs>
 
     <outputs>
-        <data label="Similarity network of ${scores}" name="similarity_network" format="graphml,cyjs,gexf,gml,json"/>
+        <data label="Similarity network of ${scores}" name="similarity_network_file" format="graphml,cyjs,gexf,gml,json"/>
     </outputs>
 
     <tests>
