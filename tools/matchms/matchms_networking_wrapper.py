@@ -1,7 +1,7 @@
 import argparse
 import sys
 
-from matchms.importing import load_scores
+from matchms.importing import scores_from_json
 from matchms.similarity import SimilarityNetwork
 
 
@@ -17,7 +17,7 @@ def main(argv):
     parser.add_argument("keep_unconnected_nodes", type=bool, help="Keep unconnected nodes in the network.")
     args = parser.parse_args()
 
-    scores = load_scores(args.scores)
+    scores = scores_from_json(args.scores)
 
     network = SimilarityNetwork(identifier_key=args.identifier,
         top_n=args.top_n,
