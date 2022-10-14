@@ -26,7 +26,6 @@ def main(argv):
                                 score_cutoff=args.score_cutoff,
                                 link_method=args.link_method,
                                 keep_unconnected_nodes=args.keep_unconnected_nodes)
-    print(f"With connected: {args.keep_unconnected_nodes}.")
 
     network.create_network(scores)
     network.export_to_file(filename=args.output_filename, graph_format=args.graph_format)
