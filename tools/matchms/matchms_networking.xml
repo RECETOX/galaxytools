@@ -79,7 +79,7 @@
             <param name="scores" value="scores.json" ftype="json"/>
             <param name="graph_format" value="graphml"/>
             <param name="identifier_key" value="compound_name"/>
-            <output name="similarity_network" ftype="graphml">
+            <output name="similarity_network_file" ftype="graphml">
                 <assert_contents>
                     <is_valid_xml />
                     <has_line_matching expression='.*node id="C[0-9]*"\/.' n="138"/>
@@ -92,7 +92,7 @@
             <param name="scores" value="scores.json" ftype="json"/>
             <param name="graph_format" value="cyjs"/>
             <param name="identifier_key" value="compound_name"/>
-            <output name="similarity_network" ftype="cyjs">
+            <output name="similarity_network_file" ftype="cyjs">
                 <assert_contents>
                     <has_text_matching expression='{"data": {"id": "C[0-9]*", "value": "C[0-9]*", "name": "C[0-9]*"}}' n="138"/>
                     <has_text_matching expression='{"data": {"weight": 0\.[0-9]*, "source": "C[0-9]*", "target": "C[0-9]*"}}' n="16"/>
@@ -103,7 +103,7 @@
             <param name="scores" value="scores.json" ftype="json"/>
             <param name="graph_format" value="gexf"/>
             <param name="identifier_key" value="compound_name"/>
-            <output name="similarity_network" ftype="gexf">
+            <output name="similarity_network_file" ftype="gexf">
             <assert_contents>
                 <is_valid_xml />
                 <has_line_matching expression='.*node id="C[0-9]*" label="C[0-9]*" \/.' n="138"/>
@@ -115,7 +115,7 @@
             <param name="scores" value="scores.json" ftype="json"/>
             <param name="graph_format" value="gml"/>
             <param name="identifier_key" value="compound_name"/>
-            <output name="similarity_network" ftype="gml">
+            <output name="similarity_network_file" ftype="gml">
                 <assert_contents>
                     <has_line_matching expression='\s*node \[\n\s*id [0-9]*\n\s*label "C[0-9]*"\n\s*\]' n="138"/>
                     <has_line_matching expression='\s*edge \[\n\s*source [0-9]*\n\s*target [0-9]*\n\s*weight 0\.[0-9]*\n\s*\]' n="16"/>
@@ -126,7 +126,7 @@
             <param name="scores" value="scores.json" ftype="json"/>
             <param name="graph_format" value="json"/>
             <param name="identifier_key" value="compound_name"/>
-            <output name="similarity_network" ftype="json">
+            <output name="similarity_network_file" ftype="json">
                 <assert_contents>
                     <has_text_matching expression='{"id": "C[0-9]*"}' n="138"/>
                     <has_text_matching expression='{"weight": 0\.[0-9]*, "source": "C[0-9]*", "target": "C[0-9]*"}' n="16"/>
@@ -138,7 +138,7 @@
             <param name="graph_format" value="graphml"/>
             <param name="identifier_key" value="compound_name"/>
             <param name="keep_unconnected_nodes" value="false"/>
-            <output name="similarity_network" ftype="graphml">
+            <output name="similarity_network_file" ftype="graphml">
                 <assert_contents>
                     <is_valid_xml />
                     <has_line_matching expression='.*node id="C[0-9]*"\/.' n="25"/>
@@ -153,7 +153,7 @@
             <param name="identifier_key" value="compound_name"/>
             <param name="score_cutoff" value="0.4"/>
             <param name="keep_unconnected_nodes" value="false"/>
-            <output name="similarity_network" ftype="graphml">
+            <output name="similarity_network_file" ftype="graphml">
                 <assert_contents>
                     <is_valid_xml />
                     <has_line_matching expression='.*node id="C[0-9]*"\/.' n="59"/>
@@ -169,7 +169,7 @@
             <param name="score_cutoff" value="0.8"/>
             <param name="link_method" value="mutual"/>
             <param name="keep_unconnected_nodes" value="false"/>
-            <output name="similarity_network" ftype="cyjs">
+            <output name="similarity_network_file" ftype="cyjs">
                 <assert_contents>
                     <has_text_matching expression='{"data": {"id": "C[0-9]*", "value": "C[0-9]*", "name": "C[0-9]*"}}' n="18"/>
                     <has_text_matching expression='{"data": {"weight": 0\.[0-9]*, "source": "C[0-9]*", "target": "C[0-9]*"}}' n="9"/>
