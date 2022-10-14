@@ -21,11 +21,11 @@ def main(argv):
     scores = scores_from_json(args.scores)
 
     network = SimilarityNetwork(identifier_key=args.identifier,
-        top_n=args.top_n,
-        max_links=args.max_links,
-        score_cutoff=args.score_cutoff,
-        link_method=args.link_method,
-        keep_unconnected_nodes=args.keep_unconnected_nodes)
+                                top_n=args.top_n,
+                                max_links=args.max_links,
+                                score_cutoff=args.score_cutoff,
+                                link_method=args.link_method,
+                                keep_unconnected_nodes=args.keep_unconnected_nodes)
     print(f"With connected: {args.keep_unconnected_nodes}.")
 
     network.create_network(scores)
