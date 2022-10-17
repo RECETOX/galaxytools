@@ -1,4 +1,4 @@
-<tool id="matchms" name="matchMS similarity" version="@TOOL_VERSION@+galaxy2" python_template_version="3.8">
+<tool id="matchms" name="matchMS similarity" version="@TOOL_VERSION@+galaxy0" python_template_version="3.8">
     <description>calculate the similarity score and matched peaks</description>
 
     <macros>
@@ -85,69 +85,48 @@
     </outputs>
 
     <tests>
-        <test>
+        <test> <!-- TEST #1: Test scoring of different file formats. -->
             <param name="references" value="similarity/fill.mgf" ftype="mgf"/>
-            <param name="queries" value="similarity/fill.msp" ftype="msp"/>
+            <param name="queries" value="similarity/fill2.msp" ftype="msp"/>
             <param name="similarity_metric" value="CosineGreedy"/>
             <output name="similarity_scores" file="similarity/scores_test1_out.json" ftype="json"
-                checksum="md5$1219ca51144087bafac9e3f1bd6bbf2d"/>
+                checksum="md5$72f96c48f8c34cf2a7c37d3aede33ca0"/>
         </test>
-        <test>
-            <param name="references" value="similarity/recetox_gc-ei_ms_20201028.msp" ftype="msp"/>
-            <param name="queries" value="similarity/fill.msp" ftype="msp"/>
+        <test> <!-- TEST #2: Test scoring of the same file formats. -->
+            <param name="references" value="similarity/RECETOX_Exposome_pesticides_HR_MS_20220323.msp" ftype="msp"/>
+            <param name="queries" value="similarity/fill2.msp" ftype="msp"/>
             <param name="similarity_metric" value="CosineGreedy"/>
-            <output name="similarity_scores" file="scores_test2_out.json" ftype="json"
-                checksum="md5$8e306f8bda7b3f86283d314d18f57d92"/>
+            <output name="similarity_scores" file="similarity/scores_test2_out.json" ftype="json"
+                checksum="md5$d325a895f74262087553d08cc40a99aa"/>
         </test>
-        <test>
-            <param name="references" value="similarity/recetox_gc-ei_ms_20201028.msp" ftype="msp"/>
-            <param name="queries" value="similarity/fill.msp" ftype="msp"/>
-            <param name="similarity_metric" value="CosineHungarian"/>
-            <output name="similarity_scores" file="similarity/scores_test3_out.json" ftype="json"
-            checksum="md5$90892dd621b80cbf891ccfeb6b75fabe"/>
-        </test>
-        <test>
-            <param name="references" value="similarity/recetox_gc-ei_ms_20201028.msp" ftype="msp"/>
-            <param name="queries" value="similarity/recetox_gc-ei_ms_20201028.msp" ftype="msp"/>
-            <param name="similarity_metric" value="ModifiedCosine"/>
-            <output name="similarity_scores" file="similarity/scores_test4_out.json" ftype="json"
-                checksum="md5$fe06940a1b32f1df0f54ac4adc1eb457"/>
-        </test>
-        <test>
-            <param name="queries" value="similarity/fill.msp" ftype="msp"/>
-            <param name="similarity_metric" value="CosineHungarian"/>
-            <param name="is_symmetric" value="TRUE"/>
-            <output name="similarity_scores" file="similarity/scores_test5_out.json" ftype="json"
-                checksum="md5$81cdfa83cd4c7eb5c3cae59114be3a5f"/>
-        </test>
-        <test>
-            <param name="references" value="similarity/recetox_gc-ei_ms_20201028.msp" ftype="msp"/>
+        <test> <!-- TEST #3: Test scoring with applying RI filtering. -->
+            <param name="references" value="similarity/fill.mgf" ftype="mgf"/>
             <param name="queries" value="similarity/fill2.msp" ftype="msp"/>
             <conditional name="ri_filtering">
                 <param name="is_true" value="True"></param>
                 <param name="tolerance" value="60.0" />
             </conditional>
-            <param name="similarity_metric" value="CosineGreedy"/>
-            <output name="similarity_scores" file="similarity/scores_test6_out.json" ftype="json"
-                checksum="md5$b5aede87f755fb8372c746c0dd3ef95f"/>
+            <param name="similarity_metric" value="CosineHungarian"/>
+            <output name="similarity_scores" file="similarity/scores_test3_out.json" ftype="json"
+                checksum="md5$437c03775ebe978f03b7c63aa09ee52e"/>
         </test>
-        <test>
-            <param name="references" value="similarity/RECETOX_Exposome_pesticides_HR_MS_20220323.msp" ftype="msp"/>
-            <param name="queries" value="similarity/RECETOX_Exposome_pesticides_HR_MS_20220323.msp" ftype="msp"/>
-            <param name="similarity_metric" value="NeutralLossesCosine"/>
-            <output name="similarity_scores" file="similarity/scores_test7_out.json" ftype="json"
-                checksum="md5$13cc3e8f4dd63d0549a736654b34d554"/>
-        </test>
-        <test>
+        <test> <!-- TEST #4: Test symmetric scoring. -->
             <param name="queries" value="similarity/recetox_gc-ei_ms_20201028.msp" ftype="msp"/>
-            <param name="similarity_metric" value="CosineGreedy"/>
+            <param name="is_symmetric" value="TRUE"/>
+            <param name="similarity_metric" value="NeutralLossesCosine"/>
+            <output name="similarity_scores" file="similarity/scores_test4_out.json" ftype="json"
+                checksum="md5$951b3bad2207d8301e0c60397533e607"/>
+        </test>
+        <test> <!-- TEST #5: Test symmetric scoring with applying RI filtering. -->
+            <param name="queries" value="similarity/recetox_gc-ei_ms_20201028.msp" ftype="msp"/>
+            <param name="similarity_metric" value="ModifiedCosine"/>
             <param name="is_symmetric" value="TRUE" />
             <conditional name="ri_filtering">
                 <param name="is_true" value="True"></param>
                 <param name="tolerance" value="60.0" />
             </conditional>
-            <output name="similarity_scores" file="similarity/scores_test8_out.json" ftype="json"
-                checksum="md5$ff470e81f20a39b5b311ce73a08a5d69"/>
+            <output name="similarity_scores" file="similarity/scores_test5_out.json" ftype="json"
+                checksum="md5$31f83451443a1996fbd7fbc204803481"/>
         </test>
     </tests>
 
