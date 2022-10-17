@@ -85,21 +85,21 @@
     </outputs>
 
     <tests>
-        <test> <!-- TEST #1-->
+        <test> <!-- TEST #1: Test scoring of different file formats. -->
             <param name="references" value="similarity/fill.mgf" ftype="mgf"/>
             <param name="queries" value="similarity/fill2.msp" ftype="msp"/>
             <param name="similarity_metric" value="CosineGreedy"/>
             <output name="similarity_scores" file="similarity/scores_test1_out.json" ftype="json"
                 checksum="md5$72f96c48f8c34cf2a7c37d3aede33ca0"/>
         </test>
-        <test> <!-- TEST #2 -->
+        <test> <!-- TEST #2: Test scoring of the same file formats. -->
             <param name="references" value="similarity/RECETOX_Exposome_pesticides_HR_MS_20220323.msp" ftype="msp"/>
             <param name="queries" value="similarity/fill2.msp" ftype="msp"/>
             <param name="similarity_metric" value="CosineGreedy"/>
             <output name="similarity_scores" file="similarity/scores_test2_out.json" ftype="json"
                 checksum="md5$d325a895f74262087553d08cc40a99aa"/>
         </test>
-        <test> <!-- TEST #3 -->
+        <test> <!-- TEST #3: Test scoring with applying RI filtering. -->
             <param name="references" value="similarity/fill.mgf" ftype="mgf"/>
             <param name="queries" value="similarity/fill2.msp" ftype="msp"/>
             <conditional name="ri_filtering">
@@ -110,14 +110,14 @@
             <output name="similarity_scores" file="similarity/scores_test3_out.json" ftype="json"
                 checksum="md5$437c03775ebe978f03b7c63aa09ee52e"/>
         </test>
-        <test> <!-- TEST #4 -->
+        <test> <!-- TEST #4: Test symmetric scoring. -->
             <param name="queries" value="similarity/recetox_gc-ei_ms_20201028.msp" ftype="msp"/>
             <param name="is_symmetric" value="TRUE"/>
             <param name="similarity_metric" value="NeutralLossesCosine"/>
             <output name="similarity_scores" file="similarity/scores_test4_out.json" ftype="json"
                 checksum="md5$951b3bad2207d8301e0c60397533e607"/>
         </test>
-        <test> <!-- TEST #5 -->
+        <test> <!-- TEST #5: Test symmetric scoring with applying RI filtering. -->
             <param name="queries" value="similarity/recetox_gc-ei_ms_20201028.msp" ftype="msp"/>
             <param name="similarity_metric" value="ModifiedCosine"/>
             <param name="is_symmetric" value="TRUE" />
