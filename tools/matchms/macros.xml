@@ -25,6 +25,12 @@
         </creator>
     </xml>
 
+    <xml name="environment_variables">
+        <environment_variables>
+            <environment_variable name="MPLCONFIGDIR">\$_GALAXY_JOB_TMP_DIR</environment_variable>
+        </environment_variables>
+    </xml>
+    
     <token name="@HELP_matchms@">
         <![CDATA[
             Documentation

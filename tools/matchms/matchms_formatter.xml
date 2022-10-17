@@ -12,6 +12,8 @@
         <requirement type="package" version="8.0.1">click</requirement>
     </requirements>
 
+    <expand macro="environment_variables"/>
+
     <command detect_errors="aggressive"><![CDATA[
         sh ${matchms_formatter_cli}
     ]]></command>
