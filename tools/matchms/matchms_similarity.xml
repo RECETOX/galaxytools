@@ -85,21 +85,21 @@
     </outputs>
 
     <tests>
-        <test>
+        <test> <!-- TEST #1-->
             <param name="references" value="similarity/fill.mgf" ftype="mgf"/>
             <param name="queries" value="similarity/fill2.msp" ftype="msp"/>
             <param name="similarity_metric" value="CosineGreedy"/>
             <output name="similarity_scores" file="similarity/scores_test1_out.json" ftype="json"
                 checksum="md5$72f96c48f8c34cf2a7c37d3aede33ca0"/>
         </test>
-        <test>
+        <test> <!-- TEST #2 -->
             <param name="references" value="similarity/RECETOX_Exposome_pesticides_HR_MS_20220323.msp" ftype="msp"/>
             <param name="queries" value="similarity/recetox_gc-ei_ms_20201028.msp" ftype="msp"/>
             <param name="similarity_metric" value="ModifiedCosine"/>
             <output name="similarity_scores" file="scores_test2_out.json" ftype="json"
                 checksum="md5$2046b310fbd8ec2c5d51edbd057566bd"/>
         </test>
-        <test>
+        <test> <!-- TEST #3 -->
             <param name="references" value="similarity/recetox_gc-ei_ms_20201028.msp" ftype="msp"/>
             <param name="queries" value="similarity/fill2.msp" ftype="msp"/>
             <conditional name="ri_filtering">
@@ -110,14 +110,14 @@
             <output name="similarity_scores" file="similarity/scores_test6_out.json" ftype="json"
                 checksum="md5$b5aede87f755fb8372c746c0dd3ef95f"/>
         </test>
-        <test>
+        <test> <!-- TEST #4 -->
             <param name="queries" value="similarity/RECETOX_Exposome_pesticides_HR_MS_20220323.msp" ftype="msp"/>
             <param name="is_symmetric" value="TRUE"/>
             <param name="similarity_metric" value="NeutralLossesCosine"/>
             <output name="similarity_scores" file="similarity/scores_test7_out.json" ftype="json"
                 checksum="md5$13cc3e8f4dd63d0549a736654b34d554"/>
         </test>
-        <test>
+        <test> <!-- TEST #5 -->
             <param name="queries" value="similarity/recetox_gc-ei_ms_20201028.msp" ftype="msp"/>
             <param name="similarity_metric" value="CosineGreedy"/>
             <param name="is_symmetric" value="TRUE" />
