@@ -94,10 +94,10 @@
         </test>
         <test> <!-- TEST #2 -->
             <param name="references" value="similarity/RECETOX_Exposome_pesticides_HR_MS_20220323.msp" ftype="msp"/>
-            <param name="queries" value="similarity/fill.mgf" ftype="mgf"/>
+            <param name="queries" value="similarity/fill2.msp" ftype="msp"/>
             <param name="similarity_metric" value="CosineGreedy"/>
             <output name="similarity_scores" file="similarity/scores_test2_out.json" ftype="json"
-                checksum="md5$9f6c97989a40d82c7fdcf49cd1aa524b"/>
+                checksum="md5$d325a895f74262087553d08cc40a99aa"/>
         </test>
         <test> <!-- TEST #3 -->
             <param name="references" value="similarity/fill.mgf" ftype="mgf"/>
