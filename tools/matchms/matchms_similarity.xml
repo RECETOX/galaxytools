@@ -119,14 +119,14 @@
         </test>
         <test> <!-- TEST #5 -->
             <param name="queries" value="similarity/recetox_gc-ei_ms_20201028.msp" ftype="msp"/>
-            <param name="similarity_metric" value="CosineGreedy"/>
+            <param name="similarity_metric" value="ModifiedCosine"/>
             <param name="is_symmetric" value="TRUE" />
             <conditional name="ri_filtering">
                 <param name="is_true" value="True"></param>
                 <param name="tolerance" value="60.0" />
             </conditional>
-            <output name="similarity_scores" file="similarity/scores_test8_out.json" ftype="json"
-                checksum="md5$ff470e81f20a39b5b311ce73a08a5d69"/>
+            <output name="similarity_scores" file="similarity/scores_test5_out.json" ftype="json"
+                checksum="md5$31f83451443a1996fbd7fbc204803481"/>
         </test>
     </tests>
 
