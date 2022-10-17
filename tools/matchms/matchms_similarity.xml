@@ -111,11 +111,11 @@
                 checksum="md5$437c03775ebe978f03b7c63aa09ee52e"/>
         </test>
         <test> <!-- TEST #4 -->
-            <param name="queries" value="similarity/RECETOX_Exposome_pesticides_HR_MS_20220323.msp" ftype="msp"/>
+            <param name="queries" value="similarity/recetox_gc-ei_ms_20201028.msp" ftype="msp"/>
             <param name="is_symmetric" value="TRUE"/>
             <param name="similarity_metric" value="NeutralLossesCosine"/>
-            <output name="similarity_scores" file="similarity/scores_test7_out.json" ftype="json"
-                checksum="md5$13cc3e8f4dd63d0549a736654b34d554"/>
+            <output name="similarity_scores" file="similarity/scores_test4_out.json" ftype="json"
+                checksum="md5$951b3bad2207d8301e0c60397533e607"/>
         </test>
         <test> <!-- TEST #5 -->
             <param name="queries" value="similarity/recetox_gc-ei_ms_20201028.msp" ftype="msp"/>
