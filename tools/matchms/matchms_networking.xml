@@ -10,6 +10,11 @@
         <requirement type="package" version="@TOOL_VERSION@">matchms</requirement>
     </requirements>
 
+    <environment_variables>
+        <environment_variable name="MPLCONFIGDIR">\$_GALAXY_JOB_TMP_DIR</environment_variable>
+        <environment_variable name="XDG_CACHE_HOME">\$_GALAXY_JOB_TMP_DIR</environment_variable>
+    </environment_variables>
+
     <command detect_errors="aggressive"><![CDATA[
         sh ${matchms_networking_cli}
     ]]></command>
