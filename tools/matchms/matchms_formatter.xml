@@ -5,14 +5,17 @@
         <import>macros.xml</import>
     </macros>
     <expand macro="creator"/>
-
+    
     <requirements>
         <requirement type="package" version="@TOOL_VERSION@">matchms</requirement>
         <requirement type="package" version="1.1.4">pandas</requirement>
         <requirement type="package" version="8.0.1">click</requirement>
     </requirements>
-
-    <expand macro="environment_variables"/>
+    
+    <environment_variables>
+        <environment_variable name="MPLCONFIGDIR">\$_GALAXY_JOB_TMP_DIR</environment_variable>
+        <environment_variable name="XDG_CACHE_HOME">\$_GALAXY_JOB_TMP_DIR</environment_variable>
+    </environment_variables>
 
     <command detect_errors="aggressive"><![CDATA[
         sh ${matchms_formatter_cli}
