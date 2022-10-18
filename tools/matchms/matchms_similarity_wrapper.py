@@ -5,7 +5,6 @@ import numpy as np
 from matchms import calculate_scores
 from matchms.importing import load_from_mgf, load_from_msp
 from matchms.similarity import CosineGreedy, CosineHungarian, MetadataMatch, ModifiedCosine, NeutralLossesCosine
-from pandas import DataFrame
 
 
 def convert_precursor_mz(spectrum):
@@ -35,8 +34,7 @@ def main(argv):
     parser.add_argument("tolerance", type=float, help="Tolerance to use for peak matching.")
     parser.add_argument("mz_power", type=float, help="The power to raise mz to in the cosine function.")
     parser.add_argument("intensity_power", type=float, help="The power to raise intensity to in the cosine function.")
-    parser.add_argument("output_filename_scores", type=str, help="Path where to store the output .tsv scores.")
-    parser.add_argument("output_filename_matches", type=str, help="Path where to store the output .tsv matches.")
+    parser.add_argument("output_filename_scores", type=str, help="Path where to store the output .json scores.")
     args = parser.parse_args()
 
     if args.queries_format == 'msp':
@@ -89,17 +87,9 @@ def main(argv):
 
 
 def write_outputs(args, scores):
+    """Write Scores to json file."""
     print("Storing outputs...")
-    query_names = [spectra.metadata['compound_name'] for spectra in scores.queries]
-    reference_names = [spectra.metadata['compound_name'] for spectra in scores.references]
-
-    # Write scores to dataframe
-    dataframe_scores = DataFrame(data=[entry["score"] for entry in scores.scores], index=reference_names, columns=query_names)
-    dataframe_scores.to_csv(args.output_filename_scores, sep='\t')
-
-    # Write number of matches to dataframe
-    dataframe_matches = DataFrame(data=[entry["matches"] for entry in scores.scores], index=reference_names, columns=query_names)
-    dataframe_matches.to_csv(args.output_filename_matches, sep='\t')
+    scores.to_json(args.output_filename_scores)
 
 
 if __name__ == "__main__":
