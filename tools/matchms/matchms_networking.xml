@@ -1,0 +1,192 @@
+<tool id="matchms_networking" name="matchMS networking" version="@TOOL_VERSION@+galaxy0" python_template_version="3.5">
+    <description>create similarity network graph from matchMS similarity scores</description>
+
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="creator"/>
+
+    <requirements>
+        <requirement type="package" version="@TOOL_VERSION@">matchms</requirement>
+    </requirements>
+
+    <environment_variables>
+        <environment_variable name="MPLCONFIGDIR">\$_GALAXY_JOB_TMP_DIR</environment_variable>
+        <environment_variable name="XDG_CACHE_HOME">\$_GALAXY_JOB_TMP_DIR</environment_variable>
+    </environment_variables>
+
+    <command detect_errors="aggressive"><![CDATA[
+        sh ${matchms_networking_cli}
+    ]]></command>
+
+    <configfiles>
+        <configfile name="matchms_networking_cli">
+            python3 ${__tool_directory__}/matchms_networking_wrapper.py \
+            --graph_format "$graph_format" \
+            --identifier "$identifier_key" \
+            --top_n "$top_n" \
+            --max_links "$max_links" \
+            --score_cutoff "$score_cutoff" \
+            --link_method "$link_method" \
+            #if $keep_unconnected_nodes
+            --keep_unconnected_nodes \
+            #end if
+            "$scores" \
+            "$similarity_network_file"
+        </configfile>
+    </configfiles>
+
+    <inputs>
+        <param label="Similarity scores" name="scores" type="data" format="json"
+            help="matchMS similarity-scores file."/>
+        <param label="Network-graph format" name="graph_format" type="select"
+            help="Output format of the similarity network.">
+            <option value="graphml">graphml</option>
+            <option value="cyjs">cyjs</option>
+            <option value="gexf">gexf</option>
+            <option value="gml">gml</option>
+            <option value="json">json</option>
+        </param>
+        <param label="Identifier key" name="identifier_key" type="text"
+            help="Unique metadata identifier of each spectrum from which scores are computed."/>
+        <param label="Number of top edges to keep" name="top_n" type="integer" value="20"
+            help="The number of highest-score edges to keep between a pair of nodes. Depending on 'Link method' parameter the top N edges will be selected either from disjoined
+            sets of individual specta or joined subset of scores between the given pair of spectra. This value has to be higher than the 'Maximum number of links'."/>
+        <param label="Maximum number of links per node" name="max_links" type="integer" value="10"
+            help="Maximum number of links to add per node."/>
+        <param label="Score cutoff" name="score_cutoff" type="float" value="0.7" min="0.0" max="1.0"
+            help="Minimum similarity score value to link two spectra."/>
+        <param label="Link method" name="link_method" type="select" display="radio"
+            help="Method for computing top N edges for each node.
+            If selected 'Single', top N nodes will be selected from disjoined sets of highest scores for nodes of a given pair (i.e., if a given edge belongs to top N scores of at least one node, it is kept).
+            If selected 'Mutual', top N nodes will be selected from a joined subset of a given spectra pair (i.e., if and only if a given edge belongs to top N scores of both nodes, it is kept).">
+            <option value="single" selected="true">Single</option>
+            <option value="mutual">Mutual</option>
+        </param>
+        <param label="Keep unconnected nodes" name="keep_unconnected_nodes" type="boolean" checked="true"
+            help="If set to No all unconnected nodes will be removed."/>
+    </inputs>
+
+    <outputs>
+        <data label="Similarity network of ${scores.name}" name="similarity_network_file">
+            <change_format>
+                <when input="graph_format" value="graphml" format="graphml"/>
+                <when input="graph_format" value="cyjs" format="cyjs"/>
+                <when input="graph_format" value="gexf" format="gexf"/>
+                <when input="graph_format" value="gml" format="gml"/>
+                <when input="graph_format" value="json" format="json"/>
+            </change_format>
+        </data>
+    </outputs>
+
+    <tests>
+        <test>
+            <param name="scores" value="scores.json" ftype="json"/>
+            <param name="graph_format" value="graphml"/>
+            <param name="identifier_key" value="compound_name"/>
+            <output name="similarity_network_file" ftype="graphml">
+                <assert_contents>
+                    <is_valid_xml />
+                    <has_line_matching expression='.*node id="C[0-9]*"\/.' n="138"/>
+                    <has_line_matching expression='.*edge source="C[0-9]*" target="C[0-9]*".' n="16"/>
+                    <has_line_matching expression='\s*.data key="d0".0\.[0-9]*.*' n="16"/>
+                </assert_contents>
+            </output>
+        </test>
+        <test>
+            <param name="scores" value="scores.json" ftype="json"/>
+            <param name="graph_format" value="cyjs"/>
+            <param name="identifier_key" value="compound_name"/>
+            <output name="similarity_network_file" ftype="cyjs">
+                <assert_contents>
+                    <has_text_matching expression='{"data": {"id": "C[0-9]*", "value": "C[0-9]*", "name": "C[0-9]*"}}' n="138"/>
+                    <has_text_matching expression='{"data": {"weight": 0\.[0-9]*, "source": "C[0-9]*", "target": "C[0-9]*"}}' n="16"/>
+                </assert_contents>
+            </output>
+        </test>
+        <test>
+            <param name="scores" value="scores.json" ftype="json"/>
+            <param name="graph_format" value="gexf"/>
+            <param name="identifier_key" value="compound_name"/>
+            <output name="similarity_network_file" ftype="gexf">
+            <assert_contents>
+                <is_valid_xml />
+                <has_line_matching expression='.*node id="C[0-9]*" label="C[0-9]*" \/.' n="138"/>
+                <has_line_matching expression='\s*.edge source="C[0-9]*" target="C[0-9]*" id="[0-9]*" weight="0.[0-9]*" \/.' n="16"/>
+            </assert_contents>
+        </output>
+        </test>
+        <test>
+            <param name="scores" value="scores.json" ftype="json"/>
+            <param name="graph_format" value="gml"/>
+            <param name="identifier_key" value="compound_name"/>
+            <output name="similarity_network_file" ftype="gml">
+                <assert_contents>
+                    <has_line_matching expression='\s*node \[\n\s*id [0-9]*\n\s*label "C[0-9]*"\n\s*\]' n="138"/>
+                    <has_line_matching expression='\s*edge \[\n\s*source [0-9]*\n\s*target [0-9]*\n\s*weight 0\.[0-9]*\n\s*\]' n="16"/>
+                </assert_contents>
+            </output>
+        </test>
+        <test>
+            <param name="scores" value="scores.json" ftype="json"/>
+            <param name="graph_format" value="json"/>
+            <param name="identifier_key" value="compound_name"/>
+            <output name="similarity_network_file" ftype="json">
+                <assert_contents>
+                    <has_text_matching expression='{"id": "C[0-9]*"}' n="138"/>
+                    <has_text_matching expression='{"weight": 0\.[0-9]*, "source": "C[0-9]*", "target": "C[0-9]*"}' n="16"/>
+                </assert_contents>
+            </output>
+        </test>
+        <test>
+            <param name="scores" value="scores.json" ftype="json"/>
+            <param name="graph_format" value="graphml"/>
+            <param name="identifier_key" value="compound_name"/>
+            <param name="keep_unconnected_nodes" value="false"/>
+            <output name="similarity_network_file" ftype="graphml">
+                <assert_contents>
+                    <is_valid_xml />
+                    <has_line_matching expression='.*node id="C[0-9]*"\/.' n="25"/>
+                    <has_line_matching expression='.*edge source="C[0-9]*" target="C[0-9]*".' n="16"/>
+                    <has_line_matching expression='\s*.data key="d0".0\.[0-9]*.*' n="16"/>
+                </assert_contents>
+            </output>
+        </test>
+        <test>
+            <param name="scores" value="scores.json" ftype="json"/>
+            <param name="graph_format" value="graphml"/>
+            <param name="identifier_key" value="compound_name"/>
+            <param name="score_cutoff" value="0.4"/>
+            <param name="keep_unconnected_nodes" value="false"/>
+            <output name="similarity_network_file" ftype="graphml">
+                <assert_contents>
+                    <is_valid_xml />
+                    <has_line_matching expression='.*node id="C[0-9]*"\/.' n="59"/>
+                    <has_line_matching expression='.*edge source="C[0-9]*" target="C[0-9]*".' n="52"/>
+                    <has_line_matching expression='\s*.data key="d0".0\.[0-9]*.*' n="52"/>
+                </assert_contents>
+            </output>
+        </test>
+        <test>
+            <param name="scores" value="scores.json" ftype="json"/>
+            <param name="graph_format" value="cyjs"/>
+            <param name="identifier_key" value="compound_name"/>
+            <param name="score_cutoff" value="0.8"/>
+            <param name="link_method" value="mutual"/>
+            <param name="keep_unconnected_nodes" value="false"/>
+            <output name="similarity_network_file" ftype="cyjs">
+                <assert_contents>
+                    <has_text_matching expression='{"data": {"id": "C[0-9]*", "value": "C[0-9]*", "name": "C[0-9]*"}}' n="18"/>
+                    <has_text_matching expression='{"data": {"weight": 0\.[0-9]*, "source": "C[0-9]*", "target": "C[0-9]*"}}' n="9"/>
+                </assert_contents>
+            </output>
+        </test>
+    </tests>
+
+    <help><![CDATA[
+        @HELP_matchms_networking@
+    ]]></help>
+
+    <expand macro="citations"/>
+
+</tool>

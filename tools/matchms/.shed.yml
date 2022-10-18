@@ -25,3 +25,10 @@ repositories:
       - formatter.py
       - test-data
       - macros.xml
+  matchms_networking:
+    description: "Create a similarity network graph from spectral similarity scores."
+    include:
+      - matchms_networking.xml
+      - matchms_networking_wrapper.py
+      - test-data
+      - macros.xml
