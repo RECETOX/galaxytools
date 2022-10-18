@@ -5,7 +5,7 @@
         <import>macros.xml</import>
     </macros>
     <expand macro="creator"/>
-    
+
     <requirements>
         <requirement type="package" version="@TOOL_VERSION@">matchms</requirement>
         <requirement type="package" version="1.1.4">pandas</requirement>
