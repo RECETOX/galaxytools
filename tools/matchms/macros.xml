@@ -28,21 +28,21 @@
     
     <token name="@HELP_matchms@">
         <![CDATA[
-        Documentation
-        For documentation on the tool see https://github.com/matchms/matchms/blob/master/README.rst
-        and https://matchms.readthedocs.io/en/latest/.
-        
-        Upstream Tools
-        +-----------+---------------+--------+-----------+
-        | Name      | Output File   | Format | Parameter |
-        +===========+===============+========+===========+
-        | RAMClustR | Mass spectra  | msp    | references|
-        +-----------+---------------+--------+-----------+
-        | RAMClustR | Mass spectra  | msp    | queries   |
-        +-----------+---------------+--------+-----------+
-        
-        Downstream Tools
-        The output is a JSON file containing serialized matchMS Scores object. The file can be processed by **matchMS output formatter**. 
+            Documentation
+                For documentation on the tool see https://github.com/matchms/matchms/blob/master/README.rst
+                and https://matchms.readthedocs.io/en/latest/.
+
+            Upstream Tools
+                +-----------+---------------+--------+-----------+
+                | Name      | Output File   | Format | Parameter |
+                +===========+===============+========+===========+
+                | RAMClustR | Mass spectra  | msp    | references|
+                +-----------+---------------+--------+-----------+
+                | RAMClustR | Mass spectra  | msp    | queries   |
+                +-----------+---------------+--------+-----------+
+
+            Downstream Tools
+                The output is a JSON file containing serialized matchMS Scores object. The file can be processed by **matchMS output formatter**. 
         ]]>
     </token>
     
@@ -64,23 +64,23 @@
     
     <token name="@HELP_formatter@">
         <![CDATA[
-        Usage
-        This tool creates user friendly tables from the similarity scores produced by **matchMS similarity**.
-        The tool can be operated on two modes based on (i) thresholds or (ii) top k matches.
-        
-        Input Table Format
-        The tool expects a JSON file containing serialized matchMS Scores object.
-        
-        Output Table Format
-        +----------+-----------+---------+--------+
-        | query    | reference | matches | scores |
-        +==========+===========+=========+========+
-        | C001     | Glycine   |      6  | 0.5    |
-        +----------+-----------+---------+--------+
-        | C002     | Glycine   |     3   | 0.34   |
-        +----------+-----------+---------+--------+
-        |   ...    | ...       | ...     | ...    |
-        +----------+-----------+---------+--------+
+            Usage
+                This tool creates user friendly tables from the similarity scores produced by **matchMS similarity**.
+                The tool can be operated on two modes based on (i) thresholds or (ii) top k matches.
+
+            Input Table Format
+                The tool expects a JSON file containing serialized matchMS Scores object.
+
+            Output Table Format
+                +----------+-----------+---------+--------+
+                | query    | reference | matches | scores |
+                +==========+===========+=========+========+
+                | C001     | Glycine   |      6  | 0.5    |
+                +----------+-----------+---------+--------+
+                | C002     | Glycine   |     3   | 0.34   |
+                +----------+-----------+---------+--------+
+                |   ...    | ...       | ...     | ...    |
+                +----------+-----------+---------+--------+
         ]]>
     </token>
     
