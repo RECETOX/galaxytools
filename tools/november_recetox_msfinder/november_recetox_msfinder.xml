@@ -1,0 +1,43 @@
+<tool id="november_recetox_msfinder" name="november RECETOX MsFinder" version="@TOOL_VERSION@+galaxy0">
+    <description>Peak Annotation</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="creator"/>
+    <expand macro="requirements" />
+    <command>
+        mono /MsFinder/MsFinder/bin/Debug/MsfinderConsoleApp.exe annotate -i "$input_data" -m "/MsFinder/MSFINDER.INI" -o "$annotated_data"        
+    </command>
+
+    <configfiles>
+        <configfile name="wrapper"><![CDATA[
+
+        ]]></configfile>
+    </configfiles>
+
+    <inputs>
+        <expand macro="input"/>
+    </inputs>
+
+    <outputs>
+        <expand macro="output"/>
+    </outputs>
+
+    <tests>
+        <test> <!-- TEST #1: Test scoring of different file formats. -->
+            <param name="input_data" value="test.msp" ftype="msp"/>
+            <output name="annotated_data" file="out.msp" ftype="msp"/>
+        </test>
+    </tests>
+
+
+    <help>
+        <![CDATA[
+        @HELP@
+        ]]>
+    </help>
+
+   <!---> <citations>
+        <expand macro="citations"/>
+    </citations> -->
+</tool>

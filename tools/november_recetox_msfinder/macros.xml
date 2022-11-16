@@ -1,0 +1,41 @@
+<macros>
+    <token name="@TOOL_VERSION@">0.1.0</token>
+    <xml name="requirements">
+        <requirements>
+            <container type="docker">zargham12/msfinder:november</container>
+        </requirements>
+    </xml>
+    <xml name="creator">
+        <creator>
+            <person
+                givenName="Zargham"
+                familyName="Ahmad"
+                url="https://github.com/zargham-ahmad"
+                identifier="0000-0002-6096-224X" />
+            <organization
+                url="https://www.recetox.muni.cz/"
+                email="GalaxyToolsDevelopmentandDeployment@space.muni.cz"
+                name="RECETOX MUNI" />
+        </creator>
+    </xml>
+    <xml name="input">
+        <param name="input_data" type="data" format="msp,mat">
+            <label>Input file to process</label>
+            <help><![CDATA[
+                Help text
+            ]]></help>
+        </param>
+    </xml>
+    <xml name="output">
+        <data name="annotated_data" format="msp"/>
+    </xml>
+
+    <token name="@HELP@">
+        <![CDATA[
+        Help text
+        ]]>
+    </token>
+<!--    <xml name="citations">
+        <citation type="doi"></citation>
+    </xml>-->
+</macros>
