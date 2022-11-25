@@ -3,30 +3,60 @@
     <macros>
         <import>macros.xml</import>
     </macros>
-    <expand macro="creator"/>
+    <expand macro="creator" />
     <expand macro="requirements" />
     <command>
-        mono /MsFinder/MsFinder/bin/Debug/MsfinderConsoleApp.exe annotate -i "$input_data" -m "/MsFinder/MSFINDER.INI" -o "$annotated_data"        
+        <![CDATA[
+        sh ${write_param} &&
+        mono /MsFinder/MsFinder/bin/Debug/MsfinderConsoleApp.exe annotate -i "$input_data" -m "MSFINDER.INI" -o "$annotated_data"        
+    ]]>
     </command>
 
     <configfiles>
-        <configfile name="wrapper"><![CDATA[
-
-        ]]></configfile>
+        <configfile name="write_param">
+            printf "%s\n" "Ms2Tolerance=$Ms2Tolerance" \
+            "IsTmsMeoxDerivative=$IsTmsMeoxDerivative" \
+            "RelativeAbundanceCutOff=$RelativeAbundanceCutOff" \
+            "Ms1Tolerance=$Ms1Tolerance" \
+			"MassToleranceType=$MassToleranceType" \
+			"StructurePredictionTimeOut=$StructurePredictionTimeOut" \
+			"Ocheck=$Ocheck" \
+            "Ncheck=$Ncheck" \
+            "Pcheck=$Pcheck" \
+            "Scheck=$Scheck" \
+            "Fcheck=$Fcheck" \
+            "ClCheck=$ClCheck" \
+            "BrCheck=$BrCheck" \
+            "Icheck=$Icheck" \
+            "SiCheck=$SiCheck" \
+            "LewisAndSeniorCheck=$LewisAndSeniorCheck" \
+			"IsUseRtForFilteringCandidates=False" \
+			"RtToleranceForStructureElucidation=2.5" \
+			"IsUsePredictedRtForStructureElucidation=False" \
+			"Coeff_RtPrediction=-1" \
+			"Intercept_RtPrediction=-1" \
+			"IsUseRtInchikeyLibrary=True" \
+			"IsUsePredictedCcsForStructureElucidation=False" \
+			"IsUseCcsForFilteringCandidates=True" \
+			"CcsToleranceForStructureElucidation=10" \
+			"CanExcuteMS2AdductSearch=False" \
+            "IsUseXlogpPrediction=False" >MSFINDER.INI
+        </configfile>
     </configfiles>
 
     <inputs>
-        <expand macro="input"/>
+        <expand macro="input" />
+        <expand macro="parameter" />
     </inputs>
 
     <outputs>
-        <expand macro="output"/>
+        <expand macro="output" />
     </outputs>
 
     <tests>
-        <test> <!-- TEST #1: Test scoring of different file formats. -->
-            <param name="input_data" value="test.msp" ftype="msp"/>
-            <output name="annotated_data" file="out.msp" ftype="msp"/>
+        <test>
+            <param name="input_data" value="test.msp" ftype="msp" />
+            <output name="annotated_data" file="out.msp" />
         </test>
     </tests>
 
@@ -37,7 +67,7 @@
         ]]>
     </help>
 
-   <!---> <citations>
+    <!---> <citations>
         <expand macro="citations"/>
     </citations> -->
 </tool>

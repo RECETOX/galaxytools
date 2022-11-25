@@ -21,13 +21,38 @@
     <xml name="input">
         <param name="input_data" type="data" format="msp,mat">
             <label>Input file to process</label>
-            <help><![CDATA[
+            <help>
+                <![CDATA[
                 Help text
-            ]]></help>
+            ]]>
+            </help>
         </param>
     </xml>
+    <xml name="parameter">
+        <param type="float" value="0.01" name="Ms2Tolerance" label="Ms2Tolerance" />
+        <param name="IsTmsMeoxDerivative" type="boolean" checked="False" truevalue="True" falsevalue="False" label="IsTmsMeoxDerivative" />
+        <param type="integer" value="1" name="RelativeAbundanceCutOff" label="RelativeAbundanceCutOff" />
+        <param type="float" value="0.001" name="Ms1Tolerance" label="Ms1Tolerance" />
+        <param type="select" name="MassToleranceType" label="MassToleranceType">
+            <option value="Da" selected="True">Da</option>
+            <option value="Ppm">Ppm</option>
+        </param>
+        <param type="integer" value="-1" name="StructurePredictionTimeOut" label="StructurePredictionTimeOut" />
+        <!-- Element Checks -->
+        <param name="Ocheck" type="boolean" checked="True" truevalue="True" falsevalue="False" label="Ocheck" />
+        <param name="Ncheck" type="boolean" checked="True" truevalue="True" falsevalue="False" label="Ncheck" />
+        <param name="Pcheck" type="boolean" checked="True" truevalue="True" falsevalue="False" label="Pcheck" />
+        <param name="Scheck" type="boolean" checked="True" truevalue="True" falsevalue="False" label="Scheck" />
+        <param name="Fcheck" type="boolean" checked="True" truevalue="True" falsevalue="False" label="Fcheck" />
+        <param name="ClCheck" type="boolean" checked="True" truevalue="True" falsevalue="False" label="ClCheck" />
+        <param name="BrCheck" type="boolean" checked="True" truevalue="True" falsevalue="False" label="BrCheck" />
+        <param name="Icheck" type="boolean" checked="True" truevalue="True" falsevalue="False" label="Icheck" />
+        <param name="SiCheck" type="boolean" checked="True" truevalue="True" falsevalue="False" label="SiCheck" />
+        <param name="LewisAndSeniorCheck" type="boolean" checked="True" truevalue="True" falsevalue="False" label="LewisAndSeniorCheck" />
+
+    </xml>
     <xml name="output">
-        <data name="annotated_data" format="msp"/>
+        <data name="annotated_data" format="msp" />
     </xml>
 
     <token name="@HELP@">
@@ -35,7 +60,7 @@
         Help text
         ]]>
     </token>
-<!--    <xml name="citations">
+    <!--    <xml name="citations">
         <citation type="doi"></citation>
     </xml>-->
 </macros>
