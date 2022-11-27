@@ -1,9 +1,10 @@
-<tool id="november_recetox_msfinder" name="november RECETOX MsFinder" version="@TOOL_VERSION@+galaxy0">
+<tool id="november_recetox_msfinder" name="NOVEMBER RECETOX MsFinder" version="@TOOL_VERSION@+galaxy0">
     <description>Peak Annotation</description>
     <macros>
         <import>macros.xml</import>
     </macros>
     <expand macro="creator" />
+
     <expand macro="requirements" />
     <command>
         <![CDATA[
@@ -20,15 +21,15 @@
             "Ms1Tolerance=$Ms1Tolerance" \
 			"MassToleranceType=$MassToleranceType" \
 			"StructurePredictionTimeOut=$StructurePredictionTimeOut" \
-			"Ocheck=$Ocheck" \
-            "Ncheck=$Ncheck" \
-            "Pcheck=$Pcheck" \
-            "Scheck=$Scheck" \
-            "Fcheck=$Fcheck" \
-            "ClCheck=$ClCheck" \
-            "BrCheck=$BrCheck" \
-            "Icheck=$Icheck" \
-            "SiCheck=$SiCheck" \
+			"Ocheck=$element_selection.Ocheck" \
+            "Ncheck=$element_selection.Ncheck" \
+            "Pcheck=$element_selection.Pcheck" \
+            "Scheck=$element_selection.Scheck" \
+            "Fcheck=$element_selection.Fcheck" \
+            "ClCheck=$element_selection.ClCheck" \
+            "BrCheck=$element_selection.BrCheck" \
+            "Icheck=$element_selection.Icheck" \
+            "SiCheck=$element_selection.SiCheck" \
             "LewisAndSeniorCheck=$LewisAndSeniorCheck" \
 			"IsUseRtForFilteringCandidates=False" \
 			"RtToleranceForStructureElucidation=2.5" \
@@ -47,6 +48,9 @@
     <inputs>
         <expand macro="input" />
         <expand macro="parameter" />
+        <section name="element_selection" title="Element Selection" expanded="true"  help="Generate formula candidates that just contain the elements selected by the users.">
+            <expand macro="element_check_parameter" />
+        </section>
     </inputs>
 
     <outputs>
