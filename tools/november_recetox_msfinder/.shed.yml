@@ -1,0 +1,11 @@
+owner: recetox
+remote_repository_url: "https://github.com/RECETOX/galaxytools/tree/master/tools/november_recetox_msfinder"
+homepage_url: "https://github.com/RECETOX/recetox-msfinder"
+categories:
+  - Metabolomics
+repositories:
+  october_recetox_xmsannotator_advanced:
+    description: "Peak Annotation"
+    include:
+      - november_recetox_msfinder.xml
+      - macros.xml
