@@ -4,8 +4,8 @@ homepage_url: "https://github.com/RECETOX/recetox-msfinder"
 categories:
   - Metabolomics
 repositories:
-  october_recetox_xmsannotator_advanced:
-    description: "Peak Annotation"
+  recetox_msfinder:
+    description: "MS-FINDER is program for compound annotation for EI-MS (GC/MS) and MS/MS data"
     include:
-      - november_recetox_msfinder.xml
+      - recetox_msfinder.xml
       - macros.xml
