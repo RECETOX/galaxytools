@@ -21,11 +21,6 @@
     <xml name="input">
         <param name="input_data" type="data" format="msp,mat">
             <label>Input file to process</label>
-            <help>
-                <![CDATA[
-                Help text
-            ]]>
-            </help>
         </param>
     </xml>
     <xml name="parameter">
@@ -40,8 +35,8 @@
             <option value="Ppm">Ppm</option>
         </param>
         <param type="integer" value="-1" name="StructurePredictionTimeOut" label="StructurePredictionTimeOut" />
-        <param name="LewisAndSeniorCheck" type="boolean" checked="True" truevalue="True" falsevalue="False" label="LewisAndSeniorCheck" 
-        help="Generate formula candidates that match the valence rules of formula elements."/>
+        <param name="LewisAndSeniorCheck" type="boolean" checked="True" truevalue="True" falsevalue="False" label="LewisAndSeniorCheck"
+            help="Generate formula candidates that match the valence rules of formula elements." />
     </xml>
     <xml name="element_check_parameter">
         <!-- Element Checks -->
@@ -59,12 +54,7 @@
         <data name="annotated_data" format="msp" />
     </xml>
 
-    <token name="@HELP@">
-        <![CDATA[
-        Help text
-        ]]>
-    </token>
-    <!--    <xml name="citations">
-        <citation type="doi"></citation>
-    </xml>-->
+    <xml name="citations">
+        <citation type="doi">10.1021/acs.analchem.6b00770</citation>
+    </xml>
 </macros>

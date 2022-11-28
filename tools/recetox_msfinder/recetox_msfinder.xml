@@ -1,4 +1,4 @@
-<tool id="november_recetox_msfinder" name="RECETOX MsFinder" version="@TOOL_VERSION@+galaxy0">
+<tool id="recetox_msfinder" name="RECETOX MsFinder" version="@TOOL_VERSION@+galaxy0">
     <description>Peak Annotation</description>
     <macros>
         <import>macros.xml</import>
@@ -48,7 +48,7 @@
     <inputs>
         <expand macro="input" />
         <expand macro="parameter" />
-        <section name="element_selection" title="Element Selection" expanded="true"  help="Generate formula candidates that just contain the elements selected by the users.">
+        <section name="element_selection" title="Element Selection" expanded="true" help="Generate formula candidates that just contain the elements selected by the users.">
             <expand macro="element_check_parameter" />
         </section>
     </inputs>
@@ -60,18 +60,11 @@
     <tests>
         <test>
             <param name="input_data" value="test.msp" ftype="msp" />
-            <output name="annotated_data" file="out.msp" />
+            <output name="annotated_data" file="out.msp" lines_diff="16" />
         </test>
     </tests>
 
-
-    <help>
-        <![CDATA[
-        @HELP@
-        ]]>
-    </help>
-
-    <!---> <citations>
-        <expand macro="citations"/>
-    </citations> -->
+    <citations>
+        <expand macro="citations" />
+    </citations>
 </tool>
