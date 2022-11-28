@@ -9,7 +9,7 @@
     <command>
         <![CDATA[
         sh ${write_param} &&
-        mono /MsFinder/MsFinder/bin/Debug/MsfinderConsoleApp.exe annotate -i "$input_data" -m "MSFINDER.INI" -o "$annotated_data"        
+        mono /MsFinder/MsFinder/bin/Debug/MsfinderConsoleApp.exe annotate -i "$input_data" -m 'MSFINDER.INI' -o "$annotated_data"        
     ]]>
     </command>
 
