@@ -1,5 +1,5 @@
 owner: recetox
-remote_repository_url: "https://github.com/RECETOX/galaxytools/tree/master/tools/november_recetox_msfinder"
+remote_repository_url: "https://github.com/RECETOX/galaxytools/tree/master/tools/recetox_msfinder"
 homepage_url: "https://github.com/RECETOX/recetox-msfinder"
 categories:
   - Metabolomics
