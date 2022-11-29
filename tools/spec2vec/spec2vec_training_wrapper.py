@@ -1,7 +1,8 @@
 import argparse
-from xml.dom.minidom import Document
-from matchms import load_from_mgf, load_from_msp
+from matchms.importing import load_from_mgf, load_from_msp
 from spec2vec import SpectrumDocument
+from spec2vec.model_building import train_new_word2vec_model
+from spec2vec.serialization import export_model
 
 
 def read_spectra(spectra_file, file_format):
@@ -10,14 +11,14 @@ def read_spectra(spectra_file, file_format):
     elif file_format == "msp":
         return load_from_msp(spectra_file)
     else:
-        raise NotImplementedError(f"Unsupported file format {file_format}.")
+        raise NotImplementedError(f"Unsupported file format: {file_format}.")
 
 def main(argv):
     parser = argparse.ArgumentParser(description="Train a spec2vec model.")
 
     # Input data
-    parser.add_argument("spectra_filename", type=str, help="Path to a file containing spectra.")
-    parser.add_argument("spectra_file_format", type=str, help="Spectra file format.")
+    parser.add_argument("--spectra_filename", type=str, help="Path to a file containing spectra.")
+    parser.add_argument("--spectra_fileformat", type=str, help="Spectra file format.")
 
     # Training parameters
     parser.add_argument("--epochs", type=int, default=10, help="Number of epochs to train the model.")
@@ -39,17 +40,44 @@ def main(argv):
     parser.add_argument("--trim_rule", type=callable, default=None, help="A callable that accepts a dict of (word, count) pairs and returns either None (discard), or a modified version of the dict (some words may be removed, or the counts may be reduced). Used to discard uncommon words or modify their counts.")
     parser.add_argument("--max_final_vocab", type=int, default=None, help="Limits the RAM during vocabulary building; if there are more unique words than this, then prune the infrequent ones. Every 10 million word types need about 1GB of RAM. Set to None for no limit (default).")
     parser.add_argument("--n_decimals", type=int, default=2, help="Rounds peak position to this number of decimals.")
-
+    parser.add_argument("--n_workers", type=int, default=1, help="Number of worker nodes to train the model.")
 
     # Output parameters
     parser.add_argument("--checkpoints", type=int, nargs="+", help="Epochs after which to save the model.")
-    parser.add_argument("--as_pickle", type=str, help="If specified, the model will also be saved as a pickle file.")
-
-    # Output data
-    parser.add_argument("output_filename", type=str, help="Path to the output file.")
+    parser.add_argument("--pickle_output_filename", type=bool, help="If specified, the model will also be saved as a pickle file.")
+    parser.add_argument("--json_output_filename", type=str, help="Path to the output file.")
 
     args = parser.parse_args(argv)
 
     # Load the spectra
     spectra = list(read_spectra(args.spectra_filename, args.spectra_file_format))
     reference_documents = [SpectrumDocument(spectrum, n_decimals=args.n_decimals) for spectrum in spectra]
+
+    # Train a model
+    model = train_new_word2vec_model(reference_documents, 
+        iterations=list({args.checkpoints.append(args.epochs)}),
+        workers=args.n_workers,
+        progress_logger=True,
+        vector_size=args.vector_size,
+        alpha=args.alpha,
+        window=args.windows,
+        min_count=args.min_count,
+        sample=args.sample,
+        seed=args.seed,
+        min_alpha=args.min_alpha,
+        sg=args.sg,
+        hs=args.hs,
+        negative=args.negative,
+        ns_exponent=args.ns_exponent,
+        cbow_mean=args.cbow_mean,
+        sorted_vocab=args.sorted_vocab,
+        batch_words=args.batch_words,
+        shrink_windows=args.shrink_windows,
+        trim_rule=args.trim_rule,
+        max_final_vocab=args.max_final_vocab)
+    
+    # Save the model
+    if pickle_filename := args.pickle_output_filename:
+        model.save(pickle_filename)
+    
+    export_model(model, args.output_filename)

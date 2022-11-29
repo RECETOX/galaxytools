@@ -16,8 +16,9 @@
     <inputs>
         <param label="Training spectra" name="spectra_filename" type="data" format="msp,mgf"
                help="Spectra file to traing a Spec2Vec model."/>
+
         <section title="Output parameters" name="output_parameters" expanded="true">
-            <param label="Save model as Pickle file" name="as_pickle" type="boolean" checked="false"
+            <param label="Save model as Pickle file" name="as_pickle" type="boolean" checked="false" truevalue="true" falsevalue="false"
                    help="Add a Pickle output besides default JSON."/>
             <conditional name="model_checkpoints">
                 <param label="Model chekpoints" name="is_true" type="boolean" truevalue="true" falsevalue="false" checked="false"
@@ -28,14 +29,115 @@
                 </when>
             </conditional>
         </section>
+
+        <section title="Training hyperparameters" name="training_parameters" expanded="true">
+            <param label="Number of training epochs" name="epochs" type="integer" value="10"
+                   help="Number of epochs to train the model."/>
+            <param label="Vector size" name="vector_size" type="integer" value="100"
+                   help="Dimensionality of the feature vectors (i.e., into how many dimensions to encode each mass spectrum."/>
+            <param label="Alpha" name="alpha" type="float" value="0.025"
+                   help="The initial learning rate."/>
+            <param label="Minimum Alpha" name="min_alpha" type="float" value="0.0001"
+                    help="Learning rate will linearly drop to this value as training progresses."/>
+            <param label="Window" name="window" type="integer" value="5"
+                   help="The maximum distance between the current and predicted peak within a spectrum."/>
+            <param label="Minimum peak count" name="min_count" type="integer" value="5"
+                   help="Ignores all peaks with total frequency lower than this."/>
+            <param label="Sample" name="sample" type="integer" value="5"
+                   help="The threshold for configuring which higher-frequency peaks are randomly downsampled."/>
+            <param label="Seed" name="seed" type="integer" value="1"
+                   help="A seed for model reproducibility."/>
+            <conditional name="sg_param">
+                <param label="Word-Embedding type" name="sg" type="select"
+                    help="Embedding type: Skip-gram or Continuous Bag of Words">
+                    <option value="0">CBOW</option>
+                    <option value="1">Skip-gram</option>
+                </param>
+                <when value="0">
+                    <param label="CBOW mean" name="cbow_mean" type="select"
+                           help="Whether to use the sum of the context word vectors or their mean.">
+                        <option value="0">Sum</option>
+                        <option value="1">Mean</option>
+                    </param>
+                </when>
+            </conditional>
+            <conditional name="hs_param">
+                <param label="Last Layer Activation" name="hs" type="select"
+                    help="Activation function of the last layer of the neural network.">
+                    <option value="0">Negative Sampling</option>
+                    <option value="1">Hierarchical Softmax</option>
+                </param>
+                <when value="0">
+                    <param label="Negative Samples" name="negative" type="integer" value="5"
+                        help="If > 0, negative sampling will be used, this value specifies how many 'negative' examples should be drawn
+                        (usually between 5-20). If set to 0, no negative sampling is used."/>
+                </when>
+            </conditional>
+            <param label="Sort the vocabulary of spectra" name="sorted_vocab" type="boolean" checked="true"
+                   help="If true, sort the vocabulary by descending frequency before assigning word indexes."/>
+            <param label="Batch size" name="batch_words" type="integer" value="10000"
+                   help="Target size (in words) for batches of examples passed to worker threads (and thus cython routines).
+                   Larger batches will be passed if individual texts are longer than 10000 words, but the standard cython code truncates to that maximum."/>
+            <param label="Shrink windows" name="shrink_windows" type="boolean" checked="true"
+                   help="If true, the input sentence will be truncated to the window size."/>
+            <param label="Trim rule" name="trim_rule" type="text" value=""
+                   help="A callable that accepts a dict of (word, count) pairs and returns either None (discard), or a modified version of the dict (some words may be removed, or the counts may be reduced).
+                   Used to discard uncommon words or modify their counts."/>
+            <conditional name="trim_final_vocab">
+                <param label="Maximum unique words in the spectral vocabulary" name="max_final_vocab_bool" type="boolean" truevalue="true" falsevalue="false" checked="false"
+                        help="Limits the RAM during vocabulary building; if there are more unique words than this, then prune the infrequent ones. Set to None for no limit (default)."/>
+                <when value="true">
+                    <param label="Maximum unique words" name="max_final_vocab" type="integer" value="100000"/>
+                </when>
+            </conditional>
+            <param label="Number of decimals to round m/z values" name="n_decimals" type="integer" value="2"
+                   help="Rounds peak position to this number of decimals."/>
+        </section>
     </inputs>
 
     <outputs>
-        <data label="Spec2Vec model" name="model_filename" format="json"/>
+        <data label="Spec2Vec model" name="model_filename_json" format="json"/>
+        <data label="Spec2Vec model Pickle" name="model_filename_pickle" format="pkl">
+            <filter>as_pickle.is_true</filter>
+        </data>
     </outputs>
 
     <help><![CDATA[
-        TODO: Fill in help.
+        python3 ${__tool_directory__}/spec2vec_training_wrapper.py \
+        --spectra_filename '$spectra_filename' \
+        --spectra_fileformat '$spectra_filename.ext' \
+        --as_pickle '$as_pickle' \
+        --checkpoints '$model_checkpoints' \
+        --epochs '$epochs' \
+        --vector_size '$vector_size' \
+        --alpha '$alpha' \
+        --min_alpha '$min_alpha' \
+        --window '$window' \
+        --min_count '$min_count' \
+        --sample '$sample' \
+        --seed '$seed' \
+        --sg '$sg_param' \
+        #if $sg_param == "0"
+            --cbow_mean '$sg_param.cbow_mean' \
+        #end if
+        --hs '$hs_param' \
+        #if $hs_param == "0"
+            --negative '$hs_param.negative' \
+        #end if
+        --sorted_vocab '$sorted_vocab' \
+        --batch_words '$batch_words' \
+        --shrink_windows '$shrink_windows' \
+        --trim_rule '$trim_rule' \
+        --max_final_vocab_bool '$trim_final_vocab.max_final_vocab_bool' \
+        #if $trim_final_vocab.max_final_vocab_bool.is_true
+            --max_final_vocab '$trim_final_vocab.max_final_vocab' \
+        #end if
+        --n_decimals '$n_decimals' \
+        --json_output_filename '$model_filename_json'
+        #if $as_pickle.is_true
+            --pickle_output_filename '$model_filename_pickle'
+        #end if
+
     ]]></help>
 
     <citations>
