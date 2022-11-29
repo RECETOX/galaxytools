@@ -1,0 +1,44 @@
+<tool id="spec2vec_training" name="Spec2Vec Model Training" version="@TOOL_VERSION@-@TOOL_DEV_VERSION@+galaxy0" python_template_version="3.5" profile="21.05">
+    <description>Train a Spec2Vec model for mass spectra similarity scoring</description>
+
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+
+    <requirements>
+        <container type="docker">recetox/spec2vec:@COMMIT_SHA@</container>
+    </requirements>
+
+    <command detect_errors="exit_code"><![CDATA[
+        TODO: Fill in command template.
+    ]]></command>
+
+    <inputs>
+        <param label="Training spectra" name="spectra_filename" type="data" format="msp,mgf"
+               help="Spectra file to traing a Spec2Vec model."/>
+        <section title="Output parameters" name="output_parameters" expanded="true">
+            <param label="Save model as Pickle file" name="as_pickle" type="boolean" checked="false"
+                   help="Add a Pickle output besides default JSON."/>
+            <conditional name="model_checkpoints">
+                <param label="Model chekpoints" name="is_true" type="boolean" truevalue="true" falsevalue="false" checked="false"
+                   help="Epochs after which to save a model."/>
+                <when value="true">
+                    <param label="Epochs" name="epochs" type="text" value="10,20,50"
+                           help="Epochs after which to save a model."/>
+                </when>
+            </conditional>
+        </section>
+    </inputs>
+
+    <outputs>
+        <data label="Spec2Vec model" name="model_filename" format="json"/>
+    </outputs>
+
+    <help><![CDATA[
+        TODO: Fill in help.
+    ]]></help>
+
+    <citations>
+        <citation type="doi">10.1371/journal.pcbi.1008724</citation>
+    </citations>
+</tool>

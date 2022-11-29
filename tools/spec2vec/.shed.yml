@@ -1,0 +1,13 @@
+owner: recetox
+remote_repository_url: "https://github.com/RECETOX/galaxytools/tree/master/tools/spec2vec"\
+homepage_url: "https://github.com/iomega/spec2vec"
+categories:
+  - Metabolomics
+repositories:
+  spec2vec_training:
+    description: "Train a Spec2Vec model for mass spectra similarity scoring."
+    include:
+      - spec2vec_training.xml
+      - macros.xml
+      - spec2vec_training_wrapper.py
+      - test-data

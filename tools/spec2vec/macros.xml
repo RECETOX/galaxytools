@@ -1,0 +1,5 @@
+<macros>
+    <token name="@COMMIT_SHA@">c9b54b9</token>
+    <token name="@TOOL_VERSION@">0.6.0</token>
+    <token name="@TOOL_DEV_VERSION@">0</token>
+</macros>
