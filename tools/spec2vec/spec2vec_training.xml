@@ -13,9 +13,9 @@
         <environment_variable name="workers">
             #if $GALAXY_SLOTS
                 $GALAXY_SLOTS
-            #else
+            #else#
                 1
-            #end if
+            #end if#
         </environment_variable>
     </environment_variables>
 
@@ -51,9 +51,9 @@
         --max_final_vocab '$training_parameters.trim_final_vocab.max_final_vocab' \
         #end if
         --n_decimals '$training_parameters.n_decimals' \
-        --n_workers $workers \
+        --n_workers '\$workers' \
         --json_output_filename '$model_filename_json'
-        #if $output_parameters.as_pickle.is_true
+        #if $output_parameters.as_pickle
         --pickle_output_filename '$model_filename_pickle'
         #end if
     ]]></command>
