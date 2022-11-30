@@ -9,8 +9,53 @@
         <container type="docker">recetox/spec2vec:@COMMIT_SHA@</container>
     </requirements>
 
+    <environment_variables>
+        <environment_variable name="workers">
+            #if $GALAXY_SLOTS
+                $GALAXY_SLOTS
+            #else
+                1
+            #end if
+        </environment_variable>
+    </environment_variables>
+
     <command detect_errors="exit_code"><![CDATA[
-        TODO: Fill in command template.
+        set n_workers = \${GALAXY_SLOTS:-1}
+
+        python3 ${__tool_directory__}/spec2vec_training_wrapper.py \
+        --spectra_filename '$spectra_filename' \
+        --spectra_fileformat '$spectra_filename.ext' \
+        --epochs '$training_parameters.epochs' \
+        --vector_size '$training_parameters.vector_size' \
+        --alpha '$training_parameters.alpha' \
+        --min_alpha '$training_parameters.min_alpha' \
+        --window '$training_parameters.window' \
+        --min_count '$training_parameters.min_count' \
+        --sample '$training_parameters.sample' \
+        --seed '$training_parameters.seed' \
+        --sg '$training_parameters.sg_param' \
+        #if $training_parameters.sg_param == "0"
+        --cbow_mean '$training_parameters.sg_param.cbow_mean' \
+        #end if
+        --hs '$training_parameters.hs_param' \
+        #if $training_parameters.hs_param == "0"
+        --negative '$training_parameters.hs_param.negative' \
+        #end if
+        --sorted_vocab '$training_parameters.sorted_vocab' \
+        --batch_words '$training_parameters.batch_words' \
+        --shrink_windows '$training_parameters.shrink_windows' \
+        --trim_rule '$training_parameters.trim_rule' \
+        --max_final_vocab_bool '$training_parameters.trim_final_vocab.max_final_vocab_bool' \
+        #if $training_parameters.trim_final_vocab.max_final_vocab_bool.is_true
+        --max_final_vocab '$training_parameters.trim_final_vocab.max_final_vocab' \
+        #end if
+        --n_decimals '$training_parameters.n_decimals' \
+        --n_workers '$workers' \
+        --checkpoints '$output_parameters.model_checkpoints' \
+        --json_output_filename '$model_filename_json'
+        #if $output_parameters.as_pickle.is_true
+            --pickle_output_filename '$model_filename_pickle'
+        #end if
     ]]></command>
 
     <inputs>
@@ -98,45 +143,12 @@
     <outputs>
         <data label="Spec2Vec model" name="model_filename_json" format="json"/>
         <data label="Spec2Vec model Pickle" name="model_filename_pickle" format="pkl">
-            <filter>as_pickle.is_true</filter>
+            <filter>output_parameters['as_pickle'].is_true</filter>
         </data>
     </outputs>
 
     <help><![CDATA[
-        python3 ${__tool_directory__}/spec2vec_training_wrapper.py \
-        --spectra_filename '$spectra_filename' \
-        --spectra_fileformat '$spectra_filename.ext' \
-        --as_pickle '$as_pickle' \
-        --checkpoints '$model_checkpoints' \
-        --epochs '$epochs' \
-        --vector_size '$vector_size' \
-        --alpha '$alpha' \
-        --min_alpha '$min_alpha' \
-        --window '$window' \
-        --min_count '$min_count' \
-        --sample '$sample' \
-        --seed '$seed' \
-        --sg '$sg_param' \
-        #if $sg_param == "0"
-            --cbow_mean '$sg_param.cbow_mean' \
-        #end if
-        --hs '$hs_param' \
-        #if $hs_param == "0"
-            --negative '$hs_param.negative' \
-        #end if
-        --sorted_vocab '$sorted_vocab' \
-        --batch_words '$batch_words' \
-        --shrink_windows '$shrink_windows' \
-        --trim_rule '$trim_rule' \
-        --max_final_vocab_bool '$trim_final_vocab.max_final_vocab_bool' \
-        #if $trim_final_vocab.max_final_vocab_bool.is_true
-            --max_final_vocab '$trim_final_vocab.max_final_vocab' \
-        #end if
-        --n_decimals '$n_decimals' \
-        --json_output_filename '$model_filename_json'
-        #if $as_pickle.is_true
-            --pickle_output_filename '$model_filename_pickle'
-        #end if
+
 
     ]]></help>
 
