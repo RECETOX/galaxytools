@@ -13,6 +13,14 @@ def read_spectra(spectra_file, file_format):
     else:
         raise NotImplementedError(f"Unsupported file format: {file_format}.")
 
+def parse_checkpoints_input(checkpoints_input):
+    checkpoints_str = checkpoints_input.replace(" ", "").split(",")
+    try:
+        checkpoints_int = map(int, checkpoints_str)
+    except ValueError:
+        raise ValueError("Checkpoint values must be integers.")
+    return list(set(checkpoints_int))
+
 def main(argv):
     parser = argparse.ArgumentParser(description="Train a spec2vec model.")
 
@@ -21,7 +29,10 @@ def main(argv):
     parser.add_argument("--spectra_fileformat", type=str, help="Spectra file format.")
 
     # Training parameters
-    parser.add_argument("--epochs", type=int, default=10, help="Number of epochs to train the model.")
+    parser.add_argument("--epochs", type=int, default=0, help="Number of epochs to train the model.")
+    parser.add_argument("--checkpoints", type=str, default=None, help="Epochs after which to save the model.")
+
+    # Hyperparameters
     parser.add_argument("--vector_size", type=int, default=100, help="Dimensionality of the feature vectors.")
     parser.add_argument("--alpha", type=float, default=0.025, help="The initial learning rate.")
     parser.add_argument("--window", type=int, default=5, help="The maximum distance between the current and predicted peak within a spectrum.")
@@ -42,8 +53,7 @@ def main(argv):
     parser.add_argument("--n_decimals", type=int, default=2, help="Rounds peak position to this number of decimals.")
     parser.add_argument("--n_workers", type=int, default=1, help="Number of worker nodes to train the model.")
 
-    # Output parameters
-    parser.add_argument("--checkpoints", type=int, nargs="+", help="Epochs after which to save the model.")
+    # Output files
     parser.add_argument("--pickle_output_filename", type=bool, help="If specified, the model will also be saved as a pickle file.")
     parser.add_argument("--json_output_filename", type=str, help="Path to the output file.")
 
@@ -53,9 +63,15 @@ def main(argv):
     spectra = list(read_spectra(args.spectra_filename, args.spectra_file_format))
     reference_documents = [SpectrumDocument(spectrum, n_decimals=args.n_decimals) for spectrum in spectra]
 
+    # Process epoch arguments
+    if args.checkpoints:
+        iterations = parse_checkpoints_input(args.checkpoints)
+    else:
+        iterations = args.epochs
+
     # Train a model
     model = train_new_word2vec_model(reference_documents, 
-        iterations=list({args.checkpoints.append(args.epochs)}),
+        iterations=iterations,
         workers=args.n_workers,
         progress_logger=True,
         vector_size=args.vector_size,
