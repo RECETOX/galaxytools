@@ -54,7 +54,6 @@
         #end if
         --n_decimals '$training_parameters.n_decimals' \
         --n_workers '$workers' \
-        --checkpoints '$output_parameters.model_checkpoints' \
         --json_output_filename '$model_filename_json'
         #if $output_parameters.as_pickle.is_true
             --pickle_output_filename '$model_filename_pickle'
