@@ -93,7 +93,7 @@ def main(argv):
         max_final_vocab=args.max_final_vocab)
     
     # Save the model
-    if pickle_filename := args.pickle_output_filename:
-        model.save(pickle_filename)
+    if args.pickle_output_filename:
+        model.save(args.pickle_output_filename)
     
     export_model(model, args.output_filename)
