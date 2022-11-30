@@ -11,8 +11,8 @@
 
     <environment_variables>
         <environment_variable name="workers">
-            #if $GALAXY_SLOTS
-                $GALAXY_SLOTS
+            #if '\$GALAXY_SLOTS'
+                '\$GALAXY_SLOTS'
             #else#
                 1
             #end if#
