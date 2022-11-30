@@ -20,11 +20,14 @@
     </environment_variables>
 
     <command detect_errors="exit_code"><![CDATA[
-        set n_workers = \${GALAXY_SLOTS:-1}
-
         python3 ${__tool_directory__}/spec2vec_training_wrapper.py \
         --spectra_filename '$spectra_filename' \
         --spectra_fileformat '$spectra_filename.ext' \
+        #if output_parameters.model_checkpoints
+            --checkpoints '$output_parameters.model_checkpoints' \
+        #else
+            --epochs $output_parameters.epochs \
+        #end if
         --epochs '$training_parameters.epochs' \
         --vector_size '$training_parameters.vector_size' \
         --alpha '$training_parameters.alpha' \
@@ -69,15 +72,17 @@
                 <param label="Model chekpoints" name="is_true" type="boolean" truevalue="true" falsevalue="false" checked="false"
                    help="Epochs after which to save a model."/>
                 <when value="true">
-                    <param label="Epochs" name="epochs" type="text" value="10,20,50"
-                           help="Epochs after which to save a model."/>
+                    <param label="Number of training epochs with checkpoints" name="epochs" type="text" value="10,20,50"
+                           help="Comma-separated epoch numbers after which to save a model. The highest number will be used as a total number of epochs for training."/>
+                </when>
+                <when value="false">
+                    <param label="Number of training epochs" name="epochs" type="integer" value="10"
+                           help="Number of epochs to train the model."/>
                 </when>
             </conditional>
         </section>
 
         <section title="Training hyperparameters" name="training_parameters" expanded="true">
-            <param label="Number of training epochs" name="epochs" type="integer" value="10"
-                   help="Number of epochs to train the model."/>
             <param label="Vector size" name="vector_size" type="integer" value="100"
                    help="Dimensionality of the feature vectors (i.e., into how many dimensions to encode each mass spectrum."/>
             <param label="Alpha" name="alpha" type="float" value="0.025"
@@ -143,7 +148,7 @@
     <outputs>
         <data label="Spec2Vec model" name="model_filename_json" format="json"/>
         <data label="Spec2Vec model Pickle" name="model_filename_pickle" format="pkl">
-            <filter>output_parameters['as_pickle'].is_true</filter>
+            <filter>output_parameters['as_pickle']</filter>
         </data>
     </outputs>
 
