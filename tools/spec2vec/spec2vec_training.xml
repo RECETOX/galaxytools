@@ -23,12 +23,11 @@
         python3 ${__tool_directory__}/spec2vec_training_wrapper.py \
         --spectra_filename '$spectra_filename' \
         --spectra_fileformat '$spectra_filename.ext' \
-        #if output_parameters.model_checkpoints
+        #if '$output_parameters.model_checkpoints'
             --checkpoints '$output_parameters.model_checkpoints' \
         #else
-            --epochs $output_parameters.epochs \
+            --epochs '$output_parameters.epochs' \
         #end if
-        --epochs '$training_parameters.epochs' \
         --vector_size '$training_parameters.vector_size' \
         --alpha '$training_parameters.alpha' \
         --min_alpha '$training_parameters.min_alpha' \
@@ -37,20 +36,20 @@
         --sample '$training_parameters.sample' \
         --seed '$training_parameters.seed' \
         --sg '$training_parameters.sg_param' \
-        #if $training_parameters.sg_param == "0"
-        --cbow_mean '$training_parameters.sg_param.cbow_mean' \
+        #if '$training_parameters.sg_param' == '0'
+            --cbow_mean '$training_parameters.sg_param.cbow_mean' \
         #end if
         --hs '$training_parameters.hs_param' \
-        #if $training_parameters.hs_param == "0"
-        --negative '$training_parameters.hs_param.negative' \
+        #if '$training_parameters.hs_param' == '0'
+            --negative '$training_parameters.hs_param.negative' \
         #end if
         --sorted_vocab '$training_parameters.sorted_vocab' \
         --batch_words '$training_parameters.batch_words' \
         --shrink_windows '$training_parameters.shrink_windows' \
         --trim_rule '$training_parameters.trim_rule' \
         --max_final_vocab_bool '$training_parameters.trim_final_vocab.max_final_vocab_bool' \
-        #if $training_parameters.trim_final_vocab.max_final_vocab_bool.is_true
-        --max_final_vocab '$training_parameters.trim_final_vocab.max_final_vocab' \
+        #if '$training_parameters.trim_final_vocab.max_final_vocab_bool'
+            --max_final_vocab '$training_parameters.trim_final_vocab.max_final_vocab' \
         #end if
         --n_decimals '$training_parameters.n_decimals' \
         --n_workers '$workers' \
