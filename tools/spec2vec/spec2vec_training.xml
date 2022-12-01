@@ -23,10 +23,10 @@
         python3 ${__tool_directory__}/spec2vec_training_wrapper.py \
         --spectra_filename '$spectra_filename' \
         --spectra_fileformat '$spectra_filename.ext' \
-        #if '$output_parameters.model_checkpoints'
-        --checkpoints '$output_parameters.model_checkpoints' \
+        #if $output_parameters.model_checkpoints.is_true
+        --checkpoints '$output_parameters.model_checkpoints.checkpoints' \
         #else
-        --epochs '$output_parameters.epochs' \
+        --epochs '$output_parameters.model_checkpoints.epochs' \
         #end if
         --vector_size '$training_parameters.vector_size' \
         --alpha '$training_parameters.alpha' \
@@ -66,13 +66,13 @@
             <param label="Save model as Pickle file" name="as_pickle" type="boolean" checked="false" truevalue="true" falsevalue="false"
                    help="Add a Pickle output besides default JSON."/>
             <conditional name="model_checkpoints">
-                <param label="Model chekpoints" name="is_true" type="boolean" truevalue="true" falsevalue="false" checked="false"
+                <param label="Model chekpoints" name="is_true" type="boolean" truevalue="TRUE" falsevalue="FALSE" checked="false"
                    help="Epochs after which to save a model."/>
-                <when value="true">
-                    <param label="Number of training epochs with checkpoints" name="epochs" type="text" value="10,20,50"
+                <when value="TRUE">
+                    <param label="Number of training epochs with checkpoints" name="checkpoints" type="text" value="10,20,50"
                            help="Comma-separated epoch numbers after which to save a model. The highest number will be used as a total number of epochs for training."/>
                 </when>
-                <when value="false">
+                <when value="FALSE">
                     <param label="Number of training epochs" name="epochs" type="integer" value="10"
                            help="Number of epochs to train the model."/>
                 </when>
