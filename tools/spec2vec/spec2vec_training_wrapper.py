@@ -55,7 +55,7 @@ def main(argv):
     parser.add_argument("--n_workers", type=int, default=1, help="Number of worker nodes to train the model.")
 
     # Output files
-    parser.add_argument("--model_filename_pickle", type=bool, help="If specified, the model will also be saved as a pickle file.")
+    parser.add_argument("--model_filename_pickle", type=str, help="If specified, the model will also be saved as a pickle file.")
     parser.add_argument("--model_filename_json", type=str, help="Path to the output model json-file.")
     parser.add_argument("--weights_filename_json", type=str, help="Path to the output weights json-file.")
 
@@ -96,6 +96,7 @@ def main(argv):
     
     # Save the model
     if args.model_filename_pickle:
+        print(f'pickle: {args.model_filename_pickle}')
         model.save(args.model_filename_pickle)
     
     export_model(model, args.model_filename_json, args.weights_filename_json)

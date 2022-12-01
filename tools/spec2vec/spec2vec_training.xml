@@ -138,7 +138,7 @@
     <outputs>
         <data label="Spec2Vec model" name="model_filename_json" format="json"/>
         <data label="Spec2Vec weights" name="weights_filename_json" format="npy"/>
-        <data label="Spec2Vec model Pickle" name="model_filename_pickle" format="pickle">
+        <data label="Spec2Vec model Pickle" name="model_filename_pickle" format="pkl">
             <filter>output_parameters['as_pickle']</filter>
         </data>
     </outputs>
