@@ -96,4 +96,4 @@ def main(argv):
     if args.pickle_output_filename:
         model.save(args.pickle_output_filename)
     
-    export_model(model, args.output_filename)
+    export_model(model, args.json_output_filename)
