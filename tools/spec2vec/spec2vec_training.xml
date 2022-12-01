@@ -51,7 +51,7 @@
         --max_final_vocab $training_parameters.trim_final_vocab.max_final_vocab \
         #end if
         --n_decimals $training_parameters.n_decimals \
-        --n_workers '\$workers' \
+        --n_workers \$workers \
         #if $output_parameters.as_pickle
         --pickle_output_filename '$model_filename_pickle' \
         #end if
@@ -63,7 +63,7 @@
                help="Spectra file to traing a Spec2Vec model."/>
 
         <section title="Output parameters" name="output_parameters" expanded="true">
-            <param label="Save model as Pickle file" name="as_pickle" type="boolean" checked="false" truevalue="true" falsevalue="false"
+            <param label="Save model as Pickle file" name="as_pickle" type="boolean" checked="false" truevalue="TRUE" falsevalue="FALSE"
                    help="Add a Pickle output besides default JSON."/>
             <conditional name="model_checkpoints">
                 <param label="Model chekpoints" name="is_true" type="boolean" truevalue="TRUE" falsevalue="FALSE" checked="false"
@@ -120,12 +120,12 @@
                         (usually between 5-20). If set to 0, no negative sampling is used."/>
                 </when>
             </conditional>
-            <param label="Sort the vocabulary of spectra" name="sorted_vocab" type="boolean" checked="true"
+            <param label="Sort the vocabulary of spectra" name="sorted_vocab" type="boolean" checked="true" truevalue="TRUE" falsevalue="FALSE"
                    help="If true, sort the vocabulary by descending frequency before assigning word indexes."/>
             <param label="Batch size" name="batch_words" type="integer" value="10000"
                    help="Target size (in words) for batches of examples passed to worker threads (and thus cython routines).
                    Larger batches will be passed if individual texts are longer than 10000 words, but the standard cython code truncates to that maximum."/>
-            <param label="Shrink windows" name="shrink_windows" type="boolean" checked="true"
+            <param label="Shrink windows" name="shrink_windows" type="boolean" checked="true" truevalue="TRUE" falsevalue="FALSE"
                    help="If true, the input sentence will be truncated to the window size."/>
             <param label="Trim rule" name="trim_rule" type="text" value=""
                    help="A callable that accepts a dict of (word, count) pairs and returns either None (discard), or a modified version of the dict (some words may be removed, or the counts may be reduced).
