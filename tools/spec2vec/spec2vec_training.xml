@@ -9,16 +9,6 @@
         <container type="docker">recetox/spec2vec:@COMMIT_SHA@</container>
     </requirements>
 
-    <environment_variables>
-        <environment_variable name="workers">
-            #if '\$GALAXY_SLOTS'
-                '\$GALAXY_SLOTS'
-            #else#
-                1
-            #end if#
-        </environment_variable>
-    </environment_variables>
-
     <command detect_errors="exit_code"><![CDATA[
         sh ${spec2vec_python_cli}
     ]]></command>
@@ -56,7 +46,7 @@
             --max_final_vocab $training_parameters.trim_final_vocab.max_final_vocab \
             #end if
             --n_decimals $training_parameters.n_decimals \
-            --n_workers \$workers \
+            --n_workers \${GALAXY_SLOTS:-1} \
             #if $output_parameters.as_pickle
             --pickle_output_filename '$model_filename_pickle' \
             #end if
