@@ -30,7 +30,7 @@
         <param type="integer" value="1" name="RelativeAbundanceCutOff" label="RelativeAbundanceCutOff"
             help="The product ions more than this parameter on the basis of base peak ion are utilized for the product ion matching." />
         <param type="float" value="0.001" name="Ms1Tolerance" label="Ms1Tolerance" help="The mass tolerance to generate formula candidates." />
-        <param type="select" name="MassToleranceType" label="MassToleranceType">
+        <param type="select" name="MassToleranceType" label="MassToleranceType" help="Da stands for Daltons (amu), and Ppm stands for parts per million">
             <option value="Da" selected="True">Da</option>
             <option value="Ppm">Ppm</option>
         </param>
