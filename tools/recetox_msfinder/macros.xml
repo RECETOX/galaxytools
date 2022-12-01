@@ -20,7 +20,7 @@
     </xml>
     <xml name="input">
         <param name="input_data" type="data" format="msp,mat">
-            <label>Input file to process</label>
+            <label>Input mass spectral library file to which to add peak annotations.</label>
         </param>
     </xml>
     <xml name="parameter">
