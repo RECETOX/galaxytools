@@ -34,7 +34,7 @@
             <option value="Da" selected="True">Da</option>
             <option value="Ppm">Ppm</option>
         </param>
-        <param type="integer" value="-1" name="StructurePredictionTimeOut" label="StructurePredictionTimeOut" />
+        <param type="integer" value="-1" name="StructurePredictionTimeOut" label="StructurePredictionTimeOut" help="Time out parameter, value of -1 means no timeout" />
         <param name="LewisAndSeniorCheck" type="boolean" checked="True" truevalue="True" falsevalue="False" label="LewisAndSeniorCheck"
             help="Generate formula candidates that match the valence rules of formula elements." />
     </xml>
