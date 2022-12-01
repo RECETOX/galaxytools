@@ -41,7 +41,6 @@
             --sorted_vocab $training_parameters.sorted_vocab \
             --batch_words $training_parameters.batch_words \
             --shrink_windows $training_parameters.shrink_windows \
-            --trim_rule '$training_parameters.trim_rule' \
             #if $training_parameters.trim_final_vocab.max_final_vocab_bool
             --max_final_vocab $training_parameters.trim_final_vocab.max_final_vocab \
             #end if
@@ -123,9 +122,6 @@
                    Larger batches will be passed if individual texts are longer than 10000 words, but the standard cython code truncates to that maximum."/>
             <param label="Shrink windows" name="shrink_windows" type="boolean" checked="true" truevalue="TRUE" falsevalue="FALSE"
                    help="If true, the input sentence will be truncated to the window size."/>
-            <param label="Trim rule" name="trim_rule" type="text" value=""
-                   help="A callable that accepts a dict of (word, count) pairs and returns either None (discard), or a modified version of the dict (some words may be removed, or the counts may be reduced).
-                   Used to discard uncommon words or modify their counts."/>
             <conditional name="trim_final_vocab">
                 <param label="Maximum unique words in the spectral vocabulary" name="max_final_vocab_bool" type="boolean" truevalue="TRUE" falsevalue="FALSE" checked="false"
                         help="Limits the RAM during vocabulary building; if there are more unique words than this, then prune the infrequent ones. Set to None for no limit (default)."/>

@@ -50,7 +50,6 @@ def main(argv):
     parser.add_argument("--sorted_vocab", type=bool, default=True, help="If 1, sort the vocabulary by descending frequency before assigning word indexes.")
     parser.add_argument("--batch_words", type=int, default=10000, help="Target size (in words) for batches of examples passed to worker threads (and thus cython routines). Larger batches will be passed if individual texts are longer than 10000 words, but the standard cython code truncates to that maximum.")
     parser.add_argument("--shrink_windows", type=bool, default=True, help="If 1, the input sentence will be truncated to the window size.")
-    parser.add_argument("--trim_rule", type=callable, default=None, help="A callable that accepts a dict of (word, count) pairs and returns either None (discard), or a modified version of the dict (some words may be removed, or the counts may be reduced). Used to discard uncommon words or modify their counts.")
     parser.add_argument("--max_final_vocab", type=int, default=None, help="Limits the RAM during vocabulary building; if there are more unique words than this, then prune the infrequent ones. Every 10 million word types need about 1GB of RAM. Set to None for no limit (default).")
     parser.add_argument("--n_decimals", type=int, default=2, help="Rounds peak position to this number of decimals.")
     parser.add_argument("--n_workers", type=int, default=1, help="Number of worker nodes to train the model.")
@@ -91,7 +90,6 @@ def main(argv):
         sorted_vocab=args.sorted_vocab,
         batch_words=args.batch_words,
         shrink_windows=args.shrink_windows,
-        trim_rule=args.trim_rule,
         max_final_vocab=args.max_final_vocab)
     
     # Save the model
