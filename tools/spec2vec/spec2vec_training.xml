@@ -20,43 +20,49 @@
     </environment_variables>
 
     <command detect_errors="exit_code"><![CDATA[
-        python3 ${__tool_directory__}/spec2vec_training_wrapper.py \
-        --spectra_filename '$spectra_filename' \
-        --spectra_fileformat '$spectra_filename.ext' \
-        #if $output_parameters.model_checkpoints.is_true
-        --checkpoints '$output_parameters.model_checkpoints.checkpoints' \
-        #else
-        --epochs $output_parameters.model_checkpoints.epochs \
-        #end if
-        --vector_size $training_parameters.vector_size \
-        --alpha $training_parameters.alpha \
-        --min_alpha $training_parameters.min_alpha \
-        --window $training_parameters.window \
-        --min_count $training_parameters.min_count \
-        --sample $training_parameters.sample \
-        --seed $training_parameters.seed \
-        --sg $training_parameters.sg_param.sg \
-        #if not $training_parameters.sg_param.sg
-        --cbow_mean $training_parameters.sg_param.cbow_mean \
-        #end if
-        --hs $training_parameters.hs_param.hs \
-        #if not $training_parameters.hs_param.hs
-        --negative $training_parameters.hs_param.negative \
-        #end if
-        --sorted_vocab $training_parameters.sorted_vocab \
-        --batch_words $training_parameters.batch_words \
-        --shrink_windows $training_parameters.shrink_windows \
-        --trim_rule '$training_parameters.trim_rule' \
-        #if $training_parameters.trim_final_vocab.max_final_vocab_bool
-        --max_final_vocab $training_parameters.trim_final_vocab.max_final_vocab \
-        #end if
-        --n_decimals $training_parameters.n_decimals \
-        --n_workers \$workers \
-        #if $output_parameters.as_pickle
-        --pickle_output_filename '$model_filename_pickle' \
-        #end if
-        --json_output_filename '$model_filename_json'
-        ]]></command>
+        sh ${spec2vec_python_cli}
+    ]]></command>
+        
+    <configfiles>
+        <configfile name="spec2vec_python_cli">
+            python3 ${__tool_directory__}/spec2vec_training_wrapper.py \
+            --spectra_filename '$spectra_filename' \
+            --spectra_fileformat '$spectra_filename.ext' \
+            #if $output_parameters.model_checkpoints.is_true
+            --checkpoints '$output_parameters.model_checkpoints.checkpoints' \
+            #else
+            --epochs $output_parameters.model_checkpoints.epochs \
+            #end if
+            --vector_size $training_parameters.vector_size \
+            --alpha $training_parameters.alpha \
+            --min_alpha $training_parameters.min_alpha \
+            --window $training_parameters.window \
+            --min_count $training_parameters.min_count \
+            --sample $training_parameters.sample \
+            --seed $training_parameters.seed \
+            --sg $training_parameters.sg_param.sg \
+            #if not $training_parameters.sg_param.sg
+            --cbow_mean $training_parameters.sg_param.cbow_mean \
+            #end if
+            --hs $training_parameters.hs_param.hs \
+            #if not $training_parameters.hs_param.hs
+            --negative $training_parameters.hs_param.negative \
+            #end if
+            --sorted_vocab $training_parameters.sorted_vocab \
+            --batch_words $training_parameters.batch_words \
+            --shrink_windows $training_parameters.shrink_windows \
+            --trim_rule '$training_parameters.trim_rule' \
+            #if $training_parameters.trim_final_vocab.max_final_vocab_bool
+            --max_final_vocab $training_parameters.trim_final_vocab.max_final_vocab \
+            #end if
+            --n_decimals $training_parameters.n_decimals \
+            --n_workers \$workers \
+            #if $output_parameters.as_pickle
+            --pickle_output_filename '$model_filename_pickle' \
+            #end if
+            --json_output_filename '$model_filename_json' \
+        </configfile>
+    </configfiles>
 
     <inputs>
         <param label="Training spectra" name="spectra_filename" type="data" format="msp,mgf"
