@@ -26,37 +26,37 @@
         #if $output_parameters.model_checkpoints.is_true
         --checkpoints '$output_parameters.model_checkpoints.checkpoints' \
         #else
-        --epochs '$output_parameters.model_checkpoints.epochs' \
+        --epochs $output_parameters.model_checkpoints.epochs \
         #end if
-        --vector_size '$training_parameters.vector_size' \
-        --alpha '$training_parameters.alpha' \
-        --min_alpha '$training_parameters.min_alpha' \
-        --window '$training_parameters.window' \
-        --min_count '$training_parameters.min_count' \
-        --sample '$training_parameters.sample' \
-        --seed '$training_parameters.seed' \
-        --sg '$training_parameters.sg_param' \
-        #if '$training_parameters.sg_param' == '0'
-        --cbow_mean '$training_parameters.sg_param.cbow_mean' \
+        --vector_size $training_parameters.vector_size \
+        --alpha $training_parameters.alpha \
+        --min_alpha $training_parameters.min_alpha \
+        --window $training_parameters.window \
+        --min_count $training_parameters.min_count \
+        --sample $training_parameters.sample \
+        --seed $training_parameters.seed \
+        --sg $training_parameters.sg_param.sg \
+        #if not $training_parameters.sg_param.sg
+        --cbow_mean $training_parameters.sg_param.cbow_mean \
         #end if
-        --hs '$training_parameters.hs_param' \
-        #if '$training_parameters.hs_param' == '0'
-        --negative '$training_parameters.hs_param.negative' \
+        --hs $training_parameters.hs_param.hs \
+        #if not $training_parameters.hs_param.hs
+        --negative $training_parameters.hs_param.negative \
         #end if
-        --sorted_vocab '$training_parameters.sorted_vocab' \
-        --batch_words '$training_parameters.batch_words' \
-        --shrink_windows '$training_parameters.shrink_windows' \
+        --sorted_vocab $training_parameters.sorted_vocab \
+        --batch_words $training_parameters.batch_words \
+        --shrink_windows $training_parameters.shrink_windows \
         --trim_rule '$training_parameters.trim_rule' \
-        #if '$training_parameters.trim_final_vocab.max_final_vocab_bool'
-        --max_final_vocab '$training_parameters.trim_final_vocab.max_final_vocab' \
+        #if $training_parameters.trim_final_vocab.max_final_vocab_bool
+        --max_final_vocab $training_parameters.trim_final_vocab.max_final_vocab \
         #end if
-        --n_decimals '$training_parameters.n_decimals' \
+        --n_decimals $training_parameters.n_decimals \
         --n_workers '\$workers' \
-        --json_output_filename '$model_filename_json'
         #if $output_parameters.as_pickle
-        --pickle_output_filename '$model_filename_pickle'
+        --pickle_output_filename '$model_filename_pickle' \
         #end if
-    ]]></command>
+        --json_output_filename '$model_filename_json'
+        ]]></command>
 
     <inputs>
         <param label="Training spectra" name="spectra_filename" type="data" format="msp,mgf"
@@ -131,9 +131,9 @@
                    help="A callable that accepts a dict of (word, count) pairs and returns either None (discard), or a modified version of the dict (some words may be removed, or the counts may be reduced).
                    Used to discard uncommon words or modify their counts."/>
             <conditional name="trim_final_vocab">
-                <param label="Maximum unique words in the spectral vocabulary" name="max_final_vocab_bool" type="boolean" truevalue="true" falsevalue="false" checked="false"
+                <param label="Maximum unique words in the spectral vocabulary" name="max_final_vocab_bool" type="boolean" truevalue="TRUE" falsevalue="FALSE" checked="false"
                         help="Limits the RAM during vocabulary building; if there are more unique words than this, then prune the infrequent ones. Set to None for no limit (default)."/>
-                <when value="true">
+                <when value="TRUE">
                     <param label="Maximum unique words" name="max_final_vocab" type="integer" value="100000"/>
                 </when>
             </conditional>
