@@ -73,10 +73,12 @@ def main(argv):
         iterations = args.epochs
 
     # Train a model
-    model = train_new_word2vec_model(reference_documents, 
+    model = train_new_word2vec_model(
+        documents=reference_documents, 
         iterations=iterations,
-        workers=args.n_workers,
+        filename="spec2vec",
         progress_logger=True,
+        workers=args.n_workers,
         vector_size=args.vector_size,
         learning_rate_initial=args.alpha,
         learning_rate_decay=args.min_alpha,
@@ -96,7 +98,6 @@ def main(argv):
     
     # Save the model
     if args.model_filename_pickle:
-        print(f'pickle: {args.model_filename_pickle}')
         model.save(args.model_filename_pickle)
     
     export_model(model, args.model_filename, args.weights_filename)

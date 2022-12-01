@@ -145,6 +145,9 @@
         <data label="Spec2Vec model Pickle" name="model_filename_pickle" format="pkl">
             <filter>output_parameters['as_pickle']</filter>
         </data>
+        <collection name="model_checkpoints" type="list" label="Model Checkpoints">
+            <discover_datasets pattern="__name_and_ext__" />
+        </collection>
     </outputs>
 
     <help><![CDATA[
