@@ -64,6 +64,12 @@
         </test>
     </tests>
 
+    <help>
+        <![CDATA[
+            @HELP@
+        ]]>
+    </help>
+
     <citations>
         <expand macro="citations" />
     </citations>

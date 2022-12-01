@@ -54,6 +54,24 @@
         <data name="annotated_data" format="msp" />
     </xml>
 
+    <token name="@HELP@"><![CDATA[
+        **Description**
+
+        MS-FINDER was launched as a universal program for compound annotation that supports EI-MS (GC/MS) and 
+        MS/MS spectral mining. MS-FINDER provide solution for fragment annotations. The program can annotate 
+        your unknowns by the public spectral databases such as MassBank, LipidBlast, and GNPS. MS-FINDER has 
+        been developed as the collaborative work between Prof. Masanori Arita team (RIKEN, Reifycs Inc.) and 
+        Prof. Oliver Fiehn team (UC Davis) supported by the JST/NSF SICORP Metabolomics for the low carbon society 
+        project.
+
+        The input is a mass spectral library file to which to add peak annotations.
+
+        Note: Formula, InChI and SMILES codes are required to be present in the input mass spectral library file.
+
+        For detailed documentation of the tool please visit https://mtbinfo-team.github.io/mtbinfo.github.io/MS-FINDER/tutorial
+    ]]>
+    </token>
+
     <xml name="citations">
         <citation type="doi">10.1021/acs.analchem.6b00770</citation>
     </xml>
