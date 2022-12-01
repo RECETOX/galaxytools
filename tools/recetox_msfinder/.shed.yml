@@ -9,3 +9,4 @@ repositories:
     include:
       - recetox_msfinder.xml
       - macros.xml
+      - test-data
