@@ -86,15 +86,15 @@
         </section>
 
         <section title="Training hyperparameters" name="training_parameters" expanded="true">
-            <param label="Vector size" name="vector_size" type="integer" value="100"
+            <param label="Vector size" name="vector_size" type="integer" value="300"
                    help="Dimensionality of the feature vectors (i.e., into how many dimensions to encode each mass spectrum."/>
             <param label="Alpha" name="alpha" type="float" value="0.025"
                    help="The initial learning rate."/>
-            <param label="Minimum Alpha" name="min_alpha" type="float" value="0.0001"
+            <param label="Minimum Alpha" name="min_alpha" type="float" value="0.00025"
                     help="Learning rate will linearly drop to this value as training progresses."/>
-            <param label="Window" name="window" type="integer" value="5"
+            <param label="Window" name="window" type="integer" value="500"
                    help="The maximum distance between the current and predicted peak within a spectrum."/>
-            <param label="Minimum peak count" name="min_count" type="integer" value="5"
+            <param label="Minimum peak count" name="min_count" type="integer" value="1"
                    help="Ignores all peaks with total frequency lower than this."/>
             <param label="Sample" name="sample" type="integer" value="5"
                    help="The threshold for configuring which higher-frequency peaks are randomly downsampled."/>
