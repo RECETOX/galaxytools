@@ -140,12 +140,12 @@
     </inputs>
 
     <outputs>
-        <data label="Spec2Vec model" name="model_filename" format="json"/>
-        <data label="Spec2Vec weights" name="weights_filename" format="npy"/>
-        <data label="Spec2Vec model Pickle" name="model_filename_pickle" format="pkl">
+        <data label="Spec2Vec model on ${on_string}" name="model_filename" format="json"/>
+        <data label="Spec2Vec weights on ${on_string}" name="weights_filename" format="npy"/>
+        <data label="Spec2Vec pickle model on ${on_string}" name="model_filename_pickle" format="pkl">
             <filter>output_parameters['as_pickle']</filter>
         </data>
-        <collection name="model_checkpoints" type="list" label="Model Checkpoints">
+        <collection name="model_checkpoints" type="list" label="Spec2Vec model checkpoints on ${on_string}">
             <discover_datasets pattern="__name_and_ext__" />
         </collection>
     </outputs>
