@@ -56,8 +56,8 @@ def main(argv):
 
     # Output files
     parser.add_argument("--model_filename_pickle", type=str, help="If specified, the model will also be saved as a pickle file.")
-    parser.add_argument("--model_filename_json", type=str, help="Path to the output model json-file.")
-    parser.add_argument("--weights_filename_json", type=str, help="Path to the output weights json-file.")
+    parser.add_argument("--model_filename", type=str, help="Path to the output model json-file.")
+    parser.add_argument("--weights_filename", type=str, help="Path to the output weights json-file.")
 
 
     args = parser.parse_args()
@@ -99,7 +99,7 @@ def main(argv):
         print(f'pickle: {args.model_filename_pickle}')
         model.save(args.model_filename_pickle)
     
-    export_model(model, args.model_filename_json, args.weights_filename_json)
+    export_model(model, args.model_filename, args.weights_filename)
 
 
 if __name__ == "__main__":

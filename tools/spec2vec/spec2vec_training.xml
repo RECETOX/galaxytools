@@ -10,10 +10,14 @@
     </requirements>
 
     <command detect_errors="exit_code"><![CDATA[
+        sh ${weights_symlink} &&
         sh ${spec2vec_python_cli}
     ]]></command>
         
     <configfiles>
+        <configfile name="weights_symlink">
+            ln -fs '${weights_filename}.${weights_filename.ext}' '${weights_filename}'
+        </configfile>
         <configfile name="spec2vec_python_cli">
             python3 ${__tool_directory__}/spec2vec_training_wrapper.py \
             --spectra_filename '$spectra_filename' \
@@ -49,8 +53,8 @@
             #if $output_parameters.as_pickle
             --model_filename_pickle '$model_filename_pickle' \
             #end if
-            --model_filename_json '$model_filename_json' \
-            --weights_filename_json '$weights_filename_json' \
+            --model_filename '$model_filename' \
+            --weights_filename '$weights_filename' \
         </configfile>
     </configfiles>
 
@@ -136,8 +140,8 @@
     </inputs>
 
     <outputs>
-        <data label="Spec2Vec model" name="model_filename_json" format="json"/>
-        <data label="Spec2Vec weights" name="weights_filename_json" format="npy"/>
+        <data label="Spec2Vec model" name="model_filename" format="json"/>
+        <data label="Spec2Vec weights" name="weights_filename" format="npy"/>
         <data label="Spec2Vec model Pickle" name="model_filename_pickle" format="pkl">
             <filter>output_parameters['as_pickle']</filter>
         </data>
