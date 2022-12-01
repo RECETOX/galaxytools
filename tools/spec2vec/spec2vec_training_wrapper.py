@@ -1,4 +1,6 @@
 import argparse
+import sys
+
 from matchms.importing import load_from_mgf, load_from_msp
 from spec2vec import SpectrumDocument
 from spec2vec.model_building import train_new_word2vec_model
@@ -97,3 +99,7 @@ def main(argv):
         model.save(args.pickle_output_filename)
     
     export_model(model, args.json_output_filename)
+
+
+if __name__ == "__main__":
+    main(sys.argv[1:])
