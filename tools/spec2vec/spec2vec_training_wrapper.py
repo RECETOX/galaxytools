@@ -62,7 +62,7 @@ def main(argv):
     args = parser.parse_args()
 
     # Load the spectra
-    spectra = list(read_spectra(args.spectra_filename, args.spectra_file_format))
+    spectra = list(read_spectra(args.spectra_filename, args.spectra_fileformat))
     reference_documents = [SpectrumDocument(spectrum, n_decimals=args.n_decimals) for spectrum in spectra]
 
     # Process epoch arguments
@@ -78,7 +78,7 @@ def main(argv):
         progress_logger=True,
         vector_size=args.vector_size,
         alpha=args.alpha,
-        window=args.windows,
+        window=args.window,
         min_count=args.min_count,
         sample=args.sample,
         seed=args.seed,
