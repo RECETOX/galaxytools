@@ -59,7 +59,7 @@ def main(argv):
     parser.add_argument("--pickle_output_filename", type=bool, help="If specified, the model will also be saved as a pickle file.")
     parser.add_argument("--json_output_filename", type=str, help="Path to the output file.")
 
-    args = parser.parse_args(argv)
+    args = parser.parse_args()
 
     # Load the spectra
     spectra = list(read_spectra(args.spectra_filename, args.spectra_file_format))
@@ -102,4 +102,4 @@ def main(argv):
 
 
 if __name__ == "__main__":
-    main(sys.argv[1:])
+    main(argv=sys.argv[1:])
