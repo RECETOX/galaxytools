@@ -105,7 +105,7 @@
                     <param label="CBOW mean" name="cbow_mean" type="select"
                            help="Whether to use the sum of the context word vectors or their mean.">
                         <option value="0">Sum</option>
-                        <option value="1">Mean</option>
+                        <option value="1" selected="true">Mean</option>
                     </param>
                 </when>
             </conditional>
