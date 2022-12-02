@@ -91,7 +91,7 @@
                    help="The maximum distance between the current and predicted peak within a spectrum."/>
             <param label="Minimum peak count" name="min_count" type="integer" value="1"
                    help="Ignores all peaks with total frequency lower than this."/>
-            <param label="Sample" name="sample" type="integer" value="5"
+            <param label="Sample" name="sample" type="float" value="0.001"
                    help="The threshold for configuring which higher-frequency peaks are randomly downsampled."/>
             <param label="Seed" name="seed" type="integer" value="1"
                    help="A seed for model reproducibility."/>
@@ -156,6 +156,8 @@
     <tests>
         <test> <!-- Test 1: with default parameters -->
             <param name="spectra_filename" value="RECETOX_Exposome_pesticides_HR_MS_normalized_20220323.msp" ftype="msp"/>
+            <output name="model_filename" file="model.json" ftype="json"/>
+            <output name="weights_filename" file="weights.npy" ftype="npy"/>
         </test>
     </tests>
 
