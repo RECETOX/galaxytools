@@ -41,6 +41,7 @@
             --hs $training_parameters.hs_param.hs \
             #if not $training_parameters.hs_param.hs
             --negative $training_parameters.hs_param.negative \
+            --ns_exponent $training_parameters.hs_param.ns_exponent \
             #end if
             --sorted_vocab $training_parameters.sorted_vocab \
             --batch_words $training_parameters.batch_words \
@@ -118,6 +119,8 @@
                     <param label="Negative Samples" name="negative" type="integer" value="5"
                         help="If > 0, negative sampling will be used, this value specifies how many 'negative' examples should be drawn
                         (usually between 5-20). If set to 0, no negative sampling is used."/>
+                    <param label="Negative Sample Exponent" name="ns_exponent" type="float" value="0.75"
+                        help="The exponent used to shape the negative sampling distribution."/>
                 </when>
             </conditional>
             <param label="Sort the vocabulary of spectra" name="sorted_vocab" type="boolean" checked="true" truevalue="TRUE" falsevalue="FALSE"
@@ -149,6 +152,12 @@
             <discover_datasets pattern="__name_and_ext__" />
         </collection>
     </outputs>
+
+    <tests>
+        <test> <!-- Test 1: with default parameters -->
+            <param name="spectra_filename" value="RECETOX_Exposome_pesticides_HR_MS_normalized_20220323.msp" ftype="msp"/>
+        </test>
+    </tests>
 
     <help><![CDATA[
     **Spec2vec** is a spectral similarity score inspired by a natural language processing algorithm – Word2Vec.
