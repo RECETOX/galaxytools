@@ -46,8 +46,8 @@
             --sorted_vocab $training_parameters.sorted_vocab \
             --batch_words $training_parameters.batch_words \
             --shrink_windows $training_parameters.shrink_windows \
-            #if $training_parameters.trim_vocab.max_final_vocab_bool
-            --max_final_vocab $training_parameters.trim_vocab.max_final_vocab \
+            #if $training_parameters.trim_vocab.max_vocab_size_bool
+            --max_vocab_size $training_parameters.trim_vocab.max_vocab_size \
             #end if
             --n_decimals $training_parameters.n_decimals \
             --n_workers \${GALAXY_SLOTS:-1} \
@@ -131,10 +131,10 @@
             <param label="Shrink windows" name="shrink_windows" type="boolean" checked="true" truevalue="TRUE" falsevalue="FALSE"
                    help="If true, the input sentence will be truncated to the window size."/>
             <conditional name="trim_vocab">
-                <param label="Maximum unique words in the spectral vocabulary" name="max_final_vocab_bool" type="boolean" truevalue="TRUE" falsevalue="FALSE" checked="false"
+                <param label="Maximum unique words in the spectral vocabulary" name="max_vocab_size_bool" type="boolean" truevalue="TRUE" falsevalue="FALSE" checked="false"
                         help="Limits the RAM during vocabulary building; if there are more unique words than this, then prune the infrequent ones. Set to None for no limit (default)."/>
                 <when value="TRUE">
-                    <param label="Maximum unique words" name="max_final_vocab" type="integer" value="100000"/>
+                    <param label="Maximum unique words" name="max_vocab_size" type="integer" value="100000"/>
                 </when>
             </conditional>
             <param label="Number of decimals to round m/z values" name="n_decimals" type="integer" value="2"
