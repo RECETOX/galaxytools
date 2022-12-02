@@ -64,9 +64,9 @@
         Prof. Oliver Fiehn team (UC Davis) supported by the JST/NSF SICORP Metabolomics for the low carbon society 
         project.
 
-        The input is a mass spectral library file to which to add peak annotations.
-
-        Note: Formula and InChI (or SMILES) codes are required to be present in the input mass spectral library file.
+        This galaxy wrapper only peforms MS2 peak annotation given a correctly formatted mass spectral library file.
+        FORMULA, PRECURSORMZ and SMILES (or INCHI) metadata entries are required to be present in the input mass spectral library file.
+        Each spectrum has to be separated by a single blank line.
 
         For detailed documentation of the tool please visit https://mtbinfo-team.github.io/mtbinfo.github.io/MS-FINDER/tutorial
     ]]>
