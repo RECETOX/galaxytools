@@ -28,7 +28,7 @@
         <param name="IsTmsMeoxDerivative" type="boolean" checked="False" truevalue="True" falsevalue="False" label="IsTmsMeoxDerivative"
             help="Check TMS-MeOX derivative to use EIMS database; otherwise, MSMS database is used." />
         <param type="integer" value="1" name="RelativeAbundanceCutOff" label="RelativeAbundanceCutOff"
-            help="Remove peaks with less then specified % relative intensity from the spectra." />
+            help="Remove peaks with less than specified % relative intensity from the spectra." />
         <param type="float" value="0.001" name="Ms1Tolerance" label="Ms1Tolerance" help="The mass tolerance to generate formula candidates." />
         <param type="select" name="MassToleranceType" label="MassToleranceType" help="Da stands for Daltons (amu), and Ppm stands for parts per million">
             <option value="Da" selected="True">Da</option>
