@@ -19,7 +19,7 @@
         </creator>
     </xml>
     <xml name="input">
-        <param name="input_data" type="data" format="msp" help="Formula, InChI and SMILES codes are required to be present in the library file">
+        <param name="input_data" type="data" format="msp" help="Formula and InChI (or SMILES) codes are required to be present in the library file">
             <label>Input mass spectral library file to which to add peak annotations.</label>
         </param>
     </xml>
