@@ -150,6 +150,7 @@
         </data>
         <collection name="model_checkpoints" type="list" label="Spec2Vec model checkpoints on ${on_string}">
             <discover_datasets pattern="__name_and_ext__" />
+            <filter>output_parameters['model_checkpoints']['is_true']</filter>
         </collection>
     </outputs>
 
