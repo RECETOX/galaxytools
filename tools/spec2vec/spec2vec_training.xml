@@ -16,7 +16,7 @@
         
     <configfiles>
         <configfile name="weights_symlink">
-            ln -fs '${weights_filename}.${weights_filename.ext}' '${weights_filename}'
+            ln -fs '${weights_filename}' '${weights_filename}.npy'
         </configfile>
         <configfile name="spec2vec_python_cli">
             python3 ${__tool_directory__}/spec2vec_training_wrapper.py \
@@ -144,8 +144,8 @@
 
     <outputs>
         <data label="Spec2Vec model on ${on_string}" name="model_filename" format="json"/>
-        <data label="Spec2Vec weights on ${on_string}" name="weights_filename" format="npy"/>
-        <data label="Spec2Vec pickle model on ${on_string}" name="model_filename_pickle" format="pkl">
+        <data label="Spec2Vec weights on ${on_string}" name="weights_filename" format="binary"/>
+        <data label="Spec2Vec pickle model on ${on_string}" name="model_filename_pickle" format="binary">
             <filter>output_parameters['as_pickle']</filter>
         </data>
         <collection name="model_checkpoints" type="list" label="Spec2Vec model checkpoints on ${on_string}">
@@ -157,7 +157,7 @@
         <test> <!-- Test 1: with default parameters -->
             <param name="spectra_filename" value="RECETOX_Exposome_pesticides_HR_MS_normalized_20220323.msp" ftype="msp"/>
             <output name="model_filename" file="model.json" ftype="json"/>
-            <output name="weights_filename" file="weights.npy" ftype="npy"/>
+            <output name="weights_filename" file="weights.npy" ftype="binary"/>
         </test>
     </tests>
 
