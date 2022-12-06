@@ -155,19 +155,19 @@
     </outputs>
 
     <tests>
-        <test> <!-- Test 1: with default parameters -->
+        <test expect_num_outputs="2"> <!-- Test 1: with default parameters -->
             <param name="spectra_filename" value="RECETOX_Exposome_pesticides_HR_MS_normalized_20220323.msp" ftype="msp"/>
             <output name="model_filename" file="model.json" ftype="json"/>
             <output name="weights_filename" file="weights.npy" ftype="binary"/>
         </test>
-        <test> <!-- Test 2: pickle output -->
+        <test expect_num_outputs="3"> <!-- Test 2: pickle output -->
             <param name="spectra_filename" value="RECETOX_Exposome_pesticides_HR_MS_normalized_20220323.msp" ftype="msp"/>
             <param name="as_pickle" value="TRUE"/>
             <output name="model_filename" file="model.json" ftype="json"/>
             <output name="weights_filename" file="weights.npy" ftype="binary"/>
             <output name="model_filename_pickle" file="model.pkl" ftype="binary" compare="sim_size" delta_frac="0.001"/>
         </test>
-        <test> <!-- Test 3: model checkpoints -->
+        <test expect_num_outputs="3"> <!-- Test 3: model checkpoints -->
             <param name="spectra_filename" value="RECETOX_Exposome_pesticides_HR_MS_normalized_20220323.msp" ftype="msp"/>
             <conditional name="model_checkpoints">
                 <param name="is_true" value="TRUE"/>
