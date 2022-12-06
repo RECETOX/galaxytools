@@ -1,4 +1,4 @@
-<tool id="recetox_aplcms_align_features" name="RECETOX apLCMS - align features" version="@TOOL_VERSION@+galaxy1">
+<tool id="recetox_aplcms_align_features" name="RECETOX apLCMS - align features" version="@TOOL_VERSION@+galaxy0">
     <description>align features from LC/MS spectra across samples</description>
     <macros>
         <import>macros.xml</import>
@@ -47,7 +47,7 @@
         <data name="metadata_file" format="parquet" label="${tool.name} on ${on_string} (metadata table)" />
         <data name="rt_file" format="parquet" label="${tool.name} on ${on_string} (rt table)" />
         <data name="intensity_file" format="parquet" label="${tool.name} on ${on_string} (intensity table)" />
-        <data name="tolerances" format="parquet" label="${tool.name} on ${on_string} (tolerances)" />
+        <data name="tolerances" format="parquet" label="${tool.name} on ${on_string} (updated tolerances)" />
     </outputs>
 
     <tests>

@@ -61,6 +61,16 @@ save_aligned_features <- function(aligned_features, metadata_file, rt_file, inte
     save_data_as_parquet_file(aligned_features$intensity, intensity_file)
 }
 
+select_table_with_sample_name <- function(tables, sample_name) {
+    sample_names <- lapply(tables, load_sample_name)
+    # find position of sample_name in sample_names
+    # return table on that position
+}
+
+select_adjusted <- function(recovered_features) {
+    return(recovered_features$adjusted_features)
+}
+
 # -----------------------------------------------
 # old code follows (to be removed)
 # -----------------------------------------------

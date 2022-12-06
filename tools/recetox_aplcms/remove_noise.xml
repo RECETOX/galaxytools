@@ -11,6 +11,8 @@
     ]]></command>
     <configfiles>
         <configfile name="run_script"><![CDATA[
+            # somehow extract sample_name from the input_file
+
             profile <- proc.cdf(
                 filename = $input_file,
                 min_pres = $min_pres,
