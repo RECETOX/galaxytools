@@ -38,6 +38,21 @@
         </creator>
     </xml>
 
+    <xml name="remove_noise_params">
+        <param name="min_pres" type="float" value="0.5" label="min_pres"
+               help="The minimum proportion of presence in the time period for a series of signals grouped by m/z to be considered a peak." />
+        <param name="min_run" type="float" value="12" label="min_run"
+               help="The minimum length of elution time for a series of signals grouped by m/z to be considered a peak." />
+        <param name="mz_tol" type="float" value="1e-05" label="mz_tol"
+               help="The m/z tolerance level for the grouping of data points. This value is expressed as the fraction of the m/z value. This value, multiplied by the m/z value, becomes the cutoff level. The recommended value is the machine's nominal accuracy level. Divide the ppm value by 1e6. For FTMS, 1e-5 is recommended." />
+        <param name="baseline_correct" type="float" value="0" label="baseline_correct"
+               help="After grouping the observations, the highest intensity in each group is found. If the highest is lower than this value, the entire group will be deleted. The default value is NA, in which case the program uses a percentile of the height of the noise groups. If given a value, the value will be used as the threshold, and baseline.correct.noise.percentile will be ignored." />
+        <param name="baseline_correct_noise_percentile" type="float" value="0.05" label="baseline_correct_noise_percentile"
+               help="The percentile of signal strength of those EIC that don't pass the run filter, to be used as the baseline threshold of signal strength." />
+        <param name="intensity_weighted" type="boolean" checked="false" truevalue="TRUE" falsevalue="FALSE" label="intensity_weighted"
+               help="Whether to weight the local density by signal intensities in initial peak detection." />
+    </xml>
+
     <xml name="inputs">
         <inputs>
             <param name="files" type="data" format="mzdata,mzml,mzxml,netcdf" multiple="true" min="3" label="data"

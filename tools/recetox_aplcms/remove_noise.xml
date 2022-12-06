@@ -1,0 +1,53 @@
+<tool id="recetox_aplcms_remove_noise" name="RECETOX apLCMS - remove noise" version="@TOOL_VERSION@+galaxy0">
+    <description>filter noise and detect peaks from LC/MS data</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="creator"/>
+    <expand macro="requirements"/>
+
+    <command detect_errors="aggressive"><![CDATA[
+        Rscript -e 'source("${__tool_directory__}/utils.R")' -e 'source("${run_script}")'
+    ]]></command>
+    <configfiles>
+        <configfile name="run_script"><![CDATA[
+            profile <- proc.cdf(
+                filename = $input_file,
+                min_pres = $min_pres,
+                min_run = $min_run,
+                mz_tol = $mz_tol,
+                baseline_correct = $baseline_correct,
+                baseline_correct_noise_percentile = $baseline_correct_noise_percentile,
+                intensity_weighted = $intensity_weighted,
+                do.plot = FALSE,
+                cache = FALSE
+            )
+
+            save_data_as_parquet_file(profile, filename)
+        ]]></configfile>
+    </configfiles>
+
+    <inputs>
+        <param label="Input spectra data" name="input_file" type="data" format="mzml"
+               help="Mass spectrometry sample-wise feature table." />
+        <expand macro="remove_noise_params"/>
+    </inputs>
+
+    <outputs>
+        <data label="RECETOX apLCMS - remove noise on ${on_string}" name="output_file" format="parquet" />
+    </outputs>
+
+    <tests>
+
+    </tests>
+
+    <help>
+        <![CDATA[
+            This is a tool which runs apLCMS noise filtering and peaks detection.
+
+            @GENERAL_HELP@
+        ]]>
+    </help>
+
+    <expand macro="citations"/>
+</tool>

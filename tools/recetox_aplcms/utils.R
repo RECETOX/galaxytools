@@ -1,5 +1,11 @@
 library(recetox.aplcms)
 
+save_data_as_parquet_file <- function(data, filename) {
+    attr(data, "filename") <- filename
+    arrow::write_parquet(data, filename)
+}
+
+
 align_features <- function(sample_names, ...) {
     aligned <- feature.align(...)
     feature_names <- seq_len(nrow(aligned$pk.times))
