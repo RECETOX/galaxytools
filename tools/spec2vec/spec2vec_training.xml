@@ -167,6 +167,38 @@
             <output name="weights_filename" file="weights.npy" ftype="binary"/>
             <output name="model_filename_pickle" file="model.pkl" ftype="binary" compare="sim_size" delta_frac="0.001"/>
         </test>
+        <test> <!-- Test 3: model checkpoints -->
+            <param name="spectra_filename" value="RECETOX_Exposome_pesticides_HR_MS_normalized_20220323.msp" ftype="msp"/>
+            <conditional name="model_checkpoints">
+                <param name="is_true" value="TRUE"/>
+                <param name="checkpoints" value="1,5,8,10"/>
+            </conditional>
+            <output name="model_filename" file="model.json" ftype="json"/>
+            <output name="weights_filename" file="weights.npy" ftype="binary"/>
+            <output_collection name="model_checkpoints" type="list" count="3">
+                <element name="spec2vec_iter_1">
+                    <assert_contents>
+                        <has_size value="3468k" delta="1k" />
+                        <has_text text="gensim.models.word2vec" />
+                        <has_text text="peak@" n="1423" />
+                    </assert_contents>
+                </element>
+                <element name="spec2vec_iter_5">
+                    <assert_contents>
+                        <has_size value="3468k" delta="1k" />
+                        <has_text text="gensim.models.word2vec" />
+                        <has_text text="peak@" n="1423" />
+                    </assert_contents>
+                </element>
+                <element name="spec2vec_iter_8">
+                    <assert_contents>
+                        <has_size value="3468k" delta="1k" />
+                        <has_text text="gensim.models.word2vec" />
+                        <has_text text="peak@" n="1423" />
+                    </assert_contents>
+                </element>
+            </output_collection>
+        </test>
     </tests>
 
     <help><![CDATA[
