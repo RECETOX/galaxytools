@@ -1,5 +1,6 @@
 library(recetox.aplcms)
 
+# maybe this doesnt actually change the object, it might need to be returned !!!
 save_sample_name <- function(df, sample_name) {
     attr(df, "sample_name") <- sample_name
 }
@@ -44,6 +45,14 @@ save_tolerances <- function(table, tol_file) {
     mz_tolerance <- c(table$mz_tolerance)
     rt_tolerance <- c(table$rt_tolerance)
     arrow::write_parquet(data.frame(mz_tolerance, rt_tolerance), tol_file)
+}
+
+get_mz_tol <- function(tolerances) {
+    return(tolerances$mz_tolerance)
+}
+
+get_rt_tol <- function(tolerances) {
+    return(tolerances$rt_tolerance)
 }
 
 # -----------------------------------------------
