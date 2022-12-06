@@ -22,7 +22,7 @@
 
     <inputs>
         <param name="files" type="data_collection" collection_type="list" format="parquet" label="Input data"
-               help="List of tables containing clustered features." />
+               help="Table containing clustered features." />
     </inputs>
 
     <outputs>
