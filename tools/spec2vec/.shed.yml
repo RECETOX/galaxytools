@@ -1,5 +1,5 @@
 owner: recetox
-remote_repository_url: "https://github.com/RECETOX/galaxytools/tree/master/tools/spec2vec"\
+remote_repository_url: "https://github.com/RECETOX/galaxytools/tree/master/tools/spec2vec"
 homepage_url: "https://github.com/iomega/spec2vec"
 categories:
   - Metabolomics
