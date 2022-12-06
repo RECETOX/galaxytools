@@ -157,7 +157,7 @@
         <data label="Spec2Vec pickle model on ${on_string}" name="model_filename_pickle" format="binary">
             <filter>output_parameters['as_pickle']</filter>
         </data>
-        <collection name="model_checkpoints on ${on_string}" type="list" label="Spec2Vec model checkpoints on ${on_string}">
+        <collection name="model_checkpoints" type="list" label="Spec2Vec model checkpoints on ${on_string}">
             <discover_datasets pattern="__name_and_ext__" />
             <filter>output_parameters['model_checkpoints']['is_true']</filter>
         </collection>
