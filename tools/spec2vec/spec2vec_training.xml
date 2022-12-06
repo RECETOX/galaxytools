@@ -160,6 +160,13 @@
             <output name="model_filename" file="model.json" ftype="json"/>
             <output name="weights_filename" file="weights.npy" ftype="binary"/>
         </test>
+        <test> <!-- Test 2: pickle output -->
+            <param name="spectra_filename" value="RECETOX_Exposome_pesticides_HR_MS_normalized_20220323.msp" ftype="msp"/>
+            <param name="as_pickle" value="TRUE"/>
+            <output name="model_filename" file="model.json" ftype="json"/>
+            <output name="weights_filename" file="weights.npy" ftype="binary"/>
+            <output name="model_filename_pickle" file="model.pkl" ftype="binary" compare="sim_size" delta_frac="0.001"/>
+        </test>
     </tests>
 
     <help><![CDATA[
