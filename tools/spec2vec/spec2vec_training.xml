@@ -71,7 +71,11 @@
                    help="Epochs after which to save a model."/>
                 <when value="TRUE">
                     <param label="Number of training epochs with checkpoints" name="checkpoints" type="text" value="10,20,50"
-                           help="Comma-separated epoch numbers after which to save a model. The highest number will be used as a total number of epochs for training."/>
+                           help="Comma-separated epoch numbers after which to save a model. The highest number will be used as a total number of epochs for training.">
+                           <validator type="empty_field" />
+                           <validator type="regex" 
+                                message="The input has to be a comma-separated sequence of integers without trailing commas. For example: 10,20,50">^[0-9][0-9,]*[0-9]$</validator>
+                    </param>
                 </when>
                 <when value="FALSE">
                     <param label="Number of training epochs" name="epochs" type="integer" value="10"
