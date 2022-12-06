@@ -12,7 +12,7 @@
     <configfiles>
          <configfile name="run_script"><![CDATA[
              profile <- load_data_from_parquet_file($profile)
-             sample_name <- read_dataframe_sample_name(profile)
+             sample_name <- load_sample_name(profile)
 
              feature_table <- prof.to.features(
                  profile = profile,

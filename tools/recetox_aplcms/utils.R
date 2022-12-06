@@ -4,7 +4,7 @@ save_sample_name <- function(df, sample_name) {
     attr(df, "sample_name") <- sample_name
 }
 
-read_dataframe_sample_name <- function(df) {
+load_sample_name <- function(df) {
     return(attr(df, "sample_name"))
 }
 
@@ -16,7 +16,39 @@ load_data_from_parquet_file <- function(filename) {
     return(arrow::read_parquet(filename))
 }
 
+load_parquet_collection <- function(files) {
+    features <- lapply(files, arrow::read_parquet)
+    features <- lapply(features, as.matrix)
+    return(features)
+}
 
+save_parquet_collection <- function(table, sample_names, subdir) {
+    dir.create(subdir)
+    for (i in 1:(length(table$feature_tables))) {
+      filename <- file.path(subdir, paste0(subdir, "_", sample_names[i], ".parquet"))
+      arrow::write_parquet(as.data.frame(table$feature_tables[i]), filename)
+    }
+}
+
+sort_by_sample_name <- function(tables, sample_names) {
+    return(tables[order(sample_names)])
+}
+
+add_sample_names <- function(table, sample_names) {
+    for (i in 1:(length(table$feature_tables))) {
+        save_sample_name(table$feature_tables[i], sample_names[i])
+    }
+}
+
+save_tolerances <- function(table, tol_file) {
+    mz_tolerance <- c(table$mz_tolerance)
+    rt_tolerance <- c(table$rt_tolerance)
+    arrow::write_parquet(data.frame(mz_tolerance, rt_tolerance), tol_file)
+}
+
+# -----------------------------------------------
+# old code follows (to be removed)
+# -----------------------------------------------
 
 align_features <- function(sample_names, ...) {
     aligned <- feature.align(...)
