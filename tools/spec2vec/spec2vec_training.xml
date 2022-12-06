@@ -61,18 +61,18 @@
 
     <inputs>
         <param label="Training spectra" name="spectra_filename" type="data" format="msp,mgf"
-               help="Spectra file to traing a Spec2Vec model."/>
+               help="Spectra file to train a Spec2Vec model."/>
 
         <section title="Output parameters" name="output_parameters" expanded="true">
             <param label="Save model as Pickle file" name="as_pickle" type="boolean" checked="false" truevalue="TRUE" falsevalue="FALSE"
                    help="Add a Pickle output besides default JSON."/>
             <conditional name="model_checkpoints">
-                <param label="Model chekpoints" name="is_true" type="boolean" truevalue="TRUE" falsevalue="FALSE" checked="false"
+                <param label="Model chekpoints" name="is_true" type="boolean" checked="false" truevalue="TRUE" falsevalue="FALSE"
                    help="Epochs after which to save a model."/>
                 <when value="TRUE">
                     <param label="Number of training epochs with checkpoints" name="checkpoints" type="text" value="10,20,50"
                            help="Comma-separated epoch numbers after which to save a model. The highest number will be used as a total number of epochs for training.">
-                           <validator type="empty_field" />
+                           <validator type="empty_field"/>
                            <validator type="regex" 
                                 message="The input has to be a comma-separated sequence of integers without trailing commas. For example: 10,20,50">^[0-9][0-9,]*[0-9]$</validator>
                     </param>
@@ -86,19 +86,19 @@
 
         <section title="Training hyperparameters" name="training_parameters" expanded="true">
             <param label="Vector size" name="vector_size" type="integer" value="300"
-                   help="Dimensionality of the feature vectors (i.e., into how many dimensions to encode each mass spectrum."/>
+                   help="Dimensionality of the feature vectors (i.e., into how many dimensions to encode each m/z and neutral loss peak."/>
             <param label="Alpha" name="alpha" type="float" value="0.025"
                    help="The initial learning rate."/>
             <param label="Minimum Alpha" name="min_alpha" type="float" value="0.00025"
                     help="Learning rate will linearly drop to this value as training progresses."/>
             <param label="Window" name="window" type="integer" value="500"
-                   help="The maximum distance between the current and predicted peak within a spectrum."/>
+                   help="Maximum distance between the current and predicted peak within a spectrum."/>
             <param label="Minimum peak count" name="min_count" type="integer" value="1"
-                   help="Ignores all peaks with total frequency lower than this."/>
+                   help="Ignores all peaks with absolute frequency lower than this."/>
             <param label="Sample" name="sample" type="float" value="0.001"
                    help="The threshold for configuring which higher-frequency peaks are randomly downsampled."/>
             <param label="Seed" name="seed" type="integer" value="1"
-                   help="A seed for model reproducibility."/>
+                   help="Seed of random number generator for model reproducibility."/>
             <conditional name="sg_param">
                 <param label="Word-Embedding type" name="sg" type="select"
                     help="Embedding type: Skip-gram or Continuous Bag of Words">
@@ -115,30 +115,35 @@
             </conditional>
             <conditional name="hs_param">
                 <param label="Last Layer Activation" name="hs" type="select"
-                    help="Activation function of the last layer of the neural network.">
+                    help="Activation function of the last layer of the neural network. Negative sampling is more computationally efficient.">
                     <option value="0">Negative Sampling</option>
                     <option value="1">Hierarchical Softmax</option>
                 </param>
                 <when value="0">
                     <param label="Negative Samples" name="negative" type="integer" value="5"
                         help="If > 0, negative sampling will be used, this value specifies how many 'negative' examples should be drawn
-                        (usually between 5-20). If set to 0, no negative sampling is used."/>
+                        for each peak and neutral loss (usually between 5-20). If set to 0, no negative sampling is used.">
+                        <validator type="in_range" min="1" message="The value must be larger than 0."/>
+                    </param>
                     <param label="Negative Sample Exponent" name="ns_exponent" type="float" value="0.75"
-                        help="The exponent used to shape the negative sampling distribution."/>
+                        help="The exponent used to shape the negative sampling distribution. A value of 1.0 samples exactly in proportion to the frequencies,
+                        0.0 samples all peaks and neutral losses equally, while a negative value samples low-frequency peaks more often than high-requency peaks.">
+                        <validator type="in_range" min="-1.0" max="1.0" message="The value must be within -1.0 and 1.0 range."/>
+                    </param>
                 </when>
             </conditional>
             <param label="Sort the vocabulary of spectra" name="sorted_vocab" type="boolean" checked="true" truevalue="TRUE" falsevalue="FALSE"
-                   help="If true, sort the vocabulary by descending frequency before assigning word indexes."/>
+                   help="If true, sort the vocabulary by descending frequency before assigning peak and neutral loss indexes."/>
             <param label="Batch size" name="batch_words" type="integer" value="10000"
-                   help="Target size (in words) for batches of examples passed to worker threads (and thus cython routines).
-                   Larger batches will be passed if individual texts are longer than 10000 words, but the standard cython code truncates to that maximum."/>
+                   help="Target size (in peaks and neutral losses) for batches of examples passed to worker threads (and thus cython routines).
+                   Larger batches will be passed if individual peak sequences are longer than 10000 words, but the standard cython code truncates to that maximum."/>
             <param label="Shrink windows" name="shrink_windows" type="boolean" checked="true" truevalue="TRUE" falsevalue="FALSE"
-                   help="If true, the input sentence will be truncated to the window size."/>
+                   help="EXPERIMENTAL. If true, the effective window size is uniformly sampled in range [1,Window] for each target peak during training."/>
             <conditional name="trim_vocab">
-                <param label="Maximum unique words in the spectral vocabulary" name="max_vocab_size_bool" type="boolean" truevalue="TRUE" falsevalue="FALSE" checked="false"
-                        help="Limits the RAM during vocabulary building; if there are more unique words than this, then prune the infrequent ones. Set to None for no limit (default)."/>
+                <param label="Maximum unique peaks and neutral losses in the spectral vocabulary" name="max_vocab_size_bool" type="boolean" truevalue="TRUE" falsevalue="FALSE" checked="false"
+                        help="Limits the RAM during vocabulary building; if there are more unique peaks and neutral losses than this, then prune the infrequent ones. Disable for no limit (default)."/>
                 <when value="TRUE">
-                    <param label="Maximum unique words" name="max_vocab_size" type="integer" value="100000"/>
+                    <param label="Maximum unique peaks and neutral losses" name="max_vocab_size" type="integer" value="100000"/>
                 </when>
             </conditional>
             <param label="Number of decimals to round m/z values" name="n_decimals" type="integer" value="2"
@@ -152,7 +157,7 @@
         <data label="Spec2Vec pickle model on ${on_string}" name="model_filename_pickle" format="binary">
             <filter>output_parameters['as_pickle']</filter>
         </data>
-        <collection name="model_checkpoints" type="list" label="Spec2Vec model checkpoints on ${on_string}">
+        <collection name="model_checkpoints on ${on_string}" type="list" label="Spec2Vec model checkpoints on ${on_string}">
             <discover_datasets pattern="__name_and_ext__" />
             <filter>output_parameters['model_checkpoints']['is_true']</filter>
         </collection>
