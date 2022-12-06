@@ -23,7 +23,8 @@
                 cache = FALSE
             )
 
-            save_data_as_parquet_file(profile, filename)
+            save_sample_name(profile, sample_name)
+            save_data_as_parquet_file(profile, $output_file)
         ]]></configfile>
     </configfiles>
 
@@ -34,7 +35,7 @@
     </inputs>
 
     <outputs>
-        <data label="RECETOX apLCMS - remove noise on ${on_string}" name="output_file" format="parquet" />
+        <data label="${tool.name} on ${on_string}" name="output_file" format="parquet" />
     </outputs>
 
     <tests>

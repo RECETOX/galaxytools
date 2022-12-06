@@ -1,9 +1,21 @@
 library(recetox.aplcms)
 
+save_sample_name <- function(df, sample_name) {
+    attr(df, "sample_name") <- sample_name
+}
+
+read_dataframe_sample_name <- function(df) {
+    return(attr(df, "sample_name"))
+}
+
 save_data_as_parquet_file <- function(data, filename) {
-    attr(data, "filename") <- filename
     arrow::write_parquet(data, filename)
 }
+
+load_data_from_parquet_file <- function(filename) {
+    return(arrow::read_parquet(filename))
+}
+
 
 
 align_features <- function(sample_names, ...) {

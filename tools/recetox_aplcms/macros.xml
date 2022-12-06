@@ -53,6 +53,39 @@
                help="Whether to weight the local density by signal intensities in initial peak detection." />
     </xml>
 
+    <xml name="generate_feature_table_params">
+        <param name="bandwidth" type="float" value="0.5" label="bandwidth"
+                   help="A value between zero and one. Multiplying this value to the length of the signal along the time axis helps determine the bandwidth in the kernel smoother used for peak identification." />
+        <param name="min_bandwidth" type="float" optional="true" label="min_bandwidth"
+               help="The minimum bandwidth to use in the kernel smoother." />
+        <param name="max_bandwidth" type="float" optional="true" label="max_bandwidth"
+               help="The maximum bandwidth to use in the kernel smoother." />
+        <param name="sd_cut_min" type="float" value="0.01" label="sd_cut_min"
+               help="The minimum standard deviation of a feature to be not eliminated." />
+        <param name="sd_cut_max" type="float" value="500" label="sd_cut_max"
+               help="The maximum standard deviation of a feature to be not eliminated." />
+        <param name="sigma_ratio_lim_min" type="float" value="0.01" label="sigma_ratio_lim_min"
+               help="The lower limit of the believed ratio range between the left-standard deviation and the right-standard deviation of the bi-Gaussian function used to fit the data." />
+        <param name="sigma_ratio_lim_max" type="float" value="100" label="sigma_ratio_lim_max"
+               help="The upper limit of the believed ratio range between the left-standard deviation and the right-standard deviation of the bi-Gaussian function used to fit the data." />
+        <param name="shape_model" type="select" display="radio" label="shape_model"
+               help="The mathematical model for the shape of a peak. There are two choices - bi-Gaussian and Gaussian. When the peaks are asymmetric, the bi-Gaussian is better.">
+            <option value="Gaussian">Gaussian</option>
+            <option value="bi-Gaussian" selected="true">bi-Gaussian</option>
+        </param>
+        <param name="peak_estim_method" type="select" display="radio" label="peak_estim_method"
+               help="The estimation method for the bi-Gaussian peak model. Two possible values: moment and EM.">
+            <option value="moment" selected="true">Moment</option>
+            <option value="EM">EM</option>
+        </param>
+        <param name="moment_power" type="float" value="1" label="moment_power"
+               help="The power parameter for data transformation when fitting the bi-Gaussian or Gaussian mixture model in an EIC." />
+        <param name="component_eliminate" type="float" value="0.01" label="component_eliminate"
+               help="In fitting mixture of bi-Gaussian (or Gaussian) model of an EIC, when a component accounts for a proportion of intensities less than this value, the component will be ignored." />
+        <param name="BIC_factor" type="float" value="2.0" label="BIC_factor"
+               help="The factor that is multiplied on the number of parameters to modify the BIC criterion. If larger than 1, models with more peaks are penalized more." />
+    </xml>
+
     <xml name="inputs">
         <inputs>
             <param name="files" type="data" format="mzdata,mzml,mzxml,netcdf" multiple="true" min="3" label="data"
