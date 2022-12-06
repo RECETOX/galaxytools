@@ -4,6 +4,7 @@
     <macros>
         <import>macros.xml</import>
     </macros>
+    <expand macro="creator"/>
 
     <requirements>
         <container type="docker">recetox/spec2vec:@COMMIT_SHA@</container>
@@ -121,8 +122,7 @@
                 </param>
                 <when value="0">
                     <param label="Negative Samples" name="negative" type="integer" value="5"
-                        help="If > 0, negative sampling will be used, this value specifies how many 'negative' examples should be drawn
-                        for each peak and neutral loss (usually between 5-20). If set to 0, no negative sampling is used.">
+                        help="Specify how many 'negative' examples should be drawn for each peak and neutral loss (usually between 5-20).">
                         <validator type="in_range" min="1" message="The value must be larger than 0."/>
                     </param>
                     <param label="Negative Sample Exponent" name="ns_exponent" type="float" value="0.75"
@@ -133,7 +133,7 @@
                 </when>
             </conditional>
             <param label="Sort the vocabulary of spectra" name="sorted_vocab" type="boolean" checked="true" truevalue="TRUE" falsevalue="FALSE"
-                   help="If true, sort the vocabulary by descending frequency before assigning peak and neutral loss indexes."/>
+                   help="If true, sort the vocabulary by descending frequency before assigning peak and neutral loss indices."/>
             <param label="Batch size" name="batch_words" type="integer" value="10000"
                    help="Target size (in peaks and neutral losses) for batches of examples passed to worker threads (and thus cython routines).
                    Larger batches will be passed if individual peak sequences are longer than 10000 words, but the standard cython code truncates to that maximum."/>
