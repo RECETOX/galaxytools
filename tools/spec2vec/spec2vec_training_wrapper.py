@@ -15,6 +15,7 @@ def read_spectra(spectra_file, file_format):
     else:
         raise NotImplementedError(f"Unsupported file format: {file_format}.")
 
+
 def parse_checkpoints_input(checkpoints_input):
     checkpoints_str = checkpoints_input.replace(" ", "").split(",")
     try:
@@ -22,6 +23,7 @@ def parse_checkpoints_input(checkpoints_input):
     except ValueError:
         raise ValueError("Checkpoint values must be integers.")
     return list(set(checkpoints_int))
+
 
 def main(argv):
     parser = argparse.ArgumentParser(description="Train a spec2vec model.")
@@ -59,7 +61,6 @@ def main(argv):
     parser.add_argument("--model_filename", type=str, help="Path to the output model json-file.")
     parser.add_argument("--weights_filename", type=str, help="Path to the output weights json-file.")
 
-
     args = parser.parse_args()
 
     # Load the spectra
@@ -74,7 +75,7 @@ def main(argv):
 
     # Train a model
     model = train_new_word2vec_model(
-        documents=reference_documents, 
+        documents=reference_documents,
         iterations=iterations,
         filename="spec2vec",
         progress_logger=True,
@@ -95,11 +96,11 @@ def main(argv):
         batch_words=args.batch_words,
         shrink_windows=args.shrink_windows,
         max_vocab_size=args.max_vocab_size)
-    
+
     # Save the model
     if args.model_filename_pickle:
         model.save(args.model_filename_pickle)
-    
+
     export_model(model, args.model_filename, args.weights_filename)
 
 
