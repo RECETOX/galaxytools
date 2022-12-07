@@ -19,9 +19,8 @@
         </creator>
     </xml>
     <xml name="input">
-        <param name="input_data" type="data" format="msp" help="Formula and InChI (or SMILES) codes are required to be present in the library file">
-            <label>Input mass spectral library file to which to add peak annotations.</label>
-        </param>
+        <param name="input_data" type="data" format="msp" label="Input mass spectral library file to which to add peak annotations."
+            help="Formula and InChI (or SMILES) codes are required to be present in the library file" />
     </xml>
     <xml name="parameter">
         <param type="float" value="0.01" name="Ms2Tolerance" label="Ms2Tolerance" help="The mass tolerance used for fragment peak matching and annotation." />
