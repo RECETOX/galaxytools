@@ -60,7 +60,9 @@
     <tests>
         <test>
             <param name="input_data" value="test.msp" ftype="msp" />
-            <output name="annotated_data" file="out.msp" lines_diff="16" />
+            <output name="annotated_data" file="out.msp" lines_diff="16	" /> 
+            <!-- This is set to 16 since msfinder sometimes places double bonds between certain atoms and sometimes not - there are 16 such cases in this file. -->
+
         </test>
     </tests>
 
