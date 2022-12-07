@@ -229,6 +229,17 @@
                 </element>
             </output_collection>
         </test>
+        <test> <!-- Test 4: embeddings size in output corresponds to `vector_size` param -->
+            <param name="spectra_filename" value="RECETOX_Exposome_pesticides_HR_MS_normalized_20220323.msp" ftype="msp"/>
+            <param name="vector_size" value="100"/>
+            <output name="model_filename" file="model_vector_size_100.json" ftype="json"/>
+            <output name="weights_filename" ftype="binary">
+                <assert_contents>
+                    <has_size value="569k" delta="1k"/>
+                    <has_text text="'shape': (1423, 100)" n="1"/>
+                </assert_contents>
+            </output>
+        </test>
     </tests>
 
     <help><![CDATA[
