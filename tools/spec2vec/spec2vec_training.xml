@@ -68,7 +68,7 @@
             <param label="Save model as Pickle file" name="as_pickle" type="boolean" checked="false" truevalue="TRUE" falsevalue="FALSE"
                    help="Add a Pickle output besides default JSON."/>
             <conditional name="model_checkpoints">
-                <param label="Model chekpoints" name="is_true" type="boolean" checked="false" truevalue="TRUE" falsevalue="FALSE"
+                <param label="Model checkpoints" name="is_true" type="boolean" checked="false" truevalue="TRUE" falsevalue="FALSE"
                    help="Epochs after which to save a model."/>
                 <when value="TRUE">
                     <param label="Number of training epochs with checkpoints" name="checkpoints" type="text" value="10,20,50"
