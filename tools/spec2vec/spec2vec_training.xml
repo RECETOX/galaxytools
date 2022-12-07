@@ -165,25 +165,25 @@
 
     <tests>
         <test expect_num_outputs="2"> <!-- Test 1: with default parameters -->
-            <param name="spectra_filename" value="RECETOX_Exposome_pesticides_HR_MS_normalized_20220323.msp" ftype="msp"/>
+            <param name="spectra_filename" value="RECETOX_Exposome_pesticides_HR_MS_trimmed_normalized_20220323.msp" ftype="msp"/>
             <output name="model_filename" file="model.json" ftype="json"/>
             <output name="weights_filename" file="weights.npy" ftype="binary"/>
         </test>
         <test expect_num_outputs="3"> <!-- Test 2: pickle output -->
-            <param name="spectra_filename" value="RECETOX_Exposome_pesticides_HR_MS_normalized_20220323.msp" ftype="msp"/>
+            <param name="spectra_filename" value="RECETOX_Exposome_pesticides_HR_MS_trimmed_normalized_20220323.msp" ftype="msp"/>
             <param name="as_pickle" value="TRUE"/>
             <output name="model_filename" file="model.json" ftype="json"/>
             <output name="weights_filename" file="weights.npy" ftype="binary"/>
             <output name="model_filename_pickle" ftype="binary">
                 <assert_contents>
-                    <has_size value="3468k" delta="1k" />
+                    <has_size value="1752k" delta="1k" />
                     <has_text text="gensim.models.word2vec"/>
-                    <has_text text="peak@" n="1423"/>
+                    <has_text text="peak@" n="718"/>
                 </assert_contents>
             </output>
         </test>
         <test expect_num_outputs="3"> <!-- Test 3: model checkpoints -->
-            <param name="spectra_filename" value="RECETOX_Exposome_pesticides_HR_MS_normalized_20220323.msp" ftype="msp"/>
+            <param name="spectra_filename" value="RECETOX_Exposome_pesticides_HR_MS_trimmed_normalized_20220323.msp" ftype="msp"/>
             <conditional name="model_checkpoints">
                 <param name="is_true" value="TRUE"/>
                 <param name="checkpoints" value="1,5,8,10"/>
@@ -193,23 +193,23 @@
             <output_collection name="model_checkpoints" type="list" count="3">
                 <element name="spec2vec_iter_1">
                     <assert_contents>
-                        <has_size value="3468k" delta="1k" />
+                        <has_size value="1752k" delta="1k" />
                         <has_text text="gensim.models.word2vec" />
-                        <has_text text="peak@" n="1423" />
+                        <has_text text="peak@" n="718" />
                     </assert_contents>
                 </element>
                 <element name="spec2vec_iter_5">
                     <assert_contents>
-                        <has_size value="3468k" delta="1k" />
+                        <has_size value="1752k" delta="1k" />
                         <has_text text="gensim.models.word2vec" />
-                        <has_text text="peak@" n="1423" />
+                        <has_text text="peak@" n="718" />
                     </assert_contents>
                 </element>
                 <element name="spec2vec_iter_8">
                     <assert_contents>
-                        <has_size value="3468k" delta="1k" />
+                        <has_size value="1752k" delta="1k" />
                         <has_text text="gensim.models.word2vec" />
-                        <has_text text="peak@" n="1423" />
+                        <has_text text="peak@" n="718" />
                     </assert_contents>
                 </element>
             </output_collection>
