@@ -1,0 +1,95 @@
+<tool id="recetox_aplcms_merge_known_table" name="RECETOX apLCMS - merge known table" version="@TOOL_VERSION@+galaxy0">
+    <description>join knowledge from aligned features and known table.</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="creator"/>
+    <expand macro="requirements"/>
+
+    <command detect_errors="aggressive"><![CDATA[
+        Rscript -e 'source("${__tool_directory__}/utils.R")' -e 'source("${run_script}")'
+    ]]></command>
+    <configfiles>
+         <configfile name="run_script"><![CDATA[
+              #set filenames = str("', '").join([str($f.element_identifier) for $f in $files])
+              feature_tables <- load_parquet_collection(filenames)
+              sample_names <- lapply(feature_tables, load_sample_name)
+
+              ordering <- order(sample_names)
+              feature_tables <- feature_tables[ordering]
+              sample_names <- sample_names[ordering]
+
+              known_table <- load_data_from_parquet_file($known_table)
+              tolerances <- load_data_from_parquet_file($tolerances)
+
+              merged <- merge_features_and_known_table(
+                  features = feature_tables,
+                  known_table = known_table,
+                  match_tol_ppm = $match_tol_ppm,
+                  mz_tol_relative = get_mz_tol(tolerances),
+                  rt_tol_relative = get_rt_tol(tolerances),
+                  # if $direction.selection == "FALSE"
+                  new_feature_min_count = $new_feature_min_count,
+                  # endif
+                  from_features_to_known_table = $direction.selection
+              )
+
+              # if $direction.selection == "TRUE"
+                  save_data_as_parquet_file(merged, $output_known_table)
+              # else
+                  add_sample_names(merged, sample_names)
+                  save_parquet_collection(merged, sample_names, "merged")
+              # endif
+         ]]></configfile>
+    </configfiles>
+
+    <inputs>
+        <param name="files" type="data_collection" collection_type="list" format="parquet" label="Input data"
+               help="List of tables containing features." />
+        <param label="Table of known features" name="known_table" type="data" format="parquet"
+               help="A table of known/previously detected peaks." />
+        <param label="Input tolerances values" name="tolerances" type="data" format="parquet"
+               help="Table containing tolerance values." />
+
+        <conditional name="direction">
+            <param label="Tables merge direction" name="selection" type="select"
+                   help="Choose between merging feature to known_table and known_table to features.">
+                <option value="TRUE">Merge features to known table</option>
+                <option value="FALSE">Merge known table to features</option>
+            </param>
+                <when value="FALSE">
+                    <param name="new_feature_min_count" type="integer" value="2" min="1" label="new_feature_min_count"
+                           help="The minimum number of occurrences of a historically unseen (unknown) feature to add
+                           this feature into the database of known features." />
+                </when>
+        </conditional>
+
+        <param name="match_tol_ppm" type="integer" optional="true" min="0" label="match_tol_ppm"
+               help="The ppm tolerance to match identified features to known metabolites/features." />
+    </inputs>
+
+    <outputs>
+        <collection name="merged_feature_tables" type="list"
+                    label="${tool.name} merged_feature_tables on ${on_string}">
+            <filter>direction['selection'] == 'FALSE'</filter>
+            <discover_datasets pattern="__designation__" directory="merged" format="parquet" />
+        </collection>
+        <data label="${tool.name} on ${on_string}" name="output_known_table" format="parquet" >
+            <filter>direction['selection'] == 'TRUE'</filter>
+        </data>
+    </outputs>
+
+    <tests>
+
+    </tests>
+
+    <help>
+        <![CDATA[
+            This is a tool which runs apLCMS merging of knowledge from aligned features and known table.
+
+            @GENERAL_HELP@
+        ]]>
+    </help>
+
+    <expand macro="citations"/>
+</tool>
