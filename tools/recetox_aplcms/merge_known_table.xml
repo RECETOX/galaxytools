@@ -47,7 +47,16 @@
         <param name="files" type="data_collection" collection_type="list" format="parquet" label="Input data"
                help="List of tables containing features." />
         <param label="Table of known features" name="known_table" type="data" format="parquet"
-               help="A table of known/previously detected peaks." />
+               help="A data table containing the known metabolite ions and previously found features. The table must
+               contain these 18 columns: chemical_formula (optional), HMDB_ID (optional), KEGG_compound_ID (optional),
+               neutral.mass (optional), ion.type (the ion form - optional), m.z (either theoretical or mean observed
+               m/z value of previously found features), Number_profiles_processed (the total number of processed
+               samples to build this database), Percent_found (the percentage of historically processed samples in
+               which the feature appeared), mz_min (minimum  observed m/z value), mz_max (maximum observed m/z value),
+               RT_mean (mean observed retention time), RT_sd (standard deviation of observed retention time),
+               RT_min (minimum observed retention time), RT_max (maximum observed retention time),
+               int_mean.log. (mean observed log intensity), int_sd.log. (standard deviation of observed log intensity),
+               int_min.log. (minimum observed log intensity), int_max.log. (maximum observed log intensity)." />
         <param label="Input tolerances values" name="tolerances" type="data" format="parquet"
                help="Table containing tolerance values." />
 
