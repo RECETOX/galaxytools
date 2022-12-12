@@ -4,57 +4,59 @@ homepage_url: "https://github.com/RECETOX/recetox-aplcms"
 categories:
   - Metabolomics
 repositories:
-  recetox_aplcms_unsupervised:
-    description: "Generate a feature table from a batch of LC/MS spectra using apLCMS's Unsupervised method."
-    include:
-      - recetox_aplcms_unsupervised.xml
-      - main.R
-      - test-data
-      - macros.xml
-  recetox_aplcms_hybrid:
-    description: "Generate a feature table from a batch of LC/MS spectra using apLCMS's Hybrid method."
-    include:
-      - recetox_aplcms_hybrid.xml
-      - main.R
-      - test-data
-      - macros.xml
-  recetox_aplcms_two_step_hybrid:
-    description: "Generate a feature table from LC/MS spectra of multibatch experiment using apLCMS's Two-Step Hybrid method."
-    include:
-      - recetox_aplcms_two_step_hybrid.xml
-      - main.R
-      - test-data
-      - macros.xml
-  recetox_aplcms_adjust_time:
-    description: "Retention time adjustment step of apLCMS after feature extraction."
-    include:
-      - recetox_aplcms_adjust_time.xml
-      - test-data
-      - macros.xml
-      - macros_split.xml
-      - utils.R
-  recetox_aplcms_extract_features:
-    description: "Initial peak detection & feature extraction step of apLCMS."
-    include:
-      - recetox_aplcms_extract_features.xml
-      - test-data
-      - macros.xml
-      - macros_split.xml
-      - utils.R
   recetox_aplcms_align_features:
-    description: "Feature alignment step of apLCMS after retention time adjustment."
+    description: "apLCMS feature alignment step of LC/MS spectra across samples."
     include:
       - recetox_aplcms_align_features.xml
       - test-data
       - macros.xml
-      - macros_split.xml
+      - utils.R
+  recetox_aplcms_compute_clusters:
+    description: "apLCMS compute clusters of m/z and RT of individual features."
+    include:
+      - recetox_aplcms_compute_clusters.xml
+      - test-data
+      - macros.xml
+      - utils.R
+  recetox_aplcms_compute_template:
+    description: "apLCMS compute template features table."
+    include:
+      - recetox_aplcms_compute_template.xml
+      - test-data
+      - macros.xml
+      - utils.R
+  recetox_aplcms_correct_time:
+    description: "apLCMS correction of the RT in each LC/MS profile to achieve better between-profile agreement."
+    include:
+      - recetox_aplcms_correct_time.xml
+      - test-data
+      - macros.xml
+      - utils.R
+  recetox_aplcms_generate_feature_table:
+    description: "apLCMS generate feature table from noise-removed LC/MS profile."
+    include:
+      - recetox_aplcms_generate_feature_table.xml
+      - test-data
+      - macros.xml
+      - utils.R
+  recetox_aplcms_merge_known_table:
+    description: "apLCMS join knowledge from aligned features and known table."
+    include:
+      - recetox_aplcms_merge_known_table.xml
+      - test-data
+      - macros.xml
       - utils.R
   recetox_aplcms_recover_weaker_signals:
-    description: "Weaker signal recovery step of apLCMS after feature alignment.."
+    description: "apLCMS weaker signal recovery step after feature alignment."
     include:
       - recetox_aplcms_recover_weaker_signals.xml
       - test-data
       - macros.xml
-      - macros_split.xml
       - utils.R
-      - main.R
+  recetox_aplcms_remove_noise:
+    description: "apLCMS filter noise and detect peaks from LC/MS data."
+    include:
+      - recetox_aplcms_remove_noise.xml
+      - test-data
+      - macros.xml
+      - utils.R
