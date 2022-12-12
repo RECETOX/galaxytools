@@ -7,21 +7,9 @@
 
     <expand macro="requirements"/>
     <command detect_errors="aggressive"><![CDATA[
-        sh ${symlink_inputs} &&
-        Rscript -e 'source("${__tool_directory__}/utils.R")' -e 'source("${__tool_directory__}/main.R")' -e 'source("${run_script}")'
+        Rscript -e 'source("${__tool_directory__}/utils.R")' -e 'source("${run_script}")'
     ]]></command>
     <configfiles>
-        <configfile name="symlink_inputs">
-            #for $infile in $ms_files
-                ln -s '${infile}' '${infile.element_identifier}'
-            #end for
-            #for $infile in $extracted_files
-                ln -s '${infile}' 'extracted_${infile.element_identifier}'
-            #end for
-            #for $infile in $corrected_files
-                ln -s '${infile}' '${infile.element_identifier}'
-            #end for
-        </configfile>
         <configfile name="run_script"><![CDATA[
             # somehow extract sample_name from the input_file
 
