@@ -71,6 +71,26 @@ select_adjusted <- function(recovered_features) {
     return(recovered_features$adjusted_features)
 }
 
+known_table_columns <- function() {
+  c("chemical_formula", "HMDB_ID", "KEGG_compound_ID", "mass", "ion.type",
+    "m.z", "Number_profiles_processed", "Percent_found", "mz_min", "mz_max",
+    "RT_mean", "RT_sd", "RT_min", "RT_max", "int_mean(log)", "int_sd(log)",
+    "int_min(log)", "int_max(log)")
+}
+
+save_known_table <- function(table, filename) {
+  columns <- known_table_columns()
+  arrow::write_parquet(table$known_table[columns], filename)
+}
+
+read_known_table <- function(filename) {
+  arrow::read_parquet(filename, col_select = known_table_columns())
+}
+
+save_pairing <- function(table, filename) {
+  arrow::read_parquet(table$pairing, filename, row.names = FALSE, col.names = c("new", "old"))
+}
+
 # -----------------------------------------------
 # old code follows (to be removed)
 # -----------------------------------------------

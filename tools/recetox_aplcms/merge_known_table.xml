@@ -19,7 +19,7 @@
               feature_tables <- feature_tables[ordering]
               sample_names <- sample_names[ordering]
 
-              known_table <- load_data_from_parquet_file($known_table)
+              known_table <- read_known_table($known_table)
               tolerances <- load_data_from_parquet_file($tolerances)
 
               merged <- merge_features_and_known_table(
@@ -35,7 +35,8 @@
               )
 
               # if $direction.selection == "TRUE"
-                  save_data_as_parquet_file(merged, $output_known_table)
+                  save_known_table(merged, $output_known_table)
+                  save_pairing(merged, $output_pairing)
               # else
                   add_sample_names(merged, sample_names)
                   save_parquet_collection(merged, sample_names, "merged")
@@ -83,7 +84,10 @@
             <filter>direction['selection'] == 'FALSE'</filter>
             <discover_datasets pattern="__designation__" directory="merged" format="parquet" />
         </collection>
-        <data label="${tool.name} on ${on_string}" name="output_known_table" format="parquet" >
+        <data label="${tool.name} on ${on_string} (known table)" name="output_known_table" format="parquet" >
+            <filter>direction['selection'] == 'TRUE'</filter>
+        </data>
+        <data label="${tool.name} on ${on_string} (pairing)" name="output_pairing" format="parquet" >
             <filter>direction['selection'] == 'TRUE'</filter>
         </data>
     </outputs>

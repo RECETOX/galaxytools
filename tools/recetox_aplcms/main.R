@@ -38,26 +38,6 @@ rcx_aplcms_to_rcx_xmsannotator <- function(peak_table) {
     return(output_table)
 }
 
-known_table_columns <- function() {
-  c("chemical_formula", "HMDB_ID", "KEGG_compound_ID", "mass", "ion.type",
-    "m.z", "Number_profiles_processed", "Percent_found", "mz_min", "mz_max",
-    "RT_mean", "RT_sd", "RT_min", "RT_max", "int_mean(log)", "int_sd(log)",
-    "int_min(log)", "int_max(log)")
-}
-
-save_known_table <- function(df, filename) {
-  columns <- known_table_columns()
-  arrow::write_parquet(df[columns], filename)
-}
-
-read_known_table <- function(filename) {
-  arrow::read_parquet(filename, col_select = known_table_columns())
-}
-
-save_pairing <- function(df, filename) {
-  write.table(df, filename, row.names = FALSE, col.names = c("new", "old"))
-}
-
 save_all_extracted_features <- function(dfs, filenames) {
   filenames <- tools::file_path_sans_ext(basename(filenames))
   filenames <- paste0(filenames, ".parquet")
