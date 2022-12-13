@@ -1,0 +1,77 @@
+<macros>
+    <token name="@TOOL_VERSION@">3.5.2</token>
+    <xml name="requirements">
+        <requirements>
+            <container type="docker">recetox/recetox-msfinder:3.5.2-0</container>
+        </requirements>
+    </xml>
+    <xml name="creator">
+        <creator>
+            <person
+                givenName="Zargham"
+                familyName="Ahmad"
+                url="https://github.com/zargham-ahmad"
+                identifier="0000-0002-6096-224X" />
+            <organization
+                url="https://www.recetox.muni.cz/"
+                email="GalaxyToolsDevelopmentandDeployment@space.muni.cz"
+                name="RECETOX MUNI" />
+        </creator>
+    </xml>
+    <xml name="input">
+        <param name="input_data" type="data" format="msp" label="Input mass spectral library file to which to add peak annotations."
+            help="Formula and InChI (or SMILES) codes are required to be present in the library file" />
+    </xml>
+    <xml name="parameter">
+        <param type="float" value="0.01" name="Ms2Tolerance" label="Ms2Tolerance" help="The mass tolerance used for fragment peak matching and annotation." />
+        <param name="IsTmsMeoxDerivative" type="boolean" checked="False" truevalue="True" falsevalue="False" label="IsTmsMeoxDerivative"
+            help="Check TMS-MeOX derivative to use EIMS database; otherwise, MSMS database is used." />
+        <param type="integer" value="1" name="RelativeAbundanceCutOff" label="RelativeAbundanceCutOff"
+            help="Remove peaks with less than specified % relative intensity from the spectra." />
+        <param type="float" value="0.001" name="Ms1Tolerance" label="Ms1Tolerance" help="The precursor m/z tolerance to generate formula candidates." />
+        <param type="select" name="MassToleranceType" label="MassToleranceType" help="Da stands for Daltons (amu), and Ppm stands for parts per million">
+            <option value="Da" selected="True">Da</option>
+            <option value="Ppm">Ppm</option>
+        </param>
+        <param type="integer" value="-1" name="StructurePredictionTimeOut" label="StructurePredictionTimeOut" help="Time out parameter, value of -1 means no timeout" />
+        <param name="LewisAndSeniorCheck" type="boolean" checked="True" truevalue="True" falsevalue="False" label="LewisAndSeniorCheck"
+            help="Generate formula candidates that match the valence rules of formula elements." />
+    </xml>
+    <xml name="element_check_parameter">
+        <!-- Element Checks -->
+        <param name="Ocheck" type="boolean" checked="True" truevalue="True" falsevalue="False" label="Ocheck" />
+        <param name="Ncheck" type="boolean" checked="True" truevalue="True" falsevalue="False" label="Ncheck" />
+        <param name="Pcheck" type="boolean" checked="True" truevalue="True" falsevalue="False" label="Pcheck" />
+        <param name="Scheck" type="boolean" checked="True" truevalue="True" falsevalue="False" label="Scheck" />
+        <param name="Fcheck" type="boolean" checked="True" truevalue="True" falsevalue="False" label="Fcheck" />
+        <param name="ClCheck" type="boolean" checked="True" truevalue="True" falsevalue="False" label="ClCheck" />
+        <param name="BrCheck" type="boolean" checked="True" truevalue="True" falsevalue="False" label="BrCheck" />
+        <param name="Icheck" type="boolean" checked="True" truevalue="True" falsevalue="False" label="Icheck" />
+        <param name="SiCheck" type="boolean" checked="True" truevalue="True" falsevalue="False" label="SiCheck" />
+    </xml>
+    <xml name="output">
+        <data name="annotated_data" format="msp" />
+    </xml>
+
+    <token name="@HELP@"><![CDATA[
+        **Description**
+
+        MS-FINDER was launched as a universal program for compound annotation that supports EI-MS (GC/MS) and 
+        MS/MS spectral mining. MS-FINDER provide solution for fragment annotations. The program can annotate 
+        your unknowns by the public spectral databases such as MassBank, LipidBlast, and GNPS. MS-FINDER has 
+        been developed as the collaborative work between Prof. Masanori Arita team (RIKEN, Reifycs Inc.) and 
+        Prof. Oliver Fiehn team (UC Davis) supported by the JST/NSF SICORP Metabolomics for the low carbon society 
+        project.
+
+        This galaxy wrapper only peforms MS2 peak annotation given a correctly formatted mass spectral library file.
+        FORMULA, PRECURSORMZ and SMILES (or INCHI) metadata entries are required to be present in the input mass spectral library file.
+        Each spectrum has to be separated by a single blank line.
+
+        For detailed documentation of the tool please visit https://mtbinfo-team.github.io/mtbinfo.github.io/MS-FINDER/tutorial
+    ]]>
+    </token>
+
+    <xml name="citations">
+        <citation type="doi">10.1021/acs.analchem.6b00770</citation>
+    </xml>
+</macros>

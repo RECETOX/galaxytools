@@ -1,0 +1,12 @@
+owner: recetox
+remote_repository_url: "https://github.com/RECETOX/galaxytools/tree/master/tools/recetox_msfinder"
+homepage_url: "https://github.com/RECETOX/recetox-msfinder"
+categories:
+  - Metabolomics
+repositories:
+  recetox_msfinder:
+    description: "MS-FINDER is program for compound annotation for EI-MS (GC/MS) and MS/MS data"
+    include:
+      - recetox_msfinder.xml
+      - macros.xml
+      - test-data
