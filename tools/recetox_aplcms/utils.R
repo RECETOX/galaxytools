@@ -63,8 +63,8 @@ save_aligned_features <- function(aligned_features, metadata_file, rt_file, inte
 
 select_table_with_sample_name <- function(tables, sample_name) {
     sample_names <- lapply(tables, load_sample_name)
-    # find position of sample_name in sample_names
-    # return table on that position
+    index <- which(sample_names == sample_name)
+    return(tables[index])
 }
 
 select_adjusted <- function(recovered_features) {
