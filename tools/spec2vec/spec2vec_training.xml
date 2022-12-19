@@ -169,7 +169,7 @@
             <output name="model_filename" file="model.json" ftype="json"/>
             <output name="weights_filename" ftype="binary">
                 <assert_contents>
-                    <has_size value="1708k" delta="1k"/>
+                    <has_size value="1708000" delta="1000"/>
                     <has_text text="'shape': (1423, 300)" n="1"/>
                 </assert_contents>
             </output>
@@ -180,13 +180,13 @@
             <output name="model_filename" file="model.json" ftype="json"/>
             <output name="weights_filename" ftype="binary">
                 <assert_contents>
-                    <has_size value="1708k" delta="1k"/>
+                    <has_size value="1708000" delta="1000"/>
                     <has_text text="'shape': (1423, 300)" n="1"/>
                 </assert_contents>
             </output>
             <output name="model_filename_pickle" ftype="binary">
                 <assert_contents>
-                    <has_size value="3468k" delta="1k" />
+                    <has_size value="3468000" delta="1000" />
                     <has_text text="gensim.models.word2vec"/>
                     <has_text text="peak@" n="1423"/>
                 </assert_contents>
@@ -201,28 +201,28 @@
             <output name="model_filename" file="model.json" ftype="json"/>
             <output name="weights_filename" ftype="binary">
                 <assert_contents>
-                    <has_size value="1708k" delta="1k"/>
+                    <has_size value="1708000" delta="1000"/>
                     <has_text text="'shape': (1423, 300)" n="1"/>
                 </assert_contents>
             </output>
             <output_collection name="model_checkpoints" type="list" count="3">
                 <element name="spec2vec_iter_1">
                     <assert_contents>
-                        <has_size value="3468k" delta="1k" />
+                        <has_size value="3468000" delta="1000" />
                         <has_text text="gensim.models.word2vec" />
                         <has_text text="peak@" n="1423" />
                     </assert_contents>
                 </element>
                 <element name="spec2vec_iter_5">
                     <assert_contents>
-                        <has_size value="3468k" delta="1k" />
+                        <has_size value="3468000" delta="1000" />
                         <has_text text="gensim.models.word2vec" />
                         <has_text text="peak@" n="1423" />
                     </assert_contents>
                 </element>
                 <element name="spec2vec_iter_8">
                     <assert_contents>
-                        <has_size value="3468k" delta="1k" />
+                        <has_size value="3468000" delta="1000" />
                         <has_text text="gensim.models.word2vec" />
                         <has_text text="peak@" n="1423" />
                     </assert_contents>
@@ -235,7 +235,7 @@
             <output name="model_filename" file="model_vector_size_100.json" ftype="json"/>
             <output name="weights_filename" ftype="binary">
                 <assert_contents>
-                    <has_size value="569k" delta="1k"/>
+                    <has_size value="569000" delta="1000"/>
                     <has_text text="'shape': (1423, 100)" n="1"/>
                 </assert_contents>
             </output>
