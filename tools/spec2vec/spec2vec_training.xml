@@ -11,16 +11,13 @@
     </requirements>
 
     <command detect_errors="exit_code"><![CDATA[
-        sh ${weights_symlink} &&
+        ln -fs '${weights_filename}' '${weights_filename}.npy' &&
         sh ${spec2vec_python_cli}
     ]]></command>
         
     <configfiles>
-        <configfile name="weights_symlink">
-            ln -fs '${weights_filename}' '${weights_filename}.npy'
-        </configfile>
         <configfile name="spec2vec_python_cli">
-            python3 ${__tool_directory__}/spec2vec_training_wrapper.py \
+            python3 '${__tool_directory__}/spec2vec_training_wrapper.py' \
             --spectra_filename '$spectra_filename' \
             --spectra_fileformat '$spectra_filename.ext' \
             #if $output_parameters.model_checkpoints.is_true
