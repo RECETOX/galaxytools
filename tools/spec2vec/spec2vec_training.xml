@@ -87,15 +87,15 @@
 
         <section title="Training hyperparameters" name="training_parameters" expanded="true">
             <param label="Vector size" name="vector_size" type="integer" value="300"
-                   help="Dimensionality of the feature vectors (i.e., into how many dimensions to encode each m/z and neutral loss peak."/>
+                   min="1" help="Dimensionality of the feature vectors (i.e., into how many dimensions to encode each m/z and neutral loss peak."/>
             <param label="Alpha" name="alpha" type="float" value="0.025"
-                   help="The initial learning rate."/>
+                   min="0" help="The initial learning rate."/>
             <param label="Minimum Alpha" name="min_alpha" type="float" value="0.00025"
-                    help="Learning rate will linearly drop to this value as training progresses."/>
+                   min="0" help="Learning rate will linearly drop to this value as training progresses."/>
             <param label="Window" name="window" type="integer" value="500"
                    help="Maximum distance between the current and predicted peak within a spectrum."/>
             <param label="Minimum peak count" name="min_count" type="integer" value="1"
-                   help="Ignores all peaks with absolute frequency lower than this."/>
+                   min="0" help="Ignores all peaks with absolute frequency lower than this."/>
             <param label="Sample" name="sample" type="float" value="0.001"
                    help="The threshold for configuring which higher-frequency peaks are randomly downsampled."/>
             <param label="Seed" name="seed" type="integer" value="1"
@@ -122,7 +122,7 @@
                 </param>
                 <when value="0">
                     <param label="Negative Samples" name="negative" type="integer" value="5"
-                        help="Specify how many 'negative' examples should be drawn for each peak and neutral loss (usually between 5-20).">
+                        min="1" help="Specify how many 'negative' examples should be drawn for each peak and neutral loss (usually between 5-20).">
                         <validator type="in_range" min="1" message="The value must be larger than 0."/>
                     </param>
                     <param label="Negative Sample Exponent" name="ns_exponent" type="float" value="0.75"
@@ -143,11 +143,11 @@
                 <param label="Maximum unique peaks and neutral losses in the spectral vocabulary" name="max_vocab_size_bool" type="boolean" truevalue="TRUE" falsevalue="FALSE" checked="false"
                         help="Limits the RAM during vocabulary building; if there are more unique peaks and neutral losses than this, then prune the infrequent ones. Disable for no limit (default)."/>
                 <when value="TRUE">
-                    <param label="Maximum unique peaks and neutral losses" name="max_vocab_size" type="integer" value="100000"/>
+                    <param label="Maximum unique peaks and neutral losses" name="max_vocab_size" type="integer" value="100000" min="1"/>
                 </when>
             </conditional>
             <param label="Number of decimals to round m/z values" name="n_decimals" type="integer" value="2"
-                   help="Rounds peak position to this number of decimals."/>
+                   min="0" max="5" help="Rounds peak position to this number of decimals."/>
         </section>
     </inputs>
 
