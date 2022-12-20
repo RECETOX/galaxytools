@@ -7,11 +7,12 @@
     <expand macro="requirements"/>
 
     <command detect_errors="aggressive"><![CDATA[
+        SAMPLE_NAME=\$(grep -Po '<run id="\K[^"]+' '$input_file') &&
         Rscript -e 'source("${__tool_directory__}/utils.R")' -e 'source("${run_script}")'
     ]]></command>
     <configfiles>
         <configfile name="run_script"><![CDATA[
-            # somehow extract sample_name from the input_file
+            sample_name <- Sys.getenv("SAMPLE_NAME", unset = NA)
 
             profile <- proc.cdf(
                 filename = $input_file,
