@@ -15,7 +15,7 @@
             sample_name <- Sys.getenv("SAMPLE_NAME", unset = NA)
 
             profile <- proc.cdf(
-                filename = $input_file,
+                filename = '$input_file',
                 min_pres = $min_pres,
                 min_run = $min_run,
                 mz_tol = $mz_tol,
@@ -27,7 +27,7 @@
             )
 
             save_sample_name(profile, sample_name)
-            save_data_as_parquet_file(profile, $output_file)
+            save_data_as_parquet_file(profile, '$output_file')
         ]]></configfile>
     </configfiles>
 

@@ -19,8 +19,8 @@
               feature_tables <- feature_tables[ordering]
               sample_names <- sample_names[ordering]
 
-              known_table <- read_known_table($known_table)
-              tolerances <- load_data_from_parquet_file($tolerances)
+              known_table <- read_known_table('$known_table')
+              tolerances <- load_data_from_parquet_file('$tolerances')
 
               merged <- merge_features_and_known_table(
                   features = feature_tables,
@@ -35,8 +35,8 @@
               )
 
               # if $direction.selection == "TRUE"
-                  save_known_table(merged, $output_known_table)
-                  save_pairing(merged, $output_pairing)
+                  save_known_table(merged, '$output_known_table')
+                  save_pairing(merged, '$output_pairing')
               # else
                   add_sample_names(merged, sample_names)
                   save_parquet_collection(merged, sample_names, "merged")

@@ -16,7 +16,7 @@
 
               template_features <- compute_template(feature_tables)
 
-              save_data_as_parquet_file(template_features, $output_file)
+              save_data_as_parquet_file(template_features, '$output_file')
          ]]></configfile>
     </configfiles>
 

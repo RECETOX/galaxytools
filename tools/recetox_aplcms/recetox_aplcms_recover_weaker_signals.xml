@@ -22,14 +22,14 @@
             corrected_feature_tables <- load_parquet_collection(corrected_filenames)
             corrected_features <- select_table_with_sample_name(corrected_feature_tables, sample_name)
 
-            metadata <- load_data_from_parquet_file($metadata_file)
-            rt_table <- load_data_from_parquet_file($rt_file)
-            intensity_table <- load_data_from_parquet_file($intensity_file)
+            metadata <- load_data_from_parquet_file('$metadata_file')
+            rt_table <- load_data_from_parquet_file('$rt_file')
+            intensity_table <- load_data_from_parquet_file('$intensity_file')
 
-            tolerances <- load_data_from_parquet_file($tolerances)
+            tolerances <- load_data_from_parquet_file('$tolerances')
 
             recovered <- recover.weaker(
-                filename = $input_file,
+                filename = '$input_file',
                 sample_name = sample_name,
                 extracted_features = extracted_features,
                 adjusted_features = corrected_features,
@@ -52,7 +52,7 @@
             recovered <- select_adjusted(recovered)
 
             save_sample_name(recovered, sample_name)
-            save_data_as_parquet_file(recovered, $output_file)
+            save_data_as_parquet_file(recovered, '$output_file')
         ]]></configfile>
     </configfiles>
 

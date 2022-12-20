@@ -11,10 +11,10 @@
     ]]></command>
     <configfiles>
          <configfile name="run_script"><![CDATA[
-              features_table <- load_data_from_parquet_file($features_table)
+              features_table <- load_data_from_parquet_file('$features_table')
               sample_name <- load_sample_name(features_table)
-              template_features <- load_data_from_parquet_file($template)
-              tolerances <- load_data_from_parquet_file($tolerances)
+              template_features <- load_data_from_parquet_file('$template')
+              tolerances <- load_data_from_parquet_file('$tolerances')
 
               corrected_table <- correct_time(
                    this.feature = features_table,
@@ -24,7 +24,7 @@
               )
 
               save_sample_name(corrected_table, sample_name)
-              save_data_as_parquet_file(corrected_table, $output_file)
+              save_data_as_parquet_file(corrected_table, '$output_file')
          ]]></configfile>
     </configfiles>
 
