@@ -11,7 +11,7 @@
     ]]></command>
     <configfiles>
          <configfile name="run_script"><![CDATA[
-             profile <- load_data_from_parquet_file($profile)
+             profile <- load_data_from_parquet_file('$profile')
              sample_name <- load_sample_name(profile)
 
              feature_table <- prof.to.features(
@@ -35,7 +35,7 @@
     </configfiles>
 
     <inputs>
-        <param label="Input profile data" name="input_file" type="data" format="parquet"
+        <param label="Input profile data" name="profile" type="data" format="parquet"
                help="Mass spectrometry profile data." />
         <expand macro="generate_feature_table_params"/>
     </inputs>
