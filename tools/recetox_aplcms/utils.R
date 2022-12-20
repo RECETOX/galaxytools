@@ -1,6 +1,5 @@
 library(recetox.aplcms)
 
-# maybe this doesnt actually change the object, it might need to be returned !!!
 save_sample_name <- function(df, sample_name) {
     attr(df, "sample_name") <- sample_name
 }
