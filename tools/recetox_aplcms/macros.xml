@@ -1,5 +1,5 @@
 <macros>
-    <token name="@TOOL_VERSION@">0.9.4</token>
+    <token name="@TOOL_VERSION@">0.10.0</token>
     <xml name="requirements">
         <requirements>
             <requirement type="package" version="4.1.0">r-base</requirement>
