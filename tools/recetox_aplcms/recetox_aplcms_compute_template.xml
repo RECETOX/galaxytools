@@ -11,8 +11,8 @@
     ]]></command>
     <configfiles>
          <configfile name="run_script"><![CDATA[
-              #set filenames = str("', '").join([str($f.element_identifier) for $f in $files])
-              feature_tables <- load_parquet_collection(filenames)
+              #set filenames = str("', '").join([str($f) for $f in $files])
+              feature_tables <- load_parquet_collection(c('$filenames'))
 
               template_features <- compute_template(feature_tables)
 

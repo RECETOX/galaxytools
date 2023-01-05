@@ -14,12 +14,12 @@
         <configfile name="run_script"><![CDATA[
             sample_name <- Sys.getenv("SAMPLE_NAME", unset = NA)
 
-            #set extracted_filenames = str("', '").join([str($f.element_identifier) for $f in $files])
-            extracted_feature_tables <- load_parquet_collection(extracted_filenames)
+            #set extracted_filenames = str("', '").join([str($f) for $f in $files])
+            extracted_feature_tables <- load_parquet_collection(c('$extracted_filenames'))
             extracted_features <- select_table_with_sample_name(extracted_feature_tables, sample_name)
 
-            #set corrected_filenames = str("', '").join([str($f.element_identifier) for $f in $files])
-            corrected_feature_tables <- load_parquet_collection(corrected_filenames)
+            #set corrected_filenames = str("', '").join([str($f) for $f in $files])
+            corrected_feature_tables <- load_parquet_collection(c('$corrected_filenames'))
             corrected_features <- select_table_with_sample_name(corrected_feature_tables, sample_name)
 
             metadata <- load_data_from_parquet_file('$metadata_file')
