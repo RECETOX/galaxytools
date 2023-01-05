@@ -87,9 +87,9 @@
     <xml name="compute_clusters_params">
         <param name="mz_tol_relative" type="float" optional="true" label="mz_tol_relative"
                help="Relative m/z tolerance to use for grouping features." />
-        <param name="mz_tol_absolute" type="float" optional="true" label="mz_tol_absolute"
+        <param name="mz_tol_absolute" type="float" label="mz_tol_absolute" value="1e-05"
                help="Absolute m/z tolerance to use for grouping features." />
-        <param name="mz_max_diff" type="float" optional="true" label="mz_max_diff"
+        <param name="mz_max_diff" type="float" label="mz_max_diff" value="0.01"
                help="Maximum difference between feature m/z values to belong to the same cluster." />
         <param name="rt_tol_relative" type="float" optional="true" label="rt_tol_relative"
                help="Relative retention time tolerance to use for grouping features." />
