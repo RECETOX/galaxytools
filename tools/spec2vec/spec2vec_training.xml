@@ -1,0 +1,257 @@
+<tool id="spec2vec_training" name="Spec2Vec Model Training" version="@TOOL_VERSION@-@TOOL_DEV_VERSION@+galaxy0" python_template_version="3.5" profile="21.05">
+    <description>Train a Spec2Vec model for mass spectra similarity scoring</description>
+
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="creator"/>
+
+    <requirements>
+        <container type="docker">recetox/spec2vec:@COMMIT_SHA@</container>
+    </requirements>
+
+    <command detect_errors="exit_code"><![CDATA[
+        ln -fs '${weights_filename}' '${weights_filename}.npy' &&
+        sh ${spec2vec_python_cli}
+    ]]></command>
+        
+    <configfiles>
+        <configfile name="spec2vec_python_cli">
+            python3 '${__tool_directory__}/spec2vec_training_wrapper.py' \
+            --spectra_filename '$spectra_filename' \
+            --spectra_fileformat '$spectra_filename.ext' \
+            #if $output_parameters.model_checkpoints.save_checkpoints == 'TRUE'
+            --checkpoints '$output_parameters.model_checkpoints.checkpoints' \
+            #else
+            --epochs $output_parameters.model_checkpoints.epochs \
+            #end if
+            --vector_size $training_parameters.vector_size \
+            --alpha $training_parameters.alpha \
+            --min_alpha $training_parameters.min_alpha \
+            --window $training_parameters.window \
+            --min_count $training_parameters.min_count \
+            --sample $training_parameters.sample \
+            --seed $training_parameters.seed \
+            --sg $training_parameters.sg_param.sg \
+            #if not $training_parameters.sg_param.sg
+            --cbow_mean $training_parameters.sg_param.cbow_mean \
+            #end if
+            --hs $training_parameters.hs_param.hs \
+            #if not $training_parameters.hs_param.hs
+            --negative $training_parameters.hs_param.negative \
+            --ns_exponent $training_parameters.hs_param.ns_exponent \
+            #end if
+            --sorted_vocab $training_parameters.sorted_vocab \
+            --batch_words $training_parameters.batch_words \
+            --shrink_windows $training_parameters.shrink_windows \
+            #if $training_parameters.trim_vocab.max_vocab_size_bool == 'TRUE'
+            --max_vocab_size $training_parameters.trim_vocab.max_vocab_size \
+            #end if
+            --n_decimals $training_parameters.n_decimals \
+            --n_workers \${GALAXY_SLOTS:-1} \
+            #if $output_parameters.as_pickle
+            --model_filename_pickle '$model_filename_pickle' \
+            #end if
+            --model_filename '$model_filename' \
+            --weights_filename '$weights_filename' \
+        </configfile>
+    </configfiles>
+
+    <inputs>
+        <param label="Training spectra" name="spectra_filename" type="data" format="msp,mgf"
+               help="Spectra file to train a Spec2Vec model."/>
+
+        <section title="Output parameters" name="output_parameters" expanded="true">
+            <param label="Save model as Pickle file" name="as_pickle" type="boolean" checked="false" truevalue="TRUE" falsevalue="FALSE"
+                   help="Add a Pickle output besides default JSON."/>
+            <conditional name="model_checkpoints">
+                <param label="Model checkpoints" name="save_checkpoints" type="select" display="radio"
+                   help="Epochs after which to save a model.">
+                    <option value="TRUE">Yes</option>
+                    <option value="FALSE" selected="true">No</option>
+                </param>
+                <when value="TRUE">
+                    <param label="Number of training epochs with checkpoints" name="checkpoints" type="text" value="10,20,50"
+                           help="Comma-separated epoch numbers after which to save a model. The highest number will be used as a total number of epochs for training.">
+                           <validator type="empty_field"/>
+                           <validator type="regex" 
+                                message="The input has to be a comma-separated sequence of integers without trailing commas. For example: 10,20,50">^[0-9]+(,[0-9]+)*$</validator>
+                    </param>
+                </when>
+                <when value="FALSE">
+                    <param label="Number of training epochs" name="epochs" type="integer" value="10"
+                           help="Number of epochs to train the model."/>
+                </when>
+            </conditional>
+        </section>
+
+        <section title="Training hyperparameters" name="training_parameters" expanded="true">
+            <param label="Vector size" name="vector_size" type="integer" value="300"
+                   min="1" help="Dimensionality of the feature vectors (i.e., into how many dimensions to encode each m/z and neutral loss peak."/>
+            <param label="Alpha" name="alpha" type="float" value="0.025"
+                   min="0" help="The initial learning rate."/>
+            <param label="Minimum Alpha" name="min_alpha" type="float" value="0.00025"
+                   min="0" help="Learning rate will linearly drop to this value as training progresses."/>
+            <param label="Window" name="window" type="integer" value="500"
+                   help="Maximum distance between the current and predicted peak within a spectrum."/>
+            <param label="Minimum peak count" name="min_count" type="integer" value="1"
+                   min="0" help="Ignores all peaks with absolute frequency lower than this."/>
+            <param label="Sample" name="sample" type="float" value="0.001"
+                   help="The threshold for configuring which higher-frequency peaks are randomly downsampled."/>
+            <param label="Seed" name="seed" type="integer" value="1"
+                   help="Seed of random number generator for model reproducibility."/>
+            <conditional name="sg_param">
+                <param label="Word-Embedding type" name="sg" type="select"
+                    help="Embedding type: Skip-gram or Continuous Bag of Words">
+                    <option value="0">CBOW</option>
+                    <option value="1">Skip-gram</option>
+                </param>
+                <when value="0">
+                    <param label="CBOW mean" name="cbow_mean" type="select"
+                           help="Whether to use the sum of the context word vectors or their mean.">
+                        <option value="0">Sum</option>
+                        <option value="1" selected="true">Mean</option>
+                    </param>
+                </when>
+            </conditional>
+            <conditional name="hs_param">
+                <param label="Last Layer Activation" name="hs" type="select"
+                    help="Activation function of the last layer of the neural network. Negative sampling is more computationally efficient.">
+                    <option value="0">Negative Sampling</option>
+                    <option value="1">Hierarchical Softmax</option>
+                </param>
+                <when value="0">
+                    <param label="Negative Samples" name="negative" type="integer" value="5"
+                        min="1" help="Specify how many 'negative' examples should be drawn for each peak and neutral loss (usually between 5-20).">
+                        <validator type="in_range" min="1" message="The value must be larger than 0."/>
+                    </param>
+                    <param label="Negative Sample Exponent" name="ns_exponent" type="float" value="0.75"
+                        help="The exponent used to shape the negative sampling distribution. A value of 1.0 samples exactly in proportion to the frequencies,
+                        0.0 samples all peaks and neutral losses equally, while a negative value samples low-frequency peaks more often than high-requency peaks.">
+                        <validator type="in_range" min="-1.0" max="1.0" message="The value must be within -1.0 and 1.0 range."/>
+                    </param>
+                </when>
+            </conditional>
+            <param label="Sort the vocabulary of spectra" name="sorted_vocab" type="boolean" checked="true" truevalue="TRUE" falsevalue="FALSE"
+                   help="If true, sort the vocabulary by descending frequency before assigning peak and neutral loss indices."/>
+            <param label="Batch size" name="batch_words" type="integer" value="10000"
+                   help="Target size (in peaks and neutral losses) for batches of examples passed to worker threads (and thus cython routines).
+                   Larger batches will be passed if individual peak sequences are longer than 10000 words, but the standard cython code truncates to that maximum."/>
+            <param label="Shrink windows" name="shrink_windows" type="boolean" checked="true" truevalue="TRUE" falsevalue="FALSE"
+                   help="EXPERIMENTAL. If true, the effective window size is uniformly sampled in range [1,Window] for each target peak during training."/>
+            <conditional name="trim_vocab">
+                <param label="Limit unique peaks and neutral losses in the spectral vocabulary" name="max_vocab_size_bool" type="select" display="radio"
+                        help="Limits the RAM during vocabulary building; if there are more unique peaks and neutral losses than this, then prune the infrequent ones. Disable for no limit (default).">
+                    <option value="FALSE">No limit</option>
+                    <option value="TRUE">Limit</option>
+                </param>
+                <when value="TRUE">
+                    <param label="Maximum unique peaks and neutral losses" name="max_vocab_size" type="integer" value="100000" min="1"/>
+                </when>
+            </conditional>
+            <param label="Number of decimals to round m/z values" name="n_decimals" type="integer" value="2"
+                   min="0" max="5" help="Rounds peak position to this number of decimals."/>
+        </section>
+    </inputs>
+
+    <outputs>
+        <data label="Spec2Vec model on ${on_string}" name="model_filename" format="json"/>
+        <data label="Spec2Vec weights on ${on_string}" name="weights_filename" format="binary"/>
+        <data label="Spec2Vec pickle model on ${on_string}" name="model_filename_pickle" format="binary">
+            <filter>output_parameters['as_pickle']</filter>
+        </data>
+        <collection name="model_checkpoints" type="list" label="Spec2Vec model checkpoints on ${on_string}">
+            <discover_datasets pattern="__name_and_ext__" />
+            <filter>output_parameters['model_checkpoints']['save_checkpoints'] == 'TRUE'</filter>
+        </collection>
+    </outputs>
+
+    <tests>
+        <test expect_num_outputs="2"> <!-- Test 1: with default parameters -->
+            <param name="spectra_filename" value="RECETOX_Exposome_pesticides_HR_MS_normalized_20220323.msp" ftype="msp"/>
+            <output name="model_filename" file="model.json" ftype="json"/>
+            <output name="weights_filename" ftype="binary">
+                <assert_contents>
+                    <has_size value="1708000" delta="1000"/>
+                    <has_text text="'shape': (1423, 300)" n="1"/>
+                </assert_contents>
+            </output>
+        </test>
+        <test expect_num_outputs="3"> <!-- Test 2: pickle output -->
+            <param name="spectra_filename" value="RECETOX_Exposome_pesticides_HR_MS_normalized_20220323.msp" ftype="msp"/>
+            <param name="as_pickle" value="TRUE"/>
+            <output name="model_filename" file="model.json" ftype="json"/>
+            <output name="weights_filename" ftype="binary">
+                <assert_contents>
+                    <has_size value="1708000" delta="1000"/>
+                    <has_text text="'shape': (1423, 300)" n="1"/>
+                </assert_contents>
+            </output>
+            <output name="model_filename_pickle" ftype="binary">
+                <assert_contents>
+                    <has_size value="3468000" delta="1000" />
+                    <has_text text="gensim.models.word2vec"/>
+                    <has_text text="peak@" n="1423"/>
+                </assert_contents>
+            </output>
+        </test>
+        <test expect_num_outputs="3"> <!-- Test 3: model checkpoints -->
+            <param name="spectra_filename" value="RECETOX_Exposome_pesticides_HR_MS_normalized_20220323.msp" ftype="msp"/>
+            <conditional name="model_checkpoints">
+                <param name="save_checkpoints" value="TRUE"/>
+                <param name="checkpoints" value="1,5,8,10"/>
+            </conditional>
+            <output name="model_filename" file="model.json" ftype="json"/>
+            <output name="weights_filename" ftype="binary">
+                <assert_contents>
+                    <has_size value="1708000" delta="1000"/>
+                    <has_text text="'shape': (1423, 300)" n="1"/>
+                </assert_contents>
+            </output>
+            <output_collection name="model_checkpoints" type="list" count="3">
+                <element name="spec2vec_iter_1">
+                    <assert_contents>
+                        <has_size value="3468000" delta="1000" />
+                        <has_text text="gensim.models.word2vec" />
+                        <has_text text="peak@" n="1423" />
+                    </assert_contents>
+                </element>
+                <element name="spec2vec_iter_5">
+                    <assert_contents>
+                        <has_size value="3468000" delta="1000" />
+                        <has_text text="gensim.models.word2vec" />
+                        <has_text text="peak@" n="1423" />
+                    </assert_contents>
+                </element>
+                <element name="spec2vec_iter_8">
+                    <assert_contents>
+                        <has_size value="3468000" delta="1000" />
+                        <has_text text="gensim.models.word2vec" />
+                        <has_text text="peak@" n="1423" />
+                    </assert_contents>
+                </element>
+            </output_collection>
+        </test>
+        <test> <!-- Test 4: embeddings size in output corresponds to `vector_size` param -->
+            <param name="spectra_filename" value="RECETOX_Exposome_pesticides_HR_MS_normalized_20220323.msp" ftype="msp"/>
+            <param name="vector_size" value="100"/>
+            <output name="model_filename" file="model_vector_size_100.json" ftype="json"/>
+            <output name="weights_filename" ftype="binary">
+                <assert_contents>
+                    <has_size value="569000" delta="1000"/>
+                    <has_text text="'shape': (1423, 100)" n="1"/>
+                </assert_contents>
+            </output>
+        </test>
+    </tests>
+
+    <help><![CDATA[
+    **Spec2vec** is a spectral similarity score inspired by a natural language processing algorithm – Word2Vec.
+    Where Word2Vec learns relationships between words in sentences, spec2vec does so for mass fragments and neutral losses in MS/MS spectra.
+    The spectral similarity score is based on spectral embeddings learnt from the fragmental relationships within a large set of spectral data.
+    ]]></help>
+
+    <citations>
+        <citation type="doi">10.1371/journal.pcbi.1008724</citation>
+    </citations>
+</tool>

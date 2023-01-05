@@ -1,0 +1,19 @@
+<macros>
+    <token name="@COMMIT_SHA@">c9b54b9</token>
+    <token name="@TOOL_VERSION@">0.6.0</token>
+    <token name="@TOOL_DEV_VERSION@">0</token>
+
+    <xml name="creator">
+        <creator>
+            <person
+                givenName="Maksym"
+                familyName="Skoryk"
+                url="https://github.com/maximskorik"
+                identifier="0000-0003-2056-8018" />
+            <organization
+                url="https://www.recetox.muni.cz/"
+                email="GalaxyToolsDevelopmentandDeployment@space.muni.cz"
+                name="RECETOX MUNI" />
+        </creator>
+    </xml>
+</macros>
