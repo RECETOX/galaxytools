@@ -51,7 +51,7 @@
 
             recovered <- select_adjusted(recovered)
 
-            save_sample_name(recovered, sample_name)
+            recovered <- save_sample_name(recovered, sample_name)
             save_data_as_parquet_file(recovered, '$output_file')
         ]]></configfile>
     </configfiles>

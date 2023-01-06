@@ -23,7 +23,7 @@
                    rt_tol_relative = get_rt_tol(tolerances)
               )
 
-              save_sample_name(corrected_table, sample_name)
+              corrected_table <- save_sample_name(corrected_table, sample_name)
               save_data_as_parquet_file(corrected_table, '$output_file')
          ]]></configfile>
     </configfiles>

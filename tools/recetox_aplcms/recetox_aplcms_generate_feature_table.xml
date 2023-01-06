@@ -29,7 +29,7 @@
                  do.plot = FALSE
              )
 
-             save_sample_name(feature_table, sample_name)
+             feature_table <- save_sample_name(feature_table, sample_name)
              save_data_as_parquet_file(feature_table, '$output_file')
          ]]></configfile>
     </configfiles>

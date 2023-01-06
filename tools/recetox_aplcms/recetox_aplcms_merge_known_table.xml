@@ -38,7 +38,7 @@
                   save_known_table(merged, '$output_known_table')
                   save_pairing(merged, '$output_pairing')
               # else
-                  add_sample_names(merged, sample_names)
+                  merged <- add_sample_names(merged, sample_names)
                   save_parquet_collection(merged, sample_names, "merged")
               # endif
          ]]></configfile>

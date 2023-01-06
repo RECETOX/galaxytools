@@ -2,6 +2,7 @@ library(recetox.aplcms)
 
 save_sample_name <- function(df, sample_name) {
     attr(df, "sample_name") <- sample_name
+    return(df)
 }
 
 load_sample_name <- function(df) {
@@ -18,7 +19,7 @@ load_data_from_parquet_file <- function(filename) {
 
 load_parquet_collection <- function(files) {
     features <- lapply(files, arrow::read_parquet)
-    features <- lapply(features, as.matrix)
+    features <- lapply(features, tibble::as_tibble)
     return(features)
 }
 
@@ -36,8 +37,9 @@ sort_by_sample_name <- function(tables, sample_names) {
 
 add_sample_names <- function(table, sample_names) {
     for (i in 1:(length(table$feature_tables))) {
-        save_sample_name(table$feature_tables[i], sample_names[i])
+        table$feature_tables[i] <- save_sample_name(table$feature_tables[i], sample_names[i])
     }
+    return(table)
 }
 
 save_tolerances <- function(table, tol_file) {
