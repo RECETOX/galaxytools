@@ -37,7 +37,6 @@
                   do.plot = FALSE
               )
 
-              clusters <- add_sample_names(clusters, sample_names)
               save_parquet_collection(clusters, sample_names, "clustered")
               save_tolerances(clusters, '$tolerances')
          ]]></configfile>
