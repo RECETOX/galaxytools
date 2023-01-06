@@ -101,7 +101,7 @@
                fraction of the m/z value. This value, multiplied by the m/z value, becomes the cutoff level.
                The recommended value is the machine's nominal accuracy level. Divide the ppm value by 1e6.
                For FTMS, 1e-5 is recommended." />
-        <param name="recover_mz_range" type="float" optional="true" abel="recover_mz_range"
+        <param name="recover_mz_range" type="float" optional="true" label="recover_mz_range"
                help="The m/z around the feature m/z to search for observations. The default value is NA, in which
                case 1.5 times the m/z tolerance in the aligned object will be used." />
         <param name="recover_rt_range" type="float" optional="true" label="recover_rt_range"
