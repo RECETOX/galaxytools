@@ -13,7 +13,7 @@
          <configfile name="run_script"><![CDATA[
               #set filenames = str("', '").join([str($f) for $f in $files])
               feature_tables <- load_parquet_collection(c('$filenames'))
-              sample_names <- lapply(feature_tables, load_sample_name)
+              sample_names <- unlist(lapply(feature_tables, load_sample_name))
 
               ordering <- order(sample_names)
               feature_tables <- feature_tables[ordering]
@@ -21,14 +21,23 @@
 
               clusters <- compute_clusters(
                   feature_tables = feature_tables,
+                  #if $mz_tol_relative:
                   mz_tol_relative = $mz_tol_relative,
-                  mz_tol_absolute = $mz_tol_absolute,
-                  mz_max_diff = 10 * $mz_max_diff,
+                  #else:
+                  mz_tol_relative = NA,
+                  #end if
+                  #if $rt_tol_relative:
                   rt_tol_relative = $rt_tol_relative,
-                  sample_names = sample_names
+                  #else:
+                  rt_tol_relative = NA,
+                  #end if
+                  mz_max_diff = 10 * $mz_max_diff,
+                  mz_tol_absolute = $mz_tol_absolute,
+                  sample_names = sample_names,
+                  do.plot = FALSE
               )
 
-              add_sample_names(clusters, sample_names)
+              clusters <- add_sample_names(clusters, sample_names)
               save_parquet_collection(clusters, sample_names, "clustered")
               save_tolerances(clusters, '$tolerances')
          ]]></configfile>

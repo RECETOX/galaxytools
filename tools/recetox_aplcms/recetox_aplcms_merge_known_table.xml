@@ -13,7 +13,7 @@
          <configfile name="run_script"><![CDATA[
               #set filenames = str("', '").join([str($f) for $f in $files])
               feature_tables <- load_parquet_collection(c('$filenames'))
-              sample_names <- lapply(feature_tables, load_sample_name)
+              sample_names <- unlist(lapply(feature_tables, load_sample_name))
 
               ordering <- order(sample_names)
               feature_tables <- feature_tables[ordering]
