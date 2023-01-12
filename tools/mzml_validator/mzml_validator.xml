@@ -5,8 +5,7 @@
     <command detect_errors="exit_code"><![CDATA[
         python3 ${__tool_directory__}/mzml_validator.py \
         --input_file "$input" \
-        --xsd_versions $xsd_versions \
-        --output_file "$validated_mzml"
+        --xsd_versions $xsd_versions
     ]]></command>
     <inputs>
         <data name="input" format="mzml" label="Input mzML file"/>
