@@ -3,11 +3,21 @@
         <requirement type="package" version="4.9.1">lxml</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
-        TODO: Fill in command template.
+        python3 ${__tool_directory__}/mzml_validator.py \
+        --input_file "$input" \
+        --xsd_versions $xsd_versions \
+        --output_file "$validated_mzml"
     ]]></command>
     <inputs>
+        <data name="input" format="mzml" label="Input mzML file"/>
+        <param name="xsd_versions" format="select" label="Schema version to validate against"
+            help="Select schema definition version (xsd) to validate file(s) against. If both are selected, a file is valid if matches against any of the versions.">
+            <option value="1.1.1">1.1.1</option>
+            <option value="1.1.0">1.1.0</option>
+        </param>
     </inputs>
     <outputs>
+        <data name="validated_mzml" format="mzml" label="Validated mzML ${on_string}"/>
     </outputs>
     <help><![CDATA[
         TODO: Fill in help.
