@@ -7,16 +7,16 @@ import sys
 
 from lxml import etree
 
-logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s', filename='logs/mzml_validator.log', filemode='w')
+logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s', filename='mzml_validator.log', filemode='w')
 
-XSD_FILENAMES = {"1.1.0": "mzML1.1.0.xsd",
-                 "1.1.1": "mzML1.1.1_idx.xsd"}
+XSD_FILENAMES = {'1.1.0': 'mzML1.1.0.xsd',
+                 '1.1.1': 'mzML1.1.1_idx.xsd'}
 
 
 def main(args):
     parser = argparse.ArgumentParser(description='Validate mzML files')
-    parser.add_argument('input_file', help='mzML file to validate')
-    parser.add_argument('xsd_versions', nargs='+', help='XSD versions to validate against')
+    parser.add_argument('--input_file', type=str, help='mzML file to validate')
+    parser.add_argument('--xsd_versions', type=lambda version: [v for v in version.split(',')], help='XSD versions to validate against')
     args = parser.parse_args(args)
 
     mzml = etree.parse(args.input_file)
