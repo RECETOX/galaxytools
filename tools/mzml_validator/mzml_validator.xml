@@ -1,4 +1,16 @@
 <tool id="mzml_validator" name="mzml_validator" version="0.1.0+galaxy0" python_template_version="3.5" profile="21.05">
+    <creator>
+        <person
+            givenName="Maksym"
+            familyName="Skoryk"
+            url="https://github.com/maximskorik"
+            identifier="0000-0003-2056-8018" />
+        <organization
+            url="https://www.recetox.muni.cz/"
+            email="GalaxyToolsDevelopmentandDeployment@space.muni.cz"
+            name="RECETOX MUNI" />
+    </creator>
+
     <requirements>
         <requirement type="package" version="4.9.1">lxml</requirement>
     </requirements>
