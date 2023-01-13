@@ -39,10 +39,10 @@ def main(args):
 
     if validated:
         sys.exit(0)
+    else:
+        list((logging.error(e), sys.stderr.write(e)) for e in stderrs.values())
+        sys.exit(1)
 
-    [(logging.error(e), sys.stderr.write(e)) for e in stderrs.values()]
-    sys.exit(1)
-        
 
 if __name__ == '__main__':
     main(sys.argv[1:])
