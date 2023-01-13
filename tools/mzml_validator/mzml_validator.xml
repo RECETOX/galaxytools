@@ -33,6 +33,32 @@
     <outputs>
         <data name="log" format="txt" label="mzML Validation on ${on_string}" />
     </outputs>
+    <tests>
+        <test> <!-- test 1: validate mzML 1.1.1 against both XSDs  -->
+            <param name="input" value="small_pwiz_1.1.1_truncated.mzML" />
+            <param name="xsd_versions" value="1.1.0,1.1.1" />
+            <output name="log">
+                <assert_contents>
+                    <has_text text="Validated against mzML XML Schema Definition v1.1.1" />
+                </assert_contents>
+            </output>
+        </test>
+        <test expect_failure="true" expect_exit_code="1"> <!-- test 2: try validate mzML 1.1.1 against XSD v1.1.0 -->
+            <param name="input" value="small_pwiz_1.1.1_truncated.mzML" />
+            <param name="xsd_versions" value="1.1.0" />
+            <assert_stderr>
+                <has_text text="Failed to validate against mzML XML Schema Definition v1.1.0" />
+            </assert_stderr>
+        </test>
+        <test expect_failure="true" expect_exit_code="1"> <!-- test 3: validate corrupted mzML -->
+            <param name="input" value="mbr_truncated.mzml" />
+            <param name="xsd_versions" value="1.1.0,1.1.1" />
+            <assert_stderr>
+                <has_text text="Failed to validate against mzML XML Schema Definition v1.1.0" />
+                <has_text text="Failed to validate against mzML XML Schema Definition v1.1.1" />
+            </assert_stderr>
+        </test>
+    </tests>
     <help><![CDATA[
         **mzML Schema Validator** validates mzML files against XML Schema Definition (XSD) developed by HUPO Proteomics Standard Initiative
         (https://www.psidev.info/mzML).
