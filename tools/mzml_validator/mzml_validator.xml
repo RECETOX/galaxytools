@@ -1,4 +1,5 @@
-<tool id="mzml_validator" name="mzml_validator" version="0.1.0+galaxy0" python_template_version="3.5" profile="21.05">
+<tool id="mzml_validator" name="mzML Schema Validator" version="0.1.0+galaxy0" python_template_version="3.5" profile="21.05">
+    <description>validates mzML files against XML Schema Definition (XSD)</description>
     <creator>
         <person
             givenName="Maksym"
