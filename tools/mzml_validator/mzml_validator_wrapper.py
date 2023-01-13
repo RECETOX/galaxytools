@@ -33,8 +33,8 @@ def main(args):
             validated = True
             logging.info(f'Validated against mzML XML Schema Definition v{version}')
         else:
-            stderrs.add(f'Failed to validate against mzML XML Schema Definition v{version}\n' \
-                        f'xmllint error message(s):' \
+            stderrs.add(f'Failed to validate against mzML XML Schema Definition v{version}\n'
+                        f'xmllint error message(s):'
                         f'{schema.error_log.last_error}\n')
 
     if validated:
