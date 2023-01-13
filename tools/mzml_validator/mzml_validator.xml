@@ -25,7 +25,7 @@
     <inputs>
         <param name="input" type="data" format="mzml" label="Input mzML file"/>
         <param name="xsd_versions" type="select" label="Schema version to validate against" multiple="true" display="checkboxes"
-            help="Select XML schema definition (XSD) version to validate file against. If both are selected, a file is valid if matches against any of the versions.">
+            help="select XML schema definition (XSD) version to validate the file against. If both are selected, a file is valid if matches against any of the versions.">
             <option value="1.1.1">1.1.1</option>
             <option value="1.1.0">1.1.0</option>
         </param>
@@ -34,6 +34,7 @@
         <data name="log" format="txt" label="mzML Validation on ${on_string}" />
     </outputs>
     <help><![CDATA[
-        TODO: Fill in help.
+        **mzML Schema Validator** validates mzML files against XML Schema Definition (XSD) developed by HUPO Proteomics Standard Initiative
+        (https://www.psidev.info/mzML).
     ]]></help>
 </tool>
