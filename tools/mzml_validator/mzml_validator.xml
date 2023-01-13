@@ -2,14 +2,12 @@
     <requirements>
         <requirement type="package" version="4.9.1">lxml</requirement>
     </requirements>
-    <required_files>
-        <include path="schemas/"/>
-    </required_files>
     <command detect_errors="exit_code"><![CDATA[
         python3 ${__tool_directory__}/mzml_validator_wrapper.py
         --input_file "$input"
+        --schemas_dir "${__tool_directory__}/schemas"
         --xsd_versions $xsd_versions
-    ]]></command>
+        ]]></command>
     <inputs>
         <param name="input" type="data" format="mzml" label="Input mzML file"/>
         <param name="xsd_versions" type="select" label="Schema version to validate against" multiple="true" display="checkboxes"

@@ -3,6 +3,7 @@
 
 import argparse
 import logging
+import os
 import sys
 
 from lxml import etree
@@ -16,6 +17,7 @@ XSD_FILENAMES = {'1.1.0': 'mzML1.1.0.xsd',
 def main(args):
     parser = argparse.ArgumentParser(description='Validate mzML files')
     parser.add_argument('--input_file', type=str, help='mzML file to validate')
+    parser.add_argument('--schemas_dir', type=str, help='Directory containing XML Schema Definitions')
     parser.add_argument('--xsd_versions', type=lambda version: [v for v in version.split(',')], help='XSD versions to validate against')
     args = parser.parse_args(args)
 
@@ -23,7 +25,7 @@ def main(args):
     validated = False
 
     for version in args.xsd_versions:
-        xsd = etree.parse(f'schemas/{XSD_FILENAMES[version]}')
+        xsd = etree.parse(os.path.join(args.schemas_dir, XSD_FILENAMES[version]))
         schema = etree.XMLSchema(xsd)
         if schema.validate(mzml):
             logging.info(f'Validated against XML Schema Definition v{version}')
