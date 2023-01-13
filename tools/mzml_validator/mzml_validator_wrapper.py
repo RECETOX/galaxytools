@@ -25,7 +25,7 @@ def main(args):
     mzml = etree.parse(args.input_file)
     validated = False
 
-    stderrs = {}
+    stderrs = set()
     for version in args.xsd_versions:
         xsd = etree.parse(os.path.join(args.schemas_dir, XSD_FILENAMES[version]))
         schema = etree.XMLSchema(xsd)
@@ -33,14 +33,14 @@ def main(args):
             validated = True
             logging.info(f'Validated against mzML XML Schema Definition v{version}')
         else:
-            stderrs[version] = f'Failed to validate against mzML XML Schema Definition v{version}\n' \
-                               f'xmllint error message(s):' \
-                               f'{schema.error_log.last_error}\n'
+            stderrs.add(f'Failed to validate against mzML XML Schema Definition v{version}\n' \
+                        f'xmllint error message(s):' \
+                        f'{schema.error_log.last_error}\n')
 
     if validated:
         sys.exit(0)
     else:
-        list((logging.error(e), sys.stderr.write(e)) for e in stderrs.values())
+        list((logging.error(e), sys.stderr.write(e)) for e in stderrs)
         sys.exit(1)
 
 
