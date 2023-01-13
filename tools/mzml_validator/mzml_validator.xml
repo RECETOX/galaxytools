@@ -7,6 +7,7 @@
         --input_file "$input"
         --schemas_dir "${__tool_directory__}/schemas"
         --xsd_versions $xsd_versions
+        --log_file "$log"
         ]]></command>
     <inputs>
         <param name="input" type="data" format="mzml" label="Input mzML file"/>
@@ -17,9 +18,7 @@
         </param>
     </inputs>
     <outputs>
-        <data name="report" format="txt">
-            <discover_datasets directory="logs" visible="true"/>
-        </data>
+        <data name="log" format="txt" label="mzML Validation on ${on_string}" />
     </outputs>
     <help><![CDATA[
         TODO: Fill in help.
