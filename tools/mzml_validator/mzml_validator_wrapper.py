@@ -23,17 +23,24 @@ def main(args):
     logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s', filename=args.log_file, filemode='w')
 
     mzml = etree.parse(args.input_file)
+    validated = False
+
+    stderrs = {}
     for version in args.xsd_versions:
         xsd = etree.parse(os.path.join(args.schemas_dir, XSD_FILENAMES[version]))
         schema = etree.XMLSchema(xsd)
         if schema.validate(mzml):
+            validated = True
             logging.info(f'Validated against mzML XML Schema Definition v{version}')
-            sys.exit(0)
+        else:
+            stderrs[version] = f'Failed to validate against mzML XML Schema Definition v{version}\n' \
+                               f'xmllint error message(s):' \
+                               f'{schema.error_log.last_error}\n'
 
-    stderr = f'Failed to validate against the following mzML XML Schema Definition(s): {args.xsd_versions}\n' \
-             f'xmllint error message: {schema.error_log.last_error}'
-    logging.error(stderr)
-    sys.stderr.write(stderr)
+    if validated:
+        sys.exit(0)
+
+    [(logging.error(e), sys.stderr.write(e)) for e in stderrs.values()]
     sys.exit(1)
         
 
