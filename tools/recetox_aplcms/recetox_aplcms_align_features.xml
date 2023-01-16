@@ -11,7 +11,7 @@
     ]]></command>
     <configfiles>
         <configfile name="run_script"><![CDATA[
-             #set filenames_str = str("', '").join([str($f) for $f in $files])
+             #set filenames = str("', '").join([str($f) for $f in $files])
              feature_tables <- load_parquet_collection(c('$filenames'))
              sample_names <- unlist(lapply(feature_tables, load_sample_name))
 
@@ -19,7 +19,7 @@
              feature_tables <- feature_tables[ordering]
              sample_names <- sample_names[ordering]
 
-             tolerances <- load_data_from_parquet_file('$tolerances')
+             tolerances <- load_data_from_parquet_file('$input_tolerances')
 
              aligned_features <- create_aligned_feature_table(
                   features_table = dplyr::bind_rows(feature_tables),
@@ -30,14 +30,14 @@
              )
 
              save_aligned_features(aligned_features, '$metadata_file', '$rt_file', '$intensity_file')
-             save_tolerances(aligned_features, '$tolerances')
+             save_tolerances(aligned_features, '$output_tolerances')
         ]]></configfile>
     </configfiles>
 
     <inputs>
         <param name="files" type="data_collection" collection_type="list" format="parquet"
                label="Clustered features" help="List of tables containing clustered features." />
-        <param label="Input tolerances values" name="tolerances" type="data" format="parquet"
+        <param label="Input tolerances values" name="input_tolerances" type="data" format="parquet"
                help="Table containing tolerance values." />
         <param name="min_occurrence" type="integer" min="1" value="2" label="min_occurrence"
                help="A feature has to show up in at least this number of profiles to be included in the final result." />
@@ -47,7 +47,7 @@
         <data name="metadata_file" format="parquet" label="${tool.name} on ${on_string} (metadata table)" />
         <data name="rt_file" format="parquet" label="${tool.name} on ${on_string} (rt table)" />
         <data name="intensity_file" format="parquet" label="${tool.name} on ${on_string} (intensity table)" />
-        <data name="tolerances" format="parquet" label="${tool.name} on ${on_string} (updated tolerances)" />
+        <data name="output_tolerances" format="parquet" label="${tool.name} on ${on_string} (updated tolerances)" />
     </outputs>
 
     <tests>
