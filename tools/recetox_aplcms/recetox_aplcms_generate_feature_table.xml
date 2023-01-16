@@ -17,12 +17,20 @@
              feature_table <- prof.to.features(
                  profile = profile,
                  bandwidth = $bandwidth,
+                 #if $min_bandwidth:
                  min_bandwidth = $min_bandwidth,
+                 #else:
+                 min_bandwidth = NA,
+                 #end if
+                 #if $max_bandwidth:
                  max_bandwidth = $max_bandwidth,
-                 sd_cut = $sd_cut,
-                 sigma_ratio_lim = $sigma_ratio_lim,
-                 shape_model = $shape_model,
-                 peak_estim_method = $peak_estim_method,
+                 #else:
+                 max_bandwidth = NA,
+                 #end if
+                 sd_cut = c($sd_cut_min, $sd_cut_max),
+                 sigma_ratio_lim = c($sigma_ratio_lim_min, $sigma_ratio_lim_max),
+                 shape_model = "$shape_model",
+                 peak_estim_method = "$peak_estim_method",
                  component_eliminate = $component_eliminate,
                  moment_power = $moment_power,
                  BIC_factor = $BIC_factor,
