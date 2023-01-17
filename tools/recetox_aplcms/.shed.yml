@@ -53,6 +53,7 @@ repositories:
       - test-data
       - macros.xml
       - utils.R
+      - mzml_id_getter.py
   recetox_aplcms_remove_noise:
     description: "apLCMS filter noise and detect peaks from LC/MS data."
     include:
@@ -60,3 +61,4 @@ repositories:
       - test-data
       - macros.xml
       - utils.R
+      - mzml_id_getter.py

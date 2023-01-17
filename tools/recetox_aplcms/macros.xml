@@ -3,6 +3,7 @@
     <xml name="requirements">
         <requirements>
             <requirement type="package" version="@TOOL_VERSION@">r-recetox-aplcms</requirement>
+            <yield/>
         </requirements>
     </xml>
 
