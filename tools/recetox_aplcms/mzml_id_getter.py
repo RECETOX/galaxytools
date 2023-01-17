@@ -7,8 +7,8 @@ from pymzml.run import Reader
 
 
 def main(argv):
-    parser = argparse.ArgumentParser(description='Get the ID from an mzML file.')
-    parser.add_argument('mzml_file', help='Path to an mzML file to get the ID from.')
+    parser = argparse.ArgumentParser(description='Get run ID from an mzML file.')
+    parser.add_argument('mzml_file', help='Path to an mzML file to get run ID from.')
     args = parser.parse_args()
 
     mzml = Reader(args.mzml_file)
