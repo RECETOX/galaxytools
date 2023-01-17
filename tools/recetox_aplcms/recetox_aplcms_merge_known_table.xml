@@ -29,7 +29,7 @@
                   #end if
                   mz_tol_relative = get_mz_tol(tolerances),
                   rt_tol_relative = get_rt_tol(tolerances),
-                  #if $direction.selection == "FALSE":
+                  #if $direction.selection == "TRUE":
                   new_feature_min_count = $direction.new_feature_min_count,
                   #end if
                   from_features_to_known_table = $direction.selection
@@ -71,7 +71,7 @@
                 <option value="TRUE">Merge features to known table</option>
                 <option value="FALSE">Merge known table to features</option>
             </param>
-            <when value="FALSE">
+            <when value="TRUE">
                 <param name="new_feature_min_count" type="integer" value="2" min="1" label="new_feature_min_count"
                        help="The minimum number of occurrences of a historically unseen (unknown) feature to add
                        this feature into the database of known features." />
