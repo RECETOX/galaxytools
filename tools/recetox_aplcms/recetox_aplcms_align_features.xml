@@ -30,7 +30,6 @@
              )
 
              save_aligned_features(aligned_features, '$metadata_file', '$rt_file', '$intensity_file')
-             save_tolerances(aligned_features, '$output_tolerances')
         ]]></configfile>
     </configfiles>
 
@@ -47,7 +46,6 @@
         <data name="metadata_file" format="parquet" label="${tool.name} on ${on_string} (metadata table)" />
         <data name="rt_file" format="parquet" label="${tool.name} on ${on_string} (rt table)" />
         <data name="intensity_file" format="parquet" label="${tool.name} on ${on_string} (intensity table)" />
-        <data name="output_tolerances" format="parquet" label="${tool.name} on ${on_string} (updated tolerances)" />
     </outputs>
 
     <tests>
