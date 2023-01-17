@@ -86,3 +86,11 @@ read_known_table <- function(filename) {
 save_pairing <- function(table, filename) {
   arrow::read_parquet(table$pairing, filename, row.names = FALSE, col.names = c("new", "old"))
 }
+
+join_tables_to_list <- function(metadata, rt_table, intensity_table) {
+  features <- new("list")
+  features$metadata <- metadata
+  features$intensity <- rt_table
+  features$rt <- intensity_table
+  return(features)
+}
