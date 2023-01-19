@@ -35,7 +35,7 @@
             #end if
             "$queries" \
             "$queries.ext" \
-            "$similarity_metric" \
+            "$metric.similarity_metric" \
             "$algorithm.tolerance" \
             "$algorithm.mz_power" \
             "$algorithm.intensity_power" \
@@ -54,14 +54,22 @@
                        help="Reference mass spectra to match against as library."/>
             </when>
         </conditional>
-        <param label="Similarity metric" name="similarity_metric" type="select" display="radio"
-               help="Similarity metric to use for score computation.">
-            <option value="CosineGreedy" selected="true">CosineGreedy</option>
-            <option value="CosineHungarian">CosineHungarian</option>
-            <option value="ModifiedCosine">ModifiedCosine</option>
-            <option value="NeutralLossesCosine">NeutralLossesCosine</option>
-            <option value="Spec2Vec">Spec2Vec</option>
-        </param>
+        <conditional name="metric">
+            <param label="Similarity metric" name="similarity_metric" type="select" display="radio"
+                help="Similarity metric to use for score computation.">
+                <option value="CosineGreedy" selected="true">CosineGreedy</option>
+                <option value="CosineHungarian">CosineHungarian</option>
+                <option value="ModifiedCosine">ModifiedCosine</option>
+                <option value="NeutralLossesCosine">NeutralLossesCosine</option>
+                <option value="Spec2Vec">Spec2Vec</option>
+            </param>
+            <when value="Spec2Vec">
+                <param label="Model JSON file" name="model_metadata" type="data" format="json"
+                       help="Model JSON file to use for Spec2Vec similarity computing."/>
+                <param label="Model NPY file" name="model_weights" type="data" format="binary"
+                       help="Model NPY file to use for Spec2Vec similarity computing."/>
+            </when>
+        </conditional>
 
         <section name="algorithm" title="Algorithm Parameters" expanded="true">
             <param label="tolerance" name="tolerance" type="float" value="0.1"
