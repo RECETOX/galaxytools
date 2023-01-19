@@ -68,6 +68,12 @@ def main(argv):
         similarity_metric = NeutralLossesCosine(args.tolerance, args.mz_power, args.intensity_power)
         reference_spectra = list(map(convert_precursor_mz, reference_spectra))
         queries_spectra = list(map(convert_precursor_mz, queries_spectra))
+    elif args.similarity_metric == 'Spec2Vec':
+        from spec2vec import Spec2Vec
+        from spec2vec.serialization import import_model
+
+        model = import_model(args.spec2vec_model, args.spec2vec_weights)
+        similarity_metric = Spec2Vec(model, intensity_weighting_power=args.intensity_power, allowed_missing_percentage=Ellipsis)
     else:
         return -1
 
