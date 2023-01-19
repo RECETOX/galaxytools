@@ -30,6 +30,7 @@ def main(argv):
     parser.add_argument("--ref_format", dest="references_format", type=str, help="Reference spectra library file format.")
     parser.add_argument("--spec2vec_model", type=str, help="Path to spec2vec model.")
     parser.add_argument("--spec2vec_weights", type=str, help="Path to spec2vec weights.")
+    parser.add_argument("--allow_missing_percentage", type=lambda x: float(x * 100), help="Maximum percentage of missing peaks in model corpus.")
     parser.add_argument("queries_filename", type=str, help="Path to query spectra.")
     parser.add_argument("queries_format", type=str, help="Query spectra file format.")
     parser.add_argument("similarity_metric", type=str, help='Metric to use for matching.')
@@ -73,7 +74,7 @@ def main(argv):
         from spec2vec.serialization import import_model
 
         model = import_model(args.spec2vec_model, args.spec2vec_weights)
-        similarity_metric = Spec2Vec(model, intensity_weighting_power=args.intensity_power, allowed_missing_percentage=Ellipsis)
+        similarity_metric = Spec2Vec(model, intensity_weighting_power=args.intensity_power, allowed_missing_percentage=args.allow_missing_percentage)
     else:
         return -1
 
