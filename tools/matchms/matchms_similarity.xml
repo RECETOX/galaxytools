@@ -59,6 +59,7 @@
             <option value="CosineHungarian">CosineHungarian</option>
             <option value="ModifiedCosine">ModifiedCosine</option>
             <option value="NeutralLossesCosine">NeutralLossesCosine</option>
+            <option value="Spec2Vec">Spec2Vec</option>
         </param>
 
         <section name="algorithm" title="Algorithm Parameters" expanded="true">
