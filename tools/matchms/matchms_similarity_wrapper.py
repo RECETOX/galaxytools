@@ -28,6 +28,8 @@ def main(argv):
     parser.add_argument("-s", dest="symmetric", action='store_true', help="Computation is symmetric.")
     parser.add_argument("--ref", dest="references_filename", type=str, help="Path to reference spectra library.")
     parser.add_argument("--ref_format", dest="references_format", type=str, help="Reference spectra library file format.")
+    parser.add_argument("--spec2vec_model", type=str, help="Path to spec2vec model.")
+    parser.add_argument("--spec2vec_weights", type=str, help="Path to spec2vec weights.")
     parser.add_argument("queries_filename", type=str, help="Path to query spectra.")
     parser.add_argument("queries_format", type=str, help="Query spectra file format.")
     parser.add_argument("similarity_metric", type=str, help='Metric to use for matching.')
