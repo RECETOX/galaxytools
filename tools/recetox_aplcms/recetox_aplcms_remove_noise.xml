@@ -7,7 +7,7 @@
     <expand macro="requirements"/>
 
     <command detect_errors="aggressive"><![CDATA[
-        SAMPLE_NAME=\$(python '${__tool_directory__}/mzml_id_getter.py' '$input_file') &&
+        export SAMPLE_NAME=\$(python '${__tool_directory__}/mzml_id_getter.py' '$input_file') &&
         Rscript -e 'source("${__tool_directory__}/utils.R")' -e 'source("${run_script}")'
     ]]></command>
     <configfiles>
