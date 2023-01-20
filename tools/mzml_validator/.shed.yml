@@ -7,3 +7,4 @@ categories:
 repositories:
   mzml_validator:
     description: "mzML Validator checks if mzML file validates against XML Schema Definition of HUPO Proteomics Standard Initiative."
+    include:
