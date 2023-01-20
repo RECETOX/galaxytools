@@ -49,6 +49,7 @@
     <inputs>
         <param label="Input profile data" name="profile" type="data" format="parquet"
                help="Mass spectrometry profile data." />
+        <expand macro="bandwidth_params"/>
         <expand macro="generate_feature_table_params"/>
     </inputs>
 

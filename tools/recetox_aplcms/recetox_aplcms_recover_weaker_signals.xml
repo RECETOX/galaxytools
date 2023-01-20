@@ -88,6 +88,7 @@
         <param label="Input tolerances values" name="tolerances" type="data" format="parquet"
                help="Table containing tolerance values." />
         <expand macro="recover_weaker_params"/>
+        <expand macro="bandwidth_params"/>
     </inputs>
 
     <outputs>
