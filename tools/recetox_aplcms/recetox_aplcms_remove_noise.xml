@@ -4,9 +4,7 @@
         <import>macros.xml</import>
     </macros>
     <expand macro="creator"/>
-    <expand macro="requirements">
-        <requirement type="package" version="2.5.2">pymzml</requirement>
-    </expand>
+    <expand macro="requirements"/>
 
     <command detect_errors="aggressive"><![CDATA[
         SAMPLE_NAME=\$(python '${__tool_directory__}/mzml_id_getter.py' '$input_file') &&

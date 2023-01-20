@@ -3,7 +3,7 @@
     <xml name="requirements">
         <requirements>
             <requirement type="package" version="@TOOL_VERSION@">r-recetox-aplcms</requirement>
-            <yield/>
+            <requirement type="package" version="2.5.2">pymzml</requirement>
         </requirements>
     </xml>
 
