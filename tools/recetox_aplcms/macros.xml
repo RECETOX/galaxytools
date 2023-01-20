@@ -63,15 +63,19 @@
                help="The minimum standard deviation of a feature to be not eliminated." />
         <param name="sd_cut_max" type="float" value="500" label="sd_cut_max"
                help="The maximum standard deviation of a feature to be not eliminated." />
-        <param name="sigma_ratio_lim_min" type="float" value="0.01" label="sigma_ratio_lim_min"
-               help="The lower limit of the believed ratio range between the left-standard deviation and the right-standard deviation of the bi-Gaussian function used to fit the data." />
-        <param name="sigma_ratio_lim_max" type="float" value="100" label="sigma_ratio_lim_max"
-               help="The upper limit of the believed ratio range between the left-standard deviation and the right-standard deviation of the bi-Gaussian function used to fit the data." />
-        <param name="shape_model" type="select" display="radio" label="shape_model"
-               help="The mathematical model for the shape of a peak. There are two choices - bi-Gaussian and Gaussian. When the peaks are asymmetric, the bi-Gaussian is better.">
-            <option value="Gaussian">Gaussian</option>
-            <option value="bi-Gaussian" selected="true">bi-Gaussian</option>
-        </param>
+        <conditional name="shape">
+            <param name="shape_model" type="select" display="radio" label="shape_model"
+                   help="The mathematical model for the shape of a peak. There are two choices - bi-Gaussian and Gaussian. When the peaks are asymmetric, the bi-Gaussian is better.">
+                <option value="Gaussian">Gaussian</option>
+                <option value="bi-Gaussian" selected="true">bi-Gaussian</option>
+            </param>
+            <when value="bi-Gaussian">
+                <param name="sigma_ratio_lim_min" type="float" value="0.01" label="sigma_ratio_lim_min"
+                       help="The lower limit of the believed ratio range between the left-standard deviation and the right-standard deviation of the bi-Gaussian function used to fit the data." />
+                <param name="sigma_ratio_lim_max" type="float" value="100" label="sigma_ratio_lim_max"
+                       help="The upper limit of the believed ratio range between the left-standard deviation and the right-standard deviation of the bi-Gaussian function used to fit the data." />
+            </when>
+        </conditional>
         <param name="peak_estim_method" type="select" display="radio" label="peak_estim_method"
                help="The estimation method for the bi-Gaussian peak model. Two possible values: moment and EM.">
             <option value="moment" selected="true">Moment</option>

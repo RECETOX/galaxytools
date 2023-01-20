@@ -28,8 +28,12 @@
                  max_bandwidth = NA,
                  #end if
                  sd_cut = c($sd_cut_min, $sd_cut_max),
-                 sigma_ratio_lim = c($sigma_ratio_lim_min, $sigma_ratio_lim_max),
-                 shape_model = "$shape_model",
+                 #if $shape.shape_model == "bi-Gaussian":
+                 sigma_ratio_lim = c($shape.sigma_ratio_lim_min, $shape.sigma_ratio_lim_max),
+                 #else:
+                 sigma_ratio_lim = NA,
+                 #end if
+                 shape_model = "$shape.shape_model",
                  peak_estim_method = "$peak_estim_method",
                  component_eliminate = $component_eliminate,
                  moment_power = $moment_power,
