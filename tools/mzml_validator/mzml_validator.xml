@@ -1,0 +1,66 @@
+<tool id="mzml_validator" name="mzML Schema Validator" version="0.1.0+galaxy0" profile="21.05">
+    <description>validates mzML files against XML Schema Definition (XSD)</description>
+    <creator>
+        <person
+            givenName="Maksym"
+            familyName="Skoryk"
+            url="https://github.com/maximskorik"
+            identifier="0000-0003-2056-8018" />
+        <organization
+            url="https://www.recetox.muni.cz/"
+            email="GalaxyToolsDevelopmentandDeployment@space.muni.cz"
+            name="RECETOX MUNI" />
+    </creator>
+
+    <requirements>
+        <requirement type="package" version="4.9.1">lxml</requirement>
+    </requirements>
+    <command detect_errors="exit_code"><![CDATA[
+        python3 '${__tool_directory__}/mzml_validator_wrapper.py'
+        --input_file '$input'
+        --schemas_dir '${__tool_directory__}/schemas'
+        --xsd_versions $xsd_versions
+        --log_file '$log'
+        ]]></command>
+    <inputs>
+        <param name="input" type="data" format="mzml" label="Input mzML file"/>
+        <param name="xsd_versions" type="select" label="Schema version to validate against" multiple="true" display="checkboxes"
+            help="select XML schema definition (XSD) version to validate the file against. If both are selected, a file is valid if matches against any of the versions.">
+            <option value="1.1.1">1.1.1</option>
+            <option value="1.1.0">1.1.0</option>
+        </param>
+    </inputs>
+    <outputs>
+        <data name="log" format="txt" label="mzML Validation on ${on_string}" />
+    </outputs>
+    <tests>
+        <test> <!-- test 1: validate mzML 1.1.1 against both XSDs  -->
+            <param name="input" value="small_pwiz_1.1.1_truncated.mzML" />
+            <param name="xsd_versions" value="1.1.0,1.1.1" />
+            <output name="log">
+                <assert_contents>
+                    <has_text text="Validated against mzML XML Schema Definition v1.1.1" />
+                </assert_contents>
+            </output>
+        </test>
+        <test expect_failure="true" expect_exit_code="1"> <!-- test 2: try validate mzML 1.1.1 against XSD v1.1.0 -->
+            <param name="input" value="small_pwiz_1.1.1_truncated.mzML" />
+            <param name="xsd_versions" value="1.1.0" />
+            <assert_stderr>
+                <has_text text="Failed to validate against mzML XML Schema Definition v1.1.0" />
+            </assert_stderr>
+        </test>
+        <test expect_failure="true" expect_exit_code="1"> <!-- test 3: validate corrupted mzML -->
+            <param name="input" value="mbr_truncated.mzml" />
+            <param name="xsd_versions" value="1.1.0,1.1.1" />
+            <assert_stderr>
+                <has_text text="Failed to validate against mzML XML Schema Definition v1.1.0" />
+                <has_text text="Failed to validate against mzML XML Schema Definition v1.1.1" />
+            </assert_stderr>
+        </test>
+    </tests>
+    <help><![CDATA[
+        **mzML Schema Validator** validates mzML files against XML Schema Definition (XSD) developed by HUPO Proteomics Standard Initiative
+        (https://www.psidev.info/mzML).
+    ]]></help>
+</tool>
