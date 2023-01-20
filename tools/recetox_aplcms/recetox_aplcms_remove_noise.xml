@@ -20,7 +20,7 @@
                 min_run = $min_run,
                 mz_tol = $mz_tol,
                 baseline_correct = $baseline_correct,
-                baseline_correct_noise_percentile = $baseline_correct_noise_percentile,
+                baseline_correct_noise_percentile = 0.05,
                 intensity_weighted = $intensity_weighted,
                 do.plot = FALSE,
                 cache = FALSE
