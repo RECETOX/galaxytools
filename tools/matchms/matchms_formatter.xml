@@ -25,36 +25,12 @@
         <configfile name="matchms_formatter_cli">
             python3 ${__tool_directory__}/formatter.py \
             --sf "$scores" \
-            --o "$output" \
-            $method.selection \
-            #if $method.selection == "get-thresholded-data"
-            --st $method.scores_threshold \
-            --mt $method.matches_threshold
-            #else
-            --k $method.k
-            #end if
+            --o "$output"
         </configfile>
     </configfiles>
 
     <inputs>
         <param label="Scores object" name="scores" type="data" format="json" help="MatchMS Scores json file." />
-
-        <conditional name="method">
-            <param name="selection" type="select" label="Formatting method">
-                <option value="get-thresholded-data" selected="true">Thresholding</option>
-                <option value="get-top-k-data">Top K Matches</option>
-            </param>
-            <when value="get-thresholded-data">
-                <param label="Scores Threshold" name="scores_threshold" type="float" value="0.6" min="0.0" max="1.0"
-                       help="Threshold for matching score."/>
-                <param label="Matches Threshold" name="matches_threshold" type="integer" value="3" min="0"
-                       help="Threshold for number of matches ions."/>
-            </when>
-            <when value="get-top-k-data">
-                <param label="Top K" name="k" type="integer" value="5" help="K for top k match selection."/>
-            </when>
-        </conditional>
-
     </inputs>
     <outputs>
         <data label="${tool.name} (${method.selection}) on ${on_string}" name="output" format="tsv"/>

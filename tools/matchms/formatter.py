@@ -35,35 +35,6 @@ def join_df(x: DataFrame, y: DataFrame, on=[], how="inner") -> DataFrame:
     return combined
 
 
-def get_top_k_matches(data: DataFrame, k: int) -> DataFrame:
-    """Function to get top k matches from dataframe with scores.
-
-    Args:
-        data (DataFrame): A table with score column.
-        k (int): Number of top scores to retrieve.
-
-    Returns:
-        DataFrame: Table containing only the top k best matches for each compound.
-    """
-    return data.groupby(level=0, group_keys=False).apply(DataFrame.nlargest, n=k, columns=['score'])
-
-
-def filter_thresholds(data: DataFrame, t_score: float, t_matches: float) -> DataFrame:
-    """Filter a dataframe with scores and matches to only contain values above specified thresholds.
-
-    Args:
-        data (DataFrame): Table to filter.
-        t_score (float): Score threshold.
-        t_matches (float): Matches threshold.
-
-    Returns:
-        DataFrame: Filtered dataframe.
-    """
-    filtered = data[data['score'] > t_score]
-    filtered = filtered[filtered['matches'] > t_matches]
-    return filtered
-
-
 def scores_to_dataframes(scores):
     """Unpack scores from matchms.scores into two dataframes of scores and matches.
 
@@ -110,23 +81,6 @@ def cli(ctx, scores_filename, output_filename):
     ctx.ensure_object(dict)
     ctx.obj['data'] = load_data(scores_filename)
     pass
-
-
-@cli.command()
-@click.option('--st', 'scores_threshold', type=float, required=True)
-@click.option('--mt', 'matches_threshold', type=float, required=True)
-@click.pass_context
-def get_thresholded_data(ctx, scores_threshold, matches_threshold):
-    result = filter_thresholds(ctx.obj['data'], scores_threshold, matches_threshold)
-    return result
-
-
-@cli.command()
-@click.option('--k', 'k', type=int, required=True)
-@click.pass_context
-def get_top_k_data(ctx, k):
-    result = get_top_k_matches(ctx.obj['data'], k)
-    return result
 
 
 @cli.result_callback()
