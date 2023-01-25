@@ -22,6 +22,7 @@
     <configfiles>
         <configfile name="matchms_networking_cli">
             python3 ${__tool_directory__}/matchms_networking_wrapper.py \
+            --score_name "${score_layer_name}_score" \
             --graph_format "$graph_format" \
             --identifier "$identifier_key" \
             --top_n "$top_n" \
@@ -39,6 +40,11 @@
     <inputs>
         <param label="Similarity scores" name="scores" type="data" format="json"
             help="matchMS similarity-scores file."/>
+        <param label="Score Layer" name="score_layer_name" type="select" help="Metric of the score layer to create a network from.">
+            <expand macro="similarity_metrics"/>
+        </param>
+        <param label="Identifier key" name="identifier_key" type="text"
+            help="Unique metadata identifier of each spectrum from which scores are computed."/>
         <param label="Network-graph format" name="graph_format" type="select"
             help="Output format of the similarity network.">
             <option value="graphml">graphml</option>
@@ -47,8 +53,6 @@
             <option value="gml">gml</option>
             <option value="json">json</option>
         </param>
-        <param label="Identifier key" name="identifier_key" type="text"
-            help="Unique metadata identifier of each spectrum from which scores are computed."/>
         <param label="Number of top edges to keep" name="top_n" type="integer" value="20"
             help="The number of highest-score edges to keep between a pair of nodes. Depending on 'Link method' parameter the top N edges will be selected either from disjoined
             sets of individual specta or joined subset of scores between the given pair of spectra. This value has to be higher than the 'Maximum number of links'."/>

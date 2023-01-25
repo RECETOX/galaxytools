@@ -69,11 +69,7 @@
         <conditional name="metric">
             <param label="Similarity metric" name="similarity_metric" type="select" display="radio"
                 help="Similarity metric to use for score computation.">
-                <option value="CosineGreedy" selected="true">CosineGreedy</option>
-                <option value="CosineHungarian">CosineHungarian</option>
-                <option value="ModifiedCosine">ModifiedCosine</option>
-                <option value="NeutralLossesCosine">NeutralLossesCosine</option>
-                <option value="Spec2Vec">Spec2Vec</option>
+                <expand macro="similarity_metrics"/>
             </param>
             <when value="CosineGreedy">
                 <expand macro="similarity_algorithm_params"/>
