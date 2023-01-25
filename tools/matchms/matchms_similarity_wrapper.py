@@ -28,6 +28,7 @@ def main(argv):
     parser = argparse.ArgumentParser(description="Compute MSP similarity scores")
     parser.add_argument("-r", dest="ri_tolerance", type=float, help="Use RI filtering with given tolerance.")
     parser.add_argument("-s", dest="symmetric", action='store_true', help="Computation is symmetric.")
+    parser.add_argument("--array_type", type=str, help="Type of array to use for storing scores (numpy or sparse).")
     parser.add_argument("--ref", dest="references_filename", type=str, help="Path to reference spectra library.")
     parser.add_argument("--ref_format", dest="references_format", type=str, help="Reference spectra library file format.")
     parser.add_argument("--spec2vec_model", type=str, help="Path to spec2vec model.")
@@ -84,14 +85,19 @@ def main(argv):
     scores = calculate_scores(
         references=reference_spectra,
         queries=queries_spectra,
+        array_type=args.array_type,
         similarity_function=similarity_metric,
         is_symmetric=args.symmetric
     )
 
     if args.ri_tolerance is not None:
         print("RI filtering with tolerance ", args.ri_tolerance)
-        ri_matches = calculate_scores(reference_spectra, queries_spectra, MetadataMatch("retention_index", "difference", args.ri_tolerance)).scores
-        scores._scores["score"] = np.where(ri_matches, scores.scores["score"], 0.0)
+        ri_matches = calculate_scores(references=reference_spectra,
+                                      queries=queries_spectra,
+                                      similarity_function=MetadataMatch("retention_index", "difference", args.ri_tolerance),
+                                      array_type="numpy",
+                                      is_symmetric=args.symmetric).scores
+        scores.scores.add_coo_matrix(ri_matches, "MetadataMatch", join_type="inner")
 
     write_outputs(args, scores)
     return 0
