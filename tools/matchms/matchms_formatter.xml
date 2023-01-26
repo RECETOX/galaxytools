@@ -33,22 +33,17 @@
         <param label="Scores object" name="scores" type="data" format="json" help="MatchMS Scores json file." />
     </inputs>
     <outputs>
-        <data label="${tool.name} (${method.selection}) on ${on_string}" name="output" format="tsv"/>
+        <data label="${tool.name} on ${on_string}" name="output" format="tsv"/>
     </outputs>
 
     <tests>
         <test>
             <param name="scores" value="similarity/scores_test2_out.json" ftype="json"/>
-            <param name="selection" value="get-thresholded-data"/>
-            <param name="scores_threshold" value="0.4"/>
-            <param name="matches_threshold" value="2"/>
             <output name="output" file="formatter/test2_threshold_formatting.tsv" ftype="tsv"
                 checksum="md5$db18b3f3dd5d8dea4db0fc1d59d3db3b"/>
         </test>
         <test>
             <param name="scores" value="similarity/scores_test2_out.json" ftype="json"/>
-            <param name="selection" value="get-top-k-data"/>
-            <param name="k" value="3"/>
             <output name="output" file="formatter/test2_topk_formatting.tsv" ftype="tsv"
                 checksum="md5$ff827ec7413acac3d2394330935ace99"/>
         </test>
