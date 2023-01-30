@@ -84,7 +84,8 @@ read_known_table <- function(filename) {
 }
 
 save_pairing <- function(table, filename) {
-  arrow::read_parquet(table$pairing, filename, row.names = FALSE, col.names = c("new", "old"))
+  df <- table$pairing %>% as_tibble() %>% setNames(c("new", "old"))
+  arrow::write_parquet(df, filename)
 }
 
 join_tables_to_list <- function(metadata, rt_table, intensity_table) {
