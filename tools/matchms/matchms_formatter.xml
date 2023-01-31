@@ -38,14 +38,13 @@
 
     <tests>
         <test>
-            <param name="scores" value="similarity/scores_test2_out.json" ftype="json"/>
-            <output name="output" file="formatter/test2_threshold_formatting.tsv" ftype="tsv"
-                checksum="md5$db18b3f3dd5d8dea4db0fc1d59d3db3b"/>
+            <param name="scores" value="formatter/fill2_trunc_scores_with_metadata_match.json" ftype="json"/>
+            <output name="output" value="formatter/fill2_formatted.tsv" ftype="tsv"
+                checksum="md5$4f0d83da381b8a403d807d26a9dd0f34"/>
         </test>
         <test>
-            <param name="scores" value="similarity/scores_test2_out.json" ftype="json"/>
-            <output name="output" file="formatter/test2_topk_formatting.tsv" ftype="tsv"
-                checksum="md5$ff827ec7413acac3d2394330935ace99"/>
+            <param name="scores" value="similarity/scores_test4_out.json" ftype="json"/>
+            <output name="output" file="formatter/test4_formatted.tsv" ftype="tsv"/>
         </test>
     </tests>
 
