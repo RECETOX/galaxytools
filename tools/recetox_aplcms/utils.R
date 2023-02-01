@@ -1,5 +1,16 @@
 library(recetox.aplcms)
 
+get_env_sample_name <- function() {
+    sample_name <- Sys.getenv("SAMPLE_NAME", unset = NA)
+    if(nchar(sample_name) == 0) {
+        sample_name <- NA
+    }
+    if(is.na(sample_name)) {
+        message("The mzML file does not contain run ID.")
+    }
+    return(sample_name)
+}
+
 save_sample_name <- function(df, sample_name) {
     attr(df, "sample_name") <- sample_name
     return(df)

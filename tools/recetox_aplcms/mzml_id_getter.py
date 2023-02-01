@@ -14,11 +14,8 @@ def main(argv):
     mzml = Reader(args.mzml_file)
     id = mzml.info['run_id']
 
-    if id is None:
-        sys.stderr.write('ERROR: The mzML file has no run ID.')
-        sys.exit(1)
-
-    sys.stdout.write(id)
+    if id is not None:
+        sys.stdout.write(id)
 
 
 if __name__ == '__main__':
