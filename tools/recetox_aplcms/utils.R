@@ -2,10 +2,10 @@ library(recetox.aplcms)
 
 get_env_sample_name <- function() {
     sample_name <- Sys.getenv("SAMPLE_NAME", unset = NA)
-    if(nchar(sample_name) == 0) {
+    if (nchar(sample_name) == 0) {
         sample_name <- NA
     }
-    if(is.na(sample_name)) {
+    if (is.na(sample_name)) {
         message("The mzML file does not contain run ID.")
     }
     return(sample_name)
@@ -105,4 +105,10 @@ join_tables_to_list <- function(metadata, rt_table, intensity_table) {
   features$intensity <- intensity_table
   features$rt <- rt_table
   return(features)
+}
+
+validate_sample_names <- function(sample_names) {
+    if ((any(is.na(sample_names))) || (length(unique(sample_names)) != length(sample_names))) {
+        stop(sprintf("Sample names absent or not unique - provided sample names: %s", paste(sample_names, collapse=", ")))
+    }
 }
