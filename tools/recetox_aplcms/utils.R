@@ -91,7 +91,7 @@ save_pairing <- function(table, filename) {
 join_tables_to_list <- function(metadata, rt_table, intensity_table) {
   features <- new("list")
   features$metadata <- metadata
-  features$intensity <- rt_table
-  features$rt <- intensity_table
+  features$intensity <- intensity_table
+  features$rt <- rt_table
   return(features)
 }
