@@ -80,7 +80,7 @@ select_table_with_sample_name <- function(tables, sample_name) {
         return(tables[[index]])
     } else {
         stop(sprintf("Mismatch - sample name '%s' not present in %s",
-                     sample_name, paste(sample_names, collapse=", ")))
+                     sample_name, paste(sample_names, collapse = ", ")))
     }
 }
 
@@ -120,6 +120,6 @@ join_tables_to_list <- function(metadata, rt_table, intensity_table) {
 validate_sample_names <- function(sample_names) {
     if ((any(is.na(sample_names))) || (length(unique(sample_names)) != length(sample_names))) {
         stop(sprintf("Sample names absent or not unique - provided sample names: %s",
-                     paste(sample_names, collapse=", ")))
+                     paste(sample_names, collapse = ", ")))
     }
 }
