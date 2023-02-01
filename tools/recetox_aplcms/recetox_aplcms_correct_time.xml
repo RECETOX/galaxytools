@@ -13,6 +13,11 @@
          <configfile name="run_script"><![CDATA[
               features_table <- load_data_from_parquet_file('$features_table')
               sample_name <- load_sample_name(features_table)
+
+              if(is.na(sample_name)) {
+                  message("The file does not contain sample name.")
+              }
+
               template_features <- load_data_from_parquet_file('$template')
               tolerances <- load_data_from_parquet_file('$tolerances')
 

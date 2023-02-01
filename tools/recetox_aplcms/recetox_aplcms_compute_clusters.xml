@@ -15,6 +15,8 @@
               feature_tables <- load_parquet_collection(c('$filenames'))
               sample_names <- unlist(lapply(feature_tables, load_sample_name))
 
+              validate_sample_names(sample_names)
+
               ordering <- order(sample_names)
               feature_tables <- feature_tables[ordering]
               sample_names <- sample_names[ordering]

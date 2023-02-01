@@ -14,6 +14,10 @@
              profile <- load_data_from_parquet_file('$profile')
              sample_name <- load_sample_name(profile)
 
+             if(is.na(sample_name)) {
+                 message("The file does not contain sample name.")
+             }
+
              feature_table <- prof.to.features(
                  profile = profile,
                  bandwidth = $bandwidth,

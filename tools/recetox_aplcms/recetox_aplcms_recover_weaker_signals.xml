@@ -14,12 +14,20 @@
         <configfile name="run_script"><![CDATA[
             sample_name <- get_env_sample_name()
 
+            if(is.na(sample_name)) {
+                stop("The mzML file does not contain run ID.")
+            }
+
             #set extracted_filenames = str("', '").join([str($f) for $f in $extracted_files])
             extracted_feature_tables <- load_parquet_collection(c('$extracted_filenames'))
+            sample_names <- unlist(lapply(extracted_feature_tables, load_sample_name))
+            validate_sample_names(sample_names)
             extracted_features <- select_table_with_sample_name(extracted_feature_tables, sample_name)
 
             #set corrected_filenames = str("', '").join([str($f) for $f in $corrected_files])
             corrected_feature_tables <- load_parquet_collection(c('$corrected_filenames'))
+            sample_names <- unlist(lapply(corrected_feature_tables, load_sample_name))
+            validate_sample_names(sample_names)
             corrected_features <- select_table_with_sample_name(corrected_feature_tables, sample_name)
 
             metadata <- load_data_from_parquet_file('$metadata_file')
