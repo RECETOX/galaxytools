@@ -76,7 +76,12 @@ save_aligned_features <- function(aligned_features, metadata_file, rt_file, inte
 select_table_with_sample_name <- function(tables, sample_name) {
     sample_names <- lapply(tables, load_sample_name)
     index <- which(sample_names == sample_name)
-    return(tables[[index]])
+    if (length(index) > 0) {
+        return(tables[[index]])
+    } else {
+        stop(sprintf("Mismatch - sample name '%s' not present in %s",
+                     sample_name, paste(sample_names, collapse=", ")))
+    }
 }
 
 select_adjusted <- function(recovered_features) {
@@ -114,6 +119,7 @@ join_tables_to_list <- function(metadata, rt_table, intensity_table) {
 
 validate_sample_names <- function(sample_names) {
     if ((any(is.na(sample_names))) || (length(unique(sample_names)) != length(sample_names))) {
-        stop(sprintf("Sample names absent or not unique - provided sample names: %s", paste(sample_names, collapse=", ")))
+        stop(sprintf("Sample names absent or not unique - provided sample names: %s",
+                     paste(sample_names, collapse=", ")))
     }
 }
