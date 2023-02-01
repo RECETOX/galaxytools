@@ -17,7 +17,12 @@ save_sample_name <- function(df, sample_name) {
 }
 
 load_sample_name <- function(df) {
-    return(attr(df, "sample_name"))
+    sample_name <- attr(df, "sample_name")
+    if (is.null(sample_name)) {
+        return(NA)
+    } else {
+        return(sample_name)
+    }
 }
 
 save_data_as_parquet_file <- function(data, filename) {
