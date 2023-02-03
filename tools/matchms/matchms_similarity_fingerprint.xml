@@ -1,0 +1,60 @@
+<tool id="matchms_similarity_fingerprint_similarity" name="matchms similarity - fingerprint similarity" version="@TOOL_VERSION@+galaxy0" python_template_version="3.8">
+    <description>matchms fingerprint similarity calculation</description>
+
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="creator"/>
+
+    <requirements>
+        <requirement type="package" version="@TOOL_VERSION@">matchms</requirement>
+    </requirements>
+
+    <!-- <environment_variables>
+        <environment_variable name="MPLCONFIGDIR">/tmp</environment_variable>
+    </environment_variables> -->
+
+    <command detect_errors="exit_code"><![CDATA[
+        python3 ${python_wrapper}
+    ]]> </command>
+
+<configfiles>
+<configfile name="python_wrapper">
+@init_logger@
+
+from matchms.similarity import FingerprintSimilarity
+similarity = FingerprintSimilarity(similarity_measure="${fingerprint_similarity}")
+@init_scores@
+
+new_scores = scores.calculate(similarity, name="FingerprintSimilarity_${fingerprint_similarity}", array_type="numpy")
+new_scores.to_json("$scores_out")
+</configfile>
+</configfiles>
+
+    <inputs>
+        <expand macro="input_param"/>
+        <param label="Fingerprint similarity distance" name="fingerprint_similarity" type="select" display="radio"
+            help="Distance measure to use.">
+            <option value="jaccard" selected="true">jaccard</option>
+            <option value="dice">dice</option>
+            <option value="cosine">cosine</option>
+        </param>
+        <!-- <param label="Array type" name="array_type" type="select" display="radio"
+            help="Array type to use for computation.">
+            <option value="sparse" selected="true">sparse</option>
+            <option value="numpy">numpy</option>
+        </param> -->
+    </inputs>
+
+    <outputs>
+        <data label="$fingerprint_similarity distance between fingerprints in ${on_string}" name="scores_out" format="json"/>
+    </outputs>
+
+    <help>
+        <![CDATA[
+            @HELP_matchms@
+        ]]>
+    </help>
+
+    <expand macro="citations"/>
+</tool>

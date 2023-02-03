@@ -1,0 +1,86 @@
+<tool id="matchms_similarity_metadata_match" name="matchms similarity - metadata match" version="@TOOL_VERSION@+galaxy0" python_template_version="3.8">
+    <description>matchms metadata match calculation for numeric fields based on tolerance</description>
+
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="creator"/>
+
+    <requirements>
+        <requirement type="package" version="1.1.4">pandas</requirement>
+        <requirement type="package" version="0.55.1">numba</requirement>
+        <requirement type="package" version="@TOOL_VERSION@">matchms</requirement>
+    </requirements>
+
+    <environment_variables>
+        <environment_variable name="MPLCONFIGDIR">/tmp</environment_variable>
+    </environment_variables>
+
+    <command detect_errors="exit_code"><![CDATA[
+        python3 ${python_wrapper}
+    ]]> </command>
+
+<configfiles>
+<configfile name="python_wrapper">
+@init_logger@
+
+from matchms.similarity import MetadataMatch
+
+#if $matching.matching_type == "difference"
+tolerance=$matching.tolerance
+name="MetadataMatch_${matching.metadata_match_field}_${matching.matching_type}_${matching.tolerance}"
+#else
+tolerance=0
+name="MetadataMatch_${matching.metadata_match_field}_${matching.matching_type}"
+#end if
+
+similarity = MetadataMatch(field="${matching.metadata_match_field}", matching_type="${matching.matching_type}", tolerance=tolerance)
+
+@init_scores@
+
+new_scores = scores.calculate(similarity, name=name, array_type="sparse")
+new_scores.to_json("$scores_out")
+</configfile>
+</configfiles>
+
+    <inputs>
+        <expand macro="input_param"/>
+        <conditional name="matching">
+            <param label="Matching type" name="matching_type" type="select" display="radio"
+                help="Type of matching to perform">
+                <option value="difference" selected="true">difference</option>
+                <option value="equal_match">equal match</option>
+            </param>
+            <when value="difference">        
+                <param label="Metadata Match" name="metadata_match_field" type="select" display="radio"
+                    help="Metadata field to use for matching">
+                    <option value="retention_index" selected="true">Retention Index</option>
+                    <option value="retention_time">Retention Time</option>
+                    <option value="precursor_mz">Precursor Mz</option>
+                </param>
+                <param label="Tolerance" name="tolerance" type="float" value="0"
+                    help="Tolerance for matching the selected metadata field - only pairs within the tolerance will be contained in the output." />
+            </when>
+            <when value="equal_match">
+                <param label="Metadata Match" name="metadata_match_field" type="select" display="radio"
+                    help="Metadata field to use for matching">
+                    <option value="smiles" selected="true">SMILES</option>
+                    <option value="inchi">InChI</option>
+                    <option value="inchi_key">InChIKey</option>
+                </param>
+            </when>
+        </conditional>
+    </inputs>
+
+    <outputs>
+        <data label="Match $matching.metadata_match_field results of ${on_string}" name="scores_out" format="json"/>
+    </outputs>
+
+    <help>
+        <![CDATA[
+            @HELP_matchms@
+        ]]>
+    </help>
+
+    <expand macro="citations"/>
+</tool>
