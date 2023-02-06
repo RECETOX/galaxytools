@@ -21,17 +21,26 @@
               feature_tables <- feature_tables[ordering]
               sample_names <- sample_names[ordering]
 
+              #if $tolerances_input_method.input_method == "file"
+              tolerances <- load_data_from_parquet_file('$input_tolerances')
+              #end if
+
               clusters <- compute_clusters(
                   feature_tables = feature_tables,
-                  #if $mz_tol_relative:
-                  mz_tol_relative = $mz_tol_relative,
+                  #if $tolerances_input_method.input_method == "file"
+                  mz_tol_relative = get_mz_tol(tolerances),
+                  rt_tol_relative = get_rt_tol(tolerances),
+                  #else
+                  #if $tolerances_input_method.mz_tol_relative:
+                  mz_tol_relative = $tolerances_input_method.mz_tol_relative,
                   #else:
                   mz_tol_relative = NA,
                   #end if
-                  #if $rt_tol_relative:
-                  rt_tol_relative = $rt_tol_relative,
+                  #if $tolerances_input_method.rt_tol_relative:
+                  rt_tol_relative = $tolerances_input_method.rt_tol_relative,
                   #else:
                   rt_tol_relative = NA,
+                  #end if
                   #end if
                   mz_max_diff = 10 * $mz_max_diff,
                   mz_tol_absolute = $mz_tol_absolute,
