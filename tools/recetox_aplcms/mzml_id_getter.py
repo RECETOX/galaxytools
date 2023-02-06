@@ -15,7 +15,8 @@ def main(argv):
     id = mzml.info['run_id']
 
     if id is not None:
-        sys.stdout.write(id)
+        with open("sample_name.txt", mode='x') as f:
+            f.write(id)
 
 
 if __name__ == '__main__':

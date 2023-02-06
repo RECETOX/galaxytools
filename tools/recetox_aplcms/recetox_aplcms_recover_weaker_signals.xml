@@ -7,12 +7,12 @@
     <expand macro="requirements"/>
 
     <command detect_errors="aggressive"><![CDATA[
-        export SAMPLE_NAME=\$(python '${__tool_directory__}/mzml_id_getter.py' '$input_file') ;
+        python '${__tool_directory__}/mzml_id_getter.py' '$input_file';
         Rscript -e 'source("${__tool_directory__}/utils.R")' -e 'source("${run_script}")'
     ]]></command>
     <configfiles>
         <configfile name="run_script"><![CDATA[
-            sample_name <- get_env_sample_name()
+            sample_name <- readChar('sample_name.txt', file.info('sample_name.txt')\$size)
 
             if(is.na(sample_name)) {
                 stop("The mzML file does not contain run ID.")

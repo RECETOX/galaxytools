@@ -7,12 +7,12 @@
     <expand macro="requirements"/>
 
     <command detect_errors="aggressive"><![CDATA[
-        export SAMPLE_NAME=\$(python '${__tool_directory__}/mzml_id_getter.py' '$input_file') ;
+        python '${__tool_directory__}/mzml_id_getter.py' '$input_file';
         Rscript -e 'source("${__tool_directory__}/utils.R")' -e 'source("${run_script}")'
     ]]></command>
     <configfiles>
         <configfile name="run_script"><![CDATA[
-            sample_name <- get_env_sample_name()
+            sample_name <- readChar('sample_name.txt', file.info('sample_name.txt')\$size)
 
             profile <- proc.cdf(
                 filename = '$input_file',
@@ -33,7 +33,7 @@
 
     <inputs>
         <param label="Input spectra data" name="input_file" type="data" format="mzml"
-               help="Mass spectrometry sample-wise feature table." />
+               help="Sample data in .mzml format acquired in profile mode." />
         <expand macro="remove_noise_params"/>
     </inputs>
 
