@@ -1,5 +1,5 @@
-<tool id="matchms_formatter" name="matchms output formatter" version="0.1.4" python_template_version="3.5">
-    <description>reformat output tables of matchms</description>
+<tool id="matchms_formatter" name="matchms scores formatter" version="0.2" python_template_version="3.5">
+    <description>reformat scores object of matchms to long format table</description>
 
     <macros>
         <import>macros.xml</import>
@@ -30,7 +30,7 @@
     </configfiles>
 
     <inputs>
-        <param label="Scores object" name="scores" type="data" format="json" help="MatchMS Scores json file." />
+        <param label="Scores object" name="scores" type="data" format="json" help="matchms Scores json file." />
     </inputs>
     <outputs>
         <data label="${tool.name} on ${on_string}" name="output" format="tsv"/>

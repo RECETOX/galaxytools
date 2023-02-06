@@ -1,4 +1,4 @@
-<tool id="matchms_similarity_metadata_match" name="matchms similarity - metadata match" version="@TOOL_VERSION@+galaxy0" python_template_version="3.8">
+<tool id="matchms_metadata_match" name="matchms metadata match" version="@TOOL_VERSION@+galaxy0" python_template_version="3.8">
     <description>matchms metadata match calculation for numeric fields based on tolerance</description>
 
     <macros>
@@ -38,7 +38,7 @@ similarity = MetadataMatch(field="${matching.metadata_match_field}", matching_ty
 
 @init_scores@
 
-new_scores = scores.calculate(similarity, name=name, array_type="sparse")
+new_scores = scores.calculate(similarity, name=name, array_type="sparse", join_type="${join_type}")
 new_scores.to_json("$scores_out")
 </configfile>
 </configfiles>
@@ -70,6 +70,11 @@ new_scores.to_json("$scores_out")
                 </param>
             </when>
         </conditional>
+    <param label="join type" name="join_type" type="select" display="radio"
+        help="join type to use for appending scores">
+        <option value="left" selected="true">left</option>
+        <option value="inner">inner</option>
+    </param>
     </inputs>
 
     <outputs>

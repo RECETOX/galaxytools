@@ -1,4 +1,4 @@
-<tool id="matchms_similarity_fingerprint_similarity" name="matchms similarity - fingerprint similarity" version="@TOOL_VERSION@+galaxy0" python_template_version="3.8">
+<tool id="matchms_fingerprint_similarity" name="matchms fingerprint similarity" version="@TOOL_VERSION@+galaxy0" python_template_version="3.8">
     <description>matchms fingerprint similarity calculation</description>
 
     <macros>

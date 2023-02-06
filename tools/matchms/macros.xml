@@ -43,6 +43,8 @@
             <param label="intensity_power" name="intensity_power" type="float" value="1.0"
                    help="The power to raise intensity to in the cosine function."/>
         </section>
+    </xml>
+
     <xml name="input_param">
         <conditional name="scores">
             <param name="use_scores" label="Use Scores Object" type="boolean" truevalue="TRUE" falsevalue="FALSE"
