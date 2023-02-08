@@ -86,14 +86,27 @@
     </xml>
 
     <xml name="compute_clusters_params">
-        <param name="mz_tol_relative" type="float" optional="true" label="mz_tol_relative"
-               help="Relative m/z tolerance to use for grouping features." />
+        <conditional name="tolerances_input_method">
+            <param name="input_method" type="select" display="radio" label="Tolerances input method"
+                   help="Tolerances can be entered directly or loaded from a file.">
+                <option value="direct" selected="true">direct</option>
+                <option value="file">file</option>
+            </param>
+            <when value="direct">
+                <param name="mz_tol_relative" type="float" optional="true" label="mz_tol_relative"
+                       help="Relative m/z tolerance to use for grouping features." />
+                <param name="rt_tol_relative" type="float" optional="true" label="rt_tol_relative"
+                       help="Relative retention time tolerance to use for grouping features." />
+            </when>
+            <when value="file">
+                <param label="Input tolerances values" name="input_tolerances" type="data" format="parquet"
+                       help="Table containing tolerance values." />
+            </when>
+        </conditional>
         <param name="mz_tol_absolute" type="float" label="mz_tol_absolute" value="1e-05"
                help="Absolute m/z tolerance to use for grouping features." />
         <param name="mz_max_diff" type="float" label="mz_max_diff" value="0.01"
                help="Maximum difference between feature m/z values to belong to the same cluster." />
-        <param name="rt_tol_relative" type="float" optional="true" label="rt_tol_relative"
-               help="Relative retention time tolerance to use for grouping features." />
     </xml>
 
     <xml name="recover_weaker_params">
