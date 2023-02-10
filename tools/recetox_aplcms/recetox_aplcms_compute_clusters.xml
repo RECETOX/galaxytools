@@ -1,5 +1,5 @@
 <tool id="recetox_aplcms_compute_clusters" name="recetox-aplcms - compute clusters" version="@TOOL_VERSION@+galaxy0">
-    <description>compute clusters of m/z and RT and assign cluster ID to individual features</description>
+    <description>compute clusters of mz and rt across samples and assign cluster IDs to individual features</description>
     <macros>
         <import>macros.xml</import>
         <import>help.xml</import>
