@@ -2,6 +2,7 @@
     <description>filter noise and detect peaks in high resolution mass spectrometry (HRMS) profile data</description>
     <macros>
         <import>macros.xml</import>
+        <import>help.xml</import>
     </macros>
     <expand macro="creator"/>
     <expand macro="requirements"/>

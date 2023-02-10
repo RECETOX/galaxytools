@@ -2,6 +2,7 @@
     <description>compute template features table</description>
     <macros>
         <import>macros.xml</import>
+        <import>help.xml</import>
     </macros>
     <expand macro="creator"/>
     <expand macro="requirements"/>
@@ -35,9 +36,10 @@
 
     <help>
         <![CDATA[
-            This is a tool which runs apLCMS computation of template features table.
+            @COMPUTE_TEMPLATE_HELP@
 
             @GENERAL_HELP@
+            
         ]]>
     </help>
 

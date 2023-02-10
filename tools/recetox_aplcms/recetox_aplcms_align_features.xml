@@ -2,6 +2,7 @@
     <description>align features from LC/MS spectra across samples</description>
     <macros>
         <import>macros.xml</import>
+        <import>help.xml</import>
     </macros>
     <expand macro="creator"/>
     <expand macro="requirements"/>
@@ -40,7 +41,7 @@
                label="Clustered features" help="List of tables containing clustered features." />
         <param label="Input tolerances values" name="input_tolerances" type="data" format="parquet"
                help="Table containing tolerance values." />
-        <param name="min_occurrence" type="integer" min="1" value="2" label="min_occurrence"
+        <param name="min_occurrence" type="integer" min="2" value="2" label="min_occurrence"
                help="A feature has to show up in at least this number of profiles to be included in the final result." />
     </inputs>
 
@@ -56,7 +57,7 @@
 
     <help>
         <![CDATA[
-            This is a tool which runs apLCMS alignment of peaks from spectra into a feature table.
+            @ALIGN_FEATURES_HELP@
 
             @GENERAL_HELP@
         ]]>

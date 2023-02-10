@@ -2,6 +2,7 @@
     <description>generate feature table from noise-removed LC/MS profile</description>
     <macros>
         <import>macros.xml</import>
+        <import>help.xml</import>
     </macros>
     <expand macro="creator"/>
     <expand macro="requirements"/>
@@ -67,7 +68,7 @@
 
     <help>
         <![CDATA[
-            This is a tool which runs apLCMS generation of feature table from noise-removed LC/MS profile.
+            @GENERATE_FEATURE_TABLE_HELP@
 
             @GENERAL_HELP@
         ]]>

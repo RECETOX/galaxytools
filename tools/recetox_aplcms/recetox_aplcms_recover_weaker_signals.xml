@@ -2,6 +2,7 @@
     <description>recover weaker signals from LC/MS spectra</description>
     <macros>
         <import>macros.xml</import>
+        <import>help.xml</import>
     </macros>
     <expand macro="creator"/>
     <expand macro="requirements"/>
@@ -109,8 +110,7 @@
 
     <help>
         <![CDATA[
-            This is a tool which runs apLCMS recovery of weaker signals in some profiles that is not identified
-            as a peak, but corresponds to identified peaks in other spectra.
+            @RECOVER_WEAKER_SIGNALS_HELP@
 
             @GENERAL_HELP@
         ]]>

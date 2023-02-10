@@ -2,6 +2,7 @@
     <description>correct the RT in each LC/MS profile to achieve better between-profile agreement.</description>
     <macros>
         <import>macros.xml</import>
+        <import>help.xml</import>
     </macros>
     <expand macro="creator"/>
     <expand macro="requirements"/>
@@ -52,10 +53,11 @@
 
     <help>
         <![CDATA[
-            This is a tool which runs apLCMS correction of retention time in each LC/MS profile
-            to achieve better between-profile agreement.
+            @CORRECT_TIME_HELP@
 
             @GENERAL_HELP@
+
+            @EXAMPLE_OUTPUT@
         ]]>
     </help>
 

@@ -2,6 +2,7 @@
     <description>join knowledge from aligned features and known table.</description>
     <macros>
         <import>macros.xml</import>
+        <import>help.xml</import>
     </macros>
     <expand macro="creator"/>
     <expand macro="requirements"/>
@@ -107,7 +108,7 @@
 
     <help>
         <![CDATA[
-            This is a tool which runs apLCMS merging of knowledge from aligned features and known table.
+            @MERGE_KNOWN_TABLES_HELP@
 
             @GENERAL_HELP@
         ]]>
