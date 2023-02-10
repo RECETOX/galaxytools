@@ -89,11 +89,11 @@
         <param name="corrected_files" type="data_collection" collection_type="list" format="parquet"
                label="Input corrected feature samples collection" help="Mass spectrometry file containing corrected feature samples." />
         <param name="metadata_file" type="data" format="parquet" label="Metadata table"
-               help="TBA" />
+               help="Peak metadata table from the align features step." />
         <param name="rt_file" type="data" format="parquet" label="RT table"
-               help="TBA" />
+               help="Table with retention times for features (rows) across samples (columns)." />
         <param name="intensity_file" type="data" format="parquet" label="Intensity table"
-               help="TBA" />
+               help="Table with intensities for features (rows) across samples (columns)." />
         <param label="Input tolerances values" name="tolerances" type="data" format="parquet"
                help="Table containing tolerance values." />
         <expand macro="recover_weaker_params"/>

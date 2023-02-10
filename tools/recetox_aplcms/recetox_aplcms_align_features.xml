@@ -46,9 +46,12 @@
     </inputs>
 
     <outputs>
-        <data name="metadata_file" format="parquet" label="${tool.name} on ${on_string} (metadata table)" />
-        <data name="rt_file" format="parquet" label="${tool.name} on ${on_string} (rt table)" />
-        <data name="intensity_file" format="parquet" label="${tool.name} on ${on_string} (intensity table)" />
+        <data name="metadata_file" format="parquet" label="${tool.name} on ${on_string} (metadata table)" 
+            help="Peak metadata table from the align features step." />
+        <data name="rt_file" format="parquet" label="${tool.name} on ${on_string} (rt table)" 
+            help="Table with retention times for features (rows) across samples (columns)." />
+        <data name="intensity_file" format="parquet" label="${tool.name} on ${on_string} (intensity table)" 
+            help="Table with intensities for features (rows) across samples (columns)." />
     </outputs>
 
     <tests>
