@@ -1,4 +1,4 @@
-<tool id="recetox_aplcms_align_features" name="RECETOX apLCMS - align features" version="@TOOL_VERSION@+galaxy0">
+<tool id="recetox_aplcms_align_features" name="recetox-aplcms - align features" version="@TOOL_VERSION@+galaxy0">
     <description>align features from LC/MS spectra across samples</description>
     <macros>
         <import>macros.xml</import>

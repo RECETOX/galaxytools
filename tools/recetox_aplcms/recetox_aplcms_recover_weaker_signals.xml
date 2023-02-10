@@ -1,4 +1,4 @@
-<tool id="recetox_aplcms_recover_weaker_signals" name="RECETOX apLCMS - recover weaker signals" version="@TOOL_VERSION@+galaxy0">
+<tool id="recetox_aplcms_recover_weaker_signals" name="recetox-aplcms - recover weaker signals" version="@TOOL_VERSION@+galaxy0">
     <description>recover weaker signals from LC/MS spectra</description>
     <macros>
         <import>macros.xml</import>

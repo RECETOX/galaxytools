@@ -1,4 +1,4 @@
-<tool id="recetox_aplcms_remove_noise" name="RECETOX apLCMS - remove noise" version="@TOOL_VERSION@+galaxy0">
+<tool id="recetox_aplcms_remove_noise" name="recetox-aplcms - remove noise" version="@TOOL_VERSION@+galaxy0">
     <description>filter noise and detect peaks in high resolution mass spectrometry (HRMS) profile data</description>
     <macros>
         <import>macros.xml</import>
