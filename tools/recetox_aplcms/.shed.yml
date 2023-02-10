@@ -1,3 +1,4 @@
+name: recetox-aplcms
 owner: recetox
 remote_repository_url: "https://github.com/RECETOX/galaxytools/tree/master/tools/recetox_aplcms"
 homepage_url: "https://github.com/RECETOX/recetox-aplcms"
@@ -5,3 +6,10 @@ categories:
   - Metabolomics
 description: "Peak detection tool for HRMS profile data."
 long_description: "Peak detection package including (1) noise filtering, (2) peak picking, (3) retention time correction, (4) feature alignment and (5) weaker signal recovery features."
+auto_tool_repositories:
+  name_template: "{{ tool_id }}"
+  description_template: "{{ tool_name }} tool from the recetox-aplcms package"
+suite:
+  name: suite_recetox-aplcms
+  description: tools from recetox-aplcms are used for peak detection in HRMS profile data
+  type: repository_suite_definition
