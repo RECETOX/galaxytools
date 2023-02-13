@@ -1,60 +1,15 @@
+name: recetox-aplcms
 owner: recetox
 remote_repository_url: "https://github.com/RECETOX/galaxytools/tree/master/tools/recetox_aplcms"
 homepage_url: "https://github.com/RECETOX/recetox-aplcms"
 categories:
   - Metabolomics
-repositories:
-  recetox_aplcms_unsupervised:
-    description: "Generate a feature table from a batch of LC/MS spectra using apLCMS's Unsupervised method."
-    include:
-      - recetox_aplcms_unsupervised.xml
-      - main.R
-      - test-data
-      - macros.xml
-  recetox_aplcms_hybrid:
-    description: "Generate a feature table from a batch of LC/MS spectra using apLCMS's Hybrid method."
-    include:
-      - recetox_aplcms_hybrid.xml
-      - main.R
-      - test-data
-      - macros.xml
-  recetox_aplcms_two_step_hybrid:
-    description: "Generate a feature table from LC/MS spectra of multibatch experiment using apLCMS's Two-Step Hybrid method."
-    include:
-      - recetox_aplcms_two_step_hybrid.xml
-      - main.R
-      - test-data
-      - macros.xml
-  recetox_aplcms_adjust_time:
-    description: "Retention time adjustment step of apLCMS after feature extraction."
-    include:
-      - recetox_aplcms_adjust_time.xml
-      - test-data
-      - macros.xml
-      - macros_split.xml
-      - utils.R
-  recetox_aplcms_extract_features:
-    description: "Initial peak detection & feature extraction step of apLCMS."
-    include:
-      - recetox_aplcms_extract_features.xml
-      - test-data
-      - macros.xml
-      - macros_split.xml
-      - utils.R
-  recetox_aplcms_align_features:
-    description: "Feature alignment step of apLCMS after retention time adjustment."
-    include:
-      - recetox_aplcms_align_features.xml
-      - test-data
-      - macros.xml
-      - macros_split.xml
-      - utils.R
-  recetox_aplcms_recover_weaker_signals:
-    description: "Weaker signal recovery step of apLCMS after feature alignment.."
-    include:
-      - recetox_aplcms_recover_weaker_signals.xml
-      - test-data
-      - macros.xml
-      - macros_split.xml
-      - utils.R
-      - main.R
+description: "Peak detection tool for HRMS profile data."
+long_description: "Peak detection package including (1) noise filtering, (2) peak picking, (3) retention time correction, (4) feature alignment and (5) weaker signal recovery features."
+auto_tool_repositories:
+  name_template: "{{ tool_id }}"
+  description_template: "{{ tool_name }} tool from the recetox-aplcms package"
+suite:
+  name: suite_recetox-aplcms
+  description: tools from recetox-aplcms are used for peak detection in HRMS profile data
+  type: repository_suite_definition

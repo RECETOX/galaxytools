@@ -1,143 +1,116 @@
-<tool id="recetox_aplcms_recover_weaker_signals" name="RECETOX apLCMS - recover weaker signals" version="@TOOL_VERSION@+galaxy1">
-    <description>recover weaker signals from LC/MS spectra</description>
+<tool id="recetox_aplcms_recover_weaker_signals" name="recetox-aplcms - recover weaker signals" version="@TOOL_VERSION@+galaxy0">
+    <description>recover weaker signals from raw data using an aligned feature table</description>
     <macros>
         <import>macros.xml</import>
-        <import>macros_split.xml</import>
+        <import>help.xml</import>
     </macros>
     <expand macro="creator"/>
-
     <expand macro="requirements"/>
+
     <command detect_errors="aggressive"><![CDATA[
-        sh ${symlink_inputs} &&
-        Rscript -e 'source("${__tool_directory__}/utils.R")' -e 'source("${__tool_directory__}/main.R")' -e 'source("${run_script}")'
+        python '${__tool_directory__}/mzml_id_getter.py' '$input_file';
+        Rscript -e 'source("${__tool_directory__}/utils.R")' -e 'source("${run_script}")'
     ]]></command>
     <configfiles>
-        <configfile name="symlink_inputs">
-            #for $infile in $ms_files
-                ln -s '${infile}' '${infile.element_identifier}'
-            #end for
-            #for $infile in $extracted_files
-                ln -s '${infile}' 'extracted_${infile.element_identifier}'
-            #end for
-            #for $infile in $corrected_files
-                ln -s '${infile}' '${infile.element_identifier}'
-            #end for
-        </configfile>
         <configfile name="run_script"><![CDATA[
-            #set filenames = str("', '").join([str($f.element_identifier) for $f in $ms_files])
-            filenames <- sort_samples_by_acquisition_number(c('$filenames'))
+            sample_name <- readChar('sample_name.txt', file.info('sample_name.txt')\$size)
 
-            #set extracted_files = str("', '").join(["extracted_" + str($f.element_identifier) for $f in $extracted_files])
-            extracted <- load_features(c('$extracted_files'))
+            if(is.na(sample_name)) {
+                stop("The mzML file does not contain run ID.")
+            }
 
-            #set corrected_files = str("', '").join([str($f.element_identifier) for $f in $corrected_files])
-            corrected <- load_features(c('$corrected_files'))
+            #set extracted_filenames = str("', '").join([str($f) for $f in $extracted_files])
+            extracted_feature_tables <- load_parquet_collection(c('$extracted_filenames'))
+            sample_names <- unlist(lapply(extracted_feature_tables, load_sample_name))
+            validate_sample_names(sample_names)
+            extracted_features <- select_table_with_sample_name(extracted_feature_tables, sample_name)
 
-            aligned <- load_aligned_features('$rt_cross_table_file', '$int_cross_table_file', '$tolerances_file')
+            #set corrected_filenames = str("', '").join([str($f) for $f in $corrected_files])
+            corrected_feature_tables <- load_parquet_collection(c('$corrected_filenames'))
+            sample_names <- unlist(lapply(corrected_feature_tables, load_sample_name))
+            validate_sample_names(sample_names)
+            corrected_features <- select_table_with_sample_name(corrected_feature_tables, sample_name)
 
-            cluster <- as.integer(Sys.getenv('GALAXY_SLOTS', unset = 1))
+            metadata <- load_data_from_parquet_file('$metadata_file')
+            rt_table <- load_data_from_parquet_file('$rt_file')
+            intensity_table <- load_data_from_parquet_file('$intensity_file')
 
-            recovered <- recover_signals(cluster,
-                                         filenames,
-                                         extracted,
-                                         corrected,
-                                         aligned,
-                                         $mz_tol,
-                                         $weak_signal_recovery.recover_mz_range,
-                                         $weak_signal_recovery.recover_chr_range,
-                                         $weak_signal_recovery.use_observed_range,
-                                         $min_bandwidth,
-                                         $max_bandwidth,
-                                         $weak_signal_recovery.recover_min_count
+            tolerances <- load_data_from_parquet_file('$tolerances')
+
+            recovered <- recover.weaker(
+                filename = '$input_file',
+                sample_name = sample_name,
+                extracted_features = extracted_features,
+                adjusted_features = corrected_features,
+                metadata_table = metadata,
+                rt_table = rt_table,
+                intensity_table = intensity_table,
+                mz_tol = $mz_tol,
+                mz_tol_relative = get_mz_tol(tolerances),
+                rt_tol_relative = get_rt_tol(tolerances),
+                #if $recover_mz_range:
+                recover_mz_range = $recover_mz_range,
+                #else:
+                recover_mz_range = NA,
+                #end if
+                #if $recover_rt_range:
+                recover_rt_range = $recover_rt_range,
+                #else:
+                recover_rt_range = NA,
+                #end if
+                use_observed_range = $use_observed_range,
+                bandwidth = $bandwidth,
+                #if $min_bandwidth:
+                min_bandwidth = $min_bandwidth,
+                #else:
+                min_bandwidth = NA,
+                #end if
+                #if $max_bandwidth:
+                max_bandwidth = $max_bandwidth,
+                #else:
+                max_bandwidth = NA,
+                #end if
+                recover_min_count = $recover_min_count,
+                intensity_weighted = $intensity_weighted
             )
 
-            aligned_feature_sample_table <- create_feature_sample_table(aligned)
-            recovered_feature_sample_table <- create_feature_sample_table(recovered)
+            recovered <- select_adjusted(recovered)
 
-            save_all_features(recovered, filenames)
-            save_all_feature_tables(aligned_feature_sample_table, recovered_feature_sample_table,
-                                    '${aligned_feature_sample_table}', '${recovered_feature_sample_table}',
-                                    '$output_format.out_format')
+            recovered <- save_sample_name(recovered, sample_name)
+            save_data_as_parquet_file(recovered, '$output_file')
         ]]></configfile>
     </configfiles>
 
     <inputs>
-        <param name="ms_files" type="data_collection" collection_type="list" format="mzdata,mzml,mzxml,netcdf"
-               label="Input data collection" help="Mass spectrometry file for peak extraction." />
+        <param name="input_file" type="data" format="mzml" label="Input spectra data"
+               help="Mass spectrometry sample-wise features table." />
         <param name="extracted_files" type="data_collection" collection_type="list" format="parquet"
                label="Input extracted feature samples collection" help="Mass spectrometry files containing feature samples." />
         <param name="corrected_files" type="data_collection" collection_type="list" format="parquet"
                label="Input corrected feature samples collection" help="Mass spectrometry file containing corrected feature samples." />
-        <param name="tolerances_file" type="data" format="parquet" label="Input tolerances" help="TBD"/>
-        <param name="rt_cross_table_file" type="data" format="parquet" label="Input rt cross table" help="TBD"/>
-        <param name="int_cross_table_file" type="data" format="parquet" label="Input int cross table" help="TBD"/>
-        <expand macro="mz_tol_macro"/>
-        <param name="min_bandwidth" type="float" optional="true" label="min_bandwidth (optional)"
-               help="The minimum bandwidth to use in the kernel smoother." />
-        <param name="max_bandwidth" type="float" optional="true" label="max_bandwidth (optional)"
-               help="The maximum bandwidth to use in the kernel smoother." />
-        <expand macro="weak_signal_recovery"/>
-        <expand macro="output_format"/>
+        <param name="metadata_file" type="data" format="parquet" label="Metadata table"
+               help="Peak metadata table from the align features step." />
+        <param name="rt_file" type="data" format="parquet" label="RT table"
+               help="Table with retention times for features (rows) across samples (columns)." />
+        <param name="intensity_file" type="data" format="parquet" label="Intensity table"
+               help="Table with intensities for features (rows) across samples (columns)." />
+        <param label="Input tolerances values" name="tolerances" type="data" format="parquet"
+               help="Table containing tolerance values." />
+        <expand macro="recover_weaker_params"/>
+        <expand macro="bandwidth_params"/>
     </inputs>
 
     <outputs>
-        <expand macro="unsupervised_outputs">
-            <collection  name="extracted_features" type="list" label="${tool.name} extracted_features on ${on_string}">
-                <discover_datasets pattern="__designation__" directory="extracted" format="parquet" />
-            </collection >
-            <collection  name="corrected_features" type="list" label="${tool.name} corrected_features on ${on_string}">
-                <discover_datasets pattern="__designation__" directory="corrected" format="parquet" />
-            </collection >
-        </expand>
+        <data label="${tool.name} on ${on_string}" name="output_file" format="parquet" />
     </outputs>
 
     <tests>
-        <test>
-            <param name="ms_files">
-                <collection type="list">
-                    <element name="mbr_test0.mzml" value="mbr_test0.mzml"/>
-                    <element name="mbr_test1.mzml" value="mbr_test1.mzml"/>
-                    <element name="mbr_test2.mzml" value="mbr_test2.mzml"/>
-                </collection>
-            </param>
-            <param name="extracted_files">
-                <collection type="list">
-                    <element name="extracted_features_0.parquet" value="extracted_expected/extracted_0.parquet"/>
-                    <element name="extracted_features_1.parquet" value="extracted_expected/extracted_1.parquet"/>
-                    <element name="extracted_features_2.parquet" value="extracted_expected/extracted_2.parquet"/>
-                </collection>
-            </param>
-            <param name="corrected_files">
-                <collection type="list">
-                    <element name="corrected_features_0.parquet" value="corrected_expected/corrected_0.parquet"/>
-                    <element name="corrected_features_1.parquet" value="corrected_expected/corrected_1.parquet"/>
-                    <element name="corrected_features_2.parquet" value="corrected_expected/corrected_2.parquet"/>
-                </collection>
-            </param>
-            <param name="tolerances_file" value="tolerances.parquet" ftype="parquet"/>
-            <param name="rt_cross_table_file" value="rt_cross_table.parquet" ftype="parquet"/>
-            <param name="int_cross_table_file" value="int_cross_table.parquet" ftype="parquet"/>
 
-            <output name="recovered_feature_sample_table" ftype="parquet"
-                    file="unsupervised_output/unsupervised_recovered_feature_sample_table.parquet"/>
-            <output name="aligned_feature_sample_table" ftype="parquet"
-                    file="unsupervised_output/unsupervised_aligned_feature_sample_table.parquet"/>
-            <output_collection name="corrected_features" type="list">
-                <element name="mbr_test0.parquet" file="unsupervised_output/corrected_features_0.parquet" ftype="parquet"/>
-                <element name="mbr_test1.parquet" file="unsupervised_output/corrected_features_1.parquet" ftype="parquet"/>
-                <element name="mbr_test2.parquet" file="unsupervised_output/corrected_features_2.parquet" ftype="parquet"/>
-            </output_collection>
-            <output_collection name="extracted_features" type="list">
-                <element name="mbr_test0.parquet" file="unsupervised_output/extracted_features_0.parquet" ftype="parquet"/>
-                <element name="mbr_test1.parquet" file="unsupervised_output/extracted_features_1.parquet" ftype="parquet"/>
-                <element name="mbr_test2.parquet" file="unsupervised_output/extracted_features_2.parquet" ftype="parquet"/>
-            </output_collection>
-        </test>
     </tests>
 
     <help>
         <![CDATA[
-            This is a tool which runs apLCMS recovery of weaker signals.
+            @RECOVER_WEAKER_SIGNALS_HELP@
 
             @GENERAL_HELP@
         ]]>
