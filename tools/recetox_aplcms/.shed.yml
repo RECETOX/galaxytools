@@ -10,6 +10,6 @@ auto_tool_repositories:
   name_template: "{{ tool_id }}"
   description_template: "{{ tool_name }} tool from the recetox-aplcms package"
 suite:
-  name: suite_recetox-aplcms
+  name: suite_recetox_aplcms
   description: tools from recetox-aplcms are used for peak detection in HRMS profile data
   type: repository_suite_definition
