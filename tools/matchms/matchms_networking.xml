@@ -1,5 +1,5 @@
-<tool id="matchms_networking" name="matchMS networking" version="@TOOL_VERSION@+galaxy0" python_template_version="3.5">
-    <description>create similarity network graph from matchMS similarity scores</description>
+<tool id="matchms_networking" name="matchms networking" version="@TOOL_VERSION@+galaxy0" python_template_version="3.5">
+    <description>create similarity network graph from matchms similarity scores</description>
 
     <macros>
         <import>macros.xml</import>
@@ -39,7 +39,7 @@
 
     <inputs>
         <param label="Similarity scores" name="scores" type="data" format="json"
-            help="matchMS similarity-scores file."/>
+            help="matchms similarity-scores file."/>
         <param label="Score Layer" name="score_layer_name" type="select" help="Metric of the score layer to create a network from.">
             <expand macro="similarity_metrics"/>
         </param>
