@@ -15,7 +15,7 @@ def main(argv):
     parser.add_argument("--score_cutoff", type=float, help="Minimum similarity score value to link two spectra.")
     parser.add_argument("--link_method", type=str, help="Method for selecting top N edges for each node.")
     parser.add_argument("--keep_unconnected_nodes", help="Keep unconnected nodes in the network.", action="store_true")
-    parser.add_argument("scores", type=str, help="Path to matchMS similarity-scores .json file.")
+    parser.add_argument("scores", type=str, help="Path to matchms similarity-scores .json file.")
     parser.add_argument("output_filename", type=str, help="Path where to store the output similarity network.")
     args = parser.parse_args()
 

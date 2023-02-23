@@ -78,7 +78,7 @@
                 +-----------+---------------+--------+-----------+
 
             Downstream Tools
-                The output is a JSON file containing serialized matchMS Scores object. The file can be processed by **matchMS output formatter**. 
+                The output is a JSON file containing serialized matchms Scores object. The file can be processed by **matchms output formatter**. 
         ]]>
     </token>
 
@@ -91,6 +91,7 @@ scores = scores_from_json("$scores_in")
 scores = Scores(references=list(load_from_msp("$references")), queries=list(load_from_msp("$queries")), is_symmetric=False)
 #end if
 </token>
+
 <token name="@init_logger@">
 from matchms import set_matchms_logger_level
 set_matchms_logger_level("WARNING")
@@ -104,7 +105,7 @@ set_matchms_logger_level("WARNING")
         
         **Upstream Tools**
 
-        matchMS similarity
+        matchms similarity
         
         **Downstream Tools**
         
@@ -115,11 +116,11 @@ set_matchms_logger_level("WARNING")
     <token name="@HELP_formatter@">
         <![CDATA[
             Usage
-                This tool creates user friendly tables from the similarity scores produced by **matchMS similarity**.
+                This tool creates user friendly tables from the similarity scores produced by **matchms similarity**.
                 The tool can be operated on two modes based on (i) thresholds or (ii) top k matches.
 
             Input Table Format
-                The tool expects a JSON file containing serialized matchMS Scores object.
+                The tool expects a JSON file containing serialized matchms Scores object.
 
             Output Table Format
                 +----------+-----------+---------+--------+

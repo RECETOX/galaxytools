@@ -237,7 +237,7 @@
                     +---------+--------------+----------------------+
                     | Name    | Output File  | Format               |
                     +=========+==============+======================+
-                    | matchMS | Mass Spectra | collection (tgz/msp) |
+                    | matchms | Mass Spectra | collection (tgz/msp) |
                     +---------+--------------+----------------------+
 
         @GENERAL_HELP@
