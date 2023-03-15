@@ -59,19 +59,6 @@
                help="The minimum standard deviation of a feature to be not eliminated." />
         <param name="sd_cut_max" type="float" value="500" label="sd_cut_max"
                help="The maximum standard deviation of a feature to be not eliminated." />
-        <conditional name="shape">
-            <param name="shape_model" type="select" display="radio" label="shape_model"
-                   help="The mathematical model for the shape of a peak. There are two choices - bi-Gaussian and Gaussian. When the peaks are asymmetric, the bi-Gaussian is better.">
-                <option value="Gaussian">Gaussian</option>
-                <option value="bi-Gaussian" selected="true">bi-Gaussian</option>
-            </param>
-            <when value="bi-Gaussian">
-                <param name="sigma_ratio_lim_min" type="float" value="0.01" label="sigma_ratio_lim_min"
-                       help="The lower limit of the believed ratio range between the left-standard deviation and the right-standard deviation of the bi-Gaussian function used to fit the data." />
-                <param name="sigma_ratio_lim_max" type="float" value="100" label="sigma_ratio_lim_max"
-                       help="The upper limit of the believed ratio range between the left-standard deviation and the right-standard deviation of the bi-Gaussian function used to fit the data." />
-            </when>
-        </conditional>
         <param name="peak_estim_method" type="select" display="radio" label="peak_estim_method"
                help="The estimation method for the bi-Gaussian peak model. Two possible values: moment and EM.">
             <option value="moment" selected="true">Moment</option>
@@ -83,6 +70,19 @@
                help="In fitting mixture of bi-Gaussian (or Gaussian) model of an EIC, when a component accounts for a proportion of intensities less than this value, the component will be ignored." />
         <param name="BIC_factor" type="float" value="2.0" label="BIC_factor"
                help="A factor influencing Bayesian information criterion (BIC) in estimation of RT peak shape. If the value is larger than 1, models with more peaks are penalized more." />
+
+        <section name="advanced" title="Advanced" expanded="false">
+            <conditional name="shape_model">
+                <param name="shape_model_deviations" type="boolean" checked="false" truevalue="TRUE" falsevalue="FALSE" label="Set bi-Gaussian deviations limits"
+                    help="When selected, it adds an option to set limits on ratios between left-standard deviation and the right-standard deviation of the bi-Gaussian function to fit the data." />
+                <when value="TRUE">
+                     <param name="sigma_ratio_lim_min" type="float" optional="true" label="sigma_ratio_lim_min"
+                            help="The lower limit of the ratio range between the deviations." />
+                     <param name="sigma_ratio_lim_max" type="float" optional="true" label="sigma_ratio_lim_max"
+                            help="The upper limit of the ratio range between the deviations." />
+                </when>
+            </conditional>
+        </section>
     </xml>
 
     <xml name="compute_clusters_params">
