@@ -44,12 +44,14 @@
     <xml name="remove_noise_params">
         <param name="min_pres" type="float" value="0.5" label="min_pres"
                help="The minimum proportion of presence in the time period for a series of signals grouped by m/z to be considered a peak." />
-        <param name="min_run" type="float" value="12" label="min_run"
+        <param name="min_run" type="float" value="12" label="min_run [unit corresponds to the retention time]"
                help="The minimum length of elution time for a series of signals grouped by m/z to be considered a peak." />
-        <param name="mz_tol" type="float" value="1e-05" label="mz_tol"
-               help="The m/z tolerance level for the grouping of data points. This value is expressed as the fraction of the m/z value. This value, multiplied by the m/z value, becomes the cutoff level. The recommended value is the machine's nominal accuracy level. Divide the ppm value by 1e6. For FTMS, 1e-5 is recommended." />
+        <param name="mz_tol" type="float" value="10" label="mz_tol [ppm]"
+               help="The m/z tolerance level for the grouping of data points. This value is expressed as the fraction of the m/z value.
+               This value, multiplied by the m/z value, becomes the cutoff level.
+               The recommended value is the machine's nominal accuracy level (e.g. for FTMS, it is 1e-5)." />
         <param name="baseline_correct" type="float" value="0" label="baseline_correct"
-               help="After grouping the observations, the highest intensity in each group is found. If the highest is lower than this value, the entire group will be deleted. The default value is NA, in which case the program uses a percentile of the height of the noise groups. If given a value, the value will be used as the threshold, and baseline.correct.noise.percentile will be ignored." />
+               help="After grouping the observations, the highest intensity in each group is found. If the highest is lower than this value, the entire group will be deleted. The default value is NA, in which case the program uses 75th percentile of the height of the noise groups. If given a value, the value will be used as the threshold." />
         <param name="intensity_weighted" type="boolean" checked="false" truevalue="TRUE" falsevalue="FALSE" label="intensity_weighted"
                help="Whether to weight the local density by signal intensities in initial peak detection." />
     </xml>
@@ -145,9 +147,9 @@
         <param name="bandwidth" type="float" value="0.5" label="Bandwidth factor" min="0" max="1"
                help="Parameter used to scale down the overall range of retention times (the bandwidth) assumed in the kernel smoother
                used for peak identification. The value is between zero and one. The minimal and maximal bandwidth can be limited by explicit values." />
-        <param name="min_bandwidth" type="float" optional="true" label="Minimal bandwidth"
+        <param name="min_bandwidth" type="float" optional="true" label="Minimal bandwidth [unit corresponds to the retention time]"
                help="The lower limit on the resulting bandwidth. If not given, it is estimated based on the overall range of retention times in the profile." />
-        <param name="max_bandwidth" type="float" optional="true" label="Maximal bandwidth"
+        <param name="max_bandwidth" type="float" optional="true" label="Maximal bandwidth [unit corresponds to the retention time]"
                help="The upper on the resulting bandwidth. If not given, it is estimated based on the overall range of retention times in the profile" />
     </xml>
 
