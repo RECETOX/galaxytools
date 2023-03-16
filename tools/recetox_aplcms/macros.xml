@@ -55,14 +55,18 @@
     </xml>
 
     <xml name="generate_feature_table_params">
-        <param name="BIC_factor" type="float" value="2.0" label="BIC_factor"
-               help="A factor influencing Bayesian information criterion (BIC) in estimation of RT peak shape. If the value is larger than 1, models with more peaks are penalized more." />
+        <param name="BIC_factor" type="float" value="2.0" label="BIC factor"
+               help="A factor influencing Bayesian information criterion (BIC) in estimation of RT peak shape.
+               If the value is larger than 1, models with more peaks are penalized more." />
 
         <section name="advanced" title="Advanced" expanded="false">
+            <param name="component_eliminate" type="float" value="0.01" label="Component eliminate"
+                   help="In fitting mixture of bi-Gaussian model of an EIC, when a component accounts for a proportion of intensities less than this value, the component will be ignored." />
+
             <section name="shape_model" title="Shape model deviations" expanded="true">
-                 <param name="sigma_ratio_lim_min" type="float" optional="true" label="sigma_ratio_lim_min"
+                 <param name="sigma_ratio_lim_min" type="float" optional="true" label="Minimal sigma ratio"
                         help="The lower limit of the ratio range between the left-standard deviation and the right-standard deviation of the bi-Gaussian function to fit the data." />
-                 <param name="sigma_ratio_lim_max" type="float" optional="true" label="sigma_ratio_lim_max"
+                 <param name="sigma_ratio_lim_max" type="float" optional="true" label="Maximal sigma ratio"
                         help="The upper limit of the ratio range between the left-standard deviation and the right-standard deviation of the bi-Gaussian function to fit the data." />
             </section>
 
@@ -70,9 +74,9 @@
                 <param name="sd_cut_bounds" type="boolean" checked="false" truevalue="TRUE" falsevalue="FALSE" label="Standard deviations boundaries."
                        help="Do not apply any limitations on the standard deviations." />
                 <when value="FALSE">
-                    <param name="sd_cut_min" type="float" value="0.01" label="sd_cut_min"
+                    <param name="sd_cut_min" type="float" value="0.01" label="Minimal standard deviation"
                            help="The minimum standard deviation - features with a standard deviation lower than this number are eliminated." />
-                    <param name="sd_cut_max" type="float" value="500" label="sd_cut_max"
+                    <param name="sd_cut_max" type="float" value="500" label="Maximal standard deviation"
                             help="The maximum standard deviation - features with a standard deviation greater than this number are eliminated." />
                 </when>
             </conditional>
@@ -84,13 +88,10 @@
                     <option value="EM">EM</option>
                 </param>
                 <when value="moment">
-                    <param name="moment_power" type="float" value="1" label="moment_power"
+                    <param name="moment_power" type="float" value="1" label="Moment power"
                            help="The power parameter for data transformation when fitting the bi-Gaussian mixture model in an EIC." />
                 </when>
             </conditional>
-
-            <param name="component_eliminate" type="float" value="0.01" label="component_eliminate"
-                   help="In fitting mixture of bi-Gaussian (or Gaussian) model of an EIC, when a component accounts for a proportion of intensities less than this value, the component will be ignored." />
         </section>
     </xml>
 
@@ -141,13 +142,13 @@
     </xml>
 
     <xml name="bandwidth_params">
-        <param name="bandwidth" type="float" value="0.5" label="bandwidth"
-               help="A value between zero and one. Multiplying this value to the length of the signal along
-               the time axis helps determine the bandwidth in the kernel smoother used for peak identification." />
-        <param name="min_bandwidth" type="float" optional="true" label="min_bandwidth"
-               help="The minimum bandwidth to use in the kernel smoother." />
-        <param name="max_bandwidth" type="float" optional="true" label="max_bandwidth"
-               help="The maximum bandwidth to use in the kernel smoother." />
+        <param name="bandwidth" type="float" value="0.5" label="Bandwidth factor" min="0" max="1"
+               help="Parameter used to scale down the overall range of retention times (the bandwidth) assumed in the kernel smoother
+               used for peak identification. The value is between zero and one. The minimal and maximal bandwidth can be limited by explicit values." />
+        <param name="min_bandwidth" type="float" optional="true" label="Minimal bandwidth"
+               help="The lower limit on the resulting bandwidth. If not given, it is estimated based on the overall range of retention times in the profile." />
+        <param name="max_bandwidth" type="float" optional="true" label="Maximal bandwidth"
+               help="The upper on the resulting bandwidth. If not given, it is estimated based on the overall range of retention times in the profile" />
     </xml>
 
     <xml name="citations">
