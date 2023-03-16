@@ -41,7 +41,7 @@
                label="Clustered features" help="List of tables containing clustered features." />
         <param label="Input tolerances values" name="input_tolerances" type="data" format="parquet"
                help="Table containing tolerance values." />
-        <param name="Minimal occurrence" type="integer" min="2" value="2" label="min_occurrence"
+        <param name="min_occurrence" type="integer" min="2" value="2" label="Minimal occurrence in samples"
                help="A feature has to show up in at least this number of profiles to be included in the final result." />
     </inputs>
 

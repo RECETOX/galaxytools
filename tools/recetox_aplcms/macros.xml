@@ -42,15 +42,18 @@
     </xml>
 
     <xml name="remove_noise_params">
-        <param name="min_pres" type="float" value="0.5" label="Minimal presence"
+        <param name="min_pres" type="float" value="0.5" label="Minimal signal presence [fraction of scans]"
+
                help="The minimum proportion of presence in the time period for a series of signals grouped by m/z to be considered a peak." />
         <param name="min_run" type="float" value="12" label="Minimal elution time [unit corresponds to the retention time]"
                help="The minimum length of elution time for a series of signals grouped by m/z to be considered a peak." />
         <param name="mz_tol" type="float" value="10" label="m/z tolerance [ppm]"
                help="The m/z tolerance level for the grouping of data points. This value is expressed as the fraction of the m/z value.
                This value, multiplied by the m/z value, becomes the cutoff level.
-               The recommended value is the machine's nominal accuracy level (e.g. for FTMS, it is 1e-5)." />
-        <param name="baseline_correct" type="float" value="0" label="Baseline correction"
+               The recommended value is the machine's nominal accuracy level (e.g. for FTMS, it is 10)." />
+
+        <param name="baseline_correct" type="float" value="0" label="Baseline correction [unit of signal intensity]"
+
                help="After grouping the observations, the highest intensity in each group is found. If the highest is lower than this value, the entire group will be deleted. The default value is NA, in which case the program uses 75th percentile of the height of the noise groups. If given a value, the value will be used as the threshold." />
         <param name="intensity_weighted" type="boolean" checked="false" truevalue="TRUE" falsevalue="FALSE" label="Weight intensity"
                help="Whether to weight the local density by signal intensities in initial peak detection." />
@@ -86,8 +89,9 @@
             <conditional name="peak_estim">
                 <param name="peak_estim_method" type="select" display="radio" label="Peak estimation method"
                        help="The estimation method for parameters of the bi-Gaussian peak model. Two possible algorithms: moment and EM (expectation maximization).">
-                    <option value="moment" selected="true">Moment</option>
-                    <option value="EM">EM</option>
+                    <option value="moment">Moment</option>
+                    <option value="EM" selected="true">EM</option>
+
                 </param>
                 <when value="moment">
                     <param name="moment_power" type="float" value="1" label="Moment power"
@@ -120,8 +124,9 @@
         <param name="mz_tol_absolute" type="float" label="Minimal absolute m/z tolerance [ppm]" value="10"
                help="During the clustering, an m/z tolerance is computed based on the data and the specified relative tolerance.
                This parameter allows the specification of a minimal value of this tolerance." />
-        <param name="mz_max_diff" type="float" label="Maximal m/z difference" value="0.01"
+        <param name="mz_max_diff" type="float" label="Maximal m/z difference [Da]" value="0.01"
                help="Maximum allowed difference between feature m/z values to belong to the same cluster." />
+
     </xml>
 
     <xml name="recover_weaker_params">
@@ -132,10 +137,11 @@
         <param name="recover_mz_range" type="float" optional="true" label="Range for m/z recovery"
                help="The m/z around the feature m/z to search for observations. The default value is NA, in which
                case 1.5 times the m/z tolerance in the aligned object will be used." />
-        <param name="recover_rt_range" type="float" optional="true" label="Range for rt recovery"
+        <param name="recover_rt_range" type="float" optional="true" label="Range for rt recovery [unit of retention time]"
                help="The retention time around the feature retention time to search for observations.
                The default value is NA, in which case 0.5 times the retention time tolerance in the aligned
                 object will be used." />
+
         <param name="use_observed_range" type="boolean" checked="true" truevalue="TRUE" falsevalue="FALSE"
                label="Use observed range" help="If the value is true, the actual range of the observed locations of
                the feature in all the spectra will be used." />
