@@ -55,13 +55,6 @@
     </xml>
 
     <xml name="generate_feature_table_params">
-        <param name="peak_estim_method" type="select" display="radio" label="peak_estim_method"
-               help="The estimation method for the bi-Gaussian peak model. Two possible values: moment and EM.">
-            <option value="moment" selected="true">Moment</option>
-            <option value="EM">EM</option>
-        </param>
-        <param name="moment_power" type="float" value="1" label="moment_power"
-               help="The power parameter for data transformation when fitting the bi-Gaussian or Gaussian mixture model in an EIC." />
         <param name="component_eliminate" type="float" value="0.01" label="component_eliminate"
                help="In fitting mixture of bi-Gaussian (or Gaussian) model of an EIC, when a component accounts for a proportion of intensities less than this value, the component will be ignored." />
         <param name="BIC_factor" type="float" value="2.0" label="BIC_factor"
@@ -76,13 +69,25 @@
             </section>
 
             <conditional name="sd_cut">
-                <param name="sd_cut_bounds" type="boolean" checked="false" truevalue="TRUE" falsevalue="FALSE" label="Use unbounded deviations."
+                <param name="sd_cut_bounds" type="boolean" checked="false" truevalue="TRUE" falsevalue="FALSE" label="Standard deviations boundaries."
                        help="Do not apply any limitations on the standard deviations." />
                 <when value="FALSE">
                     <param name="sd_cut_min" type="float" value="0.01" label="sd_cut_min"
                            help="The minimum standard deviation - features with a standard deviation lower than this number are eliminated." />
                     <param name="sd_cut_max" type="float" value="500" label="sd_cut_max"
                             help="The maximum standard deviation - features with a standard deviation greater than this number are eliminated." />
+                </when>
+            </conditional>
+
+            <conditional name="peak_estim">
+                <param name="peak_estim_method" type="select" display="radio" label="Peak estimation method"
+                       help="The estimation method for parameters of the bi-Gaussian peak model. Two possible algorithms: moment and EM (expectation maximization).">
+                    <option value="moment" selected="true">Moment</option>
+                    <option value="EM">EM</option>
+                </param>
+                <when value="moment">
+                    <param name="moment_power" type="float" value="1" label="moment_power"
+                           help="The power parameter for data transformation when fitting the bi-Gaussian mixture model in an EIC." />
                 </when>
             </conditional>
         </section>
