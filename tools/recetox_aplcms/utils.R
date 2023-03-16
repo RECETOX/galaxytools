@@ -126,10 +126,10 @@ validate_sample_names <- function(sample_names) {
 
 determine_sigma_ratios <- function(sigma_ratio_lim_min = NA, sigma_ratio_lim_max = NA) {
     if (is.na(sigma_ratio_lim_min)) {
-        sigma_ratio_lim_min = 0
+        sigma_ratio_lim_min <- 0
     }
     if (is.na(sigma_ratio_lim_max)) {
-        sigma_ratio_lim_max = Inf
+        sigma_ratio_lim_max <- Inf
     }
     return(c(sigma_ratio_lim_min, sigma_ratio_lim_max))
 }

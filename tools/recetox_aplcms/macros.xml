@@ -55,10 +55,6 @@
     </xml>
 
     <xml name="generate_feature_table_params">
-        <param name="sd_cut_min" type="float" value="0.01" label="sd_cut_min"
-               help="The minimum standard deviation of a feature to be not eliminated." />
-        <param name="sd_cut_max" type="float" value="500" label="sd_cut_max"
-               help="The maximum standard deviation of a feature to be not eliminated." />
         <param name="peak_estim_method" type="select" display="radio" label="peak_estim_method"
                help="The estimation method for the bi-Gaussian peak model. Two possible values: moment and EM.">
             <option value="moment" selected="true">Moment</option>
@@ -72,14 +68,21 @@
                help="A factor influencing Bayesian information criterion (BIC) in estimation of RT peak shape. If the value is larger than 1, models with more peaks are penalized more." />
 
         <section name="advanced" title="Advanced" expanded="false">
-            <conditional name="shape_model">
-                <param name="shape_model_deviations" type="boolean" checked="false" truevalue="TRUE" falsevalue="FALSE" label="Set bi-Gaussian deviations limits"
-                    help="When selected, it adds an option to set limits on ratios between left-standard deviation and the right-standard deviation of the bi-Gaussian function to fit the data." />
-                <when value="TRUE">
-                     <param name="sigma_ratio_lim_min" type="float" optional="true" label="sigma_ratio_lim_min"
-                            help="The lower limit of the ratio range between the deviations." />
-                     <param name="sigma_ratio_lim_max" type="float" optional="true" label="sigma_ratio_lim_max"
-                            help="The upper limit of the ratio range between the deviations." />
+            <section name="shape_model" title="Shape model deviations" expanded="true">
+                 <param name="sigma_ratio_lim_min" type="float" optional="true" label="sigma_ratio_lim_min"
+                        help="The lower limit of the ratio range between the left-standard deviation and the right-standard deviation of the bi-Gaussian function to fit the data." />
+                 <param name="sigma_ratio_lim_max" type="float" optional="true" label="sigma_ratio_lim_max"
+                        help="The upper limit of the ratio range between the left-standard deviation and the right-standard deviation of the bi-Gaussian function to fit the data." />
+            </section>
+
+            <conditional name="sd_cut">
+                <param name="sd_cut_bounds" type="boolean" checked="false" truevalue="TRUE" falsevalue="FALSE" label="Use unbounded deviations."
+                       help="Do not apply any limitations on the standard deviations." />
+                <when value="FALSE">
+                    <param name="sd_cut_min" type="float" value="0.01" label="sd_cut_min"
+                           help="The minimum standard deviation - features with a standard deviation lower than this number are eliminated." />
+                    <param name="sd_cut_max" type="float" value="500" label="sd_cut_max"
+                            help="The maximum standard deviation - features with a standard deviation greater than this number are eliminated." />
                 </when>
             </conditional>
         </section>
