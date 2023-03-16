@@ -112,7 +112,7 @@
                 <param name="mz_tol_relative" type="float" optional="true" label="Relative m/z tolerance"
                        help="Relative m/z tolerance to use for grouping features.
                        If not provided, it is calculated from the data using kernel density estimation." />
-                <param name="rt_tol_relative" type="float" optional="true" label="Relative rt tolerance"
+                <param name="rt_tol_relative" type="float" optional="true" label="Relative rt tolerance [unit corresponds to the retention time]"
                        help="Relative retention time tolerance to use for grouping features.
                        If not provided, it is calculated from the data using kernel density estimation." />
             </when>
@@ -121,7 +121,7 @@
                        help="Table containing tolerance values." />
             </when>
         </conditional>
-        <param name="mz_tol_absolute" type="float" label="Minimal absolute m/z tolerance [ppm]" value="10"
+        <param name="mz_tol_absolute" type="float" label="Minimal absolute m/z tolerance [Da]" value="1e-05"
                help="During the clustering, an m/z tolerance is computed based on the data and the specified relative tolerance.
                This parameter allows the specification of a minimal value of this tolerance." />
         <param name="mz_max_diff" type="float" label="Maximal m/z difference [Da]" value="0.01"
@@ -133,8 +133,9 @@
         <param name="mz_tol" type="float" value="10" label="m/z tolerance [ppm]"
                help="The m/z tolerance level for the grouping of data points. This value is expressed as the fraction of the m/z value.
                This value, multiplied by the m/z value, becomes the cutoff level.
-               The recommended value is the machine's nominal accuracy level (e.g. for FTMS, it is 1e-5)." />
+               The recommended value is the machine's nominal accuracy level (e.g. for FTMS, it is 1e-05)." />
         <param name="recover_mz_range" type="float" optional="true" label="Range for m/z recovery"
+<<<<<<< Updated upstream
                help="The m/z around the feature m/z to search for observations. The default value is NA, in which
                case 1.5 times the m/z tolerance in the aligned object will be used." />
         <param name="recover_rt_range" type="float" optional="true" label="Range for rt recovery [unit of retention time]"
@@ -142,6 +143,13 @@
                The default value is NA, in which case 0.5 times the retention time tolerance in the aligned
                 object will be used." />
 
+=======
+               help="The m/z around the feature m/z to search for observations. If not given, 1.5 times the m/z tolerance
+               in the aligned object will be used." />
+        <param name="recover_rt_range" type="float" optional="true" label="Range for rt recovery"
+               help="The retention time around the feature retention time to search for observations.
+               If not given, 0.5 times the retention time tolerance in the aligned object will be used." />
+>>>>>>> Stashed changes
         <param name="use_observed_range" type="boolean" checked="true" truevalue="TRUE" falsevalue="FALSE"
                label="Use observed range" help="If the value is true, the actual range of the observed locations of
                the feature in all the spectra will be used." />
