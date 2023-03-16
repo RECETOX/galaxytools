@@ -77,8 +77,6 @@
             @COMPUTE_CLUSTERS_HELP@
 
             @GENERAL_HELP@
-
-            @EXAMPLE_OUTPUT@
         ]]>
     </help>
 
