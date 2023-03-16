@@ -125,11 +125,10 @@
     </xml>
 
     <xml name="recover_weaker_params">
-        <param name="mz_tol" type="float" value="1e-05" label="m/z tolerance"
-               help="The m/z tolerance level for the grouping of data points. This value is expressed as the
-               fraction of the m/z value. This value, multiplied by the m/z value, becomes the cutoff level.
-               The recommended value is the machine's nominal accuracy level. Divide the ppm value by 1e6.
-               For FTMS, 1e-5 is recommended." />
+        <param name="mz_tol" type="float" value="10" label="m/z tolerance [ppm]"
+               help="The m/z tolerance level for the grouping of data points. This value is expressed as the fraction of the m/z value.
+               This value, multiplied by the m/z value, becomes the cutoff level.
+               The recommended value is the machine's nominal accuracy level (e.g. for FTMS, it is 1e-5)." />
         <param name="recover_mz_range" type="float" optional="true" label="Range for m/z recovery"
                help="The m/z around the feature m/z to search for observations. The default value is NA, in which
                case 1.5 times the m/z tolerance in the aligned object will be used." />

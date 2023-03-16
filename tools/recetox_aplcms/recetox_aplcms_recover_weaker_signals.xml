@@ -45,7 +45,7 @@
                 metadata_table = metadata,
                 rt_table = rt_table,
                 intensity_table = intensity_table,
-                mz_tol = $mz_tol,
+                mz_tol = $mz_tol/1e6,
                 mz_tol_relative = get_mz_tol(tolerances),
                 rt_tol_relative = get_rt_tol(tolerances),
                 #if $recover_mz_range:
