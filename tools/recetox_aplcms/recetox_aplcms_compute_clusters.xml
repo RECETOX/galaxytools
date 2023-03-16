@@ -44,7 +44,7 @@
                   #end if
                   #end if
                   mz_max_diff = 10 * $mz_max_diff,
-                  mz_tol_absolute = $mz_tol_absolute,
+                  mz_tol_absolute = $mz_tol_absolute/1e6,
                   sample_names = sample_names,
                   do.plot = FALSE
               )
