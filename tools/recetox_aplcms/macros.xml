@@ -135,21 +135,11 @@
                This value, multiplied by the m/z value, becomes the cutoff level.
                The recommended value is the machine's nominal accuracy level (e.g. for FTMS, it is 1e-05)." />
         <param name="recover_mz_range" type="float" optional="true" label="Range for m/z recovery"
-<<<<<<< Updated upstream
-               help="The m/z around the feature m/z to search for observations. The default value is NA, in which
-               case 1.5 times the m/z tolerance in the aligned object will be used." />
-        <param name="recover_rt_range" type="float" optional="true" label="Range for rt recovery [unit of retention time]"
-               help="The retention time around the feature retention time to search for observations.
-               The default value is NA, in which case 0.5 times the retention time tolerance in the aligned
-                object will be used." />
-
-=======
                help="The m/z around the feature m/z to search for observations. If not given, 1.5 times the m/z tolerance
                in the aligned object will be used." />
-        <param name="recover_rt_range" type="float" optional="true" label="Range for rt recovery"
+        <param name="recover_rt_range" type="float" optional="true" label="Range for rt recovery [unit of retention time]"
                help="The retention time around the feature retention time to search for observations.
                If not given, 0.5 times the retention time tolerance in the aligned object will be used." />
->>>>>>> Stashed changes
         <param name="use_observed_range" type="boolean" checked="true" truevalue="TRUE" falsevalue="FALSE"
                label="Use observed range" help="If the value is true, the actual range of the observed locations of
                the feature in all the spectra will be used." />
