@@ -40,7 +40,7 @@
                  sigma_ratio_lim = determine_sigma_ratios($advanced.shape_model.sigma_ratio_lim_min, $advanced.shape_model.sigma_ratio_lim_max),
                  shape_model = "bi-Gaussian",
                  peak_estim_method = "$advanced.peak_estim.peak_estim_method",
-                 component_eliminate = $component_eliminate,
+                 component_eliminate = $advanced.component_eliminate,
                  #if $advanced.peak_estim.peak_estim_method == "moment":
                  moment_power = $advanced.peak_estim.moment_power,
                  #else
