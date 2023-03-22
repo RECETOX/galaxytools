@@ -43,7 +43,6 @@
 
     <xml name="remove_noise_params">
         <param name="min_pres" type="float" value="0.5" label="Minimal signal presence [fraction of scans]"
-
                help="The minimum proportion of presence in the time period for a series of signals grouped by m/z to be considered a peak." />
         <param name="min_run" type="float" value="12" label="Minimal elution time [unit corresponds to the retention time]"
                help="The minimum length of elution time for a series of signals grouped by m/z to be considered a peak." />
@@ -51,9 +50,7 @@
                help="The m/z tolerance level for the grouping of data points. This value is expressed as the fraction of the m/z value.
                This value, multiplied by the m/z value, becomes the cutoff level.
                The recommended value is the machine's nominal accuracy level (e.g. for FTMS, it is 10)." />
-
         <param name="baseline_correct" type="float" value="0" label="Baseline correction [unit of signal intensity]"
-
                help="After grouping the observations, the highest intensity in each group is found. If the highest is lower than this value, the entire group will be deleted. The default value is NA, in which case the program uses 75th percentile of the height of the noise groups. If given a value, the value will be used as the threshold." />
         <param name="intensity_weighted" type="boolean" checked="false" truevalue="TRUE" falsevalue="FALSE" label="Weight intensity"
                help="Whether to weight the local density by signal intensities in initial peak detection." />
@@ -63,18 +60,15 @@
         <param name="BIC_factor" type="float" value="2.0" label="BIC factor"
                help="A factor influencing Bayesian information criterion (BIC) in estimation of RT peak shape.
                If the value is larger than 1, models with more peaks are penalized more." />
-
         <section name="advanced" title="Advanced" expanded="false">
             <param name="component_eliminate" type="float" value="0.01" label="Component eliminate"
                    help="In fitting mixture of bi-Gaussian model of an EIC, when a component accounts for a proportion of intensities less than this value, the component will be ignored." />
-
             <section name="shape_model" title="Shape model deviations" expanded="true">
                  <param name="sigma_ratio_lim_min" type="float" optional="true" label="Minimal sigma ratio"
                         help="The lower limit of the ratio range between the left-standard deviation and the right-standard deviation of the bi-Gaussian function to fit the data." />
                  <param name="sigma_ratio_lim_max" type="float" optional="true" label="Maximal sigma ratio"
                         help="The upper limit of the ratio range between the left-standard deviation and the right-standard deviation of the bi-Gaussian function to fit the data." />
             </section>
-
             <conditional name="sd_cut">
                 <param name="sd_cut_bounds" type="boolean" checked="false" truevalue="TRUE" falsevalue="FALSE" label="Standard deviations boundaries."
                        help="Do not apply any limitations on the standard deviations." />
@@ -85,13 +79,11 @@
                             help="The maximum standard deviation - features with a standard deviation greater than this number are eliminated." />
                 </when>
             </conditional>
-
             <conditional name="peak_estim">
                 <param name="peak_estim_method" type="select" display="radio" label="Peak estimation method"
                        help="The estimation method for parameters of the bi-Gaussian peak model. Two possible algorithms: moment and EM (expectation maximization).">
                     <option value="moment">Moment</option>
                     <option value="EM" selected="true">EM</option>
-
                 </param>
                 <when value="moment">
                     <param name="moment_power" type="float" value="1" label="Moment power"
