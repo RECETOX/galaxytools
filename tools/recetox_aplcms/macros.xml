@@ -156,7 +156,8 @@
         <param name="min_bandwidth" type="float" optional="true" label="Minimal bandwidth [unit corresponds to the retention time]"
                help="The lower limit on the resulting bandwidth. If not given, it is estimated based on the overall range of retention times in the profile." />
         <param name="max_bandwidth" type="float" optional="true" label="Maximal bandwidth [unit corresponds to the retention time]"
-               help="The upper on the resulting bandwidth. If not given, it is estimated based on the overall range of retention times in the profile" />
+               help="The upper limit on the resulting bandwidth. If not given, it is estimated based on the overall range of retention times in the profile" />
+
     </xml>
 
     <xml name="citations">
