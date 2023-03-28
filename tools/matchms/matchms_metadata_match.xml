@@ -13,11 +13,11 @@
     </requirements>
 
     <environment_variables>
-        <environment_variable name="MPLCONFIGDIR">/tmp</environment_variable>
+        <environment_variable name="MPLCONFIGDIR">\$_GALAXY_JOB_TMP_DIR</environment_variable>
     </environment_variables>
 
     <command detect_errors="exit_code"><![CDATA[
-        python3 ${python_wrapper}
+        python3 '${python_wrapper}'
     ]]> </command>
 
 <configfiles>
@@ -70,11 +70,11 @@ new_scores.to_json("$scores_out")
                 </param>
             </when>
         </conditional>
-    <param label="join type" name="join_type" type="select" display="radio"
-        help="join type to use for appending scores">
-        <option value="left" selected="true">left</option>
-        <option value="inner">inner</option>
-    </param>
+        <param label="join type" name="join_type" type="select" display="radio" hidden="true"
+            help="join type to use for appending scores">
+            <option value="left" selected="true">left</option>
+            <option value="inner">inner</option>
+        </param>
     </inputs>
 
     <outputs>
