@@ -50,8 +50,8 @@
                help="The m/z tolerance level for the grouping of data points. This value is expressed as the fraction of the m/z value.
                This value, multiplied by the m/z value, becomes the cutoff level.
                The recommended value is the machine's nominal accuracy level (e.g. for FTMS, it is 10)." />
-        <param name="baseline_correct" type="float" value="0" label="Baseline correction [unit of signal intensity]"
-               help="After grouping the observations, the highest intensity in each group is found. If the highest is lower than this value, the entire group will be deleted. The default value is NA, in which case the program uses 75th percentile of the height of the noise groups. If given a value, the value will be used as the threshold." />
+        <param name="baseline_correct" type="float" optional="true" label="Baseline correction [unit of signal intensity]"
+               help="After grouping the observations, the highest intensity in each group is found. If the highest is lower than this value, the entire group will be deleted. If not given, the tool uses 75th percentile of the height of the noise groups. If given a value, the value will be used as the threshold." />
         <param name="intensity_weighted" type="boolean" checked="false" truevalue="TRUE" falsevalue="FALSE" label="Weight intensity"
                help="Whether to weight the local density by signal intensities in initial peak detection." />
     </xml>
