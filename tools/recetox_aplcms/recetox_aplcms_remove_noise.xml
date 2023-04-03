@@ -20,11 +20,7 @@
                 min_pres = $min_pres,
                 min_run = $min_run,
                 mz_tol = $mz_tol/1e6,
-                #if $baseline_correct:
                 baseline_correct = $baseline_correct,
-                #else:
-                baseline_correct = NA,
-                #end if
                 baseline_correct_noise_percentile = 0.05,
                 intensity_weighted = $intensity_weighted,
                 do.plot = FALSE,
