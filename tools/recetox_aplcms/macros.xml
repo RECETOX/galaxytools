@@ -134,8 +134,7 @@
                help="The retention time around the feature retention time to search for observations.
                If not given, 0.5 times the retention time tolerance in the aligned object will be used." />
         <param name="use_observed_range" type="boolean" checked="true" truevalue="TRUE" falsevalue="FALSE"
-               label="Use observed range" help="If the value is true, the actual range of the observed locations of
-               the feature in all the spectra will be used." />
+               label="Use observed rt range" help="Use the minimal and maximal rt values per feature." />
         <param name="recover_min_count" type="integer" value="3" label="Minimal count to recover"
                help="The minimum number of raw data points to be considered as a true feature." />
         <param name="intensity_weighted" type="boolean" checked="false" truevalue="TRUE" falsevalue="FALSE"
