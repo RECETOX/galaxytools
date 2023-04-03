@@ -49,7 +49,7 @@
                 mz_tol_relative = get_mz_tol(tolerances),
                 rt_tol_relative = get_rt_tol(tolerances),
                 #if $recover_mz_range:
-                recover_mz_range = $recover_mz_range,
+                recover_mz_range = $recover_mz_range/1e6,
                 #else:
                 recover_mz_range = NA,
                 #end if
