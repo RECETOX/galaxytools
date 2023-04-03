@@ -32,16 +32,20 @@
                  #else:
                  max_bandwidth = NA,
                  #end if
-                 sd_cut = c($sd_cut_min, $sd_cut_max),
-                 #if $shape.shape_model == "bi-Gaussian":
-                 sigma_ratio_lim = c($shape.sigma_ratio_lim_min, $shape.sigma_ratio_lim_max),
-                 #else:
-                 sigma_ratio_lim = NA,
+                 #if $advanced.sd_cut.sd_cut_bounds == "FALSE":
+                 sd_cut = c($advanced.sd_cut.sd_cut_min, $advanced.sd_cut.sd_cut_max),
+                 #else
+                 sd_cut = c(0, Inf),
                  #end if
-                 shape_model = "$shape.shape_model",
-                 peak_estim_method = "$peak_estim_method",
-                 component_eliminate = $component_eliminate,
-                 moment_power = $moment_power,
+                 sigma_ratio_lim = determine_sigma_ratios($advanced.shape_model.sigma_ratio_lim_min, $advanced.shape_model.sigma_ratio_lim_max),
+                 shape_model = "bi-Gaussian",
+                 peak_estim_method = "$advanced.peak_estim.peak_estim_method",
+                 component_eliminate = $advanced.component_eliminate,
+                 #if $advanced.peak_estim.peak_estim_method == "moment":
+                 moment_power = $advanced.peak_estim.moment_power,
+                 #else
+                 moment_power = 1,
+                 #end if
                  BIC_factor = $BIC_factor,
                  do.plot = FALSE
              )

@@ -1,5 +1,5 @@
 <macros>
-    <token name="@TOOL_VERSION@">0.10.1</token>
+    <token name="@TOOL_VERSION@">0.10.3</token>
     <xml name="requirements">
         <requirements>
             <requirement type="package" version="@TOOL_VERSION@">r-recetox-aplcms</requirement>
@@ -42,47 +42,55 @@
     </xml>
 
     <xml name="remove_noise_params">
-        <param name="min_pres" type="float" value="0.5" label="min_pres"
+        <param name="min_pres" type="float" value="0.5" label="Minimal signal presence [fraction of scans]"
                help="The minimum proportion of presence in the time period for a series of signals grouped by m/z to be considered a peak." />
-        <param name="min_run" type="float" value="12" label="min_run"
+        <param name="min_run" type="float" value="12" label="Minimal elution time [unit corresponds to the retention time]"
                help="The minimum length of elution time for a series of signals grouped by m/z to be considered a peak." />
-        <param name="mz_tol" type="float" value="1e-05" label="mz_tol"
-               help="The m/z tolerance level for the grouping of data points. This value is expressed as the fraction of the m/z value. This value, multiplied by the m/z value, becomes the cutoff level. The recommended value is the machine's nominal accuracy level. Divide the ppm value by 1e6. For FTMS, 1e-5 is recommended." />
-        <param name="baseline_correct" type="float" value="0" label="baseline_correct"
-               help="After grouping the observations, the highest intensity in each group is found. If the highest is lower than this value, the entire group will be deleted. The default value is NA, in which case the program uses a percentile of the height of the noise groups. If given a value, the value will be used as the threshold, and baseline.correct.noise.percentile will be ignored." />
-        <param name="intensity_weighted" type="boolean" checked="false" truevalue="TRUE" falsevalue="FALSE" label="intensity_weighted"
+        <param name="mz_tol" type="float" value="10" label="m/z tolerance [ppm]"
+               help="The m/z tolerance level for the grouping of data points. This value is expressed as the fraction of the m/z value.
+               This value, multiplied by the m/z value, becomes the cutoff level.
+               The recommended value is the machine's nominal accuracy level (e.g. for FTMS, it is 10)." />
+        <param name="baseline_correct" type="float" value="0" label="Baseline correction [unit of signal intensity]"
+               help="After grouping the observations, the highest intensity in each group is found. If the highest is lower than this value, the entire group will be deleted." />
+        <param name="intensity_weighted" type="boolean" checked="false" truevalue="TRUE" falsevalue="FALSE" label="Weight intensity"
                help="Whether to weight the local density by signal intensities in initial peak detection." />
     </xml>
 
     <xml name="generate_feature_table_params">
-        <param name="sd_cut_min" type="float" value="0.01" label="sd_cut_min"
-               help="The minimum standard deviation of a feature to be not eliminated." />
-        <param name="sd_cut_max" type="float" value="500" label="sd_cut_max"
-               help="The maximum standard deviation of a feature to be not eliminated." />
-        <conditional name="shape">
-            <param name="shape_model" type="select" display="radio" label="shape_model"
-                   help="The mathematical model for the shape of a peak. There are two choices - bi-Gaussian and Gaussian. When the peaks are asymmetric, the bi-Gaussian is better.">
-                <option value="Gaussian">Gaussian</option>
-                <option value="bi-Gaussian" selected="true">bi-Gaussian</option>
-            </param>
-            <when value="bi-Gaussian">
-                <param name="sigma_ratio_lim_min" type="float" value="0.01" label="sigma_ratio_lim_min"
-                       help="The lower limit of the believed ratio range between the left-standard deviation and the right-standard deviation of the bi-Gaussian function used to fit the data." />
-                <param name="sigma_ratio_lim_max" type="float" value="100" label="sigma_ratio_lim_max"
-                       help="The upper limit of the believed ratio range between the left-standard deviation and the right-standard deviation of the bi-Gaussian function used to fit the data." />
-            </when>
-        </conditional>
-        <param name="peak_estim_method" type="select" display="radio" label="peak_estim_method"
-               help="The estimation method for the bi-Gaussian peak model. Two possible values: moment and EM.">
-            <option value="moment" selected="true">Moment</option>
-            <option value="EM">EM</option>
-        </param>
-        <param name="moment_power" type="float" value="1" label="moment_power"
-               help="The power parameter for data transformation when fitting the bi-Gaussian or Gaussian mixture model in an EIC." />
-        <param name="component_eliminate" type="float" value="0.01" label="component_eliminate"
-               help="In fitting mixture of bi-Gaussian (or Gaussian) model of an EIC, when a component accounts for a proportion of intensities less than this value, the component will be ignored." />
-        <param name="BIC_factor" type="float" value="2.0" label="BIC_factor"
-               help="A factor influencing Bayesian information criterion (BIC) in estimation of RT peak shape. If the value is larger than 1, models with more peaks are penalized more." />
+        <param name="BIC_factor" type="float" value="2.0" label="BIC factor"
+               help="A factor influencing Bayesian information criterion (BIC) in estimation of RT peak shape.
+               If the value is larger than 1, models with more peaks are penalized more." />
+        <section name="advanced" title="Advanced" expanded="false">
+            <param name="component_eliminate" type="float" value="0.01" label="Component eliminate"
+                   help="In fitting mixture of bi-Gaussian model of an EIC, when a component accounts for a proportion of intensities less than this value, the component will be ignored." />
+            <section name="shape_model" title="Shape model deviations" expanded="true">
+                 <param name="sigma_ratio_lim_min" type="float" optional="true" label="Minimal sigma ratio"
+                        help="The lower limit of the ratio range between the left-standard deviation and the right-standard deviation of the bi-Gaussian function to fit the data." />
+                 <param name="sigma_ratio_lim_max" type="float" optional="true" label="Maximal sigma ratio"
+                        help="The upper limit of the ratio range between the left-standard deviation and the right-standard deviation of the bi-Gaussian function to fit the data." />
+            </section>
+            <conditional name="sd_cut">
+                <param name="sd_cut_bounds" type="boolean" checked="false" truevalue="TRUE" falsevalue="FALSE" label="Standard deviations boundaries."
+                       help="Do not apply any limitations on the standard deviations." />
+                <when value="FALSE">
+                    <param name="sd_cut_min" type="float" value="0.01" label="Minimal standard deviation"
+                           help="The minimum standard deviation - features with a standard deviation lower than this number are eliminated." />
+                    <param name="sd_cut_max" type="float" value="500" label="Maximal standard deviation"
+                            help="The maximum standard deviation - features with a standard deviation greater than this number are eliminated." />
+                </when>
+            </conditional>
+            <conditional name="peak_estim">
+                <param name="peak_estim_method" type="select" display="radio" label="Peak estimation method"
+                       help="The estimation method for parameters of the bi-Gaussian peak model. Two possible algorithms: moment and EM (expectation maximization).">
+                    <option value="moment">Moment</option>
+                    <option value="EM" selected="true">EM</option>
+                </param>
+                <when value="moment">
+                    <param name="moment_power" type="float" value="1" label="Moment power"
+                           help="The power parameter for data transformation when fitting the bi-Gaussian mixture model in an EIC." />
+                </when>
+            </conditional>
+        </section>
     </xml>
 
     <xml name="compute_clusters_params">
@@ -93,52 +101,55 @@
                 <option value="file">file</option>
             </param>
             <when value="direct">
-                <param name="mz_tol_relative" type="float" optional="true" label="mz_tol_relative"
-                       help="Relative m/z tolerance to use for grouping features." />
-                <param name="rt_tol_relative" type="float" optional="true" label="rt_tol_relative"
-                       help="Relative retention time tolerance to use for grouping features." />
+                <param name="mz_tol_relative" type="float" optional="true" label="Relative m/z tolerance"
+                       help="Relative m/z tolerance to use for grouping features.
+                       If not provided, it is calculated from the data using kernel density estimation." />
+                <param name="rt_tol_relative" type="float" optional="true" label="Relative rt tolerance [unit corresponds to the retention time]"
+                       help="Relative retention time tolerance to use for grouping features.
+                       If not provided, it is calculated from the data using kernel density estimation." />
             </when>
             <when value="file">
                 <param label="Input tolerances values" name="input_tolerances" type="data" format="parquet"
                        help="Table containing tolerance values." />
             </when>
         </conditional>
-        <param name="mz_tol_absolute" type="float" label="mz_tol_absolute" value="1e-05"
-               help="Absolute m/z tolerance to use for grouping features." />
-        <param name="mz_max_diff" type="float" label="mz_max_diff" value="0.01"
-               help="Maximum difference between feature m/z values to belong to the same cluster." />
+        <param name="mz_tol_absolute" type="float" label="Minimal absolute m/z tolerance [Da]" value="1e-05"
+               help="During the clustering, an m/z tolerance is computed based on the data and the specified relative tolerance.
+               This parameter allows the specification of a minimal value of this tolerance." />
+        <param name="mz_max_diff" type="float" label="Maximal m/z difference [Da]" value="0.01"
+               help="Maximum allowed difference between feature m/z values to belong to the same cluster." />
+
     </xml>
 
     <xml name="recover_weaker_params">
-        <param name="mz_tol" type="float" value="1e-05" label="mz_tol"
-               help="The m/z tolerance level for the grouping of data points. This value is expressed as the
-               fraction of the m/z value. This value, multiplied by the m/z value, becomes the cutoff level.
-               The recommended value is the machine's nominal accuracy level. Divide the ppm value by 1e6.
-               For FTMS, 1e-5 is recommended." />
-        <param name="recover_mz_range" type="float" optional="true" label="recover_mz_range"
-               help="The m/z around the feature m/z to search for observations. The default value is NA, in which
-               case 1.5 times the m/z tolerance in the aligned object will be used." />
-        <param name="recover_rt_range" type="float" optional="true" label="recover_rt_range"
+        <param name="mz_tol" type="float" value="10" label="m/z tolerance [ppm]"
+               help="The m/z tolerance level for the grouping of data points. This value is expressed as the fraction of the m/z value.
+               This value, multiplied by the m/z value, becomes the cutoff level.
+               The recommended value is the machine's nominal accuracy level (e.g. for FTMS, it is 10)." />
+        <param name="recover_mz_range" type="float" optional="true" label="Range for m/z recovery [ppm]"
+
+               help="The m/z around the feature m/z to search for observations. If not given, 1.5 times the m/z tolerance
+               in the aligned object will be used." />
+        <param name="recover_rt_range" type="float" optional="true" label="Range for rt recovery [unit of retention time]"
                help="The retention time around the feature retention time to search for observations.
-               The default value is NA, in which case 0.5 times the retention time tolerance in the aligned
-                object will be used." />
+               If not given, 0.5 times the retention time tolerance in the aligned object will be used." />
         <param name="use_observed_range" type="boolean" checked="true" truevalue="TRUE" falsevalue="FALSE"
-               label="use_observed_range" help="If the value is true, the actual range of the observed locations of
-               the feature in all the spectra will be used." />
-        <param name="recover_min_count" type="integer" value="3" label="recover_min_count"
+               label="Use observed rt range" help="Use the minimal and maximal rt values per feature." />
+        <param name="recover_min_count" type="integer" value="3" label="Minimal count to recover"
                help="The minimum number of raw data points to be considered as a true feature." />
         <param name="intensity_weighted" type="boolean" checked="false" truevalue="TRUE" falsevalue="FALSE"
-               label="intensity_weighted" help="Whether to weight the local density by signal intensities in initial peak detection." />
+               label="Weight intensity" help="Whether to weight the local density by signal intensities in initial peak detection." />
     </xml>
 
     <xml name="bandwidth_params">
-        <param name="bandwidth" type="float" value="0.5" label="bandwidth"
-               help="A value between zero and one. Multiplying this value to the length of the signal along
-               the time axis helps determine the bandwidth in the kernel smoother used for peak identification." />
-        <param name="min_bandwidth" type="float" optional="true" label="min_bandwidth"
-               help="The minimum bandwidth to use in the kernel smoother." />
-        <param name="max_bandwidth" type="float" optional="true" label="max_bandwidth"
-               help="The maximum bandwidth to use in the kernel smoother." />
+        <param name="bandwidth" type="float" value="0.5" label="Bandwidth factor" min="0" max="1"
+               help="Parameter used to scale down the overall range of retention times (the bandwidth) assumed in the kernel smoother
+               used for peak identification. The value is between zero and one. The minimal and maximal bandwidth can be limited by explicit values." />
+        <param name="min_bandwidth" type="float" optional="true" label="Minimal bandwidth [unit corresponds to the retention time]"
+               help="The lower limit on the resulting bandwidth. If not given, it is estimated based on the overall range of retention times in the profile." />
+        <param name="max_bandwidth" type="float" optional="true" label="Maximal bandwidth [unit corresponds to the retention time]"
+               help="The upper limit on the resulting bandwidth. If not given, it is estimated based on the overall range of retention times in the profile" />
+
     </xml>
 
     <xml name="citations">
