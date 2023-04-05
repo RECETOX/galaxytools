@@ -1,0 +1,64 @@
+<tool id="matchms_convert" name="matchms convert" version="@TOOL_VERSION@+galaxy0" python_template_version="3.7">
+    <description>convert mass spectral library</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="creator"/>
+    <requirements>
+        <requirement type="package" version="@TOOL_VERSION@">matchms</requirement>
+    </requirements>
+
+    <command detect_errors="aggressive"><![CDATA[
+        python ${matchms_python_cli}
+    ]]></command>
+
+<configfiles>
+<configfile name="matchms_python_cli">
+from matchms.importing import load_from_msp, load_from_mgf
+from matchms.exporting import save_as_msp, save_as_mgf
+spectra = list(load_from_${spectral_library.ext}("${spectral_library}", ${harmonize_metadata}))
+save_as_${output_format}(spectra, "${converted_library}")
+</configfile>
+</configfiles>
+
+    <inputs>
+        <param label="Spectra file" name="spectral_library" type="data" format="msp,mgf,json" help="Mass spectra file to be filtered." />
+
+        <param label="Spectral library format" name="output_format" type="select"
+            help="Output format of the spectral library.">
+            <option value="msp">msp</option>
+            <option value="mgf">mgf</option>
+        </param>
+
+        <param name="harmonize_metadata" label="Harmonize metadata" type="boolean" truevalue="True" falsevalue="False" checked="true"
+                   help="Harmonize metadata present in the library."/>
+    </inputs>
+
+    <outputs>
+        <data label="${tool.name} from ${spectral_library.ext} to ${output_format} on ${on_string}" name="converted_library">
+            <change_format>
+                <when input="output_format" value="msp" format="msp" />
+                <when input="output_format" value="mgf" format="mgf" />
+                <when input="output_format" value="json" format="json" />
+            </change_format>
+        </data>
+    </outputs>
+
+    <tests>
+        <test>
+            <param name="spectral_library" value="similarity/RECETOX_Exposome_pesticides_HR_MS_20220323.msp" ftype="msp"/>
+            <param name="output_format" value="mgf"/>
+            <param name="harmonize_metadata" value="True"/>
+            <output name="output" file="convert/RECETOX_Exposome_pesticides_HR_MS_20220323.mgf" ftype="mgf"/>
+        </test>
+    </tests>
+
+
+    <help><![CDATA[
+    Documentation
+        For more documentation on the tool see https://github.com/matchms/matchms/blob/master/README.rst and https://matchms.readthedocs.io/en/latest/.
+    ]]></help>
+
+
+    <expand macro="citations"/>
+</tool>
