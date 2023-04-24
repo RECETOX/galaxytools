@@ -8,15 +8,15 @@
         <requirement type="package" version="@TOOL_VERSION@">matchms</requirement>
     </requirements>
 
-    <command detect_errors="aggressive"><![CDATA[
+    <command detect_errors='aggressive'><![CDATA[
         python ${matchms_python_cli}
     ]]></command>
 
 <configfiles>
 <configfile name="matchms_python_cli">
-from matchms.importing import load_from_msp, load_from_mgf
-from matchms.exporting import save_as_msp, save_as_mgf
-spectra = list(load_from_${spectral_library.ext}("${spectral_library}", ${harmonize_metadata}))
+from matchms.importing import load_from_msp, load_from_mgf, load_from_json
+from matchms.exporting import save_as_msp, save_as_mgf, save_as_json
+spectra = list(load_from_${spectral_library.ext}("${spectral_library}", False))
 save_as_${output_format}(spectra, "${converted_library}")
 </configfile>
 </configfiles>
@@ -28,6 +28,7 @@ save_as_${output_format}(spectra, "${converted_library}")
             help="Output format of the spectral library.">
             <option value="msp">msp</option>
             <option value="mgf">mgf</option>
+            <option value="json">json</option>
         </param>
 
         <param name="harmonize_metadata" label="Harmonize metadata" type="boolean" truevalue="True" falsevalue="False" checked="true"
@@ -35,9 +36,8 @@ save_as_${output_format}(spectra, "${converted_library}")
     </inputs>
 
     <outputs>
-        <data label="${tool.name} from ${spectral_library.ext} to ${output_format} on ${on_string}" name="converted_library">
+        <data label="${tool.name} from ${spectral_library.ext} to ${output_format} on ${on_string}" name="converted_library" format="msp">
             <change_format>
-                <when input="output_format" value="msp" format="msp" />
                 <when input="output_format" value="mgf" format="mgf" />
                 <when input="output_format" value="json" format="json" />
             </change_format>
