@@ -17,7 +17,11 @@
 from matchms.importing import load_from_msp, load_from_mgf, load_from_json
 from matchms.exporting import save_as_msp, save_as_mgf, save_as_json
 spectra = list(load_from_${spectral_library.ext}("${spectral_library}", False))
+#if $output_format == "msp"
+save_as_msp(spectra, "${converted_library}", write_peak_comments = False)
+#else
 save_as_${output_format}(spectra, "${converted_library}")
+#end if
 </configfile>
 </configfiles>
 
@@ -30,15 +34,13 @@ save_as_${output_format}(spectra, "${converted_library}")
             <option value="mgf">mgf</option>
             <option value="json">json</option>
         </param>
-
-        <param name="harmonize_metadata" label="Harmonize metadata" type="boolean" truevalue="True" falsevalue="False" checked="true"
-                   help="Harmonize metadata present in the library."/>
     </inputs>
 
     <outputs>
-        <data label="${tool.name} from ${spectral_library.ext} to ${output_format} on ${on_string}" name="converted_library" format="msp">
+        <data label="${tool.name} from ${spectral_library.ext} to ${output_format} on ${on_string}" name="converted_library">
             <change_format>
                 <when input="output_format" value="mgf" format="mgf" />
+                <when input="output_format" value="msp" format="msp" />
                 <when input="output_format" value="json" format="json" />
             </change_format>
         </data>
@@ -48,8 +50,17 @@ save_as_${output_format}(spectra, "${converted_library}")
         <test>
             <param name="spectral_library" value="similarity/RECETOX_Exposome_pesticides_HR_MS_20220323.msp" ftype="msp"/>
             <param name="output_format" value="mgf"/>
-            <param name="harmonize_metadata" value="True"/>
-            <output name="output" file="convert/RECETOX_Exposome_pesticides_HR_MS_20220323.mgf" ftype="mgf"/>
+            <output name="output" file="convert/mgf_out.mgf" ftype="mgf"/>
+        </test>
+        <test>
+            <param name="spectral_library" value="similarity/RECETOX_Exposome_pesticides_HR_MS_20220323.msp" ftype="msp"/>
+            <param name="output_format" value="json"/>
+            <output name="output" file="convert/json_out.json" ftype="json"/>
+        </test>
+        <test>
+            <param name="spectral_library" value="convert/mgf_out.mgf" ftype="mgf"/>
+            <param name="output_format" value="msp"/>
+            <output name="output" file="convert/msp_out.msp" ftype="msp"/>
         </test>
     </tests>
 
