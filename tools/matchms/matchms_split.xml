@@ -22,18 +22,18 @@
     ]]></command>
     <inputs>
         <param type="data" name="msp_input" format="msp" 
-               help="Use keyword 'compound_name', 'compoundname' or 'name' to identify individual spectra."/>
+               help="Spectral library (.msp) to split into smaller chunks. Requires keyword 'compound_name', 'compoundname' or 'name' to identify individual spectra using the one-per-file method."/>
         <conditional name="method">
-            <param name="split_type" type="select" label="Splitting method" display="radio">
-                <option value="chunk-size" selected="true">Chunks of specified size</option>
-                <option value="num-chunks">Specified number of chunks</option>
-                <option value="one-per-file">One spectrum per file</option>
+            <param name="split_type" type="select" label="Splitting method" display="radio" help="Method on how to split the library.">
+                <option value="chunk-size" selected="true">Split into chunks of specified size</option>
+                <option value="num-chunks">Split into specified number of chunks</option>
+                <option value="one-per-file">Split to one spectrum per file</option>
             </param>
             <when value="chunk-size">
-                <param name="chunk_size" type="integer" value="1000" min="2" />
+                <param name="chunk_size" type="integer" value="1000" min="2" help="Number of spectra per output chunks."/>
             </when>
             <when value="num-chunks">
-                <param name="num_chunks" type="integer" value="5" min="2" />
+                <param name="num_chunks" type="integer" value="5" min="2" help="Number of chunks into which to split the library."/>
             </when>
             <when value="one-per-file" />
         </conditional>
