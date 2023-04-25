@@ -26,10 +26,10 @@ save_as_${output_format}(spectra, "${converted_library}")
 </configfiles>
 
     <inputs>
-        <param label="Spectra file" name="spectral_library" type="data" format="msp,mgf,json" help="Mass spectra file to be filtered." />
+        <param label="Spectra file" name="spectral_library" type="data" format="msp,mgf,json" help="Mass spectral library file to convert." />
 
         <param label="Spectral library format" name="output_format" type="select"
-            help="Output format of the spectral library.">
+            help="Output format to convert the spectral library into.">
             <option value="msp" selected="true">msp</option>
             <option value="mgf">mgf</option>
             <option value="json">json</option>
@@ -66,7 +66,13 @@ save_as_${output_format}(spectra, "${converted_library}")
 
     <help><![CDATA[
     Documentation
-        For more documentation on the tool see https://github.com/matchms/matchms/blob/master/README.rst and https://matchms.readthedocs.io/en/latest/.
+        Mass spectral libraries are often stored in various formats, such as `msp`, `mgf` or `json`.
+        This tool can be used to convert from one library format to another.
+
+        Please note that peak comments in `RIKEN` style `msp` files are lost upon conversion.
+        Additionally, some of the metadata keywords might change during the conversion process, as they are harmonized internally with matchms.
+
+        For more documentation on the matchms library see https://github.com/matchms/matchms/blob/master/README.rst and https://matchms.readthedocs.io/en/latest/.
     ]]></help>
 
 
