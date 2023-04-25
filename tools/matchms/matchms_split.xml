@@ -1,0 +1,89 @@
+<tool id="matchms_split" name="matchms split library" version="@TOOL_VERSION@+galaxy0" python_template_version="3.7">
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+
+    <expand macro="creator"/>
+
+    <requirements>
+        <requirement type="package" version="@TOOL_VERSION@">matchms</requirement>
+    </requirements>
+
+    <command detect_errors='exit_code'><![CDATA[
+        python3  '$__tool_directory__/matchms_split.py'
+        --filename '$msp_input'
+        --method '${method.split_type}'
+        --outdir   'output'
+        #if $method.split_type == "chunk-size"
+        --parameter ${method.chunk_size}
+        #else if $method.split_type == "num-chunks"
+        --parameter ${method.num_chunks}
+        #end if
+    ]]></command>
+    <inputs>
+        <param type="data" name="msp_input" format="msp" 
+               help="Use keyword 'compound_name', 'compoundname' or 'name' to identify individual spectra."/>
+        <conditional name="method">
+            <param name="split_type" type="select" label="Splitting method" display="radio">
+                <option value="chunk-size" selected="true">Chunks of specified size</option>
+                <option value="num-chunks">Specified number of chunks</option>
+                <option value="one-per-file">One spectrum per file</option>
+            </param>
+            <when value="chunk-size">
+                <param name="chunk_size" type="integer" value="1000" min="2" />
+            </when>
+            <when value="num-chunks">
+                <param name="num_chunks" type="integer" value="5" min="2" />
+            </when>
+            <when value="one-per-file" />
+        </conditional>
+    </inputs>
+    <outputs>
+        <collection  format="msp" name="sample" type="list">
+            <discover_datasets pattern="__designation_and_ext__" ext="msp" directory="output"/>
+        </collection >
+    </outputs>
+    <tests>
+        <test>
+            <param name="msp_input" value="split/sample_input.msp"  />
+            <param name="split_type" value="one-per-file" />
+            <output_collection name="sample" type="list">
+                <element name="1NITROPYRENE"         file="split/one-per-file/1NITROPYRENE.msp"         ftype="msp" compare="contains"/>
+                <element name="35DICHLOROPHENOL"     file="split/one-per-file/35DICHLOROPHENOL.msp"     ftype="msp" compare="contains"/>
+                <element name="34DICHLOROPHENOL"     file="split/one-per-file/34DICHLOROPHENOL.msp"     ftype="msp" compare="contains"/>
+                <element name="26DICHLOROPHENOL"     file="split/one-per-file/26DICHLOROPHENOL.msp"     ftype="msp" compare="contains"/>
+                <element name="25DICHLOROPHENOL"     file="split/one-per-file/25DICHLOROPHENOL.msp"     ftype="msp" compare="contains"/>
+                <element name="24DINITROPHENOL"      file="split/one-per-file/24DINITROPHENOL.msp"      ftype="msp" compare="contains"/>
+                <element name="24DICHLOROPHENOL"     file="split/one-per-file/24DICHLOROPHENOL.msp"     ftype="msp" compare="contains"/>
+                <element name="246TRICHLOROPHENOL"   file="split/one-per-file/246TRICHLOROPHENOL.msp"   ftype="msp" compare="contains"/>
+                <element name="245TRICHLOROPHENOL"   file="split/one-per-file/245TRICHLOROPHENOL.msp"   ftype="msp" compare="contains"/>
+                <element name="23DICHLOROPHENOL"     file="split/one-per-file/23DICHLOROPHENOL.msp"     ftype="msp" compare="contains"/>
+            </output_collection>
+        </test>
+        <test>
+            <param name="msp_input" value="split/sample_input.msp"  />
+            <param name="split_type" value="num-chunks" />
+            <param name="num_chunks" value="2" />
+            <output_collection name="sample" type="list">
+                <element name="chunk_0" file="split/num-chunks/chunk_0.msp" ftype="msp" compare="contains"/>
+                <element name="chunk_1" file="split/num-chunks/chunk_1.msp" ftype="msp" compare="contains"/>
+            </output_collection>
+        </test>
+        <test>
+            <param name="msp_input" value="split/sample_input.msp"  />
+            <param name="split_type" value="chunk-size" />
+            <param name="chunk_size" value="4" />
+            <output_collection name="sample" type="list">
+                <element name="chunk_0" file="split/chunk-size/chunk_0.msp" ftype="msp" compare="contains"/>
+                <element name="chunk_1" file="split/chunk-size/chunk_1.msp" ftype="msp" compare="contains"/>
+                <element name="chunk_2" file="split/chunk-size/chunk_2.msp" ftype="msp" compare="contains"/>
+            </output_collection>
+        </test>
+    </tests> 
+    <help><![CDATA[
+        Splitmsp handles input/output files in MSP format using the matchms.importing and matchms.exporting modules (https://matchms.readthedocs.io/en/latest/index.html).
+
+        Please observe that the `num-chunks` method does not preserve the order of the elements as it uses a `round robin` distribution.
+    ]]></help>
+    <expand macro="citations"/>
+</tool>
