@@ -30,17 +30,16 @@ save_as_${output_format}(spectra, "${converted_library}")
 
         <param label="Spectral library format" name="output_format" type="select"
             help="Output format of the spectral library.">
-            <option value="msp">msp</option>
+            <option value="msp" selected="true">msp</option>
             <option value="mgf">mgf</option>
             <option value="json">json</option>
         </param>
     </inputs>
 
     <outputs>
-        <data label="${tool.name} from ${spectral_library.ext} to ${output_format} on ${on_string}" name="converted_library">
+        <data label="${tool.name} from ${spectral_library.ext} to ${output_format} on ${on_string}" name="converted_library" format="msp">
             <change_format>
                 <when input="output_format" value="mgf" format="mgf" />
-                <when input="output_format" value="msp" format="msp" />
                 <when input="output_format" value="json" format="json" />
             </change_format>
         </data>
@@ -50,17 +49,17 @@ save_as_${output_format}(spectra, "${converted_library}")
         <test>
             <param name="spectral_library" value="similarity/RECETOX_Exposome_pesticides_HR_MS_20220323.msp" ftype="msp"/>
             <param name="output_format" value="mgf"/>
-            <output name="output" file="convert/mgf_out.mgf" ftype="mgf"/>
+            <output name="converted_library" file="convert/mgf_out.mgf" ftype="mgf"/>
         </test>
         <test>
             <param name="spectral_library" value="similarity/RECETOX_Exposome_pesticides_HR_MS_20220323.msp" ftype="msp"/>
             <param name="output_format" value="json"/>
-            <output name="output" file="convert/json_out.json" ftype="json"/>
+            <output name="converted_library" file="convert/json_out.json" ftype="json"/>
         </test>
         <test>
             <param name="spectral_library" value="convert/mgf_out.mgf" ftype="mgf"/>
             <param name="output_format" value="msp"/>
-            <output name="output" file="convert/msp_out.msp" ftype="msp"/>
+            <output name="converted_library" file="convert/msp_out.msp" ftype="msp"/>
         </test>
     </tests>
 
