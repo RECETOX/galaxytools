@@ -1,5 +1,5 @@
 <tool id="matchms_convert" name="matchms convert" version="@TOOL_VERSION@+galaxy0" python_template_version="3.7">
-    <description>convert mass spectral library</description>
+    <description>convert between mass spectral library formats using matchms</description>
     <macros>
         <import>macros.xml</import>
     </macros>
