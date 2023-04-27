@@ -19,6 +19,11 @@
                 familyName="Ahmad"
                 url="https://github.com/zargham-ahmad"
                 identifier="0000-0002-6096-224X" />
+            <person
+                givenName="Wudmir"
+                familyName="Rojas"
+                url="https://github.com/wverastegui"
+                identifier="0000-0001-7036-9987" />
             <organization
                 url="https://www.recetox.muni.cz/"
                 email="GalaxyToolsDevelopmentandDeployment@space.muni.cz"

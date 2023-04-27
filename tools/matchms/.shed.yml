@@ -32,3 +32,10 @@ repositories:
       - matchms_networking_wrapper.py
       - test-data
       - macros.xml
+  matchms_split:
+    description: "Utility tool to split an `msp` file into chunks of records."
+    include:
+      - matchms_split.xml
+      - matchms_split.py
+      - test-data
+      - macros.xml

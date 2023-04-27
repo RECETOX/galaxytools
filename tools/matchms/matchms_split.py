@@ -1,4 +1,5 @@
 import argparse
+import itertools
 import os
 from typing import List
 
@@ -40,14 +41,13 @@ def make_outdir(outdir: str):
     return os.mkdir(outdir)
 
 
-def write_spectra(filename, outdir):
-    """Generates MSP files of individual spectra. Structure of filename is 'compound_name.msp'.
+def write_spectra(spectra, outdir):
+    """Generates MSP files of individual spectra.
 
     Args:
-        filename (str): MSP file that contains the spectra.
+        spectra (List[Spectrum]): Spectra to write to file
         outdir   (str): Path to destination directory.
     """
-    spectra = read_spectra(filename)
     names = get_spectra_names(spectra)
     for i in range(len(spectra)):
         outpath = assemble_outpath(names[i], outdir)
@@ -78,13 +78,37 @@ def split_spectra(filename, outdir):
     return write_spectra(filename, outdir)
 
 
+def split_round_robin(iterable, num_chunks):
+    chunks = [list() for _ in range(num_chunks)]
+    index = itertools.cycle(range(num_chunks))
+    for value in iterable:
+        chunks[next(index)].append(value)
+    chunks = filter(lambda x: len(x) > 0, chunks)
+    return chunks
+
+
 listarg = argparse.ArgumentParser()
 listarg.add_argument('--filename', type=str)
+listarg.add_argument('--method', type=str)
 listarg.add_argument('--outdir', type=str)
+listarg.add_argument('--parameter', type=int)
 args = listarg.parse_args()
 outdir = args.outdir
 filename = args.filename
+method = args.method
+parameter = args.parameter
 
 
 if __name__ == "__main__":
-    split_spectra(filename, outdir)
+    spectra = load_from_msp(filename)
+    make_outdir(outdir)
+
+    if method == "one-per-file":
+        write_spectra(list(spectra), outdir)
+    else:
+        if method == "chunk-size":
+            chunks = iter(lambda: list(itertools.islice(spectra, parameter)), [])
+        elif method == "num-chunks":
+            chunks = split_round_robin(spectra, parameter)
+        for i, x in enumerate(chunks):
+            save_as_msp(x, os.path.join(outdir, f"chunk_{i}.msp"))
