@@ -32,6 +32,12 @@ repositories:
       - matchms_networking_wrapper.py
       - test-data
       - macros.xml
+  matchms_convert:
+    description: "Convert between mass spectral library formats using matchms."
+    include:
+      - matchms_convert.xml
+      - test-data
+      - macros.xml
   matchms_split:
     description: "Utility tool to split an `msp` file into chunks of records."
     include:
