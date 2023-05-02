@@ -1,0 +1,80 @@
+<tool id="matchms_convert" name="matchms convert" version="@TOOL_VERSION@+galaxy0" profile="21.05">
+    <description>convert between mass spectral library formats using matchms</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="creator"/>
+    <requirements>
+        <requirement type="package" version="@TOOL_VERSION@">matchms</requirement>
+    </requirements>
+
+    <command detect_errors='aggressive'><![CDATA[
+        python ${matchms_python_cli}
+    ]]></command>
+
+<configfiles>
+<configfile name="matchms_python_cli">
+from matchms.importing import load_from_msp, load_from_mgf, load_from_json
+from matchms.exporting import save_as_msp, save_as_mgf, save_as_json
+spectra = list(load_from_${spectral_library.ext}("${spectral_library}", False))
+#if $output_format == "msp"
+save_as_msp(spectra, "${converted_library}", write_peak_comments = False)
+#else
+save_as_${output_format}(spectra, "${converted_library}")
+#end if
+</configfile>
+</configfiles>
+
+    <inputs>
+        <param label="Spectra file" name="spectral_library" type="data" format="msp,mgf,json" help="Mass spectral library file to convert." />
+
+        <param label="Spectral library format" name="output_format" type="select"
+            help="Output format to convert the spectral library into.">
+            <option value="msp" selected="true">msp</option>
+            <option value="mgf">mgf</option>
+            <option value="json">json</option>
+        </param>
+    </inputs>
+
+    <outputs>
+        <data label="${tool.name} from ${spectral_library.ext} to ${output_format} on ${on_string}" name="converted_library" format="msp">
+            <change_format>
+                <when input="output_format" value="mgf" format="mgf" />
+                <when input="output_format" value="json" format="json" />
+            </change_format>
+        </data>
+    </outputs>
+
+    <tests>
+        <test>
+            <param name="spectral_library" value="similarity/RECETOX_Exposome_pesticides_HR_MS_20220323.msp" ftype="msp"/>
+            <param name="output_format" value="mgf"/>
+            <output name="converted_library" file="convert/mgf_out.mgf" ftype="mgf"/>
+        </test>
+        <test>
+            <param name="spectral_library" value="similarity/RECETOX_Exposome_pesticides_HR_MS_20220323.msp" ftype="msp"/>
+            <param name="output_format" value="json"/>
+            <output name="converted_library" file="convert/json_out.json" ftype="json"/>
+        </test>
+        <test>
+            <param name="spectral_library" value="convert/mgf_out.mgf" ftype="mgf"/>
+            <param name="output_format" value="msp"/>
+            <output name="converted_library" file="convert/msp_out.msp" ftype="msp"/>
+        </test>
+    </tests>
+
+
+    <help><![CDATA[
+    Documentation
+        Mass spectral libraries are often stored in various formats, such as `msp`, `mgf` or `json`.
+        This tool can be used to convert from one library format to another.
+
+        Please note that peak comments in `RIKEN` style `msp` files are lost upon conversion.
+        Additionally, some of the metadata keywords might change during the conversion process, as they are harmonized internally with matchms.
+
+        For more documentation on the matchms library see https://github.com/matchms/matchms/blob/master/README.rst and https://matchms.readthedocs.io/en/latest/.
+    ]]></help>
+
+
+    <expand macro="citations"/>
+</tool>
