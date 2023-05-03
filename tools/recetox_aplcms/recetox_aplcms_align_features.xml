@@ -8,7 +8,7 @@
     <expand macro="requirements"/>
 
     <command detect_errors="aggressive"><![CDATA[
-        Rscript -e 'source("${__tool_directory__}/utils.R")' -e 'source("${run_script}")'
+        Rscript -e "cluster <- \${GALAXY_SLOTS:-1}" -e 'source("${__tool_directory__}/utils.R")' -e 'source("${run_script}")' 
     ]]></command>
     <configfiles>
         <configfile name="run_script"><![CDATA[
@@ -29,7 +29,8 @@
                   min_occurrence = $min_occurrence,
                   sample_names = sample_names,
                   mz_tol_relative = get_mz_tol(tolerances),
-                  rt_tol_relative = get_rt_tol(tolerances)
+                  rt_tol_relative = get_rt_tol(tolerances),
+                  cluster = cluster
              )
 
              save_aligned_features(aligned_features, '$metadata_file', '$rt_file', '$intensity_file')
