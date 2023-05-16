@@ -49,7 +49,7 @@
                   do.plot = FALSE
               )
 
-              save_parquet_collection(clusters, sample_names, "clustered")
+              save_parquet_collection(clusters\$feature_tables, sample_names, "clustered")
               save_tolerances(clusters, '$tolerances')
          ]]></configfile>
     </configfiles>
