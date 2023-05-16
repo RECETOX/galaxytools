@@ -1,9 +1,18 @@
 import argparse
 import asyncio
 import sys
+import os
+import shutil
 
 from matchms import set_matchms_logger_level
 from MSMetaEnhancer import Application
+
+
+def handle_xlsx_file(app, filename):
+    basename = os.path.splitext(filename)[0]
+    temp_file = basename + '.xlsx'
+    app.save_data(temp_file, file_format='xlsx')
+    shutil.copyfile(temp_file, filename)
 
 
 def main(argv):
@@ -21,7 +30,7 @@ def main(argv):
 
     # set matchms logging level to avoid extensive messages in stdout while reading file
     set_matchms_logger_level("ERROR")
-    # import .msp file
+    # import spectra file
     app.load_data(args.input_file, file_format=args.file_format)
 
     # set matchms logging level back to warning
@@ -43,8 +52,11 @@ def main(argv):
         # execute without jobs parameter to run all possible jobs
         asyncio.run(app.annotate_spectra(services))
 
-    # export .msp file
-    app.save_data(args.output_file, file_format=args.file_format)
+    # export spectra file
+    if args.file_format == 'xlsx':
+        handle_xlsx_file(app, args.output_file)
+    else:
+        app.save_data(args.output_file, file_format=args.file_format)
     return 0
 
 
