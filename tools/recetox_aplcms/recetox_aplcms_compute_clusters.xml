@@ -32,8 +32,8 @@
                   mz_tol_relative = get_mz_tol(tolerances),
                   rt_tol_relative = get_rt_tol(tolerances),
                   #else
-                  #if $tolerances_input_method.mz_tol_relative:
-                  mz_tol_relative = $tolerances_input_method.mz_tol_relative,
+                  #if $tolerances_input_method.mz_tol_relative_ppm:
+                  mz_tol_relative = $tolerances_input_method.mz_tol_relative_ppm * 1e-06,
                   #else:
                   mz_tol_relative = NA,
                   #end if

@@ -30,7 +30,6 @@
               )
 
               save_parquet_collection(clusters, sample_names, "clustered")
-              save_tolerances(clusters, '$tolerances')
          ]]></configfile>
     </configfiles>
 
