@@ -15,7 +15,7 @@
         <configfile name="run_script"><![CDATA[
             sample_name <- readChar('sample_name.txt', file.info('sample_name.txt')\$size)
 
-            profile <- proc.cdf(
+            profile <- remove_noise(
                 filename = '$input_file',
                 min_pres = $min_pres,
                 min_run = $min_run,
@@ -45,7 +45,7 @@
     <tests>
         <test>
             <param name="input_file" value="mbr_test0.mzml" ftype="mzml"/>
-            <output name="output_file" file="extarcted_expected/extracted_0.parquet" ftype="parquet" />
+            <output name="output_file" file="extracted_expected/extracted_0.parquet" ftype="parquet" />
         </test>
     </tests>
 
