@@ -1,5 +1,5 @@
 <macros>
-    <token name="@TOOL_VERSION@">0.10.3</token>
+    <token name="@TOOL_VERSION@">0.11.0</token>
     <xml name="requirements">
         <requirements>
             <requirement type="package" version="@TOOL_VERSION@">r-recetox-aplcms</requirement>
@@ -101,7 +101,7 @@
                 <option value="file">file</option>
             </param>
             <when value="direct">
-                <param name="mz_tol_relative" type="float" optional="true" label="Relative m/z tolerance"
+                <param name="mz_tol_relative_ppm" type="float" optional="true" label="Relative m/z tolerance [ppm]"
                        help="Relative m/z tolerance to use for grouping features.
                        If not provided, it is calculated from the data using kernel density estimation." />
                 <param name="rt_tol_relative" type="float" optional="true" label="Relative rt tolerance [unit corresponds to the retention time]"
