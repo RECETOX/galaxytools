@@ -17,7 +17,7 @@
 
     <token name="@HELP@">
         <![CDATA[
-        MSMetaEnhancer will fetch and update various metadata included in your spectra .msp dataset.
+        MSMetaEnhancer will fetch and update various metadata included in your spectra dataset.
         It does so through a series of conversions ran on all entries in a given file. These conversions fetch
         metadata from various online services. If no conversions are specified, all possible jobs will be executed in an arbitrary order.
 

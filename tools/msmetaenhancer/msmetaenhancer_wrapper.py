@@ -7,8 +7,9 @@ from MSMetaEnhancer import Application
 
 
 def main(argv):
-    parser = argparse.ArgumentParser(description="Annotate MSP file.")
-    parser.add_argument("--input_file", type=str, help="Path to query spectra file in MSP format.")
+    parser = argparse.ArgumentParser(description="Annotate spectra file.")
+    parser.add_argument("--input_file", type=str, help="Path to query spectra file.")
+    parser.add_argument("--file_format", type=str, help="Format of the input and the output files.")
     parser.add_argument("--output_file", type=str, help="Path to output spectra file.")
     parser.add_argument("--jobs", type=str, help="Sequence of conversion jobs to be used.")
     parser.add_argument("--log_file", type=str, help="Path to log with details of the annotation process.")
@@ -21,16 +22,16 @@ def main(argv):
     # set matchms logging level to avoid extensive messages in stdout while reading file
     set_matchms_logger_level("ERROR")
     # import .msp file
-    app.load_spectra(args.input_file, file_format='msp')
+    app.load_data(args.input_file, file_format=args.file_format)
 
     # set matchms logging level back to warning
     set_matchms_logger_level("WARNING")
 
     # curate given metadata
-    app.curate_spectra()
+    app.curate_metadata()
 
     # specify requested services and jobs
-    services = ['PubChem', 'CTS', 'CIR', 'NLM', 'RDKit', 'IDSM', 'BridgeDB']
+    services = ['PubChem', 'CTS', 'CIR', 'RDKit', 'IDSM', 'BridgeDb']
 
     if len(args.jobs) != 0:
         jobs = []
@@ -43,7 +44,7 @@ def main(argv):
         asyncio.run(app.annotate_spectra(services))
 
     # export .msp file
-    app.save_spectra(args.output_file, file_format="msp")
+    app.save_data(args.output_file, file_format=args.file_format)
     return 0
 
 
