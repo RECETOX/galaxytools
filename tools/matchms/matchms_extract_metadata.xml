@@ -27,7 +27,7 @@ export_metadata_as_csv(spectra_list, "${output_file}")
     <inputs>
         <param label="Spectra file" name="input_file" type="data" format="msp,mgf" help="Mass spectral library file."/>
         <param label="Harmonize metadata" name="harmonize_metadata" type="boolean" truevalue="True" falsevalue="False"
-               checked="false" help="Apply harmonization process on the metadata keys."/>
+               checked="false" help="Apply harmonization process on the metadata keys (e.g. parse numeric values, derive precursor mass)."/>
     </inputs>
 
     <outputs>
