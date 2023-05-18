@@ -1,4 +1,4 @@
-<tool id="matchms_extract_metadata" name="matchms extract metadata" version="0.19.0+galaxy0" profile="21.05">
+<tool id="matchms_metadata_export" name="matchms metadata export " version="0.19.0+galaxy0" profile="21.05">
     <description>extract all metadata from mass spectra file to tabular format</description>
     <macros>
         <import>macros.xml</import>
