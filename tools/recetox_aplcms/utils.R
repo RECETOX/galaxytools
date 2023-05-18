@@ -59,14 +59,6 @@ save_tolerances <- function(table, tol_file) {
     arrow::write_parquet(data.frame(mz_tolerance, rt_tolerance), tol_file)
 }
 
-get_mz_tol <- function(tolerances) {
-    return(tolerances$mz_tolerance)
-}
-
-get_rt_tol <- function(tolerances) {
-    return(tolerances$rt_tolerance)
-}
-
 save_aligned_features <- function(aligned_features, metadata_file, rt_file, intensity_file) {
     save_data_as_parquet_file(aligned_features$metadata, metadata_file)
     save_data_as_parquet_file(aligned_features$rt, rt_file)
