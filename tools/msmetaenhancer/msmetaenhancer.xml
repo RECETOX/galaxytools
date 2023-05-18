@@ -1,4 +1,4 @@
-<tool id="msmetaenhancer" name="MSMetaEnhancer" version="@TOOL_VERSION@+galaxy2">
+<tool id="msmetaenhancer" name="MSMetaEnhancer" version="@TOOL_VERSION@+galaxy0">
     <description>annotate MS data</description>
 
     <macros>
@@ -23,6 +23,7 @@
         <configfile name="msmetaenhancer_python_cli">
             python3 ${__tool_directory__}/msmetaenhancer_wrapper.py \
             --input_file "$input_file" \
+            --file_format "$input_file.ext" \
             --output_file "$output_file" \
             #if $options.logging.output_log:
             --log_file "$log_file" \
@@ -44,7 +45,7 @@
     </configfiles>
 
     <inputs>
-        <param label="Input spectra dataset" name="input_file" type="data" format="msp" />
+        <param label="Input spectra dataset" name="input_file" type="data" format="msp,mgf,json,csv,tsv,xlsx" />
 
         <repeat name="ordered_jobs" title="Ordered conversions">
             <param name="ordered_jobs_select" type="select" label="Available conversions" multiple="false" optional="true">
@@ -73,7 +74,15 @@
     </inputs>
 
     <outputs>
-        <data label="MSMetaEnhancer on ${on_string}" name="output_file" format="msp" />
+        <data label="MSMetaEnhancer on ${on_string}" name="output_file" format="msp">
+            <change_format>
+                <when input="input_file.ext" value="mgf" format="mgf" />
+                <when input="input_file.ext" value="json" format="json" />
+                <when input="input_file.ext" value="csv" format="csv" />
+                <when input="input_file.ext" value="tsv" format="tsv" />
+                <when input="input_file.ext" value="xlsx" format="xlsx" />
+            </change_format>
+        </data>    
         <data label="Log of MSMetaEnhancer on ${on_string}" name="log_file" format="txt">
            <filter>options['logging']['output_log']</filter>
        </data>
