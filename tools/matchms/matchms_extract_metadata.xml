@@ -48,9 +48,9 @@ export_metadata_as_csv(spectra_list, "${output_file}")
     <help><![CDATA[
     Documentation
         Mass spectral libraries are often stored in various formats, such as `msp`, `mgf` or `json`.
-        This tool can be used to extract metadata accompanying the actual spectral information into a tabular form.
+        This tool can be used to export the metadata accompanying the actual spectral information to a tabular file.
 
-        In the case the harmonization of metadata is selected, some of the metadata keywords might change during the conversion process to a unified form.
+        During harmonization of metadata, some of the keywords might change during the conversion process to a unified form.
 
         For more documentation on the matchms library see https://github.com/matchms/matchms/blob/master/README.rst and https://matchms.readthedocs.io/en/latest/.
     ]]></help>
