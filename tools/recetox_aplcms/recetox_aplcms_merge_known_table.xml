@@ -1,0 +1,118 @@
+<tool id="recetox_aplcms_merge_known_table" name="recetox-aplcms - merge known table" version="@TOOL_VERSION@+galaxy0">
+    <description>join knowledge from aligned features and known table.</description>
+    <macros>
+        <import>macros.xml</import>
+        <import>help.xml</import>
+    </macros>
+    <expand macro="creator"/>
+    <expand macro="requirements"/>
+
+    <command detect_errors="aggressive"><![CDATA[
+        Rscript -e 'source("${__tool_directory__}/utils.R")' -e 'source("${run_script}")'
+    ]]></command>
+    <configfiles>
+         <configfile name="run_script"><![CDATA[
+              metadata <- load_data_from_parquet_file('$metadata_file')
+              rt_table <- load_data_from_parquet_file('$rt_file')
+              intensity_table <- load_data_from_parquet_file('$intensity_file')
+              tolerances <- load_data_from_parquet_file('$tolerances')
+              known_table <- read_known_table('$known_table')
+
+              feature_tables <- join_tables_to_list(metadata, rt_table, intensity_table)
+
+              merged <- merge_features_and_known_table(
+                  features = feature_tables,
+                  known_table = known_table,
+                  #if $match_tol_ppm:
+                  match_tol_ppm = $match_tol_ppm,
+                  #else:
+                  match_tol_ppm = NA,
+                  #end if
+                  mz_tol_relative = get_mz_tol(tolerances),
+                  rt_tol_relative = get_rt_tol(tolerances),
+                  #if $direction.selection == "TRUE":
+                  new_feature_min_count = $direction.new_feature_min_count,
+                  #end if
+                  from_features_to_known_table = $direction.selection
+              )
+
+              #if $direction.selection == "TRUE":
+              save_known_table(merged, '$output_known_table')
+              save_pairing(merged, '$output_pairing')
+              #else:
+              save_aligned_features(merged, '$output_metadata_file', '$output_rt_file', '$output_intensity_file')
+              #end if
+         ]]></configfile>
+    </configfiles>
+
+    <inputs>
+        <param name="metadata_file" type="data" format="parquet" label="Metadata table"
+               help="Peak metadata table from the align features step" />
+        <param name="rt_file" type="data" format="parquet" label="RT table"
+               help="Table with retention times for features (rows) across samples (columns)." />
+        <param name="intensity_file" type="data" format="parquet" label="Intensity table"
+               help="Table with intensities for features (rows) across samples (columns)." />
+        <param label="Table of known features" name="known_table" type="data" format="parquet"
+               help="A data table containing the known metabolite ions and previously found features. The table must
+               contain these 18 columns: chemical_formula (optional), HMDB_ID (optional), KEGG_compound_ID (optional),
+               neutral.mass (optional), ion.type (the ion form - optional), m.z (either theoretical or mean observed
+               m/z value of previously found features), Number_profiles_processed (the total number of processed
+               samples to build this database), Percent_found (the percentage of historically processed samples in
+               which the feature appeared), mz_min (minimum  observed m/z value), mz_max (maximum observed m/z value),
+               RT_mean (mean observed retention time), RT_sd (standard deviation of observed retention time),
+               RT_min (minimum observed retention time), RT_max (maximum observed retention time),
+               int_mean.log. (mean observed log intensity), int_sd.log. (standard deviation of observed log intensity),
+               int_min.log. (minimum observed log intensity), int_max.log. (maximum observed log intensity)." />
+        <param label="Input tolerances values" name="tolerances" type="data" format="parquet"
+               help="Table containing tolerance values." />
+
+        <conditional name="direction">
+            <param label="Tables merge direction" name="selection" type="select"
+                   help="Choose between merging feature to known_table and known_table to features.">
+                <option value="TRUE">Merge features to known table</option>
+                <option value="FALSE">Merge known table to features</option>
+            </param>
+            <when value="TRUE">
+                <param name="new_feature_min_count" type="integer" value="2" min="1" label="new_feature_min_count"
+                       help="The minimum number of occurrences of a historically unseen (unknown) feature to add
+                       this feature into the database of known features." />
+            </when>
+        </conditional>
+
+        <param name="match_tol_ppm" type="integer" optional="true" min="0" label="match_tol_ppm"
+               help="The ppm tolerance to match identified features to known metabolites/features." />
+    </inputs>
+
+    <outputs>
+        <data name="output_metadata_file" format="parquet" label="${tool.name} on ${on_string} (metadata table)">
+            <filter>direction['selection'] == 'FALSE'</filter>
+        </data>
+        <data name="output_rt_file" format="parquet" label="${tool.name} on ${on_string} (rt table)">
+            <filter>direction['selection'] == 'FALSE'</filter>
+        </data>
+        <data name="output_intensity_file" format="parquet" label="${tool.name} on ${on_string} (intensity table)">
+            <filter>direction['selection'] == 'FALSE'</filter>
+        </data>
+
+        <data label="${tool.name} on ${on_string} (known table)" name="output_known_table" format="parquet" >
+            <filter>direction['selection'] == 'TRUE'</filter>
+        </data>
+        <data label="${tool.name} on ${on_string} (pairing)" name="output_pairing" format="parquet" >
+            <filter>direction['selection'] == 'TRUE'</filter>
+        </data>
+    </outputs>
+
+    <tests>
+
+    </tests>
+
+    <help>
+        <![CDATA[
+            @MERGE_KNOWN_TABLES_HELP@
+
+            @GENERAL_HELP@
+        ]]>
+    </help>
+
+    <expand macro="citations"/>
+</tool>
