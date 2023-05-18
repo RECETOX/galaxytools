@@ -1,0 +1,56 @@
+<tool id="matchms_extract_metadata" name="matchms extract metadata" version="0.19.0+galaxy0" profile="21.05">
+    <description>extract all metadata from mass spectra file to tabular format</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="creator"/>
+    <requirements>
+        <requirement type="package" version="0.19.0">matchms</requirement>
+        <requirement type="package">pandas</requirement>
+    </requirements>
+
+    <command detect_errors='aggressive'><![CDATA[
+        python ${matchms_python_cli}
+    ]]></command>
+
+<configfiles>
+<configfile name="matchms_python_cli">
+import pandas
+from matchms.importing import load_from_msp, load_from_mgf
+
+spectra_list = list(load_from_${input_file.ext}("${input_file}", False))
+metadata = [spectra.metadata_dict() for spectra in spectra_list]
+df = pandas.DataFrame.from_dict(metadata)
+
+df.replace("", float("NaN"), inplace=True)
+df.dropna(how='all', axis=1, inplace=True)
+
+df.to_csv("${output_file}", index=False)
+</configfile>
+</configfiles>
+
+    <inputs>
+        <param label="Spectra file" name="input_file" type="data" format="msp,mgf" help="Mass spectral library file."/>
+    </inputs>
+
+    <outputs>
+        <data label="matchms extract metadata on ${on_string}" name="output_file" format="csv"/>
+    </outputs>
+
+    <tests>
+        <test>
+            <param name="input_file" value="convert/mgf_out.mgf" ftype="mgf"/>
+            <output name="output_file" file="convert/metadata_mgf.csv" ftype="csv"/>
+        </test>
+        <test>
+            <param name="input_file" value="convert/msp_out.msp" ftype="msp"/>
+            <output name="output_file" file="convert/metadata_msp.csv" ftype="csv"/>
+        </test>
+    </tests>
+
+    <help><![CDATA[
+    TBA
+    ]]></help>
+
+    <expand macro="citations"/>
+</tool>
