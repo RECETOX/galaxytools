@@ -94,9 +94,9 @@
     </xml>
 
     <xml name="tolerances">
-       <param name="mz_tol_relative_ppm" type="float" optional="true" label="Relative m/z tolerance [ppm]"
+       <param name="mz_tol_relative_ppm" type="float" label="Relative m/z tolerance [ppm]"
               help="Relative m/z tolerance to use for grouping features." />
-       <param name="rt_tol" type="float" optional="true" label="Retention time tolerance [unit corresponds to the retention time]"
+       <param name="rt_tol" type="float" label="Retention time tolerance [unit corresponds to the retention time]"
               help="Retention time tolerance to use for grouping features." />
     </xml>
 
