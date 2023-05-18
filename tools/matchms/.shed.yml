@@ -48,6 +48,6 @@ repositories:
   matchms_metadata_export:
     description: "Export all metadata from mass spectra file to tabular format."
     include:
-      - matchms_extract_metadata.xml
+      - matchms_metadata_export.xml
       - test-data
       - macros.xml
