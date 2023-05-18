@@ -1,8 +1,8 @@
 <macros>
-    <token name="@TOOL_VERSION@">3.5.2</token>
+    <token name="@TOOL_VERSION@">v3.5.2-rcx0</token>
     <xml name="requirements">
         <requirements>
-            <container type="docker">recetox/recetox-msfinder:3.5.2-0</container>
+            <container type="docker">recetox/recetox-msfinder:v3.5.2-rcx0</container>
         </requirements>
     </xml>
     <xml name="creator">
@@ -37,8 +37,7 @@
         <param name="LewisAndSeniorCheck" type="boolean" checked="True" truevalue="True" falsevalue="False" label="LewisAndSeniorCheck"
             help="Generate formula candidates that match the valence rules of formula elements." />
     </xml>
-    <xml name="element_check_parameter">
-        <!-- Element Checks -->
+    <!-- Element Checks <xml name="element_check_parameter">
         <param name="Ocheck" type="boolean" checked="True" truevalue="True" falsevalue="False" label="Ocheck" />
         <param name="Ncheck" type="boolean" checked="True" truevalue="True" falsevalue="False" label="Ncheck" />
         <param name="Pcheck" type="boolean" checked="True" truevalue="True" falsevalue="False" label="Pcheck" />
@@ -48,7 +47,7 @@
         <param name="BrCheck" type="boolean" checked="True" truevalue="True" falsevalue="False" label="BrCheck" />
         <param name="Icheck" type="boolean" checked="True" truevalue="True" falsevalue="False" label="Icheck" />
         <param name="SiCheck" type="boolean" checked="True" truevalue="True" falsevalue="False" label="SiCheck" />
-    </xml>
+    </xml>  -->
     <xml name="output">
         <data name="annotated_data" format="msp" />
     </xml>

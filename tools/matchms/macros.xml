@@ -25,6 +25,42 @@
                 name="RECETOX MUNI" />
         </creator>
     </xml>
+
+    <xml name="similarity_metrics">
+        <option value="CosineGreedy" selected="true">CosineGreedy</option>
+        <option value="CosineHungarian">CosineHungarian</option>
+        <option value="ModifiedCosine">ModifiedCosine</option>
+        <option value="NeutralLossesCosine">NeutralLossesCosine</option>
+        <option value="Spec2Vec">Spec2Vec</option>
+    </xml>
+
+    <xml name="similarity_algorithm_params">
+        <section name="algorithm" title="Algorithm Parameters" expanded="true">
+            <param label="tolerance" name="tolerance" type="float" value="0.1"
+                   help="Peaks will be considered a match when less than tolerance apart. Absolute m/z value, not in ppm."/>
+            <param label="mz_power" name="mz_power" type="float" value="0.0"
+                   help="The power to raise mz to in the cosine function."/>
+            <param label="intensity_power" name="intensity_power" type="float" value="1.0"
+                   help="The power to raise intensity to in the cosine function."/>
+        </section>
+    </xml>
+
+    <xml name="input_param">
+        <conditional name="scores">
+            <param name="use_scores" label="Use Scores Object" type="boolean" truevalue="TRUE" falsevalue="FALSE"
+                   checked="false"/>
+            <when value="TRUE">
+                <param label="Scores object" name="scores_in" type="data" format="json"
+                    help="Scores objects calculated previously using one of the matchms similarity tools." />
+            </when>
+            <when value="FALSE">
+                <param label="Queries spectra" name="queries" type="data" format="msp,mgf"
+                    help="Query mass spectra to match against references."/>
+                <param label="Reference spectra" name="references" type="data" format="msp,mgf"
+                    help="Reference mass spectra to match against as library."/>
+            </when>
+        </conditional>
+    </xml>
     
     <token name="@HELP_matchms@">
         <![CDATA[
@@ -42,9 +78,24 @@
                 +-----------+---------------+--------+-----------+
 
             Downstream Tools
-                The output is a JSON file containing serialized matchMS Scores object. The file can be processed by **matchMS output formatter**. 
+                The output is a JSON file containing serialized matchms Scores object. The file can be processed by **matchms output formatter**. 
         ]]>
     </token>
+
+<token name="@init_scores@">
+from matchms.importing import load_from_msp, scores_from_json
+from matchms import Scores
+#if $scores.use_scores
+scores = scores_from_json("$scores_in")
+#else
+scores = Scores(references=list(load_from_msp("$references")), queries=list(load_from_msp("$queries")), is_symmetric=False)
+#end if
+</token>
+
+<token name="@init_logger@">
+from matchms import set_matchms_logger_level
+set_matchms_logger_level("WARNING")
+</token>
     
     <token name="@HELP_matchms_networking@">
         <![CDATA[
@@ -54,7 +105,7 @@
         
         **Upstream Tools**
 
-        matchMS similarity
+        matchms similarity
         
         **Downstream Tools**
         
@@ -65,11 +116,11 @@
     <token name="@HELP_formatter@">
         <![CDATA[
             Usage
-                This tool creates user friendly tables from the similarity scores produced by **matchMS similarity**.
+                This tool creates user friendly tables from the similarity scores produced by **matchms similarity**.
                 The tool can be operated on two modes based on (i) thresholds or (ii) top k matches.
 
             Input Table Format
-                The tool expects a JSON file containing serialized matchMS Scores object.
+                The tool expects a JSON file containing serialized matchms Scores object.
 
             Output Table Format
                 +----------+-----------+---------+--------+
