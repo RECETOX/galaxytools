@@ -132,7 +132,7 @@ Example Output
 recetox-aplcms - correct time
 =============================
 
-Apply spline-based retention time correction to a feature table given the template table and the computed `mz` and `rt` tolerances.
+Apply spline-based retention time correction to a feature table given the template table and the `mz` and `rt` tolerances.
 
 Example Output
 --------------
