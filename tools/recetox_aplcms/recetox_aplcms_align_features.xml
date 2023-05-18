@@ -22,14 +22,12 @@
              feature_tables <- feature_tables[ordering]
              sample_names <- sample_names[ordering]
 
-             tolerances <- load_data_from_parquet_file('$input_tolerances')
-
              aligned_features <- create_aligned_feature_table(
                   features_table = dplyr::bind_rows(feature_tables),
                   min_occurrence = $min_occurrence,
                   sample_names = sample_names,
-                  mz_tol_relative = get_mz_tol(tolerances),
-                  rt_tol_relative = get_rt_tol(tolerances),
+                  mz_tol_relative = $mz_tol_relative_ppm * 1e-06,
+                  rt_tol_relative = $rt_tol,
                   cluster = cluster
              )
 
@@ -40,8 +38,7 @@
     <inputs>
         <param name="files" type="data_collection" collection_type="list" format="parquet"
                label="Clustered features" help="List of tables containing clustered features." />
-        <param label="Input tolerances values" name="input_tolerances" type="data" format="parquet"
-               help="Table containing tolerance values." />
+        <expand macro="tolerances">
         <param name="min_occurrence" type="integer" min="2" value="2" label="Minimal occurrence in samples"
                help="A feature has to show up in at least this number of profiles to be included in the final result." />
     </inputs>
