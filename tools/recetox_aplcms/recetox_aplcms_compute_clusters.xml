@@ -36,10 +36,8 @@
     <inputs>
         <param name="files" type="data_collection" collection_type="list" format="parquet" label="Input data"
                help="List of tables containing features." />
-        <param name="mz_tol_relative_ppm" type="float" optional="true" label="Relative m/z tolerance [ppm]"
-               help="Relative m/z tolerance to use for grouping features." />
-        <param name="rt_tol" type="float" optional="true" label="Retention time tolerance [unit corresponds to the retention time]"
-               help="Retention time tolerance to use for grouping features." />    </inputs>
+        <expand macro="tolerances">
+    </inputs>
 
     <outputs>
         <collection name="clustered_feature_tables" type="list"
