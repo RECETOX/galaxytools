@@ -37,11 +37,11 @@ export_metadata_as_csv(spectra_list, "${output_file}")
     <tests>
         <test>
             <param name="input_file" value="convert/mgf_out.mgf" ftype="mgf"/>
-            <output name="output_file" file="convert/metadata_mgf.csv" ftype="csv" compare="sim_size" delta="0"/>
+            <output name="output_file" file="convert/metadata.csv" ftype="csv" compare="sim_size" delta="0"/>
         </test>
         <test>
             <param name="input_file" value="similarity/RECETOX_Exposome_pesticides_HR_MS_20220323.msp" ftype="msp"/>
-            <output name="output_file" file="convert/metadata_msp.csv" ftype="csv" compare="sim_size" delta="0"/>
+            <output name="output_file" file="convert/metadata.csv" ftype="csv" compare="sim_size" delta="0"/>
         </test>
     </tests>
 
