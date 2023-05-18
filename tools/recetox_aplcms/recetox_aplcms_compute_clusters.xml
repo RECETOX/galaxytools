@@ -36,7 +36,7 @@
     <inputs>
         <param name="files" type="data_collection" collection_type="list" format="parquet" label="Input data"
                help="List of tables containing features." />
-        <expand macro="tolerances">
+        <expand macro="tolerances"/>
     </inputs>
 
     <outputs>

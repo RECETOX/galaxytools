@@ -98,7 +98,6 @@
               help="Relative m/z tolerance to use for grouping features." />
        <param name="rt_tol" type="float" optional="true" label="Retention time tolerance [unit corresponds to the retention time]"
               help="Retention time tolerance to use for grouping features." />
-       <yield/>
     </xml>
 
     <xml name="recover_weaker_params">

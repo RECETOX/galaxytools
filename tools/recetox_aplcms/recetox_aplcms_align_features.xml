@@ -38,7 +38,7 @@
     <inputs>
         <param name="files" type="data_collection" collection_type="list" format="parquet"
                label="Clustered features" help="List of tables containing clustered features." />
-        <expand macro="tolerances">
+        <expand macro="tolerances"/>
         <param name="min_occurrence" type="integer" min="2" value="2" label="Minimal occurrence in samples"
                help="A feature has to show up in at least this number of profiles to be included in the final result." />
     </inputs>
