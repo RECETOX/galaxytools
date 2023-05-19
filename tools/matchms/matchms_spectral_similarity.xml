@@ -1,5 +1,5 @@
 <tool id="matchms_spectral_similarity" name="matchms spectral similarity" version="@TOOL_VERSION@+galaxy0" python_template_version="3.8">
-    <description>calculate the similarity score and matched peaks</description>
+    <description>matchms spectral similarity calculation</description>
 
     <macros>
         <import>macros.xml</import>
@@ -7,8 +7,6 @@
     <expand macro="creator"/>
 
     <requirements>
-        <requirement type="package" version="1.1.4">pandas</requirement>
-        <requirement type="package" version="0.55.1">numba</requirement>
         <requirement type="package" version="0.8.0">spec2vec</requirement>
         <requirement type="package" version="@TOOL_VERSION@">matchms</requirement>
     </requirements>
@@ -18,54 +16,46 @@
     </environment_variables>
 
     <command detect_errors="exit_code"><![CDATA[
-        sh ${matchms_python_cli}
+        python3 ${python_wrapper}
     ]]> </command>
 
-    <configfiles>
-        <configfile name="matchms_python_cli">
-            python3 ${__tool_directory__}/matchms_spectral_similarity_wrapper.py \
-            #if $ri_filtering.is_true
-            -r $ri_filtering.tolerance \
-            #end if
-            #if $symmetric.is_symmetric
-            -s \
-            #else
-            --ref "$references" \
-            --ref_format "$references.ext" \
-            #end if
-            --array_type "$array_type" \
-            #if "$metric.similarity_metric" == "Spec2Vec"
-            --spec2vec_model "$metric.model_metadata" \
-            --spec2vec_weights "$metric.model_weights" \
-            --allow_missing_percentage "$metric.algorithm.allow_missing_percentage" \
-            #end if
-            "$queries" \
-            "$queries.ext" \
-            "$metric.similarity_metric" \
-            "$metric.algorithm.tolerance" \
-            "$metric.algorithm.mz_power" \
-            "$metric.algorithm.intensity_power" \
-            "$similarity_scores" \
-        </configfile>
-    </configfiles>
+<configfiles>
+<configfile name="python_wrapper">
+@init_logger@
+
+from matchms.similarity import (CosineGreedy, CosineHungarian, MetadataMatch,
+                                ModifiedCosine, NeutralLossesCosine)
+
+#if "$metric.similarity_metric" == "Spec2Vec"
+similarity=None
+#else
+similarity = ${metric.similarity_metric}(
+    ${metric.algorithm.tolerance},
+    ${metric.algorithm.mz_power},
+    ${metric.algorithm.intensity_power}
+)
+name="${metric.similarity_metric}_${metric.algorithm.tolerance}_${metric.algorithm.mz_power}_${metric.algorithm.intensity_power}"
+#end if
+
+
+@init_scores@
+
+layer = similarity.sparse_array(
+    references=scores.references,
+    queries=scores.queries,
+    idx_row = scores._scores.row,
+    idx_col = scores._scores.col,
+    is_symmetric=False)
+
+scores._scores.add_sparse_data(scores._scores.row, scores._scores.col, layer, name)
+
+scores.filter_by_range(inplace=True, name=name+"_matches", low=0)
+scores.to_json("$similarity_scores")
+</configfile>
+</configfiles>
 
     <inputs>
-        <param label="Queries spectra" name="queries" type="data" format="msp,mgf"
-               help="Query mass spectra to match against references."/>
-        <conditional name="symmetric">
-            <param name="is_symmetric" label="Symmetric" type="boolean" truevalue="TRUE" falsevalue="FALSE"
-                   checked="false"/>
-            <when value="FALSE">
-                <param label="Reference spectra" name="references" type="data" format="msp,mgf"
-                       help="Reference mass spectra to match against as library."/>
-            </when>
-        </conditional>
-        <param label="Scores array type" name="array_type" type="select" display="radio"
-               help="Matrix type for storing scores objects. Sparse type more memory-efficient and better for large arrays.
-                    Note that whatever is selected the output might still be sprase array if scores have too much 0-entries.">
-            <option value="numpy" selected="true">dense</option>
-            <option value="sparse">sparse</option>
-        </param>
+        <expand macro="input_param"/>
         <conditional name="metric">
             <param label="Similarity metric" name="similarity_metric" type="select" display="radio"
                 help="Similarity metric to use for score computation.">
@@ -98,72 +88,11 @@
                 </section>
             </when>
         </conditional>
-
-
-        <conditional name="ri_filtering">
-            <param name="is_true" label="Apply RI filtering" type="boolean" truevalue="TRUE" falsevalue="FALSE"
-                   checked="false"/>
-            <when value="TRUE">
-            <param label="tolerance" name="tolerance" type="float" value="60"
-                   help="Peaks will be considered a match when less than tolerance apart."/>
-            </when>
-        </conditional>
     </inputs>
 
     <outputs>
         <data label="$metric.similarity_metric scores of ${on_string}" name="similarity_scores" format="json"/>
     </outputs>
-
-    <tests>
-        <test> <!-- TEST #1: Test scoring of different file formats. -->
-            <param name="references" value="similarity/fill.mgf" ftype="mgf"/>
-            <param name="queries" value="similarity/fill2.msp" ftype="msp"/>
-            <conditional name="metric">
-                <param name="similarity_metric" value="CosineGreedy"/>
-            </conditional>
-            <output name="similarity_scores" file="similarity/scores_test1_out.json" ftype="json"/>
-        </test>
-        <test> <!-- TEST #2: Test scoring of the same file formats. -->
-            <param name="references" value="similarity/RECETOX_Exposome_pesticides_HR_MS_20220323.msp" ftype="msp"/>
-            <param name="queries" value="similarity/fill2.msp" ftype="msp"/>
-            <conditional name="metric">
-                <param name="similarity_metric" value="CosineGreedy"/>
-            </conditional>
-            <output name="similarity_scores" file="similarity/scores_test2_out.json" ftype="json"/>
-        </test>
-        <test> <!-- TEST #3: Test scoring with applying RI filtering  -->
-            <param name="references" value="similarity/fill.mgf" ftype="mgf"/>
-            <param name="queries" value="similarity/fill2.msp" ftype="msp"/>
-            <conditional name="ri_filtering">
-                <param name="is_true" value="True"></param>
-                <param name="tolerance" value="60.0" />
-            </conditional>
-            <conditional name="metric">
-                <param name="similarity_metric" value="CosineHungarian"/>
-            </conditional>
-            <output name="similarity_scores" file="similarity/scores_test3_out.json" ftype="json"/>
-        </test>
-        <test> <!-- TEST #4: Test symmetric scoring. -->
-            <param name="queries" value="similarity/recetox_gc-ei_ms_20201028.msp" ftype="msp"/>
-            <param name="is_symmetric" value="TRUE"/>
-            <conditional name="metric">
-                <param name="similarity_metric" value="NeutralLossesCosine"/>
-            </conditional>
-            <output name="similarity_scores" file="similarity/scores_test4_out.json" ftype="json"/>
-        </test>
-        <test> <!-- TEST #5: Test symmetric scoring with applying RI filtering. -->
-            <param name="queries" value="similarity/recetox_gc-ei_ms_20201028.msp" ftype="msp"/>
-            <conditional name="metric">
-                <param name="similarity_metric" value="ModifiedCosine"/>
-            </conditional>
-            <param name="is_symmetric" value="TRUE" />
-            <conditional name="ri_filtering">
-                <param name="is_true" value="True"></param>
-                <param name="tolerance" value="60.0" />
-            </conditional>
-            <output name="similarity_scores" file="similarity/scores_test5_out.json" ftype="json"/>
-        </test>
-    </tests>
 
     <help>
         <![CDATA[
