@@ -38,8 +38,14 @@ similarity = MetadataMatch(field="${matching.metadata_match_field}", matching_ty
 
 @init_scores@
 
-new_scores = scores.calculate(similarity, name=name, array_type="sparse", join_type="${join_type}")
-new_scores.to_json("$scores_out")
+layer = similarity.matrix(
+    references=scores.references,
+    queries=scores.queries,
+    array_type = "sparse",
+    is_symmetric=False)
+
+scores._scores.add_sparse_data(layer.row, layer.col, layer.data, name)
+scores.to_json("$scores_out")
 </configfile>
 </configfiles>
 

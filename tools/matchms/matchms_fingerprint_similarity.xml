@@ -26,11 +26,16 @@ similarity = FingerprintSimilarity(similarity_measure="${fingerprint_similarity}
 from matchms.filtering import add_fingerprint
 import numpy as np
 
-scores.queries = np.asarray(list(map(add_fingerprint, scores.queries)))
-scores.references = np.asarray(list(map(add_fingerprint, scores.references)))
+name="FingerprintSimilarity_${fingerprint_similarity}"
 
-new_scores = scores.calculate(similarity, name="FingerprintSimilarity_${fingerprint_similarity}", array_type="numpy")
-new_scores.to_json("$scores_out")
+layer = similarity.matrix(
+    references=np.asarray(list(map(add_fingerprint, scores.references))),
+    queries=np.asarray(list(map(add_fingerprint, scores.queries))),
+    array_type = "numpy",
+    is_symmetric=scores.is_symmetric)
+
+scores._scores.add_dense_matrix(layer, name)
+scores.to_json("$scores_out")
 </configfile>
 </configfiles>
 
