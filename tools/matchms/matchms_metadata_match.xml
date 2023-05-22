@@ -44,7 +44,7 @@ layer = similarity.matrix(
     array_type = "sparse",
     is_symmetric=False)
 
-scores._scores.add_sparse_data(layer.row, layer.col, layer.data, name)
+scores._scores.add_sparse_data(layer.row, layer.col, layer.data, name, join_type="${join_type}")
 scores.to_json("$scores_out")
 </configfile>
 </configfiles>
@@ -76,7 +76,7 @@ scores.to_json("$scores_out")
                 </param>
             </when>
         </conditional>
-        <param label="join type" name="join_type" type="select" display="radio" hidden="true"
+        <param label="join type" name="join_type" type="select" display="radio"
             help="join type to use for appending scores">
             <option value="left" selected="true">left</option>
             <option value="inner">inner</option>
@@ -86,6 +86,29 @@ scores.to_json("$scores_out")
     <outputs>
         <data label="Match $matching.metadata_match_field results of ${on_string}" name="scores_out" format="json"/>
     </outputs>
+
+    <tests>
+        <test>
+            <param name="queries" value="similarity/recetox_gc-ei_ms_20201028.msp" ftype="msp"/>
+            <param name="references" value="similarity/recetox_gc-ei_ms_20201028.msp" ftype="msp"/>
+            <param name="tolerance" value="60.0" />
+            <output name="scores_out" value="metadata_match/ri_match_60.json" ftype="json" />
+        </test>
+        <test>
+            <param name="use_scores" value="True"/>
+            <param name="scores_in" value="metadata_match/ri_match_60.json" ftype="json"/>
+            <param name="tolerance" value="20.0" />
+            <param name="join_type" value="inner" />
+            <output name="scores_out" value="metadata_match/inner_join_ri_20.json" ftype="json" />
+        </test>
+        <test>
+            <param name="use_scores" value="True"/>
+            <param name="scores_in" value="metadata_match/ri_match_60.json" ftype="json"/>
+            <param name="tolerance" value="20.0" />
+            <param name="join_type" value="left" />
+            <output name="scores_out" value="metadata_match/left_join_ri_20.json" ftype="json" />
+        </test>
+    </tests>
 
     <help>
         <![CDATA[
