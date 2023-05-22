@@ -47,16 +47,32 @@ scores.to_json("$scores_out")
             <option value="dice">dice</option>
             <option value="cosine">cosine</option>
         </param>
-        <!-- <param label="Array type" name="array_type" type="select" display="radio"
-            help="Array type to use for computation.">
-            <option value="sparse" selected="true">sparse</option>
-            <option value="numpy">numpy</option>
-        </param> -->
     </inputs>
 
     <outputs>
         <data label="$fingerprint_similarity distance between fingerprints in ${on_string}" name="scores_out" format="json"/>
     </outputs>
+
+    <tests>
+        <test>
+            <param name="queries" value="similarity/recetox_gc-ei_ms_20201028.msp" ftype="msp"/>
+            <param name="references" value="similarity/RECETOX_Exposome_pesticides_HR_MS_20220323.msp" ftype="msp"/>
+            <param name="fingerprint_similarity" value="dice" />
+            <output name="scores_out" value="fingerprints/dice.json" ftype="json" />
+        </test>
+        <test>
+            <param name="queries" value="similarity/recetox_gc-ei_ms_20201028.msp" ftype="msp"/>
+            <param name="references" value="similarity/RECETOX_Exposome_pesticides_HR_MS_20220323.msp" ftype="msp"/>
+            <param name="fingerprint_similarity" value="cosine" />
+            <output name="scores_out" value="fingerprints/cosine.json" ftype="json" />
+        </test>
+        <test>
+            <param name="use_scores" value="True"/>
+            <param name="scores_in" value="metadata_match/inner_join_ri_20.json" ftype="json"/>
+            <param name="fingerprint_similarity" value="jaccard" />
+            <output name="scores_out" value="fingerprints/jaccard_scores.json" ftype="json" />
+        </test>
+    </tests>
 
     <help>
         <![CDATA[
