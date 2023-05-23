@@ -1,11 +1,11 @@
-<tool id="matchms_convert" name="matchms convert" version="@TOOL_VERSION@+galaxy0" profile="21.05">
+<tool id="matchms_convert" name="matchms convert" version="0.19.0+galaxy0" profile="21.05">
     <description>convert between mass spectral library formats using matchms</description>
     <macros>
         <import>macros.xml</import>
     </macros>
     <expand macro="creator"/>
     <requirements>
-        <requirement type="package" version="@TOOL_VERSION@">matchms</requirement>
+        <requirement type="package" version="0.19.0">matchms</requirement>
     </requirements>
 
     <command detect_errors='aggressive'><![CDATA[
@@ -16,31 +16,51 @@
 <configfile name="matchms_python_cli">
 from matchms.importing import load_from_msp, load_from_mgf, load_from_json
 from matchms.exporting import save_as_msp, save_as_mgf, save_as_json
-spectra = list(load_from_${spectral_library.ext}("${spectral_library}", False))
-#if $output_format == "msp"
-save_as_msp(spectra, "${converted_library}", write_peak_comments = False)
+spectra = list(load_from_${spectral_library.ext}("${spectral_library}", ${harmonization_metadata}))
+#if $output_file.output_format == "msp"
+save_as_msp(spectra, "${converted_library}", write_peak_comments = ${output_file.export_peak_comments}, style = "${output_file.export_style}")
 #else
-save_as_${output_format}(spectra, "${converted_library}")
+save_as_${output_file.output_format}(spectra, "${converted_library}")
 #end if
 </configfile>
 </configfiles>
 
     <inputs>
-        <param label="Spectra file" name="spectral_library" type="data" format="msp,mgf,json" help="Mass spectral library file to convert." />
+        <param label="Spectra file" name="spectral_library" type="data" format="msp,mgf,json"
+            help="Mass spectral library file to convert." />
 
-        <param label="Spectral library format" name="output_format" type="select"
-            help="Output format to convert the spectral library into.">
-            <option value="msp" selected="true">msp</option>
-            <option value="mgf">mgf</option>
-            <option value="json">json</option>
-        </param>
+        <param label="Harmonization metadata" name="harmonization_metadata" type="boolean" truevalue="True" falsevalue="False"
+            checked="true"
+            help="Set to False if metadata harmonization to default keys is not desired. The default is True." />
+
+        <conditional name="output_file">
+            <param label="Spectral library format" name="output_format" type="select"
+                help="Output format to convert the spectral library into.">
+                <option value="msp" selected="true">msp</option>
+                <option value="mgf">mgf</option>
+                <option value="json">json</option>
+            </param>
+            <when value="msp">
+                <param label="Export peak comments" name="export_peak_comments" type="boolean"
+                    truevalue="True" falsevalue="False" checked="true"
+                    help="Writes peak comments to individual peaks after the respective mz/intensity pair when set to True. Default is True." />
+                <param label="Export style" name="export_style" type="select"
+                    help="Converts the keys to required Export style. One of ['massbank', 'nist', 'riken', 'gnps']. Default is 'matchms'">
+                    <option value="matchms" selected="true">matchms</option>
+                    <option value="massbank">massbank</option>
+                    <option value="nist">nist</option>
+                    <option value="riken">riken</option>
+                    <option value="gnps">gnps</option>
+                </param>
+            </when>
+        </conditional>
     </inputs>
 
     <outputs>
-        <data label="${tool.name} from ${spectral_library.ext} to ${output_format} on ${on_string}" name="converted_library" format="msp">
+        <data label="${tool.name} from ${spectral_library.ext} to ${output_file.output_format} on ${on_string}" name="converted_library" format="msp">
             <change_format>
-                <when input="output_format" value="mgf" format="mgf" />
-                <when input="output_format" value="json" format="json" />
+                <when input="output_file.output_format" value="mgf" format="mgf" />
+                <when input="output_file.output_format" value="json" format="json" />
             </change_format>
         </data>
     </outputs>
@@ -48,18 +68,39 @@ save_as_${output_format}(spectra, "${converted_library}")
     <tests>
         <test>
             <param name="spectral_library" value="similarity/RECETOX_Exposome_pesticides_HR_MS_20220323.msp" ftype="msp"/>
+            <param name="harmonization_metadata" value="False"/>
             <param name="output_format" value="mgf"/>
             <output name="converted_library" file="convert/mgf_out.mgf" ftype="mgf"/>
         </test>
         <test>
             <param name="spectral_library" value="similarity/RECETOX_Exposome_pesticides_HR_MS_20220323.msp" ftype="msp"/>
+            <param name="harmonization_metadata" value="False"/>
             <param name="output_format" value="json"/>
             <output name="converted_library" file="convert/json_out.json" ftype="json"/>
         </test>
         <test>
             <param name="spectral_library" value="convert/mgf_out.mgf" ftype="mgf"/>
+            <param name="harmonization_metadata" value="False"/>
+            <param name="export_peak_comments" value="False"/>
             <param name="output_format" value="msp"/>
+            <param name="export_style" value="matchms"/>
             <output name="converted_library" file="convert/msp_out.msp" ftype="msp"/>
+        </test>
+        <test>
+            <param name="spectral_library" value="convert/mgf_out.mgf" ftype="mgf"/>
+            <param name="harmonization_metadata" value="True"/>
+            <param name="export_peak_comments" value="False"/>
+            <param name="output_format" value="msp"/>
+            <param name="export_style" value="matchms"/>
+            <output name="converted_library" file="convert/harmonized_msp_out.msp" ftype="msp"/>
+        </test>
+        <test>
+            <param name="spectral_library" value="convert/mgf_out.mgf" ftype="mgf"/>
+            <param name="harmonization_metadata" value="True"/>
+            <param name="export_peak_comments" value="True"/>
+            <param name="output_format" value="msp"/>
+            <param name="export_style" value="matchms"/>
+            <output name="converted_library" file="convert/harmonized_msp_peakcomments_out.msp" ftype="msp"/>
         </test>
     </tests>
 
