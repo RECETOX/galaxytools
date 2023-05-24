@@ -19,7 +19,7 @@
                 filename = '$input_file',
                 min_pres = $min_pres,
                 min_run = $min_run,
-                mz_tol = $mz_tol/1e6,
+                mz_tol = ${mz_tol}/1e6,
                 baseline_correct = $baseline_correct,
                 baseline_correct_noise_percentile = 0.05,
                 intensity_weighted = $intensity_weighted,
