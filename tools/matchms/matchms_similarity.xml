@@ -23,7 +23,7 @@
 
     <configfiles>
         <configfile name="matchms_python_cli">
-            python3 ${__tool_directory__}/matchms_spectral_similarity_wrapper.py \
+            python3 ${__tool_directory__}/matchms_similarity_wrapper.py \
             #if $ri_filtering.is_true
             -r $ri_filtering.tolerance \
             #end if
