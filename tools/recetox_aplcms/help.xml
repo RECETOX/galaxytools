@@ -110,7 +110,6 @@ recetox-aplcms - compute clusters
 =================================
 
 Group features with `mz` and `rt` using tolerances within the tolerance into clusters, creating larger features from raw data points.
-Custom tolerances for `mz` and `rt` are computed based on the given parameters.
 The tool takes a collection of all detected features and computes the clusters over a global feature table, adding the `sample_id` and `cluster` columns to the table.
 
 Example Output
@@ -133,7 +132,7 @@ Example Output
 recetox-aplcms - correct time
 =============================
 
-Apply spline-based retention time correction to a feature table given the template table and the computed `mz` and `rt` tolerances.
+Apply spline-based retention time correction to a feature table given the template table and the `mz` and `rt` tolerances.
 
 Example Output
 --------------

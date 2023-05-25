@@ -45,3 +45,9 @@ repositories:
       - matchms_split.py
       - test-data
       - macros.xml
+  matchms_metadata_export:
+    description: "Export all metadata from mass spectra file to tabular format."
+    include:
+      - matchms_metadata_export.xml
+      - test-data
+      - macros.xml

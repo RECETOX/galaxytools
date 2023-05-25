@@ -1,4 +1,4 @@
-<tool id="recetox_aplcms_remove_noise" name="recetox-aplcms - remove noise" version="@TOOL_VERSION@+galaxy0">
+<tool id="recetox_aplcms_remove_noise" name="recetox-aplcms - remove noise" version="@TOOL_VERSION@+galaxy1">
     <description>filter noise and detect peaks in high resolution mass spectrometry (HRMS) profile data</description>
     <macros>
         <import>macros.xml</import>
@@ -15,11 +15,11 @@
         <configfile name="run_script"><![CDATA[
             sample_name <- readChar('sample_name.txt', file.info('sample_name.txt')\$size)
 
-            profile <- proc.cdf(
+            profile <- remove_noise(
                 filename = '$input_file',
                 min_pres = $min_pres,
                 min_run = $min_run,
-                mz_tol = $mz_tol/1e6,
+                mz_tol = ${mz_tol}/1e6,
                 baseline_correct = $baseline_correct,
                 baseline_correct_noise_percentile = 0.05,
                 intensity_weighted = $intensity_weighted,
@@ -39,11 +39,14 @@
     </inputs>
 
     <outputs>
-        <data label="${tool.name} on ${on_string}" name="output_file" format="parquet" />
+        <data label="${($input_file.element_identifier).rsplit('.',1)[0]}.parquet" name="output_file" format="parquet" />
     </outputs>
 
     <tests>
-
+        <test>
+            <param name="input_file" value="mbr_test0.mzml" ftype="mzml"/>
+            <output name="output_file" file="remove_noise_docker.parquet" ftype="parquet" />
+        </test>
     </tests>
 
     <help>

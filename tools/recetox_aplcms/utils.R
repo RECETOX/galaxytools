@@ -39,10 +39,10 @@ load_parquet_collection <- function(files) {
     return(features)
 }
 
-save_parquet_collection <- function(table, sample_names, subdir) {
+save_parquet_collection <- function(feature_tables, sample_names, subdir) {
     dir.create(subdir)
     for (i in seq_len(length(table$feature_tables))) {
-      filename <- file.path(subdir, paste0(subdir, "_", sample_names[i], ".parquet"))
+      filename <- file.path(subdir, paste0(sample_names[i], ".parquet"))
       feature_table <- as.data.frame(table$feature_tables[[i]])
       feature_table <- save_sample_name(feature_table, sample_names[i])
       arrow::write_parquet(feature_table, filename)
@@ -57,14 +57,6 @@ save_tolerances <- function(table, tol_file) {
     mz_tolerance <- c(table$mz_tol_relative)
     rt_tolerance <- c(table$rt_tol_relative)
     arrow::write_parquet(data.frame(mz_tolerance, rt_tolerance), tol_file)
-}
-
-get_mz_tol <- function(tolerances) {
-    return(tolerances$mz_tolerance)
-}
-
-get_rt_tol <- function(tolerances) {
-    return(tolerances$rt_tolerance)
 }
 
 save_aligned_features <- function(aligned_features, metadata_file, rt_file, intensity_file) {
