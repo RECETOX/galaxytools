@@ -21,7 +21,7 @@
 # Load libraries
 rm(list = ls(all = TRUE))
 
-suppressMessages(library("RMassBank", warn.conflicts = T, quietly = T))
+suppressMessages(library("RMassBank", warn.conflicts = TRUE, quietly = TRUE))
 
 #############################################################
 # Read arguments

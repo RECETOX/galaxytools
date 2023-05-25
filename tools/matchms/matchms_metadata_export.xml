@@ -1,0 +1,59 @@
+<tool id="matchms_metadata_export" name="matchms metadata export " version="0.19.0+galaxy0" profile="21.05">
+    <description>extract all metadata from mass spectra file to tabular format</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="creator"/>
+    <requirements>
+        <requirement type="package" version="0.19.0">matchms</requirement>
+    </requirements>
+
+    <command detect_errors='aggressive'><![CDATA[
+        python ${matchms_python_cli}
+    ]]></command>
+
+<configfiles>
+<configfile name="matchms_python_cli">
+import pandas
+from matchms.importing import load_from_msp, load_from_mgf
+from matchms.exporting.metadata_export import export_metadata_as_csv
+
+spectra_list = list(load_from_${input_file.ext}("${input_file}", $harmonize_metadata))
+
+export_metadata_as_csv(spectra_list, "${output_file}")
+</configfile>
+</configfiles>
+
+    <inputs>
+        <param label="Spectra file" name="input_file" type="data" format="msp,mgf" help="Mass spectral library file."/>
+        <param label="Harmonize metadata" name="harmonize_metadata" type="boolean" truevalue="True" falsevalue="False"
+               checked="false" help="Apply harmonization process on the metadata keys (e.g. parse numeric values, derive precursor mass)."/>
+    </inputs>
+
+    <outputs>
+        <data label="matchms extract metadata on ${on_string}" name="output_file" format="csv"/>
+    </outputs>
+
+    <tests>
+        <test>
+            <param name="input_file" value="convert/mgf_out.mgf" ftype="mgf"/>
+            <output name="output_file" file="convert/metadata.csv" ftype="csv" compare="sim_size" delta="0"/>
+        </test>
+        <test>
+            <param name="input_file" value="similarity/RECETOX_Exposome_pesticides_HR_MS_20220323.msp" ftype="msp"/>
+            <output name="output_file" file="convert/metadata.csv" ftype="csv" compare="sim_size" delta="0"/>
+        </test>
+    </tests>
+
+    <help><![CDATA[
+    Documentation
+        Mass spectral libraries are often stored in various formats, such as `msp`, `mgf` or `json`.
+        This tool can be used to export the metadata accompanying the actual spectral information to a tabular file.
+
+        During harmonization of metadata, some of the keywords might change during the conversion process to a unified form.
+
+        For more documentation on the matchms library see https://github.com/matchms/matchms/blob/master/README.rst and https://matchms.readthedocs.io/en/latest/.
+    ]]></help>
+
+    <expand macro="citations"/>
+</tool>
