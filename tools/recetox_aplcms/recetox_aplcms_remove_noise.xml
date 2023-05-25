@@ -1,4 +1,4 @@
-<tool id="recetox_aplcms_remove_noise" name="recetox-aplcms - remove noise" version="@TOOL_VERSION@+galaxy0">
+<tool id="recetox_aplcms_remove_noise" name="recetox-aplcms - remove noise" version="@TOOL_VERSION@+galaxy1">
     <description>filter noise and detect peaks in high resolution mass spectrometry (HRMS) profile data</description>
     <macros>
         <import>macros.xml</import>
@@ -39,7 +39,7 @@
     </inputs>
 
     <outputs>
-        <data label="${tool.name} on ${on_string}" name="output_file" format="parquet" />
+        <data label="${($input_file.element_identifier).rsplit('.',1)[0]}.parquet" name="output_file" format="parquet" />
     </outputs>
 
     <tests>
