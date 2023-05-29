@@ -1,4 +1,4 @@
-<tool id="biotransformer" name="BioTransformer" version="@TOOL_VERSION@+galaxy0">
+<tool id="biotransformer" name="BioTransformer" version="@TOOL_VERSION@+galaxy0" profile="23.00">
     <macros>
         <import>macros.xml</import>
     </macros>
