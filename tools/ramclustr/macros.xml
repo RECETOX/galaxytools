@@ -71,7 +71,6 @@
         <param label="Correlation method" name="cor_method" type="select" display="radio"
                help="Choose correlational method to be used - see [1] for details.">
             <option value="pearson" selected="true">pearson</option>
-            <option value="everything">everything</option>
             <option value="spearman">spearman</option>
             <option value="kendall">kendall</option>
         </param>
