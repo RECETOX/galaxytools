@@ -72,7 +72,6 @@ apply_normalisation <- function(ramclustObj = NULL,
                                 normalize_method,
                                 metadata_file = NULL,
                                 qc_inj_range) {
-
     if (normalize_method == "TIC") {
         ramclustObj <- RAMClustR::rc.feature.normalize.tic(ramclustObj = ramclustObj)
     } else if (normalize_method == "quantile") {
