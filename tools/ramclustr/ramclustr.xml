@@ -1,4 +1,4 @@
-<tool id="ramclustr" name="RAMClustR" version="@TOOL_VERSION@+galaxy2">
+<tool id="ramclustr" name="RAMClustR" version="@TOOL_VERSION@+galaxy0">
     <description>A feature clustering algorithm for non-targeted mass spectrometric metabolomics data.</description>
     <macros>
         <import>macros.xml</import>
@@ -7,10 +7,11 @@
 
     <requirements>
         <requirement type="package" version="@TOOL_VERSION@">r-ramclustr</requirement>
-        <requirement type="package" version="3.14.0">bioconductor-xcms</requirement>
+        <requirement type="package" version="3.20.0">bioconductor-xcms</requirement>
+        <requirement type="package" version="9.0.0">r-arrow</requirement>
     </requirements>
 
-    <command detect_errors="aggressive"><![CDATA[
+    <command detect_errors="exit_code"><![CDATA[
         Rscript
             -e 'source("${__tool_directory__}/ramclustr_wrapper.R")'
             -e 'source("${ramclustr_method}")'
@@ -18,52 +19,87 @@
     </command>
     <configfiles>
         <configfile name="ramclustr_method">
-            store_output(
-                #if $filetype.type_choice == "xcms":
-                ramclustr_xcms(
-                    input_xcms = "$filetype.xcms.input_xcms",
-                    use_pheno = $filetype.xcms.usePheno,
-                #else:
-                ramclustr_csv(
-                    ms = "$filetype.ms_csv.ms",
+            #if $filetype.type_choice == "xcms":
+            obj = load("$filetype.xcms.input_xcms")
+            ramclustObj = RAMClustR::rc.get.xcms.data(
+                xcmsObj = xdata,
+                #if $extras.ExpDes:
+                    ExpDes = load_experiment_definition("${$extras.ExpDes}"),
+                #end if
+                mzdec = $msp_output_details.mzdec,
+                ensure.no.na = $extras.replace_zeros
+            )
+            #else if $filetype.type_choice == "csv":
+            ramclustObj = RAMClustR::rc.get.csv.data(
+                csv = "$filetype.ms_csv.ms",
+                #if $filetype.ms_csv.idmsms:
                     idmsms = "$filetype.ms_csv.idmsms",
                 #end if
-                    sr = $filetype.required.sr,
-                    #if $filetype.type_choice == "xcms":
-                        #if $filetype.required.st
-                            st = $filetype.required.st,
-                        #end if
-                    #else:
-                        st = $filetype.required.st,
-                    #end if
-                    cor_method = "$filetype.required.cor_method",
-                    maxt = $filetype.required.maxt,
-                    linkage = "$clustering.linkage",
-                    min_module_size = $clustering.minModuleSize,
-                    hmax = $clustering.hmax,
-                    deep_split = "$clustering.deepSplit",
-                    normalize = "$normalisation.normalisation_method.normalize",
-                    #if "$normalisation.normalisation_method.normalize" == "batch.qc":
-                        metadata_file = "$normalisation.normalisation_method.batch_order_qc",
-                        qc_inj_range = $normalisation.normalisation_method.qc_inj_range,
-                    #end if
-                    block_size = $performance.blocksize,
-                    mult = $performance.mult,
-                    mzdec = $msp_output_details.mzdec,
-                    rt_only_low_n = $extras.rt_only_low_n,
-                    replace_zeros = $extras.replace_zeros,
-                    #if $extras.ExpDes:
-                        exp_design = "${$extras.ExpDes}"
-                    #end if
-                ),
-                $msp_output_details.merge_msp,
-                "$spec_abundance",
-            #if $msp_output_details.merge_msp:
-                "$mass_spectra_merged"
-            #else:
-                NULL
+                #if $filetype.ms_csv.csv_phenoData:
+                    phenoData = "$filetype.ms_csv.csv_phenoData",
+                #end if
+                #if $extras.ExpDes:
+                    ExpDes = load_experiment_definition("${$extras.ExpDes}"),
+                #end if
+                st = $filetype.required.st,
+                ensure.no.na = $extras.replace_zeros
+            )
+            #else if $filetype.type_choice == "recetox-aplcms":
+            ramclustObj = read_ramclustr_aplcms(
+                ms1_featureDefinitions = "$filetype.ms_dataframe.ms1_featureDefinitions",
+                ms1_featureValues = "$filetype.ms_dataframe.ms1_featureValues",
+                #if $filetype.ms_dataframe.df_phenoData:
+                    df_phenoData = "$filetype.ms_dataframe.df_phenoData",
+                #end if
+                #if $extras.ExpDes:
+                    ExpDes = "${$extras.ExpDes}",
+                #end if
+                st = $filetype.required.st,
+                ensure.no.na = $extras.replace_zeros
+            )
             #end if
-                )
+
+            #if $extras.replace_zeros == "TRUE":
+            ramclustObj = RAMClustR::rc.feature.replace.na(ramclustObj = ramclustObj)
+            #end if
+
+            #if $normalisation.normalisation_method.normalize != "none":
+            ramclustObj = apply_normalisation(
+                ramclustObj = ramclustObj,
+                #if $normalisation.normalisation_method.normalize == "batch.qc":
+                    metadata_file = "${$normalisation.normalisation_method.batch_order_qc}",
+                    qc_inj_range = $normalisation.normalisation_method.qc_inj_range,
+                #end if
+                normalize_method = "$normalisation.normalisation_method.normalize"
+            )
+            #end if
+
+            ramclustObj = RAMClustR::rc.ramclustr(
+                ramclustObj = ramclustObj,
+                st = $filetype.required.st,
+                sr = $filetype.required.sr,
+                maxt = $filetype.required.maxt,
+                deepSplit = $clustering.deepSplit,
+                blocksize = $performance.blocksize,
+                mult = $performance.mult,
+                hmax = $clustering.hmax,
+                minModuleSize = $clustering.minModuleSize,
+                linkage = "$clustering.linkage",
+                cor.method = "$filetype.required.cor_method",
+                rt.only.low.n = $extras.rt_only_low_n,
+                fftempdir = NULL,
+            )
+            
+            store_output(
+                ramclustr_obj = ramclustObj,
+                output_merge_msp = $msp_output_details.merge_msp,
+                output_spec_abundance = "$spec_abundance",
+                #if $msp_output_details.merge_msp:
+                    msp_file = "$mass_spectra_merged"
+                #else:
+                    msp_file = NULL
+                #end if
+            )
         </configfile>
     </configfiles>
     <inputs>
@@ -71,6 +107,7 @@
             <param name="type_choice" type="select" label="Choose input format:">
                 <option value="xcms" selected="true">XCMS</option>
                 <option value="csv">CSV</option>
+                <option value="recetox-aplcms">RECETOX-APLCMS</option>
             </param>
             <when value="xcms">
                 <expand macro="parameters_xcms" />
@@ -82,6 +119,14 @@
             </when>
             <when value="csv">
                 <expand macro="parameters_csv" />
+                <section name="required" title="General parameters" expanded="true">
+                    <param label="Sigma t" name="st" type="float" value="1" help="Retention time similarity.
+                           A recommended starting point is half the value of your average chromatographic peak width at half max (seconds))."/>
+                    <expand macro="parameters_required" />
+                </section>
+            </when>
+            <when value="recetox-aplcms">
+                <expand macro="parameters_recetox_aplcms" />
                 <section name="required" title="General parameters" expanded="true">
                     <param label="Sigma t" name="st" type="float" value="1" help="Retention time similarity.
                            A recommended starting point is half the value of your average chromatographic peak width at half max (seconds))."/>
@@ -108,6 +153,9 @@
                     <param name="maxt" value="259.8"/>
                 </section>
             </section>
+            <section name="msp_output_details">
+                <param name="mzdec" value="4"/>
+            </section>
             <section name="extras">
                 <param name="ExpDes" value="lc-ramclustr-define-experiment.csv" ftype="csv"/>
             </section>
@@ -123,6 +171,9 @@
                 <section name="required">
                     <param name="maxt" value="78.4"/>
                 </section>
+            </section>
+            <section name="msp_output_details">
+                <param name="mzdec" value="4"/>
             </section>
             <section name="normalisation">
                 <section name="normalisation_method">
