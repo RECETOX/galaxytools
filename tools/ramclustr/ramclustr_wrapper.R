@@ -35,136 +35,67 @@ read_metadata <- function(filename) {
     return(data)
 }
 
-ramclustr_xcms <- function(input_xcms,
-                           use_pheno,
-                           sr,
-                           st = NULL,
-                           cor_method,
-                           maxt,
-                           linkage,
-                           min_module_size,
-                           hmax,
-                           deep_split,
-                           normalize,
-                           metadata_file = NULL,
-                           qc_inj_range,
-                           block_size,
-                           mult,
-                           mzdec,
-                           rt_only_low_n,
-                           replace_zeros,
-                           exp_design = NULL) {
-    obj <- load(input_xcms)
+read_ramclustr_aplcms <- function(ms1_featureDefinitions = NULL,
+                                  ms1_featureValues = NULL,
+                                  df_phenoData = NULL,
+                                  ExpDes = NULL,
+                                  st = NULL,
+                                  ensure.no.na = TRUE) {
+    ms1_featureDefinitions <- arrow::read_parquet(ms1_featureDefinitions)
+    ms1_featureValues <- arrow::read_parquet(ms1_featureValues)
 
-    batch <- NULL
-    order <- NULL
-    qc <- NULL
-
-    if (!is.null(metadata_file)) {
-        metadata <- read_metadata(metadata_file)
-        batch <- metadata$batch
-        order <- metadata$order
-        qc <- metadata$qc
+    if (!is.null(df_phenoData)) {
+        df_phenoData <- arrow::read_parquet(df_phenoData)
+    }
+    if (!is.null(ExpDes)) {
+        ExpDes <- load_experiment_definition(ExpDes)
     }
 
-    experiment <- NULL
+    featureValues <- ms1_featureValues[-1]
+    featureValues <- t(featureValues)
+    colnames(featureValues) <- ms1_featureValues[[1]]
 
-    if (!is.null(exp_design)) {
-        experiment <- load_experiment_definition(exp_design)
-    }
+    featureDefinitions <- data.frame(ms1_featureDefinitions)
 
-    x <- RAMClustR::ramclustR(
-        xcmsObj = xdata,
+    ramclustObj <- RAMClustR::rc.get.df.data(
+        ms1_featureDefinitions = featureDefinitions,
+        ms1_featureValues = featureValues,
+        phenoData = df_phenoData,
+        ExpDes = ExpDes,
         st = st,
-        maxt = maxt,
-        sr = sr,
-        deepSplit = deep_split,
-        blocksize = block_size,
-        mult = mult,
-        hmax = hmax,
-        usePheno = use_pheno,
-        mspout = FALSE,
-        qc.inj.range = qc_inj_range,
-        normalize = normalize,
-        minModuleSize = min_module_size,
-        linkage = linkage,
-        mzdec = mzdec,
-        cor.method = cor_method,
-        rt.only.low.n = rt_only_low_n,
-        fftempdir = NULL,
-        replace.zeros = replace_zeros,
-        batch = batch,
-        order = order,
-        qc = qc,
-        ExpDes = experiment
+        ensure.no.na = ensure.no.na
     )
-    return(x)
+    return(ramclustObj)
 }
 
-ramclustr_csv <- function(ms,
-                          idmsms,
-                          sr,
-                          st,
-                          cor_method,
-                          maxt,
-                          linkage,
-                          min_module_size,
-                          hmax,
-                          deep_split,
-                          normalize,
-                          metadata_file = NULL,
-                          qc_inj_range,
-                          block_size,
-                          mult,
-                          mzdec,
-                          rt_only_low_n,
-                          replace_zeros,
-                          exp_design = NULL) {
-    if (!file.exists(idmsms)) {
-        idmsms <- NULL
+apply_normalisation <- function(ramclustObj = NULL,
+                                normalize_method,
+                                metadata_file = NULL,
+                                qc_inj_range) {
+
+    if (normalize_method == "TIC") {
+        ramclustObj <- RAMClustR::rc.feature.normalize.tic(ramclustObj = ramclustObj)
+    } else if (normalize_method == "quantile") {
+        ramclustObj <- RAMClustR::rc.feature.normalize.quantile(ramclustObj)
+    } else {
+        batch <- NULL
+        order <- NULL
+        qc <- NULL
+
+        if (!is.null(metadata_file)) {
+            metadata <- read_metadata(metadata_file)
+            batch <- metadata$batch
+            order <- metadata$order
+            qc <- metadata$qc
+        }
+
+        ramclustObj <- RAMClustR::rc.feature.normalize.batch.qc(
+            order = order,
+            batch = batch,
+            qc = qc,
+            ramclustObj = ramclustObj,
+            qc.inj.range = qc_inj_range
+        )
     }
-
-    batch <- NULL
-    order <- NULL
-    qc <- NULL
-
-    if (!is.null(metadata_file)) {
-        metadata <- read_metadata(metadata_file)
-        batch <- metadata$batch
-        order <- metadata$order
-        qc <- metadata$qc
-    }
-
-    experiment <- NULL
-
-    if (!is.null(exp_design)) {
-        experiment <- load_experiment_definition(exp_design)
-    }
-
-    x <- RAMClustR::ramclustR(
-        ms = ms,
-        idmsms = idmsms,
-        st = st,
-        maxt = maxt,
-        sr = sr,
-        deepSplit = deep_split,
-        blocksize = block_size,
-        mult = mult,
-        hmax = hmax,
-        mspout = FALSE,
-        qc.inj.range = qc_inj_range,
-        normalize = normalize,
-        minModuleSize = min_module_size,
-        linkage = linkage,
-        mzdec = mzdec,
-        cor.method = cor_method,
-        rt.only.low.n = rt_only_low_n,
-        fftempdir = NULL,
-        replace.zeros = replace_zeros,
-        batch = batch,
-        order = order,
-        qc = qc,
-        ExpDes = experiment
-    )
-    return(x)
+    return(ramclustObj)
 }
