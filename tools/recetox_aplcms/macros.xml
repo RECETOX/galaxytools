@@ -1,5 +1,5 @@
 <macros>
-    <token name="@TOOL_VERSION@">0.10.3</token>
+    <token name="@TOOL_VERSION@">0.11.0</token>
     <xml name="requirements">
         <requirements>
             <requirement type="package" version="@TOOL_VERSION@">r-recetox-aplcms</requirement>
@@ -93,32 +93,11 @@
         </section>
     </xml>
 
-    <xml name="compute_clusters_params">
-        <conditional name="tolerances_input_method">
-            <param name="input_method" type="select" display="radio" label="Tolerances input method"
-                   help="Tolerances can be entered directly or loaded from a file.">
-                <option value="direct" selected="true">direct</option>
-                <option value="file">file</option>
-            </param>
-            <when value="direct">
-                <param name="mz_tol_relative" type="float" optional="true" label="Relative m/z tolerance"
-                       help="Relative m/z tolerance to use for grouping features.
-                       If not provided, it is calculated from the data using kernel density estimation." />
-                <param name="rt_tol_relative" type="float" optional="true" label="Relative rt tolerance [unit corresponds to the retention time]"
-                       help="Relative retention time tolerance to use for grouping features.
-                       If not provided, it is calculated from the data using kernel density estimation." />
-            </when>
-            <when value="file">
-                <param label="Input tolerances values" name="input_tolerances" type="data" format="parquet"
-                       help="Table containing tolerance values." />
-            </when>
-        </conditional>
-        <param name="mz_tol_absolute" type="float" label="Minimal absolute m/z tolerance [Da]" value="1e-05"
-               help="During the clustering, an m/z tolerance is computed based on the data and the specified relative tolerance.
-               This parameter allows the specification of a minimal value of this tolerance." />
-        <param name="mz_max_diff" type="float" label="Maximal m/z difference [Da]" value="0.01"
-               help="Maximum allowed difference between feature m/z values to belong to the same cluster." />
-
+    <xml name="tolerances">
+       <param name="mz_tol_relative_ppm" type="float" value="10" label="Relative m/z tolerance [ppm]"
+              help="Relative m/z tolerance to use for grouping features." />
+       <param name="rt_tol" type="float" value="5" label="Retention time tolerance [unit corresponds to the retention time]"
+              help="Retention time tolerance to use for grouping features." />
     </xml>
 
     <xml name="recover_weaker_params">

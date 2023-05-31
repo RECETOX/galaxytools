@@ -15,7 +15,6 @@
               metadata <- load_data_from_parquet_file('$metadata_file')
               rt_table <- load_data_from_parquet_file('$rt_file')
               intensity_table <- load_data_from_parquet_file('$intensity_file')
-              tolerances <- load_data_from_parquet_file('$tolerances')
               known_table <- read_known_table('$known_table')
 
               feature_tables <- join_tables_to_list(metadata, rt_table, intensity_table)
@@ -28,8 +27,8 @@
                   #else:
                   match_tol_ppm = NA,
                   #end if
-                  mz_tol_relative = get_mz_tol(tolerances),
-                  rt_tol_relative = get_rt_tol(tolerances),
+                  mz_tol_relative = $mz_tol_relative_ppm * 1e-06,
+                  rt_tol_relative = $rt_tol,
                   #if $direction.selection == "TRUE":
                   new_feature_min_count = $direction.new_feature_min_count,
                   #end if
@@ -63,8 +62,7 @@
                RT_min (minimum observed retention time), RT_max (maximum observed retention time),
                int_mean.log. (mean observed log intensity), int_sd.log. (standard deviation of observed log intensity),
                int_min.log. (minimum observed log intensity), int_max.log. (maximum observed log intensity)." />
-        <param label="Input tolerances values" name="tolerances" type="data" format="parquet"
-               help="Table containing tolerance values." />
+        <expand macro="tolerances"/>
 
         <conditional name="direction">
             <param label="Tables merge direction" name="selection" type="select"

@@ -43,9 +43,9 @@ save_as_${output_file.output_format}(spectra, "${converted_library}")
             <when value="msp">
                 <param label="Export peak comments" name="export_peak_comments" type="boolean"
                     truevalue="True" falsevalue="False" checked="true"
-                    help="Writes peak comments to individual peaks after the respective mz/intensity pair when set to True. Default is True." />
+                    help="Writes peak comments to individual peaks after the respective mz/intensity pair when selected." />
                 <param label="Export style" name="export_style" type="select"
-                    help="Converts the keys to required Export style. One of ['massbank', 'nist', 'riken', 'gnps']. Default is 'matchms'">
+                    help="Converts the keys to required Export style. One of ['matchms', 'massbank', 'nist', 'riken', 'gnps']. Default is 'matchms'">
                     <option value="matchms" selected="true">matchms</option>
                     <option value="massbank">massbank</option>
                     <option value="nist">nist</option>

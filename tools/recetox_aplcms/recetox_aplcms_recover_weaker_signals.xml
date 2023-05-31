@@ -1,4 +1,4 @@
-<tool id="recetox_aplcms_recover_weaker_signals" name="recetox-aplcms - recover weaker signals" version="@TOOL_VERSION@+galaxy0">
+<tool id="recetox_aplcms_recover_weaker_signals" name="recetox-aplcms - recover weaker signals" version="@TOOL_VERSION@+galaxy1">
     <description>recover weaker signals from raw data using an aligned feature table</description>
     <macros>
         <import>macros.xml</import>
@@ -35,8 +35,6 @@
             rt_table <- load_data_from_parquet_file('$rt_file')
             intensity_table <- load_data_from_parquet_file('$intensity_file')
 
-            tolerances <- load_data_from_parquet_file('$tolerances')
-
             recovered <- recover.weaker(
                 filename = '$input_file',
                 sample_name = sample_name,
@@ -46,8 +44,8 @@
                 rt_table = rt_table,
                 intensity_table = intensity_table,
                 mz_tol = $mz_tol/1e6,
-                mz_tol_relative = get_mz_tol(tolerances),
-                rt_tol_relative = get_rt_tol(tolerances),
+                mz_tol_relative = $mz_tol_relative_ppm * 1e-06,
+                rt_tol_relative = $rt_tol,
                 #if $recover_mz_range:
                 recover_mz_range = $recover_mz_range/1e6,
                 #else:
@@ -94,14 +92,13 @@
                help="Table with retention times for features (rows) across samples (columns)." />
         <param name="intensity_file" type="data" format="parquet" label="Intensity table"
                help="Table with intensities for features (rows) across samples (columns)." />
-        <param label="Input tolerances values" name="tolerances" type="data" format="parquet"
-               help="Table containing tolerance values." />
+        <expand macro="tolerances"/>
         <expand macro="recover_weaker_params"/>
         <expand macro="bandwidth_params"/>
     </inputs>
 
     <outputs>
-        <data label="${tool.name} on ${on_string}" name="output_file" format="parquet" />
+        <data label="${($input_file.element_identifier).rsplit('.',1)[0]}.parquet" name="output_file" format="parquet" />
     </outputs>
 
     <tests>

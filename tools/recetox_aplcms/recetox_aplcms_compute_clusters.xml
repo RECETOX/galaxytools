@@ -1,4 +1,4 @@
-<tool id="recetox_aplcms_compute_clusters" name="recetox-aplcms - compute clusters" version="@TOOL_VERSION@+galaxy0">
+<tool id="recetox_aplcms_compute_clusters" name="recetox-aplcms - compute clusters" version="@TOOL_VERSION@+galaxy1">
     <description>compute clusters of mz and rt across samples and assign cluster IDs to individual features</description>
     <macros>
         <import>macros.xml</import>
@@ -22,42 +22,21 @@
               feature_tables <- feature_tables[ordering]
               sample_names <- sample_names[ordering]
 
-              #if $tolerances_input_method.input_method == "file"
-              tolerances <- load_data_from_parquet_file('$input_tolerances')
-              #end if
-
-              clusters <- compute_clusters(
+              clusters <- compute_clusters_simple(
                   feature_tables = feature_tables,
-                  #if $tolerances_input_method.input_method == "file"
-                  mz_tol_relative = get_mz_tol(tolerances),
-                  rt_tol_relative = get_rt_tol(tolerances),
-                  #else
-                  #if $tolerances_input_method.mz_tol_relative:
-                  mz_tol_relative = $tolerances_input_method.mz_tol_relative,
-                  #else:
-                  mz_tol_relative = NA,
-                  #end if
-                  #if $tolerances_input_method.rt_tol_relative:
-                  rt_tol_relative = $tolerances_input_method.rt_tol_relative,
-                  #else:
-                  rt_tol_relative = NA,
-                  #end if
-                  #end if
-                  mz_max_diff = 10 * $mz_max_diff,
-                  mz_tol_absolute = $mz_tol_absolute,
                   sample_names = sample_names,
-                  do.plot = FALSE
+                  mz_tol_ppm = $mz_tol_relative_ppm,
+                  rt_tol = $rt_tol
               )
 
               save_parquet_collection(clusters, sample_names, "clustered")
-              save_tolerances(clusters, '$tolerances')
          ]]></configfile>
     </configfiles>
 
     <inputs>
         <param name="files" type="data_collection" collection_type="list" format="parquet" label="Input data"
                help="List of tables containing features." />
-        <expand macro="compute_clusters_params"/>
+        <expand macro="tolerances"/>
     </inputs>
 
     <outputs>
@@ -65,7 +44,6 @@
                     label="${tool.name} feature_tables on ${on_string}">
             <discover_datasets pattern="__designation__" directory="clustered" format="parquet" />
         </collection>
-        <data name="tolerances" format="parquet" label="${tool.name} on ${on_string} (updated tolerances)" />
     </outputs>
 
     <tests>
