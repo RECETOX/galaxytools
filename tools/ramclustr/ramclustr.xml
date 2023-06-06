@@ -50,6 +50,7 @@
                 ms1_featureValues = "$filetype.ms_dataframe.ms1_featureValues",
                 #if $filetype.ms_dataframe.df_phenoData:
                     df_phenoData = "$filetype.ms_dataframe.df_phenoData",
+                    phenoData_ext = "${filetype.ms_dataframe.df_phenoData.ext}",
                 #end if
                 #if $extras.ExpDes:
                     ExpDes = "${$extras.ExpDes}",
@@ -69,6 +70,12 @@
                 #if $normalisation.normalisation_method.normalize == "batch.qc":
                     metadata_file = "${$normalisation.normalisation_method.batch_order_qc}",
                     qc_inj_range = $normalisation.normalisation_method.qc_inj_range,
+                #end if
+                #if $normalisation.normalisation_method.normalize == "qc":
+                    metadata_file = "${$normalisation.normalisation_method.batch_order_qc}",
+                    p.cut = $normalisation.normalisation_method.p_cut,
+                    rsq.cut = $normalisation.normalisation_method.rsq_cut,
+                    p.adjust = $normalisation.normalisation_method.p_adjust,
                 #end if
                 normalize_method = "$normalisation.normalisation_method.normalize"
             )

@@ -61,8 +61,8 @@
                    help="Metadata with columns: mz, rt, feature names containing MS data."/>
             <param label="Input MS1 featureValues" name="ms1_featureValues" type="data" format="parquet"
                    help="data with rownames = sample names, colnames = feature names containing MS data."/>
-            <param label="phenoData" name="df_phenoData" type="data" format="parquet,csv" optional="true"
-                   help="dataframe containing phenoData."/>
+            <param label="phenoData" name="df_phenoData" type="data" format="tsv,csv" optional="true"
+                   help="CSV/TSV file containing phenoData."/>
         </section>
     </xml>
 
@@ -107,6 +107,7 @@
                     <option value="TIC">TIC</option>
                     <option value="quantile">quantile</option>
                     <option value="batch.qc">batch.qc</option>
+                    <option value="qc">qc</option>
                 </param>
                 <when value="batch.qc">
                     <param label="Metadata details" name="batch_order_qc" type="data" format="csv"
@@ -121,6 +122,22 @@
                              to individual poor outliers (though these are first removed using the boxplot function outlier
                              detection), while wider values provide less local precision in normalization but better
                              stability to individual peak areas."/>
+                </when>
+                <when value="qc">
+                    <param label="Metadata details" name="batch_order_qc" type="data" format="csv" optional="true"
+                           help="CSV with sample names (or indices, currently not handled) on rows and columns with:
+                           batch number ('batch'), position in sequence ('order'), and whether it is a QC sample or not
+                           ('qc' with true/false OR 'sampleType' with 'sample/qc/blank')."/>
+                    <param label="p.cut" name="p_cut" type="float" value="0.05" 
+                            help="Numeric when run order correction is applied, only features showing a run order vs 
+                            signal with a linear p-value (after FDR correction) &lt; p.cut will be adjusted.  also requires 
+                            r-squared &lt; rsq.cut."/>
+                    <param label="rsq.cut" name="rsq_cut" type="float" value="0.1" 
+                            help="Numeric when run order correction is applied, only features showing a run order vs signal 
+                            with a linear r-squared &gt; rsq.cut will be adjusted. also requires p values &lt; p.cut."/>
+                    <param label="p.adjust" name="p_adjust" type="text" value="none" 
+                            help="Which p-value adjustment should be used? one of ['holm', 'hochberg', 'hommel', 'bonferroni', 'BH', 
+                            'BY', 'fdr', 'none']"/>
                 </when>
             </conditional>
         </section>

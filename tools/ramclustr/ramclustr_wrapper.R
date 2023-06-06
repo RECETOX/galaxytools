@@ -38,6 +38,7 @@ read_metadata <- function(filename) {
 read_ramclustr_aplcms <- function(ms1_featureDefinitions = NULL,
                                   ms1_featureValues = NULL,
                                   df_phenoData = NULL,
+                                  phenoData_ext = NULL,
                                   ExpDes = NULL,
                                   st = NULL,
                                   ensure.no.na = TRUE) {
@@ -45,7 +46,11 @@ read_ramclustr_aplcms <- function(ms1_featureDefinitions = NULL,
     ms1_featureValues <- arrow::read_parquet(ms1_featureValues)
 
     if (!is.null(df_phenoData)) {
-        df_phenoData <- arrow::read_parquet(df_phenoData)
+        if(phenoData_ext == "csv"){
+            phenoData <- read.csv(file = df_phenoData, header = TRUE, check.names = FALSE)
+        } else {
+            phenoData <- read.csv(file = df_phenoData, header = TRUE, check.names = FALSE, sep = "\t")
+        }
     }
     if (!is.null(ExpDes)) {
         ExpDes <- load_experiment_definition(ExpDes)
@@ -60,7 +65,7 @@ read_ramclustr_aplcms <- function(ms1_featureDefinitions = NULL,
     ramclustObj <- RAMClustR::rc.get.df.data(
         ms1_featureDefinitions = featureDefinitions,
         ms1_featureValues = featureValues,
-        phenoData = df_phenoData,
+        phenoData = phenoData,
         ExpDes = ExpDes,
         st = st,
         ensure.no.na = ensure.no.na
@@ -71,16 +76,19 @@ read_ramclustr_aplcms <- function(ms1_featureDefinitions = NULL,
 apply_normalisation <- function(ramclustObj = NULL,
                                 normalize_method,
                                 metadata_file = NULL,
-                                qc_inj_range) {
+                                qc_inj_range,
+                                p.cut,
+                                rsq.cut,
+                                p.adjust) {
+    batch <- NULL
+    order <- NULL
+    qc <- NULL
+
     if (normalize_method == "TIC") {
         ramclustObj <- RAMClustR::rc.feature.normalize.tic(ramclustObj = ramclustObj)
     } else if (normalize_method == "quantile") {
         ramclustObj <- RAMClustR::rc.feature.normalize.quantile(ramclustObj)
-    } else {
-        batch <- NULL
-        order <- NULL
-        qc <- NULL
-
+    } else if (normalize_method == "batch.qc") {
         if (!is.null(metadata_file)) {
             metadata <- read_metadata(metadata_file)
             batch <- metadata$batch
@@ -94,6 +102,23 @@ apply_normalisation <- function(ramclustObj = NULL,
             qc = qc,
             ramclustObj = ramclustObj,
             qc.inj.range = qc_inj_range
+        )
+    } else {
+        if (!is.null(metadata_file)) {
+            metadata <- read_metadata(metadata_file)
+            batch <- metadata$batch
+            order <- metadata$order
+            qc <- metadata$qc
+        }
+
+        ramclustObj <- RAMClustR::rc.feature.normalize.qc(
+            order = order,
+            batch = batch,
+            qc = qc,
+            ramclustObj = ramclustObj,
+            p.cut = p.cut,
+            rsq.cut = rsq.cut,
+            p.adjust = p.adjust
         )
     }
     return(ramclustObj)
