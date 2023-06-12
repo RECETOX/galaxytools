@@ -50,8 +50,6 @@
         <section name="xcms" title="Input MS Data as XCMS" expanded="true">
             <param name="input_xcms" label="Input XCMS" type="data" format="rdata.xcms.fillpeaks"
                    help="Grouped feature data for clustering." />
-            <param label="Preserve phenotype" name="usePheno" type="boolean" truevalue="TRUE" falsevalue="FALSE" checked="true"
-                   help="Transfer phenotype data from XCMS object to Spec abundance file."/>
         </section>
     </xml>
 
@@ -177,7 +175,7 @@
     </xml>
 
     <xml name="output_msp">
-       <collection label="Mass spectra from ${tool.name} on ${on_string}" name="mass_spectra_collection" type="list">
+       <collection label="Mass spectra from ${tool.name} on ${on_string} list" name="mass_spectra_collection" type="list">
            <discover_datasets pattern="__name_and_ext__" directory="spectra" recurse="true" ext="msp"/>
            <filter>not msp_output_details['merge_msp']</filter>
        </collection>
