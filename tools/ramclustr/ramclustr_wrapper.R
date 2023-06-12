@@ -47,9 +47,9 @@ read_ramclustr_aplcms <- function(ms1_featureDefinitions = NULL,
 
     if (!is.null(df_phenoData)) {
         if(phenoData_ext == "csv"){
-            phenoData <- read.csv(file = df_phenoData, header = TRUE, check.names = FALSE)
+            df_phenoData <- read.csv(file = df_phenoData, header = TRUE, check.names = FALSE)
         } else {
-            phenoData <- read.csv(file = df_phenoData, header = TRUE, check.names = FALSE, sep = "\t")
+            df_phenoData <- read.csv(file = df_phenoData, header = TRUE, check.names = FALSE, sep = "\t")
         }
     }
     if (!is.null(ExpDes)) {
@@ -65,7 +65,7 @@ read_ramclustr_aplcms <- function(ms1_featureDefinitions = NULL,
     ramclustObj <- RAMClustR::rc.get.df.data(
         ms1_featureDefinitions = featureDefinitions,
         ms1_featureValues = featureValues,
-        phenoData = phenoData,
+        phenoData = df_phenoData,
         ExpDes = ExpDes,
         st = st,
         ensure.no.na = ensure.no.na
