@@ -3,10 +3,15 @@ store_output <- function(ramclustr_obj,
                          output_spec_abundance,
                          msp_file) {
     RAMClustR::write.msp(ramclustr_obj, one.file = output_merge_msp)
-    write.csv(ramclustr_obj$SpecAbund, file = output_spec_abundance, row.names = TRUE, quote = FALSE)
+    write.csv(ramclustr_obj$SpecAbund,
+        file = output_spec_abundance,
+        row.names = TRUE, quote = FALSE
+    )
 
     if (!is.null(msp_file)) {
-        exp_name <- ramclustr_obj$ExpDes[[1]][which(row.names(ramclustr_obj$ExpDes[[1]]) == "Experiment"), 1]
+        exp_name <- ramclustr_obj$ExpDes[[1]][which(
+            row.names(ramclustr_obj$ExpDes[[1]]) == "Experiment"
+        ), 1]
         filename <- paste("spectra/", exp_name, ".msp", sep = "")
         file.copy(from = filename, to = msp_file, overwrite = TRUE)
     }
@@ -35,45 +40,51 @@ read_metadata <- function(filename) {
     return(data)
 }
 
-read_ramclustr_aplcms <- function(ms1_featureDefinitions = NULL,
-                                  ms1_featureValues = NULL,
-                                  df_phenoData = NULL,
-                                  phenoData_ext = NULL,
-                                  ExpDes = NULL,
+read_ramclustr_aplcms <- function(ms1_featuredefinitions = NULL,
+                                  ms1_featurevalues = NULL,
+                                  df_phenodata = NULL,
+                                  phenodata_ext = NULL,
+                                  exp_des = NULL,
                                   st = NULL,
-                                  ensure.no.na = TRUE) {
-    ms1_featureDefinitions <- arrow::read_parquet(ms1_featureDefinitions)
-    ms1_featureValues <- arrow::read_parquet(ms1_featureValues)
+                                  ensure_no_na = TRUE) {
+    ms1_featuredefinitions <- arrow::read_parquet(ms1_featuredefinitions)
+    ms1_featurevalues <- arrow::read_parquet(ms1_featurevalues)
 
-    if (!is.null(df_phenoData)) {
-        if (phenoData_ext == "csv") {
-            df_phenoData <- read.csv(file = df_phenoData, header = TRUE, check.names = FALSE)
+    if (!is.null(df_phenodata)) {
+        if (phenodata_ext == "csv") {
+            df_phenodata <- read.csv(
+                file = df_phenodata,
+                header = TRUE, check.names = FALSE
+            )
         } else {
-            df_phenoData <- read.csv(file = df_phenoData, header = TRUE, check.names = FALSE, sep = "\t")
+            df_phenodata <- read.csv(
+                file = df_phenodata,
+                header = TRUE, check.names = FALSE, sep = "\t"
+            )
         }
     }
-    if (!is.null(ExpDes)) {
-        ExpDes <- load_experiment_definition(ExpDes)
+    if (!is.null(exp_des)) {
+        exp_des <- load_experiment_definition(exp_des)
     }
 
-    featureValues <- ms1_featureValues[-1]
-    featureValues <- t(featureValues)
-    colnames(featureValues) <- ms1_featureValues[[1]]
+    feature_values <- ms1_featurevalues[-1]
+    feature_values <- t(feature_values)
+    colnames(feature_values) <- ms1_featurevalues[[1]]
 
-    featureDefinitions <- data.frame(ms1_featureDefinitions)
+    feature_definitions <- data.frame(ms1_featuredefinitions)
 
-    ramclustObj <- RAMClustR::rc.get.df.data(
-        ms1_featureDefinitions = featureDefinitions,
-        ms1_featureValues = featureValues,
-        phenoData = df_phenoData,
-        ExpDes = ExpDes,
+    ramclustr_obj <- RAMClustR::rc.get.df.data(
+        ms1_featureDefinitions = feature_definitions,
+        ms1_featureValues = feature_values,
+        phenoData = df_phenodata,
+        ExpDes = exp_des,
         st = st,
-        ensure.no.na = ensure.no.na
+        ensure.no.na = ensure_no_na
     )
-    return(ramclustObj)
+    return(ramclustr_obj)
 }
 
-apply_normalisation <- function(ramclustObj = NULL,
+apply_normalisation <- function(ramclustr_obj = NULL,
                                 normalize_method,
                                 metadata_file = NULL,
                                 qc_inj_range,
@@ -85,9 +96,12 @@ apply_normalisation <- function(ramclustObj = NULL,
     qc <- NULL
 
     if (normalize_method == "TIC") {
-        ramclustObj <- RAMClustR::rc.feature.normalize.tic(ramclustObj = ramclustObj)
+        ramclustr_obj <- RAMClustR::rc.feature.normalize.tic(
+            ramclustObj =
+                ramclustr_obj
+        )
     } else if (normalize_method == "quantile") {
-        ramclustObj <- RAMClustR::rc.feature.normalize.quantile(ramclustObj)
+        ramclustr_obj <- RAMClustR::rc.feature.normalize.quantile(ramclustr_obj)
     } else if (normalize_method == "batch.qc") {
         if (!is.null(metadata_file)) {
             metadata <- read_metadata(metadata_file)
@@ -96,11 +110,11 @@ apply_normalisation <- function(ramclustObj = NULL,
             qc <- metadata$qc
         }
 
-        ramclustObj <- RAMClustR::rc.feature.normalize.batch.qc(
+        ramclustr_obj <- RAMClustR::rc.feature.normalize.batch.qc(
             order = order,
             batch = batch,
             qc = qc,
-            ramclustObj = ramclustObj,
+            ramclustObj = ramclustr_obj,
             qc.inj.range = qc_inj_range
         )
     } else {
@@ -111,15 +125,15 @@ apply_normalisation <- function(ramclustObj = NULL,
             qc <- metadata$qc
         }
 
-        ramclustObj <- RAMClustR::rc.feature.normalize.qc(
+        ramclustr_obj <- RAMClustR::rc.feature.normalize.qc(
             order = order,
             batch = batch,
             qc = qc,
-            ramclustObj = ramclustObj,
+            ramclustObj = ramclustr_obj,
             p.cut = p_cut,
             rsq.cut = rsq_cut,
             p.adjust = p_adjust
         )
     }
-    return(ramclustObj)
+    return(ramclustr_obj)
 }

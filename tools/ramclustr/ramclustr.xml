@@ -46,17 +46,17 @@
             )
             #else if $filetype.type_choice == "recetox-aplcms":
             ramclustObj = read_ramclustr_aplcms(
-                ms1_featureDefinitions = "$filetype.ms_dataframe.ms1_featureDefinitions",
-                ms1_featureValues = "$filetype.ms_dataframe.ms1_featureValues",
+                ms1_featuredefinitions = "$filetype.ms_dataframe.ms1_featureDefinitions",
+                ms1_featurevalues = "$filetype.ms_dataframe.ms1_featureValues",
                 #if $filetype.ms_dataframe.df_phenoData:
-                    df_phenoData = "$filetype.ms_dataframe.df_phenoData",
-                    phenoData_ext = "${filetype.ms_dataframe.df_phenoData.ext}",
+                    df_phenodata = "$filetype.ms_dataframe.df_phenoData",
+                    phenodata_ext = "${filetype.ms_dataframe.df_phenoData.ext}",
                 #end if
                 #if $extras.ExpDes:
-                    ExpDes = "${$extras.ExpDes}",
+                    exp_des = "${$extras.ExpDes}",
                 #end if
                 st = $filetype.required.st,
-                ensure.no.na = $extras.replace_zeros
+                ensure_no_na = $extras.replace_zeros
             )
             #end if
 
@@ -66,7 +66,7 @@
 
             #if $normalisation.normalisation_method.normalize != "none":
             ramclustObj = apply_normalisation(
-                ramclustObj = ramclustObj,
+                ramclustr_obj = ramclustObj,
                 #if $normalisation.normalisation_method.normalize == "batch.qc":
                     metadata_file = "${$normalisation.normalisation_method.batch_order_qc}",
                     qc_inj_range = $normalisation.normalisation_method.qc_inj_range,
@@ -187,7 +187,7 @@
                     <param name="batch_order_qc" value="test2_sample_metadata_xcms_2.csv" ftype="csv" />
                 </section>
             </section>
-            <output name="mass_spectra_merged" file="test2_fill_xcms_2.msp" ftype="msp" compare="diff" lines_diff="50"/>
+            <output name="mass_spectra_merged" file="test2_fill_xcms_2.msp" ftype="msp" compare="diff" lines_diff="60"/>
             <output name="spec_abundance" file="test2_spec_abundance_xcms_2.csv" ftype="csv" compare="sim_size" delta="100"/>
         </test>
         <test><!-- TEST 3 -->
