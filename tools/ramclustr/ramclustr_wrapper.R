@@ -46,7 +46,7 @@ read_ramclustr_aplcms <- function(ms1_featureDefinitions = NULL,
     ms1_featureValues <- arrow::read_parquet(ms1_featureValues)
 
     if (!is.null(df_phenoData)) {
-        if(phenoData_ext == "csv"){
+        if (phenoData_ext == "csv") {
             df_phenoData <- read.csv(file = df_phenoData, header = TRUE, check.names = FALSE)
         } else {
             df_phenoData <- read.csv(file = df_phenoData, header = TRUE, check.names = FALSE, sep = "\t")
@@ -77,9 +77,9 @@ apply_normalisation <- function(ramclustObj = NULL,
                                 normalize_method,
                                 metadata_file = NULL,
                                 qc_inj_range,
-                                p.cut,
-                                rsq.cut,
-                                p.adjust) {
+                                p_cut,
+                                rsq_cut,
+                                p_adjust) {
     batch <- NULL
     order <- NULL
     qc <- NULL

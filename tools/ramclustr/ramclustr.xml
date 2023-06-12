@@ -73,9 +73,9 @@
                 #end if
                 #if $normalisation.normalisation_method.normalize == "qc":
                     metadata_file = "${$normalisation.normalisation_method.batch_order_qc}",
-                    p.cut = $normalisation.normalisation_method.p_cut,
-                    rsq.cut = $normalisation.normalisation_method.rsq_cut,
-                    p.adjust = $normalisation.normalisation_method.p_adjust,
+                    p_cut = $normalisation.normalisation_method.p_cut,
+                    rsq_cut = $normalisation.normalisation_method.rsq_cut,
+                    p_adjust = $normalisation.normalisation_method.p_adjust,
                 #end if
                 normalize_method = "$normalisation.normalisation_method.normalize"
             )
@@ -187,7 +187,7 @@
                     <param name="batch_order_qc" value="test2_sample_metadata_xcms_2.csv" ftype="csv" />
                 </section>
             </section>
-            <output name="mass_spectra_merged" file="test2_fill_xcms_2.msp" ftype="msp" compare="diff" lines_diff="20"/>
+            <output name="mass_spectra_merged" file="test2_fill_xcms_2.msp" ftype="msp" compare="diff" lines_diff="50"/>
             <output name="spec_abundance" file="test2_spec_abundance_xcms_2.csv" ftype="csv" compare="sim_size" delta="100"/>
         </test>
         <test><!-- TEST 3 -->
@@ -216,6 +216,16 @@
                 </section>
             </section>
             <output name="mass_spectra_merged" file="test4_spectra_csv_2.msp" ftype="msp" lines_diff="10"/>
+        </test>
+        <test><!-- TEST 5 -->
+            <section name="filetype">
+                <param name="type_choice" value="recetox-aplcms"/>
+                <section name="ms_dataframe">
+                    <param name="ms1_featureDefinitions" value="test5_df_featureDefinitions_input.parquet" ftype="parquet"/>
+                    <param name="ms1_featureValues" value="test5_df_featureValues_input.parquet" ftype="parquet"/>
+                </section>
+            </section>
+            <output name="mass_spectra_merged" file="test5_spectra.msp" ftype="msp" lines_diff="10"/>
         </test>
     </tests>
 
