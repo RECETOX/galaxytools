@@ -103,7 +103,7 @@ apply_normalisation <- function(ramclustr_obj = NULL,
     } else if (normalize_method == "quantile") {
         ramclustr_obj <- RAMClustR::rc.feature.normalize.quantile(ramclustr_obj)
     } else if (normalize_method == "batch.qc") {
-        if (!is.null(metadata_file)) {
+        if (!(is.null(metadata_file) || metadata_file == "None")) {
             metadata <- read_metadata(metadata_file)
             batch <- metadata$batch
             order <- metadata$order
@@ -118,7 +118,7 @@ apply_normalisation <- function(ramclustr_obj = NULL,
             qc.inj.range = qc_inj_range
         )
     } else {
-        if (!is.null(metadata_file)) {
+        if (!(is.null(metadata_file) || metadata_file == "None")) {
             metadata <- read_metadata(metadata_file)
             batch <- metadata$batch
             order <- metadata$order
