@@ -116,9 +116,9 @@ apply_normalisation <- function(ramclustObj = NULL,
             batch = batch,
             qc = qc,
             ramclustObj = ramclustObj,
-            p.cut = p.cut,
-            rsq.cut = rsq.cut,
-            p.adjust = p.adjust
+            p.cut = p_cut,
+            rsq.cut = rsq_cut,
+            p.adjust = p_adjust
         )
     }
     return(ramclustObj)
