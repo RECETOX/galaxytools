@@ -137,6 +137,9 @@
                             help="Which p-value adjustment should be used? one of ['holm', 'hochberg', 'hommel', 'bonferroni', 'BH', 
                             'BY', 'fdr', 'none']"/>
                 </when>
+                <when value="none"/>
+                <when value="TIC"/>
+                <when value="quantile"/>
             </conditional>
         </section>
 
