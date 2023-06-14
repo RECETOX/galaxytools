@@ -12,6 +12,7 @@
     <configfiles>
         <configfile name="wrapper"><![CDATA[
             peak_table <- read_peak_table("${peak_table}")
+            filter_by <- create_filter_by_adducts($filter_by)
 
              annotation <- advanced_annotation(
                 peak_table = peak_table,
@@ -32,7 +33,7 @@
                 peak_rt_width = as.integer($peak_rt_width),
                 maximum_isotopes = as.integer($maximum_isotopes),
                 min_ions_per_chemical = as.integer($min_ions_per_chemical),
-                filter_by = $filter_by
+                filter_by = filter_by
             )
 
             arrow::save_parquet(data = annotation, file = "${annotation_parquet}")
@@ -118,10 +119,9 @@
         <param name="min_ions_per_chemical" type="integer" value="2">
             <label>min_ions_per_chemical</label>
         </param>
-        <param name="filter_by" type="text" value="c('M-H', 'M+H')">
-            <!-- turn sanitizer off for prototype, TODO refactor this for production -->
-            <sanitizer sanitize="false"></sanitizer>
-            <label>filter_by</label>
+        <param name="filter_by" type="select" label="Adducts to filter by" multiple="true" optional="true">
+            <option value="M-H">M-H</option>
+            <option value="M+H">M+H</option>
         </param>
     </inputs>
 
