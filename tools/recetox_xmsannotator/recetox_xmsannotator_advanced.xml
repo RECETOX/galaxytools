@@ -102,22 +102,24 @@
             </param>
         </section>
         <param name="intensity_deviation_tolerance" type="float" value="0.1">
-            <label>intensity_deviation_tolerance</label>
+            <label>Tolerance of intensity deviation</label>
+            <help>A numeric threshold by which an intensity ratio of two isotopic peaks may differ from their actual abundance ratio.</help>
         </param>
         <param name="mass_defect_tolerance" type="float" value="0.1">
-            <label>mass_defect_tolerance</label>
+            <label>Tolerance of mass defect</label>
+            <help>Maximum difference in mass defect between two peaks of the same compound.</help>
         </param>
         <param name="mass_defect_precision" type="float" value="0.01">
-            <label>mass_defect_precision</label>
+            <label>Precision for computing mass defect</label>
         </param>
         <param name="peak_rt_width" type="integer" value="1">
-            <label>peak_rt_width</label>
+            <label>Estimated chromatographic peak width</label>
         </param>
         <param name="maximum_isotopes" type="integer" value="10">
-            <label>maximum_isotopes</label>
+            <label>Maximum isotopes</label>
         </param>
         <param name="min_ions_per_chemical" type="integer" value="2">
-            <label>min_ions_per_chemical</label>
+            <label>Minimum ions per chemical</label>
         </param>
         <param name="filter_by" type="select" label="Adducts to filter by" multiple="true" optional="true">
             <option value="M-H">M-H</option>
