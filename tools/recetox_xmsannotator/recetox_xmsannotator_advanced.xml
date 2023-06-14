@@ -12,7 +12,7 @@
     <configfiles>
         <configfile name="wrapper"><![CDATA[
             peak_table <- read_peak_table("${peak_table}")
-            filter_by <- create_filter_by_adducts($filter_by)
+            filter_by <- create_filter_by_adducts("$filter_by")
 
              annotation <- advanced_annotation(
                 peak_table = peak_table,
@@ -122,8 +122,10 @@
             <label>Minimum ions per chemical</label>
         </param>
         <param name="filter_by" type="select" label="Adducts to filter by" multiple="true" optional="true">
-            <option value="M-H">M-H</option>
-            <option value="M+H">M+H</option>
+            <option value="M-H" selected="true">M-H</option>
+            <option value="M+H" selected="true">M+H</option>
+            <option value="2M-H">2M-H</option>
+            <option value="M-2H">M-2H</option>
         </param>
     </inputs>
 
