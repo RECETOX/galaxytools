@@ -1,9 +1,9 @@
 library(recetox.xmsannotator)
 
 read_peak_table <- function(peak_table) {
-    peak_table = arrow::read_parquet(peak_table)
+    peak_table <- arrow::read_parquet(peak_table)
 
-    if("peak" %in% colnames(peak_table)) {
+    if ("peak" %in% colnames(peak_table)) {
         if (!is.integer(peak_table$peak)) {
             peak_table$peak <- as.integer(peak_table$peak)
         }
