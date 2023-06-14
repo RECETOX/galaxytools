@@ -1,5 +1,5 @@
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.6035335.svg)](https://doi.org/10.5281/zenodo.6035335)
-![Matrix](https://img.shields.io/matrix/recetox-galaxytools:matrix.org)
+[![Matrix](https://img.shields.io/matrix/recetox-galaxytools:matrix.org)](https://matrix.to/#/#recetox-galaxytools:matrix.org)
 
 # Galaxy tools for Untargeted Mass Spectrometry Analysis
 
