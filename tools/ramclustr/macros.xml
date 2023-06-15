@@ -1,5 +1,5 @@
 <macros>
-    <token name="@TOOL_VERSION@">1.2.4</token>
+    <token name="@TOOL_VERSION@">1.3.0</token>
 
     <xml name="creator">
         <creator>
@@ -23,6 +23,11 @@
                 familyName="Čech"
                 url="https://github.com/martenson"
                 identifier="0000-0002-9318-1781" />
+            <person
+                givenName="Zargham"
+                familyName="Ahmad"
+                url="https://github.com/zargham-ahmad"
+                identifier="0000-0002-6096-224X" />
             <organization
                 url="https://www.recetox.muni.cz/"
                 email="GalaxyToolsDevelopmentandDeployment@space.muni.cz"
@@ -36,6 +41,8 @@
                    help="Features as columns, rows as samples. Column header in format mz_rt."/>
             <param label="idMSMS" name="idmsms" type="data" format="csv" optional="true"
                    help="Optional idMSMS / MSe csv data. Same dimension and names as in input CSV are required."/>
+            <param label="phenoData" name="csv_phenoData" type="data" format="csv" optional="true"
+                   help="Optional csv containing phenoData."/>
         </section>
     </xml>
 
@@ -43,8 +50,17 @@
         <section name="xcms" title="Input MS Data as XCMS" expanded="true">
             <param name="input_xcms" label="Input XCMS" type="data" format="rdata.xcms.fillpeaks"
                    help="Grouped feature data for clustering." />
-            <param label="Preserve phenotype" name="usePheno" type="boolean" truevalue="TRUE" falsevalue="FALSE" checked="true"
-                   help="Transfer phenotype data from XCMS object to Spec abundance file."/>
+        </section>
+    </xml>
+
+    <xml name="parameters_recetox_aplcms">
+        <section name="ms_dataframe" title="Input MS Data as parquet (output from recetox-aplcms)" expanded="true">
+            <param label="Input MS1 featureDefinitions" name="ms1_featureDefinitions" type="data" format="parquet"
+                   help="Metadata with columns: mz, rt, feature names containing MS data."/>
+            <param label="Input MS1 featureValues" name="ms1_featureValues" type="data" format="parquet"
+                   help="data with rownames = sample names, colnames = feature names containing MS data."/>
+            <param label="phenoData" name="df_phenoData" type="data" format="tsv,csv" optional="true"
+                   help="CSV/TSV file containing phenoData (optional)."/>
         </section>
     </xml>
 
@@ -53,7 +69,6 @@
         <param label="Correlation method" name="cor_method" type="select" display="radio"
                help="Choose correlational method to be used - see [1] for details.">
             <option value="pearson" selected="true">pearson</option>
-            <option value="everything">everything</option>
             <option value="spearman">spearman</option>
             <option value="kendall">kendall</option>
         </param>
@@ -90,9 +105,10 @@
                     <option value="TIC">TIC</option>
                     <option value="quantile">quantile</option>
                     <option value="batch.qc">batch.qc</option>
+                    <option value="qc">qc</option>
                 </param>
                 <when value="batch.qc">
-                    <param label="Metadata details" name="batch_order_qc" type="data" format="csv" optional="true"
+                    <param label="Metadata details" name="batch_order_qc" type="data" format="csv"
                            help="CSV with sample names (or indices, currently not handled) on rows and columns with:
                            batch number ('batch'), position in sequence ('order'), and whether it is a QC sample or not
                            ('qc' with true/false OR 'sampleType' with 'sample/qc/blank')."/>
@@ -105,6 +121,25 @@
                              detection), while wider values provide less local precision in normalization but better
                              stability to individual peak areas."/>
                 </when>
+                <when value="qc">
+                    <param label="Metadata details" name="batch_order_qc" type="data" format="csv" optional="true"
+                           help="CSV with sample names (or indices, currently not handled) on rows and columns with:
+                           batch number ('batch'), position in sequence ('order'), and whether it is a QC sample or not
+                           ('qc' with true/false OR 'sampleType' with 'sample/qc/blank')."/>
+                    <param label="p.cut" name="p_cut" type="float" value="0.05" 
+                            help="Numeric when run order correction is applied, only features showing a run order vs 
+                            signal with a linear p-value (after FDR correction) &lt; p.cut will be adjusted.  also requires 
+                            r-squared &lt; rsq.cut."/>
+                    <param label="rsq.cut" name="rsq_cut" type="float" value="0.1" 
+                            help="Numeric when run order correction is applied, only features showing a run order vs signal 
+                            with a linear r-squared &gt; rsq.cut will be adjusted. also requires p values &lt; p.cut."/>
+                    <param label="p.adjust" name="p_adjust" type="text" value="none" 
+                            help="Which p-value adjustment should be used? one of ['holm', 'hochberg', 'hommel', 'bonferroni', 'BH', 
+                            'BY', 'fdr', 'none']"/>
+                </when>
+                <when value="none"/>
+                <when value="TIC"/>
+                <when value="quantile"/>
             </conditional>
         </section>
 
@@ -143,7 +178,7 @@
     </xml>
 
     <xml name="output_msp">
-       <collection label="Mass spectra from ${tool.name} on ${on_string}" name="mass_spectra_collection" type="list">
+       <collection label="Mass spectra from ${tool.name} on ${on_string} list" name="mass_spectra_collection" type="list">
            <discover_datasets pattern="__name_and_ext__" directory="spectra" recurse="true" ext="msp"/>
            <filter>not msp_output_details['merge_msp']</filter>
        </collection>
