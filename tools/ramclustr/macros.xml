@@ -60,7 +60,7 @@
             <param label="Input MS1 featureValues" name="ms1_featureValues" type="data" format="parquet"
                    help="data with rownames = sample names, colnames = feature names containing MS data."/>
             <param label="phenoData" name="df_phenoData" type="data" format="tsv,csv" optional="true"
-                   help="CSV/TSV file containing phenoData."/>
+                   help="CSV/TSV file containing phenoData (optional)."/>
         </section>
     </xml>
 
