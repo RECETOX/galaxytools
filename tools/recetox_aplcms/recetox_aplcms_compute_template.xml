@@ -1,9 +1,13 @@
-<tool id="recetox_aplcms_compute_template" name="recetox-aplcms - compute template" version="@TOOL_VERSION@+galaxy0">
+<tool id="recetox_aplcms_compute_template" name="recetox-aplcms - compute template" version="@TOOL_VERSION@+galaxy1" profile="21.09">
     <description>compute retention time correction template feature table</description>
     <macros>
         <import>macros.xml</import>
         <import>help.xml</import>
     </macros>
+    <edam_operations>
+        <edam_operation>operation_3936</edam_operation>
+    </edam_operations>
+    <expand macro="annotation"/>
     <expand macro="creator"/>
     <expand macro="requirements"/>
 

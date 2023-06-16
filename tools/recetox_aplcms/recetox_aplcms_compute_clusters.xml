@@ -1,9 +1,13 @@
-<tool id="recetox_aplcms_compute_clusters" name="recetox-aplcms - compute clusters" version="@TOOL_VERSION@+galaxy1">
+<tool id="recetox_aplcms_compute_clusters" name="recetox-aplcms - compute clusters" version="@TOOL_VERSION@+galaxy2" profile="21.09">
     <description>compute clusters of mz and rt across samples and assign cluster IDs to individual features</description>
     <macros>
         <import>macros.xml</import>
         <import>help.xml</import>
     </macros>
+    <edam_operations>
+        <edam_operation>operation_2928</edam_operation>
+    </edam_operations>
+    <expand macro="annotation"/>
     <expand macro="creator"/>
     <expand macro="requirements"/>
 

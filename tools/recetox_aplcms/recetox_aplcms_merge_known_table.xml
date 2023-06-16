@@ -1,9 +1,13 @@
-<tool id="recetox_aplcms_merge_known_table" name="recetox-aplcms - merge known table" version="@TOOL_VERSION@+galaxy0">
+<tool id="recetox_aplcms_merge_known_table" name="recetox-aplcms - merge known table" version="@TOOL_VERSION@+galaxy1" profile="21.09">
     <description>join knowledge from aligned features and known table.</description>
     <macros>
         <import>macros.xml</import>
         <import>help.xml</import>
     </macros>
+    <edam_operations>
+        <edam_operation>operation_3436</edam_operation>
+    </edam_operations>
+    <expand macro="annotation"/>
     <expand macro="creator"/>
     <expand macro="requirements"/>
 
