@@ -4,9 +4,8 @@ on:
   issues:
     types:
       - opened
-      jobs:
-  call-workflow-passing-data:
-    uses: octo-org/example-repo/.github/workflows/reusable-workflow.yml@main
-    with:
-      config-path: .github/labeler.yml
+
+jobs:
+  call-workflow:
+    uses: recetox/galaxytools/.github/workflows/add_issue_to_project.yml@main
     secrets: inherit
