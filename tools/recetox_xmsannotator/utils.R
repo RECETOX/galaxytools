@@ -19,7 +19,7 @@ load_table <- function(filename) {
     if (filename == "None") {
         return(NULL)
     }
-    return(arrow::read_parquet(filename))
+    return(as.data.frame(arrow::read_parquet(filename)))
 }
 
 create_filter_by_adducts <- function(comma_separated_values) {
