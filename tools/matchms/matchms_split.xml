@@ -1,4 +1,4 @@
-<tool id="matchms_split" name="matchms split library" version="@TOOL_VERSION@+galaxy0" python_template_version="3.7">
+<tool id="matchms_split" name="matchms split library" version="@TOOL_VERSION@+galaxy0" profile="21.09">
     <macros>
         <import>macros.xml</import>
     </macros>

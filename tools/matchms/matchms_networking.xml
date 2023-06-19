@@ -1,4 +1,4 @@
-<tool id="matchms_networking" name="matchms networking" version="@TOOL_VERSION@+galaxy0" python_template_version="3.5">
+<tool id="matchms_networking" name="matchms networking" version="@TOOL_VERSION@+galaxy0" profile="21.09">
     <description>create similarity network graph from matchms similarity scores</description>
 
     <macros>

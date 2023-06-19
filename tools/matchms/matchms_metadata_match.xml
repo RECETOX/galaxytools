@@ -1,4 +1,4 @@
-<tool id="matchms_metadata_match" name="matchms metadata match" version="@TOOL_VERSION@+galaxy0" python_template_version="3.8">
+<tool id="matchms_metadata_match" name="matchms metadata match" version="@TOOL_VERSION@+galaxy0" profile="21.09">
     <description>matchms metadata match calculation for numeric fields based on tolerance</description>
 
     <macros>
