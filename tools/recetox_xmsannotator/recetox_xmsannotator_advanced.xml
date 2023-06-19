@@ -11,14 +11,15 @@
 
     <configfiles>
         <configfile name="wrapper"><![CDATA[
-            peak_table <- create_peak_table("${metadata_table}", "${intensity_table}")
+            peak_table <- create_peak_table("$metadata_table", "$intensity_table")
+
             filter_by <- create_filter_by_adducts("$filter_by")
 
-             annotation <- advanced_annotation(
+            annotation <- advanced_annotation(
                 peak_table = peak_table,
-                adduct_table = load_adduct_table_parquet("${adduct_table}"),
-                adduct_weights = as.data.frame(read.csv("${adduct_weights}")),
-                compound_table = load_compound_table_parquet("${compound_table}"),
+                adduct_table = load_adduct_table("$adduct_table"),
+                adduct_weights = load_table("$adduct_weights"),
+                compound_table = load_compound_table_parquet("$compound_table"),
                 mass_tolerance = 1e-6 * ${mass_tolerance_ppm},
                 time_tolerance = $time_tolerance,
                 correlation_threshold = as.double($clustering.correlation_threshold),
@@ -36,7 +37,7 @@
                 filter_by = filter_by
             )
 
-            arrow::save_parquet(data = annotation, file = "${annotation_parquet}")
+            arrow::save_parquet(data = annotation, file = "$annotation_parquet")
         ]]></configfile>
     </configfiles>
 

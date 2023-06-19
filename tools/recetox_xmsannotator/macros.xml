@@ -53,7 +53,7 @@
             The database is required to contain <em>adduct</em>, <em>charge</em>, <em>mass</em>, and <em>n_molecules</em>.
         ]]></help>
     </param>
-    <param name="adduct_weights" type="data" format="csv" optional="true">
+    <param name="adduct_weights" type="data" format="parquet" optional="true">
         <label>Adduct weights</label>
         <help>
             A weight-by-adduct table.
