@@ -11,7 +11,7 @@
 
     <configfiles>
         <configfile name="wrapper"><![CDATA[
-            peak_table <- read_peak_table("${peak_table}")
+            peak_table <- create_peak_table("${metadata_table}", "${intensity_table}")
             filter_by <- create_filter_by_adducts("$filter_by")
 
              annotation <- advanced_annotation(

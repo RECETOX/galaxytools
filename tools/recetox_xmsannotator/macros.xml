@@ -24,30 +24,37 @@
         </creator>
     </xml>
     <xml name="inputs">
-        <param name="peak_table" type="data" format="csv,parquet">
-            <label>Peak table</label>
+        <param name="metadata_table" type="data" format="parquet">
+            <label>Metadata table</label>
             <help><![CDATA[
-                A peak-intensity table such as outputted from apLCMS.
-                The file is required to contain the fields <em>mz</em> and <em>rt</em>.
-                Columns for feature intensity in a sample have to start with <em>intensity</em>.
+                Peak metadata table*.
             ]]></help>
         </param>
-        <param name="compound_table" type="data" format="csv,parquet">
+        <param name="intensity_table" type="data" format="parquet">
+            <label>Intensity table</label>
+            <help><![CDATA[
+                Table with intensities** for features (rows) across samples (columns).
+            ]]></help>
+        </param>
+        <param name="compound_table" type="data" format="parquet">
             <label>Compound database</label>
             <help><![CDATA[
                 Database of compounds according to which the annotation is performed.
                 The database is required to contain the fields <em>compound_id</em>, <em>monoisotopic_mass</em>, and <em>molecular_formula</em>.
             ]]></help>
         </param>
-        <param name="adduct_table" type="data" format="csv,parquet" optional="true">
-            <label>Adduct database (optional)</label>
+        <param name="adduct_table" type="data" format="parquet" optional="true">
+            <label>Adduct database</label>
             <help><![CDATA[
                 Database of adduct which is combined with the database of compound to form a molecule-adduct pairs.
                 The database is required to contain <em>adduct</em>, <em>charge</em>, <em>mass</em>, and <em>n_molecules</em>.
             ]]></help>
         </param>
         <param name="adduct_weights" type="data" format="csv" optional="true">
-            <label>adduct_weights</label>
+            <label>Adduct weights</label>
+            <help>
+                A weight-by-adduct table.
+            </help>
         </param>
     </xml>
 
@@ -73,6 +80,43 @@
 
         Then, a score and a confidence level is assigned to each match based on peak correlation
         clustering, metabolite pathway associations, adducts expectations, and isotope conformations.
+
+
+        (*) Metadata table
+        ~~~~~~~~~~~~~~~~~~
+        The output from recetox-aplcms tool. 
+        The `npeaks` column denotes the number of peaks which have been grouped into this feature. 
+        The columns with the sample names indicate whether this feature is present in the sample.
+        Only id, mz, and rt columns are required to be present.
+
+        +-------+--------------+--------------+---------------+----------------+---------------+---------------+-----------+------------------------+------------------------+------------------------+
+        |  id   | mz           |  mzmin       |  mzmax        |  rt            |  rtmin        |  rtmax        |   npeaks  |  21_qc_no_dil_milliq   |  29_qc_no_dil_milliq   |  8_qc_no_dil_milliq    |
+        +=======+==============+==============+===============+================+===============+===============+===========+========================+========================+========================+
+        |  1    | 70.03707021  |  70.037066   |  70.0370750   |  294.1038014   |  294.0634942  |  294.149985   |   3       |  1                     |  1                     |  1                     |
+        +-------+--------------+--------------+---------------+----------------+---------------+---------------+-----------+------------------------+------------------------+------------------------+
+        |  2    | 70.06505677  |  70.065045   |  70.0650676   |  141.9560055   |  140.5762528  |  143.335758   |   2       |  1                     |  0                     |  1                     |
+        +-------+--------------+--------------+---------------+----------------+---------------+---------------+-----------+------------------------+------------------------+------------------------+
+        |  57   | 78.04643252  |  78.046429   |  78.0464325   |  294.0063397   |  293.9406777  |  294.072001   |   2       |  1                     |  1                     |  0                     |
+        +-------+--------------+--------------+---------------+----------------+---------------+---------------+-----------+------------------------+------------------------+------------------------+
+        |  ...  | ...          |   ...        |  ...          |  ...           |  ...          |  ...          |   ...     |  ...                   |  ...                   |  ...                   |
+        +-------+--------------+--------------+---------------+----------------+---------------+---------------+-----------+------------------------+------------------------+------------------------+
+
+        (**) Intensity table
+        ~~~~~~~~~~~~~~~~~~~~
+        The output from recetox-aplcms tool.
+        This table contains the peak area for aligned features in all samples.
+
+        +-------+------------------------+------------------------+------------------------+
+        |  id   |  21_qc_no_dil_milliq   |  29_qc_no_dil_milliq   |  8_qc_no_dil_milliq    |
+        +=======+========================+========================+========================+
+        |  1    |  13187487.20482895     |  7957395.699119729     |  11700594.397257797    |
+        +-------+------------------------+------------------------+------------------------+
+        |  2    |  2075168.6398983458    |  0                     |  2574362.159289044     |
+        +-------+------------------------+------------------------+------------------------+
+        |  57   |  2934524.4406785755    |  1333044.5065971944    |  0                     |
+        +-------+------------------------+------------------------+------------------------+
+        |  ...  |  ...                   |  ...                   |  ...                   |
+        +-------+------------------------+------------------------+------------------------+
         ]]>
     </token>
     <xml name="citations">
