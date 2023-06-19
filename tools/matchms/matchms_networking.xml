@@ -23,17 +23,17 @@
         <configfile name="matchms_networking_cli">
             python3 ${__tool_directory__}/matchms_networking_wrapper.py \
             --score_name '${score_layer_name}_score' \
-            --graph_format "$graph_format" \
-            --identifier "$identifier_key" \
-            --top_n "$top_n" \
-            --max_links "$max_links" \
-            --score_cutoff "$score_cutoff" \
-            --link_method "$link_method" \
+            --graph_format '$graph_format' \
+            --identifier '$identifier_key' \
+            --top_n '$top_n' \
+            --max_links '$max_links' \
+            --score_cutoff '$score_cutoff' \
+            --link_method '$link_method' \
             #if $keep_unconnected_nodes
             --keep_unconnected_nodes \
             #end if
-            "$scores" \
-            "$similarity_network_file"
+            '$scores' \
+            '$similarity_network_file'
         </configfile>
     </configfiles>
 

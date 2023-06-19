@@ -24,8 +24,8 @@
     <configfiles>
         <configfile name="matchms_formatter_cli">
             python3 ${__tool_directory__}/formatter.py \
-            --sf "$scores" \
-            --o "$output"
+            --sf '$scores' \
+            --o '$output'
         </configfile>
     </configfiles>
 
