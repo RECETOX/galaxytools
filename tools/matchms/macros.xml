@@ -41,7 +41,7 @@
 
     <xml name="similarity_algorithm_params">
         <section name="algorithm" title="Algorithm Parameters" expanded="true">
-            <param label="tolerance" name="tolerance" type="float" value="0.1"
+            <param label="tolerance [Da]" name="tolerance" type="float" value="0.1"
                    help="Peaks will be considered a match when less than tolerance apart. Absolute m/z value, not in ppm."/>
             <param label="mz_power" name="mz_power" type="float" value="0.0"
                    help="The power to raise mz to in the cosine function."/>
