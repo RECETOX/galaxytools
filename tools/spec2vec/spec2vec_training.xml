@@ -1,4 +1,4 @@
-<tool id="spec2vec_training" name="Spec2Vec Model Training" version="@TOOL_VERSION@-@TOOL_DEV_VERSION@+galaxy0" python_template_version="3.5" profile="21.05">
+<tool id="spec2vec_training" name="Spec2Vec Model Training" version="@TOOL_VERSION@+galaxy0" python_template_version="3.5" profile="21.05">
     <description>Train a Spec2Vec model for mass spectra similarity scoring</description>
 
     <macros>
@@ -7,7 +7,7 @@
     <expand macro="creator"/>
 
     <requirements>
-        <container type="docker">recetox/spec2vec:@COMMIT_SHA@</container>
+        <requirement type="package" version="@TOOL_VERSION@">spec2vec</requirement>
     </requirements>
 
     <command detect_errors="exit_code"><![CDATA[
