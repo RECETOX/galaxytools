@@ -48,16 +48,16 @@
             <param name="msp_input" value="split/sample_input.msp"  />
             <param name="split_type" value="one-per-file" />
             <output_collection name="sample" type="list">
-                <element name="1NITROPYRENE"         file="split/one-per-file/1NITROPYRENE.msp"         ftype="msp" compare="contains"/>
-                <element name="35DICHLOROPHENOL"     file="split/one-per-file/35DICHLOROPHENOL.msp"     ftype="msp" compare="contains"/>
-                <element name="34DICHLOROPHENOL"     file="split/one-per-file/34DICHLOROPHENOL.msp"     ftype="msp" compare="contains"/>
-                <element name="26DICHLOROPHENOL"     file="split/one-per-file/26DICHLOROPHENOL.msp"     ftype="msp" compare="contains"/>
-                <element name="25DICHLOROPHENOL"     file="split/one-per-file/25DICHLOROPHENOL.msp"     ftype="msp" compare="contains"/>
-                <element name="24DINITROPHENOL"      file="split/one-per-file/24DINITROPHENOL.msp"      ftype="msp" compare="contains"/>
-                <element name="24DICHLOROPHENOL"     file="split/one-per-file/24DICHLOROPHENOL.msp"     ftype="msp" compare="contains"/>
-                <element name="246TRICHLOROPHENOL"   file="split/one-per-file/246TRICHLOROPHENOL.msp"   ftype="msp" compare="contains"/>
-                <element name="245TRICHLOROPHENOL"   file="split/one-per-file/245TRICHLOROPHENOL.msp"   ftype="msp" compare="contains"/>
-                <element name="23DICHLOROPHENOL"     file="split/one-per-file/23DICHLOROPHENOL.msp"     ftype="msp" compare="contains"/>
+                <element name="1NITROPYRENE"         file="split/one-per-file/1NITROPYRENE.msp"         ftype="msp" compare="diff"/>
+                <element name="35DICHLOROPHENOL"     file="split/one-per-file/35DICHLOROPHENOL.msp"     ftype="msp" compare="diff"/>
+                <element name="34DICHLOROPHENOL"     file="split/one-per-file/34DICHLOROPHENOL.msp"     ftype="msp" compare="diff"/>
+                <element name="26DICHLOROPHENOL"     file="split/one-per-file/26DICHLOROPHENOL.msp"     ftype="msp" compare="diff"/>
+                <element name="25DICHLOROPHENOL"     file="split/one-per-file/25DICHLOROPHENOL.msp"     ftype="msp" compare="diff"/>
+                <element name="24DINITROPHENOL"      file="split/one-per-file/24DINITROPHENOL.msp"      ftype="msp" compare="diff"/>
+                <element name="24DICHLOROPHENOL"     file="split/one-per-file/24DICHLOROPHENOL.msp"     ftype="msp" compare="diff"/>
+                <element name="246TRICHLOROPHENOL"   file="split/one-per-file/246TRICHLOROPHENOL.msp"   ftype="msp" compare="diff"/>
+                <element name="245TRICHLOROPHENOL"   file="split/one-per-file/245TRICHLOROPHENOL.msp"   ftype="msp" compare="diff"/>
+                <element name="23DICHLOROPHENOL"     file="split/one-per-file/23DICHLOROPHENOL.msp"     ftype="msp" compare="diff"/>
             </output_collection>
         </test>
         <test>
@@ -65,8 +65,8 @@
             <param name="split_type" value="num-chunks" />
             <param name="num_chunks" value="2" />
             <output_collection name="sample" type="list">
-                <element name="chunk_0" file="split/num-chunks/chunk_0.msp" ftype="msp" compare="contains"/>
-                <element name="chunk_1" file="split/num-chunks/chunk_1.msp" ftype="msp" compare="contains"/>
+                <element name="chunk_0" file="split/num-chunks/chunk_0.msp" ftype="msp" compare="diff"/>
+                <element name="chunk_1" file="split/num-chunks/chunk_1.msp" ftype="msp" compare="diff"/>
             </output_collection>
         </test>
         <test>
@@ -74,9 +74,9 @@
             <param name="split_type" value="chunk-size" />
             <param name="chunk_size" value="4" />
             <output_collection name="sample" type="list">
-                <element name="chunk_0" file="split/chunk-size/chunk_0.msp" ftype="msp" compare="contains"/>
-                <element name="chunk_1" file="split/chunk-size/chunk_1.msp" ftype="msp" compare="contains"/>
-                <element name="chunk_2" file="split/chunk-size/chunk_2.msp" ftype="msp" compare="contains"/>
+                <element name="chunk_0" file="split/chunk-size/chunk_0.msp" ftype="msp" compare="diff"/>
+                <element name="chunk_1" file="split/chunk-size/chunk_1.msp" ftype="msp" compare="diff"/>
+                <element name="chunk_2" file="split/chunk-size/chunk_2.msp" ftype="msp" compare="diff"/>
             </output_collection>
         </test>
     </tests> 

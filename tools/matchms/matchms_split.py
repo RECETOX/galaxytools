@@ -3,21 +3,8 @@ import itertools
 import os
 from typing import List
 
-from matchms import Spectrum
 from matchms.exporting import save_as_msp
 from matchms.importing import load_from_msp
-
-
-def read_spectra(filename: str) -> List[Spectrum]:
-    """Read spectra from file.
-
-    Args:
-        filename (str): Path to .msp file from which to load the spectra.
-
-    Returns:
-        List[Spectrum]: Spectra contained in the file.
-    """
-    return list(load_from_msp(filename, True))
 
 
 def get_spectra_names(spectra: list) -> List[str]:
@@ -67,17 +54,6 @@ def assemble_outpath(name, outdir):
     return outpath
 
 
-def split_spectra(filename, outdir):
-    """Save individual MSP spectra files in the destination directory.
-
-    Args:
-        filename (str): MSP file that contains the spectra.
-        outdir   (str): Path to destination directory where split spectra files are saved.
-    """
-    make_outdir(outdir)
-    return write_spectra(filename, outdir)
-
-
 def split_round_robin(iterable, num_chunks):
     chunks = [list() for _ in range(num_chunks)]
     index = itertools.cycle(range(num_chunks))
@@ -100,7 +76,7 @@ parameter = args.parameter
 
 
 if __name__ == "__main__":
-    spectra = load_from_msp(filename)
+    spectra = load_from_msp(filename, metadata_harmonization=True)
     make_outdir(outdir)
 
     if method == "one-per-file":
