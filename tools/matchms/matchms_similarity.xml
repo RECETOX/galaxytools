@@ -7,8 +7,6 @@
     <expand macro="creator"/>
 
     <requirements>
-        <requirement type="package" version="1.1.4">pandas</requirement>
-        <requirement type="package" version="0.55.1">numba</requirement>
         <requirement type="package" version="0.8.0">spec2vec</requirement>
         <requirement type="package" version="@TOOL_VERSION@">matchms</requirement>
     </requirements>
