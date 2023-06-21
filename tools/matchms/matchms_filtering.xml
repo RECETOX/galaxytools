@@ -67,8 +67,8 @@
             <param name="is_true" label="Filter relative intensity" type="boolean" truevalue="TRUE" falsevalue="FALSE" checked="false"
                    help="Keep only peaks within set relative intensity range (keep if maximum >= intensity >= minimum)." />
             <when value="TRUE">
-                <param label="Minimum intensity" name="from_intensity" optional="true" type="float" help="Lower bound for intensity filter." />
-                <param label="Maximum intensity" name="to_intensity" optional="true" type="float" help="Upper bound for intensity filter." />
+                <param label="Minimum intensity" name="from_intensity" value="0" type="float" help="Lower bound for intensity filter." />
+                <param label="Maximum intensity" name="to_intensity" value="1" type="float" help="Upper bound for intensity filter." />
             </when>
         </conditional>
 

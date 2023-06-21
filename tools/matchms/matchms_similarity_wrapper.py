@@ -1,11 +1,13 @@
 import argparse
+import json
 import sys
 
 from matchms import calculate_scores
 from matchms.importing import load_from_mgf, load_from_msp
 from matchms.similarity import (CosineGreedy, CosineHungarian, MetadataMatch,
                                 ModifiedCosine, NeutralLossesCosine)
-
+from spec2vec import Spec2Vec
+from spec2vec.serialization.model_importing import (load_weights, Word2VecLight)
 
 def convert_precursor_mz(spectrum):
     """
@@ -20,6 +22,30 @@ def convert_precursor_mz(spectrum):
         return spectrum
     else:
         raise ValueError("Precursor_mz missing. Apply 'add_precursor_mz' filter first.")
+    
+
+def load_model(model_file, weights_file) -> Word2VecLight:
+    """
+    Read a lightweight version of a :class:`~gensim.models.Word2Vec` model from disk.
+
+    Parameters
+    ----------
+    model_file:
+        A path of json file to load the model.
+    weights_file:
+        A path of `.npy` file to load the model's weights.
+
+    Returns
+    -------
+    :class:`~spec2vec.serialization.model_importing.Word2VecLight` – a lightweight version of a
+    :class:`~gensim.models.Word2Vec`
+    """
+    with open(model_file, "r", encoding="utf-8") as f:
+        model: dict = json.load(f)
+        del(model["mapfile_path"])
+
+    weights = load_weights(weights_file, model["__weights_format"])
+    return Word2VecLight(model, weights)
 
 
 def main(argv):
@@ -71,11 +97,8 @@ def main(argv):
         reference_spectra = list(map(convert_precursor_mz, reference_spectra))
         queries_spectra = list(map(convert_precursor_mz, queries_spectra))
     elif args.similarity_metric == 'Spec2Vec':
-        from spec2vec import Spec2Vec
-        from spec2vec.serialization import import_model
-
-        model = import_model(args.spec2vec_model, args.spec2vec_weights)
-        similarity_metric = Spec2Vec(model, intensity_weighting_power=args.intensity_power, allowed_missing_percentage=args.allow_missing_percentage)
+        model = load_model(args.spec2vec_model, args.spec2vec_weights)
+        similarity_metric = Spec2Vec(model, intensity_weighting_power=args.intensity_power, allowed_missing_percentage=args.allowed_missing_percentage)
     else:
         return -1
 

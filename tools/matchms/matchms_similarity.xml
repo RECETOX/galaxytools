@@ -107,8 +107,8 @@
             <param name="is_true" label="Apply RI filtering" type="boolean" truevalue="TRUE" falsevalue="FALSE"
                    checked="false"/>
             <when value="TRUE">
-            <param label="tolerance" name="tolerance" type="float" value="60"
-                   help="Peaks will be considered a match when less than tolerance apart."/>
+                <param label="tolerance" name="tolerance" type="float" value="60"
+                       help="Peaks will be considered a match when less than tolerance apart."/>
             </when>
         </conditional>
     </inputs>
@@ -165,6 +165,17 @@
                 <param name="tolerance" value="60.0" />
             </conditional>
             <output name="similarity_scores" file="similarity/scores_test5_out.json" ftype="json"/>
+        </test>
+        <test> <!-- TEST #6: Test Spec2Vec. -->
+            <param name="references" value="similarity/spec2vec/inp_filtered_library.msp" ftype="msp"/>
+            <param name="queries" value="similarity/spec2vec/inp_filtered_spectra.msp" ftype="msp"/>
+            <conditional name="metric">
+                <param name="similarity_metric" value="Spec2Vec"/>
+                <param name="model_metadata" value="similarity/spec2vec/model.json" ftype="json"/>
+                <param name="model_weights" value="similarity/spec2vec/weights.binary" ftype="auto"/>
+                <param name="allow_missing_percentage" value="1.0"/>
+            </conditional>
+            <output name="similarity_scores" file="similarity/scores_test6_out.json" ftype="json" compare="sim_size" delta="20000"/>
         </test>
     </tests>
 
