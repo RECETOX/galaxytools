@@ -7,7 +7,6 @@
     <expand macro="creator"/>
 
     <requirements>
-        <requirement type="package" version="0.8.0">spec2vec</requirement>
         <requirement type="package" version="@TOOL_VERSION@">matchms</requirement>
     </requirements>
 
@@ -26,17 +25,12 @@
 from matchms.similarity import (CosineGreedy, CosineHungarian, MetadataMatch,
                                 ModifiedCosine, NeutralLossesCosine)
 
-#if "$metric.similarity_metric" == "Spec2Vec"
-similarity=None
-#else
-similarity = ${metric.similarity_metric}(
-    ${metric.algorithm.tolerance},
-    ${metric.algorithm.mz_power},
-    ${metric.algorithm.intensity_power}
+similarity = ${similarity_metric}(
+    ${algorithm.tolerance},
+    ${algorithm.mz_power},
+    ${algorithm.intensity_power}
 )
-name="${metric.similarity_metric}_${metric.algorithm.tolerance}_${metric.algorithm.mz_power}_${metric.algorithm.intensity_power}"
-#end if
-
+name="${similarity_metric}_${algorithm.tolerance}_${algorithm.mz_power}_${algorithm.intensity_power}"
 
 @init_scores@
 
@@ -53,45 +47,17 @@ scores.filter_by_range(inplace=True, name=name+"_matches", low=0)
 scores.to_json("$similarity_scores")
 </configfile>
 </configfiles>
-
     <inputs>
         <expand macro="input_param"/>
-        <conditional name="metric">
-            <param label="Similarity metric" name="similarity_metric" type="select" display="radio"
-                help="Similarity metric to use for score computation.">
-                <expand macro="similarity_metrics"/>
-            </param>
-            <when value="CosineGreedy">
-                <expand macro="similarity_algorithm_params"/>
-            </when>
-            <when value="CosineHungarian">
-                <expand macro="similarity_algorithm_params"/>
-            </when>
-            <when value="ModifiedCosine">
-                <expand macro="similarity_algorithm_params"/>
-            </when>
-            <when value="NeutralLossesCosine">
-                <expand macro="similarity_algorithm_params"/>
-            </when>
-            <when value="Spec2Vec">
-                <param label="Model JSON file" name="model_metadata" type="data" format="json"
-                       help="Model JSON file to use for Spec2Vec similarity computing."/>
-                <param label="Model NPY file" name="model_weights" type="data" format="binary"
-                       help="Model NPY file to use for Spec2Vec similarity computing."/>
-
-                <section name="algorithm" title="Algorithm Parameters" expanded="true">
-                    <param label="intensity_power" name="intensity_power" type="float" value="0.0"
-                           help="Spectrum vectors are a weighted sum of the word vectors. The given word intensities will be raised to the given power.
-                            The default is 0, which means that no weighing will be done."/>
-                    <param label="Maximum share of new peaks" name="allow_missing_percentage"  type="float" value="0.1" max="1.0" min="0.0"
-                           help="Maximum allowed share of the peaks that are new to the model in relation to the whole peak corpus."/>
-                </section>
-            </when>
-        </conditional>
+        <param label="Similarity metric" name="similarity_metric" type="select" display="radio"
+            help="Similarity metric to use for score computation.">
+            <expand macro="similarity_metrics"/>
+        </param>
+        <expand macro="similarity_algorithm_params"/>
     </inputs>
 
     <outputs>
-        <data label="$metric.similarity_metric scores of ${on_string}" name="similarity_scores" format="json"/>
+        <data label="$similarity_metric scores of ${on_string}" name="similarity_scores" format="json"/>
     </outputs>
 
     <help>

@@ -36,7 +36,6 @@
         <option value="CosineHungarian">CosineHungarian</option>
         <option value="ModifiedCosine">ModifiedCosine</option>
         <option value="NeutralLossesCosine">NeutralLossesCosine</option>
-        <option value="Spec2Vec">Spec2Vec</option>
     </xml>
 
     <xml name="similarity_algorithm_params">
