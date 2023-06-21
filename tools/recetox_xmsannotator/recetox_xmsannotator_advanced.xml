@@ -139,6 +139,7 @@
             <param name="metadata_table" value="metadata_table.parquet" ftype="parquet" />
             <param name="intensity_table" value="intensity_table.parquet" ftype="parquet" />
             <param name="compound_table" value="database.parquet" ftype="parquet" />
+            <param name="adduct_table" value="adduct_table.parquet" ftype="parquet" />
             <output name="annotation_parquet" file="expected_output.parquet" ftype="parquet"/>
         </test>
     </tests>
