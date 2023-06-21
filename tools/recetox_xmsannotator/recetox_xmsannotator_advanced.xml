@@ -37,7 +37,7 @@
                 filter_by = filter_by
             )
 
-            arrow::save_parquet(data = annotation, file = "$annotation_parquet")
+            arrow::write_parquet(annotation, "$annotation_parquet")
         ]]></configfile>
     </configfiles>
 
