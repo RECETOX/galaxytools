@@ -1,4 +1,4 @@
-<tool id="spec2vec_training" name="Spec2Vec Model Training" version="@TOOL_VERSION@+galaxy0" python_template_version="3.5" profile="21.05">
+<tool id="spec2vec_training" name="spec2vec model training" version="@TOOL_VERSION@+galaxy0" profile="21.09">
     <description>Train a Spec2Vec model for mass spectra similarity scoring</description>
 
     <macros>
