@@ -19,6 +19,11 @@
             familyName="Čech"
             url="https://github.com/martenson"
             identifier="0000-0002-9318-1781" />
+        <person
+            givenName="Matej"
+            familyName="Troják"
+            url="https://github.com/xtrojak"
+            identifier="0000-0003-0841-2707" />
         <organization
             url="https://www.recetox.muni.cz/"
             email="GalaxyToolsDevelopmentandDeployment@space.muni.cz"
