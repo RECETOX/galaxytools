@@ -7,7 +7,8 @@ from matchms.importing import load_from_mgf, load_from_msp
 from matchms.similarity import (CosineGreedy, CosineHungarian, MetadataMatch,
                                 ModifiedCosine, NeutralLossesCosine)
 from spec2vec import Spec2Vec
-from spec2vec.serialization.model_importing import (load_weights, Word2VecLight)
+from spec2vec.serialization.model_importing import Word2VecLight, load_weights
+
 
 def convert_precursor_mz(spectrum):
     """
@@ -42,7 +43,7 @@ def load_model(model_file, weights_file) -> Word2VecLight:
     """
     with open(model_file, "r", encoding="utf-8") as f:
         model: dict = json.load(f)
-        del(model["mapfile_path"])
+        del (model["mapfile_path"])
 
     weights = load_weights(weights_file, model["__weights_format"])
     return Word2VecLight(model, weights)
