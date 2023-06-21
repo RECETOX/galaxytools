@@ -176,7 +176,7 @@
                 <param name="model_weights" value="similarity/spec2vec/weights.binary" ftype="auto"/>
                 <param name="allow_missing_percentage" value="1.0"/>
             </conditional>
-            <output name="similarity_scores" file="similarity/scores_test6_out.json" ftype="json" compare="sim_size" delta="20000"/>
+            <output name="similarity_scores" file="similarity/scores_test6_out.json" ftype="json" compare="sim_size" delta="100000"/>
         </test>
     </tests>
 

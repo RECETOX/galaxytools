@@ -59,6 +59,20 @@ scores.to_json("$similarity_scores")
     <outputs>
         <data label="$similarity_metric scores of ${on_string}" name="similarity_scores" format="json"/>
     </outputs>
+    <tests>
+        <test> <!-- TEST #1: Test scoring of the same file formats. -->
+            <param name="references" value="similarity/RECETOX_Exposome_pesticides_HR_MS_20220323.msp" ftype="msp"/>
+            <param name="queries" value="similarity/fill2.msp" ftype="msp"/>
+            <param name="similarity_metric" value="CosineGreedy"/>
+            <output name="similarity_scores" file="spectral_similarity/test1.json" ftype="json"/>
+        </test>
+        <test> <!-- TEST #2: Test scoring with scores as json. -->
+            <param name="use_scores" value="True"/>
+            <param name="scores_in" value="metadata_match/ri_match_60.json" ftype="json"/>
+            <param name="similarity_metric" value="CosineHungarian"/>
+            <output name="similarity_scores" file="spectral_similarity/test2.json" ftype="json"/>
+        </test>
+    </tests>
 
     <help>
         <![CDATA[
