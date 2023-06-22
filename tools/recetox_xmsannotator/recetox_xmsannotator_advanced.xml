@@ -12,15 +12,17 @@
 
     <configfiles>
         <configfile name="wrapper"><![CDATA[
-            peak_table <- create_peak_table("$metadata_table", "$intensity_table")
+            metadata_table <- load_table("$metadata_table", "$metadata_table.ext")
+            intensity_table <- load_table("$intensity_table", "$intensity_table.ext")
+            peak_table <- create_peak_table(metadata_table, intensity_table)
 
             filter_by <- create_filter_by_adducts("$filter_by")
 
             annotation <- advanced_annotation(
                 peak_table = peak_table,
-                adduct_table = load_adduct_table("$adduct_table"),
-                adduct_weights = load_table("$adduct_weights"),
-                compound_table = load_compound_table_parquet("$compound_table"),
+                adduct_table = load_table("$adduct_table", "$adduct_table.ext"),
+                adduct_weights = load_table("$adduct_weights", "$adduct_weights.ext"),
+                compound_table = load_table("$compound_table", "$compound_table.ext"),
                 mass_tolerance = 1e-6 * ${mass_tolerance_ppm},
                 time_tolerance = $time_tolerance,
                 correlation_threshold = as.double($clustering.correlation_threshold),
@@ -38,7 +40,7 @@
                 filter_by = filter_by
             )
 
-            arrow::write_parquet(annotation, "$annotation_parquet")
+            save_table(annotation, "$output_file", "$output_file.ext")
         ]]></configfile>
     </configfiles>
 
@@ -141,7 +143,14 @@
             <param name="intensity_table" value="intensity_table.parquet" ftype="parquet" />
             <param name="compound_table" value="database.parquet" ftype="parquet" />
             <param name="adduct_table" value="adduct_table.parquet" ftype="parquet" />
-            <output name="annotation_parquet" file="expected_output.parquet" ftype="parquet"/>
+            <output name="output_file" file="expected_output.parquet" ftype="parquet"/>
+        </test>
+        <test>
+            <param name="metadata_table" value="metadata_table.csv" ftype="csv" />
+            <param name="intensity_table" value="intensity_table.csv" ftype="csv" />
+            <param name="compound_table" value="database.csv" ftype="csv" />
+            <param name="adduct_table" value="adduct_table.csv" ftype="csv" />
+            <output name="output_file" file="expected_output.csv" ftype="csv"/>
         </test>
     </tests>
 

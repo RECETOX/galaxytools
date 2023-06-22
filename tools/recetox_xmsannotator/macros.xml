@@ -32,33 +32,33 @@
 </xml>
 
 <xml name="inputs">
-    <param name="metadata_table" type="data" format="parquet">
+    <param name="metadata_table" type="data" format="parquet,csv">
         <label>Metadata table</label>
         <help><![CDATA[
             Peak metadata table*.
         ]]></help>
     </param>
-    <param name="intensity_table" type="data" format="parquet">
+    <param name="intensity_table" type="data" format="parquet,csv">
         <label>Intensity table</label>
         <help><![CDATA[
             Table with intensities** for features (rows) across samples (columns).
         ]]></help>
     </param>
-    <param name="compound_table" type="data" format="parquet">
+    <param name="compound_table" type="data" format="parquet,csv">
         <label>Compound database</label>
         <help><![CDATA[
             Database of compounds according to which the annotation is performed.
             The database is required to contain the fields <em>compound_id</em>, <em>monoisotopic_mass</em>, and <em>molecular_formula</em>.
         ]]></help>
     </param>
-    <param name="adduct_table" type="data" format="parquet" optional="true">
+    <param name="adduct_table" type="data" format="parquet,csv" optional="true">
         <label>Adduct database</label>
         <help><![CDATA[
             Database of adduct which is combined with the database of compound to form a molecule-adduct pairs.
             The database is required to contain <em>adduct</em>, <em>charge</em>, <em>mass</em>, and <em>n_molecules</em>.
         ]]></help>
     </param>
-    <param name="adduct_weights" type="data" format="parquet" optional="true">
+    <param name="adduct_weights" type="data" format="parquet,csv" optional="true">
         <label>Adduct weights</label>
         <help>
             A weight-by-adduct table.
@@ -67,7 +67,11 @@
 </xml>
 
 <xml name="outputs">
-    <data name="annotation_parquet" format="parquet"/>
+    <data name="output_file" format="parquet">
+        <change_format>
+            <when input="metadata_table.ext" value="csv" format="csv" />
+        </change_format>
+    </data>
 </xml>
 
 <xml name="tolerance">
