@@ -35,6 +35,15 @@
         </creator>
     </xml>
 
+    <xml name="annotation">
+        <edam_topics>
+               <edam_topic>topic_3520</edam_topic>       
+        </edam_topics>
+        <xrefs>
+               <xref type="bio.tools">ramclustr</xref>
+        </xrefs>
+     </xml>
+
     <xml name="parameters_csv">
         <section name="ms_csv" title="Input MS Data as CSV" expanded="true">
             <param label="Input CSV" name="ms" type="data" format="csv"
