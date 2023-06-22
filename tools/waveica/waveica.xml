@@ -69,8 +69,7 @@
                     <param name="metadata" label="Input metadata" type="data" format="csv,tsv,parquet" help="" />
                 </section>
                 <param name = "transpose_feature_table" label="Transpose feature table" type="boolean" checked="false" 
-                truevalue="TRUE" falsevalue="FALSE" help="Convert table with feature names in the first column and sample names as 
-                column headers to a table with sample names in the first column and feature names as column headers. (output format of recetox-aplcms)" />
+                truevalue="TRUE" falsevalue="FALSE" help="Swap sample names with feature names as column headers (to fit recetox-aplcms outputs)." />
             </when>
         </conditional>
         <expand macro="general_parameters"/>
