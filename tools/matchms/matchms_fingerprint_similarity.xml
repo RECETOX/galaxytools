@@ -55,14 +55,14 @@ scores.to_json("$scores_out")
 
     <tests>
         <test>
-            <param name="queries" value="similarity/recetox_gc-ei_ms_20201028.msp" ftype="msp"/>
-            <param name="references" value="similarity/RECETOX_Exposome_pesticides_HR_MS_20220323.msp" ftype="msp"/>
+            <param name="queries" value="similarity/rcx_gc-ei_ms_subset.msp" ftype="msp"/>
+            <param name="references" value="similarity/rcx_exposome_pesticides_subset.msp" ftype="msp"/>
             <param name="fingerprint_similarity" value="dice" />
             <output name="scores_out" value="fingerprints/dice.json" ftype="json" />
         </test>
         <test>
-            <param name="queries" value="similarity/recetox_gc-ei_ms_20201028.msp" ftype="msp"/>
-            <param name="references" value="similarity/RECETOX_Exposome_pesticides_HR_MS_20220323.msp" ftype="msp"/>
+            <param name="queries" value="similarity/rcx_gc-ei_ms_subset.msp" ftype="msp"/>
+            <param name="references" value="similarity/rcx_exposome_pesticides_subset.msp" ftype="msp"/>
             <param name="fingerprint_similarity" value="cosine" />
             <output name="scores_out" value="fingerprints/cosine.json" ftype="json" />
         </test>

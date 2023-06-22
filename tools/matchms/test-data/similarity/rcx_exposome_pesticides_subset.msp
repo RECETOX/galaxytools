@@ -1,0 +1,151 @@
+NAME: Acephate
+SCANNUMBER: 1161
+RETENTIONTIME: 1.232997
+PRECURSORMZ: 184.0194
+PRECURSORTYPE: [M+H]+
+IONMODE: Positive
+SPECTRUMTYPE: Centroid
+FORMULA: C4H10NO3PS
+INCHIKEY: YASYVMFAVPKPKE-SECBINFHSA-N
+INCHI: 
+SMILES: COP(=O)(N=C(O)C)SC
+AUTHORS: Biomarker Analytical Laboratories, RECETOX, Masaryk University (CZ)
+COLLISIONENERGY: 
+INSTRUMENT: LC Orbitrap Fusion Tribrid MS
+INSTRUMENTTYPE: LC-ESI-Orbitrap
+IONIZATION: ESI+
+LICENSE: CC BY-NC
+COMMENT: 
+Num Peaks: 16
+90.09368	1128
+93.11512	1241
+95.10279	1118
+101.31465	1152
+102.90688	1322
+103.98039	1201
+112.01607	12289
+112.99994	38027
+115.00399	1634
+124.98121	922
+128.97701	9208
+132.57193	1350
+135.84808	1428
+142.99275	16419
+147.94205	1750
+173.5094	2353
+
+NAME: Carbaryl
+SCANNUMBER: 2257
+RETENTIONTIME: 5.259445
+PRECURSORMZ: 202.0863
+PRECURSORTYPE: [M+H]+
+IONMODE: Positive
+SPECTRUMTYPE: Centroid
+FORMULA: C12H11NO2
+INCHIKEY: CVXBEEMKQHEXEN-UHFFFAOYSA-N
+INCHI: 
+SMILES: CN=C(Oc1cccc2c1cccc2)O
+AUTHORS: Biomarker Analytical Laboratories, RECETOX, Masaryk University (CZ)
+COLLISIONENERGY: 
+INSTRUMENT: LC Orbitrap Fusion Tribrid MS
+INSTRUMENTTYPE: LC-ESI-Orbitrap
+IONIZATION: ESI+
+LICENSE: CC BY-NC
+COMMENT: 
+Num Peaks: 1
+145.06491	1326147	"Theoretical m/z 145.064787, Mass diff 0 (0.85 ppm), SMILES OC1=CC=CC=2C=CC=CC12, Annotation [C10H8O+H]+, Rule of HR True"
+
+NAME: Dicrotophos
+SCANNUMBER: 1516
+RETENTIONTIME: 2.025499
+PRECURSORMZ: 238.0844
+PRECURSORTYPE: [M+H]+
+IONMODE: Positive
+SPECTRUMTYPE: Centroid
+FORMULA: C8H16NO5P
+INCHIKEY: VEENJGZXVHKXNB-UHFFFAOYSA-N
+INCHI: 
+SMILES: COP(=O)(OC(=CC(=O)N(C)C)C)OC
+AUTHORS: Biomarker Analytical Laboratories, RECETOX, Masaryk University (CZ)
+COLLISIONENERGY: 
+INSTRUMENT: LC Orbitrap Fusion Tribrid MS
+INSTRUMENTTYPE: LC-ESI-Orbitrap
+IONIZATION: ESI+
+LICENSE: CC BY-NC
+COMMENT: 
+Num Peaks: 5
+112.074	102027
+112.07591	9070987	"Theoretical m/z 112.075687, Mass diff 0 (1.99 ppm), SMILES O=C(C=CC)N(C)C, Annotation [C6H11NO-H]+, Rule of HR True"
+127.01563	3230337	"Theoretical m/z 127.01547, Mass diff 0 (1.26 ppm), SMILES O=P(O)(OC)OC, Annotation [C2H7O4P+H]+, Rule of HR True"
+193.02605	7897744	"Theoretical m/z 193.026035, Mass diff 0 (0.08 ppm), SMILES O=CC=C(OP(=O)(OC)OC)C, Annotation [C6H11O5P-H]+, Rule of HR True"
+238.08437	2973124	"Theoretical m/z 238.083891, Mass diff 0 (2.01 ppm), SMILES O=C(C=C(OP(=O)(OC)OC)C)N(C)C, Annotation [C8H16NO5P+H]+, Rule of HR True"
+
+NAME: Dimethoate
+SCANNUMBER: 1865
+RETENTIONTIME: 2.866696
+PRECURSORMZ: 230.0072
+PRECURSORTYPE: [M+H]+
+IONMODE: Positive
+SPECTRUMTYPE: Centroid
+FORMULA: C5H12NO3PS2
+INCHIKEY: MCWXGJITAZMZEV-UHFFFAOYSA-N
+INCHI: 
+SMILES: CN=C(CSP(=S)(OC)OC)O
+AUTHORS: Biomarker Analytical Laboratories, RECETOX, Masaryk University (CZ)
+COLLISIONENERGY: 
+INSTRUMENT: LC Orbitrap Fusion Tribrid MS
+INSTRUMENTTYPE: LC-ESI-Orbitrap
+IONIZATION: ESI+
+LICENSE: CC BY-NC
+COMMENT: 
+Num Peaks: 8
+88.0219	548446	"Theoretical m/z 88.021549, Mass diff 0 (3.99 ppm), SMILES SCC=NC, Annotation [C3H7NS-H]+, Rule of HR True"
+124.98233	183861	"Theoretical m/z 124.982067, Mass diff 0 (2.11 ppm), SMILES S=P(OC)OC, Annotation [C2H7O2PS-H]+, Rule of HR True"
+142.99275	722053	"Theoretical m/z 142.993177, Mass diff 0 (0 ppm), Formula C2H8O3PS"
+156.95422	80792	"Theoretical m/z 156.954136, Mass diff 0 (0.54 ppm), SMILES S=P(S)(OC)OC, Annotation [C2H7O2PS2-H]+, Rule of HR True"
+170.97	1426256	"Theoretical m/z 170.969791, Mass diff 0 (1.22 ppm), SMILES S=P(OC)(OC)SC, Annotation [C3H9O2PS2-H]+, Rule of HR True"
+197.98123	240915	"Theoretical m/z 197.980686, Mass diff 0.001 (2.75 ppm), SMILES S=P(OC)SCC(O)=NC, Annotation [C4H10NO2PS2-H]+, Rule of HR True"
+198.96501	5415933	"Theoretical m/z 198.965248, Mass diff 0 (0 ppm), Formula C4H8O3PS2"
+230.00722	497851	"Theoretical m/z 230.006895, Mass diff 0 (1.41 ppm), SMILES S=P(OC)(OC)SCC(O)=NC, Annotation [C5H12NO3PS2+H]+, Rule of HR True"
+
+NAME: Dimethomorph
+SCANNUMBER: 3852
+RETENTIONTIME: 7.060486
+PRECURSORMZ: 388.1316
+PRECURSORTYPE: [M+H]+
+IONMODE: Positive
+SPECTRUMTYPE: Centroid
+FORMULA: C21H22NO4Cl
+INCHIKEY: QNBTYORWCCMPQP-UHFFFAOYSA-N
+INCHI: 
+SMILES: COc1cc(ccc1OC)C(=CC(=O)N1CCOCC1)c1ccc(cc1)Cl
+AUTHORS: Biomarker Analytical Laboratories, RECETOX, Masaryk University (CZ)
+COLLISIONENERGY: 
+INSTRUMENT: LC Orbitrap Fusion Tribrid MS
+INSTRUMENTTYPE: LC-ESI-Orbitrap
+IONIZATION: ESI+
+LICENSE: CC BY-NC
+COMMENT: 
+Num Peaks: 22
+114.05532	468862	"Theoretical m/z 114.054958, Mass diff 0 (3.17 ppm), SMILES O=CN1CCOCC1, Annotation [C5H9NO2-H]+, Rule of HR True"
+125.01571	886745	"Theoretical m/z 125.015255, Mass diff 0 (3.64 ppm), SMILES ClC1=CC=C(C=C1)C, Annotation [C7H7Cl-H]+, Rule of HR True"
+138.99484	4138370	"Theoretical m/z 138.995067, Mass diff 0 (0 ppm), Formula C7H4ClO"
+155.0705	425164	"Theoretical m/z 155.070819, Mass diff 0 (0 ppm), Formula C8H11O3"
+165.05519	15513399	"Theoretical m/z 165.055169, Mass diff -0.001 (0 ppm), Formula C9H9O3"
+165.06543	350695
+195.08057	386226	"Theoretical m/z 195.08099, Mass diff 0 (0 ppm), Formula C14H11O"
+215.0262	490061	"Theoretical m/z 215.026368, Mass diff 0 (0 ppm), Formula C13H8ClO"
+223.07544	702025	"Theoretical m/z 223.075837, Mass diff 0 (1.78 ppm), SMILES O=C(C=CC1=CC=C(Cl)C=C1)N(C)CC, Annotation [C12H14ClNO]+, Rule of HR False"
+227.02576	230514	"Theoretical m/z 227.026368, Mass diff 0 (0 ppm), Formula C14H8ClO"
+229.04225	216308	"Theoretical m/z 229.041467, Mass diff 0.001 (3.42 ppm), SMILES ClC1=CC=C(C=C1)CC2=CC=C(OC)C=C2, Annotation [C14H13ClO-3H]+, Rule of HR True"
+235.07555	241142	"Theoretical m/z 235.075842, Mass diff 0 (1.24 ppm), SMILES O=C(C=CC1=CC=C(Cl)C=C1)N(CC)CC, Annotation [C13H16ClNO-2H]+, Rule of HR False"
+238.09914	1323577	"Theoretical m/z 238.099317, Mass diff 0 (0.75 ppm), SMILES O=C(C=CC1=CC=C(Cl)C=C1)N(CC)CC, Annotation [C13H16ClNO+H]+, Rule of HR True"
+242.04929	2449236
+243.02142	891584	"Theoretical m/z 243.021282, Mass diff -0.001 (0 ppm), Formula C14H8ClO2"
+257.03726	578874	"Theoretical m/z 257.036371, Mass diff 0.001 (3.46 ppm), SMILES ClC1=CC=C(C=C1)C(=C)C2=CC=C(OC)C(O)=C2, Annotation [C15H13ClO2-3H]+, Rule of HR True"
+258.04443	3232295
+266.0943	358273	"Theoretical m/z 266.093756, Mass diff 0.001 (2.04 ppm), SMILES O=CC=C(C=1C=CC=CC1)C2=CC=C(OC)C(OC)=C2, Annotation [C17H16O3-2H]+, Rule of HR False"
+270.04492	608851
+273.06772	3866006	"Theoretical m/z 273.067676, Mass diff 0 (0.16 ppm), SMILES ClC1=CC=C(C=C1)C(=C)C2=CC=C(OC)C(OC)=C2, Annotation [C16H15ClO2-H]+, Rule of HR True"
+286.03912	483547
+301.06311	4060551	"Theoretical m/z 301.06261, Mass diff 0 (1.66 ppm), SMILES O=CC=C(C1=CC=C(Cl)C=C1)C2=CC=C(OC)C(OC)=C2, Annotation [C17H15ClO3-H]+, Rule of HR True"

@@ -89,8 +89,8 @@ scores.to_json("$scores_out")
 
     <tests>
         <test>
-            <param name="queries" value="similarity/recetox_gc-ei_ms_20201028.msp" ftype="msp"/>
-            <param name="references" value="similarity/recetox_gc-ei_ms_20201028.msp" ftype="msp"/>
+            <param name="queries" value="similarity/rcx_gc-ei_ms_subset.msp" ftype="msp"/>
+            <param name="references" value="similarity/rcx_gc-ei_ms_subset.msp" ftype="msp"/>
             <param name="tolerance" value="60.0" />
             <output name="scores_out" value="metadata_match/ri_match_60.json" ftype="json" />
         </test>
