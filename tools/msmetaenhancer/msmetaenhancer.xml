@@ -5,6 +5,9 @@
         <import>macros.xml</import>
     </macros>
     <expand macro="creator"/>
+    <xrefs>
+        <xref type="bio.tools">msmetaenhancer</xref>
+    </xrefs>
 
     <requirements>
         <requirement type="package" version="@TOOL_VERSION@">msmetaenhancer</requirement>
