@@ -19,6 +19,7 @@
                 #if $input_num.input_choice == "2":
                     metadata = "$input_num.input_metadata.metadata",
                     ext = "$input_num.data.ext,$input_num.input_metadata.metadata.ext",
+                    transpose = $input_num.transpose_feature_table,
                 #else:
                     ext = "$input_num.data.ext",
                 #end if
@@ -36,6 +37,7 @@
                 #if $input_num.input_choice == "2":
                     metadata = "$input_num.input_metadata.metadata",
                     ext = "$input_num.data.ext,$input_num.input_metadata.metadata.ext",
+                    transpose = $input_num.transpose_feature_table,
                 #else:
                     ext = "$input_num.data.ext",
                 #end if
@@ -61,10 +63,12 @@
                 <expand macro="input_data"/>
             </when>
             <when value="2">
+                <expand macro="input_data"/>
                 <section name="input_metadata" title="Input metadata table" expanded="true">
                     <param name="metadata" label="Input metadata" type="data" format="csv,tsv,parquet" help="" />
-                </section> 
-                <expand macro="input_data"/>
+                </section>
+                <param name = "transpose_feature_table" label="Transpose feature table" type="boolean" checked="false" 
+                truevalue="TRUE" falsevalue="FALSE" help="Transpose if feature names are -> column 1 and sampleNames are column" />
             </when>
         </conditional>
         <expand macro="general_parameters"/>
@@ -93,7 +97,7 @@
             <param name="data" value="input_data.csv" ftype="csv"/>
             <param name="mode" value="batchwise"/>
             <param name="wavelet_filter" value="d"/>
-            <param name="filter_length" value="2"/>
+            <param name="wavelet_length" value="2"/>
             <param name="k" value="20"/>
             <param name="t" value="0.05"/>
             <param name="t2" value="0.05"/>
@@ -104,7 +108,7 @@
             <param name="data" value="input_data.tsv" ftype="tsv"/>
             <param name="mode" value="batchwise"/>
             <param name="wavelet_filter" value="d"/>
-            <param name="filter_length" value="2"/>
+            <param name="wavelet_length" value="2"/>
             <param name="k" value="20"/>
             <param name="t" value="0.05"/>
             <param name="t2" value="0.05"/>
@@ -115,7 +119,7 @@
             <param name="data" value="input_data.parquet" ftype="parquet"/>
             <param name="mode" value="batchwise"/>
             <param name="wavelet_filter" value="d"/>
-            <param name="filter_length" value="2"/>
+            <param name="wavelet_length" value="2"/>
             <param name="k" value="20"/>
             <param name="t" value="0.05"/>
             <param name="t2" value="0.05"/>
@@ -128,7 +132,7 @@
             <param name="metadata" value="metadata.csv" ftype="csv"/>
             <param name="mode" value="batchwise"/>
             <param name="wavelet_filter" value="d"/>
-            <param name="filter_length" value="2"/>
+            <param name="wavelet_length" value="2"/>
             <param name="k" value="20"/>
             <param name="t" value="0.05"/>
             <param name="t2" value="0.05"/>
@@ -141,7 +145,7 @@
             <param name="metadata" value="metadata.tsv" ftype="tsv"/>
             <param name="mode" value="batchwise"/>
             <param name="wavelet_filter" value="d"/>
-            <param name="filter_length" value="2"/>
+            <param name="wavelet_length" value="2"/>
             <param name="k" value="20"/>
             <param name="t" value="0.05"/>
             <param name="t2" value="0.05"/>
@@ -154,12 +158,40 @@
             <param name="metadata" value="metadata.csv" ftype="csv"/>
             <param name="mode" value="batchwise"/>
             <param name="wavelet_filter" value="d"/>
-            <param name="filter_length" value="2"/>
+            <param name="wavelet_length" value="2"/>
             <param name="k" value="20"/>
             <param name="t" value="0.05"/>
             <param name="t2" value="0.05"/>
             <param name="alpha" value="0"/>
             <output name="normalized_data" file="normalized_data.parquet" compare="sim_size" delta="200"/>
+        </test>
+        <test><!-- TEST 7 -->
+            <param name="input_choice" value="2"/>
+            <param name="data" value="feature_table_transpose_version.parquet" ftype="parquet"/>
+            <param name="metadata" value="metadata.parquet" ftype="parquet"/>
+            <param name="transpose_feature_table" value="TRUE"/>
+            <param name="mode" value="batchwise"/>
+            <param name="wavelet_filter" value="d"/>
+            <param name="wavelet_length" value="2"/>
+            <param name="k" value="20"/>
+            <param name="t" value="0.05"/>
+            <param name="t2" value="0.05"/>
+            <param name="alpha" value="0"/>
+            <output name="normalized_data" file="normalized_data.parquet" compare="sim_size" delta="200"/>
+        </test>
+        <test><!-- TEST 8 -->
+            <param name="input_choice" value="2"/>
+            <param name="data" value="feature_table_transpose_version.csv" ftype="csv"/>
+            <param name="metadata" value="metadata.csv" ftype="csv"/>
+            <param name="transpose_feature_table" value="TRUE"/>
+            <param name="mode" value="batchwise"/>
+            <param name="wavelet_filter" value="d"/>
+            <param name="wavelet_length" value="2"/>
+            <param name="k" value="20"/>
+            <param name="t" value="0.05"/>
+            <param name="t2" value="0.05"/>
+            <param name="alpha" value="0"/>
+            <output name="normalized_data" file="normalized_data.csv"/>
         </test>
         <!-- The following test has different results on three platform I've tried -->
         <!-- <test>
