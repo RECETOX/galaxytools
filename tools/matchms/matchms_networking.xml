@@ -166,8 +166,8 @@
                 <assert_contents>
                     <is_valid_xml />
                     <has_line_matching expression='.*node id="C[0-9]*"\/.' n="20"/>
-                    <has_line_matching expression='.*edge source="C[0-9]*" target="C[0-9]*".' n="17"/>
-                    <has_line_matching expression='\s*.data key="d0".0\.[0-9]*.*' n="17"/>
+                    <has_line_matching expression='.*edge source="C[0-9]*" target="C[0-9]*".' n="13"/>
+                    <has_line_matching expression='\s*.data key="d0".0\.[0-9]*.*' n="13"/>
                 </assert_contents>
             </output>
         </test>
