@@ -91,9 +91,9 @@
             <output name="similarity_network_file" ftype="graphml">
                 <assert_contents>
                     <is_valid_xml />
-                    <has_line_matching expression='.*node id="C[0-9]*"\/.' n="138"/>
-                    <has_line_matching expression='.*edge source="C[0-9]*" target="C[0-9]*".' n="16"/>
-                    <has_line_matching expression='\s*.data key="d0".0\.[0-9]*.*' n="16"/>
+                    <has_line_matching expression='.*node id="C[0-9]*"\/.' n="51"/>
+                    <has_line_matching expression='.*edge source="C[0-9]*" target="C[0-9]*".' n="4"/>
+                    <has_line_matching expression='\s*.data key="d0".0\.[0-9]*.*' n="4"/>
                 </assert_contents>
             </output>
         </test>
@@ -103,8 +103,8 @@
             <param name="identifier_key" value="compound_name"/>
             <output name="similarity_network_file" ftype="cyjs">
                 <assert_contents>
-                    <has_text_matching expression='{"data": {"id": "C[0-9]*", "value": "C[0-9]*", "name": "C[0-9]*"}}' n="138"/>
-                    <has_text_matching expression='{"data": {"weight": 0\.[0-9]*, "source": "C[0-9]*", "target": "C[0-9]*"}}' n="16"/>
+                    <has_text_matching expression='{"data": {"id": "C[0-9]*", "value": "C[0-9]*", "name": "C[0-9]*"}}' n="51"/>
+                    <has_text_matching expression='{"data": {"weight": 0\.[0-9]*, "source": "C[0-9]*", "target": "C[0-9]*"}}' n="4"/>
                 </assert_contents>
             </output>
         </test>
@@ -115,8 +115,8 @@
             <output name="similarity_network_file" ftype="gexf">
             <assert_contents>
                 <is_valid_xml />
-                <has_line_matching expression='.*node id="C[0-9]*" label="C[0-9]*" \/.' n="138"/>
-                <has_line_matching expression='\s*.edge source="C[0-9]*" target="C[0-9]*" id="[0-9]*" weight="0.[0-9]*" \/.' n="16"/>
+                <has_line_matching expression='.*node id="C[0-9]*" label="C[0-9]*" \/.' n="51"/>
+                <has_line_matching expression='\s*.edge source="C[0-9]*" target="C[0-9]*" id="[0-9]*" weight="0.[0-9]*" \/.' n="4"/>
             </assert_contents>
         </output>
         </test>
@@ -126,8 +126,8 @@
             <param name="identifier_key" value="compound_name"/>
             <output name="similarity_network_file" ftype="gml">
                 <assert_contents>
-                    <has_line_matching expression='\s*node \[\n\s*id [0-9]*\n\s*label "C[0-9]*"\n\s*\]' n="138"/>
-                    <has_line_matching expression='\s*edge \[\n\s*source [0-9]*\n\s*target [0-9]*\n\s*weight 0\.[0-9]*\n\s*\]' n="16"/>
+                    <has_line_matching expression='\s*node \[\n\s*id [0-9]*\n\s*label "C[0-9]*"\n\s*\]' n="51"/>
+                    <has_line_matching expression='\s*edge \[\n\s*source [0-9]*\n\s*target [0-9]*\n\s*weight 0\.[0-9]*\n\s*\]' n="4"/>
                 </assert_contents>
             </output>
         </test>
@@ -137,8 +137,8 @@
             <param name="identifier_key" value="compound_name"/>
             <output name="similarity_network_file" ftype="json">
                 <assert_contents>
-                    <has_text_matching expression='{"id": "C[0-9]*"}' n="138"/>
-                    <has_text_matching expression='{"weight": 0\.[0-9]*, "source": "C[0-9]*", "target": "C[0-9]*"}' n="16"/>
+                    <has_text_matching expression='{"id": "C[0-9]*"}' n="51"/>
+                    <has_text_matching expression='{"weight": 0\.[0-9]*, "source": "C[0-9]*", "target": "C[0-9]*"}' n="4"/>
                 </assert_contents>
             </output>
         </test>
