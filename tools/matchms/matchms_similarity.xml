@@ -173,7 +173,7 @@
             <conditional name="metric">
                 <param name="similarity_metric" value="Spec2Vec"/>
                 <param name="model_metadata" value="similarity/spec2vec/model.json" ftype="json"/>
-                <param name="model_weights" value="similarity/spec2vec/weights.binary" ftype="auto"/>
+                <param name="model_weights" value="similarity/spec2vec/weights_100.binary" ftype="auto"/>
                 <param name="allow_missing_percentage" value="1.0"/>
             </conditional>
             <output name="similarity_scores" file="similarity/scores_test6_out.json" ftype="json" compare="sim_size" delta="100000"/>
