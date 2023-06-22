@@ -3,25 +3,72 @@
         <import>macros.xml</import>
     </macros>
     <expand macro="creator"/>
+    <expand macro="edam" />
 
     <requirements>
         <requirement type="package" version="@TOOL_VERSION@">spec2vec</requirement>
     </requirements>
 
     <command detect_errors="aggressive"><![CDATA[
-
+        python3 ${python_wrapper}
     ]]></command>
+<configfiles>
+<configfile name="python_wrapper">
+@init_logger@
+@init_model@
 
-<inputs>
-    <param label="Model JSON file" name="model_metadata" type="data" format="json"
-        help="Model JSON file to use for Spec2Vec similarity computing."/>
-    <param label="Model NPY file" name="model_weights" type="data" format="binary"
-        help="Model NPY file to use for Spec2Vec similarity computing."/>
-    <param label="intensity_power" name="intensity_power" type="float" value="0.0"
-        help="Spectrum vectors are a weighted sum of the word vectors. The given word intensities will be raised to the given power. 
-        The default is 0, which means that no weighing will be done."/>
-    <param label="Maximum share of new peaks" name="allow_missing_percentage"  type="float" value="0.1" max="1.0" min="0.0"
-        help="Maximum allowed share of the peaks that are new to the model in relation to the whole peak corpus."/>
-</inputs>
+import numpy as np
+from spec2vec import Spec2Vec
 
+similarity = Spec2Vec(
+    model,
+    intensity_weighting_power=${intensity_power},
+    allowed_missing_percentage=${allow_missing_percentage} * 100
+)
+name="Spec2Vec_${intensity_power}_${allow_missing_percentage}"
+
+@init_scores@
+
+from matchms.filtering import normalize_intensities
+
+layer = similarity.sparse_array(
+    references=np.asarray(list(map(normalize_intensities, scores.references))),
+    queries=np.asarray(list(map(normalize_intensities, scores.queries))),
+    idx_row = scores._scores.row,
+    idx_col = scores._scores.col,
+    is_symmetric=False)
+
+scores._scores.add_sparse_data(scores._scores.row, scores._scores.col, layer, name)
+
+scores.filter_by_range(inplace=True, name=name, low=0)
+scores.to_json("$similarity_scores")
+</configfile>
+</configfiles>
+
+    <inputs>
+        <expand macro="input_param" />
+        <param label="Model JSON file" name="model_metadata" type="data" format="json"
+            help="Model JSON file to use for Spec2Vec similarity computing."/>
+        <param label="Model NPY file" name="model_weights" type="data" format="binary"
+            help="Model NPY file to use for Spec2Vec similarity computing."/>
+        <param label="intensity_power" name="intensity_power" type="float" value="0.0"
+            help="Spectrum vectors are a weighted sum of the word vectors. The given word intensities will be raised to the given power. 
+            The default is 0, which means that no weighing will be done."/>
+        <param label="Maximum share of new peaks" name="allow_missing_percentage"  type="float" value="0.1" max="1.0" min="0.0"
+            help="Maximum allowed share of the peaks that are new to the model in relation to the whole peak corpus."/>
+    </inputs>
+    <outputs>
+        <data label="Spec2Vec scores of ${on_string}" name="similarity_scores" format="json"/>
+    </outputs>
+
+    <tests>
+        <test> <!-- TEST #1: Test Spec2Vec. -->
+            <param name="references" value="inp_filtered_library.msp" ftype="msp"/>
+            <param name="queries" value="inp_filtered_spectra.msp" ftype="msp"/>
+            <param name="model_metadata" value="model_100.json" ftype="json"/>
+            <param name="model_weights" value="weights_100.binary" ftype="auto"/>
+            <param name="allow_missing_percentage" value="1.0"/>
+            <output name="similarity_scores" file="scores_test1.json" ftype="json"/>
+        </test>
+    </tests>
 </tool>

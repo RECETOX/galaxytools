@@ -5,6 +5,7 @@
         <import>macros.xml</import>
     </macros>
     <expand macro="creator"/>
+    <expand macro="edam" />
 
     <requirements>
         <requirement type="package" version="@TOOL_VERSION@">spec2vec</requirement>
