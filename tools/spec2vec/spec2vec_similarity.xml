@@ -68,7 +68,15 @@ scores.to_json("$similarity_scores")
             <param name="model_metadata" value="model_100.json" ftype="json"/>
             <param name="model_weights" value="weights_100.binary" ftype="auto"/>
             <param name="allow_missing_percentage" value="1.0"/>
-            <output name="similarity_scores" file="scores_test1.json" ftype="json"/>
+            <output name="similarity_scores" file="s2v_scores_test1_out.json" ftype="json"/>
+        </test>
+        <test>
+            <param name="use_scores" value="True"/>
+            <param name="scores_in" value="ri_match_60.json" ftype="json"/>
+            <param name="model_metadata" value="model_100.json" ftype="json"/>
+            <param name="model_weights" value="weights_100.binary" ftype="auto"/>
+            <param name="allow_missing_percentage" value="1.0"/>
+            <output name="similarity_scores" value="s2v_scores_test2_out.json" ftype="json" />
         </test>
     </tests>
 </tool>
