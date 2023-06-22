@@ -1,8 +1,11 @@
-<tool id="biotransformer" name="BioTransformer" version="@TOOL_VERSION@+galaxy0" profile="21.09">
+<tool id="biotransformer" name="BioTransformer" version="@TOOL_VERSION@+galaxy1" profile="21.09">
     <macros>
         <import>macros.xml</import>
     </macros>
     <expand macro="creator"/>
+    <xrefs>
+        <xref type="bio.tools">biotransformer</xref>
+    </xrefs>
     <requirements>
         <requirement type="package" version="@TOOL_VERSION@">biotransformer</requirement>
         <requirement type="package" version="3.1.1">openbabel</requirement>
