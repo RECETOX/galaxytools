@@ -1,9 +1,13 @@
-<tool id="riassigner" name="RIAssigner" version="@TOOL_VERSION@+galaxy1" profile="19.05">
+<tool id="riassigner" name="RIAssigner" version="@TOOL_VERSION@+galaxy2" profile="21.09">
     <description>compute retention indices</description>
     <macros>
         <import>macros.xml</import>
     </macros>
     <expand macro="creator"/>
+
+    <xrefs>
+        <xref type="bio.tools">riassigner</xref>
+    </xrefs>
 
     <requirements>
         <requirement type="package" version="@TOOL_VERSION@">riassigner</requirement>
