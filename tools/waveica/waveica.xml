@@ -3,7 +3,7 @@
     <macros>
         <import>macros.xml</import>
     </macros>
-    <expand macro='annotation'/>
+    <expand macro="annotation"/>
     <expand macro="creator"/>
 
     <requirements>
