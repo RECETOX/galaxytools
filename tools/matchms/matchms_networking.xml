@@ -150,9 +150,9 @@
             <output name="similarity_network_file" ftype="graphml">
                 <assert_contents>
                     <is_valid_xml />
-                    <has_line_matching expression='.*node id="C[0-9]*"\/.' n="25"/>
-                    <has_line_matching expression='.*edge source="C[0-9]*" target="C[0-9]*".' n="16"/>
-                    <has_line_matching expression='\s*.data key="d0".0\.[0-9]*.*' n="16"/>
+                    <has_line_matching expression='.*node id="C[0-9]*"\/.' n="8"/>
+                    <has_line_matching expression='.*edge source="C[0-9]*" target="C[0-9]*".' n="4"/>
+                    <has_line_matching expression='\s*.data key="d0".0\.[0-9]*.*' n="4"/>
                 </assert_contents>
             </output>
         </test>
@@ -165,9 +165,9 @@
             <output name="similarity_network_file" ftype="graphml">
                 <assert_contents>
                     <is_valid_xml />
-                    <has_line_matching expression='.*node id="C[0-9]*"\/.' n="59"/>
-                    <has_line_matching expression='.*edge source="C[0-9]*" target="C[0-9]*".' n="52"/>
-                    <has_line_matching expression='\s*.data key="d0".0\.[0-9]*.*' n="52"/>
+                    <has_line_matching expression='.*node id="C[0-9]*"\/.' n="20"/>
+                    <has_line_matching expression='.*edge source="C[0-9]*" target="C[0-9]*".' n="17"/>
+                    <has_line_matching expression='\s*.data key="d0".0\.[0-9]*.*' n="17"/>
                 </assert_contents>
             </output>
         </test>
@@ -180,8 +180,8 @@
             <param name="keep_unconnected_nodes" value="false"/>
             <output name="similarity_network_file" ftype="cyjs">
                 <assert_contents>
-                    <has_text_matching expression='{"data": {"id": "C[0-9]*", "value": "C[0-9]*", "name": "C[0-9]*"}}' n="18"/>
-                    <has_text_matching expression='{"data": {"weight": 0\.[0-9]*, "source": "C[0-9]*", "target": "C[0-9]*"}}' n="9"/>
+                    <has_text_matching expression='{"data": {"id": "C[0-9]*", "value": "C[0-9]*", "name": "C[0-9]*"}}' n="6"/>
+                    <has_text_matching expression='{"data": {"weight": 0\.[0-9]*, "source": "C[0-9]*", "target": "C[0-9]*"}}' n="3"/>
                 </assert_contents>
             </output>
         </test>
