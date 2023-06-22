@@ -49,15 +49,15 @@
             <param name="split_type" value="one-per-file" />
             <output_collection name="sample" type="list">
                 <element name="1NITROPYRENE"         file="split/one-per-file/1NITROPYRENE.msp"         ftype="msp" compare="diff"/>
-                <element name="35DICHLOROPHENOL"     file="split/one-per-file/35DICHLOROPHENOL.msp"     ftype="msp" compare="diff"/>
-                <element name="34DICHLOROPHENOL"     file="split/one-per-file/34DICHLOROPHENOL.msp"     ftype="msp" compare="diff"/>
-                <element name="26DICHLOROPHENOL"     file="split/one-per-file/26DICHLOROPHENOL.msp"     ftype="msp" compare="diff"/>
-                <element name="25DICHLOROPHENOL"     file="split/one-per-file/25DICHLOROPHENOL.msp"     ftype="msp" compare="diff"/>
-                <element name="24DINITROPHENOL"      file="split/one-per-file/24DINITROPHENOL.msp"      ftype="msp" compare="diff"/>
-                <element name="24DICHLOROPHENOL"     file="split/one-per-file/24DICHLOROPHENOL.msp"     ftype="msp" compare="diff"/>
-                <element name="246TRICHLOROPHENOL"   file="split/one-per-file/246TRICHLOROPHENOL.msp"   ftype="msp" compare="diff"/>
-                <element name="245TRICHLOROPHENOL"   file="split/one-per-file/245TRICHLOROPHENOL.msp"   ftype="msp" compare="diff"/>
                 <element name="23DICHLOROPHENOL"     file="split/one-per-file/23DICHLOROPHENOL.msp"     ftype="msp" compare="diff"/>
+                <element name="245TRICHLOROPHENOL"   file="split/one-per-file/245TRICHLOROPHENOL.msp"   ftype="msp" compare="diff"/>
+                <element name="246TRICHLOROPHENOL"   file="split/one-per-file/246TRICHLOROPHENOL.msp"   ftype="msp" compare="diff"/>
+                <element name="24DICHLOROPHENOL"     file="split/one-per-file/24DICHLOROPHENOL.msp"     ftype="msp" compare="diff"/>
+                <element name="24DINITROPHENOL"      file="split/one-per-file/24DINITROPHENOL.msp"      ftype="msp" compare="diff"/>
+                <element name="25DICHLOROPHENOL"     file="split/one-per-file/25DICHLOROPHENOL.msp"     ftype="msp" compare="diff"/>
+                <element name="26DICHLOROPHENOL"     file="split/one-per-file/26DICHLOROPHENOL.msp"     ftype="msp" compare="diff"/>
+                <element name="34DICHLOROPHENOL"     file="split/one-per-file/34DICHLOROPHENOL.msp"     ftype="msp" compare="diff"/>
+                <element name="35DICHLOROPHENOL"     file="split/one-per-file/35DICHLOROPHENOL.msp"     ftype="msp" compare="diff"/>
             </output_collection>
         </test>
         <test>
