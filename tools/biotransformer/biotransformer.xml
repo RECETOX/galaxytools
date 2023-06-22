@@ -54,9 +54,24 @@
             <param name="steps" value="1"/>
             <param name="tolerance" value="0.01"/>
             <param name="input_file" value="smiles.csv"/>
-            <output name="output_file" value="output1.tsv"/>
-            <output name="output_file2" value="output2.tsv"/>
-            <output name="output_file3" value="output3.tsv"/>
+            <output name="output_file">
+                <assert_contents>
+                    <has_size value="8600" delta="100"/>
+                    <has_n_lines n="225" delta="10"/>
+                </assert_contents>
+            </output>
+            <output name="output_file2">
+                <assert_contents>
+                    <has_size value="8600" delta="100"/>
+                    <has_n_lines n="225" delta="10"/>
+                </assert_contents>
+            </output>
+            <output name="output_file3">
+                <assert_contents>
+                    <has_size value="7400" delta="100"/>
+                    <has_n_lines n="186" delta="10"/>
+                </assert_contents>
+            </output>
         </test>
     </tests>
     <help>
