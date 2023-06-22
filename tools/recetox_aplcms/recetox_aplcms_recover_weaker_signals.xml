@@ -1,9 +1,14 @@
-<tool id="recetox_aplcms_recover_weaker_signals" name="recetox-aplcms - recover weaker signals" version="@TOOL_VERSION@+galaxy1">
+<tool id="recetox_aplcms_recover_weaker_signals" name="recetox-aplcms - recover weaker signals" version="@TOOL_VERSION@+galaxy2" profile="21.09">
     <description>recover weaker signals from raw data using an aligned feature table</description>
     <macros>
         <import>macros.xml</import>
         <import>help.xml</import>
     </macros>
+    <edam_operations>
+        <edam_operation>operation_3215</edam_operation>
+        <edam_operation>operation_3799</edam_operation>
+    </edam_operations>
+    <expand macro="annotation"/>
     <expand macro="creator"/>
     <expand macro="requirements"/>
 

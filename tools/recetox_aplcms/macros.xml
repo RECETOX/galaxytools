@@ -7,6 +7,17 @@
         </requirements>
     </xml>
 
+    <xml name="annotation">
+       <edam_topics>
+              <edam_topic>topic_3172</edam_topic>
+              <edam_topic>topic_0091</edam_topic>
+              <edam_topic>topic_3520</edam_topic>       
+       </edam_topics>
+       <xrefs>
+              <xref type="bio.tools">recetox-aplcms</xref>
+       </xrefs>
+    </xml>
+
     <xml name="creator">
         <creator>
             <person
