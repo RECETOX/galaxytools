@@ -70,7 +70,7 @@ scores.to_json("$similarity_scores")
             <param name="use_scores" value="True"/>
             <param name="scores_in" value="metadata_match/ri_match_60.json" ftype="json"/>
             <param name="similarity_metric" value="CosineHungarian"/>
-            <output name="similarity_scores" file="spectral_similarity/test2.json" ftype="json" compare="sim_size" delta="100"/>
+            <output name="similarity_scores" file="spectral_similarity/test2.json" ftype="json"/>
         </test>
     </tests>
 
