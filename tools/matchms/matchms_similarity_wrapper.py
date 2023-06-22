@@ -7,7 +7,7 @@ from matchms.importing import load_from_mgf, load_from_msp
 from matchms.similarity import (CosineGreedy, CosineHungarian, MetadataMatch,
                                 ModifiedCosine, NeutralLossesCosine)
 from spec2vec import Spec2Vec
-from spec2vec.serialization.model_importing import Word2VecLight, load_weights
+from spec2vec.serialization.model_importing import load_weights, Word2VecLight
 
 
 def convert_precursor_mz(spectrum):
@@ -23,7 +23,7 @@ def convert_precursor_mz(spectrum):
         return spectrum
     else:
         raise ValueError("Precursor_mz missing. Apply 'add_precursor_mz' filter first.")
-    
+
 
 def load_model(model_file, weights_file) -> Word2VecLight:
     """
