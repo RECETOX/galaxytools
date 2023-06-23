@@ -5,6 +5,9 @@
         <import>macros.xml</import>
     </macros>
     <expand macro="creator"/>
+    <xrefs>
+        <xref type="bio.tools">recetox-xmsannotator</xref>
+    </xrefs>
     <expand macro="requirements" />
     <command detect_errors="aggressive"><![CDATA[
         Rscript -e 'source("${__tool_directory__}/utils.R")' -e "n_workers <- \${GALAXY_SLOTS:-1}" -e "source('${wrapper}')"
