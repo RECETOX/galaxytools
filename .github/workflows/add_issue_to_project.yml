@@ -1,0 +1,16 @@
+name: Add issues to project
+
+on:
+  workflow_call:
+ 
+jobs:
+  add-to-project:
+    name: Add issue to project
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/add-to-project@v0.5.0
+        with:
+          # You can target a project in a different organization
+          # to the issue
+          project-url: https://github.com/orgs/RECETOX/projects/15
+          github-token: ${{ secrets.PROJECT_AUTOMATION_PERSONAL_TOKEN_HH }}

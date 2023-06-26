@@ -20,6 +20,12 @@
         </creator>
     </xml>
 
+    <xml name="annotation">
+        <xrefs>
+               <xref type="bio.tools">waveica</xref>
+        </xrefs>
+     </xml>
+
     <xml name="input_data">
         <param type="data" name="data" label="Feature table" format="csv,tsv,parquet" help=""/>
     </xml>

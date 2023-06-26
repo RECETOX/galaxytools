@@ -1,8 +1,12 @@
-<tool id="ramclustr_define_experiment" name="RAMClustR define experiment" version="1.0.2">
+<tool id="ramclustr_define_experiment" name="RAMClustR define experiment" version="1.0.2+galaxy0" profile="21.09">
     <description>Definition of experimental design used for record keeping and writing spectra data.</description>
     <macros>
         <import>macros.xml</import>
     </macros>
+    <edam_operations>
+        <edam_operation>operation_3429</edam_operation>
+    </edam_operations>
+    <expand macro='annotation'/>
     <expand macro="creator"/>
 
     <command detect_errors="exit_code"><![CDATA[

@@ -1,9 +1,9 @@
+import re
 import subprocess
 import sys
 import tempfile
-import re
-import pandas
 
+import pandas
 from openbabel import openbabel, pybel
 openbabel.obErrorLog.StopLogging()
 
@@ -14,7 +14,7 @@ def InchiToSmiles(df):
     for item in df['InChI']:
         tmp = pybel.readstring("inchi", item)
         sm.append(tmp.write("smi"))
-    return(sm)
+    return sm
 
 
 executable = ["biotransformer"]
@@ -64,12 +64,12 @@ smList3 = sum(smList3, [])
 
 out_df1.insert(0, "SMILES query", smList1)
 out_df1.insert(1, "SMILES target", InchiToSmiles(out_df1))
-out_df1.to_csv(ocsv, sep ='\t')
+out_df1.to_csv(ocsv, sep='\t')
 
 out_df2.insert(0, "SMILES query", smList2)
 out_df2.insert(1, "SMILES target", InchiToSmiles(out_df2))
-out_df2.to_csv(ocsv_dup, sep ='\t')
+out_df2.to_csv(ocsv_dup, sep='\t')
 
 out_df3.insert(0, "SMILES query", smList3)
 out_df3.insert(1, "SMILES target", InchiToSmiles(out_df3))
-out_df3.to_csv(ocsv_dup2, sep ='\t')
+out_df3.to_csv(ocsv_dup2, sep='\t')
