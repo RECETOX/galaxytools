@@ -1,43 +1,49 @@
-<tool id="recetox_xmsannotator_advanced" name="RECETOX xMSannotator advanced" version="@TOOL_VERSION@+galaxy0">
+<tool id="recetox_xmsannotator_advanced" name="recetox-xMSannotator" version="@TOOL_VERSION@+galaxy0">
+
     <description>annotate peak intensity table including scores and confidence levels</description>
     <macros>
         <import>macros.xml</import>
     </macros>
     <expand macro="creator"/>
+    <xrefs>
+        <xref type="bio.tools">recetox-xmsannotator</xref>
+    </xrefs>
     <expand macro="requirements" />
     <command detect_errors="aggressive"><![CDATA[
-        Rscript -e "n_workers <- \${GALAXY_SLOTS:-1}" -e "source('${wrapper}')"
+        Rscript -e 'source("${__tool_directory__}/utils.R")' -e "n_workers <- \${GALAXY_SLOTS:-1}" -e "source('${wrapper}')"
     ]]></command>
 
     <configfiles>
         <configfile name="wrapper"><![CDATA[
-            library(xmsannotator)
+            metadata_table <- load_table("$metadata_table", "$metadata_table.ext")
+            intensity_table <- load_table("$intensity_table", "$intensity_table.ext")
+            peak_table <- create_peak_table(metadata_table, intensity_table)
+
+            filter_by <- create_filter_by_adducts("$filter_by")
 
             annotation <- advanced_annotation(
-            #if $peak_table.is_of_type("h5")
-                peak_table = load_peak_table_hdf("${peak_table}"),
-            #elif $peak_table.is_of_type("parquet")
-                peak_table = load_peak_table_parquet("${peak_table}"),
-            #end if
-                adduct_table = load_adduct_table_parquet("${adduct_table}"),
-                compound_table = load_compound_table_parquet("${compound_table}"),
+                peak_table = peak_table,
+                adduct_table = load_table("$adduct_table", "$adduct_table.ext"),
+                adduct_weights = load_table("$adduct_weights", "$adduct_weights.ext"),
+                compound_table = load_table("$compound_table", "$compound_table.ext"),
                 mass_tolerance = 1e-6 * ${mass_tolerance_ppm},
                 time_tolerance = $time_tolerance,
                 correlation_threshold = as.double($clustering.correlation_threshold),
                 min_cluster_size = as.integer($clustering.min_cluster_size),
                 deep_split = as.integer($clustering.deep_split),
                 network_type = "$clustering.network_type",
-            #if $scoring.expected_adducts
-                expected_adducts = load_expected_adducts_csv("${scoring.expected_adducts}"),
-            #end if
-            #if $scoring.boost_compounds
-                boost_compounds = load_boost_compounds_csv("${scoring.boost_compounds}"),
-            #end if
                 redundancy_filtering = $scoring.redundancy_filtering,
-                n_workers = n_workers
+                n_workers = n_workers,
+                intensity_deviation_tolerance = as.double($intensity_deviation_tolerance),
+                mass_defect_tolerance = as.double($mass_defect_tolerance),
+                mass_defect_precision = as.double($mass_defect_precision),
+                peak_rt_width = as.integer($peak_rt_width),
+                maximum_isotopes = as.integer($maximum_isotopes),
+                min_ions_per_chemical = as.integer($min_ions_per_chemical),
+                filter_by = filter_by
             )
 
-            save_parquet(data = annotation, file = "${annotation_parquet}")
+            save_table(annotation, "$output_file", "$output_file.ext")
         ]]></configfile>
     </configfiles>
 
@@ -47,15 +53,11 @@
             <param name="time_tolerance" type="float" value="10" min="0">
                 <label>Retention time tolerance [s]</label>
                 <help>
-                    Retention time tolerance in seconds for finding peaks derived from the same parent metabolite.
+                    Retention time tolerance in seconds for finding peaks derived from the same parent compound.
                 </help>
             </param>
         </expand>
         <section name="clustering" title="Clustering">
-            <param name="correlation_method" type="select" display="radio" label="Correlation method">
-                <option value="pearson" selected="true">pearson</option>
-                <option value="spearman">spearman</option>
-            </param>
             <param name="correlation_threshold" type="float" value="0.7">
                 <label>Correlation threshold</label>
                 <help>Correlation threshold between peaks to qualify as adducts/isotopes of the same metabolite.</help>
@@ -77,8 +79,8 @@
                     Network type parameter affects how the network's adjacency matrix is created from the correlation
                     matrix (see WGCNA package documentation).
                 </help>
-                <option value="signed">signed</option>
-                <option value="unsigned" selected="true">unsigned</option>
+                <option value="signed">Signed</option>
+                <option value="unsigned" selected="true">Unsigned</option>
             </param>
         </section>
         <section name="scoring" title="Scoring" expanded="true">
@@ -87,21 +89,6 @@
                 <help>
                     Boost the scores of metabolites that not only belongs to the same pathway but also to the same
                     cluster. Otherwise, do not account for cluster membership.
-                </help>
-            </param>
-            <param name="expected_adducts" type="data" format="csv" optional="true">
-                <label>Expected adducts</label>
-                <help>
-                    Require the presence of certain adducts for a high confidence match. By default, at least the
-                    presence of an M+H adduct is required for a high confidence match.
-                </help>
-            </param>
-            <param name="boost_compounds" type="data" format="csv" optional="true">
-                <label>Validated compounds score boosting (optional)</label>
-                <help>
-                    Table of previously validated compounds to boost their scores and confidence levels.
-                    The 1st column of the table must contain IDs of compounds.
-                    The optional 2nd and 3rd columns may contain mz values and retention times.
                 </help>
             </param>
             <param name="min_isp" type="integer" min="0" value="1">
@@ -121,17 +108,58 @@
                 <help>Whether to filter out low-scored multiple matcher or not.</help>
             </param>
         </section>
+        <param name="intensity_deviation_tolerance" type="float" value="0.1">
+            <label>Tolerance of intensity deviation</label>
+            <help>A numeric threshold by which an intensity ratio of two isotopic peaks may differ from their actual abundance ratio.</help>
+        </param>
+        <param name="mass_defect_tolerance" type="float" value="0.1">
+            <label>Tolerance of mass defect</label>
+            <help>Maximum difference in mass defect between two peaks of the same compound.</help>
+        </param>
+        <param name="mass_defect_precision" type="float" value="0.01">
+            <label>Precision for computing mass defect</label>
+        </param>
+        <param name="peak_rt_width" type="integer" value="1">
+            <label>Estimated chromatographic peak width</label>
+        </param>
+        <param name="maximum_isotopes" type="integer" value="10">
+            <label>Maximum isotopes</label>
+        </param>
+        <param name="min_ions_per_chemical" type="integer" value="2">
+            <label>Minimum ions per chemical</label>
+        </param>
+        <param name="filter_by" type="select" label="Adducts to filter by" multiple="true" optional="true">
+            <option value="M-H" selected="true">M-H</option>
+            <option value="M+H" selected="true">M+H</option>
+            <option value="2M-H">2M-H</option>
+            <option value="M-2H">M-2H</option>
+        </param>
     </inputs>
 
     <outputs>
         <expand macro="outputs"/>
     </outputs>
 
+    <tests>
+        <test>
+            <param name="metadata_table" value="metadata_table.parquet" ftype="parquet" />
+            <param name="intensity_table" value="intensity_table.parquet" ftype="parquet" />
+            <param name="compound_table" value="database.parquet" ftype="parquet" />
+            <param name="adduct_table" value="adduct_table.parquet" ftype="parquet" />
+            <output name="output_file" file="expected_output.parquet" ftype="parquet"/>
+        </test>
+        <test>
+            <param name="metadata_table" value="metadata_table.csv" ftype="csv" />
+            <param name="intensity_table" value="intensity_table.csv" ftype="csv" />
+            <param name="compound_table" value="database.csv" ftype="csv" />
+            <param name="adduct_table" value="adduct_table.csv" ftype="csv" />
+            <output name="output_file" file="expected_output.csv" ftype="csv"/>
+        </test>
+    </tests>
+
     <help>
         <![CDATA[
-        @HELP@
-        Then, a score and a confidence level is assigned to each match based on peak correlation
-        clustering, metabolite pathway associations, adducts expectations, and isotope conformations.
+            @HELP@
         ]]>
     </help>
 
