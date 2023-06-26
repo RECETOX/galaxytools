@@ -4,6 +4,10 @@
         <import>macros.xml</import>
     </macros>
     <expand macro="creator"/>
+    <edam_operations>
+        <edam_operation>operation_3434</edam_operation>
+    </edam_operations>
+    <expand macro="bio.tools"/>
 
     <requirements>
         <requirement type="package" version="@TOOL_VERSION@">matchms</requirement>
@@ -115,10 +119,10 @@ save_as_${output_file.output_format}(spectra, "${converted_library}")
             Mass spectral libraries are often stored in various formats, such as `msp`, `mgf` or `json`.
             This tool can be used to convert from one library format to another.
             Some of the metadata keywords might change during the conversion process, as they are harmonized internally with matchms.
-        
+
             .. rubric:: **Footnotes**
             .. [1] Export styles - see this `table <https://github.com/matchms/matchms/blob/master/matchms/data/export_key_conversions.csv>`_ for supported key conversions and detailed description of the export styles.
-        
+
             For more documentation on the matchms library see https://github.com/matchms/matchms/blob/master/README.rst and https://matchms.readthedocs.io/en/latest/.
     ]]></help>
 

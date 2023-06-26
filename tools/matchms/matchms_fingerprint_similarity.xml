@@ -5,6 +5,10 @@
         <import>macros.xml</import>
     </macros>
     <expand macro="creator"/>
+    <edam_operations>
+        <edam_operation>operation_0360</edam_operation>
+    </edam_operations>
+    <expand macro="bio.tools"/>
 
     <requirements>
         <requirement type="package" version="@TOOL_VERSION@">matchms</requirement>
@@ -76,7 +80,7 @@ scores.to_json("$scores_out")
 
     <help><![CDATA[       
         @HELP_matchms@
-        
+
         .. rubric:: **Footnotes**
         .. [1] SQL join types `explained <https://learnsql.com/blog/sql-joins-types-explained/>`_.
         .. [2] Fingerprint - the `daylight fingerprint <https://www.daylight.com/dayhtml/doc/theory/theory.finger.html>`_ is used to compute chemical similarity.

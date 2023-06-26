@@ -5,6 +5,11 @@
         <import>macros.xml</import>
     </macros>
     <expand macro="creator"/>
+    <edam_operations>
+        <edam_operation>operation_3927</edam_operation>
+        <edam_operation>operation_3925</edam_operation>
+    </edam_operations>
+    <expand macro="bio.tools"/>
 
     <requirements>
         <requirement type="package" version="@TOOL_VERSION@">matchms</requirement>

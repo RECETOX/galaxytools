@@ -5,6 +5,7 @@
         <import>macros.xml</import>
     </macros>
     <expand macro="creator"/>
+    <expand macro="bio.tools"/>
 
     <requirements>
         <requirement type="package" version="0.8.0">spec2vec</requirement>

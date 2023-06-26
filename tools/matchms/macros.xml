@@ -30,6 +30,11 @@
                 name="RECETOX MUNI" />
         </creator>
     </xml>
+    <xml name="bio.tools">
+        <xrefs>
+            <xref type="bio.tools">matchms</xref>
+        </xrefs>
+    </xml>
 
     <xml name="similarity_metrics">
         <option value="CosineGreedy" selected="true">CosineGreedy</option>
