@@ -44,7 +44,11 @@ layer = similarity.matrix(
     array_type = "sparse",
     is_symmetric=False)
 
+#if $matching.matching_type == "equal_match"
+scores._scores.add_dense_matrix(layer, name, join_type="${join_type}")
+#else
 scores._scores.add_sparse_data(layer.row, layer.col, layer.data, name, join_type="${join_type}")
+#end if
 scores.to_json("$scores_out")
 </configfile>
 </configfiles>
@@ -93,6 +97,13 @@ scores.to_json("$scores_out")
             <param name="references" value="similarity/rcx_gc-ei_ms_subset.msp" ftype="msp"/>
             <param name="tolerance" value="60.0" />
             <output name="scores_out" value="metadata_match/ri_match_60.json" ftype="json" />
+        </test>
+        <test>
+            <param name="queries" value="similarity/rcx_gc-ei_ms_subset.msp" ftype="msp"/>
+            <param name="references" value="similarity/rcx_gc-ei_ms_subset.msp" ftype="msp"/>
+            <param name="matching_type" value="equal_match" />
+            <param name="metadata_match_field" value="smiles" />
+            <output name="scores_out" value="metadata_match/smiles.json" ftype="json" />
         </test>
         <test>
             <param name="use_scores" value="True"/>
