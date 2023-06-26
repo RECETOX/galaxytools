@@ -48,7 +48,7 @@
         <param label="Score Layer" name="score_layer_name" type="select" help="Metric of the score layer to create a network from.">
             <expand macro="similarity_metrics"/>
         </param>
-        <param label="Identifier key" name="identifier_key" type="text"
+        <param label="Identifier key" name="identifier_key" type="text" value="compound_name"
             help="Unique metadata identifier of each spectrum from which scores are computed."/>
         <param label="Network-graph format" name="graph_format" type="select"
             help="Output format of the similarity network.">
