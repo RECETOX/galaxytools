@@ -55,13 +55,13 @@ scores.to_json("$scores_out")
         <expand macro="input_param"/>
         <conditional name="matching">
             <param label="Matching type" name="matching_type" type="select" display="radio"
-                help="Type of matching to perform">
+                help="Type of matching to perform.">
                 <option value="difference" selected="true">difference</option>
                 <option value="equal_match">equal match</option>
             </param>
             <when value="difference">        
                 <param label="Metadata Match" name="metadata_match_field" type="select" display="radio"
-                    help="Metadata field to use for matching">
+                    help="Metadata field to use for matching.">
                     <option value="retention_index" selected="true">Retention Index</option>
                     <option value="retention_time">Retention Time</option>
                     <option value="precursor_mz">Precursor Mz</option>
@@ -122,10 +122,12 @@ scores.to_json("$scores_out")
         </test>
     </tests>
 
-    <help>
-        <![CDATA[
-            @HELP_matchms@
-        ]]>
+    <help><![CDATA[
+        @HELP_matchms@
+        
+        .. rubric:: **Footnotes**
+        .. [1] SQL join types `explained <https://learnsql.com/blog/sql-joins-types-explained/>`_.
+    ]]>
     </help>
 
     <expand macro="citations"/>

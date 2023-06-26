@@ -4,6 +4,7 @@
         <import>macros.xml</import>
     </macros>
     <expand macro="creator"/>
+
     <requirements>
         <requirement type="package" version="@TOOL_VERSION@">matchms</requirement>
     </requirements>
@@ -14,6 +15,8 @@
 
 <configfiles>
 <configfile name="matchms_python_cli">
+@init_logger@
+
 from matchms.importing import load_from_msp, load_from_mgf, load_from_json
 from matchms.exporting import save_as_msp, save_as_mgf, save_as_json
 spectra = list(load_from_${spectral_library.ext}("${spectral_library}", ${harmonization_metadata}))
@@ -31,7 +34,7 @@ save_as_${output_file.output_format}(spectra, "${converted_library}")
 
         <param label="Harmonization metadata" name="harmonization_metadata" type="boolean" truevalue="True" falsevalue="False"
             checked="true"
-            help="Set to False if metadata harmonization is not desired. The default is True." />
+            help="Apply metadata harmonization, parsing certain keys required by additional filters or initializing other attributes. The default is True." />
 
         <conditional name="output_file">
             <param label="Spectral library format" name="output_format" type="select"
@@ -43,9 +46,9 @@ save_as_${output_file.output_format}(spectra, "${converted_library}")
             <when value="msp">
                 <param label="Export peak comments" name="export_peak_comments" type="boolean"
                     truevalue="True" falsevalue="False" checked="true"
-                    help="Retain peak comments from individual peaks after the respective mz and intensity pair when selected." />
+                    help="Retain peak comments from individual peaks after the respective mz and intensity pairs when selected." />
                 <param label="Export style" name="export_style" type="select"
-                    help="Converts the keys to required Export style. One of ['matchms', 'massbank', 'nist', 'riken', 'gnps']. Default is 'matchms'">
+                    help="Converts the keys to a specific style - see [1] for details.. One of ['matchms', 'massbank', 'nist', 'riken', 'gnps']. Default is 'matchms'.">
                     <option value="matchms" selected="true">matchms</option>
                     <option value="massbank">massbank</option>
                     <option value="nist">nist</option>
@@ -53,6 +56,8 @@ save_as_${output_file.output_format}(spectra, "${converted_library}")
                     <option value="gnps">gnps</option>
                 </param>
             </when>
+            <when value="mgf" />
+            <when value="json" />
         </conditional>
     </inputs>
 
@@ -106,14 +111,15 @@ save_as_${output_file.output_format}(spectra, "${converted_library}")
 
 
     <help><![CDATA[
-    Documentation
-        Mass spectral libraries are often stored in various formats, such as `msp`, `mgf` or `json`.
-        This tool can be used to convert from one library format to another.
-
-        Please note that peak comments in `RIKEN` style `msp` files are lost upon conversion.
-        Additionally, some of the metadata keywords might change during the conversion process, as they are harmonized internally with matchms.
-
-        For more documentation on the matchms library see https://github.com/matchms/matchms/blob/master/README.rst and https://matchms.readthedocs.io/en/latest/.
+        Documentation
+            Mass spectral libraries are often stored in various formats, such as `msp`, `mgf` or `json`.
+            This tool can be used to convert from one library format to another.
+            Some of the metadata keywords might change during the conversion process, as they are harmonized internally with matchms.
+        
+            .. rubric:: **Footnotes**
+            .. [1] Export styles - see this `table <https://github.com/matchms/matchms/blob/master/matchms/data/export_key_conversions.csv>`_ for supported key conversions and detailed description of the export styles.
+        
+            For more documentation on the matchms library see https://github.com/matchms/matchms/blob/master/README.rst and https://matchms.readthedocs.io/en/latest/.
     ]]></help>
 
 

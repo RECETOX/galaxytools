@@ -180,10 +180,9 @@
         </test>
     </tests>
 
-    <help>
-        <![CDATA[
-            @HELP_matchms@
-        ]]>
+    <help><![CDATA[
+        @HELP_matchms@
+    ]]>
     </help>
 
     <expand macro="citations"/>

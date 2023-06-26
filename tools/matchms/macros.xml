@@ -57,7 +57,7 @@
                 <param label="Scores object" name="scores_in" type="data" format="json"
                     help="Scores objects calculated previously using one of the matchms similarity tools." />
                 <param label="join type" name="join_type" type="select" display="radio"
-                    help="The join type to use for appending scores.">
+                    help="The join type to use for appending scores - see [1] for details.">
                     <option value="left" selected="true">left</option>
                     <option value="inner">inner</option>
                     <option value="right">right</option>

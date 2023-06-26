@@ -6,7 +6,6 @@
     <expand macro="creator"/>
     <requirements>
         <requirement type="package" version="@TOOL_VERSION@">matchms</requirement>
-        <requirement type="package" version="1.1.4">pandas</requirement>
     </requirements>
 
     <environment_variables>
@@ -130,20 +129,20 @@
     </tests>
 
     <help><![CDATA[
-    Documentation
-        For documentation on the tool see https://github.com/matchms/matchms/blob/master/README.rst and https://matchms.readthedocs.io/en/latest/.
+        Documentation
+            For documentation on the tool see https://github.com/matchms/matchms/blob/master/README.rst and https://matchms.readthedocs.io/en/latest/.
 
-    Upstream Tools
-        +-----------+---------------+--------+-----------+
-        | Name      | Output File   | Format | Parameter |
-        +===========+===============+========+===========+
-        | RAMClustR | Mass spectra  | msp    | references|
-        +-----------+---------------+--------+-----------+
-        | RAMClustR | Mass spectra  | msp    | queries   |
-        +-----------+---------------+--------+-----------+
+        Upstream Tools
+            +-----------+---------------+--------+-----------+
+            | Name      | Output File   | Format | Parameter |
+            +===========+===============+========+===========+
+            | RAMClustR | Mass spectra  | msp    | references|
+            +-----------+---------------+--------+-----------+
+            | RAMClustR | Mass spectra  | msp    | queries   |
+            +-----------+---------------+--------+-----------+
 
-    Downstream Tools
-        The output is an msp file after applying the specified filters.
+        Downstream Tools
+            The output is an msp file after applying the specified filters.
     ]]></help>
 
 

@@ -74,10 +74,12 @@ scores.to_json("$similarity_scores")
         </test>
     </tests>
 
-    <help>
-        <![CDATA[
-            @HELP_matchms@
-        ]]>
+    <help><![CDATA[
+        @HELP_matchms@
+
+        .. rubric:: **Footnotes**
+        .. [1] SQL join types `explained <https://learnsql.com/blog/sql-joins-types-explained/>`_.
+    ]]>
     </help>
 
     <expand macro="citations"/>

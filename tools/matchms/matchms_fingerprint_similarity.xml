@@ -42,7 +42,7 @@ scores.to_json("$scores_out")
     <inputs>
         <expand macro="input_param"/>
         <param label="Fingerprint similarity distance" name="fingerprint_similarity" type="select" display="radio"
-            help="Distance measure to use.">
+            help="Distance measure to use to compute between the molecular fingerprints - see [2] for details regarding the used fingerprint.">
             <option value="jaccard" selected="true">jaccard</option>
             <option value="dice">dice</option>
             <option value="cosine">cosine</option>
@@ -74,10 +74,14 @@ scores.to_json("$scores_out")
         </test>
     </tests>
 
-    <help>
-        <![CDATA[
-            @HELP_matchms@
-        ]]>
+    <help><![CDATA[       
+        @HELP_matchms@
+        
+        .. rubric:: **Footnotes**
+        .. [1] SQL join types `explained <https://learnsql.com/blog/sql-joins-types-explained/>`_.
+        .. [2] Fingerprint - the `daylight fingerprint <https://www.daylight.com/dayhtml/doc/theory/theory.finger.html>`_ is used to compute chemical similarity.
+               Fingerprints are derived from SMILES or InChI structure notations present in the spectrum metadata.
+    ]]>
     </help>
 
     <expand macro="citations"/>
