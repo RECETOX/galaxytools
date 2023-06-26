@@ -7,8 +7,6 @@
     <expand macro="creator"/>
 
     <requirements>
-        <requirement type="package" version="1.1.4">pandas</requirement>
-        <requirement type="package" version="0.55.1">numba</requirement>
         <requirement type="package" version="@TOOL_VERSION@">matchms</requirement>
     </requirements>
 
@@ -45,9 +43,9 @@ layer = similarity.matrix(
     is_symmetric=False)
 
 #if $matching.matching_type == "equal_match"
-scores._scores.add_dense_matrix(layer, name, join_type="${join_type}")
+scores._scores.add_dense_matrix(layer, name, join_type=join_type)
 #else
-scores._scores.add_sparse_data(layer.row, layer.col, layer.data, name, join_type="${join_type}")
+scores._scores.add_sparse_data(layer.row, layer.col, layer.data, name, join_type=join_type)
 #end if
 scores.to_json("$scores_out")
 </configfile>
@@ -76,15 +74,10 @@ scores.to_json("$scores_out")
                     help="Metadata field to use for matching">
                     <option value="smiles" selected="true">SMILES</option>
                     <option value="inchi">InChI</option>
-                    <option value="inchi_key">InChIKey</option>
+                    <option value="inchikey">InChIKey</option>
                 </param>
             </when>
         </conditional>
-        <param label="join type" name="join_type" type="select" display="radio"
-            help="join type to use for appending scores">
-            <option value="left" selected="true">left</option>
-            <option value="inner">inner</option>
-        </param>
     </inputs>
 
     <outputs>
@@ -104,6 +97,14 @@ scores.to_json("$scores_out")
             <param name="matching_type" value="equal_match" />
             <param name="metadata_match_field" value="smiles" />
             <output name="scores_out" value="metadata_match/smiles.json" ftype="json" />
+        </test>
+        <test>
+            <param name="use_scores" value="True"/>
+            <param name="scores_in" value="metadata_match/smiles.json" ftype="json"/>
+            <param name="matching_type" value="equal_match" />
+            <param name="metadata_match_field" value="inchi_key" />
+            <param name="join_type" value="inner" />
+            <output name="scores_out" value="metadata_match/inchi_key_inner.json" ftype="json" />
         </test>
         <test>
             <param name="use_scores" value="True"/>
