@@ -1,5 +1,5 @@
 <tool id="matchms_fingerprint_similarity" name="matchms fingerprint similarity" version="@TOOL_VERSION@+galaxy0" profile="21.09">
-    <description>matchms fingerprint similarity calculation</description>
+    <description>calculate similarity between molecular fingerprints calculated from structural spectrum metadata descriptors</description>
 
     <macros>
         <import>macros.xml</import>
