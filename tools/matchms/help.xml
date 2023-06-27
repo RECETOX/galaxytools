@@ -1,10 +1,10 @@
 <macros>
     <token name="@HELP_matchms@">
         Documentation
-            The python library matchms provides functions to convert, filter and compare mass spectrometry data.
-            For an overview of the different galaxy mnodules see the figure below
-            For detailed documentation on the tool see https://github.com/matchms/matchms/blob/master/README.rst
-            and https://matchms.readthedocs.io/en/latest/ for the python API.
+            The Python library matchms provides functions to convert, filter and compare mass spectrometry data.
+            For an overview of the different galaxy modules, see the figure below.
+            For detailed documentation on the tool, see https://github.com/matchms/matchms/blob/master/README.rst
+            and https://matchms.readthedocs.io/en/latest/ for the Python API.
 
             To get more familiar with the library, there is a `tutorial`_ available which explains how to build a mass spectrometry data processing
             pipeline with matchms.
