@@ -1,11 +1,14 @@
-<tool id="matchms_metadata_export" name="matchms metadata export " version="0.19.0+galaxy0" profile="21.05">
+<tool id="matchms_metadata_export" name="matchms metadata export " version="@TOOL_VERSION@+galaxy0" profile="21.09">
     <description>extract all metadata from mass spectra file to tabular format</description>
     <macros>
         <import>macros.xml</import>
+        <import>help.xml</import>
     </macros>
     <expand macro="creator"/>
+    <expand macro="bio.tools"/>
+    
     <requirements>
-        <requirement type="package" version="0.19.0">matchms</requirement>
+        <requirement type="package" version="@TOOL_VERSION@">matchms</requirement>
     </requirements>
 
     <command detect_errors='aggressive'><![CDATA[
@@ -14,7 +17,6 @@
 
 <configfiles>
 <configfile name="matchms_python_cli">
-import pandas
 from matchms.importing import load_from_msp, load_from_mgf
 from matchms.exporting.metadata_export import export_metadata_as_csv
 
@@ -45,15 +47,15 @@ export_metadata_as_csv(spectra_list, "${output_file}")
         </test>
     </tests>
 
-    <help><![CDATA[
-    Documentation
-        Mass spectral libraries are often stored in various formats, such as `msp`, `mgf` or `json`.
-        This tool can be used to export the metadata accompanying the actual spectral information to a tabular file.
-
-        During harmonization of metadata, some of the keywords might change during the conversion process to a unified form.
-
-        For more documentation on the matchms library see https://github.com/matchms/matchms/blob/master/README.rst and https://matchms.readthedocs.io/en/latest/.
-    ]]></help>
+    <help>
+        Documentation
+            Mass spectral libraries are often stored in various formats, such as `msp`, `mgf` or `json`.
+            This tool can be used to export the metadata accompanying the actual spectral to a tabular file,
+            creating a column for each attribute and a row for each spectrum.
+            All keys which are present in at least one spectrum are contained in the output.
+        
+        @HELP_matchms@
+    </help>
 
     <expand macro="citations"/>
 </tool>

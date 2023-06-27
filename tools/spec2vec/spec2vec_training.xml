@@ -1,13 +1,14 @@
-<tool id="spec2vec_training" name="Spec2Vec Model Training" version="@TOOL_VERSION@-@TOOL_DEV_VERSION@+galaxy0" python_template_version="3.5" profile="21.05">
+<tool id="spec2vec_training" name="spec2vec model training" version="@TOOL_VERSION@+galaxy0" profile="21.09">
     <description>Train a Spec2Vec model for mass spectra similarity scoring</description>
 
     <macros>
         <import>macros.xml</import>
     </macros>
     <expand macro="creator"/>
+    <expand macro="edam" />
 
     <requirements>
-        <container type="docker">recetox/spec2vec:@COMMIT_SHA@</container>
+        <requirement type="package" version="@TOOL_VERSION@">spec2vec</requirement>
     </requirements>
 
     <command detect_errors="exit_code"><![CDATA[
@@ -245,13 +246,12 @@
         </test>
     </tests>
 
-    <help><![CDATA[
+    <help>
     **Spec2vec** is a spectral similarity score inspired by a natural language processing algorithm – Word2Vec.
     Where Word2Vec learns relationships between words in sentences, spec2vec does so for mass fragments and neutral losses in MS/MS spectra.
     The spectral similarity score is based on spectral embeddings learnt from the fragmental relationships within a large set of spectral data.
-    ]]></help>
+    </help>
 
-    <citations>
-        <citation type="doi">10.1371/journal.pcbi.1008724</citation>
-    </citations>
+    <expand macro="citations"/>
+
 </tool>

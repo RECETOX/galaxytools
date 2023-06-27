@@ -1,0 +1,98 @@
+<tool id="matchms_spectral_similarity" name="matchms spectral similarity" version="@TOOL_VERSION@+galaxy0" profile="21.09">
+    <description>matchms spectral similarity calculation</description>
+
+    <macros>
+        <import>macros.xml</import>
+        <import>help.xml</import>
+    </macros>
+    <expand macro="creator"/>
+    <expand macro="bio.tools"/>
+
+    <requirements>
+        <requirement type="package" version="@TOOL_VERSION@">matchms</requirement>
+    </requirements>
+
+    <environment_variables>
+        <environment_variable name="MPLCONFIGDIR">\$_GALAXY_JOB_TMP_DIR</environment_variable>
+    </environment_variables>
+
+    <command detect_errors="exit_code"><![CDATA[
+        python3 ${python_wrapper}
+    ]]> </command>
+
+<configfiles>
+<configfile name="python_wrapper">
+@init_logger@
+
+from matchms.similarity import (CosineGreedy, CosineHungarian, MetadataMatch,
+                                ModifiedCosine, NeutralLossesCosine)
+
+similarity = ${similarity_metric}(
+    ${algorithm.tolerance},
+    ${algorithm.mz_power},
+    ${algorithm.intensity_power}
+)
+name="${similarity_metric}_${algorithm.tolerance}_${algorithm.mz_power}_${algorithm.intensity_power}"
+
+@init_scores@
+
+layer = similarity.sparse_array(
+    references=scores.references,
+    queries=scores.queries,
+    idx_row = scores._scores.row,
+    idx_col = scores._scores.col,
+    is_symmetric=False)
+
+scores._scores.add_sparse_data(scores._scores.row, scores._scores.col, layer, name)
+
+scores.filter_by_range(inplace=True, name=name+"_matches", low=0)
+scores.to_json("$similarity_scores")
+</configfile>
+</configfiles>
+    <inputs>
+        <expand macro="input_param"/>
+        <param label="Similarity metric" name="similarity_metric" type="select" display="radio"
+            help="Similarity metric to use for score computation.">
+            <expand macro="similarity_metrics"/>
+        </param>
+        <expand macro="similarity_algorithm_params"/>
+    </inputs>
+
+    <outputs>
+        <data label="$similarity_metric scores of ${on_string}" name="similarity_scores" format="json"/>
+    </outputs>
+    <tests>
+        <test> <!-- TEST #1: Test scoring of the same file formats. -->
+            <param name="references" value="similarity/RECETOX_Exposome_pesticides_HR_MS_20220323.msp" ftype="msp"/>
+            <param name="queries" value="similarity/fill2.msp" ftype="msp"/>
+            <param name="similarity_metric" value="CosineGreedy"/>
+            <output name="similarity_scores" file="spectral_similarity/test1.json" ftype="json"/>
+        </test>
+        <test> <!-- TEST #2: Test scoring with scores as json. -->
+            <param name="use_scores" value="True"/>
+            <param name="scores_in" value="metadata_match/ri_match_60.json" ftype="json"/>
+            <param name="similarity_metric" value="CosineHungarian"/>
+            <output name="similarity_scores" file="spectral_similarity/test2.json" ftype="json"/>
+        </test>
+    </tests>
+
+    <help>
+        Description
+            To compute the spectral similarity, only peaks matching another within the specified tolerance are used.
+            Non-overlapping peaks do not contribute to the score computation.
+            This spectrum vectorization can be interpreted as taking the intersection of spectra A and B.
+
+            This is different from the NIST scoring algorithm which computes a weighted score computed for both spaces, A and B.
+            For more details see this `galaxy training`_.
+
+        .. rubric:: **Footnotes**
+        .. [1] SQL join types explained on LearnSQL_.
+        
+        .. _LearnSQL: https://learnsql.com/blog/sql-joins-types-explained/
+        .. _galaxy training: https://training.galaxyproject.org/training-material/topics/metabolomics/tutorials/gc_ms_with_xcms/tutorial.html
+
+        @HELP_matchms@
+    </help>
+
+    <expand macro="citations"/>
+</tool>

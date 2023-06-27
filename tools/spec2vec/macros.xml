@@ -1,7 +1,5 @@
 <macros>
-    <token name="@COMMIT_SHA@">c9b54b9</token>
-    <token name="@TOOL_VERSION@">0.6.0</token>
-    <token name="@TOOL_DEV_VERSION@">0</token>
+    <token name="@TOOL_VERSION@">0.8.0</token>
 
     <xml name="creator">
         <creator>
@@ -10,10 +8,71 @@
                 familyName="Skoryk"
                 url="https://github.com/maximskorik"
                 identifier="0000-0003-2056-8018" />
+            <person
+                givenName="Helge"
+                familyName="Hecht"
+                url="https://github.com/hechth"
+                identifier="0000-0001-6744-996X" />
             <organization
                 url="https://www.recetox.muni.cz/"
                 email="GalaxyToolsDevelopmentandDeployment@space.muni.cz"
                 name="RECETOX MUNI" />
         </creator>
     </xml>
+
+    <xml name="edam">
+        <xrefs>
+            <xref type="bio.tools">spec2vec</xref>
+        </xrefs>
+    </xml>
+
+    <xml name="input_param">
+        <conditional name="scores">
+            <param name="use_scores" label="Use Scores Object" type="boolean" truevalue="TRUE" falsevalue="FALSE"
+                   checked="false"/>
+            <when value="TRUE">
+                <param label="Scores object" name="scores_in" type="data" format="json"
+                    help="Scores objects calculated previously using one of the matchms similarity tools." />
+            </when>
+            <when value="FALSE">
+                <param label="Queries spectra" name="queries" type="data" format="msp,mgf"
+                    help="Query mass spectra to match against references."/>
+                <param label="Reference spectra" name="references" type="data" format="msp,mgf"
+                    help="Reference mass spectra to match against as library."/>
+            </when>
+        </conditional>
+    </xml>
+
+    <xml name="citations">
+        <citations>
+            <citation type="doi">10.1371/journal.pcbi.1008724</citation>
+        </citations>
+    </xml>
+
+<token name="@init_scores@">
+from matchms.importing import load_from_msp, scores_from_json
+from matchms import Scores
+#if $scores.use_scores
+scores = scores_from_json("$scores_in")
+#else
+scores = Scores(references=list(load_from_msp("$references")), queries=list(load_from_msp("$queries")), is_symmetric=False)
+#end if
+</token>
+        
+<token name="@init_logger@">
+from matchms import set_matchms_logger_level
+set_matchms_logger_level("WARNING")
+</token>
+
+<token name="@init_model@">
+import json
+from spec2vec.serialization.model_importing import load_weights, Word2VecLight
+    
+with open("${model_metadata}", "r", encoding="utf-8") as f:
+    model: dict = json.load(f)
+    del (model["mapfile_path"])
+    
+weights = load_weights("${model_weights}", model["__weights_format"])
+model = Word2VecLight(model, weights)
+</token>
 </macros>

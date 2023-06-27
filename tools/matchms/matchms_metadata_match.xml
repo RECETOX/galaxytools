@@ -1,0 +1,142 @@
+<tool id="matchms_metadata_match" name="matchms metadata match" version="@TOOL_VERSION@+galaxy0" profile="21.09">
+    <description>matchms metadata match calculation for numeric fields based on tolerance</description>
+
+    <macros>
+        <import>macros.xml</import>
+        <import>help.xml</import>
+    </macros>
+    <expand macro="creator"/>
+    <expand macro="bio.tools"/>
+
+    <requirements>
+        <requirement type="package" version="@TOOL_VERSION@">matchms</requirement>
+    </requirements>
+
+    <environment_variables>
+        <environment_variable name="MPLCONFIGDIR">\$_GALAXY_JOB_TMP_DIR</environment_variable>
+    </environment_variables>
+
+    <command detect_errors="exit_code"><![CDATA[
+        python3 '${python_wrapper}'
+    ]]> </command>
+
+<configfiles>
+<configfile name="python_wrapper">
+@init_logger@
+
+from matchms.similarity import MetadataMatch
+
+#if $matching.matching_type == "difference"
+tolerance=$matching.tolerance
+name="MetadataMatch_${matching.metadata_match_field}_${matching.matching_type}_${matching.tolerance}"
+#else
+tolerance=0
+name="MetadataMatch_${matching.metadata_match_field}_${matching.matching_type}"
+#end if
+
+similarity = MetadataMatch(field="${matching.metadata_match_field}", matching_type="${matching.matching_type}", tolerance=tolerance)
+
+@init_scores@
+
+layer = similarity.matrix(
+    references=scores.references,
+    queries=scores.queries,
+    array_type = "sparse",
+    is_symmetric=False)
+
+#if $matching.matching_type == "equal_match"
+scores._scores.add_dense_matrix(layer, name, join_type=join_type)
+#else
+scores._scores.add_sparse_data(layer.row, layer.col, layer.data, name, join_type=join_type)
+#end if
+scores.to_json("$scores_out")
+</configfile>
+</configfiles>
+
+    <inputs>
+        <expand macro="input_param"/>
+        <conditional name="matching">
+            <param label="Matching type" name="matching_type" type="select" display="radio"
+                help="Type of matching to perform.">
+                <option value="difference" selected="true">difference</option>
+                <option value="equal_match">equal match</option>
+            </param>
+            <when value="difference">        
+                <param label="Metadata Match" name="metadata_match_field" type="select" display="radio"
+                    help="Metadata field to use for matching.">
+                    <option value="retention_index" selected="true">Retention Index</option>
+                    <option value="retention_time">Retention Time</option>
+                    <option value="precursor_mz">Precursor Mz</option>
+                </param>
+                <param label="Tolerance" name="tolerance" type="float" value="0"
+                    help="Tolerance for matching the selected metadata field - only pairs within the tolerance will be contained in the output." />
+            </when>
+            <when value="equal_match">
+                <param label="Metadata Match" name="metadata_match_field" type="select" display="radio"
+                    help="Metadata field to use for matching">
+                    <option value="smiles" selected="true">SMILES</option>
+                    <option value="inchi">InChI</option>
+                    <option value="inchikey">InChIKey</option>
+                </param>
+            </when>
+        </conditional>
+    </inputs>
+
+    <outputs>
+        <data label="Match $matching.metadata_match_field results of ${on_string}" name="scores_out" format="json"/>
+    </outputs>
+
+    <tests>
+        <test>
+            <param name="queries" value="similarity/rcx_gc-ei_ms_subset.msp" ftype="msp"/>
+            <param name="references" value="similarity/rcx_gc-ei_ms_subset.msp" ftype="msp"/>
+            <param name="tolerance" value="60.0" />
+            <output name="scores_out" value="metadata_match/ri_match_60.json" ftype="json" />
+        </test>
+        <test>
+            <param name="queries" value="similarity/rcx_gc-ei_ms_subset.msp" ftype="msp"/>
+            <param name="references" value="similarity/rcx_gc-ei_ms_subset.msp" ftype="msp"/>
+            <param name="matching_type" value="equal_match" />
+            <param name="metadata_match_field" value="smiles" />
+            <output name="scores_out" value="metadata_match/smiles.json" ftype="json" />
+        </test>
+        <test>
+            <param name="use_scores" value="True"/>
+            <param name="scores_in" value="metadata_match/smiles.json" ftype="json"/>
+            <param name="matching_type" value="equal_match" />
+            <param name="metadata_match_field" value="inchikey" />
+            <param name="join_type" value="inner" />
+            <output name="scores_out" value="metadata_match/inchi_key_inner.json" ftype="json" />
+        </test>
+        <test>
+            <param name="use_scores" value="True"/>
+            <param name="scores_in" value="metadata_match/ri_match_60.json" ftype="json"/>
+            <param name="tolerance" value="20.0" />
+            <param name="join_type" value="inner" />
+            <output name="scores_out" value="metadata_match/inner_join_ri_20.json" ftype="json" />
+        </test>
+        <test>
+            <param name="use_scores" value="True"/>
+            <param name="scores_in" value="metadata_match/ri_match_60.json" ftype="json"/>
+            <param name="tolerance" value="20.0" />
+            <param name="join_type" value="left" />
+            <output name="scores_out" value="metadata_match/left_join_ri_20.json" ftype="json" />
+        </test>
+    </tests>
+
+    <help>
+        Description
+            The metadata matching module allows comparing metadata entries to create a mask to use for further computations.
+            Numerical metadata can be matched using a tolerance while an exact match is required for categorical metadata.
+            The output will be __TRUE__ if the value is within the tolerance or an exact match and __FALSE__ otherwise.
+
+        .. rubric:: **Footnotes**
+        .. [1] SQL join types explained on LearnSQL_.
+        
+        .. _LearnSQL: https://learnsql.com/blog/sql-joins-types-explained/
+
+        @HELP_matchms@
+    </help>
+
+    <expand macro="citations"/>
+</tool>

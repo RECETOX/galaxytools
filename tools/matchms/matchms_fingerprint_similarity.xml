@@ -1,0 +1,100 @@
+<tool id="matchms_fingerprint_similarity" name="matchms fingerprint similarity" version="@TOOL_VERSION@+galaxy0" profile="21.09">
+    <description>calculate similarity between molecular fingerprints calculated from structural spectrum metadata descriptors</description>
+
+    <macros>
+        <import>macros.xml</import>
+        <import>help.xml</import>
+    </macros>
+    <expand macro="creator"/>
+    <edam_operations>
+        <edam_operation>operation_0360</edam_operation>
+    </edam_operations>
+    <expand macro="bio.tools"/>
+
+    <requirements>
+        <requirement type="package" version="@TOOL_VERSION@">matchms</requirement>
+    </requirements>
+
+
+    <command detect_errors="exit_code"><![CDATA[
+        python3 ${python_wrapper}
+    ]]> </command>
+
+<configfiles>
+<configfile name="python_wrapper">
+@init_logger@
+
+from matchms.similarity import FingerprintSimilarity
+similarity = FingerprintSimilarity(similarity_measure="${fingerprint_similarity}")
+@init_scores@
+
+from matchms.filtering import add_fingerprint
+import numpy as np
+
+name="FingerprintSimilarity_${fingerprint_similarity}"
+
+layer = similarity.matrix(
+    references=np.asarray(list(map(add_fingerprint, scores.references))),
+    queries=np.asarray(list(map(add_fingerprint, scores.queries))),
+    array_type = "numpy",
+    is_symmetric=scores.is_symmetric)
+
+scores._scores.add_dense_matrix(layer, name)
+scores.to_json("$scores_out")
+</configfile>
+</configfiles>
+
+    <inputs>
+        <expand macro="input_param"/>
+        <param label="Fingerprint similarity distance" name="fingerprint_similarity" type="select" display="radio"
+            help="Distance measure to use to compute between the molecular fingerprints - see [2] for details regarding the used fingerprint.">
+            <option value="jaccard" selected="true">jaccard</option>
+            <option value="dice">dice</option>
+            <option value="cosine">cosine</option>
+        </param>
+    </inputs>
+
+    <outputs>
+        <data label="$fingerprint_similarity distance between fingerprints in ${on_string}" name="scores_out" format="json"/>
+    </outputs>
+
+    <tests>
+        <test>
+            <param name="queries" value="similarity/rcx_gc-ei_ms_subset.msp" ftype="msp"/>
+            <param name="references" value="similarity/rcx_exposome_pesticides_subset.msp" ftype="msp"/>
+            <param name="fingerprint_similarity" value="dice" />
+            <output name="scores_out" value="fingerprints/dice.json" ftype="json" />
+        </test>
+        <test>
+            <param name="queries" value="similarity/rcx_gc-ei_ms_subset.msp" ftype="msp"/>
+            <param name="references" value="similarity/rcx_exposome_pesticides_subset.msp" ftype="msp"/>
+            <param name="fingerprint_similarity" value="cosine" />
+            <output name="scores_out" value="fingerprints/cosine.json" ftype="json" />
+        </test>
+        <test>
+            <param name="use_scores" value="True"/>
+            <param name="scores_in" value="metadata_match/inner_join_ri_20.json" ftype="json"/>
+            <param name="fingerprint_similarity" value="jaccard" />
+            <output name="scores_out" value="fingerprints/jaccard_scores.json" ftype="json" />
+        </test>
+    </tests>
+
+    <help>
+        Description
+            Molecular fingerprints are a digital representation of a molecule based on specific patterns, such as substructures or physicochemical properties.
+            They usually have a fixed length with each entry representing the presence or absence of a certain attribute.
+            Similarity between molecular fingerprints can serve as a proxy for structural similarity and can therefore be used to compare molecules.
+
+        .. rubric:: **Footnotes**
+        .. [1] SQL join types explained on LearnSQL_.
+        .. [2] Fingerprint - the `daylight fingerprint`_ is used to compute chemical similarity.
+               Fingerprints are derived from SMILES or InChI structure notations present in the spectrum metadata.
+        
+        .. _LearnSQL: https://learnsql.com/blog/sql-joins-types-explained/
+        .. _daylight fingerprint: https://www.daylight.com/dayhtml/doc/theory/theory.finger.html
+        
+        @HELP_matchms@
+    </help>
+
+    <expand macro="citations"/>
+</tool>

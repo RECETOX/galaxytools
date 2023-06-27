@@ -1,21 +1,29 @@
-<tool id="matchms_filtering" name="matchMS filtering" version="@TOOL_VERSION@+galaxy0">
+<tool id="matchms_filtering" name="matchms filtering" version="@TOOL_VERSION@+galaxy0" profile="21.09">
     <description>filter and normalize mass spectrometry data</description>
+
     <macros>
         <import>macros.xml</import>
+        <import>help.xml</import>
     </macros>
+
     <expand macro="creator"/>
+
+    <edam_operations>
+        <edam_operation>operation_3695</edam_operation>
+    </edam_operations>
+    <expand macro="bio.tools"/>
+
     <requirements>
         <requirement type="package" version="@TOOL_VERSION@">matchms</requirement>
-        <requirement type="package" version="1.1.4">pandas</requirement>
     </requirements>
-
-    <environment_variables>
-        <environment_variable name="MPLCONFIGDIR">\$_GALAXY_JOB_TMP_DIR</environment_variable>
-    </environment_variables>
 
     <command detect_errors="exit_code"><![CDATA[
         sh ${matchms_python_cli}
     ]]> </command>
+
+    <environment_variables>
+        <environment_variable name="MPLCONFIGDIR">\$_GALAXY_JOB_TMP_DIR</environment_variable>
+    </environment_variables>
 
     <configfiles>
         <configfile name="matchms_python_cli">
@@ -67,8 +75,8 @@
             <param name="is_true" label="Filter relative intensity" type="boolean" truevalue="TRUE" falsevalue="FALSE" checked="false"
                    help="Keep only peaks within set relative intensity range (keep if maximum >= intensity >= minimum)." />
             <when value="TRUE">
-                <param label="Minimum intensity" name="from_intensity" optional="true" type="float" help="Lower bound for intensity filter." />
-                <param label="Maximum intensity" name="to_intensity" optional="true" type="float" help="Upper bound for intensity filter." />
+                <param label="Minimum intensity" name="from_intensity" value="0" type="float" help="Lower bound for intensity filter." />
+                <param label="Maximum intensity" name="to_intensity" value="1" type="float" help="Upper bound for intensity filter." />
             </when>
         </conditional>
 
@@ -129,23 +137,9 @@
         </test>
     </tests>
 
-    <help><![CDATA[
-    Documentation
-        For documentation on the tool see https://github.com/matchms/matchms/blob/master/README.rst and https://matchms.readthedocs.io/en/latest/.
-
-    Upstream Tools
-        +-----------+---------------+--------+-----------+
-        | Name      | Output File   | Format | Parameter |
-        +===========+===============+========+===========+
-        | RAMClustR | Mass spectra  | msp    | references|
-        +-----------+---------------+--------+-----------+
-        | RAMClustR | Mass spectra  | msp    | queries   |
-        +-----------+---------------+--------+-----------+
-
-    Downstream Tools
-        The output is an msp file after applying the specified filters.
-    ]]></help>
-
+    <help>
+        @HELP_matchms@
+    </help>
 
     <expand macro="citations"/>
 </tool>
