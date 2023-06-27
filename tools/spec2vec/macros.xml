@@ -25,6 +25,30 @@
             <xref type="bio.tools">spec2vec</xref>
         </xrefs>
     </xml>
+
+    <xml name="input_param">
+        <conditional name="scores">
+            <param name="use_scores" label="Use Scores Object" type="boolean" truevalue="TRUE" falsevalue="FALSE"
+                   checked="false"/>
+            <when value="TRUE">
+                <param label="Scores object" name="scores_in" type="data" format="json"
+                    help="Scores objects calculated previously using one of the matchms similarity tools." />
+            </when>
+            <when value="FALSE">
+                <param label="Queries spectra" name="queries" type="data" format="msp,mgf"
+                    help="Query mass spectra to match against references."/>
+                <param label="Reference spectra" name="references" type="data" format="msp,mgf"
+                    help="Reference mass spectra to match against as library."/>
+            </when>
+        </conditional>
+    </xml>
+
+    <xml name="citations">
+        <citations>
+            <citation type="doi">10.1371/journal.pcbi.1008724</citation>
+        </citations>
+    </xml>
+
 <token name="@init_scores@">
 from matchms.importing import load_from_msp, scores_from_json
 from matchms import Scores
@@ -51,20 +75,4 @@ with open("${model_metadata}", "r", encoding="utf-8") as f:
 weights = load_weights("${model_weights}", model["__weights_format"])
 model = Word2VecLight(model, weights)
 </token>
-<xml name="input_param">
-    <conditional name="scores">
-        <param name="use_scores" label="Use Scores Object" type="boolean" truevalue="TRUE" falsevalue="FALSE"
-               checked="false"/>
-        <when value="TRUE">
-            <param label="Scores object" name="scores_in" type="data" format="json"
-                help="Scores objects calculated previously using one of the matchms similarity tools." />
-        </when>
-        <when value="FALSE">
-            <param label="Queries spectra" name="queries" type="data" format="msp,mgf"
-                help="Query mass spectra to match against references."/>
-            <param label="Reference spectra" name="references" type="data" format="msp,mgf"
-                help="Reference mass spectra to match against as library."/>
-        </when>
-    </conditional>
-</xml>
 </macros>

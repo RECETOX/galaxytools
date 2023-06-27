@@ -30,6 +30,7 @@
                 name="RECETOX MUNI" />
         </creator>
     </xml>
+    
     <xml name="bio.tools">
         <xrefs>
             <xref type="bio.tools">matchms</xref>
@@ -77,8 +78,13 @@
             </when>
         </conditional>
     </xml>
-    
 
+    <xml name="citations">
+        <citations>
+            <citation type="doi">10.5281/zenodo.7178586</citation>
+            <citation type="doi">10.21105/joss.02411</citation>
+        </citations>
+    </xml>
 
 <token name="@init_scores@">
 from matchms.importing import load_from_msp, scores_from_json
@@ -96,11 +102,4 @@ join_type = "left"
 from matchms import set_matchms_logger_level
 set_matchms_logger_level("WARNING")
 </token>   
-        <xml name="citations">
-            <citations>
-                <citation type="doi">10.5281/zenodo.7178586</citation>
-                <citation type="doi">10.21105/joss.02411</citation>
-            </citations>
-        </xml>
-
 </macros>

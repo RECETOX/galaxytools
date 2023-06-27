@@ -79,4 +79,6 @@ scores.to_json("$similarity_scores")
             <output name="similarity_scores" value="s2v_scores_test2_out.json" ftype="json" />
         </test>
     </tests>
+
+    <expand macro="citations"/>
 </tool>
