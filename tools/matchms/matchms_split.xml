@@ -2,6 +2,7 @@
     <description>split a large library into subsets</description>
     <macros>
         <import>macros.xml</import>
+        <import>help.xml</import>
     </macros>
     <edam_operations>
         <edam_operation>operation_3359</edam_operation>

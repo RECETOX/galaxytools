@@ -3,6 +3,7 @@
 
     <macros>
         <import>macros.xml</import>
+        <import>help.xml</import>
     </macros>
     <expand macro="creator"/>
     <edam_operations>

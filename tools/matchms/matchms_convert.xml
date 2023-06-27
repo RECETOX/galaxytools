@@ -2,6 +2,7 @@
     <description>convert between mass spectral library formats (.mgf/.msp/.json) using matchms</description>
     <macros>
         <import>macros.xml</import>
+        <import>help.xml</import>
     </macros>
     <expand macro="creator"/>
     <edam_operations>

@@ -2,6 +2,7 @@
     <description>extract all metadata from mass spectra file to tabular format</description>
     <macros>
         <import>macros.xml</import>
+        <import>help.xml</import>
     </macros>
     <expand macro="creator"/>
     <expand macro="bio.tools"/>

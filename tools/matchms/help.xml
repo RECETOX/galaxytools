@@ -1,0 +1,69 @@
+<macros>
+    <token name="@HELP_matchms@">
+            Documentation
+                For documentation on the tool see https://github.com/matchms/matchms/blob/master/README.rst
+                and https://matchms.readthedocs.io/en/latest/.
+
+            Overview
+                .. image:: ./images/matchms_galaxytools.png
+                   :width: 3120
+                   :height: 1686
+                   :scale: 30
+                   :alt: Overview of different matchms galaxytools and how they are connected.
+    </token>
+    <token name="@HELP_matchms_networking@">
+        <![CDATA[
+        Documentation
+        For documentation on the tool see https://github.com/matchms/matchms/blob/master/README.rst
+        and https://matchms.readthedocs.io/en/latest/.
+        
+        **Upstream Tools**
+
+        matchms similarity
+        
+        **Downstream Tools**
+        
+        The output is a network-graph file that can be visualized using graph visualization software (e.g., Cytoscape).
+        ]]>
+    </token>
+    
+    <token name="@HELP_formatter@">
+        <![CDATA[
+            Usage
+                This tool creates user friendly tables from the similarity scores produced by **matchms similarity**.
+                The tool can be operated on two modes based on (i) thresholds or (ii) top k matches.
+
+            Input Table Format
+                The tool expects a JSON file containing serialized matchms Scores object.
+
+            Output Table Format
+                +----------+-----------+---------+--------+
+                | query    | reference | matches | scores |
+                +==========+===========+=========+========+
+                | C001     | Glycine   |      6  | 0.5    |
+                +----------+-----------+---------+--------+
+                | C002     | Glycine   |     3   | 0.34   |
+                +----------+-----------+---------+--------+
+                |   ...    | ...       | ...     | ...    |
+                +----------+-----------+---------+--------+
+        ]]>
+    </token>
+    <token name="@HELP_filtering@">
+        Documentation
+            For documentation on the tool see https://github.com/matchms/matchms/blob/master/README.rst and https://matchms.readthedocs.io/en/latest/.
+
+        Upstream Tools
+            +-----------+---------------+--------+-----------+
+            | Name      | Output File   | Format | Parameter |
+            +===========+===============+========+===========+
+            | RAMClustR | Mass spectra  | msp    | references|
+            +-----------+---------------+--------+-----------+
+            | RAMClustR | Mass spectra  | msp    | queries   |
+            +-----------+---------------+--------+-----------+
+
+        Downstream Tools
+            The output is an msp file after applying the specified filters.
+
+
+    </token>
+</macros>
