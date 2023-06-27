@@ -193,9 +193,10 @@
         </test>
     </tests>
 
-    <help><![CDATA[
+    <help>
         @HELP_matchms_networking@
-    ]]></help>
+        @HELP_matchms@
+    </help>
 
     <expand macro="citations"/>
 

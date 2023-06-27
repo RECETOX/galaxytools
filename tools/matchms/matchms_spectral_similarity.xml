@@ -76,12 +76,22 @@ scores.to_json("$similarity_scores")
         </test>
     </tests>
 
-    <help><![CDATA[
-        @HELP_matchms@
+    <help>
+        Description
+            To compute the spectral similarity, only peaks matching another within the specified tolerance are used.
+            Non-overlapping peaks do not contribute to the score computation.
+            This spectrum vectorization can be interpreted as taking the intersection of spectra A and B.
+
+            This is different from the NIST scoring algorithm which computes a weighted score computed for both spaces, A and B.
+            For more details see this `galaxy training`_.
 
         .. rubric:: **Footnotes**
-        .. [1] SQL join types `explained <https://learnsql.com/blog/sql-joins-types-explained/>`_.
-    ]]>
+        .. [1] SQL join types explained on LearnSQL_.
+        
+        .. _LearnSQL: https://learnsql.com/blog/sql-joins-types-explained/
+        .. _galaxy training: https://training.galaxyproject.org/training-material/topics/metabolomics/tutorials/gc_ms_with_xcms/tutorial.html
+
+        @HELP_matchms@
     </help>
 
     <expand macro="citations"/>

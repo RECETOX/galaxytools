@@ -124,12 +124,18 @@ scores.to_json("$scores_out")
         </test>
     </tests>
 
-    <help><![CDATA[
-        @HELP_matchms@
-        
+    <help>
+        Description
+            The metadata matching module allows comparing metadata entries to create a mask to use for further computations.
+            Numerical metadata can be matched using a tolerance while an exact match is required for categorical metadata.
+            The output will be __TRUE__ if the value is within the tolerance or an exact match and __FALSE__ otherwise.
+
         .. rubric:: **Footnotes**
-        .. [1] SQL join types `explained <https://learnsql.com/blog/sql-joins-types-explained/>`_.
-    ]]>
+        .. [1] SQL join types explained on LearnSQL_.
+        
+        .. _LearnSQL: https://learnsql.com/blog/sql-joins-types-explained/
+
+        @HELP_matchms@
     </help>
 
     <expand macro="citations"/>

@@ -182,9 +182,8 @@
         </test>
     </tests>
 
-    <help><![CDATA[
+    <help>
         @HELP_matchms@
-    ]]>
     </help>
 
     <expand macro="citations"/>

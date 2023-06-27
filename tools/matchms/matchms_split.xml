@@ -85,10 +85,14 @@
             </output_collection>
         </test>
     </tests> 
-    <help><![CDATA[
-        Splitmsp handles input/output files in MSP format using the matchms.importing and matchms.exporting modules (https://matchms.readthedocs.io/en/latest/index.html).
+    <help>
+        Description
+            This tool can be used to split a mass spectral library into smaller subsets for further processing.
+            This can be used to perform efficient spectral matching with large libraries, using job-level parallelism.
 
-        Please observe that the `num-chunks` method does not preserve the order of the elements as it uses a `round robin` distribution.
-    ]]></help>
+            Please observe that the `num-chunks` method does not preserve the order of the elements as it uses a `round robin` distribution.
+
+        @HELP_matchms@
+    </help>
     <expand macro="citations"/>
 </tool>
