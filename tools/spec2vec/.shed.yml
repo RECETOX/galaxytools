@@ -11,3 +11,9 @@ repositories:
       - macros.xml
       - spec2vec_training_wrapper.py
       - test-data
+  spec2vec_similarity:
+    description: "Mass spectra similarity scoring using a trained Spec2Vec model."
+    include:
+      - spec2vec_similarity.xml
+      - macros.xml
+      - test-data
