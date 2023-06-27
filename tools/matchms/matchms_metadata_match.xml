@@ -3,6 +3,7 @@
 
     <macros>
         <import>macros.xml</import>
+        <import>help.xml</import>
     </macros>
     <expand macro="creator"/>
     <expand macro="bio.tools"/>
@@ -103,7 +104,7 @@ scores.to_json("$scores_out")
             <param name="use_scores" value="True"/>
             <param name="scores_in" value="metadata_match/smiles.json" ftype="json"/>
             <param name="matching_type" value="equal_match" />
-            <param name="metadata_match_field" value="inchi_key" />
+            <param name="metadata_match_field" value="inchikey" />
             <param name="join_type" value="inner" />
             <output name="scores_out" value="metadata_match/inchi_key_inner.json" ftype="json" />
         </test>
