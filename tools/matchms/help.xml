@@ -12,7 +12,7 @@
             .. _tutorial: https://medium.com/escience-center/build-your-own-mass-spectrometry-analysis-pipeline-in-python-using-matchms-part-i-d96c718c68ee
 
         Overview
-            .. image:: https://github.com/RECETOX/galaxytools/raw/29e54e69dab6ab1263f56d35ea19f5d7f284d728/tools/matchms/images/matchms_galaxytools.svg
+            .. image:: https://github.com/RECETOX/galaxytools/raw/f9fdc2e2c5715d56159edc406fed30f7b83fe461/tools/matchms/images/matchms_galaxytools.svg
                :width: 3120
                :height: 1686
                :scale: 30
