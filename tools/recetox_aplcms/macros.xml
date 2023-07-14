@@ -53,7 +53,7 @@
     </xml>
 
     <xml name="remove_noise_params">
-        <param name="min_pres" type="float" value="0.5" label="Minimal signal presence [fraction of scans]"
+        <param name="min_pres" type="float" value="0.5" label="Minimal signal presence [fraction of scans]" min="0.0" max="1.0"
                help="The minimum proportion of presence in the time period for a series of signals grouped by m/z to be considered a peak." />
         <param name="min_run" type="float" value="12" label="Minimal elution time [unit corresponds to the retention time]"
                help="The minimum length of elution time for a series of signals grouped by m/z to be considered a peak." />
