@@ -81,9 +81,9 @@
                         help="The upper limit of the ratio range between the left-standard deviation and the right-standard deviation of the bi-Gaussian function to fit the data." />
             </section>
             <conditional name="sd_cut">
-                <param name="sd_cut_bounds" type="boolean" checked="false" truevalue="TRUE" falsevalue="FALSE" label="Standard deviations boundaries."
-                       help="Do not apply any limitations on the standard deviations." />
-                <when value="FALSE">
+                <param name="sd_cut_bounds" type="boolean" checked="true" truevalue="TRUE" falsevalue="FALSE" label="Standard deviations boundaries."
+                       help="Limit the standard deviations by setting boundaries." />
+                <when value="TRUE">
                     <param name="sd_cut_min" type="float" value="0.01" label="Minimal standard deviation"
                            help="The minimum standard deviation - features with a standard deviation lower than this number are eliminated." />
                     <param name="sd_cut_max" type="float" value="500" label="Maximal standard deviation"
