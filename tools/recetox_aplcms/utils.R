@@ -16,6 +16,10 @@ save_sample_name <- function(df, sample_name) {
     return(df)
 }
 
+restore_sample_name <- function(df) {
+    return(df$sample_id[1])
+}
+
 load_sample_name <- function(df) {
     sample_name <- attr(df, "sample_name")
     if (is.null(sample_name)) {
