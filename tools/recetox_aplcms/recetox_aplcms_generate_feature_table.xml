@@ -37,7 +37,7 @@
                  #else:
                  max_bandwidth = NA,
                  #end if
-                 #if $advanced.sd_cut.sd_cut_bounds == "FALSE":
+                 #if $advanced.sd_cut.sd_cut_bounds == "TRUE":
                  sd_cut = c($advanced.sd_cut.sd_cut_min, $advanced.sd_cut.sd_cut_max),
                  #else
                  sd_cut = c(0, Inf),

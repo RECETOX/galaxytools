@@ -33,6 +33,7 @@
                   rt_tol = $rt_tol
               )
 
+              sample_names <- unlist(lapply(clusters, restore_sample_name))
               save_parquet_collection(clusters, sample_names, "clustered")
          ]]></configfile>
     </configfiles>

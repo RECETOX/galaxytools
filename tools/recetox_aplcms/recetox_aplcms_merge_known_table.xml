@@ -75,13 +75,13 @@
                 <option value="FALSE">Merge known table to features</option>
             </param>
             <when value="TRUE">
-                <param name="new_feature_min_count" type="integer" value="2" min="1" label="new_feature_min_count"
+                <param name="new_feature_min_count" type="integer" value="2" min="1" label="Minimal occurence of feature"
                        help="The minimum number of occurrences of a historically unseen (unknown) feature to add
                        this feature into the database of known features." />
             </when>
         </conditional>
 
-        <param name="match_tol_ppm" type="integer" optional="true" min="0" label="match_tol_ppm"
+        <param name="match_tol_ppm" type="integer" optional="true" min="0" label="Match tolerance [ppm]"
                help="The ppm tolerance to match identified features to known metabolites/features." />
     </inputs>
 
