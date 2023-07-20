@@ -10,3 +10,4 @@ repositories:
       - recetox_xmsannotator_advanced.xml
       - macros.xml
       - utils.R
+      - test-data

@@ -10,3 +10,4 @@ repositories:
     include:
       - riassigner.xml
       - macros.xml
+      - test-data
