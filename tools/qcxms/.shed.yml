@@ -1,0 +1,22 @@
+name: QCxMS
+owner: recetox
+remote_repository_url: "https://github.com/RECETOX/galaxytools/tree/master/tools/qcxms"
+homepage_url: "https://github.com/grimme-lab/QCxMS"
+categories:
+  - Computational chemistry
+  - Molecular Dynamics
+description: "QCxMS is a quantum chemical (QC) based program that enables users to calculate mass spectra (MS) using Born-Oppenheimer Molecular Dynamics (MD)."
+long_description: |
+ "QCxMS is a quantum chemical (QC) based program that enables users to calculate mass spectra (MS) using Born-Oppenheimer Molecular Dynamics (MD).
+  It is the successor of the QCEIMS program, in which the EI part is exchanged to x (x=EI, CID) to account for the greater general applicability of the program.
+  The program was originally developed to calculate Electron Ionization (EI) mass spectra, 
+  in which a (typically 70 eV) electron beam is focused on a molecule in order to create an open-shell radical ion (uneven number of valence electrons).
+  This process not only ionizes the molecule, but simultaneously increases the internal energy of the species, which in turn leads to bond breaking, 
+  fragmentation, rearrangement, etc of the ion."
+auto_tool_repositories:
+  name_template: "{{ tool_id }}"
+  description_template: "{{ tool_name }} tool from the QCxMS package"
+suite:
+  name: suite_qcxms
+  description: tools from QCxMS are used for molecular geometry optimization and in silico calculation of mass spectra using quantum chemistry
+  type: repository_suite_definition

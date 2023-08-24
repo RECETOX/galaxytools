@@ -1,0 +1,13 @@
+<macros>
+    <token name="@TOOL_VERSION@">5.2.0</token>
+
+    <xml name="creator">
+        <creator>
+            <yield/>
+            <organization
+                url="https://www.recetox.muni.cz/"
+                email="GalaxyToolsDevelopmentandDeployment@space.muni.cz"
+                name="RECETOX MUNI" />
+        </creator>
+    </xml>
+</macros>
