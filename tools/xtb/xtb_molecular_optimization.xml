@@ -1,0 +1,23 @@
+<tool id="xtb_molecular_optimization" name="xtb molecular optimization" version="0.1.0+galaxy0" python_template_version="3.5" profile="21.05">
+    <requirements>
+        <requirement type="package" version="6.6.1">xtb</requirement>
+    </requirements>
+    <command detect_errors="exit_code"><![CDATA[
+        ln ${input1} mol.${input1.ext} &&
+        xtb mol.${input1.ext} --opt ${level_opt} && 
+        cp xtbopt.${input1.ext} ${output}
+    ]]></command>
+    <inputs>
+        <param type="data" name="input1" format="xyz, coord" />
+        <param type="select" name="level_opt" >
+            <option value="tight">tight</option>
+            <option value="crude">crude</option>
+        </param>
+    </inputs>
+    <outputs>
+        <data name="output" format_source="input1" />
+    </outputs>
+    <help><![CDATA[
+        TODO: Fill in help.
+    ]]></help>
+</tool>
