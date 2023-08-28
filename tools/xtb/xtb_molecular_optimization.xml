@@ -28,6 +28,6 @@
         </test>
     </tests> 
     <help><![CDATA[
-        TODO: Fill in help.
+        XTB Molecular Optimization handles coord and XYZ input formats.
     ]]></help>
 </tool>
