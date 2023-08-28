@@ -17,6 +17,16 @@
     <outputs>
         <data name="output" format_source="input1" />
     </outputs>
+    <tests>
+         <test>
+            <param name="input1" value="initial_mol.xyz" ftype="xyz"/>
+            <output name="output" file="optimized_mol.xyz" ftype="xyz"/>
+        </test>
+        <test>
+            <param name="input1" value="initial_mol.coord" ftype="coord"/>
+            <output name="output" file="optimized_mol.coord" ftype="coord"/>
+        </test>
+    </tests> 
     <help><![CDATA[
         TODO: Fill in help.
     ]]></help>
