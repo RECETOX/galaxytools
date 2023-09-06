@@ -37,17 +37,19 @@
     <tests>
          <test>
             <param name="coordinates" value="initial_mol.xyz" ftype="xyz"/>
-            <output name="output" file="optimized_mol.xyz" ftype="xyz"/>
+            <output name="output" file="optimized_mol.xyz" ftype="xyz">
                 <assert_contents>
                     <has_n_lines n="26" delta="4"/>
                 </assert_contents>
+            </output>
         </test>
         <test>
             <param name="coordinates" value="initial_mol.coord" ftype="coord"/>
-            <output name="output" file="optimized_mol.coord" ftype="coord"/>
+            <output name="output" file="optimized_mol.coord" ftype="coord">
                 <assert_contents>
                     <has_n_lines n="26" delta="4"/>
                 </assert_contents>
+            </output>
         </test>
     </tests> 
     <help><![CDATA[
