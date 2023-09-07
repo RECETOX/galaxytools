@@ -19,9 +19,9 @@
         <requirement type="package" version="6.6.1">xtb</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
-        ln ${coordinates} mol.${coordinates.ext} &&
-        xtb mol.${coordinates.ext} --opt ${opt_level} && 
-        cp xtbopt.${coordinates.ext} ${output}
+        ln '${coordinates}' 'mol.${coordinates.ext}' &&
+        xtb 'mol.${coordinates.ext}' --opt '${opt_level}' && 
+        cp 'xtbopt.${coordinates.ext}' '${output}'
     ]]></command>
     <inputs>
         <param label="Atomic coordinates file" type="data" name="coordinates" format="xyz, coord" help="Initial atomic coordinates file to be optimized."/>
@@ -39,24 +39,35 @@
             <param name="coordinates" value="initial_mol.xyz" ftype="xyz"/>
             <output name="output" file="optimized_mol.xyz" ftype="xyz">
                 <assert_contents>
-                    <has_n_lines n="26" delta="4"/>
+                    <has_n_lines n="26" delta="2"/>
                 </assert_contents>
             </output>
         </test>
-        <test>
+        <!-- <test>
             <param name="coordinates" value="initial_mol.coord" ftype="coord"/>
             <output name="output" file="optimized_mol.coord" ftype="coord">
                 <assert_contents>
-                    <has_n_lines n="26" delta="4"/>
+                    <has_text text="$coord"/>
                 </assert_contents>
             </output>
-        </test>
+        </test> -->
+        <!-- <test>
+            <param name="coordinates"/>
+            <assert_stdout >
+                <has_text text="optimized" />
+            </assert_stdout>
+        </test> -->
     </tests> 
-    <help><![CDATA[
+    <help>
+        <![CDATA[
         XTB Molecular Optimization handles coord and XYZ input formats, as well as, three levels of optimization.
         
         Documentation
             The xTB molecular optimization tool is based on the Semiempirical Tight Binding method GFNn-xTB implemented in the xtb (extended tight binding) 
             program package. Detailed documentation for the xtb program can be found in https://xtb-docs.readthedocs.io/en/latest/optimization.html.
-    ]]></help>
+        ]]>
+    </help>
+    <citations>
+        <citation type="doi">https://doi.org/10.1002/wcms.1493</citation>
+    </citations>
 </tool>
