@@ -1,4 +1,4 @@
-<tool id="xtb_molecular_optimization" name="xtb molecular optimization" version="0.1.0+galaxy0" python_template_version="3.5" profile="21.05">
+<tool id="xtb_molecular_optimization" name="xtb molecular optimization" version="0.1.0+galaxy0" profile="21.05">
        <description>Semiempirical quantum mechanical molecular optimization method</description><creator>
         <person
             givenName="Wudmir"
