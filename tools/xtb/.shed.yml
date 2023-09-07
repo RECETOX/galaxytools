@@ -1,13 +1,12 @@
 owner: recetox
 repositories:
   xtb_molecular_optimization:
-    description:  data.
+    description:  xtb molecular optimization is a semiempirical quantum mechanical method.
     include:
-      - xtb.xml
+      - xtb_molecular_optimization.xml
       - test-data
 long_description:  analysis.
 remote_repository_url: "https://github.com/RECETOX/galaxytools/tree/master/tools/xtb"
 homepage_url: "https://github.com/RECETOX/galaxytools"
 categories:
   - Metabolomics
-type: unrestricted
