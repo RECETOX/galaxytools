@@ -1,0 +1,11 @@
+
+name: xtb_molecular_optimization
+owner: recetox
+description: Performs semiempirical molecular optimization.
+long_description: |
+
+categories:
+  - Metabolomics
+remote_repository_url: "https://github.com/RECETOX/galaxytools/tree/master/tools/xtb_molecular_optimization"
+homepage_url: "https://github.com/RECETOX/galaxytools"
+type: unrestricted
