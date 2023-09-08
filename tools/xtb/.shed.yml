@@ -3,9 +3,11 @@ name: xtb_molecular_optimization
 owner: recetox
 description: Performs semiempirical molecular optimization.
 long_description: |
-
+      The xtb molecular optimization tool is based on the Semiempirical Tight Binding method GFNn-xTB implemented in the 
+      xtb (extended tight binding) program package. It handles coord and XYZ input formats, and optimize calculations at three 
+      convergence levels.
 categories:
   - Metabolomics
-remote_repository_url: "https://github.com/RECETOX/galaxytools/tree/master/tools/xtb_molecular_optimization"
+remote_repository_url: "https://github.com/RECETOX/galaxytools/tree/master/tools/xtb"
 homepage_url: "https://github.com/RECETOX/galaxytools"
 type: unrestricted
