@@ -24,7 +24,7 @@
         cp 'xtbopt.${coordinates.ext}' '${output}'
     ]]></command>
     <inputs>
-        <param label="Atomic coordinates file" type="data" name="coordinates" format="xyz, coord" help="Initial atomic coordinates file to be optimized."/>
+        <param label="Atomic coordinates file" type="data" name="coordinates" format="xyz,coord" help="Initial atomic coordinates file to be optimized."/>
         <param type="select" label="Optimization Levels" name="opt_level" help="Geometry optimization convergence levels." >
             <option value="crude">crude</option>
             <option value="tight">tight</option>
