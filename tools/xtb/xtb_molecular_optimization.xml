@@ -27,7 +27,12 @@
         <param label="Atomic coordinates file" type="data" name="coordinates" format="xyz,coord" help="Initial atomic coordinates file to be optimized."/>
         <param type="select" label="Optimization Levels" name="opt_level" help="Geometry optimization convergence levels." >
             <option value="crude">crude</option>
+            <option value="sloppy">sloppy</option>
+            <option value="loose">loose</option>
+            <option value="lax">lax</option>
+            <option value="normal">normal</option>
             <option value="tight">tight</option>
+            <option value="vtight">vtight</option>
             <option value="extreme">extreme</option>
         </param>
     </inputs>
@@ -39,7 +44,7 @@
             <param name="coordinates" value="initial_mol.xyz" ftype="xyz"/>
             <output name="output" file="optimized_mol.xyz" ftype="xyz">
                 <assert_contents>
-                    <has_n_lines n="26" delta="2"/>
+                    <has_text text=" energy" n="1"/>
                 </assert_contents>
             </output>
         </test>
@@ -60,7 +65,7 @@
     </tests> 
     <help>
         <![CDATA[
-        XTB Molecular Optimization handles coord and XYZ input formats, as well as, three levels of optimization.
+        XTB Molecular Optimization handles coord and XYZ input formats, as well as, several levels of optimization.
         
         Documentation
             The xTB molecular optimization tool is based on the Semiempirical Tight Binding method GFNn-xTB implemented in the xtb (extended tight binding) 
