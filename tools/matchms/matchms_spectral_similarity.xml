@@ -50,6 +50,7 @@ scores._scores = similarity.matrix(
     queries=scores.queries,
     array_type="sparse",
     is_symmetric=False)
+scores._scores.data.dtype.names = [name+"_scores", name+"_matches"]
 #end if
 
 scores.filter_by_range(name=name+"_matches", low=0)
