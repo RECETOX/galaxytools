@@ -36,16 +36,24 @@ name="${similarity_metric}_${algorithm.tolerance}_${algorithm.mz_power}_${algori
 
 @init_scores@
 
+#if $scores.use_scores
 layer = similarity.sparse_array(
     references=scores.references,
     queries=scores.queries,
     idx_row = scores._scores.row,
     idx_col = scores._scores.col,
     is_symmetric=False)
-
 scores._scores.add_sparse_data(scores._scores.row, scores._scores.col, layer, name)
+#else
+scores._scores = similarity.matrix(
+    references=scores.references,
+    queries=scores.queries,
+    array_type="sparse",
+    is_symmetric=False)
+scores._scores.data.dtype.names = [name+"_scores", name+"_matches"]
+#end if
 
-scores.filter_by_range(inplace=True, name=name+"_matches", low=0)
+scores.filter_by_range(name=name+"_matches", low=0)
 scores.to_json("$similarity_scores")
 </configfile>
 </configfiles>
