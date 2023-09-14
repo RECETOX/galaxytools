@@ -1,5 +1,6 @@
 name: Weekly global Tool Linting and Tests
 on:
+  workflow_dispatch:
   schedule:
     # Run at midnight every monday
     - cron: '0 0 * * 1'
