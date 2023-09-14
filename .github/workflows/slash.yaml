@@ -10,6 +10,6 @@ jobs:
         if: github.repository_owner == 'RECETOX'
         uses: peter-evans/slash-command-dispatch@v3
         with:
-          token: ${{ secrets.PAT }}
+          token: ${{ secrets.PROJECT_AUTOMATION_PERSONAL_TOKEN_HH }}
           commands: |
             run-all-tool-tests
