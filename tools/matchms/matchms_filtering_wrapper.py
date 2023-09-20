@@ -4,15 +4,15 @@ import sys
 from matchms.exporting import save_as_mgf, save_as_msp
 from matchms.filtering import add_compound_name, add_fingerprint, add_losses, add_parent_mass, add_precursor_mz,\
     add_retention_index, add_retention_time, clean_compound_name
-from matchms.filtering import default_filters, normalize_intensities, select_by_mz, select_by_relative_intensity, \
-    reduce_to_number_of_peaks
+from matchms.filtering import default_filters, normalize_intensities, reduce_to_number_of_peaks, select_by_mz, \
+    select_by_relative_intensity
 from matchms.importing import load_from_mgf, load_from_msp
 
 
 def require_key(spectrum, key):
     if spectrum.get(key):
         return spectrum
-    
+
     return None
 
 
@@ -82,7 +82,7 @@ def main(argv):
             spectrum = select_by_mz(spectrum, args.from_mz, args.to_mz)
 
         if args.reduce_to_top_n_peaks:
-            spectrum = reduce_to_number_of_peaks(spectrum_in = spectrum, n_max = args.n_max)
+            spectrum = reduce_to_number_of_peaks(spectrum_in=spectrum, n_max=args.n_max)
 
         if args.require_smiles and spectrum is not None:
             spectrum = require_key(spectrum, "smiles")
