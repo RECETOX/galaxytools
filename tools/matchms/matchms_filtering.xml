@@ -113,7 +113,7 @@
             <param name="is_true" label="Reduce to top n peaks" type="boolean" truevalue="TRUE" falsevalue="FALSE" checked="false"
                    help="Lowest intensity peaks will be removed when it has more peaks than desired." />
             <when value="TRUE">
-                <param label="Maximum number of peaks" name="n_max" optional="true" type="integer" help="Maximum number of peaks. Remove peaks if more peaks are found." />
+                <param label="Maximum number of peaks" name="n_max" value="5" type="integer" help="Maximum number of peaks. Remove peaks if more peaks are found." />
             </when>
         </conditional>
 
