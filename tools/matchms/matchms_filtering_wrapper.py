@@ -4,8 +4,16 @@ import sys
 from matchms.exporting import save_as_mgf, save_as_msp
 from matchms.filtering import add_compound_name, add_fingerprint, add_losses, add_parent_mass, add_precursor_mz,\
     add_retention_index, add_retention_time, clean_compound_name
-from matchms.filtering import default_filters, normalize_intensities, select_by_mz, select_by_relative_intensity
+from matchms.filtering import default_filters, normalize_intensities, select_by_mz, select_by_relative_intensity, \
+    reduce_to_number_of_peaks
 from matchms.importing import load_from_mgf, load_from_msp
+
+
+def require_key(spectrum, key):
+    if spectrum.get(key):
+        return spectrum
+    
+    return None
 
 
 def main(argv):
@@ -27,13 +35,23 @@ def main(argv):
                         help="Keep only peaks between set m/z range (keep if to_mz >= m/z >= from_mz).")
     parser.add_argument("--from_mz", type=float, help="Lower bound for m/z  filter")
     parser.add_argument("--to_mz", type=float, help="Upper bound for m/z  filter")
+    parser.add_argument("-require_smiles", action='store_true',
+                        help="Remove spectra that does not contain SMILES.")
+    parser.add_argument("-require_inchi", action='store_true',
+                        help="Remove spectra that does not contain INCHI.")
+    parser.add_argument("-reduce_to_top_n_peaks", action='store_true',
+                        help="reduce to top n peaks filter.")
+    parser.add_argument("--n_max", type=int, help="Maximum number of peaks. Remove peaks if more peaks are found.")
     args = parser.parse_args()
 
     if not (args.normalise_intensities
             or args.default_filters
             or args.clean_metadata
             or args.relative_intensity
-            or args.mz_range):
+            or args.mz_range
+            or args.require_smiles
+            or args.require_inchi
+            or args.reduce_to_top_n_peaks):
         raise ValueError('No filter selected.')
 
     if args.spectra_format == 'msp':
@@ -63,7 +81,17 @@ def main(argv):
         if args.mz_range:
             spectrum = select_by_mz(spectrum, args.from_mz, args.to_mz)
 
-        filtered_spectra.append(spectrum)
+        if args.reduce_to_top_n_peaks:
+            spectrum = reduce_to_number_of_peaks(spectrum_in = spectrum, n_max = args.n_max)
+
+        if args.require_smiles and spectrum is not None:
+            spectrum = require_key(spectrum, "smiles")
+
+        if args.require_inchi and spectrum is not None:
+            spectrum = require_key(spectrum, "inchi")
+
+        if spectrum is not None:
+            filtered_spectra.append(spectrum)
 
     if args.spectra_format == 'msp':
         save_as_msp(filtered_spectra, args.output)

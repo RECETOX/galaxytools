@@ -49,6 +49,16 @@
                 --from_mz "$mz_range.from_mz" \
                 --to_mz "$mz_range.to_mz" \
             #end if
+            #if $require_smiles.is_true
+                -require_smiles \
+            #end if
+            #if $require_inchi.is_true
+                -require_inchi \
+            #end if
+            #if $reduce_to_top_n_peaks.is_true
+                -reduce_to_top_n_peaks \
+                --n_max "$reduce_to_top_n_peaks.n_max" \
+            #end if
             --output "$output"
         </configfile>
     </configfiles>
@@ -86,6 +96,24 @@
             <when value="TRUE">
                 <param label="Minimum m/z" name="from_mz" optional="true" type="float" help="Lower bound for m/z filter." />
                 <param label="Maximum m/z" name="to_mz" optional="true" type="float" help="Upper bound for m/z filter." />
+            </when>
+        </conditional>
+
+        <conditional name="require_smiles">
+            <param name="is_true" label="Require SMILES" type="boolean" truevalue="TRUE" falsevalue="FALSE" checked="false"
+                   help="Remove spectra that does not contain SMILES." />
+        </conditional>
+
+        <conditional name="require_inchi">
+            <param name="is_true" label="Require INCHI" type="boolean" truevalue="TRUE" falsevalue="FALSE" checked="false"
+                   help="Remove spectra that does not contain INCHI." />
+        </conditional>
+
+        <conditional name="reduce_to_top_n_peaks">
+            <param name="is_true" label="Reduce to top n peaks" type="boolean" truevalue="TRUE" falsevalue="FALSE" checked="false"
+                   help="Lowest intensity peaks will be removed when it has more peaks than desired." />
+            <when value="TRUE">
+                <param label="Maximum number of peaks" name="n_max" optional="true" type="integer" help="Maximum number of peaks. Remove peaks if more peaks are found." />
             </when>
         </conditional>
 
@@ -134,6 +162,28 @@
                 <param name="to_mz" value="800"/>
             </section>
             <output name="output" file="filtering/mz_range.msp" ftype="msp"/>
+        </test>
+        <test>
+            <param name="spectra" value="filtering/require_filter.msp" ftype="msp"/>
+            <section name="require_smiles">
+                <param name="is_true" value="TRUE"/>
+            </section>
+            <output name="output" file="filtering/require_smiles_out.msp" ftype="msp"/>
+        </test>
+        <test>
+            <param name="spectra" value="filtering/require_filter.msp" ftype="msp"/>
+            <section name="require_inchi">
+                <param name="is_true" value="TRUE"/>
+            </section>
+            <output name="output" file="filtering/require_inchi_out.msp" ftype="msp"/>
+        </test>
+        <test>
+            <param name="spectra" value="filtering/input.msp" ftype="msp"/>
+            <section name="reduce_to_top_n_peaks">
+                <param name="is_true" value="TRUE"/>
+                <param name="n_max" value="5"/>
+            </section>
+            <output name="output" file="filtering/reduce_to_top_n_peaks.msp" ftype="msp"/>
         </test>
     </tests>
 
