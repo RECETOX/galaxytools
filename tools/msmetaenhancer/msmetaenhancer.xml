@@ -13,14 +13,14 @@
         <requirement type="package" version="@TOOL_VERSION@">msmetaenhancer</requirement>
     </requirements>
 
+    <command detect_errors="exit_code"><![CDATA[
+        sh ${msmetaenhancer_python_cli}
+    ]]> </command>
+
     <environment_variables>
         <environment_variable name="MPLCONFIGDIR">\$_GALAXY_JOB_TMP_DIR</environment_variable>
         <environment_variable name="XDG_CACHE_HOME">\$_GALAXY_JOB_TMP_DIR</environment_variable>
     </environment_variables>
-
-    <command detect_errors="exit_code"><![CDATA[
-        sh ${msmetaenhancer_python_cli}
-    ]]> </command>
 
     <configfiles>
         <configfile name="msmetaenhancer_python_cli">
@@ -72,6 +72,7 @@
                         <option value="info" selected="true">INFO</option>
                     </param>
                 </when>
+                <when value="FALSE"></when>
             </conditional>
         </section>
     </inputs>
@@ -104,5 +105,9 @@
         @HELP@
         ]]>
     </help>
+
+    <citations>
+        <citation type="doi">https://doi.org/10.21105/joss.04494</citation>
+    </citations>
 
 </tool>

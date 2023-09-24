@@ -69,16 +69,22 @@
         <conditional name="normalise_intensities">
             <param name="is_true" label="Normalize intensities" type="boolean" truevalue="TRUE" falsevalue="FALSE" checked="false"
                    help="Normalize intensities of peaks (and losses) to unit height."/>
+            <when value="TRUE"></when>
+            <when value="FALSE"></when>
         </conditional>
 
         <conditional name="default_filters">
             <param name="is_true" label="Apply default filters" type="boolean" truevalue="TRUE" falsevalue="FALSE" checked="false"
                    help="Collection of filters that are considered default and that do no require any (factory) arguments."/>
+            <when value="TRUE"></when>
+            <when value="FALSE"></when>
         </conditional>
 
         <conditional name="clean_metadata">
             <param name="is_true" label="Clean metadata" type="boolean" truevalue="TRUE" falsevalue="FALSE" checked="false"
                    help="Apply all adding and cleaning filters if possible, so that the spectra have canonical metadata." />
+            <when value="TRUE"></when>
+            <when value="FALSE"></when>
         </conditional>
 
         <conditional name="relative_intensity">
@@ -88,6 +94,7 @@
                 <param label="Minimum intensity" name="from_intensity" value="0" type="float" help="Lower bound for intensity filter." />
                 <param label="Maximum intensity" name="to_intensity" value="1" type="float" help="Upper bound for intensity filter." />
             </when>
+            <when value="FALSE"></when>
         </conditional>
 
         <conditional name="mz_range">
@@ -97,16 +104,21 @@
                 <param label="Minimum m/z" name="from_mz" optional="true" type="float" help="Lower bound for m/z filter." />
                 <param label="Maximum m/z" name="to_mz" optional="true" type="float" help="Upper bound for m/z filter." />
             </when>
+            <when value="FALSE"></when>
         </conditional>
 
         <conditional name="require_smiles">
             <param name="is_true" label="Require SMILES" type="boolean" truevalue="TRUE" falsevalue="FALSE" checked="false"
                    help="Remove spectra that does not contain SMILES." />
+            <when value="TRUE"></when>
+            <when value="FALSE"></when>
         </conditional>
 
         <conditional name="require_inchi">
             <param name="is_true" label="Require INCHI" type="boolean" truevalue="TRUE" falsevalue="FALSE" checked="false"
                    help="Remove spectra that does not contain INCHI." />
+            <when value="TRUE"></when>
+            <when value="FALSE"></when>
         </conditional>
 
         <conditional name="reduce_to_top_n_peaks">
@@ -115,6 +127,7 @@
             <when value="TRUE">
                 <param label="Maximum number of peaks" name="n_max" value="5" type="integer" help="Maximum number of peaks. Remove peaks if more peaks are found." />
             </when>
+            <when value="FALSE"></when>
         </conditional>
 
     </inputs>

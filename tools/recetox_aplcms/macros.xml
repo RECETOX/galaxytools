@@ -13,6 +13,9 @@
               <edam_topic>topic_0091</edam_topic>
               <edam_topic>topic_3520</edam_topic>       
        </edam_topics>
+    </xml>
+
+    <xml name="refs">
        <xrefs>
               <xref type="bio.tools">recetox-aplcms</xref>
        </xrefs>
@@ -89,6 +92,7 @@
                     <param name="sd_cut_max" type="float" value="500" label="Maximal standard deviation"
                             help="The maximum standard deviation - features with a standard deviation greater than this number are eliminated." />
                 </when>
+                <when value="FALSE"></when>
             </conditional>
             <conditional name="peak_estim">
                 <param name="peak_estim_method" type="select" display="radio" label="Peak estimation method"
@@ -100,6 +104,7 @@
                     <param name="moment_power" type="float" value="1" label="Moment power"
                            help="The power parameter for data transformation when fitting the bi-Gaussian mixture model in an EIC." />
                 </when>
+                <when value="EM"></when>
             </conditional>
         </section>
     </xml>

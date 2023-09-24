@@ -12,13 +12,13 @@
         <requirement type="package" version="@TOOL_VERSION@">matchms</requirement>
     </requirements>
 
-    <environment_variables>
-        <environment_variable name="MPLCONFIGDIR">\$_GALAXY_JOB_TMP_DIR</environment_variable>
-    </environment_variables>
-
     <command detect_errors="exit_code"><![CDATA[
         python3 ${python_wrapper}
     ]]> </command>
+
+    <environment_variables>
+        <environment_variable name="MPLCONFIGDIR">\$_GALAXY_JOB_TMP_DIR</environment_variable>
+    </environment_variables>
 
 <configfiles>
 <configfile name="python_wrapper">

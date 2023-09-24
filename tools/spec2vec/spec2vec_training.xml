@@ -114,6 +114,7 @@
                         <option value="1" selected="true">Mean</option>
                     </param>
                 </when>
+                <when value="1"></when>
             </conditional>
             <conditional name="hs_param">
                 <param label="Last Layer Activation" name="hs" type="select"
@@ -132,6 +133,7 @@
                         <validator type="in_range" min="-1.0" max="1.0" message="The value must be within -1.0 and 1.0 range."/>
                     </param>
                 </when>
+                <when value="1"></when>
             </conditional>
             <param label="Sort the vocabulary of spectra" name="sorted_vocab" type="boolean" checked="true" truevalue="TRUE" falsevalue="FALSE"
                    help="If true, sort the vocabulary by descending frequency before assigning peak and neutral loss indices."/>
@@ -149,6 +151,7 @@
                 <when value="TRUE">
                     <param label="Maximum unique peaks and neutral losses" name="max_vocab_size" type="integer" value="100000" min="1"/>
                 </when>
+                <when value="FALSE"></when>
             </conditional>
             <param label="Number of decimals to round m/z values" name="n_decimals" type="integer" value="2"
                    min="0" max="5" help="Rounds peak position to this number of decimals."/>

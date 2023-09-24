@@ -40,4 +40,8 @@
     <help><![CDATA[
         MSPmerge handles input/output files in MSP format using the matchms.importing and matchms.exporting modules (https://matchms.readthedocs.io/en/latest/index.html).
     ]]></help>
+
+    <citations>
+        <citation type="doi">https://doi.org/10.5281/zenodo.6035335</citation>
+    </citations>
 </tool>

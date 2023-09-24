@@ -13,13 +13,13 @@
         <requirement type="package" version="@TOOL_VERSION@">matchms</requirement>
     </requirements>
 
-    <environment_variables>
-        <environment_variable name="MPLCONFIGDIR">\$_GALAXY_JOB_TMP_DIR</environment_variable>
-    </environment_variables>
-
     <command detect_errors="exit_code"><![CDATA[
         sh ${matchms_python_cli}
     ]]> </command>
+
+    <environment_variables>
+        <environment_variable name="MPLCONFIGDIR">\$_GALAXY_JOB_TMP_DIR</environment_variable>
+    </environment_variables>
 
     <configfiles>
         <configfile name="matchms_python_cli">
@@ -64,6 +64,7 @@
                 <param label="Reference spectra" name="references" type="data" format="msp,mgf"
                        help="Reference mass spectra to match against as library."/>
             </when>
+            <when value="TRUE"></when>
         </conditional>
         <param label="Scores array type" name="array_type" type="select" display="radio"
                help="Matrix type for storing scores objects. Sparse type more memory-efficient and better for large arrays.
@@ -113,6 +114,7 @@
                 <param label="tolerance" name="tolerance" type="float" value="60"
                        help="Peaks will be considered a match when less than tolerance apart."/>
             </when>
+            <when value="FALSE"></when>
         </conditional>
     </inputs>
 

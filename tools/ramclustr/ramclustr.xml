@@ -3,13 +3,14 @@
     <macros>
         <import>macros.xml</import>
     </macros>
+    <expand macro='annotation'/>
     <edam_operations>
         <edam_operation>operation_3557</edam_operation>
         <edam_operation>operation_3435</edam_operation>
         <edam_operation>operation_3432</edam_operation>
         <edam_operation>operation_3465</edam_operation>
     </edam_operations>
-    <expand macro='annotation'/>
+    <expand macro="refs"/>
     <expand macro="creator"/>
 
     <requirements>
