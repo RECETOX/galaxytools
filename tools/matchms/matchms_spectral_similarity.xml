@@ -36,7 +36,7 @@ name="${similarity_metric}_${algorithm.tolerance}_${algorithm.mz_power}_${algori
 
 @init_scores@
 
-#if $scores.use_scores
+#if $scores.use_scores == "True"
 layer = similarity.sparse_array(
     references=scores.references,
     queries=scores.queries,

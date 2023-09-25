@@ -24,10 +24,10 @@
     <configfiles>
         <configfile name="matchms_python_cli">
             python3 ${__tool_directory__}/matchms_similarity_wrapper.py \
-            #if $ri_filtering.is_true
+            #if $ri_filtering.is_true == "TRUE"
             -r $ri_filtering.tolerance \
             #end if
-            #if $symmetric.is_symmetric
+            #if $symmetric.is_symmetric == "TRUE"
             -s \
             #else
             --ref "$references" \
@@ -58,8 +58,10 @@
         <param label="Queries spectra" name="queries" type="data" format="msp,mgf"
                help="Query mass spectra to match against references."/>
         <conditional name="symmetric">
-            <param name="is_symmetric" label="Symmetric" type="boolean" truevalue="TRUE" falsevalue="FALSE"
-                   checked="false"/>
+            <param name="is_symmetric" label="Symmetric" type="select">
+                <option value="FALSE" selected="true">FALSE</option>
+                <option value="TRUE">TRUE</option>
+            </param>
             <when value="FALSE">
                 <param label="Reference spectra" name="references" type="data" format="msp,mgf"
                        help="Reference mass spectra to match against as library."/>
@@ -108,8 +110,10 @@
 
 
         <conditional name="ri_filtering">
-            <param name="is_true" label="Apply RI filtering" type="boolean" truevalue="TRUE" falsevalue="FALSE"
-                   checked="false"/>
+            <param name="is_true" label="Apply RI filtering" type="select">
+                <option value="FALSE" selected="true">FALSE</option>
+                <option value="TRUE">TRUE</option>
+            </param>
             <when value="TRUE">
                 <param label="tolerance" name="tolerance" type="float" value="60"
                        help="Peaks will be considered a match when less than tolerance apart."/>
@@ -143,7 +147,7 @@
             <param name="references" value="similarity/fill.mgf" ftype="mgf"/>
             <param name="queries" value="similarity/fill2.msp" ftype="msp"/>
             <conditional name="ri_filtering">
-                <param name="is_true" value="True"></param>
+                <param name="is_true" value="TRUE"></param>
                 <param name="tolerance" value="60.0" />
             </conditional>
             <conditional name="metric">
@@ -166,7 +170,7 @@
             </conditional>
             <param name="is_symmetric" value="TRUE" />
             <conditional name="ri_filtering">
-                <param name="is_true" value="True"></param>
+                <param name="is_true" value="TRUE"></param>
                 <param name="tolerance" value="60.0" />
             </conditional>
             <output name="similarity_scores" file="similarity/scores_test5_out.json" ftype="json"/>
