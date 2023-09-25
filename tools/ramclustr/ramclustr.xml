@@ -158,7 +158,7 @@
     </outputs>
 
     <tests>
-        <test><!-- TEST 1 -->
+        <test expect_num_outputs="2"><!-- TEST 1 -->
             <section name="filetype">
                 <param name="type_choice" value="xcms"/>
                 <section name="xcms">
@@ -177,7 +177,7 @@
             <output name="mass_spectra_merged" file="test1_fill_xcms_1.msp" ftype="msp"/>
             <output name="spec_abundance" file="test1_spec_abundance_xcms_1.csv" ftype="csv" compare="sim_size" delta="100"/>
         </test>
-        <test><!-- TEST 2 -->
+        <test expect_num_outputs="2"><!-- TEST 2 -->
             <section name="filetype">
                 <param name="type_choice" value="xcms"/>
                 <section name="xcms">
@@ -198,7 +198,7 @@
             <output name="mass_spectra_merged" file="test2_fill_xcms_2.msp" ftype="msp" compare="sim_size" delta="100"/>
             <output name="spec_abundance" file="test2_spec_abundance_xcms_2.csv" ftype="csv" compare="sim_size" delta="100"/>
         </test>
-        <test><!-- TEST 3 -->
+        <test expect_num_outputs="2"><!-- TEST 3 -->
             <section name="filetype">
                 <param name="type_choice" value="csv"/>
                 <section name="ms_csv">
@@ -216,7 +216,7 @@
             <output name="mass_spectra_merged" file="test3_spectra_csv_1.msp" ftype="msp"/>
             <output name="spec_abundance" file="test3_spec_abundance_csv_1.csv" ftype="csv"/>
         </test>
-        <test><!-- TEST 4 -->
+        <test expect_num_outputs="2"><!-- TEST 4 -->
             <section name="filetype">
                 <param name="type_choice" value="csv"/>
                 <section name="ms_csv">
@@ -225,7 +225,7 @@
             </section>
             <output name="mass_spectra_merged" file="test4_spectra_csv_2.msp" ftype="msp" lines_diff="10"/>
         </test>
-        <test><!-- TEST 5 -->
+        <test expect_num_outputs="2"><!-- TEST 5 -->
             <section name="filetype">
                 <param name="type_choice" value="recetox-aplcms"/>
                 <section name="ms_dataframe">
