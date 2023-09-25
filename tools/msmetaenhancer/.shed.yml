@@ -12,5 +12,3 @@ repositories:
       - msmetaenhancer_wrapper.py
       - test-data
       - macros.xml
-    exclude:
-      - README.md
