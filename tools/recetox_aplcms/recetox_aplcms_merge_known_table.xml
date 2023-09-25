@@ -1,4 +1,4 @@
-<tool id="recetox_aplcms_merge_known_table" name="recetox-aplcms - merge known table" version="@TOOL_VERSION@+galaxy1" profile="21.09">
+<tool id="recetox_aplcms_merge_known_table" name="recetox-aplcms - merge known table" version="@TOOL_VERSION@+galaxy2" profile="21.09">
     <description>join knowledge from aligned features and known table.</description>
     <macros>
         <import>macros.xml</import>

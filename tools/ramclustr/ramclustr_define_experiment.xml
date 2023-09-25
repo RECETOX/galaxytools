@@ -1,4 +1,4 @@
-<tool id="ramclustr_define_experiment" name="RAMClustR define experiment" version="1.0.2+galaxy0" profile="21.09">
+<tool id="ramclustr_define_experiment" name="RAMClustR define experiment" version="1.0.2+galaxy1" profile="21.09">
     <description>Definition of experimental design used for record keeping and writing spectra data.</description>
     <macros>
         <import>macros.xml</import>
