@@ -6,8 +6,11 @@ categories:
 repositories:
   msmetaenhancer:
     description: "MSMetaEnhancer is a python tool for annotation of MS data."
+    long_description: "MSMetaEnhancer is a tool used for .msp files annotation. It adds metadata like SMILES, InChI, and CAS number fetched from the following services: CIR, CTS, PubChem, IDSM, and BridgeDb."
     include:
       - msmetaenhancer.xml
       - msmetaenhancer_wrapper.py
       - test-data
       - macros.xml
+    exclude:
+      - README.md
