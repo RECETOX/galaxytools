@@ -49,6 +49,14 @@ save_as_msp(new_spectra, "${output}")
         </data>
     </outputs>
 
+    <tests>
+        <test>
+            <param name="spectral_library" value="filtering/input.msp" ftype="msp"/>
+            <param name="key" value="tool_used"/>
+            <param name="value" value="matchms"/>
+            <output name="output" file="out_matchms_add_key.msp" ftype="msp"/>
+        </test>
+    </tests>
 
     <help><![CDATA[
         Description
