@@ -36,7 +36,7 @@ jobs:
   # which are needed in subsequent steps.
   setup:
     name: Setup cache and determine changed repositories
-    runs-on: ubuntu-22.04.02
+    runs-on: ubuntu-latest
     outputs:
       galaxy-head-sha: ${{ steps.get-galaxy-sha.outputs.galaxy-head-sha }}
       repository-list: ${{ steps.discover.outputs.repository-list }}
