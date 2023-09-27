@@ -1,4 +1,4 @@
-<tool id="msmetaenhancer" name="MSMetaEnhancer" version="@TOOL_VERSION@+galaxy1">
+<tool id="msmetaenhancer" name="MSMetaEnhancer" version="@TOOL_VERSION@+galaxy2">
     <description>annotate MS data</description>
 
     <macros>
@@ -13,14 +13,14 @@
         <requirement type="package" version="@TOOL_VERSION@">msmetaenhancer</requirement>
     </requirements>
 
+    <command detect_errors="exit_code"><![CDATA[
+        sh ${msmetaenhancer_python_cli}
+    ]]> </command>
+
     <environment_variables>
         <environment_variable name="MPLCONFIGDIR">\$_GALAXY_JOB_TMP_DIR</environment_variable>
         <environment_variable name="XDG_CACHE_HOME">\$_GALAXY_JOB_TMP_DIR</environment_variable>
     </environment_variables>
-
-    <command detect_errors="exit_code"><![CDATA[
-        sh ${msmetaenhancer_python_cli}
-    ]]> </command>
 
     <configfiles>
         <configfile name="msmetaenhancer_python_cli">
@@ -28,7 +28,7 @@
             --input_file "$input_file" \
             --file_format "$input_file.ext" \
             --output_file "$output_file" \
-            #if $options.logging.output_log:
+            #if $options.logging.output_log == "TRUE":
             --log_file "$log_file" \
             --log_level "$options.logging.log_level" \
             #end if
@@ -62,8 +62,10 @@
 
         <section name="options" title="Options">
             <conditional name="logging">
-                <param label="Save the log file" name="output_log" type="boolean" truevalue="TRUE" falsevalue="FALSE"
-                       checked="false" help="Preserve a log with details about the annotation process."/>
+                <param label="Save the log file" name="output_log" type="select" help="Preserve a log with details about the annotation process.">
+                    <option value="FALSE" selected="true">FALSE</option>
+                    <option value="TRUE">TRUE</option>
+                </param>
                 <when value="TRUE">
                     <param name="log_level" type="select" label="Log level"
                            help="Severity of log messages  present in the log file.">
@@ -72,6 +74,7 @@
                         <option value="info" selected="true">INFO</option>
                     </param>
                 </when>
+                <when value="FALSE"></when>
             </conditional>
         </section>
     </inputs>
@@ -92,7 +95,7 @@
     </outputs>
 
     <tests>
-        <test>
+        <test expect_num_outputs="2">
             <param name="input_file" value="sample.msp" ftype="msp" />
             <param name="jobs" value="compound_name inchi PubChem,inchi canonical_smiles PubChem"/>
             <output name="output_file" file="sample_out.msp" ftype="msp"/>
@@ -104,5 +107,9 @@
         @HELP@
         ]]>
     </help>
+
+    <citations>
+        <citation type="doi">https://doi.org/10.21105/joss.04494</citation>
+    </citations>
 
 </tool>

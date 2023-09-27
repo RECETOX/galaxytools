@@ -1,4 +1,4 @@
-<tool id="matchms_filtering" name="matchms filtering" version="@TOOL_VERSION@+galaxy0" profile="21.09">
+<tool id="matchms_filtering" name="matchms filtering" version="@TOOL_VERSION@+galaxy1" profile="21.09">
     <description>filter and normalize mass spectrometry data</description>
 
     <macros>
@@ -30,24 +30,34 @@
             python3 ${__tool_directory__}/matchms_filtering_wrapper.py \
             --spectra "$spectra" \
             --spectra_format "$spectra.ext" \
-            #if $normalise_intensities.is_true
+            #if $normalise_intensities_is_true == "TRUE"
                 -normalise_intensities \
             #end if
-            #if $default_filters.is_true
+            #if $default_filters_is_true == "TRUE"
                 -default_filters \
             #end if
-            #if $clean_metadata.is_true
+            #if $clean_metadata_is_true == "TRUE"
                 -clean_metadata \
             #end if
-            #if $relative_intensity.is_true
+            #if $relative_intensity.is_true == "TRUE"
                 -relative_intensity \
                 --from_intensity "$relative_intensity.from_intensity" \
                 --to_intensity "$relative_intensity.to_intensity" \
             #end if
-            #if $mz_range.is_true
+            #if $mz_range.is_true == "TRUE"
                 -mz_range \
                 --from_mz "$mz_range.from_mz" \
                 --to_mz "$mz_range.to_mz" \
+            #end if
+            #if $require_smiles_is_true == "TRUE"
+                -require_smiles \
+            #end if
+            #if $require_inchi_is_true == "TRUE"
+                -require_inchi \
+            #end if
+            #if $reduce_to_top_n_peaks.is_true == "TRUE"
+                -reduce_to_top_n_peaks \
+                --n_max "$reduce_to_top_n_peaks.n_max" \
             #end if
             --output "$output"
         </configfile>
@@ -55,38 +65,55 @@
 
     <inputs>
         <param label="Spectra file" name="spectra" type="data" format="msp,mgf" help="Mass spectra file to be filtered." />
-
-        <conditional name="normalise_intensities">
-            <param name="is_true" label="Normalize intensities" type="boolean" truevalue="TRUE" falsevalue="FALSE" checked="false"
-                   help="Normalize intensities of peaks (and losses) to unit height."/>
-        </conditional>
-
-        <conditional name="default_filters">
-            <param name="is_true" label="Apply default filters" type="boolean" truevalue="TRUE" falsevalue="FALSE" checked="false"
-                   help="Collection of filters that are considered default and that do no require any (factory) arguments."/>
-        </conditional>
-
-        <conditional name="clean_metadata">
-            <param name="is_true" label="Clean metadata" type="boolean" truevalue="TRUE" falsevalue="FALSE" checked="false"
-                   help="Apply all adding and cleaning filters if possible, so that the spectra have canonical metadata." />
-        </conditional>
+        <param name="normalise_intensities_is_true" label="Normalize intensities" type="boolean" truevalue="TRUE" falsevalue="FALSE" checked="false"
+                help="Normalize intensities of peaks (and losses) to unit height."/>
+        <param name="default_filters_is_true" label="Apply default filters" type="boolean" truevalue="TRUE" falsevalue="FALSE" checked="false"
+                help="Collection of filters that are considered default and that do no require any (factory) arguments."/>
+        <param name="clean_metadata_is_true" label="Clean metadata" type="boolean" truevalue="TRUE" falsevalue="FALSE" checked="false"
+                help="Apply all adding and cleaning filters if possible, so that the spectra have canonical metadata." />
 
         <conditional name="relative_intensity">
-            <param name="is_true" label="Filter relative intensity" type="boolean" truevalue="TRUE" falsevalue="FALSE" checked="false"
-                   help="Keep only peaks within set relative intensity range (keep if maximum >= intensity >= minimum)." />
+            <param name="is_true" label="Filter relative intensity" type="select" 
+                   help="Keep only peaks within set relative intensity range (keep if maximum >= intensity >= minimum).">
+                <option value="FALSE" selected="true">FALSE</option>
+                <option value="TRUE">TRUE</option>
+            </param>
             <when value="TRUE">
                 <param label="Minimum intensity" name="from_intensity" value="0" type="float" help="Lower bound for intensity filter." />
                 <param label="Maximum intensity" name="to_intensity" value="1" type="float" help="Upper bound for intensity filter." />
             </when>
+            <when value="FALSE"></when>
         </conditional>
 
         <conditional name="mz_range">
-            <param name="is_true" label="Filter m/z range" type="boolean" truevalue="TRUE" falsevalue="FALSE" checked="false"
-                   help="Keep only peaks between set m/z range (keep if maximum >= m/z >= minimum)." />
+            <param name="is_true" label="Filter m/z range" type="select"
+                   help="Keep only peaks between set m/z range (keep if maximum >= m/z >= minimum).">
+                <option value="FALSE" selected="true">FALSE</option>
+                <option value="TRUE">TRUE</option>
+            </param>
             <when value="TRUE">
                 <param label="Minimum m/z" name="from_mz" optional="true" type="float" help="Lower bound for m/z filter." />
                 <param label="Maximum m/z" name="to_mz" optional="true" type="float" help="Upper bound for m/z filter." />
             </when>
+            <when value="FALSE"></when>
+        </conditional>
+
+        <param name="require_smiles_is_true" label="Require SMILES" type="boolean" truevalue="TRUE" falsevalue="FALSE" checked="false"
+                help="Remove spectra that does not contain SMILES." />
+
+        <param name="require_inchi_is_true" label="Require INCHI" type="boolean" truevalue="TRUE" falsevalue="FALSE" checked="false"
+                help="Remove spectra that does not contain INCHI." />
+
+        <conditional name="reduce_to_top_n_peaks">
+            <param name="is_true" label="Reduce to top n peaks" type="select"
+                   help="Lowest intensity peaks will be removed when it has more peaks than desired.">
+                <option value="FALSE" selected="true">FALSE</option>
+                <option value="TRUE">TRUE</option>
+            </param>
+            <when value="TRUE">
+                <param label="Maximum number of peaks" name="n_max" value="5" type="integer" help="Maximum number of peaks. Remove peaks if more peaks are found." />
+            </when>
+            <when value="FALSE"></when>
         </conditional>
 
     </inputs>
@@ -98,23 +125,17 @@
     <tests>
         <test>
             <param name="spectra" value="filtering/input.msp" ftype="msp"/>
-            <section name="normalise_intensities">
-                <param name="is_true" value="TRUE"/>
-            </section>
+            <param name="normalise_intensities_is_true" value="TRUE"/>
             <output name="output" file="filtering/normalise_intensities.msp" ftype="msp"/>
         </test>
         <test>
             <param name="spectra" value="filtering/input.msp" ftype="msp"/>
-            <section name="default_filters">
-                <param name="is_true" value="TRUE"/>
-            </section>
+            <param name="default_filters_is_true" value="TRUE"/>
             <output name="output" file="filtering/default_filters.msp" ftype="msp"/>
         </test>
         <test>
             <param name="spectra" value="filtering/input.msp" ftype="msp"/>
-            <section name="clean_metadata">
-                <param name="is_true" value="TRUE"/>
-            </section>
+            <param name="clean_metadata_is_true" value="TRUE"/>
             <output name="output" file="filtering/clean_metadata.msp" ftype="msp"/>
         </test>
         <test>
@@ -134,6 +155,24 @@
                 <param name="to_mz" value="800"/>
             </section>
             <output name="output" file="filtering/mz_range.msp" ftype="msp"/>
+        </test>
+        <test>
+            <param name="spectra" value="filtering/require_filter.msp" ftype="msp"/>
+            <param name="require_smiles_is_true" value="TRUE"/>
+            <output name="output" file="filtering/require_smiles_out.msp" ftype="msp"/>
+        </test>
+        <test>
+            <param name="spectra" value="filtering/require_filter.msp" ftype="msp"/>
+            <param name="require_inchi_is_true" value="TRUE"/>
+            <output name="output" file="filtering/require_inchi_out.msp" ftype="msp"/>
+        </test>
+        <test>
+            <param name="spectra" value="filtering/input.msp" ftype="msp"/>
+            <section name="reduce_to_top_n_peaks">
+                <param name="is_true" value="TRUE"/>
+                <param name="n_max" value="5"/>
+            </section>
+            <output name="output" file="filtering/reduce_to_top_n_peaks.msp" ftype="msp"/>
         </test>
     </tests>
 

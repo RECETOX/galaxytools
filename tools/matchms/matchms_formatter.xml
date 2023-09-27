@@ -1,4 +1,4 @@
-<tool id="matchms_formatter" name="matchms scores formatter" version="@TOOL_VERSION@+galaxy0" profile="21.09">
+<tool id="matchms_formatter" name="matchms scores formatter" version="@TOOL_VERSION@+galaxy1" profile="21.09">
     <description>reformat scores object of matchms to long format table</description>
 
     <macros>
@@ -16,15 +16,15 @@
         <requirement type="package" version="1.1.4">pandas</requirement>
         <requirement type="package" version="8.0.1">click</requirement>
     </requirements>
+
+    <command detect_errors="aggressive"><![CDATA[
+        sh ${matchms_formatter_cli}
+    ]]></command>
     
     <environment_variables>
         <environment_variable name="MPLCONFIGDIR">\$_GALAXY_JOB_TMP_DIR</environment_variable>
         <environment_variable name="XDG_CACHE_HOME">\$_GALAXY_JOB_TMP_DIR</environment_variable>
     </environment_variables>
-
-    <command detect_errors="aggressive"><![CDATA[
-        sh ${matchms_formatter_cli}
-    ]]></command>
 
     <configfiles>
         <configfile name="matchms_formatter_cli">
@@ -57,4 +57,8 @@
         @HELP_formatter@
         @HELP_matchms@
     </help>
+
+    <citations>
+        <citation type="doi">https://doi.org/10.5281/zenodo.6035335</citation>
+    </citations>
 </tool>

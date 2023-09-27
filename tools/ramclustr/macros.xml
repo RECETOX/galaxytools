@@ -39,10 +39,13 @@
         <edam_topics>
                <edam_topic>topic_3520</edam_topic>       
         </edam_topics>
+     </xml>
+    
+    <xml name="refs">
         <xrefs>
                <xref type="bio.tools">ramclustr</xref>
         </xrefs>
-     </xml>
+    </xml>
 
     <xml name="parameters_csv">
         <section name="ms_csv" title="Input MS Data as CSV" expanded="true">

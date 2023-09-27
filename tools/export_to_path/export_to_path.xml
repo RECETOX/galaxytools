@@ -1,9 +1,9 @@
 <tool id="export_to_path" name="export to path" version="0.0.2">
+    <description>on a filesystem accessible to compute node</description>
     <macros>
         <import>macros.xml</import>
     </macros>
     <expand macro="creator"/>
-    <description>on a filesystem accessible to compute node</description>
     <requirements>
         <requirement type="package" version="3.6">python</requirement>
     </requirements>
