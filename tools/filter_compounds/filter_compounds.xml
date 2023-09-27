@@ -44,5 +44,8 @@
             @HELP@
         ]]>
     </help>
+    <citations>
+        <citation type="doi">https://doi.org/10.5281/zenodo.6035335</citation>
+    </citations>
 </tool>
 

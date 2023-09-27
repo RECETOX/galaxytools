@@ -6,6 +6,7 @@ categories:
 repositories:
   ramclustr:
     description: "A feature clustering algorithm for non-targeted mass spectrometric metabolomics data using peaks detected using XCMS or using MS1 and MS2 spectra."
+    long_description: "A feature clustering algorithm for non-targeted mass spectrometric metabolomics data. This method is compatible with gas and liquid chromatography coupled mass spectrometry, including indiscriminant tandem mass spectrometry data."
     include:
       - ramclustr.xml
       - ramclustr_wrapper.R
@@ -13,6 +14,7 @@ repositories:
       - macros.xml
   ramclustr_define_experiment:
     description: "Definition of experimental design used for record keeping and writing spectra data."
+    long_description: "Create an Experimental Design R object for record-keeping and msp output"
     include:
       - ramclustr_define_experiment.xml
       - ramclustr_define_experiment_wrapper.py

@@ -13,6 +13,9 @@
               <edam_topic>topic_0091</edam_topic>
               <edam_topic>topic_3520</edam_topic>       
        </edam_topics>
+    </xml>
+
+    <xml name="refs">
        <xrefs>
               <xref type="bio.tools">recetox-aplcms</xref>
        </xrefs>
@@ -81,14 +84,18 @@
                         help="The upper limit of the ratio range between the left-standard deviation and the right-standard deviation of the bi-Gaussian function to fit the data." />
             </section>
             <conditional name="sd_cut">
-                <param name="sd_cut_bounds" type="boolean" checked="true" truevalue="TRUE" falsevalue="FALSE" label="Standard deviations boundaries."
-                       help="Limit the standard deviations by setting boundaries." />
+                <param name="sd_cut_bounds" type="select" label="Standard deviations boundaries."
+                       help="Limit the standard deviations by setting boundaries.">
+                     <option value="FALSE">FALSE</option>
+                     <option value="TRUE" selected="true">TRUE</option>
+                </param>
                 <when value="TRUE">
                     <param name="sd_cut_min" type="float" value="0.01" label="Minimal standard deviation"
                            help="The minimum standard deviation - features with a standard deviation lower than this number are eliminated." />
                     <param name="sd_cut_max" type="float" value="500" label="Maximal standard deviation"
                             help="The maximum standard deviation - features with a standard deviation greater than this number are eliminated." />
                 </when>
+                <when value="FALSE"></when>
             </conditional>
             <conditional name="peak_estim">
                 <param name="peak_estim_method" type="select" display="radio" label="Peak estimation method"
@@ -100,6 +107,7 @@
                     <param name="moment_power" type="float" value="1" label="Moment power"
                            help="The power parameter for data transformation when fitting the bi-Gaussian mixture model in an EIC." />
                 </when>
+                <when value="EM"></when>
             </conditional>
         </section>
     </xml>

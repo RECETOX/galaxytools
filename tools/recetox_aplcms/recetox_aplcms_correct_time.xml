@@ -1,13 +1,14 @@
-<tool id="recetox_aplcms_correct_time" name="recetox-aplcms - correct time" version="@TOOL_VERSION@+galaxy2" profile="21.09">
+<tool id="recetox_aplcms_correct_time" name="recetox-aplcms - correct time" version="@TOOL_VERSION@+galaxy3" profile="21.09">
     <description>correct retention time across samples for peak alignment</description>
     <macros>
         <import>macros.xml</import>
         <import>help.xml</import>
     </macros>
+    <expand macro="annotation"/>
     <edam_operations>
         <edam_operation>operation_3628</edam_operation>
     </edam_operations>
-    <expand macro="annotation"/>
+    <expand macro="refs"/>
     <expand macro="creator"/>
     <expand macro="requirements"/>
 

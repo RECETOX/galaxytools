@@ -1,4 +1,4 @@
-<tool id="mzml_validator" name="mzML Schema Validator" version="0.1.0+galaxy0" profile="21.05">
+<tool id="mzml_validator" name="mzML Schema Validator" version="0.1.0+galaxy1" profile="21.05">
     <description>validates mzML files against XML Schema Definition (XSD)</description>
     <creator>
         <person
@@ -63,4 +63,8 @@
         **mzML Schema Validator** validates mzML files against XML Schema Definition (XSD) developed by HUPO Proteomics Standard Initiative
         (https://www.psidev.info/mzML).
     ]]></help>
+
+    <citations>
+        <citation type="doi">https://doi.org/10.5281/zenodo.6035335</citation>
+    </citations>
 </tool>

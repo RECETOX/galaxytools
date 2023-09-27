@@ -1,4 +1,4 @@
-<tool id="matchms_networking" name="matchms networking" version="@TOOL_VERSION@+galaxy0" profile="21.09">
+<tool id="matchms_networking" name="matchms networking" version="@TOOL_VERSION@+galaxy1" profile="21.09">
     <description>create similarity network graph from matchms similarity scores</description>
 
     <macros>
@@ -16,14 +16,14 @@
         <requirement type="package" version="@TOOL_VERSION@">matchms</requirement>
     </requirements>
 
+    <command detect_errors="aggressive"><![CDATA[
+        sh ${matchms_networking_cli}
+    ]]></command>
+
     <environment_variables>
         <environment_variable name="MPLCONFIGDIR">\$_GALAXY_JOB_TMP_DIR</environment_variable>
         <environment_variable name="XDG_CACHE_HOME">\$_GALAXY_JOB_TMP_DIR</environment_variable>
     </environment_variables>
-
-    <command detect_errors="aggressive"><![CDATA[
-        sh ${matchms_networking_cli}
-    ]]></command>
 
     <configfiles>
         <configfile name="matchms_networking_cli">
@@ -78,7 +78,7 @@
     </inputs>
 
     <outputs>
-        <data label="Similarity network of ${scores.name}" name="similarity_network_file">
+        <data label="Similarity network of ${scores.name}" name="similarity_network_file" format="graphml">
             <change_format>
                 <when input="graph_format" value="graphml" format="graphml"/>
                 <when input="graph_format" value="cyjs" format="cyjs"/>

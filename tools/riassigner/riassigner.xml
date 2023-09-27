@@ -1,4 +1,4 @@
-<tool id="riassigner" name="RIAssigner" version="@TOOL_VERSION@+galaxy2" profile="21.09">
+<tool id="riassigner" name="RIAssigner" version="@TOOL_VERSION@+galaxy3" profile="21.09">
     <description>compute retention indices</description>
     <macros>
         <import>macros.xml</import>
@@ -75,4 +75,8 @@
         @HELP@
         ]]>
     </help>
+    
+    <citations>
+        <citation type="doi">10.21105/joss.04337</citation>
+    </citations>
 </tool>

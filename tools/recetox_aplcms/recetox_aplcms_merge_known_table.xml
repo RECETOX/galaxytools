@@ -1,13 +1,14 @@
-<tool id="recetox_aplcms_merge_known_table" name="recetox-aplcms - merge known table" version="@TOOL_VERSION@+galaxy1" profile="21.09">
+<tool id="recetox_aplcms_merge_known_table" name="recetox-aplcms - merge known table" version="@TOOL_VERSION@+galaxy2" profile="21.09">
     <description>join knowledge from aligned features and known table.</description>
     <macros>
         <import>macros.xml</import>
         <import>help.xml</import>
     </macros>
+    <expand macro="annotation"/>
     <edam_operations>
         <edam_operation>operation_3436</edam_operation>
     </edam_operations>
-    <expand macro="annotation"/>
+    <expand macro="refs"/>
     <expand macro="creator"/>
     <expand macro="requirements"/>
 
@@ -79,6 +80,7 @@
                        help="The minimum number of occurrences of a historically unseen (unknown) feature to add
                        this feature into the database of known features." />
             </when>
+            <when value="FALSE"></when>
         </conditional>
 
         <param name="match_tol_ppm" type="integer" optional="true" min="0" label="Match tolerance [ppm]"

@@ -1,4 +1,4 @@
-<tool id="spec2vec_similarity" name="spec2vec similarity" version="@TOOL_VERSION@+galaxy0" profile="21.09">
+<tool id="spec2vec_similarity" name="spec2vec similarity" version="@TOOL_VERSION@+galaxy1" profile="21.09">
     <macros>
         <import>macros.xml</import>
     </macros>
@@ -79,6 +79,12 @@ scores.to_json("$similarity_scores")
             <output name="similarity_scores" value="s2v_scores_test2_out.json" ftype="json" />
         </test>
     </tests>
+
+    <help>
+    **Spec2vec** is a spectral similarity score inspired by a natural language processing algorithm – Word2Vec.
+    Where Word2Vec learns relationships between words in sentences, spec2vec does so for mass fragments and neutral losses in MS/MS spectra.
+    The spectral similarity score is based on spectral embeddings learnt from the fragmental relationships within a large set of spectral data.
+    </help>
 
     <expand macro="citations"/>
 </tool>
