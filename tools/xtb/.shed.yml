@@ -9,5 +9,5 @@ long_description: |
 categories:
   - Metabolomics
 remote_repository_url: "https://github.com/RECETOX/galaxytools/tree/master/tools/xtb"
-homepage_url: "https://github.com/RECETOX/galaxytools"
+homepage_url: "https://github.com/grimme-lab/xtb"
 type: unrestricted
