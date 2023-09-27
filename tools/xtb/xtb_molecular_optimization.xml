@@ -1,12 +1,11 @@
-<tool id="xtb_molecular_optimization" name="xtb molecular optimization" version="@TOOL_VERSION@+galaxy0" profile="21.05">
+<tool id="xtb_molecular_optimization" name="xtb molecular optimization" version="@TOOL_VERSION@+galaxy0" profile="21.09">
     <description>Semiempirical quantum mechanical molecular optimization method</description>
     <macros>
         <import>macros.xml</import>
     </macros>
     <expand macro="creator"/>
     <requirements>
-        <requirement type="package" version="@TOOL_VERSION@">xtb_molecular_optimization</requirement>
-        <requirement type="package" version="6.6.1">xtb</requirement>
+        <requirement type="package" version="@TOOL_VERSION@">xtb</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
         ln '${coordinates}' 'mol.${coordinates.ext}' &&
@@ -38,20 +37,6 @@
                 </assert_contents>
             </output>
         </test>
-        <!-- <test>
-            <param name="coordinates" value="initial_mol.coord" ftype="coord"/>
-            <output name="output" file="optimized_mol.coord" ftype="coord">
-                <assert_contents>
-                    <has_text text="$coord"/>
-                </assert_contents>
-            </output>
-        </test> -->
-        <!-- <test>
-            <param name="coordinates"/>
-            <assert_stdout >
-                <has_text text="optimized" />
-            </assert_stdout>
-        </test> -->
     </tests> 
     <help>
         <![CDATA[
