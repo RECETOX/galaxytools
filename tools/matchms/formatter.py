@@ -13,10 +13,12 @@ def scores_to_dataframe(scores):
         DataFrame: Scores
         DataFrame: Matches
     """
-    dataframe = DataFrame(columns=['query', 'reference', *scores.scores.score_names])
+    data = []
 
     for i, (row, col) in enumerate(zip(scores.scores.row, scores.scores.col)):
-        dataframe.loc[i] = [scores.queries[col].metadata['compound_name'], scores.references[row].metadata['compound_name'], *scores.scores.data[i]]
+        data.append([scores.queries[col].metadata['compound_name'], scores.references[row].metadata['compound_name'], *scores.scores.data[i]])
+
+    dataframe = DataFrame(data, columns=['query', 'reference', *scores.scores.score_names])
 
     return dataframe
 
