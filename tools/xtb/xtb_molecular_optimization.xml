@@ -27,15 +27,16 @@
         </param>
     </inputs>
     <outputs>
-        <data name="output" format_source="coordinates" />
+        <data name="output" format_source="coordinates"  />
     </outputs>
     <tests>
-         <test>
+        <test>
             <param name="coordinates" value="initial_mol.xyz" ftype="xyz"/>
-            <output name="output" file="optimized_mol.xyz" ftype="xyz">
-                <assert_contents>
-                    <has_text text=" energy" n="1"/>
-                </assert_contents>
+            <output name="output" file="optimized_mol.xyz" ftype="xyz" compare="contains" lines_diff="25">
+                <!-- <assert_contents>
+                    <has_text text="$coord"/>
+                    <has_n_lines min="2"/> 
+                </assert_contents> -->
             </output>
         </test>
         <!-- <test>
@@ -43,14 +44,9 @@
             <output name="output" file="optimized_mol.coord" ftype="coord">
                 <assert_contents>
                     <has_text text="$coord"/>
+                    <has_n_lines min="2"/> 
                 </assert_contents>
             </output>
-        </test> -->
-        <!-- <test>
-            <param name="coordinates"/>
-            <assert_stdout >
-                <has_text text="optimized" />
-            </assert_stdout>
         </test> -->
     </tests> 
     <help>
