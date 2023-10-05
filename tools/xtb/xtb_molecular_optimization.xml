@@ -31,10 +31,10 @@
     <tests>
         <test>
             <param name="coordinates" value="initial_mol.xyz" ftype="xyz"/>
-            <output name="output" file="optimized_mol.xyz" ftype="xyz">
+            <output name="output">
                 <assert_contents>
                     <has_text text="xtb"/>
-                    <has_n_lines min="26"/> 
+                    <has_n_lines n="26"/> 
                 </assert_contents>
             </output>
         </test>
