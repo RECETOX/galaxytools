@@ -1,0 +1,59 @@
+<tool id="xtb_molecular_optimization" name="xtb molecular optimization" version="@TOOL_VERSION@+galaxy0" profile="21.09">
+    <description>Semiempirical quantum mechanical molecular optimization method</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="creator"/>
+    <requirements>
+        <requirement type="package" version="@TOOL_VERSION@">xtb</requirement>
+    </requirements>
+    <command detect_errors="exit_code"><![CDATA[
+        ln -s '${coordinates}' 'mol.${coordinates.ext}' &&
+        xtb 'mol.${coordinates.ext}' --opt '${opt_level}' && 
+        cp 'xtbopt.${coordinates.ext}' '${output}'
+    ]]></command>
+    <inputs>
+        <param label="Atomic coordinates file" type="data" name="coordinates" format="xyz" help="Initial atomic coordinates file to be optimized."/>
+        <param type="select" label="Optimization Levels" name="opt_level" help="Geometry optimization convergence levels." >
+            <option value="crude">crude</option>
+            <option value="sloppy">sloppy</option>
+            <option value="loose">loose</option>
+            <option value="lax">lax</option>
+            <option value="normal">normal</option>
+            <option value="tight">tight</option>
+            <option value="vtight">vtight</option>
+            <option value="extreme">extreme</option>
+        </param>
+    </inputs>
+    <outputs>
+        <data name="output" format_source="coordinates"  />
+    </outputs>
+    <tests>
+        <test>
+            <param name="coordinates" value="initial_mol.xyz" ftype="xyz"/>
+            <output name="output">
+                <assert_contents>
+                    <has_text text="xtb"/>
+                    <has_n_lines n="26"/> 
+                </assert_contents>
+            </output>
+        </test>
+        <!-- <test>
+            <param name="coordinates" value="initial_mol.coord" ftype="coord"/>
+            <output name="output" file="optimized_mol.coord" ftype="coord">
+                <assert_contents>
+                    <has_text text="$coord"/>
+                    <has_n_lines min="26"/> 
+                </assert_contents>
+            </output>
+        </test> -->
+    </tests> 
+    <help>
+        <![CDATA[
+        @HELP@
+        ]]>
+    </help>
+    <citations>
+        <citation type="doi">https://doi.org/10.1002/wcms.1493</citation>
+    </citations>
+</tool>
