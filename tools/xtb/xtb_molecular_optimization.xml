@@ -31,14 +31,14 @@
     <tests>
         <test>
             <param name="coordinates" value="initial_mol.xyz" ftype="xyz"/>
-            <output name="output" file="optimized_mol.xyz" ftype="xyz" compare="contains" lines_diff="25">
-                <!-- <assert_contents>
+            <output name="output" file="optimized_mol.xyz" ftype="xyz">
+                <assert_contents>
                     <has_text text="$coord"/>
                     <has_n_lines min="2"/> 
-                </assert_contents> -->
+                </assert_contents>
             </output>
         </test>
-        <!-- <test>
+        <test>
             <param name="coordinates" value="initial_mol.coord" ftype="coord"/>
             <output name="output" file="optimized_mol.coord" ftype="coord">
                 <assert_contents>
@@ -46,7 +46,7 @@
                     <has_n_lines min="2"/> 
                 </assert_contents>
             </output>
-        </test> -->
+        </test>
     </tests> 
     <help>
         <![CDATA[
