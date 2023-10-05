@@ -8,7 +8,7 @@
         <requirement type="package" version="@TOOL_VERSION@">xtb</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
-        ln '${coordinates}' 'mol.${coordinates.ext}' &&
+        ln -s '${coordinates}' 'mol.${coordinates.ext}' &&
         xtb 'mol.${coordinates.ext}' --opt '${opt_level}' && 
         cp 'xtbopt.${coordinates.ext}' '${output}'
     ]]></command>
