@@ -1,4 +1,4 @@
-<tool id="matchms_convert" name="matchms convert" version="@TOOL_VERSION@+galaxy0" profile="21.05">
+<tool id="matchms_convert" name="matchms convert" version="@TOOL_VERSION@+galaxy1" profile="21.05">
     <description>convert between mass spectral library formats (.mgf/.msp/.json) using matchms</description>
     
     <macros>
@@ -19,6 +19,12 @@
 
     <command detect_errors='aggressive'><![CDATA[
         python ${matchms_python_cli}
+        #if $output_file.output_format == "msp":
+        #if $output_file.export_style == "ms_lima":
+        &&
+        sh ${ms_lima_output}
+        #end if
+        #end if
     ]]></command>
 
 <configfiles>
@@ -29,10 +35,24 @@ from matchms.importing import load_from_msp, load_from_mgf, load_from_json
 from matchms.exporting import save_as_msp, save_as_mgf, save_as_json
 spectra = list(load_from_${spectral_library.ext}("${spectral_library}", ${harmonization_metadata}))
 #if $output_file.output_format == "msp"
+#if $output_file.export_style == "ms_lima"
+save_as_msp(spectra, "${converted_library}", write_peak_comments = ${output_file.export_peak_comments}, style = "riken")
+#else
 save_as_msp(spectra, "${converted_library}", write_peak_comments = ${output_file.export_peak_comments}, style = "${output_file.export_style}")
+#end if
 #else
 save_as_${output_file.output_format}(spectra, "${converted_library}")
 #end if
+</configfile>
+<configfile name="ms_lima_output">
+sed -E "s,[[:space:]]+, ,g" ${converted_library} > ${converted_library}.tmp
+
+grep -rl 'IONMODE' . | xargs sed '/IONMODE/d' ${converted_library}.tmp > ${converted_library}.tmp1
+grep -rl 'CHARGE' . | xargs sed '/CHARGE/d' ${converted_library}.tmp1 > ${converted_library}.tmp2
+grep -rl 'COMPOUND_NAME' . | xargs sed 's/COMPOUND_NAME/NAME/g' ${converted_library}.tmp2 > ${converted_library}.tmp3
+
+mv ${converted_library}.tmp3 ${converted_library}
+rm -f ${converted_library}.tmp1 ${converted_library}.tmp2 ${converted_library}.tmp3 ${converted_library}.tmp
 </configfile>
 </configfiles>
 
@@ -62,6 +82,7 @@ save_as_${output_file.output_format}(spectra, "${converted_library}")
                     <option value="nist">nist</option>
                     <option value="riken">riken</option>
                     <option value="gnps">gnps</option>
+                    <option value="ms_lima">ms-lima</option>
                 </param>
             </when>
             <when value="mgf" />
@@ -114,6 +135,14 @@ save_as_${output_file.output_format}(spectra, "${converted_library}")
             <param name="output_format" value="msp"/>
             <param name="export_style" value="matchms"/>
             <output name="converted_library" file="convert/harmonized_msp_peakcomments_out.msp" ftype="msp"/>
+        </test>
+        <test>
+            <param name="spectral_library" value="convert/mgf_out.mgf" ftype="mgf"/>
+            <param name="harmonization_metadata" value="True"/>
+            <param name="export_peak_comments" value="False"/>
+            <param name="output_format" value="msp"/>
+            <param name="export_style" value="ms_lima"/>
+            <output name="converted_library" file="convert/ms_lima_output.msp" ftype="msp"/>
         </test>
     </tests>
 
