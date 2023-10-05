@@ -13,7 +13,7 @@
         cp 'xtbopt.${coordinates.ext}' '${output}'
     ]]></command>
     <inputs>
-        <param label="Atomic coordinates file" type="data" name="coordinates" format="xyz,coord" help="Initial atomic coordinates file to be optimized."/>
+        <param label="Atomic coordinates file" type="data" name="coordinates" format="xyz" help="Initial atomic coordinates file to be optimized."/>
         <param type="select" label="Optimization Levels" name="opt_level" help="Geometry optimization convergence levels." >
             <option value="crude">crude</option>
             <option value="sloppy">sloppy</option>
@@ -38,7 +38,7 @@
                 </assert_contents>
             </output>
         </test>
-        <test>
+        <!-- <test>
             <param name="coordinates" value="initial_mol.coord" ftype="coord"/>
             <output name="output" file="optimized_mol.coord" ftype="coord">
                 <assert_contents>
@@ -46,7 +46,7 @@
                     <has_n_lines min="26"/> 
                 </assert_contents>
             </output>
-        </test>
+        </test> -->
     </tests> 
     <help>
         <![CDATA[
