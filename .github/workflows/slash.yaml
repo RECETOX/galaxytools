@@ -8,8 +8,8 @@ jobs:
     steps:
       - name: Slash Command Dispatch
         if: github.repository_owner == 'RECETOX'
-        uses: peter-evans/slash-command-dispatch@v2
+        uses: peter-evans/slash-command-dispatch@v3
         with:
-          token: ${{ secrets.TEST_PAT }}
+          token: ${{ secrets.PAT }}
           commands: |
             run-all-tool-tests
