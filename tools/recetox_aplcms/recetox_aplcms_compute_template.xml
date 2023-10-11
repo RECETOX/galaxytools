@@ -36,9 +36,9 @@
     </outputs>
 
     <tests>
-
+        <test expect_failure="true" />
     </tests>
-
+    
     <help>
         <![CDATA[
             @COMPUTE_TEMPLATE_HELP@
