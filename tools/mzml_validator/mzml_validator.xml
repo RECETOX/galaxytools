@@ -1,4 +1,4 @@
-<tool id="mzml_validator" name="mzML Schema Validator" version="0.1.0+galaxy1" profile="21.05">
+<tool id="mzml_validator" name="mzML Schema Validator" version="0.1.0+galaxy2" profile="21.05">
     <description>validates mzML files against XML Schema Definition (XSD)</description>
     <creator>
         <person
