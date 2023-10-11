@@ -51,7 +51,7 @@
     </outputs>
 
     <tests>
-
+        <test expect_failure="true" />
     </tests>
 
     <help>
