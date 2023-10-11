@@ -6,7 +6,9 @@ categories:
 repositories:
   riassigner:
     description: "RIAssigner is a python tool for retention index (RI) computation for GC-MS data."
-
+    long_description: |
+      "RIAssigner is a python tool for retention index (RI) computation for GC-MS data.
+      Supported input data are msp and csv. Supported computational methods are piecewise linear interpolation and b-Spline interpolation."
     include:
       - riassigner.xml
       - macros.xml
