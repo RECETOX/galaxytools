@@ -6,6 +6,11 @@ categories:
 repositories:
   recetox_xmsannotator_advanced:
     description: "Annotate peak table using RT, m/z and mass defect based clustering, isotopic patterns, pathways and chemical score computation"
+    long_description: |
+      "Annotate peak table using RT, m/z and mass defect based clustering, isotopic patterns, pathways and chemical score computation.
+      This tool is an advanced version of the original xMSannotator tool.
+      It is based on the same principles, but it is more flexible and implements a new isotopic pattern matching.
+      It also allows to use different databases for different compounds."
     include:
       - recetox_xmsannotator_advanced.xml
       - macros.xml
