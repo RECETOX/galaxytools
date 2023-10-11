@@ -109,8 +109,7 @@ waveica_singlebatch <- function(file,
 
   data <- sort_by_injection_order(data)
 
-  feature_columns <- colnames(data)[!colnames(data) %in%
-    c(required_columns, optional_columns)]
+  feature_columns <- colnames(data)[!colnames(data) %in% c(required_columns, optional_columns)]
   features <- data[, feature_columns]
   injection_order <- data$injectionOrder
 
@@ -137,14 +136,9 @@ waveica_singlebatch <- function(file,
 
 sort_by_injection_order <- function(data) {
   if ("batch" %in% colnames(data)) {
-    data <- data[order(data[, "batch"],
-      data[, "injectionOrder"],
-      decreasing = FALSE
-    ), ]
+    data <- data[order(data[, "batch"], data[, "injectionOrder"], decreasing = FALSE), ]
   } else {
-    data <- data[order(data[, "injectionOrder"],
-      decreasing = FALSE
-    ), ]
+    data <- data[order(data[, "injectionOrder"], decreasing = FALSE), ]
   }
   return(data)
 }

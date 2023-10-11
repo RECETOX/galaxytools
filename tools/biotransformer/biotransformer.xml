@@ -7,7 +7,7 @@
         <xref type="bio.tools">biotransformer</xref>
     </xrefs>
     <requirements>
-        <requirement type="package" version="@TOOL_VERSION@">biotransformer</requirement>
+        <requirement type="package" version="3.0_20230403">biotransformer</requirement>
         <requirement type="package" version="3.1.1">openbabel</requirement>
         <requirement type="package" version="1.1.1">pandas</requirement>
     </requirements>
