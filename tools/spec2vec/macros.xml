@@ -54,8 +54,8 @@
 <token name="@init_scores@">
 from matchms.importing import load_from_msp, scores_from_json
 from matchms import Scores
-#if $scores.use_scores
-scores = scores_from_json("$scores_in")
+#if $scores.use_scores == "True"
+scores = scores_from_json("${scores_in}")
 #else
 scores = Scores(references=list(load_from_msp("$references")), queries=list(load_from_msp("$queries")), is_symmetric=False)
 #end if
