@@ -6,6 +6,8 @@ categories:
 repositories:
   spec2vec_training:
     description: "Train a Spec2Vec model for mass spectra similarity scoring."
+    long_description: |
+      "Spec2Vec models can be trained on mass spectral libraries to be used with Spec2Vec similarity."
     include:
       - spec2vec_training.xml
       - macros.xml
@@ -13,6 +15,10 @@ repositories:
       - test-data
   spec2vec_similarity:
     description: "Mass spectra similarity scoring using a trained Spec2Vec model."
+    long_description: |
+      "Spec2Vec is a novel spectral similarity score inspired by a natural language processing algorithm—Word2Vec.
+      Spec2Vec learns frag- mental relationships within a large set of spectral data to derive abstract spectral 
+      embeddings that can be used to assess spectral similarities."
     include:
       - spec2vec_similarity.xml
       - macros.xml
