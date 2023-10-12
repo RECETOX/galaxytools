@@ -28,16 +28,18 @@
 
     <xml name="input_param">
         <conditional name="scores">
-            <param name="use_scores" label="Use Scores Object" type="boolean" truevalue="TRUE" falsevalue="FALSE"
-                   checked="false"/>
-            <when value="TRUE">
+            <param name="use_scores" label="Use Scores Object" type="select">
+                <option value="False" selected="true">FALSE</option>
+                <option value="True">TRUE</option>
+            </param>
+            <when value="True">
                 <param label="Scores object" name="scores_in" type="data" format="json"
                     help="Scores objects calculated previously using one of the matchms similarity tools." />
             </when>
-            <when value="FALSE">
-                <param label="Queries spectra" name="queries" type="data" format="msp,mgf"
+            <when value="False">
+                <param label="Queries spectra" name="queries" type="data" format="msp"
                     help="Query mass spectra to match against references."/>
-                <param label="Reference spectra" name="references" type="data" format="msp,mgf"
+                <param label="Reference spectra" name="references" type="data" format="msp"
                     help="Reference mass spectra to match against as library."/>
             </when>
         </conditional>
@@ -52,8 +54,8 @@
 <token name="@init_scores@">
 from matchms.importing import load_from_msp, scores_from_json
 from matchms import Scores
-#if $scores.use_scores
-scores = scores_from_json("$scores_in")
+#if $scores.use_scores == "True"
+scores = scores_from_json("${scores_in}")
 #else
 scores = Scores(references=list(load_from_msp("$references")), queries=list(load_from_msp("$queries")), is_symmetric=False)
 #end if

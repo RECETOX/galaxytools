@@ -6,6 +6,13 @@ categories:
 repositories:
   recetox_msfinder:
     description: "MS-FINDER is program for compound annotation for EI-MS (GC/MS) and MS/MS data"
+    long_description: |
+      "Molecular formulas of precursor ions are determined from accurate mass, 
+      isotope ratio, and product ion information. All isomer structures of the 
+      predicted formula are retrieved from metabolome databases and MS/MS 
+      fragmentations are predicted in silico. The structures are ranked by a 
+      combined weighting score considering bond dissociation energies, mass accuracies, 
+      fragment linkages and, most importantly, nine HR rules.""
     include:
       - recetox_msfinder.xml
       - macros.xml
