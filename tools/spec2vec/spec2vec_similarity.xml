@@ -63,6 +63,7 @@ scores.to_json("$similarity_scores")
 
     <tests>
         <test> <!-- TEST #1: Test Spec2Vec. -->
+            <param name="use_scores" value="False"/>
             <param name="references" value="inp_filtered_library.msp" ftype="msp"/>
             <param name="queries" value="inp_filtered_spectra.msp" ftype="msp"/>
             <param name="model_metadata" value="model_100.json" ftype="json"/>
