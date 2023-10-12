@@ -12,6 +12,6 @@ long_description: |
   name_template: "{{ tool_id }}"
 description_template: "{{ tool_name }} tool from the spec2vec package"
 suite:
-  name: seuite_spec2vec
+  name: suite_spec2vec
   description: tools from the spec2vec suite are used for searching mass spectral libraries and training a Spec2Vec model.
   type: repository_suite_definition
