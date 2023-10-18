@@ -53,7 +53,9 @@ scores._scores = similarity.matrix(
 scores._scores.data.dtype.names = [name+"_scores", name+"_matches"]
 #end if
 
+#if $filter_zero == "TRUE"
 scores.filter_by_range(name=name+"_matches", low=0)
+#end if
 scores.to_json("$similarity_scores")
 </configfile>
 </configfiles>
@@ -64,6 +66,8 @@ scores.to_json("$similarity_scores")
             <expand macro="similarity_metrics"/>
         </param>
         <expand macro="similarity_algorithm_params"/>
+        <param label="Filter zero scores" name="filter_zero" type="boolean" checked="true" truevalue="TRUE" falsevalue="FALSE"
+            help="Filter out zero scores from the output."/>
     </inputs>
 
     <outputs>
