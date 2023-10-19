@@ -1,4 +1,4 @@
-<tool id="matchms_filtering" name="matchms filtering" version="@TOOL_VERSION@+galaxy2" profile="21.09">
+<tool id="matchms_filtering" name="matchms filtering" version="@TOOL_VERSION@+galaxy0" profile="21.09">
     <description>filter and normalize mass spectrometry data</description>
 
     <macros>
