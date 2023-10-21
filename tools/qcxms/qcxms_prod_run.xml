@@ -1,4 +1,4 @@
-<tool id="qcxms_prod_run" name="QCxMS prod run" version="@TOOL_VERSION@+galaxy0" python_template_version="3.5" profile="21.05">
+<tool id="qcxms_production_run" name="QCxMS production run" version="@TOOL_VERSION@+galaxy0" profile="21.05">
     <description>production runs</description>
     
     <macros>
