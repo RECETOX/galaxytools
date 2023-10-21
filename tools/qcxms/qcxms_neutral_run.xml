@@ -1,4 +1,4 @@
-<tool id="qcxms_neutral_run" name="QCxMS neutral run" version="@TOOL_VERSION@+galaxy0" python_template_version="3.5" profile="21.05">
+<tool id="qcxms_neutral_run" name="QCxMS neutral run" version="@TOOL_VERSION@+galaxy0" profile="21.05">
     <description>required as first step to prepare for the production runs</description>
     
     <macros>
