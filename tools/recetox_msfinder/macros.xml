@@ -18,6 +18,11 @@
                 name="RECETOX MUNI" />
         </creator>
     </xml>
+    <xml name="refs">
+        <xrefs>
+               <xref type="bio.tools">recetox-msfinder</xref>
+        </xrefs>
+     </xml>
     <xml name="input">
         <param name="input_data" type="data" format="msp" label="Input mass spectral library file to which to add peak annotations."
             help="Formula and InChI (or SMILES) codes are required to be present in the library file" />

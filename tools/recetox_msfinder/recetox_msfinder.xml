@@ -1,8 +1,9 @@
-<tool id="recetox_msfinder" name="RECETOX MsFinder" version="@TOOL_VERSION@+galaxy1">
+<tool id="recetox_msfinder" name="RECETOX MsFinder" version="@TOOL_VERSION@+galaxy2">
     <description>Annotation of fragment peaks in mass spectral libraries.</description>
     <macros>
         <import>macros.xml</import>
     </macros>
+    <expand macro="refs"/>
     <expand macro="creator" />
 
     <expand macro="requirements" />

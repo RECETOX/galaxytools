@@ -20,6 +20,12 @@
         </creator>
     </xml>
 
+    <xml name="refs">
+        <xrefs>
+               <xref type="bio.tools">retip</xref>
+        </xrefs>
+     </xml>
+
     <xml name="requirements">
         <requirements>
             <container type="docker">recetox/retip:@TOOL_VERSION@-recetox4</container>
