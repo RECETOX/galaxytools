@@ -21,8 +21,8 @@
     <command detect_errors="exit_code"><![CDATA[
         ln $mol molecule.xyz &&
         cat qcxms.in &&
-        qcxms -i molecule.xyz >> $log &&
-        qcxms -i molecule.xyz >> $log &&
+        qcxms -i molecule.xyz >> '$log' &&
+        qcxms -i molecule.xyz >> '$log' &&
         python3 rename.py
 
     ]]></command>
