@@ -1,25 +1,15 @@
 <tool id="qcxms_production_run" name="QCxMS production run" version="@TOOL_VERSION@+galaxy0" profile="21.05">
-    <description>production runs</description>
+    <description>Production run to obtain a QCxMS simulated mass spectrum</description>
     
     <macros>
         <import>macros.xml</import>
     </macros>
-
+    <expand macro="edam"/>
     <expand macro="creator"/>
-
-    <edam_topics>
-        <edam_topic>topic_3332</edam_topic>
-    </edam_topics>
-    <edam_operations>
-        <edam_operation>operation_0297</edam_operation>
-    </edam_operations>
-
-    <requirements>
-        <requirement type="package" version="@TOOL_VERSION@">qcxms</requirement>
-    </requirements>
+    <expand macro="requirements"/>
 
     <command detect_errors="exit_code"><![CDATA[
-        python3 '${create_folder}' &&
+        python '${create_folder}' &&
         find TMPQCXMS/*/ -type d | xargs -I {} -P 4 sh -c 'cd {} && qcxms --prod >> $log' &&
         getres &&
         plotms
@@ -34,29 +24,29 @@
 import os
 import shutil
 
-#set folder1_files = str("', '").join([str($f) for $f in $in_files])
-#set folder2_files = str("', '").join([str($f) for $f in $start_files])
-#set folder3_files = str("', '").join([str($f) for $f in $xyz_files])
+#set in_collection = str("', '").join([str($f) for $f in $in_files])
+#set start_collection = str("', '").join([str($f) for $f in $start_files])
+#set xyz_collection = str("', '").join([str($f) for $f in $xyz_files])
 
 #set names = str("', '").join([str($f.name) for $f in $xyz_files])
 names = '$names'
 folder_names = [x.split("_")[0] for x in names]
 
-folder1_files = '$folder1_files'
-folder2_files = '$folder2_files'
-folder3_files = '$folder3_files'
+in_collection = '$in_collection'
+start_collection = '$start_collection'
+xyz_collection = '$xyz_collection'
 
 # Create a new output folder to store the result
 output_path = 'TMPQCXMS'
 os.makedirs(output_path, exist_ok=True)
 
-for fname, filename1, filename2, filename3 in zip(folder_names, folder1_files, folder2_files, folder3_files):
-    new_folder_path = os.path.join(output_path, fname)
+for folder_name, in_file, start_file, xyz_file in zip(folder_names, in_collection, start_collection, xyz_collection):
+    new_folder_path = os.path.join(output_path, folder_name)
     os.makedirs(new_folder_path, exist_ok=True)
 
-    shutil.copy2(os.path.join(os.path.dirname(folder1_files[0]), filename1), os.path.join(new_folder_path, 'qcxms.in'))
-    shutil.copy2(os.path.join(os.path.dirname(folder2_files[0]), filename2), os.path.join(new_folder_path, 'qcxms.start'))
-    shutil.copy2(os.path.join(os.path.dirname(folder3_files[0]), filename3), os.path.join(new_folder_path, 'start.xyz'))
+    shutil.copy2(os.path.join(os.path.dirname(in_collection[0]), in_file), os.path.join(new_folder_path, 'qcxms.in'))
+    shutil.copy2(os.path.join(os.path.dirname(start_collection[0]), start_file), os.path.join(new_folder_path, 'qcxms.start'))
+    shutil.copy2(os.path.join(os.path.dirname(xyz_collection[0]), xyz_file), os.path.join(new_folder_path, 'start.xyz'))
 
         </configfile>
     </configfiles>

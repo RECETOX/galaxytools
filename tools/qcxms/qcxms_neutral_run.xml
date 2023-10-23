@@ -4,26 +4,16 @@
     <macros>
         <import>macros.xml</import>
     </macros>
-
+    <expand macro="edam"/>
     <expand macro="creator"/>
-
-    <edam_topics>
-        <edam_topic>topic_3332</edam_topic>
-    </edam_topics>
-    <edam_operations>
-        <edam_operation>operation_0297</edam_operation>
-    </edam_operations>
-
-    <requirements>
-        <requirement type="package" version="@TOOL_VERSION@">qcxms</requirement>
-    </requirements>
+    <expand macro="requirements"/>
 
     <command detect_errors="exit_code"><![CDATA[
         ln -s '$mol' molecule.xyz &&
         cat qcxms.in &&
         qcxms -i molecule.xyz >> '$log' &&
         qcxms -i molecule.xyz >> '$log' &&
-        python3 rename.py
+        python rename.py
 
     ]]></command>
 
