@@ -122,7 +122,11 @@ rename_files_with_folder_name(path)
         </test>
     </tests>
 
-    <help><![CDATA[]]>
+    <help><![CDATA[
+        The QCxMS Neutral Run tool serves as the first step in preparing for production runs. The tool execute neutral runs for mass 
+        spectrometry simulations using the GFN2-xTB and GFN-xTB quantum chemistry methods. For detail information visit the documentation 
+        at https://xtb-docs.readthedocs.io/en/latest/qcxms_doc/qcxms_run.html#excecuting-the-production-runs
+        ]]>
     </help>
 
     <citations>
