@@ -7,9 +7,9 @@ library(MetaboCoreUtils)
 data(isotopes)
 data(adducts)
 
-adducts_to_use <- c("M+H", "M+NH4", "2M+H", "2M+NH4", "M+Na", "2M+Na")
+adducts_to_use <- c("M-H", "2M-H")
 
-compound_table <- read.csv("lc_markers_pos.csv", stringsAsFactors = FALSE)
+compound_table <- read.csv("lc_markers_neg.csv", stringsAsFactors = FALSE)
 chemforms <- compound_table$formula
 chemforms <- check_chemform(isotopes, chemforms)[,2]
 
@@ -59,5 +59,5 @@ for (current in adducts_to_use) {
 }
 
 sps <- Spectra(spectra)
-export(sps, MsBackendMsp(), file="lc_markers_pos.msp")
+export(sps, MsBackendMsp(), file="lc_markers_neg_R.msp")
 
