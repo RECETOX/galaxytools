@@ -1,0 +1,19 @@
+<tool id="isolib" name="create isotopic pattern library" version="0.1.0+galaxy0" python_template_version="3.5" profile="21.05">
+    <requirements>
+        <requirement type="package" version="0.23.1">matchms</requirement>
+        <requirement type="package" version="2.2.1">isospecpy</requirement>
+        <requirement type="package" version="1.8.0">bioconductor-metabocoreutils</requirement>
+    </requirements>
+    <command detect_errors="exit_code"><![CDATA[
+        TODO: Fill in command template.
+    ]]></command>
+    <inputs>
+        <param name="input_file" type="data" format="tabular" label="Table with input compounds"/>
+    </inputs>
+    <outputs>
+        <data format="msp" name="isotope_library"/>
+    </outputs>
+    <help><![CDATA[
+        TODO: Fill in help.
+    ]]></help>
+</tool>

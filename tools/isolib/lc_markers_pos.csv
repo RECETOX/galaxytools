@@ -1,0 +1,29 @@
+﻿formula,name,ion_mode,mz,adduct,rt
+C9H5D4N3O2,Carbendazim-D4,positive,196.1018564,M+H,286.8
+C12D27O4P,tri-n-butyl-D27-phosphate,positive,294.3414464,M+H,797.4
+C12H10D7NO,DEET-D7,positive,199.1822264,M+H,614.4
+C10H7N3OS,5-hydroxy-thiabendazole,positive,218.0382564,M+H,287.4
+C15H16D6ClNO2,metolachlor-D6,positive,290.1788464,M+H,726.6
+C12H15D3N2O,isoproturon-D3,positive,210.1680164,M+H,610.8
+C14H20ClNO2,Acetochlor,positive,270.1255364,M+H,723.6
+C5H3D5ClN5,desisopropylatrazine-D5,positive,179.0854864,M+H,333
+C12H12D6Cl2N2O,clenbuterol-d6,positive,283.1245564,M+H,378
+C9H9N3O2,Carbendazim,positive,192.0767564,M+H,297
+C13H15D6NO3,salbutamol-d6,positive,246.1970764,M+H,222.6
+C19D3H25O2,beta-testosteron-d3,positive,292.2350364,M+H,682.8
+C12H14Cl3O4P,Chlorfenvinphos,positive,358.9768064,M+H,766.8
+C5H8Cl1N5,Desisopropylatrazine,positive,174.0540964,M+H,336
+C38H66D3NO13,Clarithromycin-d3,positive,751.5029964,M+H,657.6
+C16H11ClF6N2O,Fluopyram,positive,397.0536864,M+H,713.4
+C16H22ClN3O2,Hydroxy-tebuconazole,positive,324.1473264,M+H,681.6
+C12H18N2O1,Isoproturon,positive,207.1491864,M+H,613.2
+C15H22Cl1N1O2,Metolachlor,positive,284.1411864,M+H,729.6
+C12H17N1O1,"N,N-diethyl-m-toluamide ou DEET",positive,192.1382864,M+H,618.6
+C5H12N1O4P1S1,Omethoate,positive,214.0297464,M+H,232.8
+C15H16Cl3N3O2,Prochloraz,positive,376.0380864,M+H,762
+C14H12O3,Benzophenone-3 (Oxybenzone),positive,229.0859164,M+H,727.8
+C9H15N3O1,2-diethylamino-6-methyl pyrimidin-4-ol/one,positive,182.1287864,M+H,306
+C14D5H7O3,Benzophenone-3 d5,positive,234.1176614,M+H,724.2
+C7D4H5NO2S,p-Toluenesulfonamide-D4,positive,193.0943314,M+NH4,351
+C7H9NO2S,p-Toluenesulfonamide,positive,189.0692214,M+NH4,353.4
+C9H9N4Cl,acetamiprid-N-desmethyl,positive,209.0588464,M+H,393
