@@ -18,7 +18,7 @@
     </requirements>
 
     <command detect_errors='aggressive'><![CDATA[
-        python ${matchms_python_cli}
+        python '${matchms_python_cli}'
     ]]></command>
 
 <configfiles>
