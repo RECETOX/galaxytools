@@ -3,6 +3,7 @@
     <xml name="requirements">
         <requirements>
             <requirement type="package" version="@TOOL_VERSION@">qcxms</requirement>
+            <requirement type="package" version="6.2.0">plotms</requirement>
             <requirement type="package" version="3.8">python</requirement>
         </requirements>
     </xml>
