@@ -27,8 +27,11 @@ def main(argv):
                                 score_cutoff=args.score_cutoff,
                                 link_method=args.link_method,
                                 keep_unconnected_nodes=args.keep_unconnected_nodes)
-
-    network.create_network(scores, args.score_name)
+    score_name = next((s for s in scores.score_names if args.score_name in s and "score" in s), None)
+    if score_name is None:
+        raise ValueError(f"Could not find any score name containing '{args.score_name}'.")
+    
+    network.create_network(scores, score_name)
     network.export_to_file(filename=args.output_filename, graph_format=args.graph_format)
 
     return 0

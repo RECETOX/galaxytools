@@ -28,7 +28,7 @@
     <configfiles>
         <configfile name="matchms_networking_cli">
             python3 ${__tool_directory__}/matchms_networking_wrapper.py \
-            --score_name '${score_layer_name}_score' \
+            --score_name '${score_layer_name}' \
             --graph_format '$graph_format' \
             --identifier '$identifier_key' \
             --top_n '$top_n' \
@@ -188,6 +188,18 @@
                 <assert_contents>
                     <has_text_matching expression='{"data": {"id": "C[0-9]*", "value": "C[0-9]*", "name": "C[0-9]*"}}' n="6"/>
                     <has_text_matching expression='{"data": {"weight": 0\.[0-9]*, "source": "C[0-9]*", "target": "C[0-9]*"}}' n="3"/>
+                </assert_contents>
+            </output>
+        </test>
+        <test>
+            <param name="scores" value="networking/test9.json" ftype="json"/>
+            <param name="graph_format" value="graphml"/>
+            <param name="identifier_key" value="compound_name"/>
+            <param name="score_cutoff" value="0.4"/>
+            <param name="keep_unconnected_nodes" value="false"/>
+            <output name="similarity_network_file" ftype="graphml">
+                <assert_contents>
+                    <is_valid_xml />
                 </assert_contents>
             </output>
         </test>
