@@ -30,7 +30,7 @@ def main(argv):
     score_name = next((s for s in scores.score_names if args.score_name in s and "score" in s), None)
     if score_name is None:
         raise ValueError(f"Could not find any score name containing '{args.score_name}'.")
-    
+
     network.create_network(scores, score_name)
     network.export_to_file(filename=args.output_filename, graph_format=args.graph_format)
 
