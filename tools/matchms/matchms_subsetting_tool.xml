@@ -64,10 +64,6 @@ matchms.exporting.save_as_msp(filtered_spectra.tolist(), '${output}')
     <inputs>
         <param label="Spectra file" name="spectral_library" type="data" format="msp"
             help="Mass spectral library file." />
-        
-        <param label="Select mode" name="mode" type="boolean" truevalue="include" falsevalue="exclude"
-            checked="true"
-            help="Include/Exclude the spectra matching the identifiers in the file. The default is include." />
         <param label="Select mode" name="mode" type="select"
                 help="Include/Exclude the spectra matching the identifiers in the file. The default is include.">
             <option value="include" selected="true">include</option>
