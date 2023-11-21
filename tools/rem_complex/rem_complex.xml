@@ -1,0 +1,36 @@
+<tool id="rem_complex" name="Remove complexes" version="@TOOL_VERSION@+galaxy1"  profile="21.09">
+    <description>Remove molecular coordination complexes </description>
+        <macros>
+        <import>macros.xml</import>
+    </macros>
+    <requirements>
+        <requirement type="package" version="3.9.17">python</requirement>
+    </requirements>
+    <command detect_errors="exit_code"><![CDATA[
+        python  $__tool_directory__/rem_complex.py
+        -i 'input' -o 'output' 
+    ]]></command>
+    <inputs>
+        <param  type="data" name="input" format="smi, csv, inchi"/>
+    </inputs>
+    <outputs>
+        <data name="output" format_source="input"  />
+    </outputs>
+    <tests>
+        <test>
+            <param name="input" ftype="smi" value="input.smi" />
+            <output name="output" file="sample_output.smi"/>
+        </test>
+        <test>
+            <param name="input" ftype="inchi" value="input.inchi"/>
+            <output name="output" ftype="inchi" file="sample_output.inchi"/>
+        </test>
+        <test>
+            <param name="input" ftype="csv" value="input.csv"/>
+            <output name="output" ftype="csv" file="sample_output.csv"/>
+        </test>
+    </tests>
+    <help><![CDATA[
+        TODO: Fill in help.
+    ]]></help>
+</tool>
