@@ -1,4 +1,4 @@
-<tool id="matchms_networking" name="matchms networking" version="@TOOL_VERSION@+galaxy1" profile="21.09">
+<tool id="matchms_networking" name="matchms networking" version="@TOOL_VERSION@+galaxy2" profile="21.09">
     <description>create similarity network graph from matchms similarity scores</description>
 
     <macros>
@@ -78,12 +78,12 @@
     </inputs>
 
     <outputs>
-        <data label="Similarity network of ${scores.name}" name="similarity_network_file" format="graphml">
+        <data label="Similarity network of ${scores.name}" name="similarity_network_file" format="xml">
             <change_format>
-                <when input="graph_format" value="graphml" format="graphml"/>
-                <when input="graph_format" value="cyjs" format="cyjs"/>
-                <when input="graph_format" value="gexf" format="gexf"/>
-                <when input="graph_format" value="gml" format="gml"/>
+                <when input="graph_format" value="graphml" format="xml"/>
+                <when input="graph_format" value="cyjs" format="json"/>
+                <when input="graph_format" value="gexf" format="xml"/>
+                <when input="graph_format" value="gml" format="xml"/>
                 <when input="graph_format" value="json" format="json"/>
             </change_format>
         </data>
