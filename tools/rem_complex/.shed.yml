@@ -1,0 +1,11 @@
+
+name: rem_complex
+owner: recetox
+description: Removes coordination complexes molecules.
+long_description: |
+      The rem complex tool filter out coordination complexes from a list of SMLES or InChI.
+categories:
+  - Metabolomics
+remote_repository_url: "https://github.com/RECETOX/galaxytools/tree/master/tools/rem_complex"
+homepage_url: "TODO"
+type: unrestricted
