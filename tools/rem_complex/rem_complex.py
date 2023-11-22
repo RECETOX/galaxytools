@@ -1,18 +1,21 @@
 import argparse
 import pandas as pd
-from openbabel import pybel
+from openbabel import openbabel, pybel
+
+openbabel.obErrorLog.StopLogging()
 
 
 def parse_arguments():
     parser = argparse.ArgumentParser()
+    parser.add_argument('-iformat', '--input_format', help='Input file format')
     parser.add_argument('-i', '--input_filename', type=str, required=True, help='Input file name')
     parser.add_argument('-o', '--output_filename', type=str, required=True, help='Outout file name')
     args = parser.parse_args()
     return args
 
 
-def filter_complex_molecules(file_name, output_file_name):
-    file_extension = file_name.split('.')[-1]
+def filter_complex_molecules(file_name, output_file_name, input_format):
+    file_extension = input_format
 
     if file_extension in ['csv', 'smi', 'inchi']:
         if file_extension == 'csv':
@@ -30,4 +33,4 @@ def filter_complex_molecules(file_name, output_file_name):
 
 if __name__ == "__main__":
     args = parse_arguments()
-    filter_complex_molecules(args.input_filename, args.output_filename)
+    filter_complex_molecules(args.input_filename, args.output_filename, args.input_format)
