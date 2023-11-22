@@ -75,7 +75,7 @@ matchms.exporting.save_as_msp(merged_array.tolist(), '${output}')
         <test>
             <param name="spectral_library" value="metadata_merge/input.msp" ftype="msp"/>
             <param name="metadata_table_file" value="metadata_merge/metadata.csv" ftype="csv"/>
-            <param name="user_specified_column" value="compound_name"/>
+            <param name="user_specified_column" value="name"/>
             <output name="output" file="metadata_merge/output.msp" ftype="msp"/>
         </test>
     </tests>
