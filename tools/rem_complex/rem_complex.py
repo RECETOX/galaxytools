@@ -5,7 +5,7 @@ from openbabel import openbabel, pybel
 openbabel.obErrorLog.SetOutputLevel(1)  # 0: suppress warnings; 1: warnings
 
 
-def parse_arguments():
+def parse_arguments() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument('-iformat', '--input_format', help='Input file format')
     parser.add_argument('-i', '--input_filename', type=str, required=True, help='Input file name')
@@ -14,13 +14,14 @@ def parse_arguments():
     return args
 
 
-def filter_csv_molecules(file_name, output_file_name):
+def filter_csv_molecules(file_name: str, output_file_name: str) -> None:
     df = pd.read_csv(file_name)
-    mask = df['smiles'].str.contains(".", na=False, regex=False) == False
+    mask = df['smiles'].str.contains(".", na=False, regex=False)
+    mask = mask.apply(lambda x: not x)
     df[mask].to_csv(output_file_name, index=False)
 
 
-def filter_other_format_molecules(file_name, output_file_name, input_format):
+def filter_other_format_molecules(file_name: str, output_file_name: str, input_format: str) -> None:
     molecules = list(pybel.readfile(input_format, file_name))
     filtered_molecules = [mol for mol in molecules if "." not in mol.write('smi').strip()]
 
@@ -29,7 +30,7 @@ def filter_other_format_molecules(file_name, output_file_name, input_format):
             f.write(mol.write(input_format))
 
 
-def filter_complex_molecules(file_name, output_file_name, input_format):
+def filter_complex_molecules(file_name: str, output_file_name: str, input_format: str) -> None:
     if input_format == 'csv':
         filter_csv_molecules(file_name, output_file_name)
     else:
