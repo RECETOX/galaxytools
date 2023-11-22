@@ -28,6 +28,7 @@ import matchms
 import numpy as np
 
 matchms.set_matchms_logger_level('ERROR')
+matchms.Metadata.set_key_replacements({})
 
 spectra = list(matchms.importing.load_from_msp('${spectral_library}', False))
 
@@ -85,6 +86,12 @@ matchms.exporting.save_as_msp(filtered_spectra.tolist(), '${output}')
             <param name="mode" value="include"/>
             <param name="list_of_identifiers" value="subsetting/identifier.csv" ftype="csv"/>
             <output name="output" file="subsetting/subsetting_output.msp" ftype="msp"/>
+        </test>
+        <test>
+            <param name="spectral_library" value="out_matchms_add_key.msp" ftype="msp"/>
+            <param name="mode" value="exclude"/>
+            <param name="list_of_identifiers" value="subsetting/identifier.csv" ftype="csv"/>
+            <output name="output" file="subsetting/subsetting_output2.msp" ftype="msp"/>
         </test>
     </tests>
 
