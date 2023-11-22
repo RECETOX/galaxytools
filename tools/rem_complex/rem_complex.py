@@ -1,7 +1,6 @@
 import argparse
 
 import pandas as pd
-
 from openbabel import openbabel, pybel
 openbabel.obErrorLog.SetOutputLevel(1)  # 0: suppress warnings; 1: warnings
 
