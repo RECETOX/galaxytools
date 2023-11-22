@@ -20,7 +20,7 @@
     <outputs>
         <data name="output" format_source="input" />
     </outputs>
-    <!-- <tests>
+    <tests>
         <test>
             <param name="input" ftype="smi" value="input.smi" />
             <output name="output" ftype="smi" file="sample_output.smi"/>
@@ -33,7 +33,7 @@
             <param name="input" ftype="csv" value="input.csv"/>
             <output name="output" ftype="csv" file="sample_output.csv"/>
         </test>
-    </tests> -->
+    </tests>
     <help><![CDATA[
         TODO: Fill in help.
     ]]></help>
