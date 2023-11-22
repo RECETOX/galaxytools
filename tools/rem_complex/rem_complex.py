@@ -15,6 +15,12 @@ def parse_arguments() -> argparse.Namespace:
 
 
 def filter_csv_molecules(file_name: str, output_file_name: str) -> None:
+    """Removes molecules with '.' in SMILES string from csv file.
+
+    Args:
+        file_name (str): Path to csv file that contains metadata.
+        output_file_name (str): Path to destination file, in csv format.
+    """
     df = pd.read_csv(file_name)
     mask = df['smiles'].str.contains(".", na=False, regex=False)
     mask = mask.apply(lambda x: not x)
@@ -22,6 +28,13 @@ def filter_csv_molecules(file_name: str, output_file_name: str) -> None:
 
 
 def filter_other_format_molecules(file_name: str, output_file_name: str, input_format: str) -> None:
+    """Removes molecules with '.' in SMILES string from smi or inchi files.
+
+    Args:
+        file_name (str): Path to smi or inchi files.
+        output_file_name (str): Path to destination files, in smi or inchi formats.
+        input_format (str): Input file format.
+    """
     molecules = list(pybel.readfile(input_format, file_name))
     filtered_molecules = [mol for mol in molecules if "." not in mol.write('smi').strip()]
 
@@ -31,6 +44,13 @@ def filter_other_format_molecules(file_name: str, output_file_name: str, input_f
 
 
 def filter_complex_molecules(file_name: str, output_file_name: str, input_format: str) -> None:
+    """Removes molecular complexes depending on the input format.
+
+    Args:
+        file_name (str): Path to csv, smi or inchi files
+        output_file_name (str): Path to destination files, in csv. smi or inchi formats.
+        input_format (str): Input file formats.
+    """
     if input_format == 'csv':
         filter_csv_molecules(file_name, output_file_name)
     else:
