@@ -1,8 +1,8 @@
 import argparse
 import pandas as pd
-from openbabel import openbabel, pybel
 
-openbabel.obErrorLog.StopLogging()
+from openbabel import openbabel, pybel
+openbabel.obErrorLog.SetOutputLevel(1)  # 0: suppress warnings; 1: warnings
 
 
 def parse_arguments():
@@ -14,21 +14,26 @@ def parse_arguments():
     return args
 
 
-def filter_complex_molecules(file_name, output_file_name, input_format):
-    file_extension = input_format
+def filter_csv_molecules(file_name, output_file_name):
+    df = pd.read_csv(file_name)
+    mask = df['smiles'].str.contains(".", na=False, regex=False) == False
+    df[mask].to_csv(output_file_name, index=False)
 
-    if file_extension in ['csv', 'smi', 'inchi']:
-        if file_extension == 'csv':
-            df = pd.read_csv(file_name)
-            mask = df['smiles'].str.contains(".", na=False, regex=False) == False
-            df_filtered = df[mask]
-            df_filtered.to_csv(output_file_name, index=False)
-        elif file_extension in ['smi', 'inchi']:
-            df = list(pybel.readfile(file_extension, file_name))
-            df_filtered = [mol for mol in df if "." not in mol.write('smi').strip()]
-            with open(output_file_name, 'w') as f:
-                for mol in df_filtered:
-                    f.write(mol.write(file_extension))
+
+def filter_other_format_molecules(file_name, output_file_name, input_format):
+    molecules = list(pybel.readfile(input_format, file_name))
+    filtered_molecules = [mol for mol in molecules if "." not in mol.write('smi').strip()]
+
+    with open(output_file_name, 'w') as f:
+        for mol in filtered_molecules:
+            f.write(mol.write(input_format))
+
+
+def filter_complex_molecules(file_name, output_file_name, input_format):
+    if input_format == 'csv':
+        filter_csv_molecules(file_name, output_file_name)
+    else:
+        filter_other_format_molecules(file_name, output_file_name, input_format)
 
 
 if __name__ == "__main__":
