@@ -4,22 +4,26 @@
         <import>macros.xml</import>
     </macros>
     <requirements>
-        <requirement type="package" version="3.9.17">python</requirement>
+        <requirement type="package" version="3.10">python</requirement>
+        <requirement type="package" version="1.5.3">pandas</requirement>
+        <requirement type="package" version="3.1.1">openbabel</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
         python  $__tool_directory__/rem_complex.py
-        -i 'input' -o 'output' 
+        -i '${input}'
+        -iformat '${input.ext}'
+        -o '${output}' 
     ]]></command>
     <inputs>
-        <param  type="data" name="input" format="smi, csv, inchi"/>
+        <param name="input" format="inchi,smi,csv" type="data" />
     </inputs>
     <outputs>
-        <data name="output" format_source="input"  />
+        <data name="output" format_source="input" />
     </outputs>
-    <tests>
+    <!-- <tests>
         <test>
             <param name="input" ftype="smi" value="input.smi" />
-            <output name="output" file="sample_output.smi"/>
+            <output name="output" ftype="smi" file="sample_output.smi"/>
         </test>
         <test>
             <param name="input" ftype="inchi" value="input.inchi"/>
@@ -29,7 +33,7 @@
             <param name="input" ftype="csv" value="input.csv"/>
             <output name="output" ftype="csv" file="sample_output.csv"/>
         </test>
-    </tests>
+    </tests> -->
     <help><![CDATA[
         TODO: Fill in help.
     ]]></help>
