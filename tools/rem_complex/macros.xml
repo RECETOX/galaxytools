@@ -22,7 +22,8 @@
             The remove complex tool filters out coordination complexes from a list of SMLES or InChI.
         
             Documentation
-                The rem complex  tool removes coordination complexes from a list of SMLES or InChI.        
+                The rem complex tool removes coordination complexes from a list of SMLES or InChI. The tool accepts input files with csv, smi and inchi formats, 
+                and returns the same format as the input file. The tool is based on the openbabel python library.        
     ]]>
     </token>
 </macros>

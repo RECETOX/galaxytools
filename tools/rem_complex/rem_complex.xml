@@ -34,7 +34,9 @@
             <output name="output" ftype="csv" file="sample_output.csv"/>
         </test>
     </tests>
-    <help><![CDATA[
-        TODO: Fill in help.
-    ]]></help>
+    <help>
+        <![CDATA[
+            @HELP@
+        ]]>
+    </help>
 </tool>
