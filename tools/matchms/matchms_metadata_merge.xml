@@ -28,6 +28,7 @@ import matchms
 import numpy as np
 
 matchms.set_matchms_logger_level('ERROR')
+matchms.Metadata.set_key_replacements({})
 
 spectra = list(matchms.importing.load_from_msp('${spectral_library}', False))
 
