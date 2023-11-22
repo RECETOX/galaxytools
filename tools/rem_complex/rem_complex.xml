@@ -14,7 +14,7 @@
         -o '${output}' 
     ]]></command>
     <inputs>
-        <param name="input" format="inchi,smi,csv" type="data" />
+        <param name="input" format="inchi,smi,csv" type="data" help="Accepted input formats: CSV, SMI, and InChI."/>
     </inputs>
     <outputs>
         <data name="output" format_source="input" />
