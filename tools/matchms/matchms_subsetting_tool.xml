@@ -69,7 +69,7 @@ matchms.exporting.save_as_msp(filtered_spectra.tolist(), '${output}')
             <option value="include" selected="true">include</option>
             <option value="exclude">exclude</option>
         </param>
-        <param label="list of identifiers" name="list_of_identifiers" type="data" format="csv,tsv"
+        <param label="list of identifiers" name="list_of_identifiers" type="data" format="csv,tsv,tabular"
             help="file containing list of identifiers in tsv or csv." />
 
     </inputs>
