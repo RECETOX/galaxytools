@@ -84,6 +84,19 @@
     </outputs>
 
     <tests>
+
+        <test expect_exit_code="1" expect_failure="true">
+            <param name="scores" value="scores.json" ftype="json"/>
+            <param name="graph_format" value="cyjs"/>
+            <param name="max_links" value="5"/>
+            <param name="score_cutoff" value="0.3"/>
+            <param name="identifier_key" value="COMPOUND_NAME"/>
+            <param name="keep_unconnected_nodes" value="false"/>
+            <assert_stderr>
+                <has_text text="ValueError: None cannot be a node"/>
+            </assert_stderr>
+        </test>
+
         <test>
             <param name="scores" value="scores.json" ftype="json"/>
             <param name="graph_format" value="graphml"/>
