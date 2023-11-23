@@ -17,31 +17,25 @@
     </requirements>
 
     <command detect_errors="aggressive"><![CDATA[
-        sh ${matchms_networking_cli}
+        python3 '${__tool_directory__}/matchms_networking_wrapper.py'
+            --score_name '${score_layer_name}'
+            --graph_format '$graph_format'
+            --identifier '$identifier_key'
+            --top_n '$top_n'
+            --max_links '$max_links'
+            --score_cutoff '$score_cutoff'
+            --link_method '$link_method'
+            #if $keep_unconnected_nodes
+            --keep_unconnected_nodes
+            #end if
+            '$scores'
+            '$similarity_network_file'
     ]]></command>
 
     <environment_variables>
         <environment_variable name="MPLCONFIGDIR">\$_GALAXY_JOB_TMP_DIR</environment_variable>
         <environment_variable name="XDG_CACHE_HOME">\$_GALAXY_JOB_TMP_DIR</environment_variable>
     </environment_variables>
-
-    <configfiles>
-        <configfile name="matchms_networking_cli">
-            python3 ${__tool_directory__}/matchms_networking_wrapper.py \
-            --score_name '${score_layer_name}' \
-            --graph_format '$graph_format' \
-            --identifier '$identifier_key' \
-            --top_n '$top_n' \
-            --max_links '$max_links' \
-            --score_cutoff '$score_cutoff' \
-            --link_method '$link_method' \
-            #if $keep_unconnected_nodes
-            --keep_unconnected_nodes \
-            #end if
-            '$scores' \
-            '$similarity_network_file'
-        </configfile>
-    </configfiles>
 
     <inputs>
         <param label="Similarity scores" name="scores" type="data" format="json"
