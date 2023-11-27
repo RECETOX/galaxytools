@@ -1,0 +1,107 @@
+<tool id="matchms_subsetting" name="matchms subsetting" version="@TOOL_VERSION@+galaxy1" profile="21.09">
+    <description>Extract spectra from a library given unique metadata identifier</description>
+    
+    <macros>
+        <import>macros.xml</import>
+        <import>help.xml</import>
+    </macros>
+
+    <expand macro="creator"/>
+
+    <edam_operations>
+        <edam_operation>operation_2409</edam_operation>
+    </edam_operations>
+    <expand macro="bio.tools"/>
+
+    <requirements>
+        <requirement type="package" version="@TOOL_VERSION@">matchms</requirement>
+    </requirements>
+
+    <command detect_errors='aggressive'><![CDATA[
+        python3 '${matchms_python_cli}'
+    ]]></command>
+
+<configfiles>
+<configfile name="matchms_python_cli">
+import pandas
+import matchms
+import numpy as np
+
+matchms.set_matchms_logger_level('ERROR')
+matchms.Metadata.set_key_replacements({})
+
+spectra = list(matchms.importing.load_from_msp('${spectral_library}', False))
+
+if "$list_of_identifiers.ext" == "csv":
+    identifiers_table = pandas.read_csv('${list_of_identifiers}', dtype=object)
+else:
+    identifiers_table = pandas.read_csv('${list_of_identifiers}', dtype=object, sep='\t')
+
+identifiers_table.columns = map(str.lower, identifiers_table.columns)
+
+spectra_arr = np.asarray(spectra, dtype=object)
+
+def filter_spectra(spectra, identifiers, mode):
+    identifier_column = identifiers.columns[0]
+
+    indices = []
+    for i, spectrum in enumerate(spectra):
+        if spectrum.get(identifier_column) in identifiers.values:
+            indices.append(i)
+
+    if mode == "include":
+        spectra_filtered = spectra[indices]
+    else:
+        spectra_filtered = np.delete(spectra, indices)
+
+    return spectra_filtered
+
+filtered_spectra = filter_spectra(spectra_arr, identifiers_table, "${mode}")
+
+matchms.exporting.save_as_msp(filtered_spectra.tolist(), '${output}')
+</configfile>
+</configfiles>
+
+    <inputs>
+        <param label="Spectra file" name="spectral_library" type="data" format="msp"
+            help="Mass spectral library file." />
+        <param label="Select mode" name="mode" type="select"
+                help="Include/Exclude the spectra matching the identifiers in the file. The default is include.">
+            <option value="include" selected="true">include</option>
+            <option value="exclude">exclude</option>
+        </param>
+        <param label="list of identifiers" name="list_of_identifiers" type="data" format="csv,tsv,tabular"
+            help="file containing list of identifiers in tsv or csv." />
+
+    </inputs>
+
+    <outputs>
+        <data label="${tool.name} on ${on_string}" name="output" format="msp">
+        </data>
+    </outputs>
+
+    <tests>
+        <test>
+            <param name="spectral_library" value="out_matchms_add_key.msp" ftype="msp"/>
+            <param name="mode" value="include"/>
+            <param name="list_of_identifiers" value="subsetting/identifier.csv" ftype="csv"/>
+            <output name="output" file="subsetting/subsetting_output.msp" ftype="msp"/>
+        </test>
+        <test>
+            <param name="spectral_library" value="out_matchms_add_key.msp" ftype="msp"/>
+            <param name="mode" value="exclude"/>
+            <param name="list_of_identifiers" value="subsetting/identifier.csv" ftype="csv"/>
+            <output name="output" file="subsetting/subsetting_output2.msp" ftype="msp"/>
+        </test>
+    </tests>
+
+    <help>
+        **Description**
+            The tool takes an msp file and a csv/tsv file containing list of identifier and 
+            extract spectra from a library based on the provided list of identifiers.
+    </help>
+
+    <citations>
+        <citation type="doi">https://doi.org/10.5281/zenodo.8083373</citation>
+    </citations>
+</tool>
