@@ -1,5 +1,5 @@
-<tool id="rem_complex" name="Remove complexes" version="@TOOL_VERSION@+galaxy1"  profile="21.09">
-    <description>Remove molecular coordination complexes </description>
+<tool id="rem_complex" name="Remove coordination complexes" version="@TOOL_VERSION@+galaxy1"  profile="21.09">
+    <description>Remove molecular coordination complexes from a list of structure representations</description>
     <macros>
         <import>macros.xml</import>
     </macros>
