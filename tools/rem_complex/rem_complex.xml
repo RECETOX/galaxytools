@@ -1,0 +1,44 @@
+<tool id="rem_complex" name="Remove coordination complexes" version="@TOOL_VERSION@+galaxy0"  profile="21.09">
+    <description>Remove molecular coordination complexes from a list of structure representations</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <requirements>
+        <requirement type="package" version="1.5.3">pandas</requirement>
+        <requirement type="package" version="3.1.1">openbabel</requirement>
+    </requirements>
+    <command detect_errors="exit_code"><![CDATA[
+        python  $__tool_directory__/rem_complex.py
+        -i '${input}'
+        -iformat '${input.ext}'
+        -o '${output}' 
+    ]]></command>
+    <inputs>
+        <param name="input" format="inchi,smi,csv" type="data" help="Accepted input formats: CSV, SMI, and InChI."/>
+    </inputs>
+    <outputs>
+        <data name="output" format_source="input" />
+    </outputs>
+    <tests>
+        <test>
+            <param name="input" ftype="smi" value="input.smi" />
+            <output name="output" ftype="smi" file="sample_output.smi"/>
+        </test>
+        <test>
+            <param name="input" ftype="inchi" value="input.inchi"/>
+            <output name="output" ftype="inchi" file="sample_output.inchi"/>
+        </test>
+        <test>
+            <param name="input" ftype="csv" value="input.csv"/>
+            <output name="output" ftype="csv" file="sample_output.csv"/>
+        </test>
+    </tests>
+    <help>
+        <![CDATA[
+            @HELP@
+        ]]>
+    </help>
+    <citations>
+        <citation type="doi">https://doi.org/10.5281/zenodo.6035335</citation>
+    </citations>
+</tool>
