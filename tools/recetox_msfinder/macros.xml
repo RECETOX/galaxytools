@@ -2,7 +2,7 @@
     <token name="@TOOL_VERSION@">v3.5.2</token>
     <xml name="requirements">
         <requirements>
-            <container type="docker">recetox/recetox-msfinder:v3.5.2-rcx0</container>
+            <container type="docker">recetox/recetox-msfinder:v3.5.2-rcx1</container>
         </requirements>
     </xml>
     <xml name="creator">
@@ -54,7 +54,10 @@
         <param name="SiCheck" type="boolean" checked="True" truevalue="True" falsevalue="False" label="SiCheck" />
     </xml>  -->
     <xml name="output">
-        <data name="annotated_data" format="msp" />
+        <collection type="list" format="txt" name="output" label="${tool.name} on ${on_string}">
+            <discover_datasets pattern="(?P&lt;designation&gt;.+)\.smi" directory="output" ext="smi" />
+            <discover_datasets  pattern="(?P&lt;designation&gt;.+)\.msp" directory="output" ext="msp" />
+        </collection>
     </xml>
 
     <token name="@HELP@"><![CDATA[

@@ -1,4 +1,4 @@
-<tool id="recetox_msfinder" name="RECETOX MsFinder" version="@TOOL_VERSION@+galaxy2">
+<tool id="recetox_msfinder" name="RECETOX MsFinder" version="@TOOL_VERSION@+galaxy3">
     <description>Annotation of fragment peaks in mass spectral libraries.</description>
     <macros>
         <import>macros.xml</import>
@@ -9,8 +9,11 @@
     <expand macro="requirements" />
     <command>
         <![CDATA[
-        sh ${write_param} &&
-        mono /MsFinder/MsFinder/bin/Debug/MsfinderConsoleApp.exe annotate -i "$input_data" -m 'MSFINDER.INI' -o "$annotated_data"        
+        mkdir output;
+        sh ${write_param};
+        mono /MsFinder/MsFinder/bin/Debug/MsfinderConsoleApp.exe annotate -i "$input_data" -m 'MSFINDER.INI' -o 'output/result.msp';
+        [ -s output/result.msp ] || rm output/result.msp;
+
     ]]>
     </command>
 
@@ -52,9 +55,16 @@
     <tests>
         <test>
             <param name="input_data" value="test.msp" ftype="msp" />
-            <output name="annotated_data" file="out.msp" lines_diff="16	" /> 
+            <output_collection name="output" type="list">
+                <element name="result" file="out.msp" lines_diff="16"/>
+            </output_collection>
             <!-- This is set to 16 since msfinder sometimes places double bonds between certain atoms and sometimes not - there are 16 such cases in this file. -->
-
+        </test>
+        <test>
+            <param name="input_data" value="test_log.msp" ftype="msp" />
+            <output_collection name="output" type="list">
+                <element name="log_smiles" file="log_smiles.smi" />
+            </output_collection>
         </test>
     </tests>
 
