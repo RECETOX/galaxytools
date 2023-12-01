@@ -1,4 +1,4 @@
-<tool id="rem_complex" name="Remove coordination complexes" version="@TOOL_VERSION@+galaxy0"  profile="21.09">
+<tool id="rem_complex" name="Remove coordination complexes" version="@TOOL_VERSION@+galaxy1"  profile="21.09">
     <description>Remove molecular coordination complexes from a list of structure representations</description>
     <macros>
         <import>macros.xml</import>
@@ -7,12 +7,18 @@
         <requirement type="package" version="1.5.3">pandas</requirement>
         <requirement type="package" version="3.1.1">openbabel</requirement>
     </requirements>
+
     <command detect_errors="exit_code"><![CDATA[
         python  $__tool_directory__/rem_complex.py
         -i '${input}'
         -iformat '${input.ext}'
         -o '${output}' 
     ]]></command>
+
+    <environment_variables>
+        <environment_variable name="OPENBLAS_NUM_THREADS">1</environment_variable>
+    </environment_variables>
+    
     <inputs>
         <param name="input" format="inchi,smi,csv" type="data" help="Accepted input formats: CSV, SMI, and InChI."/>
     </inputs>
