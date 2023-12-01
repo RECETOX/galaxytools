@@ -1,4 +1,4 @@
-<tool id="rem_complex" name="Remove coordination complexes" version="@TOOL_VERSION@+galaxy1"  profile="21.09">
+<tool id="rem_complex" name="Remove coordination complexes" version="@TOOL_VERSION@+galaxy2"  profile="21.09">
     <description>Remove molecular coordination complexes from a list of structure representations</description>
     <macros>
         <import>macros.xml</import>
@@ -16,7 +16,7 @@
     ]]></command>
 
     <environment_variables>
-        <environment_variable name="OPENBLAS_NUM_THREADS">1</environment_variable>
+        <environment_variable name="OPENBLAS_NUM_THREADS">4</environment_variable>
     </environment_variables>
     
     <inputs>
