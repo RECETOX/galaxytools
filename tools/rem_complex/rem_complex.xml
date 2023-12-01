@@ -7,6 +7,9 @@
         <requirement type="package" version="1.5.3">pandas</requirement>
         <requirement type="package" version="3.1.1">openbabel</requirement>
     </requirements>
+    <environment_variables>
+        <environment_variable name="OPENBLAS_NUM_THREADS">1</environment_variable>
+    </environment_variables>
     <command detect_errors="exit_code"><![CDATA[
         python  $__tool_directory__/rem_complex.py
         -i '${input}'
