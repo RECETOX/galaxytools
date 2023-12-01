@@ -1,4 +1,4 @@
-<tool id="matchms_subsetting" name="matchms subsetting" version="@TOOL_VERSION@+galaxy1" profile="21.09">
+<tool id="matchms_subsetting" name="matchms subsetting" version="@TOOL_VERSION@+galaxy2" profile="21.09">
     <description>Extract spectra from a library given unique metadata identifier</description>
     
     <macros>
@@ -16,6 +16,9 @@
     <requirements>
         <requirement type="package" version="@TOOL_VERSION@">matchms</requirement>
     </requirements>
+    <environment_variables>
+        <environment_variable name="OPENBLAS_NUM_THREADS">1</environment_variable>
+    </environment_variables>
 
     <command detect_errors='aggressive'><![CDATA[
         python3 '${matchms_python_cli}'
