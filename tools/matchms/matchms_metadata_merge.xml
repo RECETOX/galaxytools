@@ -16,6 +16,10 @@
     <requirements>
         <requirement type="package" version="@TOOL_VERSION@">matchms</requirement>
     </requirements>
+    
+    <environment_variables>
+        <environment_variable name="OPENBLAS_NUM_THREADS">1</environment_variable>
+    </environment_variables>
 
     <command detect_errors='aggressive'><![CDATA[
         python3 '${matchms_python_cli}'
