@@ -1,4 +1,4 @@
-<tool id="matchms_formatter" name="matchms scores formatter" version="@TOOL_VERSION@+galaxy2" profile="21.09">
+<tool id="matchms_formatter" name="matchms scores formatter" version="@TOOL_VERSION@+galaxy3" profile="21.09">
     <description>reformat scores object of matchms to long format table</description>
 
     <macros>
@@ -13,7 +13,6 @@
 
     <requirements>
         <requirement type="package" version="@TOOL_VERSION@">matchms</requirement>
-        <requirement type="package" version="1.1.4">pandas</requirement>
         <requirement type="package" version="8.0.1">click</requirement>
     </requirements>
 
@@ -25,6 +24,7 @@
         <environment_variable name="MPLCONFIGDIR">\$_GALAXY_JOB_TMP_DIR</environment_variable>
         <environment_variable name="XDG_CACHE_HOME">\$_GALAXY_JOB_TMP_DIR</environment_variable>
         <environment_variable name="OPENBLAS_NUM_THREADS">4</environment_variable>
+        <environment_variable name="RLIMIT_NPROC">4</environment_variable>        
     </environment_variables>
 
     <configfiles>
