@@ -20,6 +20,13 @@
         <data label="${tool.name} on ${on_string}" name="output" format="csv"/>
     </outputs>
 
+    <tests>
+        <test>
+            <param name="intensity_table" value="minimal_input.csv"/>
+            <output name="output" file="clustering.csv"/>
+        </test>
+    </tests>
+
     <help><![CDATA[
     Before using the ipaPy2 package, the processed data coming from an untargeted metabolomics experiment must be properly prepared.
     The data must be organized in a pandas dataframe containing the following columns:
