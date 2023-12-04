@@ -21,6 +21,29 @@
     </outputs>
 
     <help><![CDATA[
-    TODO: Fill in help.
+    Before using the ipaPy2 package, the processed data coming from an untargeted metabolomics experiment must be properly prepared.
+    The data must be organized in a pandas dataframe containing the following columns:
+
+    - **ids**: an unique numeric id for each mass spectrometry feature feature
+    - **rel.ids**: relation ids. Features must be clustered based on correlation/peak shape/retention time. Features in the same cluster are likely to come from the same metabolite.
+    - **mzs**: mass-to-charge ratios, usually the average across different samples.
+    - **RTs**: retention times in seconds, usually the average across different samples.
+    - **Int**: representative (e.g., maximum or average) intensity detected for each feature across samples (either peak area or peak intensity)
+
+    The clustering of the features is a necessary and must be performed before running the IPA method.
+    For this step, the use of widely used data processing software such as mzMatch and CAMERA is recommended.
+    Nevertheless, the ipaPy2 library provides a function (clusterFeatures()) able to perform such step,
+    starting from a dataframe containing the measured intensities across several samples (at least 3 samples, the more samples the better).
+    Such dataframe should be organized as follows:
+
+    +----+------+-----+-------------+-------------+-------------+
+    | id | mz   | rt  | intensity_1 | intensity_2 | intensity_3 |
+    +====+======+=====+=============+=============+=============+
+    | 1  | 100  | 10  | 500         | 600         | 700         |
+    +----+------+-----+-------------+-------------+-------------+
+    | 2  | 200  | 20  | 800         | 900         | 1000        |
+    +----+------+-----+-------------+-------------+-------------+
+    | 3  | 300  | 30  | 1100        | 1200        | 1300        |
+    +----+------+-----+-------------+-------------+-------------+
     ]]></help>
 </tool>
