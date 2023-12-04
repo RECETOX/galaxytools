@@ -18,7 +18,7 @@
     </requirements>
 
     <command detect_errors='aggressive'><![CDATA[
-        python ${matchms_python_cli}
+        python '${matchms_python_cli}'
     ]]></command>
 
 <configfiles>
@@ -67,6 +67,6 @@ save_as_msp(new_spectra, "${output}")
     ]]></help>
 
     <citations>
-        <citation type="doi">https://doi.org/10.5281/zenodo.6035335</citation>
+        <citation type="doi">10.5281/zenodo.6035335</citation>
     </citations>
 </tool>
