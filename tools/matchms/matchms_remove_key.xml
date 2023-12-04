@@ -23,20 +23,18 @@
 
 <configfiles>
 <configfile name="matchms_python_cli">
+import matchms
 @init_logger@
-
-from matchms.importing import load_from_msp
-from matchms.exporting import save_as_msp
 
 matchms.Metadata.set_key_replacements({})
 
-spectra = list(load_from_msp("${spectral_library}", metadata_harmonization = "False"))
+spectra = list(matchms.importing.load_from_msp("${spectral_library}", metadata_harmonization = "False"))
 new_spectra = []
 for spectrum in spectra:
     if '${key}' in spectrum.metadata._data:
         del spectrum.metadata._data['${key}']
     new_spectra.append(spectrum)
-save_as_msp(new_spectra, "${output}")
+matchms.exporting.save_as_msp(new_spectra, "${output}")
 </configfile>
 </configfiles>
 
