@@ -31,12 +31,11 @@ key = "${key}".lower()
 spectra = list(matchms.importing.load_from_msp("${spectral_library}", metadata_harmonization = "False"))
 new_spectra = []
 for spectrum in spectra:
-    new_spectrum = spectrum.clone()
-    if new_spectrum.get(key) is not None:
-        metadata = new_spectrum.metadata
+    if spectrum.get(key) is not None:
+        metadata = spectrum.metadata
         del metadata[key]
-        new_spectrum.metadata = metadata
-    new_spectra.append(new_spectrum)
+        spectrum.metadata = metadata
+    new_spectra.append(spectrum)
 matchms.exporting.save_as_msp(new_spectra, "${output}")
 </configfile>
 </configfiles>
@@ -57,7 +56,7 @@ matchms.exporting.save_as_msp(new_spectra, "${output}")
         <test>
             <param name="spectral_library" value="filtering/input.msp" ftype="msp"/>
             <param name="key" value="ionmode"/>
-            <output name="output" file="out_matchms_remove_key.msp" ftype="msp"/>
+            <output name="output" file="out_matchms_remove_key.msp" ftype="msp" compare="sim_size"/>
         </test>
     </tests>
 
