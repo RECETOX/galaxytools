@@ -63,7 +63,7 @@ save_as_msp(new_spectra, "${output}")
     <help><![CDATA[
         Description
         The tool take MSP file as an input and take as parameters the name of the 
-        attribute and its value which will be assigned to all spectra records in the MSP.
+        attribute which will be removed from all spectra records in the MSP.
     ]]></help>
 
     <citations>
