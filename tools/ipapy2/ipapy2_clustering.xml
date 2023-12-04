@@ -46,4 +46,8 @@
     | 3  | 300  | 30  | 1100        | 1200        | 1300        |
     +----+------+-----+-------------+-------------+-------------+
     ]]></help>
+    <citations>
+        <citation type="doi">10.1021/acs.analchem.9b02354</citation>
+        <citation type="doi">10.1093/bioinformatics/btad455</citation>
+    </citations>
 </tool>
