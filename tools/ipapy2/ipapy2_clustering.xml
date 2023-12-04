@@ -1,0 +1,22 @@
+<tool id="ipapy2_clustering" name="ipaPy2 clustering" version="@TOOL_VERSION@+galaxy0" python_template_version="3.5" profile="21.05">
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <requirements>
+        <requirement type="package" version="@TOOL_VERSION@">ipapy2</requirement>
+        <requirement type="package" version="8.0.1">click</requirement>
+    </requirements>
+    <command detect_errors="exit_code"><![CDATA[
+        python3 ${__tool_directory__}/ipapy2_clustering.py --i '${intensity_table}' --o '${output}'
+    ]]></command>
+    <inputs>
+        <param label="Intensity table" name="intensity_table" type="data" format="csv" help="Mass spectral library file." />
+    </inputs>
+    <outputs>
+        <data label="${tool.name} on ${on_string}" name="output" format="csv"/>
+    </outputs>
+
+    <help><![CDATA[
+    TODO: Fill in help.
+    ]]></help>
+</tool>
