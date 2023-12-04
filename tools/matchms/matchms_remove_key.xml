@@ -18,7 +18,7 @@
     </requirements>
 
     <command detect_errors='aggressive'><![CDATA[
-        python '${matchms_python_cli}'
+        python3 '${matchms_python_cli}'
     ]]></command>
 
 <configfiles>
@@ -27,13 +27,16 @@ import matchms
 @init_logger@
 
 matchms.Metadata.set_key_replacements({})
-
+key = "${key}".lower()
 spectra = list(matchms.importing.load_from_msp("${spectral_library}", metadata_harmonization = "False"))
 new_spectra = []
 for spectrum in spectra:
-    if '${key}' in spectrum.metadata._data:
-        del spectrum.metadata._data['${key}']
-    new_spectra.append(spectrum)
+    new_spectrum = spectrum.clone()
+    if new_spectrum.get(key) is not None:
+        metadata = new_spectrum.metadata
+        del metadata[key]
+        new_spectrum.metadata = metadata
+    new_spectra.append(new_spectrum)
 matchms.exporting.save_as_msp(new_spectra, "${output}")
 </configfile>
 </configfiles>
