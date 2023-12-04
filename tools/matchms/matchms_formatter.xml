@@ -14,6 +14,7 @@
     <requirements>
         <requirement type="package" version="@TOOL_VERSION@">matchms</requirement>
         <requirement type="package" version="8.0.1">click</requirement>
+        <requirement type="package" version="1.1.4">pandas</requirement>
     </requirements>
 
     <command detect_errors="aggressive"><![CDATA[
