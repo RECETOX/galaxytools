@@ -1,0 +1,81 @@
+<tool id="ipapy2_MS1_annotation" name="ipapy2_MS1_annotation" version="@TOOL_VERSION@+galaxy0" python_template_version="3.5" profile="21.05">
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    
+    <requirements>
+        <requirement type="package" version="@TOOL_VERSION@">ipapy2</requirement>
+        <requirement type="package" version="8.0.1">click</requirement>
+    </requirements>
+
+    <command detect_errors="exit_code"><![CDATA[
+    python3 ${__tool_directory__}/ipapy2_MS1_annotation.py 
+        --ipa_isotope_filename '${ipa_isotope}' 
+        --all_adducts_filename '${all_adducts}' 
+        --ionisation '${adducts_table}' 
+        --ncores '${adducts_table}' 
+        --output_filename '${output}'
+    ]]></command>
+
+    <inputs>
+        <param label="IPA isotope table" name="ipa_isotope" type="data" format="csv" help="Mass spectral library file." />
+        <param label="all possible adducts table" name="all_adducts" type="data" format="csv" help="Mass spectral library file." />
+        <param label="ionisation" name="ionisation" type="integer" help="Mass spectral library file." />
+        <param label="Number of cores" name="ncores" type="integer" help="Mass spectral library file." />
+    </inputs>
+
+    <outputs>
+        <data label="${tool.name} on ${on_string}" name="output" format="csv"/>
+    </outputs>
+
+    <tests>
+        <test>
+            <param name="ipa_isotope_filename" value="ipa_isotope.csv"/>
+            <param name="all_adducts_filename" value="all_adducts.csv"/>
+            <param name="ionisation" value=1/>
+            <param name="ncores" value=1/>
+            <output name="output" file="annotations.csv"/>
+        </test>
+    </tests>
+
+    <help><![CDATA[
+    MS1annotation(df, allAdds, ppm, me=0.000548579909065, ratiosd=0.9, ppmunk=None, ratiounk=None, ppmthr=None, pRTNone=None, pRTout=None, ncores=1)
+    Annotation of the dataset base on the MS1 information. Prior probabilities
+    are based on mass only, while post probabilities are based on mass, RT,
+    previous knowledge and isotope patterns.
+    
+    Parameters
+    ----------
+    df: pandas dataframe containing the MS1 data. It should be the output of the
+        function ipa.map_isotope_patterns()
+    allAdds: pandas dataframe containing the information on all the possible
+            adducts given the database. It should be the output of either
+            ipa.compute_all_adducts() or ipa.compute_all_adducts_Parallel()
+    ppm: accuracy of the MS instrument used
+    me: accurate mass of the electron. Default 5.48579909065e-04
+    ratiosd: default 0.9. It represents the acceptable ratio between predicted
+             intensity and observed intensity of isotopes. It is used to compute
+             the shape parameters of the lognormal distribution used to
+             calculate the isotope pattern scores as sqrt(1/ratiosd)
+    ppmunk: ppm associated to the 'unknown' annotation. If not provided equal
+            to ppm.
+    ratiounk: isotope ratio associated to the 'unknown' annotation. If not
+              provided equal to 0.5
+    ppmthr: Maximum ppm possible for the annotations. If not provided equal to
+            2*ppm
+    pRTNone: Multiplicative factor for the RT if no RTrange present in the
+             database. If not provided equal to 0.8
+    pRTout: Multiplicative factor for the RT if measured RT is outside the
+            RTrange present in the database. If not provided equal to 0.4
+    ncores: default value 1. Number of cores used
+    
+    Returns
+    -------
+    annotations: a dictionary containing all the possible annotations for the
+                measured features. The keys of the dictionary are the unique
+                ids for the features present in df. For each feature, the
+                annotations are summarized in a pandas dataframe.
+    ]]></help>
+
+    <expand macro="citations"/>
+</tool>
