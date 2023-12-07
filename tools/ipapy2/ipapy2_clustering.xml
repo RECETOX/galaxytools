@@ -9,8 +9,16 @@
     </requirements>
 
     <command detect_errors="exit_code"><![CDATA[
-        python3 ${__tool_directory__}/ipapy2_clustering.py --i '${intensity_table}' --o '${output}'
+        sh ${ipapy2_clustering_cli}
     ]]></command>
+
+    <configfiles>
+        <configfile name="ipapy2_clustering_cli">
+            python3 ${__tool_directory__}/ipapy2_clustering.py \
+            '${intensity_table}' \
+            '${output}'
+        </configfile>
+    </configfiles>
 
     <inputs>
         <param label="Intensity table" name="intensity_table" type="data" format="csv" help="Mass spectral library file." />
@@ -53,8 +61,6 @@
     | 3  | 300  | 30  | 1100        | 1200        | 1300        |
     +----+------+-----+-------------+-------------+-------------+
     ]]></help>
-    <citations>
-        <citation type="doi">10.1021/acs.analchem.9b02354</citation>
-        <citation type="doi">10.1093/bioinformatics/btad455</citation>
-    </citations>
+    
+    <expand macro="citations"/>
 </tool>
