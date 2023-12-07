@@ -1,16 +1,19 @@
-import click
+import argparse
+import sys
 import pandas as pd
 from ipaPy2 import ipa
 
 
-@click.group(invoke_without_command=True)
-@click.option('--i', 'input_filename', type=click.Path(exists=True), required=True)
-@click.option('--o', 'output_filename', type=click.Path(writable=True), required=True)
-def cli(input_filename, output_filename):
-    intensity_table = pd.read_csv(input_filename)
+def main(argv):
+    parser = argparse.ArgumentParser(description="cluster features before IPA pipeline.")
+    parser.add_argument("input_filename", type=str, help="a dataframe containing the measured intensities across several samples.")
+    parser.add_argument("output_filename", type=str, help="a dataframe of clustered features.")
+    args = parser.parse_args()
+
+    intensity_table = pd.read_csv(args.input_filename)
     result = ipa.clusterFeatures(intensity_table)
-    result.to_csv(output_filename, index=False)
+    result.to_csv(args.output_filename, index=False)
 
 
 if __name__ == '__main__':
-    cli()
+    main(argv=sys.argv[1:])
