@@ -10,8 +10,8 @@
 
     <xml name="ionisation">
         <param label="ionisation" name="ionisation" type="select" help="ionisation. positive +1 or negative -1">
-            <option value="1" >+1</option>
-            <option value="-1" >-1</option>
+            <option value="1">+1</option>
+            <option value="-1">-1</option>
         </param>
     </xml>
 
@@ -19,4 +19,9 @@
         <param label="number of cores" name="ncores" type="integer" value="1" help="number of cores">
         </param>
     </xml>
+
+<token name="@init_logger@">
+import pandas as pd
+from ipaPy2 import ipa
+</token> 
 </macros>
