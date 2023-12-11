@@ -55,6 +55,10 @@
             #if $require_inchi_is_true == "TRUE"
                 -require_inchi \
             #end if
+            #if $derive_precursor_mz_from_parent_mass.is_true == "TRUE"
+                -derive_precursor_mz_from_parent_mass \
+                --estimate_from_adduct "$derive_precursor_mz_from_parent_mass.estimate_from_adduct" \
+            #end if
             #if $reduce_to_top_n_peaks.is_true == "TRUE"
                 -reduce_to_top_n_peaks \
                 --n_max "$reduce_to_top_n_peaks.n_max" \
@@ -103,6 +107,18 @@
 
         <param name="require_inchi_is_true" label="Require INCHI" type="boolean" truevalue="TRUE" falsevalue="FALSE" checked="false"
                 help="Remove spectra that does not contain INCHI." />
+
+        <conditional name="derive_precursor_mz_from_parent_mass">
+            <param name="is_true" label="Derive precursor_mz from parent_mass" type="select"
+                   help="Derives the precursor_mz from the parent mass and adduct or charge.">
+                <option value="FALSE" selected="true">FALSE</option>
+                <option value="TRUE">TRUE</option>
+            </param>
+            <when value="TRUE">
+                <param label="Estimate from adduct" name="estimate_from_adduct" type="boolean" truevalue="TRUE" falsevalue="FALSE" checked="false" />
+            </when>
+            <when value="FALSE"></when>
+        </conditional>
 
         <conditional name="reduce_to_top_n_peaks">
             <param name="is_true" label="Reduce to top n peaks" type="select"
@@ -173,6 +189,14 @@
                 <param name="n_max" value="5"/>
             </section>
             <output name="output" file="filtering/reduce_to_top_n_peaks.msp" ftype="msp"/>
+        </test>
+        <test>
+            <param name="spectra" value="filtering/derive_precursor_mz.msp" ftype="msp"/>
+            <section name="derive_precursor_mz_from_parent_mass">
+                <param name="is_true" value="TRUE"/>
+                <param name="estimate_from_adduct" value="TRUE"/>
+            </section>
+            <output name="output" file="filtering/derive_precursor_mz_out.msp" ftype="msp"/>
         </test>
     </tests>
 
