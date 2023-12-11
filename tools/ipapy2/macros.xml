@@ -10,8 +10,8 @@
 
     <xml name="ionisation">
         <param label="ionisation" name="ionisation" type="select" help="ionisation. positive +1 or negative -1">
-            <option value="1">+1</option>
-            <option value="-1">-1</option>
+            <option value="positive">positive</option>
+            <option value="negative">negative</option>
         </param>
     </xml>
 

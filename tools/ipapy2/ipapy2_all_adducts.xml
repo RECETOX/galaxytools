@@ -1,4 +1,4 @@
-<tool id="ipapy2_all_adducts" name="ipapy2_all_adducts" version="@TOOL_VERSION@+galaxy0" python_template_version="3.5" profile="21.05">
+<tool id="ipapy2_all_adducts" name="1. IPA compute all adducts" version="@TOOL_VERSION@+galaxy0" python_template_version="3.5" profile="21.05">
     <macros>
         <import>macros.xml</import>
     </macros>
@@ -17,7 +17,11 @@
 
 adducts_table = pd.read_csv('${adducts_table}')
 DB_table = pd.read_csv('${DB_table}')
-all_adducts = ipa.compute_all_adducts(adducts_table, DB_table, ionisation=${ionisation}, ncores=${ncores})
+#if $ionisation == "positive"
+all_adducts = ipa.compute_all_adducts(adducts_table, DB_table, ionisation=1, ncores=$ncores)
+#else
+all_adducts = ipa.compute_all_adducts(adducts_table, DB_table, ionisation=-1, ncores=$ncores)
+#end if
 all_adducts.to_csv('${output}', index=False)
 </configfile>
 </configfiles>
@@ -43,31 +47,47 @@ all_adducts.to_csv('${output}', index=False)
     </tests>
     
     <help><![CDATA[
+    ::
         compute_all_adducts(adductsAll, DB, ionisation=1, ncores=1)
         compute all adducts table based on the information present in the database
         
         Parameters
+        ----------
         adductsAll : pandas dataframe (necessary)
-            Dataframe containing information on all possible adducts. The file must be in the same format as the example provided in the DB/adducts.csv
+                    Dataframe containing information on all possible
+                    adducts. The file must be in the same format as the example
+                    provided in the DB/adducts.csv
         DB : pandas dataframe (necessary)
-            Dataframe containing the database against which the annotation is performed. The DB must contain the following columns in this exact order (optional fields can contain None):
+            Dataframe containing the database against which the annotation is
+            performed. The DB must contain the following columns in this exact
+            order (optional fields can contain None):
                 - id: unique id of the database entry (e.g., 'C00031') - necessary
                 - name: compound name (e.g., 'D-Glucose') - necessary
                 - formula: chemical formula (e.g., 'C6H12O6') - necessary
                 - inchi: inchi string - optional
                 - smiles: smiles string - optional
-                - RT: if known, retention time range (in seconds) where this compound is expected to elute (e.g., '30;60') - optional
-                - adductsPos: list of adducts that should be considered in positive mode for this entry (e.g.,'M+Na;M+H;M+')
-                - adductsNeg: list of adducts that should be considered in negative mode for this entry (e.g.,'M-H;M-2H')
+                - RT: if known, retention time range (in seconds) where this
+                    compound is expected to elute (e.g., '30;60') - optional
+                - adductsPos: list of adducts that should be considered in
+                            positive mode for this entry (e.g.,'M+Na;M+H;M+')
+                - adductsNeg: list of adducts that should be considered in
+                            negative mode for this entry (e.g.,'M-H;M-2H')
                 - description: comments on the entry - optional
-                - pk: previous knowledge on the likelihood of this compound to be present in the sample analysed. The value has to be between 1 (compound likely to be present in the sample) and 0 (compound cannot be present in the sample).
-                - MS2: id for the MS2 database entries related to this compound (optional)
-                - reactions: list of reactions ids involving this compound (e.g., 'R00010 R00015 R00028')-optional 
+                - pk: previous knowledge on the likelihood of this compound to be
+                    present in the sample analysed. The value has to be between
+                    1 (compound likely to be present in the sample) and 0
+                    (compound cannot be present in the sample).
+                - MS2: id for the MS2 database entries related to this compound
+                        (optional)
+                - reactions: list of reactions ids involving this compound
+                            (e.g., 'R00010 R00015 R00028')-optional 
         ionisation : Default value 1. positive = 1, negative = -1
         ncores : default value 1. Number of cores used
         
         Returns
-        allAdds: pandas dataframe containing the information on all the possible adducts given the database.
+        -------
+        allAdds: pandas dataframe containing the information on all the possible
+        adducts given the database.
     ]]></help>
 
     <expand macro="citations"/>

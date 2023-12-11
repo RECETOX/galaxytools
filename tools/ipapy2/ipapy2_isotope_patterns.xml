@@ -1,4 +1,4 @@
-<tool id="ipapy2_isotope_patterns" name="IPA isotope patterns" version="@TOOL_VERSION@+galaxy0" python_template_version="3.5" profile="21.05">
+<tool id="ipapy2_isotope_patterns" name="3. IPA isotope patterns" version="@TOOL_VERSION@+galaxy0" python_template_version="3.5" profile="21.05">
     <macros>
         <import>macros.xml</import>
     </macros>
@@ -16,7 +16,11 @@
 @init_logger@
 
 ipa_dataframe = pd.read_csv('${isotope_input}')
-ipa.map_isotope_patterns(ipa_dataframe, isoDiff=${isotope_diff}, ppm=${ppm}, ionisation=${ionisation}, MinIsoRatio=${isotope_ratio})
+#if $ionisation == "positive"
+ipa.map_isotope_patterns(ipa_dataframe, isoDiff=$isotope_diff, ppm=$ppm, ionisation=1, MinIsoRatio=$isotope_ratio)
+#else
+ipa.map_isotope_patterns(ipa_dataframe, isoDiff=$isotope_diff, ppm=$ppm, ionisation=-1, MinIsoRatio=$isotope_ratio)
+#end if
 ipa_dataframe.to_csv('${isotope_output}', index=False)
 </configfile>
 </configfiles>
@@ -35,57 +39,57 @@ ipa_dataframe.to_csv('${isotope_output}', index=False)
     
     <tests>
         <test>
-            <param name="isotope_input" value="clustering.csv"/>
-            <param name="ionisation" value="1"/>
+            <param name="isotope_input" value="clustered features.csv"/>
             <output name="isotope_output" file="isotope_output.csv"/>
         </test>
     </tests>
 
     <help><![CDATA[
-        map_isotope_patterns(df, isoDiff=1, ppm=100, ionisation=1, MinIsoRatio=0.5)
-        mapping isotope patterns in MS1 data.
-        
-        Parameters
-        ----------
-        df : pandas dataframe (necessary)
-            A dataframe containing the MS1 data including the following columns:
-                -ids: an unique id for each feature
-                -rel.ids:   relation ids. In a previous step of the data processing
-                            pipeline, features are clustered based on peak shape
-                            similarity/retention time. Features in the same
-                            cluster are likely to come from the same metabolite.
-                            All isotope patterns must be in the same rel.id
-                            cluster.
-                -mzs: mass-to-charge ratios, usually the average across
-                    different samples.
-                -RTs: retention times in seconds, usually the average across
-                    different samples.
-                -Ints: representative (e.g., maximum or average) intensity detected
-                    for each feature across samples (either peak area or peak
-                    intensity)
-        isoDiff : Default value 1. Difference between isotopes of charge 1, does
-                not need to be exact
-        ppm:   Default value 100. Maximum ppm value allowed between 2 isotopes.
-                It is very high on purpose
-        ionisation: Default value 1. positive = 1, negative = -1
-        MinIsoRatio: mininum intensity ratio expressed (Default value 1%). Only
-                    isotopes with intensity higher than MinIsoRatio% of the main isotope
-                    are considered.
-        
-        Returns
-        -------
-        df: the main input is modified by adding and populating the following
-            columns
-            - relationship: the possible values are:
-                            * bp: basepeak, most intense peak within each rel id
-                            * bp|isotope: isotope of the basepeak
-                            * potential bp: most intense peak within each isotope
-                                            pattern (excluding the basepeak)
-                            * potential bp|isotope: isotope of one potential bp
-            - isotope pattern: feature used to cluster the different isotope
-                                patterns within the same relation id
-            - charge: predicted charge based on the isotope pattern (1,2,3,4,5 or
-                    -1,-2,-3,-4,-5 are the only values allowed)
+	::
+		map_isotope_patterns(df, isoDiff=1, ppm=100, ionisation=1, MinIsoRatio=0.5)
+		mapping isotope patterns in MS1 data.
+		
+		Parameters
+		----------
+		df : pandas dataframe (necessary)
+			A dataframe containing the MS1 data including the following columns:
+				-ids: an unique id for each feature
+				-rel.ids:   relation ids. In a previous step of the data processing
+							pipeline, features are clustered based on peak shape
+							similarity/retention time. Features in the same
+							cluster are likely to come from the same metabolite.
+							All isotope patterns must be in the same rel.id
+							cluster.
+				-mzs: mass-to-charge ratios, usually the average across
+					different samples.
+				-RTs: retention times in seconds, usually the average across
+					different samples.
+				-Ints: representative (e.g., maximum or average) intensity detected
+					for each feature across samples (either peak area or peak
+					intensity)
+		isoDiff : Default value 1. Difference between isotopes of charge 1, does
+				not need to be exact
+		ppm:   Default value 100. Maximum ppm value allowed between 2 isotopes.
+				It is very high on purpose
+		ionisation: Default value 1. positive = 1, negative = -1
+		MinIsoRatio: mininum intensity ratio expressed (Default value 1%). Only
+					isotopes with intensity higher than MinIsoRatio% of the main isotope
+					are considered.
+		
+		Returns
+		-------
+		df: the main input is modified by adding and populating the following
+			columns
+			- relationship: the possible values are:
+							* bp: basepeak, most intense peak within each rel id
+							* bp|isotope: isotope of the basepeak
+							* potential bp: most intense peak within each isotope
+											pattern (excluding the basepeak)
+							* potential bp|isotope: isotope of one potential bp
+			- isotope pattern: feature used to cluster the different isotope
+								patterns within the same relation id
+			- charge: predicted charge based on the isotope pattern (1,2,3,4,5 or
+					-1,-2,-3,-4,-5 are the only values allowed)
     ]]></help>
 
     <expand macro="citations"/>

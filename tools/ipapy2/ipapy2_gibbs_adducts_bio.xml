@@ -1,4 +1,4 @@
-<tool id="ipapy2_gibbs_adducts_bio" name="ipapy2_gibbs_adducts_bio" version="0.1.0+galaxy0" python_template_version="3.5" profile="21.05">
+<tool id="ipapy2_gibbs_adducts_bio" name="8. IPA gibbs sampler adducts bio" version="@TOOL_VERSION@+galaxy0" python_template_version="3.5" profile="21.05">
     <requirements>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[

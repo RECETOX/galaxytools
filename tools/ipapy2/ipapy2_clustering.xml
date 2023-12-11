@@ -1,4 +1,4 @@
-<tool id="ipapy2_clustering" name="IPA clustering" version="@TOOL_VERSION@+galaxy0" python_template_version="3.5" profile="21.05">
+<tool id="ipapy2_clustering" name="2. IPA clustering" version="@TOOL_VERSION@+galaxy0" python_template_version="3.5" profile="21.05">
     <macros>
         <import>macros.xml</import>
     </macros>
@@ -16,16 +16,16 @@
 @init_logger@
 
 intensity_table = pd.read_csv('${intensity_table}')
-result = ipa.clusterFeatures(intensity_table, Cthr=${Cthr}, RTwin=${RTwin}, Intmode='${Intmode}')
+result = ipa.clusterFeatures(intensity_table, Cthr=$Cthr, RTwin=$RTwin, Intmode='${Intmode}')
 result.to_csv('${output}', index=False)
 </configfile>
 </configfiles>
 
     <inputs>
         <param label="Intensity table" name="intensity_table" type="data" format="csv" help="a dataframe containing the measured intensities across several samples." />
-        <param label="correlation threshold" name="Cthr" type="float" value="0.8" help="Default value 0.8. Minimum correlation allowed in each cluster." />
-        <param label="RT threshold" name="RTwin" type="float" value="1" help="Default value 1. Maximum difference in RT time between features in the same cluster." />
-        <param label="Intensity mode" name="Intmode" type="text" value="max" help="intensity mode. Default 'max' or 'ave'." />
+        <param label="correlation threshold" name="Cthr" type="float" optional="true" value="0.8" help="Default value 0.8. Minimum correlation allowed in each cluster." />
+        <param label="RT threshold" name="RTwin" type="float" optional="true" value="1" help="Default value 1. Maximum difference in RT time between features in the same cluster." />
+        <param label="Intensity mode" name="Intmode" type="text" optional="true" value="max" help="intensity mode. Default 'max' or 'ave'." />
     </inputs>
 
     <outputs>
@@ -34,8 +34,8 @@ result.to_csv('${output}', index=False)
 
     <tests>
         <test>
-            <param name="intensity_table" value="minimal_input.csv"/>
-            <output name="output" file="clustering.csv"/>
+            <param name="intensity_table" value="unclustered.csv"/>
+            <output name="output" file="clustered features.csv"/>
         </test>
     </tests>
 
@@ -43,7 +43,7 @@ result.to_csv('${output}', index=False)
     Before using the ipaPy2 package, the processed data coming from an untargeted metabolomics experiment must be properly prepared.
     The data must be organized in a pandas dataframe containing the following columns:
 
-    - **ids**: an unique numeric id for each mass spectrometry feature feature
+    - **ids**: an unique numeric id for each mass spectrometry feature 
     - **rel.ids**: relation ids. Features must be clustered based on correlation/peak shape/retention time. Features in the same cluster are likely to come from the same metabolite.
     - **mzs**: mass-to-charge ratios, usually the average across different samples.
     - **RTs**: retention times in seconds, usually the average across different samples.
