@@ -31,7 +31,7 @@
     Before using the ipaPy2 package, the processed data coming from an untargeted metabolomics experiment must be properly prepared.
     The data must be organized in a pandas dataframe containing the following columns:
 
-    - **ids**: an unique numeric id for each mass spectrometry feature feature
+    - **ids**: an unique numeric id for each mass spectrometry feature
     - **rel.ids**: relation ids. Features must be clustered based on correlation/peak shape/retention time. Features in the same cluster are likely to come from the same metabolite.
     - **mzs**: mass-to-charge ratios, usually the average across different samples.
     - **RTs**: retention times in seconds, usually the average across different samples.
