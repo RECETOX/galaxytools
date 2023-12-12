@@ -55,7 +55,7 @@
             #if $require_inchi_is_true == "TRUE"
                 -require_inchi \
             #end if
-            #if ${derive_precursor_mz_from_parent_mass.is_true} == "TRUE"
+            #if $derive_precursor_mz_from_parent_mass.is_true == "TRUE"
                 -derive_precursor_mz_from_parent_mass \
                 --estimate_from_adduct "${derive_precursor_mz_from_parent_mass.estimate_from_adduct}" \
             #end if
