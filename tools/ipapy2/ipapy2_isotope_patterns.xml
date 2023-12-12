@@ -16,11 +16,7 @@
 @init_logger@
 
 ipa_dataframe = pd.read_csv('${isotope_input}')
-#if $ionisation == "positive"
-ipa.map_isotope_patterns(ipa_dataframe, isoDiff=$isotope_diff, ppm=$ppm, ionisation=1, MinIsoRatio=$isotope_ratio)
-#else
-ipa.map_isotope_patterns(ipa_dataframe, isoDiff=$isotope_diff, ppm=$ppm, ionisation=-1, MinIsoRatio=$isotope_ratio)
-#end if
+ipa.map_isotope_patterns(ipa_dataframe, isoDiff=$isotope_diff, ppm=$ppm, ionisation=int(${ionisation}), MinIsoRatio=$isotope_ratio)
 ipa_dataframe.to_csv('${isotope_output}', index=False)
 </configfile>
 </configfiles>
