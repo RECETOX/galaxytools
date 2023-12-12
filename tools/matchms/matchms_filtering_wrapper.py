@@ -90,7 +90,7 @@ def main(argv):
             spectrum = reduce_to_number_of_peaks(spectrum_in=spectrum, n_max=args.n_max)
 
         if args.derive_precursor_mz_from_parent_mass:
-            spectrum.set("parent_mass", int(float(spectrum.get('parent_mass'))))
+            spectrum.set("parent_mass", float(spectrum.get('parent_mass')))
             precursor_mz = derive_precursor_mz_from_parent_mass(spectrum, args.estimate_from_adduct)
             spectrum.set("precursor_mz", precursor_mz)
 
