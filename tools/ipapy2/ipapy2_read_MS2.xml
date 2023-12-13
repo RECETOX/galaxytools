@@ -1,4 +1,4 @@
-<tool id="ipapy2_gibbs_adducts_bio" name="IPA gibbs sampler adducts bio" version="@TOOL_VERSION@+galaxy0" python_template_version="3.5" profile="21.05">
+<tool id="ipapy2_read_MS2" name="IPA read MSP or MGF file MS2 data" version="@TOOL_VERSION@+galaxy0" profile="21.05">
     <requirements>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
@@ -11,6 +11,4 @@
     <help><![CDATA[
     TODO: Fill in help.
     ]]></help>
-
-    <expand macro="citations"/>
 </tool>

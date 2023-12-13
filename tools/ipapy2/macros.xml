@@ -15,13 +15,16 @@
         </param>
     </xml>
 
-    <xml name="ncores">
-        <param label="number of cores" name="ncores" type="integer" value="1" help="number of cores">
-        </param>
-    </xml>
-
-<token name="@init_logger@">
+<token name="@init_import@">
 import pandas as pd
 from ipaPy2 import ipa
+</token> 
+
+<token name="@annotation_flatten@">
+annotations_flat = pd.DataFrame()
+for peak_id in annotations:
+    annotation = annotations[peak_id]
+    annotation["peak_id"] = peak_id
+    annotations_flat = pd.concat([annotations_flat, annotation])
 </token> 
 </macros>
