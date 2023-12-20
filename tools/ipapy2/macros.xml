@@ -16,7 +16,7 @@
     </xml>
 
     <xml name="bio_connections">
-        <param label="connections list provided" name="connection_list" type="select" optional="true" multiple="true" display="checkboxes"/>
+        <param label="connections list provided" name="connection_list" type="select" optional="true" multiple="true" display="checkboxes">
             <help>list of possible connections between compounds defined as formulas. Only necessary if mode='connections'.</help>
             <option value="C3H5NO">C3H5NO</option>
             <option value="C6H12N4O">C6H12N4O</option>
