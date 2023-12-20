@@ -22,7 +22,7 @@ allAdds = pd.read_csv('${all_adducts}', keep_default_na=False)
 allAdds = allAdds.replace('', None)
 ppmunk = os.getenv('ppmunk', $ppm)
 ppmthr = os.getenv('ppmthr', 2*$ppm)
-annotations = ipa.MS1annotation(df, allAdds, ppm=$ppm, me=$me, ratiosd=$ratiosd, ppmunk=ppmunk, ratiounk=$ratiounk, ppmthr=ppmthr, pRTNone=$pRTNone, pRTout=$pRTout, ncores=int(os.environ.get('GALAXY_SLOTS')))
+annotations = ipa.MS1annotation(df, allAdds, ppm=$ppm, ratiosd=$ratiosd, ppmunk=ppmunk, ratiounk=$ratiounk, ppmthr=ppmthr, pRTNone=$pRTNone, pRTout=$pRTout, ncores=int(os.environ.get('GALAXY_SLOTS')))
 @annotation_flatten@
 annotations_flat.to_csv('${output}', index=False)
 </configfile>
@@ -43,7 +43,7 @@ annotations_flat.to_csv('${output}', index=False)
             </param>
         </section>
         <section name="optional_settings" title="optional settings">
-            <param name="ratiosd" type="float" value="0.9">
+            <param name="ratiosd" type="float" value="0.9" optional="true">
                 <label>intensity ratio</label>
                 <help>acceptable ratio between predicted intensity and observed intensity of isotopes</help>
             </param>

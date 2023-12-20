@@ -14,6 +14,7 @@
 <configfiles>
 <configfile name="ipapy2_MS2_annotation_cli">
 @init_import@
+import os
 
 df = pd.read_csv('${MS1_table}', keep_default_na=False)
 df = df.replace('', None)
@@ -25,7 +26,7 @@ DBMS2 = pd.read_csv('${DBMS2_table}', keep_default_na=False)
 DBMS2 = DBMS2.replace('', None)
 ppmunk = os.getenv('ppmunk', $ppm)
 ppmthr = os.getenv('ppmthr', 2*$ppm)
-annotations = ipa.MSMSannotation(df, dfMS2, allAdds, DBMS2, ppm=$ppm, me=$me, ratiosd=$ratiosd, ppmunk=ppmunk, ratiounk=$ratiounk, ppmthr=ppmthr, pRTNone=$pRTNone, pRTout=$pRTout, mzdCS=$mzdCS, ppmCS=$ppmCS, CSunk=$CSunk, evfilt=$evfilt, ncores=int(os.environ.get('GALAXY_SLOTS')))
+annotations = ipa.MSMSannotation(df, dfMS2, allAdds, DBMS2, ppm=$ppm, ratiosd=$ratiosd, ppmunk=ppmunk, ratiounk=$ratiounk, ppmthr=ppmthr, pRTNone=$pRTNone, pRTout=$pRTout, mzdCS=$mzdCS, ppmCS=$ppmCS, CSunk=$CSunk, evfilt=$evfilt, ncores=int(os.environ.get('GALAXY_SLOTS')))
 @annotation_flatten@
 annotations_flat.to_csv('${output}', index=False)
 </configfile>
@@ -53,39 +54,30 @@ annotations_flat.to_csv('${output}', index=False)
         </section>
 
         <section name="optional_settings" title="optional settings">
-            <param name="me" type="float" value="0.000548579909065">
-                <label>accurate mass of the electron</label>
-                <help>Default 5.48579909065e-04.</help>
-            </param>
-            <param name="ratiosd" type="float" value="0.9">
-                <label>intensity ratio</label>
+            <param name="ratiosd" type="float" value="0.9" label="intensity ratio">
                 <help>acceptable ratio between predicted intensity and observed intensity of isotopes</help>
             </param>
-            <param name="ppmthr" type="float" optional="true">
-                <label>ppm threshold</label>
+            <param name="ppmthr" type="float" optional="true" label="ppm threshold">
                 <help>maximum ppm possible for the annotations. if not provided equal to 2*ppm.</help>
             </param>
-            <param name="pRTNone" type="float" value="0.8">
-                <label>no RT factor</label>
+            <param name="pRTNone" type="float" value="0.8" label="no RT factor">
                 <help>multiplicative factor for the RT if no RTrange present in the database.</help>
             </param>
-            <param name="pRTout" type="float" value="0.4">
-                <label>outside RT factor</label>
+            <param name="pRTout" type="float" value="0.4" label="outside RT factor">
                 <help>multiplicative factor for the RT if measured RT is outside the RTrange present in the database.</help>
             </param>
-            <param name="mzdCS" type="float" value="0">
-                <label>MS2 mz threshold</label>
+            <param name="mzdCS" type="float" value="0" label="MS2 mz threshold">
                 <help>maximum mz difference allowed when computing cosine similarity scores. 
                 If one wants to use this parameter instead of ppmCS, this must be set to 0. Default 0.</help>
             </param>
-            <param name="ppmCS" type="float" value="10">
-                <label>outside RT factor</label>
+            <param name="ppmCS" type="float" value="10" label="maximum ppm for cosine similarity scores">
                 <help>maximum ppm allowed when computing cosine similarity scores. 
                 If one wants to use this parameter instead of mzdCS, this must be set to 0. Default 10.</help>
             </param>
-            <param name="evfilt" type="boolean" value="false">
-                <label>outside RT factor</label>
+            <param name="evfilt" type="select" label="same collision energy">
                 <help>If true, only spectrum acquired with the same collision energy are considered. Default value False.</help>
+                <option value="False">False</option>
+                <option value="True">True</option>
             </param>
         </section>
     </inputs>

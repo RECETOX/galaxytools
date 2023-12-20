@@ -15,6 +15,15 @@
         </param>
     </xml>
 
+    <xml name="bio_connections">
+        <param label="connections list provided" name="connection_list" type="select" optional="true" multiple="true" display="checkboxes"/>
+            <help>list of possible connections between compounds defined as formulas. Only necessary if mode='connections'.</help>
+            <option value="C3H5NO">C3H5NO</option>
+            <option value="C6H12N4O">C6H12N4O</option>
+            <option value="C4H6N2O2">C4H6N2O2</option>
+        </param>
+    </xml>
+
 <token name="@init_import@">
 import pandas as pd
 from ipaPy2 import ipa
