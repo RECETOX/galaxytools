@@ -1,4 +1,4 @@
-<tool id="matchms_filtering" name="matchms filtering" version="@TOOL_VERSION@+galaxy1" profile="21.09">
+<tool id="matchms_filtering" name="matchms filtering" version="@TOOL_VERSION@+galaxy2" profile="21.09">
     <description>filter and normalize mass spectrometry data</description>
 
     <macros>
@@ -175,12 +175,12 @@
         <test>
             <param name="spectra" value="filtering/require_filter.msp" ftype="msp"/>
             <param name="require_smiles_is_true" value="TRUE"/>
-            <output name="output" file="filtering/require_smiles_out.msp" ftype="msp"/>
+            <output name="output" file="filtering/require_out.msp" ftype="msp"/>
         </test>
         <test>
             <param name="spectra" value="filtering/require_filter.msp" ftype="msp"/>
             <param name="require_inchi_is_true" value="TRUE"/>
-            <output name="output" file="filtering/require_inchi_out.msp" ftype="msp"/>
+            <output name="output" file="filtering/require_out.msp" ftype="msp"/>
         </test>
         <test>
             <param name="spectra" value="filtering/input.msp" ftype="msp"/>

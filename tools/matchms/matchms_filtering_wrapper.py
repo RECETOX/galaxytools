@@ -7,11 +7,13 @@ from matchms.filtering import add_compound_name, add_fingerprint, add_losses, ad
 from matchms.filtering import default_filters, normalize_intensities, reduce_to_number_of_peaks, select_by_mz, \
     select_by_relative_intensity
 from matchms.filtering.filter_utils.derive_precursor_mz_and_parent_mass import derive_precursor_mz_from_parent_mass
+from matchms.filtering.filter_utils.smile_inchi_inchikey_conversions import is_valid_inchi, is_valid_smiles
 from matchms.importing import load_from_mgf, load_from_msp
 
 
-def require_key(spectrum, key):
-    if spectrum.get(key):
+def require_key(spectrum, key, function):
+    value = spectrum.get(key)
+    if function(value):
         return spectrum
 
     return None
@@ -95,10 +97,10 @@ def main(argv):
             spectrum.set("precursor_mz", precursor_mz)
 
         if args.require_smiles and spectrum is not None:
-            spectrum = require_key(spectrum, "smiles")
+            spectrum = require_key(spectrum, "smiles", is_valid_smiles)
 
         if args.require_inchi and spectrum is not None:
-            spectrum = require_key(spectrum, "inchi")
+            spectrum = require_key(spectrum, "inchi", is_valid_inchi)
 
         if spectrum is not None:
             filtered_spectra.append(spectrum)

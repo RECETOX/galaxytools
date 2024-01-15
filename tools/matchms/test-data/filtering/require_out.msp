@@ -1,35 +1,3 @@
-FORMULA: C13H14O
-CASNO: 2000130-22-2
-ID: 7198
-COMMENT: SpectrumID: 1752764; Source: A1-13-956/SMS7-13; DOI: 10.1021/ol1029996; QI: 383; Class: Benzene and substituted derivatives; CASRN not real! |RI:1588|
-COMPOUND_NAME: ((1R*,2R*)-1-Methyl-2-phenylethynylcyclopropyl)methanol
-PARENT_MASS: 186.1044655
-RETENTION_INDEX: 1588.0
-PUBCHEMID: 130762197
-NOMINAL_MASS: 186
-INCHI: InChI=1S/C13H14O/c1-13(10-14)9-12(13)8-7-11-5-3-2-4-6-11/h2-6,12,14H,9-10H2,1H3/t12-,13-/m0/s1
-NUM PEAKS: 20
-51.0        89.92
-63.0        89.92
-77.0        179.84
-88.0        39.96
-89.0        59.95
-91.0        49.95
-102.0       149.86
-113.0       49.95
-115.0       229.79
-127.0       139.87
-128.0       999.0
-129.0       199.82
-144.0       99.91
-155.0       119.89
-156.0       14.89
-157.0       1.1
-158.0       0.1
-186.0       39.96
-187.0       5.89
-188.0       0.5
-
 FORMULA: C34H54O4
 CASNO: 2000774-54-3
 ID: 36905
