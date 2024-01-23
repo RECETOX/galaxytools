@@ -1,4 +1,4 @@
-<tool id="recetox_msfinder" name="RECETOX MsFinder" version="@TOOL_VERSION@+galaxy3">
+<tool id="recetox_msfinder" name="RECETOX MsFinder" version="@TOOL_VERSION@+galaxy4">
     <description>Annotation of fragment peaks in mass spectral libraries.</description>
     <macros>
         <import>macros.xml</import>
@@ -7,13 +7,13 @@
     <expand macro="creator" />
 
     <expand macro="requirements" />
-    <command>
+    <command detect_errors="exit_code">
         <![CDATA[
         mkdir output;
         sh ${write_param};
-        mono /MsFinder/MsFinder/bin/Debug/MsfinderConsoleApp.exe annotate -i "$input_data" -m 'MSFINDER.INI' -o 'output/result.msp';
+        mono /MsFinder/MsFinder/bin/Debug/MsfinderConsoleApp.exe annotate -i '$input_data' -m 'MSFINDER.INI' -o 'output/result.msp';
+        [ -f output/log_smiles.smi ] && sed -i '1s/^/smiles\n/' output/log_smiles.smi;
         [ -s output/result.msp ] || rm output/result.msp;
-
     ]]>
     </command>
 
@@ -36,16 +36,24 @@
 			"IsUseCcsForFilteringCandidates=True" \
 			"CcsToleranceForStructureElucidation=10" \
 			"CanExcuteMS2AdductSearch=False" \
-            "IsUseXlogpPrediction=False" >MSFINDER.INI
+            "IsUseXlogpPrediction=False" \
+            "ElementProbabilityCheck=$ElementProbabilityCheck" \
+            "IsotopicAbundanceTolerance=$IsotopicAbundanceTolerance" \
+            "TreeDepth=$TreeDepth" \
+            "$element_ratio_check" >MSFINDER.INI
+            
+            #set element_selected = "\n".join([str($element) for $element in str($element_selection_option).split(",")])
+            printf "%s\n" "$element_selected" >> MSFINDER.INI
         </configfile>
     </configfiles>
 
     <inputs>
         <expand macro="input" />
         <expand macro="parameter" />
-        <!-- <section name="element_selection" title="Element Selection" expanded="true" help="Generate formula candidates that just contain the elements selected by the users.">
-            <expand macro="element_check_parameter" />
-        </section> -->
+        <param name="element_selection_option" type="select" label="Element selection" multiple="true" optional="true"
+            help="Generate formula candidates that just contain the elements selected by the users. Check 'IsTmsMeoxDerivative' if you want to annotate EI-MS spectra.">
+            <expand macro="element_select" />
+        </param>
     </inputs>
 
     <outputs>
