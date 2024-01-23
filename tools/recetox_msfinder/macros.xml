@@ -89,7 +89,7 @@
         FORMULA, PRECURSORMZ and SMILES (or INCHI) metadata entries are required to be present in the input mass spectral library file.
         Each spectrum has to be separated by a single blank line.
 
-        For detailed documentation of the tool please visit https://mtbinfo-team.github.io/mtbinfo.github.io/MS-FINDER/tutorial
+        For detailed documentation of the tool please visit https://systemsomicslab.github.io/mtbinfo.github.io/MS-FINDER/tutorial
     ]]>
     </token>
 
