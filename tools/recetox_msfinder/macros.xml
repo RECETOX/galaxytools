@@ -54,6 +54,8 @@
         <param name="ElementProbabilityCheck" type="boolean" checked="True" truevalue="True" falsevalue="False" label="ElementProbabilityCheck"
             help="Generate formula candidates that satisfy the heuristic rules as described in the Seven Golden Rules paper. For example, if a formula 
             candidate contains the following element counts, i.e. NOPS all > 1, the element counts of N, O, P, and S should be less than 9, 19, 3, and 2, respectively."/>
+        <param name="IsUseEiFragmentDB" type="boolean" checked="False" truevalue="True" falsevalue="False" label="UseEiFragmentDB"
+            help="Utilize the fragment ion library for EI-MS spectral mining"/>
     </xml>
 
     <xml name="element_select">

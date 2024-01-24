@@ -40,7 +40,8 @@
             "ElementProbabilityCheck=$ElementProbabilityCheck" \
             "IsotopicAbundanceTolerance=$IsotopicAbundanceTolerance" \
             "TreeDepth=$TreeDepth" \
-            "$element_ratio_check" >MSFINDER.INI
+            "$element_ratio_check" \
+            "IsUseEiFragmentDB=$IsUseEiFragmentDB" >MSFINDER.INI
             
             #set element_selected = "\n".join([str($element) for $element in str($element_selection_option).split(",")])
             printf "%s\n" "$element_selected" >> MSFINDER.INI
