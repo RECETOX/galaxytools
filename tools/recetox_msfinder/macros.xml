@@ -39,8 +39,9 @@
             <option value="Ppm">Ppm</option>
         </param>
         <param type="integer" value="-1" name="StructurePredictionTimeOut" label="StructurePredictionTimeOut" help="Time out parameter, value of -1 means no timeout" />
-        <param name="LewisAndSeniorCheck" type="boolean" checked="True" truevalue="True" falsevalue="False" label="LEWIS and SENIOR rules check" help="For an explanation of those rules see 'Seven Golden Rules for heuristic filtering of molecular formulas obtained by accurate mass spectrometry'"
-            help="Generate formula candidates that match the valence rules of formula elements." />
+        <param name="LewisAndSeniorCheck" type="boolean" checked="True" truevalue="True" falsevalue="False" label="LEWIS and SENIOR rules check"
+            help="Generate formula candidates that match the valence rules of formula elements. For an explanation of those rules see 'Seven Golden Rules for heuristic 
+            filtering of molecular formulas obtained by accurate mass spectrometry'" />
         <param name="element_ratio_check" type="select" value="CommonRange=TRUE" label="element ratio check." 
             help="Generate formula candidates that satisfy every element ratios (ex. H/C ratio should be between 0 and 3.33 for Common range (99.7%) restriction.)">
             <option value="CommonRange=TRUE" selected="true">Common Range</option>
@@ -48,7 +49,7 @@
             <option value="ExtremeRange=TRUE">No restriction</option>
         </param>
         <param type="integer" value="2" min="1" max="3" name="TreeDepth" label="Tree Depth"
-            help="The limitation of in silico cleavages, i.e. if the user sets '2', the MS-FINDER program generates the fragments until product ions of a product ion."/>
+            help="The limitation of in silico cleavages, i.e. if the user sets '2', the MS-FINDER program generates fragments up to the second level of product ions."/>
         <param type="integer" value="20" min="0" max="100" name="IsotopicAbundanceTolerance" label="Isotopic Ratio Tolerance"
             help="Calculate the isotopic score. The tolerance should be utilized as the sigma value for the Gaussian scoring."/>
         <param name="ElementProbabilityCheck" type="boolean" checked="True" truevalue="True" falsevalue="False" label="Element probability check"
