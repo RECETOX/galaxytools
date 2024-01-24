@@ -70,6 +70,15 @@
             <!-- This is set to 16 since msfinder sometimes places double bonds between certain atoms and sometimes not - there are 16 such cases in this file. -->
         </test>
         <test>
+            <param name="input_data" value="test.msp" ftype="msp" />
+            <param name="element_ratio_check" value="ExtendedRange=TRUE"/>
+            <param name="TreeDepth" value="3"/>
+            <param name="element_selection_option" value="Ocheck=True,Ncheck=True,Pcheck=True,Scheck=True,Fcheck=True,ClCheck=True,BrCheck=True,Icheck=True,SiCheck=True"/>
+            <output_collection name="output" type="list">
+                <element name="result" file="test2_out.msp"/>
+            </output_collection>
+        </test>
+        <test>
             <param name="input_data" value="test_log.msp" ftype="msp" />
             <output_collection name="output" type="list">
                 <element name="log_smiles" file="log_smiles.smi" />
