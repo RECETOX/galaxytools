@@ -39,7 +39,7 @@
             <option value="Ppm">Ppm</option>
         </param>
         <param type="integer" value="-1" name="StructurePredictionTimeOut" label="StructurePredictionTimeOut" help="Time out parameter, value of -1 means no timeout" />
-        <param name="LewisAndSeniorCheck" type="boolean" checked="True" truevalue="True" falsevalue="False" label="LewisAndSeniorCheck"
+        <param name="LewisAndSeniorCheck" type="boolean" checked="True" truevalue="True" falsevalue="False" label="LEWIS and SENIOR rules check" help="For an explanation of those rules see 'Seven Golden Rules for heuristic filtering of molecular formulas obtained by accurate mass spectrometry'"
             help="Generate formula candidates that match the valence rules of formula elements." />
         <param name="element_ratio_check" type="select" value="CommonRange=TRUE" label="element ratio check." 
             help="Generate formula candidates that satisfy every element ratios (ex. H/C ratio should be between 0 and 3.33 for Common range (99.7%) restriction.)">
