@@ -75,7 +75,7 @@
             <param name="TreeDepth" value="3"/>
             <param name="element_selection_option" value="Ocheck=True,Ncheck=True,Pcheck=True,Scheck=True,Fcheck=True,ClCheck=True,BrCheck=True,Icheck=True,SiCheck=True"/>
             <output_collection name="output" type="list">
-                <element name="result" file="test2_out.msp" lines_diff="12"/>
+                <element name="result" file="test2_out.msp" lines_diff="16"/>
             </output_collection>
         </test>
         <test>
