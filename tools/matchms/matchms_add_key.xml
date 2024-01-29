@@ -1,4 +1,4 @@
-<tool id="matchms_add_key" name="matchms add key" version="@TOOL_VERSION@+galaxy0" profile="21.09">
+<tool id="matchms_add_key" name="matchms add key" version="@TOOL_VERSION@+galaxy1" profile="21.09">
     <description>Set metadata key in MSP to static value</description>
     
     <macros>
@@ -27,6 +27,10 @@
 
 from matchms.importing import load_from_msp
 from matchms.exporting import save_as_msp
+import matchms
+
+matchms.Metadata.set_key_replacements({})
+
 spectra = list(load_from_msp("${spectral_library}", metadata_harmonization = "False"))
 new_spectra = []
 for spectrum in spectra:

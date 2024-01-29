@@ -5,18 +5,9 @@ from typing import List
 
 from matchms.exporting import save_as_msp
 from matchms.importing import load_from_msp
+import matchms
 
-
-def get_spectra_names(spectra: list) -> List[str]:
-    """Read the keyword 'compound_name' from a spectra.
-
-    Args:
-        spectra (list): List of individual spectra.
-
-    Returns:
-        List[str]: List with 'compoud_name' of individual spectra.
-    """
-    return [x.get("compound_name") for x in spectra]
+matchms.Metadata.set_key_replacements({})
 
 
 def make_outdir(outdir: str):
@@ -35,23 +26,8 @@ def write_spectra(spectra, outdir):
         spectra (List[Spectrum]): Spectra to write to file
         outdir   (str): Path to destination directory.
     """
-    names = get_spectra_names(spectra)
     for i in range(len(spectra)):
-        outpath = assemble_outpath(names[i], outdir)
-        save_as_msp(spectra[i], outpath)
-
-
-def assemble_outpath(name, outdir):
-    """Filter special chracteres from name.
-
-    Args:
-        name   (str): Name to be filetered.
-        outdir (str): Path to destination directory.
-    """
-    filename = ''.join(filter(str.isalnum, name))
-    outfile = str(filename) + ".msp"
-    outpath = os.path.join(outdir, outfile)
-    return outpath
+        save_as_msp(spectra[i], os.path.join(outdir, f"{i}.msp"))
 
 
 def split_round_robin(iterable, num_chunks):
@@ -76,7 +52,7 @@ parameter = args.parameter
 
 
 if __name__ == "__main__":
-    spectra = load_from_msp(filename, metadata_harmonization=True)
+    spectra = load_from_msp(filename, metadata_harmonization=False)
     make_outdir(outdir)
 
     if method == "one-per-file":

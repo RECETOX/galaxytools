@@ -1,4 +1,4 @@
-<tool id="matchms_metadata_export" name="matchms metadata export" version="@TOOL_VERSION@+galaxy0" profile="21.09">
+<tool id="matchms_metadata_export" name="matchms metadata export" version="@TOOL_VERSION@+galaxy1" profile="21.09">
     <description>extract all metadata from mass spectra file to tabular format</description>
     <macros>
         <import>macros.xml</import>
@@ -19,6 +19,11 @@
 <configfile name="matchms_python_cli">
 from matchms.importing import load_from_msp, load_from_mgf
 from matchms.exporting.metadata_export import export_metadata_as_csv
+import matchms
+
+
+if "$harmonize_metadata" == "False":
+    matchms.Metadata.set_key_replacements({})
 
 spectra_list = list(load_from_${input_file.ext}("${input_file}", $harmonize_metadata))
 
@@ -39,10 +44,12 @@ export_metadata_as_csv(spectra_list, "${output_file}")
     <tests>
         <test>
             <param name="input_file" value="convert/mgf_out.mgf" ftype="mgf"/>
+            <param name="harmonize_metadata" value="True"/>
             <output name="output_file" file="convert/metadata.csv" ftype="csv" compare="sim_size" delta="0"/>
         </test>
         <test>
             <param name="input_file" value="similarity/RECETOX_Exposome_pesticides_HR_MS_20220323.msp" ftype="msp"/>
+            <param name="harmonize_metadata" value="True"/>
             <output name="output_file" file="convert/metadata.csv" ftype="csv" compare="sim_size" delta="0"/>
         </test>
     </tests>
