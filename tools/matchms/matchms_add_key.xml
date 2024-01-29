@@ -25,9 +25,10 @@
 <configfile name="matchms_python_cli">
 @init_logger@
 
+import matchms
 from matchms.importing import load_from_msp
 from matchms.exporting import save_as_msp
-import matchms
+
 
 matchms.Metadata.set_key_replacements({})
 

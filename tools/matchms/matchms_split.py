@@ -2,10 +2,11 @@ import argparse
 import itertools
 import os
 from typing import List
+import matchms
 
 from matchms.exporting import save_as_msp
 from matchms.importing import load_from_msp
-import matchms
+
 
 matchms.Metadata.set_key_replacements({})
 

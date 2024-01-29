@@ -17,9 +17,9 @@
 
 <configfiles>
 <configfile name="matchms_python_cli">
+import matchms
 from matchms.importing import load_from_msp, load_from_mgf
 from matchms.exporting.metadata_export import export_metadata_as_csv
-import matchms
 
 
 if "$harmonize_metadata" == "False":
