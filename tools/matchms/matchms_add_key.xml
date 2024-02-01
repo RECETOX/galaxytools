@@ -46,7 +46,15 @@ save_as_msp(new_spectra, "${output}")
             help="Mass spectral library file to add key." />
 
         <param label="Attribute Name" name="key" type="text" value="" help="Name of the attribute which will be assigned to all spectra records in the MSP." />
-        <param label="Value" name="value" type="text" value="" help="Value of the attribute which will be assigned to all spectra records in the MSP." />
+        <param label="Value" name="value" type="text" value="" help="Value of the attribute which will be assigned to all spectra records in the MSP." >
+            <sanitizer>
+                <valid initial="default">
+                    <add value="{}" />
+                    <add value="[]" />
+                    <add value="\" />
+                </valid>
+            </sanitizer>
+        </param>
     </inputs>
 
     <outputs>
@@ -59,7 +67,13 @@ save_as_msp(new_spectra, "${output}")
             <param name="spectral_library" value="filtering/input.msp" ftype="msp"/>
             <param name="key" value="tool_used"/>
             <param name="value" value="matchms"/>
-            <output name="output" file="out_matchms_add_key.msp" ftype="msp"/>
+            <output name="output" file="add_key/out_matchms_add_key.msp" ftype="msp"/>
+        </test>
+        <test>
+            <param name="spectral_library" value="add_key/add_key_test2.msp" ftype="msp"/>
+            <param name="key" value="adduct"/>
+            <param name="value" value="[M]+"/>
+            <output name="output" file="add_key/add_key_test2_out.msp" ftype="msp"/>
         </test>
     </tests>
 
