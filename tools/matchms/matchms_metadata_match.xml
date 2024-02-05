@@ -131,9 +131,9 @@ scores.to_json("$scores_out")
             The output will be __TRUE__ if the value is within the tolerance or an exact match and __FALSE__ otherwise.
 
         .. rubric:: **Footnotes**
-        .. [1] SQL join types explained on LearnSQL_.
+        .. [1] SQL join types explained on W3School_.
         
-        .. _LearnSQL: https://learnsql.com/blog/sql-joins-types-explained/
+        .. _W3School: https://www.w3schools.com/sql/sql_join.asp
 
         @HELP_matchms@
     </help>
