@@ -9,15 +9,15 @@
     <expand macro="requirements"/>
 
     <command detect_errors="exit_code"><![CDATA[
-        python '${create_folder_structure}' &&
-        find TMPQCXMS/*/ -type d | xargs -I {} -P 4 sh -c 'cd {} && qcxms --prod >> $log' &&
-        getres &&
-        plotms &&
+        python3 '${create_folder_structure}' &&
+        find TMPQCXMS/*/ -type d | xargs -I {} -P 4 sh -c 'cd {} && /qcxms_bin/qcxms --prod >> $log' &&
+        /qcxms_bin/getres &&
+        /plotms_bin/PlotMS.v.6.2.0/plotms &&
         sh ${__tool_directory__}/msp_out.sh
     ]]></command>
 
     <environment_variables>
-        <environment_variable name="OMP_NUM_THREADS">1</environment_variable>
+        <environment_variable name="OMP_NUM_THREADS">1,2,1</environment_variable>
     </environment_variables>
 
     <configfiles>
@@ -67,7 +67,6 @@ for folder_name, in_file, start_file, xyz_file in zip(folder_names, in_collectio
     </outputs>
 
     <tests>
-        <test expect_failure="true" />
     </tests>
 
     <help><![CDATA[
