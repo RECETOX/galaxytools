@@ -1,5 +1,5 @@
 <macros>
-    <token name="@TOOL_VERSION@">0.3.4</token>
+    <token name="@TOOL_VERSION@">0.4.0</token>
     <xml name="creator">
         <creator>
             <person
@@ -7,19 +7,32 @@
                 familyName="Hecht"
                 url="https://github.com/hechth"
                 identifier="0000-0001-6744-996X" />
+            <person
+                givenName="Wudmir"
+                familyName="Rojas"
+                url="https://github.com/wverastegui"
+                identifier="0000-0001-7036-9987" />
             <organization
                 url="https://www.recetox.muni.cz/"
                 email="GalaxyToolsDevelopmentandDeployment@space.muni.cz"
                 name="RECETOX MUNI" />
         </creator>
     </xml>
-
+ 
     <token name="@HELP@">
         <![CDATA[
+        ## RIAssigner
+
         RIAssigner can be used to read data from .msp, .csv and .tsv files using matchms and pandas and to compute the
         retention indices for the data. A reference list of retention indexed compounds (traditionally an Alkane series)
         with retention times is used to compute the RI for a query dataset of retention time values using the van den
         Dool method or by using cubic spline based interpolation.
+
+        ## Assign RI from Comment Field
+
+        This tool can be used to assign retention indices (RI) from the comment field in csv, tsv, parquet, or msp files.
+        The tool will read RI from the comment field and assign them to the RI field. The type of gas chromatographic column
+        for which to set the retention index value can be selected.
         ]]>
     </token>
 </macros>

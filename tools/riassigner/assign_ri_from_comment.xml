@@ -35,7 +35,7 @@ query.write('results.${input.ext}')
     <inputs>
         <param name="input" type="data" format="csv,tsv,parquet,msp" label="Input File">
             <help><![CDATA[
-                From a file containing a comment field. The tool will read ri from the comment field and assign them
+                From a file that contains a comment field. The tool will read ri from the comment field and assign them
                 to the RI field.
                 Accepted formats: CSV, TSV, Parquet, and MSP
             ]]></help>
