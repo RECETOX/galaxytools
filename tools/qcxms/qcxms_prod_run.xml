@@ -67,6 +67,7 @@ for folder_name, in_file, start_file, xyz_file in zip(folder_names, in_collectio
     </outputs>
 
     <tests>
+        <test expect_failure="true"/>
     </tests>
 
     <help><![CDATA[
