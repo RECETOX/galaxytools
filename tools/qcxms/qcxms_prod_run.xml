@@ -10,7 +10,7 @@
 
     <command detect_errors="exit_code"><![CDATA[
         python3 '${create_folder_structure}' &&
-        find TMPQCXMS/*/ -type d | xargs -I {} -P 4 sh -c 'cd {} && /qcxms_bin/qcxms --prod >> $log' &&
+        find TMPQCXMS/*/ -type d | xargs -I {} -P ${GALAXY_SLOTS} sh -c 'cd {} && /qcxms_bin/qcxms --prod >> $log' &&
         /qcxms_bin/getres &&
         /plotms_bin/PlotMS.v.6.2.0/plotms &&
         sh ${__tool_directory__}/msp_out.sh
