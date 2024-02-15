@@ -1,0 +1,72 @@
+<tool id="matchms_remove_key" name="matchms remove key" version="@TOOL_VERSION@+galaxy0" profile="21.09">
+    <description>Remove metadata entry for all spectra in a library</description>
+    
+    <macros>
+        <import>macros.xml</import>
+        <import>help.xml</import>
+    </macros>
+
+    <expand macro="creator"/>
+
+    <edam_operations>
+        <edam_operation>operation_3695</edam_operation>
+    </edam_operations>
+    <expand macro="bio.tools"/>
+
+    <requirements>
+        <requirement type="package" version="@TOOL_VERSION@">matchms</requirement>
+    </requirements>
+
+    <command detect_errors='aggressive'><![CDATA[
+        python3 '${matchms_python_cli}'
+    ]]></command>
+
+<configfiles>
+<configfile name="matchms_python_cli">
+import matchms
+@init_logger@
+
+matchms.Metadata.set_key_replacements({})
+key = "${key}".lower()
+spectra = list(matchms.importing.load_from_msp("${spectral_library}", metadata_harmonization = "False"))
+new_spectra = []
+for spectrum in spectra:
+    if spectrum.get(key) is not None:
+        metadata = spectrum.metadata
+        del metadata[key]
+        spectrum.metadata = metadata
+    new_spectra.append(spectrum)
+matchms.exporting.save_as_msp(new_spectra, "${output}")
+</configfile>
+</configfiles>
+
+    <inputs>
+        <param label="Spectra file" name="spectral_library" type="data" format="msp"
+            help="Mass spectral library file to add key." />
+
+        <param label="Attribute Name" name="key" type="text" value="" help="Name of the attribute which will be removed from all spectra records in the MSP." />
+    </inputs>
+
+    <outputs>
+        <data label="${tool.name} on ${on_string}" name="output" format="msp">
+        </data>
+    </outputs>
+
+    <tests>
+        <test>
+            <param name="spectral_library" value="filtering/input.msp" ftype="msp"/>
+            <param name="key" value="ionmode"/>
+            <output name="output" file="out_matchms_remove_key.msp" ftype="msp" compare="sim_size"/>
+        </test>
+    </tests>
+
+    <help><![CDATA[
+        Description
+        The tool take MSP file as an input and take as parameters the name of the 
+        attribute which will be removed from all spectra records in the MSP.
+    ]]></help>
+
+    <citations>
+        <citation type="doi">10.5281/zenodo.6035335</citation>
+    </citations>
+</tool>

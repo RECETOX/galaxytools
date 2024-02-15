@@ -1,14 +1,15 @@
-<tool id="recetox_aplcms_generate_feature_table" name="recetox-aplcms - generate feature table" version="@TOOL_VERSION@+galaxy2" profile="21.09">
+<tool id="recetox_aplcms_generate_feature_table" name="recetox-aplcms - generate feature table" version="@TOOL_VERSION@+galaxy3" profile="21.09">
     <description>generate feature table from noise-removed HRMS profile data</description>
     <macros>
         <import>macros.xml</import>
         <import>help.xml</import>
     </macros>
+    <expand macro="annotation"/>
     <edam_operations>
         <edam_operation>operation_3215</edam_operation>
         <edam_operation>operation_3799</edam_operation>
     </edam_operations>
-    <expand macro="annotation"/>
+    <expand macro="refs"/>
     <expand macro="creator"/>
     <expand macro="requirements"/>
 
@@ -37,7 +38,7 @@
                  #else:
                  max_bandwidth = NA,
                  #end if
-                 #if $advanced.sd_cut.sd_cut_bounds == "FALSE":
+                 #if $advanced.sd_cut.sd_cut_bounds == "TRUE":
                  sd_cut = c($advanced.sd_cut.sd_cut_min, $advanced.sd_cut.sd_cut_max),
                  #else
                  sd_cut = c(0, Inf),
@@ -72,7 +73,11 @@
     </outputs>
 
     <tests>
-
+        <test expect_failure="true" />
+        <test>
+            <param name="profile" value="remove_noise_docker.parquet" />
+            <output name="output_file" file="peak_table_galaxy.parquet" />
+        </test>
     </tests>
 
     <help>

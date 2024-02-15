@@ -5,11 +5,11 @@
     <expand macro="creator"/>
 
     <requirements>
-        <requirement type="package">click</requirement>
-        <requirement type="package">pyarrow</requirement>
-        <requirement type="package">pytables</requirement>
-        <requirement type="package">pandas</requirement>
-        <requirement type="package">pandasql</requirement>
+        <requirement type="package" version="7.0">click</requirement>
+        <requirement type="package" version="0.15.1">pyarrow</requirement>
+        <requirement type="package" version="3.6.1">pytables</requirement>
+        <requirement type="package" version="1.3.5">pandas</requirement>
+        <requirement type="package" version="0.7.3">pandasql</requirement>
         <requirement type="package" version="3.7">python</requirement>
     </requirements>
 
@@ -88,11 +88,15 @@
             </param>
             <expand macro="internal_name" format="h5"/>
             <expand macro="internal_name" format="sqlite"/>
+            <when value="csv"></when>
+            <when value="tsv"></when>
+            <when value="feather"></when>
+            <when value="parquet"></when>
         </conditional>
     </inputs>
 
     <outputs>
-        <data name="output">
+        <data name="output" format="h5">
             <change_format>
                 <when input="result.format" value="h5" format="h5"/>
                 <when input="result.format" value="csv" format="csv"/>
@@ -121,4 +125,13 @@
             <output name="output" file="ab.csv" ftype="csv"/>
         </test>
     </tests>
+
+    <help>
+    Query tool simplifies data handling by offering seamless conversion between different tabular data types and the execution of SQL SELECT 
+    and JOIN operations on various input file formats. Additionally, it allows you to customize the output format to meet your specific requirements.
+    </help>
+
+    <citations>
+        <citation type="doi">https://doi.org/10.5281/zenodo.6035335</citation>
+    </citations>
 </tool>

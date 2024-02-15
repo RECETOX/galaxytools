@@ -1,4 +1,4 @@
-<tool id="biotransformer" name="BioTransformer" version="@TOOL_VERSION@+galaxy1" profile="21.09">
+<tool id="biotransformer" name="BioTransformer" version="@TOOL_VERSION@+galaxy2" profile="21.09">
     <macros>
         <import>macros.xml</import>
     </macros>
@@ -7,7 +7,7 @@
         <xref type="bio.tools">biotransformer</xref>
     </xrefs>
     <requirements>
-        <requirement type="package" version="@TOOL_VERSION@">biotransformer</requirement>
+        <requirement type="package" version="3.0_20230403">biotransformer</requirement>
         <requirement type="package" version="3.1.1">openbabel</requirement>
         <requirement type="package" version="1.1.1">pandas</requirement>
     </requirements>
@@ -59,19 +59,19 @@
             <param name="input_file" value="smiles.csv"/>
             <output name="output_file">
                 <assert_contents>
-                    <has_size value="8600" delta="100"/>
+                    <has_size value="8600" delta="300"/>
                     <has_n_lines n="225" delta="10"/>
                 </assert_contents>
             </output>
             <output name="output_file2">
                 <assert_contents>
-                    <has_size value="8600" delta="100"/>
+                    <has_size value="8600" delta="300"/>
                     <has_n_lines n="225" delta="10"/>
                 </assert_contents>
             </output>
             <output name="output_file3">
                 <assert_contents>
-                    <has_size value="7400" delta="100"/>
+                    <has_size value="7400" delta="300"/>
                     <has_n_lines n="186" delta="10"/>
                 </assert_contents>
             </output>

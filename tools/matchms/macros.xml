@@ -1,5 +1,5 @@
 <macros>
-    <token name="@TOOL_VERSION@">0.20.0</token>
+    <token name="@TOOL_VERSION@">0.24.0</token>
 
     <xml name="creator">
         <creator>
@@ -57,9 +57,11 @@
 
     <xml name="input_param">
         <conditional name="scores">
-            <param name="use_scores" label="Use Scores Object" type="boolean" truevalue="TRUE" falsevalue="FALSE"
-                   checked="false"/>
-            <when value="TRUE">
+            <param name="use_scores" label="Use Scores Object" type="select">
+                <option value="False" selected="true">FALSE</option>
+                <option value="True">TRUE</option>
+            </param>
+            <when value="True">
                 <param label="Scores object" name="scores_in" type="data" format="json"
                     help="Scores objects calculated previously using one of the matchms similarity tools." />
                 <param label="join type" name="join_type" type="select" display="radio"
@@ -70,7 +72,7 @@
                     <option value="outer">outer</option>
                 </param>
             </when>
-            <when value="FALSE">
+            <when value="False">
                 <param label="Queries spectra" name="queries" type="data" format="msp"
                     help="Query mass spectra to match against references."/>
                 <param label="Reference spectra" name="references" type="data" format="msp"
@@ -89,7 +91,7 @@
 <token name="@init_scores@">
 from matchms.importing import load_from_msp, scores_from_json
 from matchms import Scores
-#if $scores.use_scores
+#if $scores.use_scores == "True"
 scores = scores_from_json("$scores_in")
 join_type = "$scores.join_type"
 #else

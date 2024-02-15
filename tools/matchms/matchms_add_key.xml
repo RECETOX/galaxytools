@@ -1,0 +1,89 @@
+<tool id="matchms_add_key" name="matchms add key" version="@TOOL_VERSION@+galaxy1" profile="21.09">
+    <description>Set metadata key in MSP to static value</description>
+    
+    <macros>
+        <import>macros.xml</import>
+        <import>help.xml</import>
+    </macros>
+
+    <expand macro="creator"/>
+
+    <edam_operations>
+        <edam_operation>operation_2409</edam_operation>
+    </edam_operations>
+    <expand macro="bio.tools"/>
+
+    <requirements>
+        <requirement type="package" version="@TOOL_VERSION@">matchms</requirement>
+    </requirements>
+
+    <command detect_errors='aggressive'><![CDATA[
+        python ${matchms_python_cli}
+    ]]></command>
+
+<configfiles>
+<configfile name="matchms_python_cli">
+@init_logger@
+
+import matchms
+from matchms.importing import load_from_msp
+from matchms.exporting import save_as_msp
+
+
+matchms.Metadata.set_key_replacements({})
+
+spectra = list(load_from_msp("${spectral_library}", metadata_harmonization = "False"))
+new_spectra = []
+for spectrum in spectra:
+    spectrum.set("${key}", "${value}")
+    new_spectra.append(spectrum)
+save_as_msp(new_spectra, "${output}")
+</configfile>
+</configfiles>
+
+    <inputs>
+        <param label="Spectra file" name="spectral_library" type="data" format="msp"
+            help="Mass spectral library file to add key." />
+
+        <param label="Attribute Name" name="key" type="text" value="" help="Name of the attribute which will be assigned to all spectra records in the MSP." />
+        <param label="Value" name="value" type="text" value="" help="Value of the attribute which will be assigned to all spectra records in the MSP." >
+            <sanitizer>
+                <valid initial="default">
+                    <add value="{}" />
+                    <add value="[]" />
+                    <add value="\" />
+                </valid>
+            </sanitizer>
+        </param>
+    </inputs>
+
+    <outputs>
+        <data label="${tool.name} on ${on_string}" name="output" format="msp">
+        </data>
+    </outputs>
+
+    <tests>
+        <test>
+            <param name="spectral_library" value="filtering/input.msp" ftype="msp"/>
+            <param name="key" value="tool_used"/>
+            <param name="value" value="matchms"/>
+            <output name="output" file="add_key/out_matchms_add_key.msp" ftype="msp"/>
+        </test>
+        <test>
+            <param name="spectral_library" value="add_key/add_key_test2.msp" ftype="msp"/>
+            <param name="key" value="adduct"/>
+            <param name="value" value="[M]+"/>
+            <output name="output" file="add_key/add_key_test2_out.msp" ftype="msp"/>
+        </test>
+    </tests>
+
+    <help><![CDATA[
+        Description
+        The tool take MSP file as an input and take as parameters the name of the 
+        attribute and its value which will be assigned to all spectra records in the MSP.
+    ]]></help>
+
+    <citations>
+        <citation type="doi">https://doi.org/10.5281/zenodo.6035335</citation>
+    </citations>
+</tool>
