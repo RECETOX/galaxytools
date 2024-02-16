@@ -4,7 +4,7 @@ homepage_url: "TODO"
 categories:
   - Metabolomics
 repositories:
-  riassigner:
+  use_theoretical_mz_annotations:
     description: "TODO"
     long_description: |
       "TODO"
