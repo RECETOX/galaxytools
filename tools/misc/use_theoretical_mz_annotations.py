@@ -1,5 +1,5 @@
 import argparse
-from typing import Tuple, Iterator
+from typing import Iterator, Tuple
 
 
 def get_peak_values(peak: str) -> Tuple[float, float, str]:
