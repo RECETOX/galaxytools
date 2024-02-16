@@ -1,0 +1,57 @@
+<tool id="use_theoretical_mz_annotations" name="Use Theoretical M/Z Annotations" version="@TOOL_VERSION@+galaxy4" profile="21.09">
+    <description>Use theoretical M/Z annotations in the input MSP or MGF file</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="creator"/>
+
+    <xrefs>
+        <xref type="bio.tools">use_theoretical_mz_annotations</xref>
+    </xrefs>
+
+    <command detect_errors="exit_code"><![CDATA[
+    python '$__tool_directory__/use_theoretical_mz_annotations.py'
+    -i '${input}'
+    -o '${output_file}' 
+    #if $only_theoretical_annotated
+    -a
+    #end if
+    ]]>
+    </command>
+
+    <inputs>
+        <param name="input" type="data" format="msp,mgf" label="Input MSP or MGF file" />
+        <param name="output_file" type="text" label="Output file name" />
+        <param name="only_theoretical_annotated" type="boolean" label="use only theoretical annotated peaks?" truevalue="True" falsevalue="False" checked="false" />
+    </inputs>
+
+    <outputs>
+        <data name="output_data" format_source="input" />
+    </outputs>
+
+    <tests>
+        <test>
+            <param name="input" value="input.msp" ftype="msp"/>
+            <param name="output_file" value="output_only_annotated.msp"/>
+            <param name="only_theoretical_annotated" value="True"/>
+            <output name="output_data" value="output_only_annotated.msp"/>
+        </test>
+        <test>
+            <param name="input" value="input.msp" ftype="msp"/>
+            <param name="output_file" value="output_plus_no_annotated.msp"/>
+            <param name="only_theoretical_annotated" value="False"/>
+            <output name="output_data" value="output_plus_no_annotated.msp"/>
+        </test>
+    </tests>
+
+    <help>
+        <![CDATA[
+        This tool uses theoretical M/Z annotations in the input MSP or MGF file. 
+        You can choose whether to include non-annotated peaks in the output.
+        ]]>
+    </help>
+    <!-- check is this is the correct citation -->
+    <citations>
+        <citation type="doi">10.21105/joss.04337</citation>
+    </citations>
+</tool>
