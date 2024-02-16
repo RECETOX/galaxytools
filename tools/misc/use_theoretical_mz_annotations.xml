@@ -12,7 +12,7 @@
     <command detect_errors="exit_code"><![CDATA[
     python '$__tool_directory__/use_theoretical_mz_annotations.py'
     -i '${input}'
-    -o '${output_file}' 
+    -o '${output_data}' 
     #if $only_theoretical_annotated
     -a
     #end if
@@ -21,7 +21,6 @@
 
     <inputs>
         <param name="input" type="data" format="msp,mgf" label="Input MSP or MGF file" />
-        <param name="output_file" type="text" label="Output file name" />
         <param name="only_theoretical_annotated" type="boolean" label="use only theoretical annotated peaks?" truevalue="True" falsevalue="False" checked="false" />
     </inputs>
 
@@ -32,13 +31,11 @@
     <tests>
         <test>
             <param name="input" value="input.msp" ftype="msp"/>
-            <param name="output_file" value="output_only_annotated.msp"/>
             <param name="only_theoretical_annotated" value="True"/>
             <output name="output_data" value="output_only_annotated.msp"/>
         </test>
         <test>
             <param name="input" value="input.msp" ftype="msp"/>
-            <param name="output_file" value="output_plus_no_annotated.msp"/>
             <param name="only_theoretical_annotated" value="False"/>
             <output name="output_data" value="output_plus_no_annotated.msp"/>
         </test>
