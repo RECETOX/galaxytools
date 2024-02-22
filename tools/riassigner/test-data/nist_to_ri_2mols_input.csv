@@ -1,0 +1,3 @@
+﻿casno,num_peaks,compound_name,retention_index,formula,id,comment,inchi,smiles,nominal_mass,
+7732185,5,Water,,H2O,9,"SemiStdNP=317 StdNP=323/4/2 StdPolar=1053/14/2 ; NIST MS# 7, Seq# M67",InChI=1S/H2O/h1H2,O,18
+67561,16,Methyl Alcohol,,CH4O,32,"SemiStdNP=354/16/10 StdNP=379/7/34 StdPolar=903/8/35 ; NIST MS# 229809, Seq# M1806","InChI=1S/CH4O/c1-2/h2H,1H3",CO,32
