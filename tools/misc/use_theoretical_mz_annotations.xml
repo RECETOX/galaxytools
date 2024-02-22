@@ -1,13 +1,9 @@
-<tool id="use_theoretical_mz_annotations" name="Use Theoretical M/Z Annotations" version="@TOOL_VERSION@+galaxy4" profile="21.09">
-    <description>Use theoretical M/Z annotations in the input MSP or MGF file</description>
+<tool id="use_theoretical_mz" name="use theoretical m/z values" version="@TOOL_VERSION@+galaxy4" profile="21.09">
+    <description>Overwrite experimentally measured mz values for peaks with theoretical values from peak comments.</description>
     <macros>
         <import>macros.xml</import>
     </macros>
     <expand macro="creator"/>
-
-    <xrefs>
-        <xref type="bio.tools">use_theoretical_mz_annotations</xref>
-    </xrefs>
 
     <command detect_errors="exit_code"><![CDATA[
     python '$__tool_directory__/use_theoretical_mz_annotations.py'
@@ -20,8 +16,8 @@
     </command>
 
     <inputs>
-        <param name="input" type="data" format="msp,mgf" label="Input MSP or MGF file" />
-        <param name="only_theoretical_annotated" type="boolean" label="use only theoretical annotated peaks?" truevalue="True" falsevalue="False" checked="false" />
+        <param name="input" type="data" format="msp,mgf" label="Input mass spectral library with peak comments in RIKEN format." />
+        <param name="only_theoretical_annotated" type="boolean" label="only retain annotated peaks" truevalue="True" falsevalue="False" checked="false" />
     </inputs>
 
     <outputs>
