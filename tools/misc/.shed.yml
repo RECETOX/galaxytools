@@ -1,13 +1,13 @@
 owner: recetox
 remote_repository_url: "https://github.com/RECETOX/galaxytools/tree/master/tools/misc"
-homepage_url: "TODO"
+homepage_url: "https://github.com/RECETOX/galaxytools"
 categories:
   - Metabolomics
 repositories:
   use_theoretical_mz_annotations:
-    description: "TODO"
+    description: "use theoretical m/z values from peak annotations"
     long_description: |
-      "TODO"
+      "Overwrite experimentally measured mz values for peaks with theoretical values from peak comments."
     include:
       - use_theoretical_mz_annotations.xml
       - macros.xml
