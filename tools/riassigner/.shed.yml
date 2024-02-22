@@ -19,6 +19,6 @@ repositories:
       "Assign RI from Comment Field is a tool for assigning retention indices from the comment field in csv, tsv, parquet, or msp files.
       The tool will read RI from the comment field and assign them to the RI field."
     include:
-      - assign_ri_from_comment.xml
+      - riassigner_from_comment.xml
       - macros.xml
       - test-data

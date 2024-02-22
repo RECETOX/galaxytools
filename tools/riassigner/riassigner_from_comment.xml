@@ -1,5 +1,5 @@
-<tool id="assign_ri_from_comment" name="Assign RI from Comment Field" version="@TOOL_VERSION@+galaxy4" profile="21.09">
-    <description>Assign RI from comment field in csv, tsv, parquet, or msp files</description>
+<tool id="riassigner_from_comment" name="RIAssigner init from comment" version="@TOOL_VERSION@+galaxy4" profile="21.09">
+    <description>Assign different retention indices from unstructured comment metadata</description>
     <macros>
         <import>macros.xml</import>
     </macros>
@@ -33,12 +33,10 @@ query.write('results.${input.ext}')
     </configfiles>
 
     <inputs>
-        <param name="input" type="data" format="csv,tsv,parquet,msp" label="Input File">
-            <help><![CDATA[
-                From a file that contains a comment field. The tool will read ri from the comment field and assign them
-                to the RI field.
-                Accepted formats: CSV, TSV, Parquet, and MSP
-            ]]></help>
+        <param name="input" type="data" format="csv,tsv,parquet,msp,mgf" label="Input File">
+            <help>
+                File with 'comment' metadata in which to assign the selected retention index type from 'comment' to 'retention_index'.
+            </help>
         </param>
         <param name="format" type="select" label="GC column type" help="Type of gas chromatographic column for which to set the retention index value">
             <option value="SemiStdNP">Semi Standard Non-Polar</option>
@@ -48,7 +46,7 @@ query.write('results.${input.ext}')
     </inputs>
 
     <outputs>
-        <data format_source="input" name="output" />
+        <data format_source="input" name="output" label="${on_string} with ${format} RI"/>
     </outputs>
 
     <tests>
@@ -62,11 +60,13 @@ query.write('results.${input.ext}')
         </test>
     </tests>
 
-    <help>
-        <![CDATA[
-        @HELP@
-        ]]>
-    </help>
+    <help><![CDATA[
+        # Assign RI from Comment Field
+
+        This tool can be used to assign retention indices (RI) from the comment field in csv, tsv, parquet, or msp files.
+        The tool will read RI from the comment field and assign them to the RI field. The type of gas chromatographic column
+        for which to set the retention index value can be selected.
+    ]]></help>
     
     <citations>
         <citation type="doi">10.21105/joss.04337</citation>
