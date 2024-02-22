@@ -21,7 +21,7 @@
 
     <token name="@HELP@">
         <![CDATA[
-        TODO
+        This tool should be used after assigning peak annotations including theoretical mz values and structure annotations using recetox-msfinder. The tool overwrites the experimental peak mz value with the theoretical value from the peak annotation.
         ]]>
     </token>
 </macros>
