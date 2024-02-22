@@ -21,18 +21,12 @@
  
     <token name="@HELP@">
         <![CDATA[
-        ## RIAssigner
+        # RIAssigner
 
         RIAssigner can be used to read data from .msp, .csv and .tsv files using matchms and pandas and to compute the
         retention indices for the data. A reference list of retention indexed compounds (traditionally an Alkane series)
         with retention times is used to compute the RI for a query dataset of retention time values using the van den
         Dool method or by using cubic spline based interpolation.
-
-        ## Assign RI from Comment Field
-
-        This tool can be used to assign retention indices (RI) from the comment field in csv, tsv, parquet, or msp files.
-        The tool will read RI from the comment field and assign them to the RI field. The type of gas chromatographic column
-        for which to set the retention index value can be selected.
         ]]>
     </token>
 </macros>
