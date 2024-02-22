@@ -21,8 +21,6 @@
  
     <token name="@HELP@">
         <![CDATA[
-        # RIAssigner
-
         RIAssigner can be used to read data from .msp, .csv and .tsv files using matchms and pandas and to compute the
         retention indices for the data. A reference list of retention indexed compounds (traditionally an Alkane series)
         with retention times is used to compute the RI for a query dataset of retention time values using the van den

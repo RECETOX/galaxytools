@@ -61,8 +61,6 @@ query.write('results.${input.ext}')
     </tests>
 
     <help><![CDATA[
-        # Assign RI from Comment Field
-
         This tool can be used to assign retention indices (RI) from the comment field in csv, tsv, parquet, or msp files.
         The tool will read RI from the comment field and assign them to the RI field. The type of gas chromatographic column
         for which to set the retention index value can be selected.
