@@ -10,5 +10,6 @@ repositories:
       "Overwrite experimentally measured mz values for peaks with theoretical values from peak comments."
     include:
       - use_theoretical_mz_annotations.xml
+      - use_theoretical_mz_annotations.py
       - macros.xml
       - test-data
