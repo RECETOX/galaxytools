@@ -6,7 +6,7 @@
     <expand macro="creator"/>
 
     <command detect_errors="exit_code"><![CDATA[
-    python3 '$__tool_directory__/use_theoretical_mz_annotations.py'
+    python3 '${__tool_directory__}/use_theoretical_mz_annotations.py'
     -i '${input}'
     -o '${output_data}' 
     #if $only_theoretical_annotated
