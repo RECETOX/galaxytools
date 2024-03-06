@@ -1,6 +1,6 @@
 #!/bin/sh
 
-molname=`sed -n '2{p;q}'  TMPQCXMS/TMP.1/start.xyz`
+molname=`sed -n '1{p;q}'  molname.txt`
 kword=$(grep 'NPOINTS' result.jdx)
 num_peaks=$(echo "$kword" | sed 's/^[^=]*=//')
 echo `pwd`
