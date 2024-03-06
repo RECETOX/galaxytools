@@ -58,7 +58,7 @@ shutil.copy2(os.path.join(os.path.dirname(xyz_file), xyz_file), os.path.join(new
     </outputs>
 
     <tests>
-        <test>
+        <test expect_num_outputs="1">
             <param name="in_file" value="TMP.1_qcxms_in.txt" ftype="txt"/>
             <param name="start_file" value="TMP.1_qcxms_start.txt" ftype="txt"/>
             <param name="xyz_file" value="TMP.1_start_xyz.txt" ftype="txt"/>
