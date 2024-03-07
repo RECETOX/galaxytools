@@ -25,9 +25,6 @@ import shutil
 names = '$xyz_file.name'
 folder_name = names.split("_")[0]
 
-in_file = '$in_file'
-start_file = '$start_file'
-xyz_file = '$xyz_file'
 
 # Create a new output folder to store the result
 output_path = 'TMPQCXMS'
