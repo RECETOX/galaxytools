@@ -38,7 +38,7 @@ with open(output_file, 'w') as output:
 
     <inputs>
         <param type="data" name="mol" label="Molecule 3D structure [.xzy]" format="xyz,txt" />
-        <param type="data_collection" collection_type="list" name="res_files" label="res files [.res]" format="res,txt,text"/>
+        <param type="data_collection" collection_type="list" name="res_files" label="res files [.res]" format="txt,text"/>
     </inputs>
 
     <outputs>
