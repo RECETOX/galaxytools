@@ -6,14 +6,11 @@
     </macros>
     <expand macro="edam"/>
     <expand macro="creator"/>
-    <requirements>
-        <requirement type="package" version="6.2.0">plotms</requirement>
-        <requirement type="package" version="3.10">python</requirement>
-    </requirements>
+    <expand macro="requirements"/>
 
     <command detect_errors="exit_code"><![CDATA[
         python3 '${get_res}' &&
-        plotms &&
+        /plotms_bin/PlotMS.v.6.2.0/plotms &&
         sh ${__tool_directory__}/msp_out.sh
     ]]></command>
 
