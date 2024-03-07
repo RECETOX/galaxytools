@@ -36,9 +36,9 @@ os.makedirs(output_path, exist_ok=True)
 new_folder_path = os.path.join(output_path, folder_name)
 os.makedirs(new_folder_path, exist_ok=True)
 
-shutil.copy2(os.path.join(os.path.dirname(in_file), in_file), os.path.join(new_folder_path, 'qcxms.in'))
-shutil.copy2(os.path.join(os.path.dirname(start_file), start_file), os.path.join(new_folder_path, 'qcxms.start'))
-shutil.copy2(os.path.join(os.path.dirname(xyz_file), xyz_file), os.path.join(new_folder_path, 'start.xyz'))
+shutil.copy2(os.path.join(os.path.dirname('$in_file'), '$in_file'), os.path.join(new_folder_path, 'qcxms.in'))
+shutil.copy2(os.path.join(os.path.dirname('$start_file'), '$start_file'), os.path.join(new_folder_path, 'qcxms.start'))
+shutil.copy2(os.path.join(os.path.dirname('$xyz_file'), '$xyz_file'), os.path.join(new_folder_path, 'start.xyz'))
 
         </configfile>
     </configfiles>
