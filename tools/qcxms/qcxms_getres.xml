@@ -8,6 +8,7 @@
     <expand macro="creator"/>
     <requirements>
         <requirement type="package" version="6.2.0">plotms</requirement>
+        <requirement type="package" version="3.10">python</requirement>
     </requirements>
 
     <command detect_errors="exit_code"><![CDATA[
