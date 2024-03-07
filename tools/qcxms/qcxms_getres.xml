@@ -26,7 +26,7 @@ with open('molname.txt', 'w') as file:
     file.write(molname)
 
 input_files = '$res_collection'
-output_file = "tmpqcxms.res"
+output_file = 'tmpqcxms.res'
 
 with open(output_file, 'w') as output:
     for file_path in input_files:
