@@ -41,8 +41,8 @@ shutil.copy2(os.path.join(os.path.dirname('$xyz_file'), '$xyz_file'), os.path.jo
     </configfiles>
 
     <inputs>
-        <param type="data" name="in_file" label="in files [.in]" format="in,txt,text"/>
-        <param type="data" name="start_file" label="start files [.start]" format="start,txt,text"/>
+        <param type="data" name="in_file" label="in files [.in]" format="txt,text"/>
+        <param type="data" name="start_file" label="start files [.start]" format="txt,text"/>
         <param type="data" name="xyz_file" label="xyz files [.xyz]" format="xyz,txt,text"/>
         <param name="store_extended_output" type="boolean" value="false" label="Store additional outputs" help="Output the logfile."/>
     </inputs>
