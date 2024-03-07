@@ -22,7 +22,7 @@ with open('$mol', 'r') as file:
     lines = file.readlines()
     molname = lines[1]
 
-with open("molname.txt", "w") as file:
+with open('molname.txt', 'w') as file:
     file.write(molname)
 
 input_files = '$res_collection'
