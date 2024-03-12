@@ -1,4 +1,4 @@
-<tool id="matchms_add_key" name="matchms add key" version="@TOOL_VERSION@+galaxy1" profile="21.09">
+<tool id="matchms_add_key" name="matchms add key" version="@TOOL_VERSION@+galaxy2" profile="21.09">
     <description>Set metadata key in MSP to static value</description>
     
     <macros>
@@ -29,13 +29,14 @@ import matchms
 from matchms.importing import load_from_msp
 from matchms.exporting import save_as_msp
 
-
+#set keys_dict = ({str($k.key): str($k.value) for $k in $attribute_repeat})
 matchms.Metadata.set_key_replacements({})
 
 spectra = list(load_from_msp("${spectral_library}", metadata_harmonization = "False"))
 new_spectra = []
 for spectrum in spectra:
-    spectrum.set("${key}", "${value}")
+    for key, value in ($keys_dict).items():
+        spectrum.set(key, value)
     new_spectra.append(spectrum)
 save_as_msp(new_spectra, "${output}")
 </configfile>
@@ -44,17 +45,18 @@ save_as_msp(new_spectra, "${output}")
     <inputs>
         <param label="Spectra file" name="spectral_library" type="data" format="msp"
             help="Mass spectral library file to add key." />
-
-        <param label="Attribute Name" name="key" type="text" value="" help="Name of the attribute which will be assigned to all spectra records in the MSP." />
-        <param label="Value" name="value" type="text" value="" help="Value of the attribute which will be assigned to all spectra records in the MSP." >
-            <sanitizer>
-                <valid initial="default">
-                    <add value="{}" />
-                    <add value="[]" />
-                    <add value="\" />
-                </valid>
-            </sanitizer>
-        </param>
+        <repeat name="attribute_repeat" title="Keys to add">
+            <param label="Attribute Name" name="key" type="text" value="" help="Name of the attribute which will be assigned to all spectra records in the MSP." />
+            <param label="Value" name="value" type="text" value="" help="Value of the attribute which will be assigned to all spectra records in the MSP." >
+                <sanitizer>
+                    <valid initial="default">
+                        <add value="{}" />
+                        <add value="[]" />
+                        <add value="\" />
+                    </valid>
+                </sanitizer>
+            </param>
+        </repeat>
     </inputs>
 
     <outputs>
@@ -71,8 +73,14 @@ save_as_msp(new_spectra, "${output}")
         </test>
         <test>
             <param name="spectral_library" value="add_key/add_key_test2.msp" ftype="msp"/>
-            <param name="key" value="adduct"/>
-            <param name="value" value="[M]+"/>
+            <repeat name="attribute_repeat">
+                <param name="key" value="adduct"/>
+                <param name="value" value="[M]+"/>
+            </repeat>
+            <repeat name="attribute_repeat">
+                <param name="key" value="tool_used"/>
+                <param name="value" value="matchms"/>
+            </repeat>
             <output name="output" file="add_key/add_key_test2_out.msp" ftype="msp"/>
         </test>
     </tests>

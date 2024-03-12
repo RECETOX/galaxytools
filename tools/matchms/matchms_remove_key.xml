@@ -1,4 +1,4 @@
-<tool id="matchms_remove_key" name="matchms remove key" version="@TOOL_VERSION@+galaxy0" profile="21.09">
+<tool id="matchms_remove_key" name="matchms remove key" version="@TOOL_VERSION@+galaxy1" profile="21.09">
     <description>Remove metadata entry for all spectra in a library</description>
     
     <macros>
@@ -26,15 +26,19 @@
 import matchms
 @init_logger@
 
+
+#set keys_list = ([str($k.key) for $k in $attribute_repeat])
+
 matchms.Metadata.set_key_replacements({})
-key = "${key}".lower()
 spectra = list(matchms.importing.load_from_msp("${spectral_library}", metadata_harmonization = "False"))
 new_spectra = []
 for spectrum in spectra:
-    if spectrum.get(key) is not None:
-        metadata = spectrum.metadata
-        del metadata[key]
-        spectrum.metadata = metadata
+    for key in $keys_list:
+        key = key.lower()
+        if spectrum.get(key) is not None:
+            metadata = spectrum.metadata
+            del metadata[key]
+            spectrum.metadata = metadata
     new_spectra.append(spectrum)
 matchms.exporting.save_as_msp(new_spectra, "${output}")
 </configfile>
@@ -43,8 +47,9 @@ matchms.exporting.save_as_msp(new_spectra, "${output}")
     <inputs>
         <param label="Spectra file" name="spectral_library" type="data" format="msp"
             help="Mass spectral library file to add key." />
-
-        <param label="Attribute Name" name="key" type="text" value="" help="Name of the attribute which will be removed from all spectra records in the MSP." />
+        <repeat name="attribute_repeat" title="Keys to remove">
+            <param label="Attribute Name" name="key" type="text" value="" help="Name of the attribute which will be removed from all spectra records in the MSP." />
+        </repeat>
     </inputs>
 
     <outputs>
@@ -56,7 +61,17 @@ matchms.exporting.save_as_msp(new_spectra, "${output}")
         <test>
             <param name="spectral_library" value="filtering/input.msp" ftype="msp"/>
             <param name="key" value="ionmode"/>
-            <output name="output" file="out_matchms_remove_key.msp" ftype="msp" compare="sim_size"/>
+            <output name="output" file="remove_key/out_matchms_remove_key.msp" ftype="msp"/>
+        </test>
+        <test>
+            <param name="spectral_library" value="filtering/input.msp" ftype="msp"/>
+            <repeat name="attribute_repeat">
+                <param name="key" value="ionmode"/>
+            </repeat>
+            <repeat name="attribute_repeat">
+                <param name="key" value="spectrumtype"/>
+            </repeat>
+            <output name="output" file="remove_key/out2_matchms_remove_key.msp" ftype="msp"/>
         </test>
     </tests>
 
