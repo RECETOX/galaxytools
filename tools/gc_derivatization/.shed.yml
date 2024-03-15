@@ -7,10 +7,6 @@ categories:
   - Metabolomics
 description: Performs GC derivatization.
 long_description: |
-    The GC-derivatization tool converts carbonyl groups to C═N–OCH3 (MeOX) and transforms acidic protons into -Si(CH3)3 (TMS). Key functionalities include checking for 
+    The GC-derivatization tool converts carbonyl groups to C═N-OCH3 (MeOX) and transforms acidic protons into -Si(CH3)3 (TMS). Key functionalities include checking for 
     specific groups, removing derivatization groups, and adding derivatization groups to molecules.
-include:
-  - gc_derivatization.xml
-  - macros.xml
-  - test-data
 type: unrestricted
