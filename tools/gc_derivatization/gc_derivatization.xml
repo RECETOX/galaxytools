@@ -34,7 +34,6 @@
     </tests>
     <help>
         <![CDATA[
-        GC derivatization conducts in-silico derivatization using Methoximation (MeOX) and Trimethylsilylation (TMS).
         Detailed documentation can be found in https://doi.org/10.1021/acs.analchem.7b01010.  
         ]]>
     </help>
