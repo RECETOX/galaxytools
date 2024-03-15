@@ -26,6 +26,7 @@
                     <has_text text="CC(N)=O"/>
                     <has_text text="CC(=O)O"/>
                     <has_text text="CC=NOC"/>
+                    <has_text text="OC1=CC=CC=C1"/>
                 </assert_contents>
             </output>
         </test>
