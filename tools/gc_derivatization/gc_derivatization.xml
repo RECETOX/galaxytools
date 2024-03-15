@@ -3,6 +3,7 @@
     <macros>
         <import>macros.xml</import>
     </macros>
+    <expand macro="creator"/>
     <requirements>
         <requirement type="package" version="@TOOL_VERSION@">gc-meox-tms</requirement>
     </requirements>
