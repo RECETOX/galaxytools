@@ -1,0 +1,19 @@
+
+name: gc_derivatization
+owner: recetox
+remote_repository_url: "https://github.com/RECETOX/galaxytools/tree/master/tools/gc_derivatization"
+homepage_url: "https://github.com/RECETOX/galaxytools"
+categories:
+  - Metabolomics
+description: Performs GC derivatization.
+long_description: |
+    The functionality of the GC-derivatization tool involves converting a carbonyl group to C═N–OCH3 during MeOX and transforming acidic protons (active H) into 
+    specific -Si(CH3)3 during Trimethylsilylation. The toolset can perform three key functionalities: 
+    (1) is_derivatized(): checks whether a given molecule contains specific groups (MeOX or TMS).
+    (2) remove_derivatization_groups(): Removes suspected derivatization groups (MeOX or TMS) from the molecule, making it useful for analyses requiring the original structure.
+    (3) add_derivatization_groups(): Performs the derivatization of a molecule. 
+include:
+  - ugc_derivatization.xml
+  - macros.xml
+  - test-data
+type: unrestricted

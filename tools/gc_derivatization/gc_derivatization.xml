@@ -1,0 +1,42 @@
+<tool id="gc_derivatization" name="Gas chromatography derivatization" version="@TOOL_VERSION@+galaxy1" profile="21.09">
+    <description>This tool perform MeOX and TMS derivatization</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <requirements>
+        <requirement type="package" version="@TOOL_VERSION@">gc-meox-tms</requirement>
+    </requirements>
+
+    <command detect_errors="exit_code"><![CDATA[
+    python -m gc_meox_tms -t '${output}' '${input}'
+    ]]>
+    </command>
+
+    <inputs>
+        <param name="input" type="data" format="smi,tabular" help="SMILES list in smi or tabular formats."/>
+    </inputs>
+    <outputs>
+        <data name="output" format="tabular"/>
+    </outputs>
+    <tests>
+        <test>
+            <param name="input" value="input.tabular" ftype="smi"/>
+            <output name="output" >
+                <assert_contents>
+                    <has_text text="CC(N)=O"/>
+                    <has_text text="CC(=O)O"/>
+                    <has_text text="CC=NOC"/>
+                </assert_contents>
+            </output>
+        </test>
+    </tests>
+    <help>
+        <![CDATA[
+        GC derivatization conducts in-silico derivatization using Methoximation (MeOX) and Trimethylsilylation (TMS).
+        Detailed documentation can be found in https://doi.org/10.1021/acs.analchem.7b01010.  
+        ]]>
+    </help>
+    <citations>
+        <citation type="doi">https://doi.org/10.1021/acs.analchem.7b01010</citation>
+    </citations>     
+</tool>
