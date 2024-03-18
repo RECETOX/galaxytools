@@ -20,7 +20,7 @@
     </environment_variables>
     
     <inputs>
-        <param name="input" format="inchi,smi,csv,tsv" type="data" help="Accepted input formats: TSV, CSV, SMI, and InChI."/>
+        <param name="input" format="inchi,smi,csv" type="data" help="Accepted input formats: CSV, SMI, and InChI."/>
     </inputs>
     <outputs>
         <data name="output" format="tsv" >
