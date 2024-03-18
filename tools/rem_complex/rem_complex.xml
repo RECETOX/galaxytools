@@ -1,4 +1,4 @@
-<tool id="rem_complex" name="Remove coordination complexes" version="@TOOL_VERSION@+galaxy2"  profile="21.09">
+<tool id="rem_complex" name="Remove coordination complexes" version="@TOOL_VERSION@+galaxy3"  profile="21.09">
     <description>Remove molecular coordination complexes from a list of structure representations</description>
     <macros>
         <import>macros.xml</import>
@@ -20,10 +20,15 @@
     </environment_variables>
     
     <inputs>
-        <param name="input" format="inchi,smi,csv" type="data" help="Accepted input formats: CSV, SMI, and InChI."/>
+        <param name="input" format="inchi,smi,csv,tsv" type="data" help="Accepted input formats: TSV, CSV, SMI, and InChI."/>
     </inputs>
     <outputs>
-        <data name="output" format_source="input" />
+        <data name="output" format="tsv" >
+            <change_format>
+                <when input="input.ext" value="smi" format="smi" />
+                <when input="input.ext" value="inchi" format="inchi" />
+            </change_format>
+        </data>
     </outputs>
     <tests>
         <test>
@@ -36,7 +41,7 @@
         </test>
         <test>
             <param name="input" ftype="csv" value="input.csv"/>
-            <output name="output" ftype="csv" file="sample_output.csv"/>
+            <output name="output" ftype="tsv" file="sample_output.tsv"/>
         </test>
     </tests>
     <help>

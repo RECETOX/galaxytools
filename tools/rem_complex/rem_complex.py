@@ -24,7 +24,7 @@ def filter_csv_molecules(file_name: str, output_file_name: str) -> None:
     df = pd.read_csv(file_name)
     mask = df['smiles'].str.contains(".", na=False, regex=False)
     mask = mask.apply(lambda x: not x)
-    df[mask].to_csv(output_file_name, index=False)
+    df[mask].to_csv(output_file_name, index=False, sep='\t')
 
 
 def filter_other_format_molecules(file_name: str, output_file_name: str, input_format: str) -> None:
