@@ -1,5 +1,5 @@
 <tool id="gc_derivatization" name="GC derivatization" version="@TOOL_VERSION@+galaxy0" profile="21.09">
-    <description>This tool perform MeOX and TMS derivatization</description>
+    <description>In silico MeOX and TMS derivatization tool</description>
     <macros>
         <import>macros.xml</import>
     </macros>
