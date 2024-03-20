@@ -2,7 +2,7 @@
 name: gc_derivatization
 owner: recetox
 remote_repository_url: "https://github.com/RECETOX/galaxytools/tree/master/tools/gc_derivatization"
-homepage_url: "https://github.com/RECETOX/galaxytools"
+homepage_url: "https://github.com/RECETOX/gc-meox-tms"
 categories:
   - Metabolomics
 description: Performs GC derivatization.
