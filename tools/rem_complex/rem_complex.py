@@ -7,7 +7,7 @@ openbabel.obErrorLog.SetOutputLevel(1)  # 0: suppress warnings; 1: warnings
 
 def parse_arguments() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
-    parser.add_argument('-iformat', '--input_format', choices=['csv', 'tsv', 'smi', 'inchi'], help='Input file format')
+    parser.add_argument('-iformat', '--input_format', help='Input file format')
     parser.add_argument('-i', '--input_filename', type=str, required=True, help='Input file name')
     parser.add_argument('-o', '--output_filename', type=str, required=True, help='Output file name')
     args = parser.parse_args()
