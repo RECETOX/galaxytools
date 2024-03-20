@@ -34,7 +34,20 @@
     </tests>
     <help>
         <![CDATA[
-        Detailed documentation can be found in https://doi.org/10.1021/acs.analchem.7b01010.  
+        The tool outputs a table with multiple columns containing the original SMILES as well as with the derivatization group removed.
+        The further columns contain all possible derivatized forms of the molecule. See the example output below.
+
+        +----------------+----------------+-------------------------+--------------------+---------------------------------+
+        | orig           | deriv. removed | deriv. added            | ...                |                                 |
+        +================+================+=========================+====================+=================================+
+        | CC(N)=O        | CC(N)=O        | CC(N)=O                 | CC(=O)N[Si](C)(C)C | CC(=O)N([Si](C)(C)C)[Si](C)(C)C |
+        +----------------+----------------+-------------------------+--------------------+---------------------------------+
+        | OC1=CC=CC=C1   | OC1=CC=CC=C1   | C[Si](C)(C)OC1=CC=CC=C1 | OC1=CC=CC=C1       |                                 |
+        +----------------+----------------+-------------------------+--------------------+---------------------------------+
+        | CC(=O)O        | CC(=O)O        | CC(=O)O[Si](C)(C)C      | CC(=O)O            |                                 |
+        +----------------+----------------+-------------------------+--------------------+---------------------------------+
+        | CC=NOC         | CC=O           | CC=NOC                  |                    |                                 |
+        +----------------+----------------+-------------------------+--------------------+---------------------------------+
         ]]>
     </help>
     <citations>
