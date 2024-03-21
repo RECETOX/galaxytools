@@ -44,11 +44,11 @@ jobs:
     - name: Determine latest commit in the Galaxy repo
       id: get-galaxy-sha
       run: echo "galaxy-head-sha=$(git ls-remote https://github.com/${{ steps.get-fork-branch.outputs.fork }}/galaxy refs/heads/${{ steps.get-fork-branch.outputs.branch }} | cut -f1)" >> $GITHUB_OUTPUT
-    - uses: actions/setup-python@v4
+    - uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python-version }}
     - name: Cache .cache/pip
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       id: cache-pip
       with:
         path: ~/.cache/pip
@@ -57,7 +57,7 @@ jobs:
     # are not available as wheels, pip will build a wheel for them, which can be cached.
     - name: Install wheel
       run: pip install wheel
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
       with:
         fetch-depth: 1
     - name: Fake a Planemo run to update cache and determine commit range, repositories, and chunks
@@ -85,14 +85,14 @@ jobs:
       matrix:
         python-version: ['3.7']
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
       with:
         fetch-depth: 1
-    - uses: actions/setup-python@v4
+    - uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python-version }}
     - name: Cache .cache/pip
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       id: cache-pip
       with:
         path: ~/.cache/pip
@@ -105,11 +105,11 @@ jobs:
         repository-list: ${{ needs.setup.outputs.repository-list }}
         tool-list: ${{ needs.setup.outputs.tool-list }}
         additional-planemo-options: --biocontainers -s tests,output,inputs,help,general,command,citations,tool_xsd
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       if: ${{ failure() }}
       with:
         name: 'Tool linting output'
-        path: lint_report.txt
+        path: lint_report.txt1
 
   test:
     name: Test tools
@@ -134,20 +134,20 @@ jobs:
     steps:
     # checkout the repository
     # and use it as the current working directory
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
       with:
         fetch-depth: 1
-    - uses: actions/setup-python@v4
+    - uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python-version }}
     - name: Cache .cache/pip
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       id: cache-pip
       with:
         path: ~/.cache/pip
         key: pip_cache_py_${{ matrix.python-version }}_gxy_${{ needs.setup.outputs.galaxy-head-sha }}
     - name: Get number of CPU cores
-      uses: SimenB/github-actions-cpu-cores@v1
+      uses: SimenB/github-actions-cpu-cores@v2
       id: cpu-cores
     - name: Clean dotnet folder for space
       run: rm -Rf /usr/share/dotnet
@@ -164,7 +164,7 @@ jobs:
         galaxy-slots: ${{ steps.cpu-cores.outputs.count }}
         # Limit each test to 15 minutes
         test_timeout: 900
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       with:
         name: 'Tool test output ${{ matrix.chunk }}'
         path: upload
@@ -186,11 +186,11 @@ jobs:
     - uses: actions/download-artifact@v3
       with:
         path: artifacts
-    - uses: actions/setup-python@v4
+    - uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python-version }}
     - name: Cache .cache/pip
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       id: cache-pip
       with:
         path: ~/.cache/pip
@@ -201,7 +201,7 @@ jobs:
       with:
         mode: combine
         html-report: true
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       with:
         name: 'All tool test results'
         path: upload
