@@ -1,0 +1,11 @@
+name: plot_eic
+owner: recetox
+remote_repository_url: "https://github.com/RECETOX/galaxytools/tree/master/tools/plot_eic"
+homepage_url: "https://github.com/RECETOX/galaxytools"
+categories:
+  - Metabolomics
+description: Single Extracted Ion Chromatogram (EIC) Plotting Tool
+long_description: |
+    The EIC Plotting tool reads an mzML file, extracts a single EIC for a specific m/z value with a certain tolerance, and 
+    plots the EIC. The output is a PNG image of the EIC plot. This tool is designed to handle one EIC at a time.
+type: unrestricted

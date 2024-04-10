@@ -1,0 +1,38 @@
+<tool id="plot_eic" name="Plot Extracted Ion Chromatogram"  version="@TOOL_VERSION@+galaxy0" profile="22.09">
+    <description>Plot the extracted ion chromatogram (EIC) from mzML file</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="creator"/>
+    <requirements>
+        <requirement type="package" version="@TOOL_VERSION@">bioconductor-xcms</requirement>
+    </requirements>
+    <command detect_errors="exit_code"><![CDATA[
+        Rscript plot_eic.R
+        '${input}' 
+        '${mz_value}' 
+        '${tolerance_ppm}' 
+    ]]></command>
+    <inputs>
+        <param type="data" name="input" format="mzml" label="Input mzML file"/>
+        <param type="float" name="mz_value" label="m/z Value" help="m/z value for the EIC"/>
+        <param type="float" name="tolerance_ppm" label="Tolerance (ppm)" help="Tolerance for m/z value in ppm"/>
+    </inputs>
+    <outputs>
+        <data name="plot_output" format="png" from_work_dir="plot_output.png" label="EIC Plot"/>
+    </outputs>
+    <tests>
+        <test>
+            <param name="input" value="test.mzml"/>
+            <param name="mz_value" value="624.32880"/>
+            <param name="tolerance_ppm" value="5.0"/>
+            <output name="plot_output" file="plot_output.png"/>
+        </test>
+    </tests>
+    <help><![CDATA[
+        This tool plots the extracted ion chromatogram (EIC) based on the provided m/z value and tolerance from an mzML file.
+    ]]></help>
+    <citations>
+        <citation type="doi">10.1021/ac051437y</citation>
+    </citations>
+</tool>
