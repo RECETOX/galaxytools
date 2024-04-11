@@ -1,4 +1,4 @@
-<tool id="ramclustr" name="RAMClustR" version="@TOOL_VERSION@+galaxy3" profile="21.09">
+<tool id="ramclustr" name="RAMClustR" version="@TOOL_VERSION@+galaxy4" profile="21.09">
     <description>A feature clustering algorithm for non-targeted mass spectrometric metabolomics data.</description>
     <macros>
         <import>macros.xml</import>
@@ -72,6 +72,16 @@
             ramclustObj = RAMClustR::rc.feature.replace.na(ramclustObj = ramclustObj)
             #end if
 
+            #if $filtering.feature_filter_blanks.filter_blanks == "TRUE":
+            ramclustObj = RAMClustR::rc.feature.filter.blanks(
+                ramclustObj = ramclustObj,
+                qc.tag = "${filtering.feature_filter_blanks.qc_tag}",
+                blank.tag = "${filtering.feature_filter_blanks.blank_tag}",
+                sn = $filtering.feature_filter_blanks.sn,
+                remove.blanks = $filtering.feature_filter_blanks.remove_blanks
+            )
+            #end if
+
             #if $normalisation.normalisation_method.normalize != "none":
             ramclustObj = apply_normalisation(
                 ramclustr_obj = ramclustObj,
@@ -86,6 +96,14 @@
                     p_adjust = $normalisation.normalisation_method.p_adjust,
                 #end if
                 normalize_method = "$normalisation.normalisation_method.normalize"
+            )
+            #end if
+
+            #if $filtering.feature_filter_cv.filter_cv == "TRUE":
+            ramclustObj = RAMClustR::rc.feature.filter.cv(
+                ramclustObj = ramclustObj,
+                qc.tag = "${filtering.feature_filter_cv.qc_tag}",
+                max.cv = $filtering.feature_filter_cv.max_cv
             )
             #end if
 
@@ -104,6 +122,10 @@
                 rt.only.low.n = $extras.rt_only_low_n,
                 fftempdir = NULL,
             )
+
+            #if $extras.quality_control == "TRUE":
+            ramclustObj = RAMClustR::rc.qc(ramclustObj = ramclustObj)
+            #end if
             
             store_output(
                 ramclustr_obj = ramclustObj,
@@ -234,6 +256,40 @@
                 </section>
             </section>
             <output name="mass_spectra_merged" file="test5_spectra.msp" ftype="msp" lines_diff="10"/>
+        </test>
+        <test expect_num_outputs="3"><!-- TEST 6 -->
+            <section name="filetype">
+                <param name="type_choice" value="xcms"/>
+                <section name="xcms">
+                    <param name="input_xcms" value="test6.fillpeaks" ftype="rdata.xcms.fillpeaks"/>
+                </section>
+            </section>
+            <section name="msp_output_details">
+                <param name="mzdec" value="4"/>
+            </section>
+            <section name="extras">
+                <param name="quality_control" value="TRUE"/>
+            </section>
+            <section name="filtering">
+                <section name="feature_filter_blanks">
+                    <param name="filter_blanks" value="TRUE"/>
+                    <param name="blank_tag" value="Blanc"/>
+                </section>
+                <section name="feature_filter_cv">
+                    <param name="filter_cv" value="TRUE"/>
+                </section>
+            </section>
+            <output name="mass_spectra_merged" file="test6_out.msp" ftype="msp"/>
+            <output name="spec_abundance">
+                <assert_contents>
+                    <has_size value="309" delta="10"/>
+                </assert_contents>
+            </output>
+            <output name="pdf_plot">
+                <assert_contents>
+                    <has_size value="6842" delta="100"/>
+                </assert_contents>
+            </output>
         </test>
     </tests>
 

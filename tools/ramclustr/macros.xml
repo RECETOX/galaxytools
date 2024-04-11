@@ -184,8 +184,48 @@
                    help="NA, NaN, and Inf values are replaced with zero, and zero values are sometimes returned from
                    peak peaking. When TRUE, zero values will be replaced with a small amount of noise, with noise level
                    set based on the detected signal intensities for that feature."/>
+            <param label="Quality control" name="quality_control" type="boolean" truevalue="TRUE" falsevalue="FALSE"
+                   checked="false"
+                   help="Add graph to Rplots.pdf output which contains summarize quality control for clustering and for quality 
+                   control sample variation based on compound ($SpecAbund) and feature ($MSdata and $MSMSdata, if present)."/>
             <param label="Experimental design metadata" name="ExpDes" type="data" format="csv" optional="true"
                    help="Definition of experimental design in CSV format." />
+        </section>
+
+        <section name="filtering" title="Filtering">
+            <conditional name="feature_filter_blanks">
+                <param label="Filter blanks" name="filter_blanks" type="boolean" truevalue="TRUE" falsevalue="FALSE" checked="false"
+                    help="Is used to remove features which are found at similar intensity in blank samples"/>
+                <when value="TRUE">
+                    <param label="qc tag" name="qc_tag" type="text" value="QC"
+                        help="Character vector of length one or two. If length is two, enter search string and factor name in $phenoData slot 
+                        (i.e. c('QC', 'sample.type'). If length one (i.e. 'QC'), will search for this string in the 'sample.names' slot by default.
+                        Default is 'QC'"/>
+                    <param label="blank tag" name="blank_tag" type="text" value="blank"
+                        help="See 'qc tag' , but for blanks to use as background. Default is 'blank'"/>
+                    <param label="signal to noise (sn)" name="sn" type="integer" value="3"
+                        help="Numeric defines the ratio for 'signal'. i.e. sn = 3 indicates that signal intensity must be 3 fold higher in sample than in blanks,
+                        on average, to be retained. Default is '3'"/>
+                    <param label="Remove blanks" name="remove_blanks" type="boolean" truevalue="TRUE" falsevalue="FALSE" checked="true"
+                        help="TRUE by default. This removes any recognized blanks samples from the MSdata and MSMSdata sets after they are used to filter 
+                        contaminant features."/>
+                </when>
+                <when value="FALSE"></when>
+            </conditional>
+            
+            <conditional name="feature_filter_cv">
+                <param label="Filter cv" name="filter_cv" type="boolean" truevalue="TRUE" falsevalue="FALSE" checked="false"
+                    help="Extractor for xcms objects in preparation for clustering. This function offers normalization 
+                    by total extracted ion signal. It is recommended to first run 'Filter blanks' to remove non-sample derived signal"/>
+                <when value="TRUE">
+                    <param label="qc tag" name="qc_tag" type="text" value="QC"
+                        help="Character vector of length one or two. If length is two, enter search string and factor name in $phenoData slot 
+                        (i.e. c('QC', 'sample.type'). If length one (i.e. 'QC'), will search for this string in the 'sample.names' slot by default.
+                        Default is 'QC'"/>
+                    <param label="Max cv" name="max_cv" type="float" value="0.5" help="Numeric maximum allowable cv for any feature. Default = 0.5."/>
+                </when>
+                <when value="FALSE"></when>
+            </conditional>
         </section>
     </xml>
 
@@ -196,6 +236,9 @@
        </collection>
        <data label="Mass spectra from ${tool.name} on ${on_string}" name="mass_spectra_merged" format="msp">
            <filter>msp_output_details['merge_msp']</filter>
+       </data>
+       <data format="pdf" name="pdf_plot" from_work_dir="Rplots.pdf" label="PDF plot.">
+            <filter>extras['quality_control'] or filtering['feature_filter_cv']['filter_cv']</filter>
        </data>
     </xml>
 
