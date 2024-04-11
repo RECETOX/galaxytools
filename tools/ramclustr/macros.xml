@@ -194,8 +194,11 @@
 
         <section name="filtering" title="Filtering">
             <conditional name="feature_filter_blanks">
-                <param label="Filter blanks" name="filter_blanks" type="boolean" truevalue="TRUE" falsevalue="FALSE" checked="false"
-                    help="Is used to remove features which are found at similar intensity in blank samples"/>
+                <param label="Filter blanks" name="filter_blanks" type="select"
+                    help="Is used to remove features which are found at similar intensity in blank samples">
+                    <option value="FALSE" selected="true">FALSE</option>
+                    <option value="TRUE">TRUE</option>
+                </param>
                 <when value="TRUE">
                     <param label="qc tag" name="qc_tag" type="text" value="QC"
                         help="Character vector of length one or two. If length is two, enter search string and factor name in $phenoData slot 
@@ -214,9 +217,12 @@
             </conditional>
             
             <conditional name="feature_filter_cv">
-                <param label="Filter cv" name="filter_cv" type="boolean" truevalue="TRUE" falsevalue="FALSE" checked="false"
+                <param label="Filter cv" name="filter_cv" type="select"
                     help="Extractor for xcms objects in preparation for clustering. This function offers normalization 
-                    by total extracted ion signal. It is recommended to first run 'Filter blanks' to remove non-sample derived signal"/>
+                    by total extracted ion signal. It is recommended to first run 'Filter blanks' to remove non-sample derived signal">
+                    <option value="FALSE" selected="true">FALSE</option>
+                    <option value="TRUE">TRUE</option>
+                </param>
                 <when value="TRUE">
                     <param label="qc tag" name="qc_tag" type="text" value="QC"
                         help="Character vector of length one or two. If length is two, enter search string and factor name in $phenoData slot 
@@ -238,7 +244,7 @@
            <filter>msp_output_details['merge_msp']</filter>
        </data>
        <data format="pdf" name="pdf_plot" from_work_dir="Rplots.pdf" label="PDF plot.">
-            <filter>extras['quality_control'] or filtering['feature_filter_cv']['filter_cv']</filter>
+            <filter>extras['quality_control'] or filtering['feature_filter_cv']['filter_cv'] == "TRUE"</filter>
        </data>
     </xml>
 
