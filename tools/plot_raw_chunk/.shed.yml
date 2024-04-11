@@ -1,0 +1,11 @@
+name: plot_rawdata
+owner: recetox
+remote_repository_url: "https://github.com/RECETOX/galaxytools/tree/master/tools/plot_raw_chunk"
+homepage_url: "https://github.com/RECETOX/galaxytools"
+categories:
+  - Metabolomics
+description: Visualization tool for raw data filtered by m/z and retention time.
+long_description: |
+     The plot_raw_chunk tool filters data based on provided m/z and retention time ranges, then plots the resulting chunk in PNG format. 
+     It operates on single mzML files. 
+type: unrestricted
