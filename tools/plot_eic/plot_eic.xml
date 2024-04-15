@@ -8,7 +8,7 @@
         <requirement type="package" version="@TOOL_VERSION@">bioconductor-xcms</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
-        Rscript plot_eic.R
+        Rscript -e 'source("${__tool_directory__}/plot_eic.R")'
         '${input}' 
         '${mz_value}' 
         '${tolerance_ppm}' 
@@ -16,7 +16,7 @@
     <inputs>
         <param type="data" name="input" format="mzml" label="Input mzML file"/>
         <param type="float" name="mz_value" label="m/z Value" help="m/z value for the EIC"/>
-        <param type="float" name="tolerance_ppm" label="Tolerance (ppm)" help="Tolerance for m/z value in ppm"/>
+        <param type="float" value="10" name="tolerance_ppm" label="Tolerance (ppm)" help="Tolerance for m/z value in ppm"/>
     </inputs>
     <outputs>
         <data name="plot_output" format="png" from_work_dir="plot_output.png" label="EIC Plot"/>

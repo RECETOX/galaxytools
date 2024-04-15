@@ -46,7 +46,6 @@ main <- function() {
   mz_value <- as.numeric(args[2])
   tolerance_ppm <- ifelse(length(args) >= 3, as.numeric(args[3]), 10)
   output_file <- "plot_output.png"
-  print(tolerance_ppm)
 
   data <- read_data(file_path)
   chrom <- extract_eic(data, mz_value, tolerance_ppm)
