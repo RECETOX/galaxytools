@@ -12,10 +12,11 @@ read_data <- function(file_path) {
 #' @param data An OnDiskMSnExp object
 #' @param mz_value m/z value for the slice
 #' @param tolerance_ppm Tolerance for m/z value in ppm
+#' @param ms_level MS level for the slice
 #' @return A Chromatogram object
-extract_mz <- function(data, mz_value, tolerance_ppm) {
+extract_mz <- function(data, mz_value, tolerance_ppm, ms_level) {
   tolerance <- mz_value * tolerance_ppm / 1e6
-  extracted_mz <- xcms::chromatogram(data, mz = mz_value + c(-tolerance, tolerance), msLevel = 2)
+  extracted_mz <- xcms::chromatogram(data, mz = mz_value + c(-tolerance, tolerance), msLevel = ms_level)
   return(extracted_mz[[1]])
 }
 
@@ -63,6 +64,7 @@ plot_data <- function(rt, intensities, output_file, mz_value, tolerance) {
 #'
 #' @description This function reads the command line arguments, reads the mzML file, extracts the mz slice, 
 #' filters the data by retention time, extracts the retention times and intensities, and plots the data.
+#' @param ms_level MS level for the slice
 main <- function() {
   args <- commandArgs(trailingOnly = TRUE)
   
@@ -71,12 +73,13 @@ main <- function() {
   tolerance_ppm <- ifelse(length(args) >= 4, as.numeric(args[3]), 10)
   rt <- ifelse(length(args) >= 4, as.numeric(args[4]), 0)
   rt_range <- ifelse(length(args) >= 5, as.numeric(args[5]), 5)
+  ms_level <- ifelse(length(args) >= 6, as.numeric(args[6]), 1)
   output_file <- "plot_output.png"
-  
+  print(ms_level)
   data <- read_data(file_path)
   
   # Extract mz first
-  slice <- extract_mz(data, mz_value, tolerance_ppm)
+  slice <- extract_mz(data, mz_value, tolerance_ppm, ms_level)
   # Filter by retention time
   filtered_slice <- filter_data_rt(slice, rt, rt_range)
   rt_and_intensities <- extract_rt_and_intensities(filtered_slice)

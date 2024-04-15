@@ -1,4 +1,4 @@
-<tool id="plot_raw_chunk" name = "Plot of Raw Data Filtered by m/z and Retention Time" version="@TOOL_VERSION@+galaxy0" profile="22.09">
+<tool id="plot_raw_chunk" name = "Plot filtered by m/z and retention time" version="@TOOL_VERSION@+galaxy0" profile="22.09">
     <description>Plot raw data filtered by m/z range and retention time (RT) range</description>
     <macros>
         <import>macros.xml</import>
@@ -14,6 +14,7 @@
         '${tolerance_ppm}'
         '${rt}'
         '${rt_range}'
+        '${mslevel}'
     ]]></command>
     <inputs>
         <param type="data" name="input" format="mzml" label="Input mzML file"/>
@@ -21,6 +22,7 @@
         <param type="float" name="tolerance_ppm" value="10.0" label="Tolerance (ppm)" help="Tolerance for m/z value in ppm"/>
         <param type="float" name="rt" label="Retention Time" help="Retention time for the plot"/>
         <param type="float" name="rt_range" value="10.0" label="Retention Time Range" help="Retention time range for the plot"/>
+        <param type="integer" name="mslevel" value="1" label="MS Level" help="MS level for the plot"/>
     </inputs>
     <outputs>
         <data name="plot_output" format="png" from_work_dir="plot_output.png" label="Plot Output"/>
@@ -32,6 +34,7 @@
             <param name="tolerance_ppm" value="10.0"/>
             <param name="rt" value="7350"/>
             <param name="rt_range" value="10"/>
+            <param name="mslevel" value="2"/>
             <output name="plot_output" file="plot_output.png"/>
         </test>
     </tests>
