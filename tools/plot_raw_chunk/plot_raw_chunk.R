@@ -54,7 +54,7 @@ plot_data <- function(rt, intensities, output_file, mz_value, tolerance) {
   mz_min <- mz_value - tolerance
   mz_max <- mz_value + tolerance
   title <- paste("m/z range: [", mz_min, ", ", mz_max, "]", sep = "")
-  
+
   png(filename = output_file)
   plot(rt, intensities, type = "l", xlab = "Retention Time (s)", ylab = "Intensity", main = title)
   dev.off()
@@ -62,12 +62,12 @@ plot_data <- function(rt, intensities, output_file, mz_value, tolerance) {
 
 #' Main function
 #'
-#' @description This function reads the command line arguments, reads the mzML file, extracts the mz slice, 
+#' @description This function reads the command line arguments, reads the mzML file, extracts the mz slice,
 #' filters the data by retention time, extracts the retention times and intensities, and plots the data.
 #' @param ms_level MS level for the slice
 main <- function() {
   args <- commandArgs(trailingOnly = TRUE)
-  
+
   file_path <- args[1]
   mz_value <- as.numeric(args[2])
   tolerance_ppm <- ifelse(length(args) >= 4, as.numeric(args[3]), 10)
@@ -77,13 +77,13 @@ main <- function() {
   output_file <- "plot_output.png"
   print(ms_level)
   data <- read_data(file_path)
-  
+
   # Extract mz first
   slice <- extract_mz(data, mz_value, tolerance_ppm, ms_level)
   # Filter by retention time
   filtered_slice <- filter_data_rt(slice, rt, rt_range)
   rt_and_intensities <- extract_rt_and_intensities(filtered_slice)
-  
+
   plot_data(rt_and_intensities$rt, rt_and_intensities$intensities, output_file, mz_value, tolerance_ppm)
 }
 
