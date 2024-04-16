@@ -8,10 +8,11 @@ read_data <- function(file_path) {
 #' @param data An MSnExp object containing the data from an mzML file.
 #' @param mz_value A numeric value specifying the m/z value.
 #' @param tolerance_ppm A numeric value specifying the tolerance in ppm.
+#' @param ms_level A numeric value specifying the MS level.
 #' @return A Chromatogram object containing the EIC.
-extract_eic <- function(data, mz_value, tolerance_ppm) {
+extract_eic <- function(data, mz_value, tolerance_ppm, ms_level) {
   tolerance <- mz_value * tolerance_ppm / 1e6
-  eic <- xcms::chromatogram(data, mz = mz_value + c(-tolerance, tolerance), msLevel = 2)
+  eic <- xcms::chromatogram(data, mz = mz_value + c(-tolerance, tolerance), msLevel = ms_level)
   return(eic[[1]])
 }
 
@@ -39,16 +40,18 @@ plot_eic <- function(rt, intensities, output_file, mz_value, tolerance_ppm) {
 }
 
 #' @param args A list of command line arguments.
+#' @param ms_level A numeric value specifying the MS level.
 main <- function() {
   args <- commandArgs(trailingOnly = TRUE)
   
   file_path <- args[1]
   mz_value <- as.numeric(args[2])
   tolerance_ppm <- ifelse(length(args) >= 3, as.numeric(args[3]), 10)
+  ms_level <- ifelse(length(args) >= 4, as.numeric(args[4]), 1)
   output_file <- "plot_output.png"
 
   data <- read_data(file_path)
-  chrom <- extract_eic(data, mz_value, tolerance_ppm)
+  chrom <- extract_eic(data, mz_value, tolerance_ppm, ms_level)
   rt_and_intensities <- extract_rt_and_intensities(chrom)
   
   plot_eic(rt_and_intensities$rt, rt_and_intensities$intensities, output_file, mz_value, tolerance_ppm)
