@@ -3,9 +3,9 @@ store_output <- function(ramclustr_obj,
                          output_spec_abundance,
                          msp_file) {
   RAMClustR::write.msp(ramclustr_obj, one.file = output_merge_msp)
-  write.csv(ramclustr_obj$SpecAbund,
+  write.table(ramclustr_obj$SpecAbund,
     file = output_spec_abundance,
-    row.names = TRUE, quote = FALSE
+    row.names = TRUE, quote = FALSE, col.names = NA, sep = "\t"
   )
 
   if (!is.null(msp_file)) {

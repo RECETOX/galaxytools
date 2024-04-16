@@ -1,4 +1,4 @@
-<tool id="riassigner_from_comment" name="RIAssigner init from comment" version="@TOOL_VERSION@+galaxy4" profile="21.09">
+<tool id="riassigner_from_comment" name="RIAssigner init from comment" version="@TOOL_VERSION@+galaxy5" profile="21.09">
     <description>Assign different retention indices from unstructured comment metadata</description>
     <macros>
         <import>macros.xml</import>
@@ -15,7 +15,11 @@
 
     <command detect_errors="exit_code"><![CDATA[
         python ${script} &&
+        #if $input.ext == "csv"
+        mv results.tsv ${output}
+        #else:
         mv results.${input.ext} ${output}
+        #end if
         ]]>
     </command>
 
@@ -28,7 +32,11 @@ query = PandasData('${input}', '${input.ext}', rt_unit="seconds")
 query = MatchMSData('${input}', '${input.ext}', rt_unit="seconds")
 #end if
 query.init_ri_from_comment('${format}')
+#if $input.ext == "csv"
+query.write('results.tsv')
+#else
 query.write('results.${input.ext}')
+#end if
         </configfile>
     </configfiles>
 
@@ -46,13 +54,19 @@ query.write('results.${input.ext}')
     </inputs>
 
     <outputs>
-        <data format_source="input" name="output" label="${on_string} with ${format} RI"/>
+        <data format="tsv" name="output" label="${on_string} with ${format} RI">
+            <change_format>
+                <when input="input.ext" value="msp" format="msp" />
+                <when input="input.ext" value="mgf" format="mgf" />
+                <when input="input.ext" value="parquet" format="parquet" />
+            </change_format>
+        </data>
     </outputs>
 
     <tests>
         <test>
             <param name="input" value="nist_to_ri_2mols_input.csv" ftype="csv"/>
-            <output name="output" file="nist_to_ri_2mols_output.csv" ftype="csv"/>
+            <output name="output" file="nist_to_ri_2mols_output.tsv" ftype="tsv"/>
         </test>
         <test>
             <param name="input" value="nist_ei_ms_2mols_input.msp" ftype="msp"/>

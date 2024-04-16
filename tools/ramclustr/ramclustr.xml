@@ -175,7 +175,7 @@
     </inputs>
 
     <outputs>
-        <data label="Spec Abundance of ${on_string}" name="spec_abundance" format="csv" />
+        <data label="Spec Abundance of ${on_string}" name="spec_abundance" format="tsv" />
         <expand macro="output_msp"/>
     </outputs>
 
@@ -197,7 +197,7 @@
                 <param name="ExpDes" value="lc-ramclustr-define-experiment.csv" ftype="csv"/>
             </section>
             <output name="mass_spectra_merged" file="test1_fill_xcms_1.msp" ftype="msp"/>
-            <output name="spec_abundance" file="test1_spec_abundance_xcms_1.csv" ftype="csv" compare="sim_size" delta="100"/>
+            <output name="spec_abundance" file="test1_spec_abundance_xcms_1.tsv" ftype="tsv" compare="sim_size" delta="100"/>
         </test>
         <test expect_num_outputs="2"><!-- TEST 2 -->
             <section name="filetype">
@@ -218,7 +218,7 @@
                 </section>
             </section>
             <output name="mass_spectra_merged" file="test2_fill_xcms_2.msp" ftype="msp" compare="sim_size" delta="100"/>
-            <output name="spec_abundance" file="test2_spec_abundance_xcms_2.csv" ftype="csv" compare="sim_size" delta="100"/>
+            <output name="spec_abundance" file="test2_spec_abundance_xcms_2.tsv" ftype="tsv" compare="sim_size" delta="100"/>
         </test>
         <test expect_num_outputs="2"><!-- TEST 3 -->
             <section name="filetype">
@@ -236,7 +236,7 @@
                 <param name="mult" value="1"/>
             </section>
             <output name="mass_spectra_merged" file="test3_spectra_csv_1.msp" ftype="msp"/>
-            <output name="spec_abundance" file="test3_spec_abundance_csv_1.csv" ftype="csv"/>
+            <output name="spec_abundance" file="test3_spec_abundance_csv_1.tsv" ftype="tsv"/>
         </test>
         <test expect_num_outputs="2"><!-- TEST 4 -->
             <section name="filetype">
