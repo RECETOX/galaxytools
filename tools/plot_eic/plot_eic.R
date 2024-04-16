@@ -33,7 +33,7 @@ plot_eic <- function(rt, intensities, output_file, mz_value, tolerance_ppm) {
   mz_min <- mz_value - tolerance_ppm / 1e6
   mz_max <- mz_value + tolerance_ppm / 1e6
   title <- paste("m/z range: [", mz_min, ", ", mz_max, "]", sep = "")
-  
+
   png(filename = output_file)
   plot(rt, intensities, type = "l", xlab = "Retention Time (s)", ylab = "Intensity", main = title)
   dev.off()
@@ -43,7 +43,7 @@ plot_eic <- function(rt, intensities, output_file, mz_value, tolerance_ppm) {
 #' @param ms_level A numeric value specifying the MS level.
 main <- function() {
   args <- commandArgs(trailingOnly = TRUE)
-  
+
   file_path <- args[1]
   mz_value <- as.numeric(args[2])
   tolerance_ppm <- ifelse(length(args) >= 3, as.numeric(args[3]), 10)
@@ -53,7 +53,7 @@ main <- function() {
   data <- read_data(file_path)
   chrom <- extract_eic(data, mz_value, tolerance_ppm, ms_level)
   rt_and_intensities <- extract_rt_and_intensities(chrom)
-  
+
   plot_eic(rt_and_intensities$rt, rt_and_intensities$intensities, output_file, mz_value, tolerance_ppm)
 }
 
