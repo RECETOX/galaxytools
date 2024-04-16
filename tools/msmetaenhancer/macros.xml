@@ -1,5 +1,5 @@
 <macros>
-    <token name="@TOOL_VERSION@">0.3.0</token>
+    <token name="@TOOL_VERSION@">0.4.0</token>
 
     <xml name="creator">
         <creator>
@@ -40,6 +40,7 @@
 
     <xml name="job_options">
         <option value="canonical_smiles mw RDKit">RDKit: canonical_smiles -> mw</option>
+        <option value="formula mw RDKit">RDKit: formula -> mw</option>
         <option value="inchi canonical_smiles RDKit">RDKit: inchi -> canonical_smiles</option>
         <option value="inchi isomeric_smiles RDKit">RDKit: inchi -> isomeric_smiles</option>
         <option value="isomeric_smiles mw RDKit">RDKit: isomeric_smiles -> mw</option>
@@ -82,8 +83,19 @@
         <option value="inchi isomeric_smiles PubChem">PubChem: inchi -> isomeric_smiles</option>
         <option value="inchi iupac_name PubChem">PubChem: inchi -> iupac_name</option>
         <option value="inchi pubchemid PubChem">PubChem: inchi -> pubchemid</option>
+        <option value="inchikey canonical_smiles PubChem">PubChem: inchikey -> canonical_smiles</option>
+        <option value="inchikey formula PubChem">PubChem: inchikey -> formula</option>
+        <option value="inchikey inchi PubChem">PubChem: inchikey -> inchi</option>
+        <option value="inchikey isomeric_smiles PubChem">PubChem: inchikey -> isomeric_smiles</option>
+        <option value="inchikey iupac_name PubChem">PubChem: inchikey -> iupac_name</option>
+        <option value="inchikey pubchemid PubChem">PubChem: inchikey -> pubchemid</option>
+        <option value="pubchemid canonical_smiles PubChem">PubChem: pubchemid -> canonical_smiles</option>
+        <option value="pubchemid formula PubChem">PubChem: pubchemid -> formula</option>
         <option value="pubchemid hmdbid PubChem">PubChem: pubchemid -> hmdbid</option>
         <option value="pubchemid inchi PubChem">PubChem: pubchemid -> inchi</option>
+        <option value="pubchemid inchikey PubChem">PubChem: pubchemid -> inchikey</option>
+        <option value="pubchemid isomeric_smiles PubChem">PubChem: pubchemid -> isomeric_smiles</option>
+        <option value="pubchemid iupac_name PubChem">PubChem: pubchemid -> iupac_name</option>
         <option value="chebiid chemspiderid BridgeDb">BridgeDb: chebiid -> chemspiderid</option>
         <option value="chebiid hmdbid BridgeDb">BridgeDb: chebiid -> hmdbid</option>
         <option value="chebiid keggid BridgeDb">BridgeDb: chebiid -> keggid</option>
