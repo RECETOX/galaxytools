@@ -1,4 +1,4 @@
-<tool id="msmetaenhancer" name="MSMetaEnhancer" version="@TOOL_VERSION@+galaxy0">
+<tool id="msmetaenhancer" name="MSMetaEnhancer" version="@TOOL_VERSION@+galaxy0"  profile="21.09">
     <description>annotate MS data</description>
 
     <macros>
@@ -84,7 +84,7 @@
             <change_format>
                 <when input="input_file.ext" value="mgf" format="mgf" />
                 <when input="input_file.ext" value="json" format="json" />
-                <when input="input_file.ext" value="csv" format="csv" />
+                <when input="input_file.ext" value="csv" format="tsv" />
                 <when input="input_file.ext" value="tsv" format="tsv" />
                 <when input="input_file.ext" value="xlsx" format="xlsx" />
             </change_format>

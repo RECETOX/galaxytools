@@ -1,4 +1,4 @@
-<tool id="riassigner" name="RIAssigner" version="@TOOL_VERSION@+galaxy4" profile="21.09">
+<tool id="riassigner" name="RIAssigner" version="@TOOL_VERSION@+galaxy5" profile="21.09">
     <description>compute retention indices</description>
     <macros>
         <import>macros.xml</import>
@@ -14,8 +14,8 @@
     </requirements>
 
     <command detect_errors="exit_code"><![CDATA[
-        python -m RIAssigner --reference "$reference_section.reference" "$reference_section.reference.ext" "$reference_section.reference_rt_units" --query "$query_section.query" "$query_section.query.ext" "$query_section.query_rt_units" --method "$method" --output "output.${query_section.query.ext}" &&
-        cp -r 'output.${query_section.query.ext}' '${output}'
+        python -m RIAssigner --reference "$reference_section.reference" "$reference_section.reference.ext" "$reference_section.reference_rt_units" --query "$query_section.query" "$query_section.query.ext" "$query_section.query_rt_units" --method "$method" --output "output.${output.ext}" &&
+        cp -r 'output.${output.ext}' '${output}'
         ]]>
     </command>
 
@@ -55,8 +55,12 @@
     </inputs>
 
     <outputs>
-        <data label="RI using $method of ${query_section.query.element_identifier}" name="output" format_source="query"
-              metadata_source="query"/>
+        <data label="RI using $method of ${query_section.query.element_identifier}" name="output" format="tsv"
+              metadata_source="query">
+            <change_format>
+                <when input="query_section.query.ext" value="msp" format="msp" />
+            </change_format>
+        </data>
     </outputs>
 
     <tests>
@@ -66,7 +70,7 @@
             <param name="reference" value="Alkanes_20210325.csv" ftype="csv"/>
             <param name="reference_rt_units" value="seconds"/>
             <param name="method" value="kovats"/>
-            <output name="output" file="results.csv" ftype="csv"/>
+            <output name="output" file="results.tsv" ftype="tsv"/>
         </test>
     </tests>
 
