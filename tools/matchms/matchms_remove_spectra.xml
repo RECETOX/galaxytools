@@ -1,0 +1,141 @@
+<tool id="matchms_remove_spectra" name="matchms remove spectra" version="@TOOL_VERSION@+galaxy0" profile="21.09">
+    <description>Filters spectra based on metadata presence</description>
+    
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+
+    <expand macro="creator"/>
+
+    <edam_operations>
+        <edam_operation>operation_3695</edam_operation>
+    </edam_operations>
+    
+    <expand macro="bio.tools"/>
+
+    <requirements>
+        <requirement type="package" version="@TOOL_VERSION@">matchms</requirement>
+    </requirements>
+    <command detect_errors="exit_code"><![CDATA[
+        python3 '${filter_spectra}'
+    ]]></command>
+
+    <configfiles>
+        <configfile name="filter_spectra">
+from matchms.exporting import save_as_mgf, save_as_msp
+from matchms.filtering.filter_utils.smile_inchi_inchikey_conversions import is_valid_inchi, is_valid_smiles, is_valid_inchikey
+from matchms.filtering import require_compound_name, require_formula, require_precursor_mz, \
+require_retention_time, require_retention_index, require_valid_annotation, 
+from matchms.importing import load_from_mgf, load_from_msp
+
+#set metadata_fields = str("', '").join([str($f) for $f in $metadata_fields])
+required_metadata = "$metadata_fields"
+
+if "$spectra.ext" == "msp":
+    spectra = list(load_from_msp("${spectra}"))
+elif "$spectra.ext" == 'mgf':
+    spectra = list(load_from_mgf("${spectra}"))
+else:
+    raise ValueError(f'File format {$spectra.ext} not supported for mass spectra file.')
+
+filtered_spectra = []
+removed_spectra = []
+keep = False
+
+for spectrum in spectra:
+    if 'smiles' in required_metadata:
+        keep = is_valid_smiles(spectrum.get('smiles'))
+    
+    if 'inchi' in required_metadata:
+        keep = is_valid_inchi(spectrum.get('inchi'))
+    
+    if 'inchikey' in required_metadata:
+        keep = is_valid_inchikey(spectrum.get('inchikey'))
+
+    if 'precursor_mz' in required_metadata:
+        result = require_precursor_mz(spectrum)
+        if result is not None:
+            keep = True
+        else:
+            keep = False
+    
+    if 'valid_annotation' in required_metadata:
+        result = require_valid_annotation(spectrum)
+        if result is not None:
+            keep = True
+        else:
+            keep = False
+    
+    if 'formula' in required_metadata:
+        result = require_formula(spectrum)
+        if result is not None:
+            keep = True
+        else:
+            keep = False
+
+    if 'compound_name' in required_metadata:
+        result = require_compound_name(spectrum)
+        if result is not None:
+            keep = True
+        else:
+            keep = False
+    
+    if 'retention_time' in required_metadata:
+        result = require_retention_time(spectrum)
+        if result is not None:
+            keep = True
+        else:
+            keep = False
+    
+    if 'retention_index' in required_metadata:
+        result = require_retention_index(spectrum)
+        if result is not None:
+            keep = True
+        else:
+            keep = False
+
+    if keep:
+        filtered_spectra.append(spectrum)
+    
+    if "$spectra_removed" == "TRUE" and keep == False:
+        removed_spectra.append(spectrum)
+
+
+if "$spectra.ext" == "msp":
+    save_as_msp(filtered_spectra, "${output_filtered}")
+    save_as_msp(removed_spectra, "${output_removed}")
+else:
+    save_as_mgf(filtered_spectra, "${output_filtered}")
+    save_as_mgf(removed_spectra, "${output_removed}")
+
+        </configfile>
+    </configfiles>
+
+    <inputs>
+        <param name="spectra" type="data" format="msp,mgf" label="Input Spectra File" help="Input file containing mass spectra"/>
+        <param name="metadata_fields" type="select" multiple="true" label="Metadata Fields" help="Select metadata fields required in the spectra">
+            <option value="smiles">SMILES</option>
+            <option value="inchI">InChI</option>
+            <option value="inchikey">InChIKey</option>
+            <option value="formula">Formula</option>
+            <option value="retention_time">Retention Time</option>
+            <option value="retention_index">Retention Index</option>
+            <option value="precursor_mz">Precursor MZ</option>
+            <option value="valid_annotation">Valid Annotation</option>
+            <option value="compound_name">Compound Name</option>
+        </param>
+        <param name="spectra_removed" type="boolean" truevalue="TRUE" falsevalue="FALSE" checked="false" label="Output Removed Spectra" help="Output spectra that were removed due to missing metadata"/>
+    </inputs>
+
+    <outputs>
+        <data name="output_filtered" format_source="spectra" label="${tool.name} on ${on_string}: Filtered Spectra"/>
+        <data name="output_removed" format_source="spectra" label="${tool.name} on ${on_string}: Removed Spectra">
+            <filter>spectra_removed</filter>
+        </data>
+    </outputs>
+
+    <help><![CDATA[
+        This tool filters input mass spectra based on the presence of specified metadata fields. Spectra missing any of the selected metadata fields are optionally logged and output separately.
+        Valid Annotation filter removes spectra that are not fully annotated (correct and matching, smiles, inchi and inchikey)
+    ]]></help>
+</tool>
