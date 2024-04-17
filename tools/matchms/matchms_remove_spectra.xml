@@ -138,4 +138,6 @@ else:
         This tool filters input mass spectra based on the presence of specified metadata fields. Spectra missing any of the selected metadata fields are optionally logged and output separately.
         Valid Annotation filter removes spectra that are not fully annotated (correct and matching, smiles, inchi and inchikey)
     ]]></help>
+
+    <expand macro="citations"/>
 </tool>
