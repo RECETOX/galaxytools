@@ -1,0 +1,17 @@
+name: xcms_plot
+owner: recetox
+remote_repository_url: "https://github.com/RECETOX/galaxytools/tree/master/tools/plot_eic"
+homepage_url: "https://github.com/RECETOX/galaxytools"
+categories:
+  - Metabolomics
+description: XCMS and Spectra plotting tools
+long_description: |
+    
+type: unrestricted
+auto_tool_repositories:
+  name_template: "{{ tool_id }}"
+  description_template: "{{ tool_name }} tool from the xcms package"
+suite:
+  name: suite_xcms_plot
+  description: tools from xcms are used for visualization of raw data
+  type: repository_suite_definition

@@ -1,0 +1,50 @@
+<tool id="xcms_plot_eic" name="Plot Extracted Ion Chromatogram" version="@TOOL_VERSION@+galaxy0" profile="21.09">
+    <description>Plot the extracted ion chromatogram (EIC) from mzML file</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="creator"/>
+    <requirements>
+        <requirement type="package" version="@TOOL_VERSION@">bioconductor-xcms</requirement>
+    </requirements>
+    <command detect_errors="exit_code"><![CDATA[
+        Rscript -e 'source("${plot_eic}")'
+    ]]></command>
+    <configfiles>
+        <configfile name="plot_eic">
+library(xcms)
+library(MsExperiment)
+library(Spectra)
+mse = readMsExperiment(file.path('${input}'))
+offset = ${tolerance_ppm} * 1e-6 * ${mz_value}
+chr = chromatogram(mse, mz = ${mz_value} + c(-offset, offset), msLevel = ${mslevel})
+png(filename = '${plot_output}')
+plot(chr)
+dev.off()
+        </configfile>
+    </configfiles>
+    <inputs>
+        <param type="data" name="input" format="mzml" label="Input mzML file"/>
+        <param type="float" name="mz_value" value="0" label="m/z Value" help="m/z value for the EIC"/>
+        <param type="integer" value="10" name="tolerance_ppm" label="Tolerance (ppm)" help="Tolerance for m/z value in ppm"/>
+        <param type="integer" value="1" name="mslevel" label="MS Level" help="MS level for the EIC"/>
+    </inputs>
+    <outputs>
+        <data name="plot_output" format="png" label="EIC Plot"/>
+    </outputs>
+    <tests>
+        <test>
+            <param name="input" value="test.mzml"/>
+            <param name="mz_value" value="624.32880"/>
+            <param name="tolerance_ppm" value="10.0"/>
+            <param name="mslevel" value="2"/>
+            <output name="plot_output" file="plot_output.png"/>
+        </test>
+    </tests>
+    <help><![CDATA[
+        This tool plots the extracted ion chromatogram (EIC) based on the provided m/z value and tolerance from an mzML file.
+    ]]></help>
+    <citations>
+        <citation type="doi">10.1021/ac051437y</citation>
+    </citations>
+</tool>

@@ -1,0 +1,55 @@
+<tool id="xcms_plot_raw" name = "Plot filtered by m/z and retention time" version="@TOOL_VERSION@+galaxy0" profile="21.09">
+    <description>Plot raw data filtered by m/z range and retention time (RT) range</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="creator"/>
+    <requirements>
+        <requirement type="package" version="@TOOL_VERSION@">bioconductor-xcms</requirement>
+    </requirements>
+    <command detect_errors="exit_code"><![CDATA[
+        Rscript -e 'source("${plot_raw}")'
+    ]]></command>
+    <configfiles>
+        <configfile name="plot_raw">
+library(xcms)
+library(MsExperiment)
+library(Spectra)
+mse = readMsExperiment(file.path('${input}'))
+mz_offset = ${tolerance_ppm} * 1e-6 * ${mz_value}
+rt_offset = ${rt_range} / 2
+raw = mse |>
+    filterRt(rt = c(${rt} - rt_offset, ${rt} + rt_offset)) |>
+    filterMzRange(mz = ${mz_value} + c(-mz_offset, mz_offset))
+png(filename = '${plot_output}')
+plot(raw)
+dev.off()
+        </configfile>
+    </configfiles>
+    <inputs>
+        <param type="data" name="input" format="mzml" label="Input mzML file"/>
+        <param type="float" name="mz_value" value="0.0" label="m/z Value" help="m/z value for the plot"/>
+        <param type="integer" name="tolerance_ppm" value="10" label="Tolerance (ppm)" help="Tolerance for m/z value in ppm"/>
+        <param type="float" name="rt" label="Retention Time" value="0.0" help="Retention time for the plot"/>
+        <param type="float" name="rt_range" value="10.0" label="Retention Time Range" help="Retention time range for the plot"/>
+    </inputs>
+    <outputs>
+        <data name="plot_output" format="png" from_work_dir="plot_output.png" label="Plot Output"/>
+    </outputs>
+    <tests>
+        <test>
+            <param name="input" value="test.mzml"/>
+            <param name="mz_value" value="624.32880"/>
+            <param name="tolerance_ppm" value="10.0"/>
+            <param name="rt" value="7350"/>
+            <param name="rt_range" value="10"/>
+            <output name="plot_output" file="plot_output.png"/>
+        </test>
+    </tests>
+<help><![CDATA[
+        This tool plots the raw data filtered by m/z range and retention time (RT) range from an mzML file.
+    ]]></help>
+    <citations>
+        <citation type="doi">10.1021/ac051437y</citation>
+    </citations>
+</tool>
