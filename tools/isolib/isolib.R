@@ -46,7 +46,7 @@ main <- function() {
           charge=adduct$Charge,
           ionization_mode=adduct$Ion_mode,
           precursor_mz=precursor_mz,
-          msLevel=1
+          msLevel=as.integer(1)
       )
  
       patterns <- enviPat::isopattern(

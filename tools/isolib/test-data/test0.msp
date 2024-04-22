@@ -1,12 +1,11 @@
 NAME: 2,4-Dichlorophenoxyacetic acid ou 2,4-D (M-H)
-msLevel: MSNA
+msLevel: MS1
 PRECURSORTYPE: [M-H]-
 FORMULA: C8H6Cl2O3
 retention_time: 484.2
 charge: -1
 ionization_mode: negative
 precursor_mz: 218.962123412
-mslevel: 1
 Num Peaks: 5
 218.962123019909 100
 219.965477859909 8.65258263418579
@@ -15,28 +14,26 @@ Num Peaks: 5
 222.956222799909 10.2372969049151
 
 NAME: 2-diethylamino-6-methyl pyrimidin-4-ol/one (M-H)
-msLevel: MSNA
+msLevel: MS1
 PRECURSORTYPE: [M-H]-
 FORMULA: C9H15N3O1
 retention_time: 451.8
 charge: -1
 ionization_mode: negative
 precursor_mz: 180.1142361
-mslevel: 1
 Num Peaks: 3
 180.114235677909 100
 181.111270637909 1.09598940142117
 181.117590517909 9.73415546345901
 
 NAME: 3,5,6-Trichloro-2-pyridinol (M-H)
-msLevel: MSNA
+msLevel: MS1
 PRECURSORTYPE: [M-H]-
 FORMULA: C5H2Cl3N1O1
 retention_time: 499.2
 charge: -1
 ionization_mode: negative
 precursor_mz: 195.912920724
-mslevel: 1
 Num Peaks: 7
 195.912920371909 100
 196.916275211909 5.40786414636612
@@ -47,53 +44,49 @@ Num Peaks: 7
 201.904070041909 3.27550259998867
 
 NAME: 3-phenoxybenzoic acid (M-H)
-msLevel: MSNA
+msLevel: MS1
 PRECURSORTYPE: [M-H]-
 FORMULA: C13H10O3
 retention_time: 517.8
 charge: -1
 ionization_mode: negative
 precursor_mz: 213.05571818
-mslevel: 1
 Num Peaks: 2
 213.055717727909 100
 214.059072567909 14.0604467805519
 
 NAME: 4-Fluoro-3-phenoxybenzoic acid (M-H)
-msLevel: MSNA
+msLevel: MS1
 PRECURSORTYPE: [M-H]-
 FORMULA: C13H9F1O3
 retention_time: 532.2
 charge: -1
 ionization_mode: negative
 precursor_mz: 231.046296368
-mslevel: 1
 Num Peaks: 2
 231.046295895909 100
 232.049650735909 14.0604467805519
 
 NAME: 4-nitrophenol (M-H)
-msLevel: MSNA
+msLevel: MS1
 PRECURSORTYPE: [M-H]-
 FORMULA: C6H5N1O3
 retention_time: 165
 charge: -1
 ionization_mode: negative
 precursor_mz: 138.01966702
-mslevel: 1
 Num Peaks: 2
 138.019666577909 100
 139.023021417909 6.48943697563934
 
 NAME: 6-Chloronicotinic acid (M-H)
-msLevel: MSNA
+msLevel: MS1
 PRECURSORTYPE: [M-H]-
 FORMULA: C6H4Cl1N1O2
 retention_time: 172.2
 charge: -1
 ionization_mode: negative
 precursor_mz: 155.985780048
-mslevel: 1
 Num Peaks: 4
 155.985779635909 100
 156.989134475909 6.48943697563934
@@ -101,14 +94,13 @@ Num Peaks: 4
 158.986184365909 2.0763457271581
 
 NAME: Acetochlor mercapturate (M-H)
-msLevel: MSNA
+msLevel: MS1
 PRECURSORTYPE: [M-H]-
 FORMULA: C19H28N2O5S1
 retention_time: 607.2
 charge: -1
 ionization_mode: negative
 precursor_mz: 395.164616996
-mslevel: 1
 Num Peaks: 5
 395.164616293909 100
 396.167971133909 20.5498837561912
@@ -117,14 +109,13 @@ Num Peaks: 5
 397.171325973909 2.00035763238777
 
 NAME: Alachlor mercapturate (M-H)
-msLevel: MSNA
+msLevel: MS1
 PRECURSORTYPE: [M-H]-
 FORMULA: C19H28N2O5S1
 retention_time: 607.2
 charge: -1
 ionization_mode: negative
 precursor_mz: 395.164616996
-mslevel: 1
 Num Peaks: 5
 395.164616293909 100
 396.167971133909 20.5498837561912
@@ -133,42 +124,39 @@ Num Peaks: 5
 397.171325973909 2.00035763238777
 
 NAME: Bentazone (M-H)
-msLevel: MSNA
+msLevel: MS1
 PRECURSORTYPE: [M-H]-
 FORMULA: C10H12N2O3S1
 retention_time: 747.6
 charge: -1
 ionization_mode: negative
 precursor_mz: 239.049587244
-mslevel: 1
 Num Peaks: 3
 239.049586541909 100
 240.052941381909 10.8157282927322
 241.045382681909 4.47415517422887
 
 NAME: Diethylthiophosphate (M-H)
-msLevel: MSNA
+msLevel: MS1
 PRECURSORTYPE: [M-H]-
 FORMULA: C4H11O3P1S1
 retention_time: 177
 charge: -1
 ionization_mode: negative
 precursor_mz: 169.009375842
-mslevel: 1
 Num Peaks: 3
 169.009374979909 100
 170.012729819909 4.32629131709289
 171.005171119909 4.47415517422887
 
 NAME: Fenhexamid (M-H)
-msLevel: MSNA
+msLevel: MS1
 PRECURSORTYPE: [M-H]-
 FORMULA: C14H17Cl2N1O2
 retention_time: 689.4
 charge: -1
 ionization_mode: negative
 precursor_mz: 300.056358144
-mslevel: 1
 Num Peaks: 7
 300.056357761909 100
 301.059712601909 15.1420196098251
@@ -179,14 +167,13 @@ Num Peaks: 7
 305.053812381909 1.55013350485826
 
 NAME: Fenvalerate free acid (M-H)
-msLevel: MSNA
+msLevel: MS1
 PRECURSORTYPE: [M-H]-
 FORMULA: C11H13Cl1O2
 retention_time: 585
 charge: -1
 ionization_mode: negative
 precursor_mz: 211.053131336
-mslevel: 1
 Num Peaks: 4
 211.053130913909 100
 212.056485753909 11.8973011220055
@@ -194,14 +181,13 @@ Num Peaks: 4
 214.053535643909 3.80663383312318
 
 NAME: Fipronil (M-H)
-msLevel: MSNA
+msLevel: MS1
 PRECURSORTYPE: [M-H]-
 FORMULA: C12H4Cl2F6N4O1S1
 retention_time: 750
 charge: -1
 ionization_mode: negative
 precursor_mz: 434.931430428
-mslevel: 1
 Num Peaks: 9
 434.931429685909 100
 435.928464645909 1.4613192018949
@@ -214,14 +200,13 @@ Num Peaks: 9
 439.928884305909 1.32868586130708
 
 NAME: Fipronil sulfone (M-H)
-msLevel: MSNA
+msLevel: MS1
 PRECURSORTYPE: [M-H]-
 FORMULA: C12H4Cl2F6N4O2S1
 retention_time: 771
 charge: -1
 ionization_mode: negative
 precursor_mz: 450.926345048
-mslevel: 1
 Num Peaks: 9
 450.926344305909 100
 451.923379265909 1.4613192018949
@@ -234,14 +219,13 @@ Num Peaks: 9
 455.923798925909 1.32868586130708
 
 NAME: Hydroxy-tebuconazole (M-H)
-msLevel: MSNA
+msLevel: MS1
 PRECURSORTYPE: [M-H]-
 FORMULA: C16H22Cl1N3O2
 retention_time: 696.6
 charge: -1
 ionization_mode: negative
 precursor_mz: 322.132778624
-mslevel: 1
 Num Peaks: 6
 322.132778231909 100
 323.129813191909 1.09598940142117
@@ -251,14 +235,13 @@ Num Peaks: 6
 325.133182961909 5.53692193908827
 
 NAME: Fluopyram (M-H)
-msLevel: MSNA
+msLevel: MS1
 PRECURSORTYPE: [M-H]-
 FORMULA: C16H11Cl1F6N2O1
 retention_time: 725.4
 charge: -1
 ionization_mode: negative
 precursor_mz: 395.039133972
-mslevel: 1
 Num Peaks: 5
 395.039133449909 100
 396.042488289909 17.3051652683716
@@ -267,14 +250,13 @@ Num Peaks: 5
 398.039538179909 5.53692193908827
 
 NAME: Mecoprop (M-H)
-msLevel: MSNA
+msLevel: MS1
 PRECURSORTYPE: [M-H]-
 FORMULA: C10H11Cl1O3
 retention_time: 544.8
 charge: -1
 ionization_mode: negative
 precursor_mz: 213.032395892
-mslevel: 1
 Num Peaks: 4
 213.032395469909 100
 214.035750309909 10.8157282927322
@@ -282,28 +264,26 @@ Num Peaks: 4
 216.032800199909 3.46057621193017
 
 NAME: p-Toluenesulfonamide (M-H)
-msLevel: MSNA
+msLevel: MS1
 PRECURSORTYPE: [M-H]-
 FORMULA: C7H9N1O2S1
 retention_time: 362.4
 charge: -1
 ionization_mode: negative
 precursor_mz: 170.028123528
-mslevel: 1
 Num Peaks: 3
 170.028122815909 100
 171.031477655909 7.57100980491256
 172.023918955909 4.47415517422887
 
 NAME: Triclosan (M-H)
-msLevel: MSNA
+msLevel: MS1
 PRECURSORTYPE: [M-H]-
 FORMULA: C12H7Cl3O2
 retention_time: 811.8
 charge: -1
 ionization_mode: negative
 precursor_mz: 286.943886504
-mslevel: 1
 Num Peaks: 7
 286.943886141909 100
 287.947240981909 12.9788739512787
@@ -314,14 +294,13 @@ Num Peaks: 7
 292.935035811909 3.27550259998867
 
 NAME: Triclosan glucuronide (M-H)
-msLevel: MSNA
+msLevel: MS1
 PRECURSORTYPE: [M-H]-
 FORMULA: C18H15Cl3O8
 retention_time: 665.4
 charge: -1
 ionization_mode: negative
 precursor_mz: 462.97597448
-mslevel: 1
 Num Peaks: 11
 462.975974117909 100
 463.979328957909 19.468310926918
@@ -336,14 +315,13 @@ Num Peaks: 11
 468.967123787909 3.27550259998867
 
 NAME: Triclosan sulfate (M-H)
-msLevel: MSNA
+msLevel: MS1
 PRECURSORTYPE: [M-H]-
 FORMULA: C12H7Cl3O5S1
 retention_time: 695.4
 charge: -1
 ionization_mode: negative
 precursor_mz: 366.900701364
-mslevel: 1
 Num Peaks: 11
 366.900700731909 100
 367.904055571909 12.9788739512787
@@ -358,14 +336,13 @@ Num Peaks: 11
 372.891850401909 3.27550259998867
 
 NAME: acetamiprid-N-desmethyl (M-H)
-msLevel: MSNA
+msLevel: MS1
 PRECURSORTYPE: [M-H]-
 FORMULA: C9H9N4Cl1
 retention_time: 402.6
 charge: -1
 ionization_mode: negative
 precursor_mz: 207.044297968
-mslevel: 1
 Num Peaks: 5
 207.044297585909 100
 208.041332545909 1.4613192018949
