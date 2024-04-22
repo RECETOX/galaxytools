@@ -1,4 +1,4 @@
-<tool id="ipapy2_clustering" name="2. IPA clustering" version="@TOOL_VERSION@+galaxy0" python_template_version="3.5" profile="21.05">
+<tool id="ipapy2_clustering" name="IPA clustering" version="@TOOL_VERSION@+galaxy0" profile="21.05">
     <macros>
         <import>macros.xml</import>
     </macros>
@@ -13,19 +13,30 @@
 
 <configfiles>
 <configfile name="ipapy2_clustering_cli">
-@init_logger@
+@init_import@
 
 intensity_table = pd.read_csv('${intensity_table}')
-result = ipa.clusterFeatures(intensity_table, Cthr=$Cthr, RTwin=$RTwin, Intmode='${Intmode}')
+result = ipa.clusterFeatures(intensity_table, Cthr=$clustering.Cthr, RTwin=$clustering.RTwin, Intmode='${clustering.Intmode}')
 result.to_csv('${output}', index=False)
 </configfile>
 </configfiles>
 
     <inputs>
         <param label="Intensity table" name="intensity_table" type="data" format="csv" help="a dataframe containing the measured intensities across several samples." />
-        <param label="correlation threshold" name="Cthr" type="float" optional="true" value="0.8" help="Default value 0.8. Minimum correlation allowed in each cluster." />
-        <param label="RT threshold" name="RTwin" type="float" optional="true" value="1" help="Default value 1. Maximum difference in RT time between features in the same cluster." />
-        <param label="Intensity mode" name="Intmode" type="text" optional="true" value="max" help="intensity mode. Default 'max' or 'ave'." />
+        <section name="clustering" title="clustering settings">
+            <param name="Cthr" type="float" value="0.8">
+                <label>correlation threshold</label>
+                <help>Minimum correlation allowed in each cluster. Default value 0.8.</help>
+            </param>
+            <param name="RTwin" type="float" value="1">
+                <label>RT threshold</label>
+                <help>Maximum difference in RT time between features in the same cluster. Default value 1.</help>
+            </param>
+            <param name="Intmode" type="text" value="max">
+                <label>intensity mode</label>
+                <help>intensity mode. Default 'max' or 'ave'.</help>
+            </param>
+        </section>
     </inputs>
 
     <outputs>

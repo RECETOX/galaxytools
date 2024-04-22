@@ -1,4 +1,4 @@
-<tool id="ipapy2_MS2_annotation" name="5. IPA MS2 annotation" version="@TOOL_VERSION@+galaxy0" python_template_version="3.5" profile="21.05">
+<tool id="ipapy2_MS2_annotation" name="IPA MS2 annotation" version="@TOOL_VERSION@+galaxy0" profile="21.05">
     <macros>
         <import>macros.xml</import>
     </macros>
@@ -13,14 +13,22 @@
 
 <configfiles>
 <configfile name="ipapy2_MS2_annotation_cli">
-@init_logger@
+@init_import@
+import os
 
-df = pd.read_csv('${MS1_table}')
-dfMS2 = pd.read_csv('${MS2_table}')
-allAdds = pd.read_csv('${all_adducts}')
-DBMS2 = pd.read_csv('${DBMS2_table}')
-annotations = ipa.MSMSannotation(df, dfMS2, allAdds, DBMS2, ppm=$ppm, me=$me, ratiosd=$ratiosd, ppmunk=$ppmunk, ratiounk=$ratiounk, ppmthr=$ppmthr, pRTNone=$pRTNone, pRTout=$pRTout, mzdCS=$mzdCS, ppmCS=$ppmCS, CSunk=$CSunk, evfilt=$evfilt, ncores=$ncores)
-annotations.to_csv('${output}', index=False)
+df = pd.read_csv('${MS1_table}', keep_default_na=False)
+df = df.replace('', None)
+dfMS2 = pd.read_csv('${MS2_table}', keep_default_na=False)
+dfMS2 = dfMS2.replace('', None)
+allAdds = pd.read_csv('${all_adducts}', keep_default_na=False)
+allAdds = allAdds.replace('', None)
+DBMS2 = pd.read_csv('${DBMS2_table}', keep_default_na=False)
+DBMS2 = DBMS2.replace('', None)
+ppmunk = os.getenv('ppmunk', $ppm)
+ppmthr = os.getenv('ppmthr', 2*$ppm)
+annotations = ipa.MSMSannotation(df, dfMS2, allAdds, DBMS2, ppm=$ppm, ratiosd=$ratiosd, ppmunk=ppmunk, ratiounk=$ratiounk, ppmthr=ppmthr, pRTNone=$pRTNone, pRTout=$pRTout, mzdCS=$mzdCS, ppmCS=$ppmCS, CSunk=$CSunk, evfilt=$evfilt, ncores=int(os.environ.get('GALAXY_SLOTS')))
+@annotation_flatten@
+annotations_flat.to_csv('${output}', index=False)
 </configfile>
 </configfiles>
 
@@ -30,22 +38,52 @@ annotations.to_csv('${output}', index=False)
         <param label="all possible adducts table" name="all_adducts" type="data" format="csv" help="pandas dataframe containing the information on all the possible adducts given the database." />
         <param label="DBMS2 table" name="DBMS2_table" type="data" format="csv" help="pandas dataframe containing the database containing the MS2 information." />
         <param label="ppm" name="ppm" type="float" help="accuracy of the MS instrument used."/>
-        <param label="me" name="me" type="float" value="0.000548579909065" help="accurate mass of the electron. Default 5.48579909065e-04."/>
-        <param label="ratiosd" name="ratiosd" type="float" value="0.9" help="It represents the acceptable ratio between predicted intensity and observed intensity of isotopes. default 0.9."/>
-        <param label="ppmunk" name="ppmunk" type="float" value='$ppm' help="ppm associated to the 'unknown' annotation. If not provided equal to ppm.."/>
-        <param label="ratiounk" name="ratiounk" type="float" value="0.5" help="isotope ratio associated to the 'unknown' annotation. If not provided equal to 0.5."/>
-        <param label="ppmthr" name="ppmthr" type="float" value='$ppm*2' help="Maximum ppm possible for the annotations. Ff not provided equal to 2*ppm."/>
-        <param label="pRTNone" name="pRTNone" type="float" value="0.8" help="Multiplicative factor for the RT if no RTrange present in the database. If not provided equal to 0.8."/>
-        <param label="pRTout" name="pRTout" type="float" value="0.4" help="Multiplicative factor for the RT if measured RT is outside the RTrange present in the database. If not provided equal to 0.4."/>
-        <param label="mzdCS" name="mzdCS" type="float" value="0" help="maximum mz difference allowed when computing cosine similarity scores. If one wants to use this parameter instead of ppmCS, this must be set to 0. Default 0.."/>
-        <param label="ppmCS" name="ppmCS" type="float" value="10" help="maximum ppm allowed when computing cosine similarity scores. If one wants to use this parameter instead of mzdCS, this must be set to 0. Default 10.."/>
-        <param label="CSunk" name="CSunk" type="float" value="0.7" help="cosine similarity score associated with the 'unknown' annotation. Default 0.7."/>
-        <param label="evfilt" name="evfilt" type="boolean" value="False" help="Default value False. If true, only spectrum acquired with the same collision energy are considered.."/>
-        <expand macro="ncores"/>
+        <section name="unknown" title="unknown settings">
+            <param name="ppmunk" type="float" optional="true">
+                <label>ppm for unknown</label>
+                <help>ppm associated to the 'unknown' annotation. If not provided equal to ppm.</help>
+            </param>
+            <param name="ratiounk" type="float" value="0.5">
+                <label>isotope ratio for unknown</label>
+                <help>isotope ratio associated to the 'unknown' annotation. Default 0.5.</help>
+            </param>
+            <param name="CSunk" type="float" value="0.7">
+                <label>cosine similarity for unknown</label>
+                <help>cosine similarity score associated with the 'unknown' annotation. Default 0.7.</help>
+            </param>
+        </section>
+
+        <section name="optional_settings" title="optional settings">
+            <param name="ratiosd" type="float" value="0.9" label="intensity ratio">
+                <help>acceptable ratio between predicted intensity and observed intensity of isotopes</help>
+            </param>
+            <param name="ppmthr" type="float" optional="true" label="ppm threshold">
+                <help>maximum ppm possible for the annotations. if not provided equal to 2*ppm.</help>
+            </param>
+            <param name="pRTNone" type="float" value="0.8" label="no RT factor">
+                <help>multiplicative factor for the RT if no RTrange present in the database.</help>
+            </param>
+            <param name="pRTout" type="float" value="0.4" label="outside RT factor">
+                <help>multiplicative factor for the RT if measured RT is outside the RTrange present in the database.</help>
+            </param>
+            <param name="mzdCS" type="float" value="0" label="MS2 mz threshold">
+                <help>maximum mz difference allowed when computing cosine similarity scores. 
+                If one wants to use this parameter instead of ppmCS, this must be set to 0. Default 0.</help>
+            </param>
+            <param name="ppmCS" type="float" value="10" label="maximum ppm for cosine similarity scores">
+                <help>maximum ppm allowed when computing cosine similarity scores. 
+                If one wants to use this parameter instead of mzdCS, this must be set to 0. Default 10.</help>
+            </param>
+            <param name="evfilt" type="select" label="same collision energy">
+                <help>If true, only spectrum acquired with the same collision energy are considered. Default value False.</help>
+                <option value="False">False</option>
+                <option value="True">True</option>
+            </param>
+        </section>
     </inputs>
 
     <outputs>
-        <data label="${tool.name} on ${on_string}" name="output" format="csv"/>
+        <data label="${tool.name} on ${on_string}" name="output" format="csv" help="a dictionary containing all the possible annotations for the measured features."/>
     </outputs>
 
     <tests>
@@ -61,60 +99,9 @@ annotations.to_csv('${output}', index=False)
 
     <help><![CDATA[
     ::
-        MSMSannotation(df, dfMS2, allAdds, DBMS2, ppm, me=0.000548579909065, ratiosd=0.9, ppmunk=None, ratiounk=None, ppmthr=None, pRTNone=None, pRTout=None, mzdCS=0, ppmCS=10, CSunk=0.7, evfilt=False, ncores=1)
         Annotation of the dataset base on the MS1 and MS2 information. Prior
         probabilities are based on mass only, while post probabilities are based
         on mass, RT, previous knowledge and isotope patterns.
-        
-        Parameters
-        ----------
-        df: pandas dataframe containing the MS1 data. It should be the output of the
-            function ipa.map_isotope_patterns()
-        dfMS2: pandas dataframe containing the MS2 data. It must contain 3 columns
-            -id: an unique id for each feature for which the MS2 spectrum was
-                acquired (same as in df)
-            -spectrum: string containing the spectrum information in the following
-                    format 'mz1:Int1 mz2:Int2 mz3:Int3 ...'
-            -ev: collision energy used to acquire the fragmentation spectrum
-        allAdds: pandas dataframe containing the information on all the possible
-                adducts given the database. It should be the output of either
-                ipa.compute_all_adducts() or ipa.compute_all_adducts_Parallel()
-        DBMS2: pandas dataframe containing the database containing the MS2
-            information
-        ppm: accuracy of the MS instrument used
-        me: accurate mass of the electron. Default 5.48579909065e-04
-        ratiosd: default 0.9. It represents the acceptable ratio between predicted
-                intensity and observed intensity of isotopes. it is used to compute
-                the shape parameters of the lognormal distribution used to
-                calculate the isotope pattern scores as sqrt(1/ratiosd)
-        ppmunk: ppm associated to the 'unknown' annotation. If not provided equal
-                to ppm.
-        ratiounk: isotope ratio associated to the 'unknown' annotation. If not
-                provided equal to 0.5
-        ppmthr: Maximum ppm possible for the annotations. Ff not provided equal to
-                2*ppm
-        pRTNone: Multiplicative factor for the RT if no RTrange present in the
-                database. If not provided equal to 0.8
-        pRTout: Multiplicative factor for the RT if measured RT is outside the
-                RTrange present in the database. If not provided equal to 0.4
-        mzdCS: maximum mz difference allowed when computing cosine similarity
-            scores. If one wants to use this parameter instead of ppmCS, this
-            must be set to 0. Default 0.
-        ppmCS: maximum ppm allowed when computing cosine similarity scores.
-            If one wants to use this parameter instead of mzdCS, this must be
-            set to 0. Default 10.
-        CSunk: cosine similarity score associated with the 'unknown' annotation.
-                Default 0.7
-        evfilt: Default value False. If true, only spectrum acquired with the same
-                collision energy are considered.
-        ncores: default value 1. Number of cores used
-        
-        Returns
-        -------
-        annotations: a dictionary containing all the possible annotations for the
-                    measured features. The keys of the dictionary are the unique
-                    ids for the features present in df. For each feature, the
-                    annotations are summarized in a pandas dataframe.
     ]]></help>
 
     <expand macro="citations"/>

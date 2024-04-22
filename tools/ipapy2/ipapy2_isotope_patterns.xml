@@ -1,4 +1,4 @@
-<tool id="ipapy2_isotope_patterns" name="3. IPA isotope patterns" version="@TOOL_VERSION@+galaxy0" python_template_version="3.5" profile="21.05">
+<tool id="ipapy2_isotope_patterns" name="IPA isotope patterns" version="@TOOL_VERSION@+galaxy0" profile="21.05">
     <macros>
         <import>macros.xml</import>
     </macros>
@@ -13,20 +13,32 @@
 
 <configfiles>
 <configfile name="ipapy2_isotope_cli">
-@init_logger@
+@init_import@
 
 ipa_dataframe = pd.read_csv('${isotope_input}')
-ipa.map_isotope_patterns(ipa_dataframe, isoDiff=$isotope_diff, ppm=$ppm, ionisation=int(${ionisation}), MinIsoRatio=$isotope_ratio)
+ipa.map_isotope_patterns(ipa_dataframe, isoDiff=$isotope.isoDiff, ppm=$isotope.ppm, ionisation=int(${ionisation}), MinIsoRatio=$isotope.isotope_ratio)
 ipa_dataframe.to_csv('${isotope_output}', index=False)
 </configfile>
 </configfiles>
 
     <inputs>
         <param label="IPA dataframe" name="isotope_input" type="data" format="csv" help="a dataframe of clustered features." />
-        <param label="isoDiff" name="isotope_diff" type="float" value="1" help="Difference between isotopes of charge 1"/>
-        <param label="ppm" name="ppm" type="float" value="100" help="Default value 100. Maximum ppm value allowed between 2 isotopes."/>
         <expand macro="ionisation"/>
-        <param label="isotope ratio" name="isotope_ratio" type="float" min="0" max="100" value="0.5" help="mininum intensity ratio expressed (Default value 0.5%). Only isotopes with intensity higher than MinIsoRatio% of the main isotope are considered."/>
+        <section name="isotope" title="isotope settings">
+            <param name="isoDiff" type="float" value="1">
+                <label>isotope difference</label>
+                <help>Difference between isotopes of charge 1.</help>
+            </param>
+            <param name="ppm" type="float" value="100">
+                <label>ppm between isotopes</label>
+                <help>Maximum ppm value allowed between 2 isotopes. Default value 100.</help>
+            </param>
+            <param name="isotope_ratio" type="float" min="0" max="100" value="0.5">
+                <label>isotope ratio</label>
+                <help>mininum intensity ratio expressed (Default value 0.5%). 
+				Only isotopes with intensity higher than MinIsoRatio% of the main isotope are considered</help>
+            </param>
+        </section>
     </inputs>
     
     <outputs>
@@ -42,50 +54,7 @@ ipa_dataframe.to_csv('${isotope_output}', index=False)
 
     <help><![CDATA[
 	::
-		map_isotope_patterns(df, isoDiff=1, ppm=100, ionisation=1, MinIsoRatio=0.5)
 		mapping isotope patterns in MS1 data.
-		
-		Parameters
-		----------
-		df : pandas dataframe (necessary)
-			A dataframe containing the MS1 data including the following columns:
-				-ids: an unique id for each feature
-				-rel.ids:   relation ids. In a previous step of the data processing
-							pipeline, features are clustered based on peak shape
-							similarity/retention time. Features in the same
-							cluster are likely to come from the same metabolite.
-							All isotope patterns must be in the same rel.id
-							cluster.
-				-mzs: mass-to-charge ratios, usually the average across
-					different samples.
-				-RTs: retention times in seconds, usually the average across
-					different samples.
-				-Ints: representative (e.g., maximum or average) intensity detected
-					for each feature across samples (either peak area or peak
-					intensity)
-		isoDiff : Default value 1. Difference between isotopes of charge 1, does
-				not need to be exact
-		ppm:   Default value 100. Maximum ppm value allowed between 2 isotopes.
-				It is very high on purpose
-		ionisation: Default value 1. positive = 1, negative = -1
-		MinIsoRatio: mininum intensity ratio expressed (Default value 1%). Only
-					isotopes with intensity higher than MinIsoRatio% of the main isotope
-					are considered.
-		
-		Returns
-		-------
-		df: the main input is modified by adding and populating the following
-			columns
-			- relationship: the possible values are:
-							* bp: basepeak, most intense peak within each rel id
-							* bp|isotope: isotope of the basepeak
-							* potential bp: most intense peak within each isotope
-											pattern (excluding the basepeak)
-							* potential bp|isotope: isotope of one potential bp
-			- isotope pattern: feature used to cluster the different isotope
-								patterns within the same relation id
-			- charge: predicted charge based on the isotope pattern (1,2,3,4,5 or
-					-1,-2,-3,-4,-5 are the only values allowed)
     ]]></help>
 
     <expand macro="citations"/>
