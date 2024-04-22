@@ -1,4 +1,4 @@
-<tool id="matchms_formatter" name="matchms scores formatter" version="@TOOL_VERSION@+galaxy3" profile="21.09">
+<tool id="matchms_formatter" name="matchms scores formatter" version="@TOOL_VERSION@+galaxy4" profile="21.09">
     <description>reformat scores object of matchms to long format table</description>
 
     <macros>
@@ -13,12 +13,11 @@
 
     <requirements>
         <requirement type="package" version="@TOOL_VERSION@">matchms</requirement>
-        <requirement type="package" version="8.0.1">click</requirement>
         <requirement type="package" version="1.1.4">pandas</requirement>
     </requirements>
 
     <command detect_errors="aggressive"><![CDATA[
-        sh ${matchms_formatter_cli}
+        python3 '${formatter}'
     ]]></command>
     
     <environment_variables>
@@ -29,15 +28,26 @@
     </environment_variables>
 
     <configfiles>
-        <configfile name="matchms_formatter_cli">
-            python3 ${__tool_directory__}/formatter.py \
-            --sf '$scores' \
-            --o '$output'
+        <configfile name="formatter">
+from matchms.importing import scores_from_json
+from pandas import DataFrame
+
+scores = scores_from_json('$scores')
+data = []
+
+for i, (row, col) in enumerate(zip(scores.scores.row, scores.scores.col)):
+        data.append([scores.queries[col].metadata['$key'], scores.references[row].metadata['$key'], *scores.scores.data[i]])
+
+result = DataFrame(data, columns=['query', 'reference', *scores.scores.score_names])
+
+result.to_csv('$output', sep="\t", index=False)
+
         </configfile>
     </configfiles>
 
     <inputs>
         <param label="Scores object" name="scores" type="data" format="json" help="matchms Scores json file." />
+        <param label="Key" name="key" type="text" value="compound_name" help="Name of the key to use. Default is 'compound_name'." />
     </inputs>
     <outputs>
         <data label="${tool.name} on ${on_string}" name="output" format="tsv"/>
@@ -46,11 +56,13 @@
     <tests>
         <test>
             <param name="scores" value="formatter/fill2_trunc_scores_with_metadata_match.json" ftype="json"/>
+            <param name="key" value="compound_name"/>
             <output name="output" value="formatter/fill2_formatted.tsv" ftype="tsv"
                 checksum="md5$4f0d83da381b8a403d807d26a9dd0f34"/>
         </test>
         <test>
             <param name="scores" value="similarity/scores_test4_out.json" ftype="json"/>
+            <param name="key" value="compound_name"/>
             <output name="output" file="formatter/test4_formatted.tsv" ftype="tsv"/>
         </test>
     </tests>
