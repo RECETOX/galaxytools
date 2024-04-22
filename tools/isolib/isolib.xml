@@ -43,7 +43,7 @@
                 </param>
             </when>
         </conditional>
-        <param name="threshold" type="float" min="0" max="100" value="1" label="Threshold" help="Probability threshold to use as cutoff for isotopic pattern distribution." />
+        <param name="threshold" type="float" min="0" max="100" value="1" label="Threshold" help="Probability threshold to use as cutoff for isotopic pattern distribution - this can be used to remove low abundant peaks and improve computation performance." />
         <param name="append_adduct" type="boolean" truevalue="TRUE" falsevalue="FALSE" checked="true" label="Append adduct to compound name" help="Append the adduct string to the compound name for easy identification." />
     </inputs>
     <outputs>
@@ -58,6 +58,12 @@
     </tests>
     <help><![CDATA[
         This tool computes isotopic patterns for given compounds and adduct forms.
+        The compound table input file should contain the following columns:
+        - name: compound name
+        - formula: compound formula
+        - rt (optional): retention time
+
+        The output is a spectral library in the MSP format.
     ]]></help>
     <citations>
         <citation type="doi">10.1021/acs.analchem.5b00941</citation>
