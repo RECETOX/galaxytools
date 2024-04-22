@@ -23,9 +23,9 @@ main <- function() {
       multiplied_chemforms <- multiform(chemforms, adduct$Mult)
   
       if(adduct$Ion_mode == "negative") {
-          merged_chemforms <- subform(multiplied_chemforms, adduct$Formula_ded)
+        merged_chemforms <- subform(multiplied_chemforms, adduct$Formula_ded)
       } else {
-          merged_chemforms <- mergeform(multiplied_chemforms, adduct$Formula_add)
+        merged_chemforms <- mergeform(multiplied_chemforms, adduct$Formula_add)
       }
   
       charge_string <- paste0(if(adduct$Charge > 0) "+" else "-", if(abs(adduct$Charge) > 1) abs(adduct$Charge) else "")
