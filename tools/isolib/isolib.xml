@@ -21,7 +21,7 @@
         <requirement type="package" version="2.6">r-envipat</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
-        Rscript -e 'source("${__tool_directory__}/isolib.R")' '${input_file}' '${adducts}' '${threshold}' '${append_adduct}' '${isotope_library}'
+        Rscript ${__tool_directory__}/isolib.R '${input_file}' '${adducts}' '${threshold}' '${append_adduct}' '${isotope_library}'
     ]]></command>
     <inputs>
         <param name="input_file" type="data" format="tabular" label="Table with input compounds"/>
