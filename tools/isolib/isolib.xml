@@ -1,6 +1,11 @@
 <tool id="isolib" name="isolib" version="1.0.0+galaxy0" profile="21.09">
     <description>create an isotopic pattern library for given compounds and adducts</description>
     <creator>
+        <person
+            givenName="Helge"
+            familyName="Hecht"
+            url="https://github.com/hechth"
+            identifier="0000-0001-6744-996X" />
         <organization
             url="https://www.recetox.muni.cz/"
             email="GalaxyToolsDevelopmentandDeployment@space.muni.cz"
