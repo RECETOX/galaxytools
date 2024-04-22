@@ -42,12 +42,15 @@ main <- function() {
           name=names,
           adduct=adduct_string,
           formula=chemforms,
-          retention_time=compound_table$rt,
           charge=adduct$Charge,
           ionization_mode=adduct$Ion_mode,
           precursor_mz=precursor_mz,
           msLevel=as.integer(1)
       )
+
+      if ('rt' %in% colnames(compound_table)) {
+        spectra_df$retention_time=compound_table$rt
+      }
  
       patterns <- enviPat::isopattern(
           isotopes=isotopes,
