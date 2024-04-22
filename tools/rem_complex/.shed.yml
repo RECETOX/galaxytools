@@ -1,0 +1,10 @@
+name: rem_complex
+owner: recetox
+description: Removes molecular coordination complexes.
+long_description: |
+      The rem_complex tool filters out coordination complexes from a list of structure representations (SMILES, InChI).
+categories:
+  - Metabolomics
+remote_repository_url: "https://github.com/RECETOX/galaxytools/tree/master/tools/rem_complex"
+homepage_url: "https://github.com/RECETOX/galaxytools"
+type: unrestricted

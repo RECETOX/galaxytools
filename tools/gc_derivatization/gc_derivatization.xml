@@ -1,0 +1,56 @@
+<tool id="gc_derivatization" name="GC derivatization" version="@TOOL_VERSION@+galaxy0" profile="21.09">
+    <description>In silico MeOX and TMS derivatization tool</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="creator"/>
+    <requirements>
+        <requirement type="package" version="@TOOL_VERSION@">gc-meox-tms</requirement>
+    </requirements>
+
+    <command detect_errors="exit_code"><![CDATA[
+    python -m gc_meox_tms -t '${output}' '${input}'
+    ]]>
+    </command>
+
+    <inputs>
+        <param name="input" type="data" format="smi,tabular" help="SMILES list in smi or tabular formats."/>
+    </inputs>
+    <outputs>
+        <data name="output" format="tabular"/>
+    </outputs>
+    <tests>
+        <test>
+            <param name="input" value="input.tabular" ftype="smi"/>
+            <output name="output" >
+                <assert_contents>
+                    <has_text text="CC(N)=O"/>
+                    <has_text text="CC(=O)O"/>
+                    <has_text text="CC=NOC"/>
+                    <has_text text="OC1=CC=CC=C1"/>
+                </assert_contents>
+            </output>
+        </test>
+    </tests>
+    <help>
+        <![CDATA[
+        The tool outputs a table with multiple columns containing the original SMILES as well as with the derivatization group removed.
+        The further columns contain all possible derivatized forms of the molecule. See the example output below.
+
+        +----------------+----------------+-------------------------+--------------------+---------------------------------+
+        | orig           | deriv. removed | deriv. added            | ...                |                                 |
+        +================+================+=========================+====================+=================================+
+        | CC(N)=O        | CC(N)=O        | CC(N)=O                 | CC(=O)N[Si](C)(C)C | CC(=O)N([Si](C)(C)C)[Si](C)(C)C |
+        +----------------+----------------+-------------------------+--------------------+---------------------------------+
+        | OC1=CC=CC=C1   | OC1=CC=CC=C1   | C[Si](C)(C)OC1=CC=CC=C1 | OC1=CC=CC=C1       |                                 |
+        +----------------+----------------+-------------------------+--------------------+---------------------------------+
+        | CC(=O)O        | CC(=O)O        | CC(=O)O[Si](C)(C)C      | CC(=O)O            |                                 |
+        +----------------+----------------+-------------------------+--------------------+---------------------------------+
+        | CC=NOC         | CC=O           | CC=NOC                  |                    |                                 |
+        +----------------+----------------+-------------------------+--------------------+---------------------------------+
+        ]]>
+    </help>
+    <citations>
+        <citation type="doi">https://doi.org/10.1021/acs.analchem.7b01010</citation>
+    </citations>     
+</tool>

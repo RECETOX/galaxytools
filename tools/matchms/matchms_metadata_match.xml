@@ -1,4 +1,4 @@
-<tool id="matchms_metadata_match" name="matchms metadata match" version="@TOOL_VERSION@+galaxy0" profile="21.09">
+<tool id="matchms_metadata_match" name="matchms metadata match" version="@TOOL_VERSION@+galaxy1" profile="21.09">
     <description>matchms metadata match calculation for numeric fields based on tolerance</description>
 
     <macros>
@@ -77,6 +77,7 @@ scores.to_json("$scores_out")
                     <option value="smiles" selected="true">SMILES</option>
                     <option value="inchi">InChI</option>
                     <option value="inchikey">InChIKey</option>
+                    <option value="formula">Formula</option>
                 </param>
             </when>
         </conditional>
@@ -122,6 +123,13 @@ scores.to_json("$scores_out")
             <param name="join_type" value="left" />
             <output name="scores_out" value="metadata_match/left_join_ri_20.json" ftype="json" />
         </test>
+        <test>
+            <param name="queries" value="similarity/rcx_gc-ei_ms_subset.msp" ftype="msp"/>
+            <param name="references" value="similarity/rcx_gc-ei_ms_subset.msp" ftype="msp"/>
+            <param name="matching_type" value="equal_match" />
+            <param name="metadata_match_field" value="formula" />
+            <output name="scores_out" value="metadata_match/formula.json" ftype="json" />
+        </test>
     </tests>
 
     <help>
@@ -131,9 +139,9 @@ scores.to_json("$scores_out")
             The output will be __TRUE__ if the value is within the tolerance or an exact match and __FALSE__ otherwise.
 
         .. rubric:: **Footnotes**
-        .. [1] SQL join types explained on LearnSQL_.
+        .. [1] SQL join types explained on W3School_.
         
-        .. _LearnSQL: https://learnsql.com/blog/sql-joins-types-explained/
+        .. _W3School: https://www.w3schools.com/sql/sql_join.asp
 
         @HELP_matchms@
     </help>
