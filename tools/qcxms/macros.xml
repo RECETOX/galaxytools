@@ -1,0 +1,26 @@
+<macros>
+    <token name="@TOOL_VERSION@">5.2.1</token>
+    <xml name="requirements">
+        <requirements>
+            <container type="docker">recetox/qcxms-docker:@TOOL_VERSION@</container>
+        </requirements>
+    </xml>
+    <xml name="edam">
+        <edam_topics>
+            <edam_topic>topic_3332</edam_topic>
+        </edam_topics>
+        <edam_operations>
+            <edam_operation>operation_0297</edam_operation>
+        </edam_operations>
+    </xml>
+
+    <xml name="creator">
+        <creator>
+            <yield/>
+            <organization
+                url="https://www.recetox.muni.cz/"
+                email="GalaxyToolsDevelopmentandDeployment@space.muni.cz"
+                name="RECETOX MUNI" />
+        </creator>
+    </xml>
+</macros>

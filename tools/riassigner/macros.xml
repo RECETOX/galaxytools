@@ -1,5 +1,5 @@
 <macros>
-    <token name="@TOOL_VERSION@">0.3.4</token>
+    <token name="@TOOL_VERSION@">0.4.0</token>
     <xml name="creator">
         <creator>
             <person
@@ -7,13 +7,18 @@
                 familyName="Hecht"
                 url="https://github.com/hechth"
                 identifier="0000-0001-6744-996X" />
+            <person
+                givenName="Wudmir"
+                familyName="Rojas"
+                url="https://github.com/wverastegui"
+                identifier="0000-0001-7036-9987" />
             <organization
                 url="https://www.recetox.muni.cz/"
                 email="GalaxyToolsDevelopmentandDeployment@space.muni.cz"
                 name="RECETOX MUNI" />
         </creator>
     </xml>
-
+ 
     <token name="@HELP@">
         <![CDATA[
         RIAssigner can be used to read data from .msp, .csv and .tsv files using matchms and pandas and to compute the

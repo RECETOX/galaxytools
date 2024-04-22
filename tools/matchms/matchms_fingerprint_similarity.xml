@@ -86,11 +86,11 @@ scores.to_json("$scores_out")
             Similarity between molecular fingerprints can serve as a proxy for structural similarity and can therefore be used to compare molecules.
 
         .. rubric:: **Footnotes**
-        .. [1] SQL join types explained on LearnSQL_.
+        .. [1] SQL join types explained on W3School_.
         .. [2] Fingerprint - the `daylight fingerprint`_ is used to compute chemical similarity.
                Fingerprints are derived from SMILES or InChI structure notations present in the spectrum metadata.
         
-        .. _LearnSQL: https://learnsql.com/blog/sql-joins-types-explained/
+        .. _W3School: https://www.w3schools.com/sql/sql_join.asp
         .. _daylight fingerprint: https://www.daylight.com/dayhtml/doc/theory/theory.finger.html
         
         @HELP_matchms@
