@@ -4,7 +4,7 @@ remote_repository_url: "https://github.com/RECETOX/galaxytools/tree/master/tools
 homepage_url: "https://github.com/RECETOX/galaxytools"
 categories:
   - Metabolomics
-description: XCMS and Spectra plotting tools
+description: XCMS Spectra plotting tools
 long_description: |
     
 type: unrestricted
