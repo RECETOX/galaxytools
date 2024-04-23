@@ -48,9 +48,10 @@ dev.off()
             <output name="output_filename" file="raw_plot.png"/>
         </test>
     </tests>
-<help><![CDATA[
-    This tool plots the raw data filtered by m/z range and retention time (RT) range from an mzML file. 
-    It uses a default tolerance of 10 ppm and retention time range of 5.
+    <help><![CDATA[
+        This tool plots the raw data filtered by m/z range and retention time (RT) range from an mzML file. 
+        It uses a default tolerance of 10 ppm and retention time range of 5 s. 
+        More information and detailed instructions can be found in the tutorial at: https://jorainer.github.io/xcmsTutorials/articles/xcms-preprocessing.html#data-visualization
     ]]></help>
     <citations>
         <citation type="doi">10.1021/ac051437y</citation>

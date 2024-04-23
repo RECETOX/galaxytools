@@ -45,6 +45,7 @@ dev.off()
     <help><![CDATA[
         This tool plots the extracted ion chromatogram (EIC) from an mzML file, using a provided m/z value. 
         It uses a default tolerance of 10 ppm and operates at mslevel 1 by default.    
+        More information and detailed instructions can be found in the tutorial at: https://jorainer.github.io/xcmsTutorials/articles/xcms-preprocessing.html#data-visualization
     ]]></help>
     <citations>
         <citation type="doi">10.1021/ac051437y</citation>
