@@ -1,0 +1,72 @@
+<tool id="isolib" name="isolib" version="1.0.0+galaxy1" profile="21.09">
+    <description>create an isotopic pattern library for given compounds and adducts</description>
+    <creator>
+        <person
+            givenName="Helge"
+            familyName="Hecht"
+            url="https://github.com/hechth"
+            identifier="0000-0001-6744-996X" />
+        <organization
+            url="https://www.recetox.muni.cz/"
+            email="GalaxyToolsDevelopmentandDeployment@space.muni.cz"
+            name="RECETOX MUNI" />
+    </creator>
+    <edam_operations>
+        <edam_operation>operation_3632</edam_operation>
+    </edam_operations>
+    <requirements>
+        <requirement type="package" version="1.10.0">bioconductor-metabocoreutils</requirement>
+        <requirement type="package" version="1.12.0">bioconductor-spectra</requirement>
+        <requirement type="package" version="1.6.0">bioconductor-msbackendmsp</requirement>
+        <requirement type="package" version="2.6">r-envipat</requirement>
+    </requirements>
+    <command detect_errors="exit_code"><![CDATA[
+        Rscript '${__tool_directory__}/isolib.R' '${input_file}' '${ionization.adducts}' '${threshold}' '${append_adduct}' '${isotope_library}'
+    ]]></command>
+    <inputs>
+        <param name="input_file" type="data" format="tabular" label="Table with input compounds"/>
+        <conditional name="ionization">
+            <param name="ionization" type="select" label="Ionization mode" help="Ionization mode used in the experiment">
+                <option value="negative" selected="true">negative</option>
+                <option value="positive">positive</option>
+            </param>
+            <when value="positive">
+                <param name="adducts" type="select" label="Adducts" multiple="true" help="Adducts to use">
+                    <option value="M+H" selected="true">M+H</option>
+                </param>
+            </when>
+            <when value="negative">
+                <param name="adducts" type="select" label="Adducts" multiple="true" help="Adducts to use">
+                    <option value="M-H" selected="true">M-H</option>
+                    <option value="M-2H">M-2H</option>
+                    <option value="2M-H">2M-H</option>
+                </param>
+            </when>
+        </conditional>
+        <param name="threshold" type="float" min="0" max="100" value="1" label="Threshold" help="Probability threshold to use as cutoff for isotopic pattern distribution - this can be used to remove low abundant peaks and improve computation performance." />
+        <param name="append_adduct" type="boolean" truevalue="TRUE" falsevalue="FALSE" checked="true" label="Append adduct to compound name" help="Append the adduct string to the compound name for easy identification." />
+    </inputs>
+    <outputs>
+        <data format="msp" name="isotope_library"/>
+    </outputs>
+
+    <tests>
+        <test>
+            <param name="input_file" value="lc_markers_neg.tsv"/>
+            <output name="isotope_library" file="test0.msp"/>
+        </test>
+    </tests>
+    <help><![CDATA[
+        This tool computes isotopic patterns for given compounds and adduct forms.
+        The compound table input file should contain the following columns:
+        - name: compound name
+        - formula: compound formula
+        - rt (optional): retention time
+
+        The output is a spectral library in the MSP format.
+    ]]></help>
+    <citations>
+        <citation type="doi">10.1021/acs.analchem.5b00941</citation>
+        <citation type="doi">10.3390/metabo12020173</citation>
+    </citations>
+</tool>
