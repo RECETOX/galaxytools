@@ -1,6 +1,6 @@
 name: xcms_plot
 owner: recetox
-remote_repository_url: "https://github.com/RECETOX/galaxytools/tree/master/tools/plot_eic"
+remote_repository_url: "https://github.com/RECETOX/galaxytools/tree/master/tools/xcms"
 homepage_url: "https://github.com/RECETOX/galaxytools"
 categories:
   - Metabolomics
