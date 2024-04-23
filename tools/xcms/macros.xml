@@ -18,4 +18,9 @@
             name="RECETOX MUNI"/>
     </creator>
     </xml>
+    <xml name="bio.tools">
+        <xrefs>
+            <xref type="bio.tools">XCMS</xref>
+        </xrefs>
+    </xml>
 </macros>
