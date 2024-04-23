@@ -31,7 +31,7 @@ dev.off()
         <param type="float" name="mz_value" value="0.0" label="m/z Value" help="m/z value for the plot"/>
         <param type="integer" name="tolerance_ppm" value="10" label="Tolerance (ppm)" help="Tolerance for m/z value in ppm"/>
         <param type="float" name="rt" label="Retention Time" value="0.0" help="Retention time for the plot"/>
-        <param type="float" name="rt_range" value="10.0" label="Retention Time Range" help="Retention time range for the plot"/>
+        <param type="float" name="rt_range" value="5.0" label="Retention Time Range" help="Retention time range for the plot"/>
     </inputs>
     <outputs>
         <data name="output_filename" format="png" label="PLot at m/z=$mz_value and rt=$rt of $input.element_identifier"/>
@@ -48,7 +48,7 @@ dev.off()
     </tests>
 <help><![CDATA[
     This tool plots the raw data filtered by m/z range and retention time (RT) range from an mzML file. 
-    It uses a default tolerance of 10 ppm and retention time range of 10.
+    It uses a default tolerance of 10 ppm and retention time range of 5.
     ]]></help>
     <citations>
         <citation type="doi">10.1021/ac051437y</citation>
