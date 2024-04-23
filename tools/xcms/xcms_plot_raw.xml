@@ -22,6 +22,7 @@ raw = mse |>
     filterRt(rt = ${rt} + c(-rt_offset, rt_offset)) |>
     filterMzRange(mz = ${mz_value} + c(-mz_offset, mz_offset))
 png(filename = '${output_filename}')
+par(oma = c(0.5, 2, 0.5, 1))
 plot(raw)
 dev.off()
         </configfile>
