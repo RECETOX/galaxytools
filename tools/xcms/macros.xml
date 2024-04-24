@@ -28,4 +28,10 @@
         <param type="float" name="mz_value" value="10.0" min="0.0" label="m/z Value" help="m/z value for the EIC"/>
         <param type="integer" value="10" name="tolerance_ppm" min="0" label="Tolerance (ppm)" help="Tolerance for m/z value in ppm"/>
     </xml>
+    <xml name="citations">
+        <citations>
+            <citation type="doi">10.1021/ac051437y</citation>
+            <citation type="doi">10.3390/metabo12020173</citation>
+        </citations>
+    </xml>
 </macros>
