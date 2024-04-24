@@ -48,7 +48,7 @@ main <- function() {
     )
 
     if ("rt" %in% colnames(compound_table)) {
-      spectra_df$retention_time <- compound_table$rt
+      spectra_df$retention_time <- as.numeric(sub(",", ".", compound_table$rt, fixed = TRUE))
     }
 
     patterns <- enviPat::isopattern(
