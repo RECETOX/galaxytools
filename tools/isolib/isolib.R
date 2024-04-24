@@ -2,6 +2,7 @@ library(enviPat)
 library(Spectra)
 library(MsBackendMsp)
 library(MetaboCoreUtils)
+library(readr)
 
 #' @param args A list of command line arguments.
 main <- function() {
@@ -9,7 +10,11 @@ main <- function() {
   data(adducts)
 
   args <- commandArgs(trailingOnly = TRUE)
-  compound_table <- read.delim(args[1], stringsAsFactors = FALSE)
+  compound_table <- read_tsv(
+    file = args[1],
+    col_types = "ccd",
+    col_select = tidyselect::all_of(c("name", "formula")) | tidyselect::any_of("rt")
+  )
   adducts_to_use <- c(unlist(strsplit(args[2], ",", fixed = TRUE)))
 
   chemforms <- compound_table$formula
