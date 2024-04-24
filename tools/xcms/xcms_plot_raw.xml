@@ -29,11 +29,9 @@ dev.off()
         </configfile>
     </configfiles>
     <inputs>
-        <param type="data" name="input" format="mzml" label="Input mzML file"/>
-        <param type="float" name="mz_value" value="10.0" label="m/z Value" help="m/z value for the plot"/>
-        <param type="integer" name="tolerance_ppm" value="10" label="Tolerance (ppm)" help="Tolerance for m/z value in ppm"/>
-        <param type="float" name="rt" label="Retention Time" value="10.0" help="Retention time for the plot"/>
-        <param type="float" name="rt_range" value="5.0" label="Retention Time Range" help="Retention time range for the plot"/>
+        <expand macro="base_params"/>
+        <param type="float" name="rt" label="Retention Time" min="0.0" value="0.0" help="Retention time for the plot"/>
+        <param type="float" name="rt_range" value="5.0" min="0.0" label="Retention Time Range" help="Retention time range for the plot"/>
     </inputs>
     <outputs>
         <data name="output_filename" format="png" label="PLot at m/z=$mz_value and rt=$rt of $input.element_identifier"/>

@@ -25,10 +25,8 @@ dev.off()
         </configfile>
     </configfiles>
     <inputs>
-        <param type="data" name="input" format="mzML" label="Input mzML file"/>
-        <param type="float" name="mz_value" value="10.0" label="m/z Value" help="m/z value for the EIC"/>
-        <param type="integer" value="10" name="tolerance_ppm" label="Tolerance (ppm)" help="Tolerance for m/z value in ppm"/>
-        <param type="integer" value="1" name="mslevel" label="MS Level" help="MS level for the EIC"/>
+        <expand macro="base_params"/>
+        <param type="integer" value="1" name="mslevel" min="1" label="MS Level" help="MS level for the EIC"/>
     </inputs>
     <outputs>
         <data name="output_filename" format="png" label="EIC plot at m/z=$mz_value of $input.element_identifier"  />
