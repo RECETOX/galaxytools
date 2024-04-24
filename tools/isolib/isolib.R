@@ -13,7 +13,7 @@ main <- function() {
   compound_table <- read_tsv(
     file = args[1],
     col_types = "ccd",
-    col_select = c("name", "formula", "rt")
+    col_select = tidyselect::all_of(c("name", "formula")) | tidyselect::any_of("rt")
   )
   adducts_to_use <- c(unlist(strsplit(args[2], ",", fixed = TRUE)))
 

@@ -56,6 +56,10 @@
             <param name="input_file" value="lc_markers_neg.tsv"/>
             <output name="isotope_library" file="test0.msp"/>
         </test>
+        <test>
+            <param name="input_file" value="markers_no_rt.tsv"/>
+            <output name="isotope_library" file="test1.msp"/>
+        </test>
     </tests>
     <help><![CDATA[
         This tool computes isotopic patterns for given compounds and adduct forms.
