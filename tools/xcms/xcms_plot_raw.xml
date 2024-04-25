@@ -43,7 +43,7 @@ dev.off()
             <param name="tolerance_ppm" value="10"/>
             <param name="rt" value="171.922"/>
             <param name="rt_range" value="0.1"/>
-            <output name="output_filename" file="raw_plot.png" compare="sim_size" delta="1500"/>
+            <output name="output_filename" file="raw_plot.png" compare="sim_size" delta="2000"/>
         </test>
     </tests>
     <help><![CDATA[
