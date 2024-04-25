@@ -1,4 +1,4 @@
-<tool id="isolib" name="isolib" version="1.0.0+galaxy1" profile="21.09">
+<tool id="isolib" name="isolib" version="1.0.1+galaxy0" profile="21.09">
     <description>create an isotopic pattern library for given compounds and adducts</description>
     <creator>
         <person
@@ -19,6 +19,7 @@
         <requirement type="package" version="1.12.0">bioconductor-spectra</requirement>
         <requirement type="package" version="1.6.0">bioconductor-msbackendmsp</requirement>
         <requirement type="package" version="2.6">r-envipat</requirement>
+        <requirement type="package" version="2.1.5">r-readr</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
         Rscript '${__tool_directory__}/isolib.R' '${input_file}' '${ionization.adducts}' '${threshold}' '${append_adduct}' '${isotope_library}'
@@ -54,6 +55,10 @@
         <test>
             <param name="input_file" value="lc_markers_neg.tsv"/>
             <output name="isotope_library" file="test0.msp"/>
+        </test>
+        <test>
+            <param name="input_file" value="markers_no_rt.tsv"/>
+            <output name="isotope_library" file="test1.msp"/>
         </test>
     </tests>
     <help><![CDATA[
