@@ -232,7 +232,7 @@ exclude_group <- function(data, group) {
 
 store_data <- function(data, output, ext) {
   if (ext == "parquet") {
-    arrow::write_parquet(data, sink = output)
+    arrow::write_parquet(data, output)
   } else {
     write.table(data,
       file = output, sep = "\t",

@@ -99,9 +99,9 @@
 
     <xml name="outputs">
         <outputs>
-            <data name="normalized_data" format_source="data" >
+            <data name="normalized_data" format="tsv">
                 <change_format>
-                    <when input="data.ext" value="parquet" format="parquet" />
+                    <when input_dataset="data" attribute="ext" value="parquet" format="parquet" />
                 </change_format>
             </data>
         </outputs>
