@@ -1,4 +1,4 @@
-<tool id="waveica" name="WaveICA" version="@TOOL_VERSION@+galaxy4" python_template_version="3.5">
+<tool id="waveica" name="WaveICA" version="@TOOL_VERSION@+galaxy5" profile="21.09">
     <description>removal of batch effects for untargeted metabolomics data</description>
     <macros>
         <import>macros.xml</import>
@@ -103,7 +103,7 @@
             <param name="t" value="0.05"/>
             <param name="t2" value="0.05"/>
             <param name="alpha" value="0"/>
-            <output name="normalized_data" file="normalized_data.csv"/>
+            <output name="normalized_data" file="normalized_data.tsv" ftype="tsv"/>
         </test>
         <test><!-- TEST 2 -->
             <param name="data" value="input_data.tsv" ftype="tsv"/>
@@ -114,7 +114,7 @@
             <param name="t" value="0.05"/>
             <param name="t2" value="0.05"/>
             <param name="alpha" value="0"/>
-            <output name="normalized_data" file="normalized_data.tsv"/>
+            <output name="normalized_data" file="normalized_data.tsv" ftype="tsv"/>
         </test>
         <test><!-- TEST 3 -->
             <param name="data" value="input_data.parquet" ftype="parquet"/>
@@ -125,7 +125,7 @@
             <param name="t" value="0.05"/>
             <param name="t2" value="0.05"/>
             <param name="alpha" value="0"/>
-            <output name="normalized_data" file="normalized_data.parquet"/>
+            <output name="normalized_data" file="normalized_data.parquet" ftype="parquet"/>
         </test>
         <test><!-- TEST 4 -->
             <param name="input_choice" value="2"/>
@@ -138,7 +138,7 @@
             <param name="t" value="0.05"/>
             <param name="t2" value="0.05"/>
             <param name="alpha" value="0"/>
-            <output name="normalized_data" file="normalized_data.csv"/>
+            <output name="normalized_data" file="normalized_data.tsv" ftype="tsv"/>
         </test>
         <test><!-- TEST 5 -->
             <param name="input_choice" value="2"/>
@@ -151,7 +151,7 @@
             <param name="t" value="0.05"/>
             <param name="t2" value="0.05"/>
             <param name="alpha" value="0"/>
-            <output name="normalized_data" file="normalized_data.tsv"/>
+            <output name="normalized_data" file="normalized_data.tsv" ftype="tsv"/>
         </test>
         <test><!-- TEST 6 -->
             <param name="input_choice" value="2"/>
@@ -164,7 +164,7 @@
             <param name="t" value="0.05"/>
             <param name="t2" value="0.05"/>
             <param name="alpha" value="0"/>
-            <output name="normalized_data" file="normalized_data.parquet" compare="sim_size" delta="200"/>
+            <output name="normalized_data" file="normalized_data.parquet" compare="sim_size" delta="200" ftype="parquet"/>
         </test>
         <test><!-- TEST 7 -->
             <param name="input_choice" value="2"/>
@@ -178,7 +178,7 @@
             <param name="t" value="0.05"/>
             <param name="t2" value="0.05"/>
             <param name="alpha" value="0"/>
-            <output name="normalized_data" file="normalized_data.parquet" compare="sim_size" delta="200"/>
+            <output name="normalized_data" file="normalized_data.parquet" compare="sim_size" delta="200" ftype="parquet"/>
         </test>
         <test><!-- TEST 8 -->
             <param name="input_choice" value="2"/>
@@ -192,7 +192,7 @@
             <param name="t" value="0.05"/>
             <param name="t2" value="0.05"/>
             <param name="alpha" value="0"/>
-            <output name="normalized_data" file="normalized_data.csv"/>
+            <output name="normalized_data" file="normalized_data.tsv" ftype="tsv"/>
         </test>
         <!-- The following test has different results on three platform I've tried -->
         <!-- <test>

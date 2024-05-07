@@ -231,15 +231,13 @@ exclude_group <- function(data, group) {
 }
 
 store_data <- function(data, output, ext) {
-  if (ext == "csv") {
-    write.csv(data, file = output, row.names = FALSE, quote = FALSE)
-  } else if (ext == "tsv") {
+  if (ext == "parquet") {
+    arrow::write_parquet(data, output)
+  } else {
     write.table(data,
       file = output, sep = "\t",
       row.names = FALSE, quote = FALSE
     )
-  } else {
-    arrow::write_parquet(data, sink = output)
   }
   cat("Normalization has been completed.\n")
 }

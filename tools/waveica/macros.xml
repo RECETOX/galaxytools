@@ -99,7 +99,11 @@
 
     <xml name="outputs">
         <outputs>
-             <data format_source="data" name="normalized_data"/>
+            <data name="normalized_data" format="tsv">
+                <change_format>
+                    <when input_dataset="data" attribute="ext" value="parquet" format="parquet" />
+                </change_format>
+            </data>
         </outputs>
     </xml>
 
