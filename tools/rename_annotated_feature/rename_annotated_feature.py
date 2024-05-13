@@ -71,7 +71,7 @@ def rename_multiple(annotations_table: pd.DataFrame, abundance_table: pd.DataFra
         mapping[query].append(ref)
 
     for query, refs in mapping.items():
-        new_column_name = ' '.join(refs)
+        new_column_name = ', '.join(refs)
         if query in abundance_table.columns:
             abundance_table.rename(columns={query: new_column_name}, inplace=True)
 
@@ -87,7 +87,7 @@ def main() -> None:
     else:
         rename_multiple(annotations_table, abundance_table)
 
-    abundance_table.to_csv(args.output_path, index=False)
+    abundance_table.to_csv(args.output_path, sep="\t", index=False)
 
 
 if __name__ == "__main__":

@@ -23,20 +23,20 @@
         </param>
     </inputs>
     <outputs>
-        <data name="output_path" format="csv"  label="Renamed abundance table"/>
+        <data name="output_path" format="tabular" label="Renamed abundance table"/>
     </outputs>
     <tests>
         <test>
-            <param name="annotations_table_path" value="annotated_table.tsv" ftype="tsv"/>
-            <param name="abundance_table_path" value="abundance_table.tabular" ftype="tabular"/>
+            <param name="annotations_table_path" value="annotated_table.tsv" ftype="tabular"/>
+            <param name="abundance_table_path" value="abundance_table.tsv" ftype="tabular"/>
             <param name="mode" value="single"/>
-            <output name="output_path" file="single_mode_output.csv"/>
+            <output name="output_path" file="single_mode_output.tsv"/>
         </test>
         <test>
-            <param name="annotations_table_path" value="annotated_table.tsv" ftype="tsv"/>
-            <param name="abundance_table_path" value="abundance_table.tabular" ftype="tabular" />
+            <param name="annotations_table_path" value="annotated_table.tsv" ftype="tabular"/>
+            <param name="abundance_table_path" value="abundance_table.tsv" ftype="tabular" />
             <param name="mode" value="multiple"/>
-            <output name="output_path" file="multi_mode_output.csv"/>
+            <output name="output_path" file="multi_mode_output.tsv"/>
         </test>
     </tests>
     <help>
