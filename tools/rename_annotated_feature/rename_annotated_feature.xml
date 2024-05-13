@@ -44,7 +44,8 @@
         @HELP@
         ]]>
     </help>
+    <!-- Update to the correct citation for this tool -->
     <citations>
-        <citation type="doi">https://doi.org/10.1002/wcms.1493</citation>  
+        <citation type="doi">TODO</citation>  
     </citations>
 </tool>
