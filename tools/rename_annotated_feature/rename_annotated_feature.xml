@@ -17,7 +17,7 @@
     <inputs>
         <param name="annotations_table_path" type="data" format="tabular" label="Annotations table file" help="Path to the annotations table file."/>
         <param name="abundance_table_path" type="data" format="tabular" label="Abundance table file" help="Path to the abundance table file."/>
-        <param name="mode" type="select" label="Mode to use for renaming" help="Can be 'single' or 'multiple'.">
+        <param name="mode" type="select" label="Mode to use for renaming" help="Can be single or multiple.">
             <option value="single" selected="true">Single</option>
             <option value="multiple">Multiple</option>
         </param>
