@@ -1,0 +1,10 @@
+
+name: rename_annotated_feature
+owner: recetox
+description: TODO.
+long_description: |
+    TODO.
+categories:
+  - Metabolomics
+remote_repository_url: "https://github.com/RECETOX/galaxytools/tree/master/tools/rename_annotated_feature"
+type: unrestricted
