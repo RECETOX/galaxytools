@@ -1,7 +1,8 @@
 import argparse
-import pandas as pd
 from collections import defaultdict
 from typing import Tuple
+
+import pandas as pd
 
 
 def parse_arguments() -> argparse.Namespace:
