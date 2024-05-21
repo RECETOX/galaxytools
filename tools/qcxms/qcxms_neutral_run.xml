@@ -1,4 +1,4 @@
-<tool id="qcxms_neutral_run" name="QCxMS neutral run" version="@TOOL_VERSION@+galaxy2" profile="22.09">
+<tool id="qcxms_neutral_run" name="QCxMS neutral run" version="@TOOL_VERSION@+galaxy3" profile="22.09">
     <description>required as first step to prepare for the production runs</description>
     
     <macros>
@@ -56,7 +56,7 @@ rename_files_with_folder_name(path)
     </configfiles>
 
     <inputs>
-        <param type="data" name="mol" label="Molecule 3D structure [.xzy]" format="xyz" />
+        <param type="data" name="mol" label="Molecule 3D structure [.xyz]" format="xyz" />
         <param name="QC_Level" type="select" display="radio" label="QC Method">
             <option value="xtb2" selected="true">GFN2-xTB</option>
             <option value="xtb">GFN1-xTB</option>
@@ -152,7 +152,7 @@ rename_files_with_folder_name(path)
 
     <help><![CDATA[
         The QCxMS Neutral Run tool serves as the first step in preparing for production runs. The tool execute neutral runs for mass 
-        spectrometry simulations using the GFN2-xTB and GFN-xTB quantum chemistry methods. For detail information visit the documentation 
+        spectrometry simulations using the GFN2-xTB and GFN1-xTB quantum chemistry methods. For detail information visit the documentation 
         at https://xtb-docs.readthedocs.io/en/latest/qcxms_doc/qcxms_run.html#excecuting-the-production-runs
         ]]>
     </help>

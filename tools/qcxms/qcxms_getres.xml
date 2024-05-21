@@ -1,4 +1,4 @@
-<tool id="qcxms_getres" name="QCxMS get results" version="@TOOL_VERSION@+galaxy0" profile="22.09">
+<tool id="qcxms_getres" name="QCxMS get results" version="@TOOL_VERSION@+galaxy1" profile="22.09">
     <description>Get result of the Production run to obtain a QCxMS simulated mass spectrum</description>
     
     <macros>
@@ -37,7 +37,7 @@ with open(output_file, 'w') as output:
     </configfiles>
 
     <inputs>
-        <param type="data" name="mol" label="Molecule 3D structure [.xzy]" format="xyz" />
+        <param type="data" name="mol" label="Molecule 3D structure [.xyz]" format="xyz" />
         <param type="data_collection" collection_type="list" name="res_files" label="res files [.res]" format="txt,text"/>
     </inputs>
 
