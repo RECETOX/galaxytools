@@ -165,7 +165,7 @@ verify_column_types <- function(data, required_columns) {
   # Specify the column names and their expected types
   column_types <- list(
     "sampleName" = c("character", "factor"),
-    "class" = c("character", "factor"),
+    "class" = c("character", "factor", "integer"),
     "sampleType" = c("character", "factor"),
     "injectionOrder" = "integer",
     "batch" = "integer"
