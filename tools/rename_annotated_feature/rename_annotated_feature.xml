@@ -1,0 +1,53 @@
+<tool id="rename_annotated_feature" name="Rename Annotated Feature" version="@TOOL_VERSION@+galaxy0" profile="21.09">
+    <description>Rename columns in abundance table based on annotations table</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="creator"/>
+    <requirements>
+        <requirement type="package" version="2.2.1">pandas</requirement>
+    </requirements>
+    <command detect_errors="exit_code"><![CDATA[
+        python3 '${__tool_directory__}/rename_annotated_feature.py'
+        --annotations_table_path '$annotations_table_path' 
+        --abundance_table_path '$abundance_table_path' 
+        --mode '$mode'
+        --output_path '$output_path'
+    ]]></command>
+    <inputs>
+        <param name="annotations_table_path" type="data" format="tabular" label="Annotations table file" help="Path to the annotations table file."/>
+        <param name="abundance_table_path" type="data" format="tabular" label="Abundance table file" help="Path to the abundance table file."/>
+        <param name="mode" type="select" label="Mode to use for renaming" help="Can be single or multiple.">
+            <option value="single" selected="true">Single</option>
+            <option value="multiple">Multiple</option>
+        </param>
+    </inputs>
+    <outputs>
+        <data name="output_path" format="tabular" label="Renamed abundance table"/>
+    </outputs>
+    <tests>
+        <test>
+            <param name="annotations_table_path" value="annotated_table.tsv" ftype="tabular"/>
+            <param name="abundance_table_path" value="abundance_table.tsv" ftype="tabular"/>
+            <param name="mode" value="single"/>
+            <output name="output_path" file="single_mode_output.tsv"/>
+        </test>
+        <test>
+            <param name="annotations_table_path" value="annotated_table.tsv" ftype="tabular"/>
+            <param name="abundance_table_path" value="abundance_table.tsv" ftype="tabular" />
+            <param name="mode" value="multiple"/>
+            <output name="output_path" file="multi_mode_output.tsv"/>
+        </test>
+    </tests>
+    <help>
+        <![CDATA[
+        @HELP@
+        ]]>
+    </help>
+    <!-- Update to the correct citation for this tool -->
+    <citations>
+            <citation type="doi">10.5281/zenodo.7178586</citation>
+            <citation type="doi">10.21105/joss.02411</citation>
+            <citation type="doi">10.1021/ac501530d</citation>            
+    </citations>
+</tool>
