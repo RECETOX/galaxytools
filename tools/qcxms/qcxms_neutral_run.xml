@@ -1,4 +1,4 @@
-<tool id="qcxms_neutral_run" name="QCxMS neutral run" version="@TOOL_VERSION@+galaxy2" profile="22.09">
+<tool id="qcxms_neutral_run" name="QCxMS neutral run" version="@TOOL_VERSION@+galaxy3" profile="22.09">
     <description>required as first step to prepare for the production runs</description>
     
     <macros>
