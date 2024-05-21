@@ -69,7 +69,7 @@
         <section name="ms_dataframe" title="Input MS Data as parquet (output from recetox-aplcms)" expanded="true">
             <param label="Input MS1 featureDefinitions" name="ms1_featureDefinitions" type="data" format="parquet,tabular"
                    help="Metadata with columns: mz, rt, feature names containing MS data."/>
-            <param label="Input MS1 featureValues" name="ms1_featureValues" type="data" format="parquet,tsv"
+            <param label="Input MS1 featureValues" name="ms1_featureValues" type="data" format="parquet,tabular"
                    help="data with rownames = sample names, colnames = feature names containing MS data."/>
             <param label="phenoData" name="df_phenoData" type="data" format="tsv,csv" optional="true"
                    help="CSV/TSV file containing phenoData (optional)."/>
