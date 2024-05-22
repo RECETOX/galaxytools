@@ -46,9 +46,22 @@ read_ramclustr_aplcms <- function(ms1_featuredefinitions = NULL,
                                   phenodata_ext = NULL,
                                   exp_des = NULL,
                                   st = NULL,
-                                  ensure_no_na = TRUE) {
-  ms1_featuredefinitions <- arrow::read_parquet(ms1_featuredefinitions)
-  ms1_featurevalues <- arrow::read_parquet(ms1_featurevalues)
+                                  ensure_no_na = TRUE,
+                                  ms1_featuredefinitions_ext = "parquet",
+                                  ms1_featurevalues_ext = "parquet") {
+  if (ms1_featuredefinitions_ext == "parquet") {
+    ms1_featuredefinitions <- arrow::read_parquet(ms1_featuredefinitions)
+  } else {
+    ms1_featuredefinitions <- read.csv(ms1_featuredefinitions,
+      header = TRUE, sep = "\t"
+    )
+  }
+
+  if (ms1_featurevalues_ext == "parquet") {
+    ms1_featurevalues <- arrow::read_parquet(ms1_featurevalues)
+  } else {
+    ms1_featurevalues <- read.csv(ms1_featurevalues, header = TRUE, sep = "\t")
+  }
 
   if (!is.null(df_phenodata)) {
     if (phenodata_ext == "csv") {

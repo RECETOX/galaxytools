@@ -1,4 +1,4 @@
-<tool id="ramclustr" name="RAMClustR" version="@TOOL_VERSION@+galaxy5" profile="21.09">
+<tool id="ramclustr" name="RAMClustR" version="@TOOL_VERSION@+galaxy6" profile="21.09">
     <description>A feature clustering algorithm for non-targeted mass spectrometric metabolomics data.</description>
     <macros>
         <import>macros.xml</import>
@@ -56,6 +56,8 @@
             ramclustObj = read_ramclustr_aplcms(
                 ms1_featuredefinitions = "$filetype.ms_dataframe.ms1_featureDefinitions",
                 ms1_featurevalues = "$filetype.ms_dataframe.ms1_featureValues",
+                ms1_featuredefinitions_ext = "$filetype.ms_dataframe.ms1_featureDefinitions.ext",
+                ms1_featurevalues_ext = "$filetype.ms_dataframe.ms1_featureValues.ext",
                 #if $filetype.ms_dataframe.df_phenoData:
                     df_phenodata = "$filetype.ms_dataframe.df_phenoData",
                     phenodata_ext = "${filetype.ms_dataframe.df_phenoData.ext}",
