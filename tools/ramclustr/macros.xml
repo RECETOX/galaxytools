@@ -66,7 +66,7 @@
     </xml>
 
     <xml name="parameters_recetox_aplcms">
-        <section name="ms_dataframe" title="Input MS Data as parquet (output from recetox-aplcms)" expanded="true">
+        <section name="ms_dataframe" title="Input MS Data as parquet/tabular (output from recetox-aplcms)" expanded="true">
             <param label="Input MS1 featureDefinitions" name="ms1_featureDefinitions" type="data" format="parquet,tabular"
                    help="Metadata with columns: mz, rt, feature names containing MS data."/>
             <param label="Input MS1 featureValues" name="ms1_featureValues" type="data" format="parquet,tabular"
