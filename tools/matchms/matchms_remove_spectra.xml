@@ -1,4 +1,4 @@
-<tool id="matchms_remove_spectra" name="matchms remove spectra" version="@TOOL_VERSION@+galaxy0" profile="21.09">
+<tool id="matchms_remove_spectra" name="matchms remove spectra" version="@TOOL_VERSION@+galaxy1" profile="21.09">
     <description>Filters spectra based on metadata presence</description>
     
     <macros>
@@ -25,7 +25,7 @@
 from matchms.exporting import save_as_mgf, save_as_msp
 from matchms.filtering.filter_utils.smile_inchi_inchikey_conversions import is_valid_inchi, is_valid_smiles, is_valid_inchikey
 from matchms.filtering import require_compound_name, require_formula, require_precursor_mz, \
-require_retention_time, require_retention_index, require_valid_annotation, 
+require_retention_time, require_retention_index, require_valid_annotation
 from matchms.importing import load_from_mgf, load_from_msp
 
 #set metadata_fields = str("', '").join([str($f) for $f in $metadata_fields])
@@ -115,7 +115,7 @@ else:
         <param name="spectra" type="data" format="msp,mgf" label="Input Spectra File" help="Input file containing mass spectra"/>
         <param name="metadata_fields" type="select" multiple="true" label="Metadata Fields" help="Select metadata fields required in the spectra">
             <option value="smiles">SMILES</option>
-            <option value="inchI">InChI</option>
+            <option value="inchi">InChI</option>
             <option value="inchikey">InChIKey</option>
             <option value="formula">Formula</option>
             <option value="retention_time">Retention Time</option>
@@ -133,6 +133,60 @@ else:
             <filter>spectra_removed</filter>
         </data>
     </outputs>
+
+    <tests>
+        <test>
+            <param name="spectra" value="remove_spectra/require_filter.msp" ftype="msp"/>
+            <param name="metadata_fields" value="smiles"/>
+            <output name="output_filtered" file="remove_spectra/require_smiles.msp" ftype="msp"/>
+        </test>
+        <test>
+            <param name="spectra" value="remove_spectra/require_filter.msp" ftype="msp"/>
+            <param name="metadata_fields" value="inchi"/>
+            <param name="spectra_removed" value="TRUE"/>
+            <output name="output_filtered" file="remove_spectra/require_inchi.msp" ftype="msp"/>
+            <output name="output_removed" file="remove_spectra/require_inchi_removed_spectra.msp" ftype="msp"/>
+        </test>
+        <test>
+            <param name="spectra" value="remove_spectra/require_filter.msp" ftype="msp"/>
+            <param name="metadata_fields" value="inchikey"/>
+            <output name="output_filtered" file="remove_spectra/require_inchikey.msp" ftype="msp"/>
+        </test>
+        <test>
+            <param name="spectra" value="remove_spectra/require_filter.msp" ftype="msp"/>
+            <param name="metadata_fields" value="formula"/>
+            <output name="output_filtered" file="remove_spectra/require_formula.msp" ftype="msp"/>
+        </test>
+        <test>
+            <param name="spectra" value="remove_spectra/require_filter.msp" ftype="msp"/>
+            <param name="metadata_fields" value="retention_time"/>
+            <output name="output_filtered" file="remove_spectra/require_retention_time.msp" ftype="msp"/>
+        </test>
+        <test>
+            <param name="spectra" value="remove_spectra/require_filter.msp" ftype="msp"/>
+            <param name="metadata_fields" value="retention_index"/>
+            <output name="output_filtered" file="remove_spectra/require_retention_index.msp" ftype="msp"/>
+        </test>
+        <test>
+            <param name="spectra" value="remove_spectra/require_filter.msp" ftype="msp"/>
+            <param name="metadata_fields" value="precursor_mz"/>
+            <output name="output_filtered" file="remove_spectra/require_precursor_mz.msp" ftype="msp"/>
+        </test>
+        <test>
+            <param name="spectra" value="remove_spectra/require_filter.msp" ftype="msp"/>
+            <param name="metadata_fields" value="compound_name"/>
+            <output name="output_filtered" file="remove_spectra/require_compound_name.msp" ftype="msp"/>
+        </test>
+        <test>
+            <param name="spectra" value="remove_spectra/require_filter.msp" ftype="msp"/>
+            <param name="metadata_fields" value="valid_annotation"/>
+            <output name="output_filtered">
+                <assert_contents>
+                    <has_n_lines n="0"/>
+                </assert_contents>
+            </output>
+        </test>
+    </tests>
 
     <help><![CDATA[
         This tool filters input mass spectra based on the presence of specified metadata fields. Spectra missing any of the selected metadata fields are optionally logged and output separately.
