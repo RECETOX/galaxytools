@@ -135,49 +135,49 @@ else:
     </outputs>
 
     <tests>
-        <test>
+        <test expect_num_outputs="1">
             <param name="spectra" value="remove_spectra/require_filter.msp" ftype="msp"/>
             <param name="metadata_fields" value="smiles"/>
             <output name="output_filtered" file="remove_spectra/require_smiles.msp" ftype="msp"/>
         </test>
-        <test>
+        <test expect_num_outputs="2">
             <param name="spectra" value="remove_spectra/require_filter.msp" ftype="msp"/>
             <param name="metadata_fields" value="inchi"/>
             <param name="spectra_removed" value="TRUE"/>
             <output name="output_filtered" file="remove_spectra/require_inchi.msp" ftype="msp"/>
             <output name="output_removed" file="remove_spectra/require_inchi_removed_spectra.msp" ftype="msp"/>
         </test>
-        <test>
+        <test expect_num_outputs="1">
             <param name="spectra" value="remove_spectra/require_filter.msp" ftype="msp"/>
             <param name="metadata_fields" value="inchikey"/>
             <output name="output_filtered" file="remove_spectra/require_inchikey.msp" ftype="msp"/>
         </test>
-        <test>
+        <test expect_num_outputs="1">
             <param name="spectra" value="remove_spectra/require_filter.msp" ftype="msp"/>
             <param name="metadata_fields" value="formula"/>
             <output name="output_filtered" file="remove_spectra/require_formula.msp" ftype="msp"/>
         </test>
-        <test>
+        <test expect_num_outputs="1">
             <param name="spectra" value="remove_spectra/require_filter.msp" ftype="msp"/>
             <param name="metadata_fields" value="retention_time"/>
             <output name="output_filtered" file="remove_spectra/require_retention_time.msp" ftype="msp"/>
         </test>
-        <test>
+        <test expect_num_outputs="1">
             <param name="spectra" value="remove_spectra/require_filter.msp" ftype="msp"/>
             <param name="metadata_fields" value="retention_index"/>
             <output name="output_filtered" file="remove_spectra/require_retention_index.msp" ftype="msp"/>
         </test>
-        <test>
+        <test expect_num_outputs="1">
             <param name="spectra" value="remove_spectra/require_filter.msp" ftype="msp"/>
             <param name="metadata_fields" value="precursor_mz"/>
             <output name="output_filtered" file="remove_spectra/require_precursor_mz.msp" ftype="msp"/>
         </test>
-        <test>
+        <test expect_num_outputs="1">
             <param name="spectra" value="remove_spectra/require_filter.msp" ftype="msp"/>
             <param name="metadata_fields" value="compound_name"/>
             <output name="output_filtered" file="remove_spectra/require_compound_name.msp" ftype="msp"/>
         </test>
-        <test>
+        <test expect_num_outputs="1">
             <param name="spectra" value="remove_spectra/require_filter.msp" ftype="msp"/>
             <param name="metadata_fields" value="valid_annotation"/>
             <output name="output_filtered">
