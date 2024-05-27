@@ -8,7 +8,7 @@ on:
     types: [run-all-tool-tests-command]
 env:
   GALAXY_FORK: galaxyproject
-  GALAXY_BRANCH: release_23.1
+  GALAXY_BRANCH: release_24.0
   MAX_CHUNKS: 40
 jobs:
   setup:
@@ -24,11 +24,11 @@ jobs:
       chunk-list: ${{ steps.discover.outputs.chunk-list }}
     strategy:
       matrix:
-        python-version: ['3.7']
+        python-version: ['3.11']
     steps:
     - name: Add reaction
       if: ${{ github.event.client_payload.slash_command.command == 'run-all-tool-tests' }}
-      uses: peter-evans/create-or-update-comment@v2
+      uses: peter-evans/create-or-update-comment@v4
       with:
         token: ${{ secrets.PAT }}
         repository: ${{ github.event.client_payload.github.payload.repository.full_name }}
@@ -83,7 +83,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ['3.7']
+        python-version: ['3.11']
     steps:
     - uses: actions/checkout@v4
       with:
@@ -121,7 +121,7 @@ jobs:
       fail-fast: false
       matrix:
         chunk: ${{ fromJson(needs.setup.outputs.chunk-list) }}
-        python-version: ['3.7']
+        python-version: ['3.11']
     services:
       postgres:
         image: postgres:11
@@ -179,7 +179,7 @@ jobs:
     needs: [setup, test]
     strategy:
       matrix:
-        python-version: ['3.7']
+        python-version: ['3.11']
     # This job runs on Linux
     runs-on: ubuntu-latest
     steps:
@@ -212,7 +212,7 @@ jobs:
 
     - name: Create comment
       if: ${{ github.event.client_payload.slash_command.command == 'run-all-tool-tests' }}
-      uses: peter-evans/create-or-update-comment@v2
+      uses: peter-evans/create-or-update-comment@v4
       with:
         token: ${{ secrets.PAT }}
         repository: ${{ github.event.client_payload.github.payload.repository.full_name }}
