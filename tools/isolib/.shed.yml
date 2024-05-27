@@ -1,0 +1,11 @@
+categories:
+- Metabolomics
+description: Create an isotopic pattern library for given compounds and adducts.
+homepage_url: https://github.com/RECETOX/galaxytools/
+long_description: |
+  Create MSP files containing the isotopic patterns for given molecules with given adducts.
+  The tool is based on enviPat and the RforMassSpectrometry toolbox.
+name: isolib
+owner: recetox
+remote_repository_url: https://github.com/RECETOX/galaxytools/tree/master/tools/isolib
+type: unrestricted

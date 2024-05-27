@@ -3,9 +3,9 @@ store_output <- function(ramclustr_obj,
                          output_spec_abundance,
                          msp_file) {
   RAMClustR::write.msp(ramclustr_obj, one.file = output_merge_msp)
-  write.csv(ramclustr_obj$SpecAbund,
+  write.table(ramclustr_obj$SpecAbund,
     file = output_spec_abundance,
-    row.names = TRUE, quote = FALSE
+    row.names = TRUE, quote = FALSE, col.names = NA, sep = "\t"
   )
 
   if (!is.null(msp_file)) {
@@ -46,9 +46,25 @@ read_ramclustr_aplcms <- function(ms1_featuredefinitions = NULL,
                                   phenodata_ext = NULL,
                                   exp_des = NULL,
                                   st = NULL,
-                                  ensure_no_na = TRUE) {
-  ms1_featuredefinitions <- arrow::read_parquet(ms1_featuredefinitions)
-  ms1_featurevalues <- arrow::read_parquet(ms1_featurevalues)
+                                  ensure_no_na = TRUE,
+                                  ms1_featuredefinitions_ext = "parquet",
+                                  ms1_featurevalues_ext = "parquet") {
+  if (ms1_featuredefinitions_ext == "parquet") {
+    ms1_featuredefinitions <- arrow::read_parquet(ms1_featuredefinitions)
+  } else {
+    ms1_featuredefinitions <- read.csv(ms1_featuredefinitions,
+      header = TRUE, sep = "\t", check.names = FALSE
+    )
+  }
+
+  if (ms1_featurevalues_ext == "parquet") {
+    ms1_featurevalues <- arrow::read_parquet(ms1_featurevalues)
+  } else {
+    ms1_featurevalues <- read.csv(ms1_featurevalues,
+      header = TRUE,
+      sep = "\t", check.names = FALSE
+    )
+  }
 
   if (!is.null(df_phenodata)) {
     if (phenodata_ext == "csv") {
