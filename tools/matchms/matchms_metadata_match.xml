@@ -1,4 +1,4 @@
-<tool id="matchms_metadata_match" name="matchms metadata match" version="@TOOL_VERSION@+galaxy1" profile="21.09">
+<tool id="matchms_metadata_match" name="matchms metadata match" version="@TOOL_VERSION@+galaxy0" profile="21.09">
     <description>matchms metadata match calculation for numeric fields based on tolerance</description>
 
     <macros>
@@ -44,11 +44,7 @@ layer = similarity.matrix(
     array_type = "sparse",
     is_symmetric=False)
 
-#if $matching.matching_type == "equal_match"
-scores._scores.add_dense_matrix(layer, name, join_type=join_type)
-#else
 scores._scores.add_sparse_data(layer.row, layer.col, layer.data, name, join_type=join_type)
-#end if
 scores.to_json("$scores_out")
 </configfile>
 </configfiles>
