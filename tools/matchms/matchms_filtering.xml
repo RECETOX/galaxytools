@@ -1,4 +1,4 @@
-<tool id="matchms_filtering" name="matchms filtering" version="@TOOL_VERSION@+galaxy0" profile="21.09">
+<tool id="matchms_filtering" name="matchms filtering" version="@TOOL_VERSION@+galaxy1" profile="21.09">
     <description>filter and normalize mass spectrometry data</description>
 
     <macros>
@@ -49,12 +49,6 @@
                 --from_mz "$mz_range.from_mz" \
                 --to_mz "$mz_range.to_mz" \
             #end if
-            #if $require_smiles_is_true == "TRUE"
-                -require_smiles \
-            #end if
-            #if $require_inchi_is_true == "TRUE"
-                -require_inchi \
-            #end if
             #if $derive_precursor_mz_from_parent_mass.is_true == "TRUE"
                 -derive_precursor_mz_from_parent_mass \
                 --estimate_from_adduct "${derive_precursor_mz_from_parent_mass.estimate_from_adduct}" \
@@ -101,12 +95,6 @@
             </when>
             <when value="FALSE"></when>
         </conditional>
-
-        <param name="require_smiles_is_true" label="Require SMILES" type="boolean" truevalue="TRUE" falsevalue="FALSE" checked="false"
-                help="Remove spectra that does not contain SMILES." />
-
-        <param name="require_inchi_is_true" label="Require INCHI" type="boolean" truevalue="TRUE" falsevalue="FALSE" checked="false"
-                help="Remove spectra that does not contain INCHI." />
 
         <conditional name="derive_precursor_mz_from_parent_mass">
             <param name="is_true" label="Derive precursor_mz from parent_mass" type="select"
@@ -171,16 +159,6 @@
                 <param name="to_mz" value="800"/>
             </section>
             <output name="output" file="filtering/mz_range.msp" ftype="msp"/>
-        </test>
-        <test>
-            <param name="spectra" value="filtering/require_filter.msp" ftype="msp"/>
-            <param name="require_smiles_is_true" value="TRUE"/>
-            <output name="output" file="filtering/require_out.msp" ftype="msp"/>
-        </test>
-        <test>
-            <param name="spectra" value="filtering/require_filter.msp" ftype="msp"/>
-            <param name="require_inchi_is_true" value="TRUE"/>
-            <output name="output" file="filtering/require_out.msp" ftype="msp"/>
         </test>
         <test>
             <param name="spectra" value="filtering/input.msp" ftype="msp"/>

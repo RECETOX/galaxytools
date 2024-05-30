@@ -7,16 +7,7 @@ from matchms.filtering import add_compound_name, add_fingerprint, add_losses, ad
 from matchms.filtering import default_filters, normalize_intensities, reduce_to_number_of_peaks, select_by_mz, \
     select_by_relative_intensity
 from matchms.filtering.filter_utils.derive_precursor_mz_and_parent_mass import derive_precursor_mz_from_parent_mass
-from matchms.filtering.filter_utils.smile_inchi_inchikey_conversions import is_valid_inchi, is_valid_smiles
 from matchms.importing import load_from_mgf, load_from_msp
-
-
-def require_key(spectrum, key, function):
-    value = spectrum.get(key)
-    if function(value):
-        return spectrum
-
-    return None
 
 
 def main(argv):
@@ -38,10 +29,6 @@ def main(argv):
                         help="Keep only peaks between set m/z range (keep if to_mz >= m/z >= from_mz).")
     parser.add_argument("--from_mz", type=float, help="Lower bound for m/z  filter")
     parser.add_argument("--to_mz", type=float, help="Upper bound for m/z  filter")
-    parser.add_argument("-require_smiles", action='store_true',
-                        help="Remove spectra that does not contain SMILES.")
-    parser.add_argument("-require_inchi", action='store_true',
-                        help="Remove spectra that does not contain INCHI.")
     parser.add_argument("-derive_precursor_mz_from_parent_mass", action='store_true',
                         help="Derives the precursor_mz from the parent mass and adduct or charge.")
     parser.add_argument("--estimate_from_adduct", type=str, help="estimate from adduct.")
@@ -55,8 +42,6 @@ def main(argv):
             or args.clean_metadata
             or args.relative_intensity
             or args.mz_range
-            or args.require_smiles
-            or args.require_inchi
             or args.derive_precursor_mz_from_parent_mass
             or args.reduce_to_top_n_peaks):
         raise ValueError('No filter selected.')
@@ -95,12 +80,6 @@ def main(argv):
             spectrum.set("parent_mass", float(spectrum.get('parent_mass')))
             precursor_mz = derive_precursor_mz_from_parent_mass(spectrum, args.estimate_from_adduct)
             spectrum.set("precursor_mz", precursor_mz)
-
-        if args.require_smiles and spectrum is not None:
-            spectrum = require_key(spectrum, "smiles", is_valid_smiles)
-
-        if args.require_inchi and spectrum is not None:
-            spectrum = require_key(spectrum, "inchi", is_valid_inchi)
 
         if spectrum is not None:
             filtered_spectra.append(spectrum)
