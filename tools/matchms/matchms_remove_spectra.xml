@@ -76,7 +76,7 @@ for spectrum in spectra:
     if 'retention_index' in required_metadata:
         result = require_retention_index(spectrum)
         if result is not None:
-            keep = keep and result.get('retention_index') > 0
+            keep = keep and float(result.get('retention_index', 0)) > 0
         else:
             keep = False
 
