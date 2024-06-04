@@ -1,4 +1,4 @@
-<tool id="matchms_remove_spectra" name="matchms remove spectra" version="@TOOL_VERSION@+galaxy0" profile="21.09">
+<tool id="matchms_remove_spectra" name="matchms remove spectra" version="@TOOL_VERSION@+galaxy1" profile="21.09">
     <description>Filters spectra based on metadata presence</description>
     
     <macros>
@@ -28,9 +28,8 @@ from matchms.filtering import require_compound_name, require_formula, require_pr
 require_retention_time, require_retention_index, require_valid_annotation
 from matchms.importing import load_from_mgf, load_from_msp
 
-#set metadata_fields = str("', '").join([str($f) for $f in $metadata_fields])
-required_metadata = "$metadata_fields"
-
+#set metadata_fields = [str($f) for $f in $metadata_fields]
+required_metadata = [x for x in $metadata_fields]
 if "$spectra.ext" == "msp":
     spectra = list(load_from_msp("${spectra}"))
 elif "$spectra.ext" == 'mgf':
@@ -40,57 +39,44 @@ else:
 
 filtered_spectra = []
 removed_spectra = []
-keep = False
 
 for spectrum in spectra:
+    keep = True
+
     if 'smiles' in required_metadata:
-        keep = is_valid_smiles(spectrum.get('smiles'))
+        keep = keep and is_valid_smiles(spectrum.get('smiles', '').strip())
     
     if 'inchi' in required_metadata:
-        keep = is_valid_inchi(spectrum.get('inchi'))
+        keep = keep and is_valid_inchi(spectrum.get('inchi', '').strip())
     
     if 'inchikey' in required_metadata:
-        keep = is_valid_inchikey(spectrum.get('inchikey'))
+        inchikey = spectrum.get('inchikey', '')
+        keep = keep and is_valid_inchikey(inchikey.strip())
 
     if 'precursor_mz' in required_metadata:
         result = require_precursor_mz(spectrum)
-        if result is not None:
-            keep = True
-        else:
-            keep = False
+        keep = keep and result is not None
     
     if 'valid_annotation' in required_metadata:
         result = require_valid_annotation(spectrum)
-        if result is not None:
-            keep = True
-        else:
-            keep = False
-    
+        keep = keep and result is not None
+
     if 'formula' in required_metadata:
         result = require_formula(spectrum)
-        if result is not None:
-            keep = True
-        else:
-            keep = False
+        keep = keep and result is not None
 
     if 'compound_name' in required_metadata:
         result = require_compound_name(spectrum)
-        if result is not None:
-            keep = True
-        else:
-            keep = False
-    
+        keep = keep and result is not None
+
     if 'retention_time' in required_metadata:
         result = require_retention_time(spectrum)
-        if result is not None:
-            keep = True
-        else:
-            keep = False
+        keep = keep and result is not None
     
     if 'retention_index' in required_metadata:
         result = require_retention_index(spectrum)
         if result is not None:
-            keep = True
+            keep = keep and float(result.get('retention_index', 0)) > 0
         else:
             keep = False
 
