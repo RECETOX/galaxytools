@@ -98,7 +98,7 @@
     </xml>
     <xml name="split_output">
         <param name = "keep_two_output" label="Output metadata and data matrix as separate files" type="boolean" checked="false" 
-                truevalue="TRUE" falsevalue="FALSE" help="keep two outputs, one is feature table and second is metadata table" />
+                truevalue="TRUE" falsevalue="FALSE" help="Keep two output files, one being the data matrix (feature table) and the second being the  metadata table." />
     </xml>
 
     <xml name="outputs">
