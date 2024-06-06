@@ -3,10 +3,7 @@ read_file <- function(file, metadata, ft_ext, mt_ext, transpose) {
 
     if (transpose) {
         col_names <- c("sampleName", data[[1]])
-        t_data <- data[-1]
-        t_data <- t(t_data)
-        data <- data.frame(rownames(t_data), t_data)
-        colnames(data) <- col_names
+        data <- tranpose_data(data, col_names)
     }
 
     if (!is.na(metadata)) {
@@ -133,7 +130,6 @@ waveica_singlebatch <- function(file,
     return(data)
 }
 
-
 sort_by_injection_order <- function(data) {
     if ("batch" %in% colnames(data)) {
         data <- data[order(data[, "batch"], data[, "injectionOrder"], decreasing = FALSE), ]
@@ -142,7 +138,6 @@ sort_by_injection_order <- function(data) {
     }
     return(data)
 }
-
 
 verify_input_dataframe <- function(data, required_columns) {
     if (anyNA(data)) {
@@ -194,7 +189,6 @@ verify_column_types <- function(data, required_columns) {
     return(data)
 }
 
-
 # Match group labels with [blank/sample/qc] and enumerate them
 enumerate_groups <- function(group) {
     group[grepl("blank", tolower(group))] <- 0
@@ -203,7 +197,6 @@ enumerate_groups <- function(group) {
 
     return(group)
 }
-
 
 # Create appropriate input for R wavelets function
 get_wf <- function(wavelet_filter, wavelet_length) {
@@ -217,7 +210,6 @@ get_wf <- function(wavelet_filter, wavelet_length) {
     return(wf)
 }
 
-
 # Exclude blanks from a dataframe
 exclude_group <- function(data, group) {
     row_idx_to_exclude <- which(group %in% 0)
@@ -230,14 +222,62 @@ exclude_group <- function(data, group) {
     }
 }
 
-store_data <- function(data, output, ext) {
+store_data <- function(data, feature_output, metadata_output, ext, split_output = FALSE) {
     if (ext == "parquet") {
-        arrow::write_parquet(data, output)
+        if (split_output == TRUE) {
+            split_df <- split_output(data)
+            arrow::write_parquet(split_df$metadata, metadata_output)
+            arrow::write_parquet(split_df$feature_table, feature_output)
+        } else {
+            arrow::write_parquet(data, feature_output)
+        }
     } else {
-        write.table(data,
-            file = output, sep = "\t",
-            row.names = FALSE, quote = FALSE
-        )
+        if (split_output == TRUE) {
+            split_df <- split_output(data)
+            write.table(split_df$metadata,
+                file = metadata_output, sep = "\t",
+                row.names = FALSE, quote = FALSE
+            )
+            write.table(split_df$feature_table,
+                file = feature_output, sep = "\t",
+                row.names = FALSE, quote = FALSE
+            )
+        } else {
+            write.table(data,
+                file = feature_output, sep = "\t",
+                row.names = FALSE, quote = FALSE
+            )
+        }
     }
     cat("Normalization has been completed.\n")
+}
+
+split_output <- function(df) {
+    required_columns_set1 <- c("sampleName", "class", "sampleType", "injectionOrder", "batch")
+    required_columns_set2 <- c("sampleName", "class", "sampleType", "injectionOrder")
+
+    if (all(required_columns_set1 %in% colnames(df))) {
+        metadata_df <- df[, required_columns_set1, drop = FALSE]
+        df <- df[, -c(2:5)]
+    } else if (all(required_columns_set2 %in% colnames(df))) {
+        metadata_df <- df[, required_columns_set2, drop = FALSE]
+        df <- df[, -c(2:4)]
+    } else {
+        stop("Neither set of required columns is present in the dataframe.")
+    }
+
+    # Transpose the feature table
+    col_names <- c("id", as.vector(df[[1]]))
+    feature_table <- tranpose_data(df, col_names)
+
+    return(list(metadata = metadata_df, feature_table = feature_table))
+}
+
+tranpose_data <- function(data, column_names) {
+    t_data <- data[-1]
+    t_data <- t(t_data)
+    tranposed_data <- data.frame(rownames(t_data), t_data)
+    colnames(tranposed_data) <- column_names
+
+    return(tranposed_data)
 }
