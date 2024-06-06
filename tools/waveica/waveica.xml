@@ -1,4 +1,4 @@
-<tool id="waveica" name="WaveICA" version="@TOOL_VERSION@+galaxy6" profile="21.09">
+<tool id="waveica" name="WaveICA" version="@TOOL_VERSION@+galaxy7" profile="21.09">
     <description>removal of batch effects for untargeted metabolomics data</description>
     <macros>
         <import>macros.xml</import>
@@ -51,14 +51,14 @@
             )'
             #end if
 
-            -e 'store_data(normalized_data, "$normalized_data", "$input_num.data.ext")'
+            -e 'store_data(normalized_data, "$normalized_data", "$metadata", "$input_num.data.ext", $keep_two_output)'
     ]]></command>
 
     <inputs>
         <conditional name="input_num">
             <param name="input_choice" type="select" label="Choose input files:">
-                    <option value="1" selected="true">1</option>
-                    <option value="2">2</option>
+                    <option value="1" selected="true">1: intensity-by-feature table with metadata</option>
+                    <option value="2">2: intensity-by-feature table and metadata table separately</option>
             </param>
             <when value="1">
                 <expand macro="input_data"/>
@@ -89,12 +89,13 @@
             </when>
         </conditional>
         <expand macro="exclude_blanks"/>
+        <expand macro="split_output"/>
     </inputs>
 
     <expand macro="outputs"/>
 
     <tests>
-        <test><!-- TEST 1 -->
+        <test expect_num_outputs="1"><!-- TEST 1 -->
             <param name="data" value="input_data.csv" ftype="csv"/>
             <param name="mode" value="batchwise"/>
             <param name="wavelet_filter" value="d"/>
@@ -105,7 +106,7 @@
             <param name="alpha" value="0"/>
             <output name="normalized_data" file="normalized_data.tsv" ftype="tsv"/>
         </test>
-        <test><!-- TEST 2 -->
+        <test expect_num_outputs="1"><!-- TEST 2 -->
             <param name="data" value="input_data.tsv" ftype="tsv"/>
             <param name="mode" value="batchwise"/>
             <param name="wavelet_filter" value="d"/>
@@ -116,7 +117,7 @@
             <param name="alpha" value="0"/>
             <output name="normalized_data" file="normalized_data.tsv" ftype="tsv"/>
         </test>
-        <test><!-- TEST 3 -->
+        <test expect_num_outputs="1"><!-- TEST 3 -->
             <param name="data" value="input_data.parquet" ftype="parquet"/>
             <param name="mode" value="batchwise"/>
             <param name="wavelet_filter" value="d"/>
@@ -127,7 +128,7 @@
             <param name="alpha" value="0"/>
             <output name="normalized_data" file="normalized_data.parquet" ftype="parquet"/>
         </test>
-        <test><!-- TEST 4 -->
+        <test expect_num_outputs="1"><!-- TEST 4 -->
             <param name="input_choice" value="2"/>
             <param name="data" value="feature_table.csv" ftype="csv"/>
             <param name="metadata" value="metadata.csv" ftype="csv"/>
@@ -140,7 +141,7 @@
             <param name="alpha" value="0"/>
             <output name="normalized_data" file="normalized_data.tsv" ftype="tsv"/>
         </test>
-        <test><!-- TEST 5 -->
+        <test expect_num_outputs="1"><!-- TEST 5 -->
             <param name="input_choice" value="2"/>
             <param name="data" value="feature_table.tsv" ftype="tsv"/>
             <param name="metadata" value="metadata.tsv" ftype="tsv"/>
@@ -153,7 +154,7 @@
             <param name="alpha" value="0"/>
             <output name="normalized_data" file="normalized_data.tsv" ftype="tsv"/>
         </test>
-        <test><!-- TEST 6 -->
+        <test expect_num_outputs="1"><!-- TEST 6 -->
             <param name="input_choice" value="2"/>
             <param name="data" value="feature_table.parquet" ftype="parquet"/>
             <param name="metadata" value="metadata.csv" ftype="csv"/>
@@ -166,7 +167,7 @@
             <param name="alpha" value="0"/>
             <output name="normalized_data" file="normalized_data.parquet" compare="sim_size" delta="200" ftype="parquet"/>
         </test>
-        <test><!-- TEST 7 -->
+        <test expect_num_outputs="1"><!-- TEST 7 -->
             <param name="input_choice" value="2"/>
             <param name="data" value="feature_table_transpose_version.parquet" ftype="parquet"/>
             <param name="metadata" value="metadata.parquet" ftype="parquet"/>
@@ -180,7 +181,7 @@
             <param name="alpha" value="0"/>
             <output name="normalized_data" file="normalized_data.parquet" compare="sim_size" delta="200" ftype="parquet"/>
         </test>
-        <test><!-- TEST 8 -->
+        <test expect_num_outputs="1"><!-- TEST 8 -->
             <param name="input_choice" value="2"/>
             <param name="data" value="feature_table_transpose_version.csv" ftype="csv"/>
             <param name="metadata" value="metadata.csv" ftype="csv"/>
@@ -205,10 +206,42 @@
             <param name="cutoff" value="0"/>
             <output name="normalized_data" file="normalized_data_nobatch.tsv"/>
         </test> -->
-        <test expect_failure="true">
+        <test expect_num_outputs="2"><!-- TEST 9 -->
+            <param name="input_choice" value="2"/>
+            <param name="data" value="feature_table_transpose_version.parquet" ftype="parquet"/>
+            <param name="metadata" value="metadata.parquet" ftype="parquet"/>
+            <param name="transpose_feature_table" value="TRUE"/>
+            <param name="mode" value="batchwise"/>
+            <param name="wavelet_filter" value="d"/>
+            <param name="wavelet_length" value="2"/>
+            <param name="k" value="20"/>
+            <param name="t" value="0.05"/>
+            <param name="t2" value="0.05"/>
+            <param name="alpha" value="0"/>
+            <param name="keep_two_output" value="TRUE"/>
+            <output name="normalized_data" file="test9_output1.parquet" ftype="parquet"/>
+            <output name="metadata" file="test9_output2.parquet" ftype="parquet"/>
+        </test>
+        <test expect_num_outputs="2"><!-- TEST 10 -->
+            <param name="input_choice" value="2"/>
+            <param name="data" value="feature_table_transpose_version.csv" ftype="csv"/>
+            <param name="metadata" value="metadata.csv" ftype="csv"/>
+            <param name="transpose_feature_table" value="TRUE"/>
+            <param name="mode" value="batchwise"/>
+            <param name="wavelet_filter" value="d"/>
+            <param name="wavelet_length" value="2"/>
+            <param name="k" value="20"/>
+            <param name="t" value="0.05"/>
+            <param name="t2" value="0.05"/>
+            <param name="alpha" value="0"/>
+            <param name="keep_two_output" value="TRUE"/>
+            <output name="normalized_data" file="test10_output1.tsv" ftype="tsv"/>
+            <output name="metadata" file="test10_output2.tsv" ftype="tsv"/>
+        </test>
+        <test expect_failure="true"><!-- TEST 11 -->
             <param name="data" value="na_data.csv" ftype="csv"/>
         </test>
-        <test expect_failure="true">
+        <test expect_failure="true"><!-- TEST 12 -->
             <param name="data" value="incomplete_metadata_data.csv" ftype="csv"/>
         </test>
     </tests>

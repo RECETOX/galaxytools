@@ -96,10 +96,20 @@
             </when>
         </conditional>
     </xml>
+    <xml name="split_output">
+        <param name = "keep_two_output" label="Keep Two Output in recetox-aplcms format" type="boolean" checked="false" 
+                truevalue="TRUE" falsevalue="FALSE" help="keep two outputs, one is feature table and second is metadata table" />
+    </xml>
 
     <xml name="outputs">
         <outputs>
-            <data name="normalized_data" format="tsv">
+            <data name="normalized_data" format="tsv" label="Normalized table of ${on_string}">
+                <change_format>
+                    <when input_dataset="data" attribute="ext" value="parquet" format="parquet" />
+                </change_format>
+            </data>
+            <data name="metadata" format="tsv" label="Metadata table of ${on_string}">
+                <filter>keep_two_output</filter>
                 <change_format>
                     <when input_dataset="data" attribute="ext" value="parquet" format="parquet" />
                 </change_format>
