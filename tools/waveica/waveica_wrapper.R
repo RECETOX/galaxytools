@@ -234,14 +234,17 @@ store_data <- function(data, feature_output, metadata_output, ext, split_output 
     } else {
         if (split_output == TRUE) {
             split_df <- split_output(data)
-            write.table(split_df$metadata, file = metadata_output, sep = "\t",
+            write.table(split_df$metadata,
+                file = metadata_output, sep = "\t",
                 row.names = FALSE, quote = FALSE
             )
-            write.table(split_df$feature_table, file = feature_output, sep = "\t",
+            write.table(split_df$feature_table,
+                file = feature_output, sep = "\t",
                 row.names = FALSE, quote = FALSE
             )
         } else {
-            write.table(data, file = feature_output, sep = "\t",
+            write.table(data,
+                file = feature_output, sep = "\t",
                 row.names = FALSE, quote = FALSE
             )
         }
