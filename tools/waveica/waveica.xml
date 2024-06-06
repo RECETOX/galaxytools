@@ -104,7 +104,7 @@
             <param name="t" value="0.05"/>
             <param name="t2" value="0.05"/>
             <param name="alpha" value="0"/>
-            <output name="normalized_data" file="normalized_data.tsv" ftype="tsv"/>
+            <output name="normalized_data" file="normalized_data.tsv" ftype="tabular"/>
         </test>
         <test expect_num_outputs="1"><!-- TEST 2 -->
             <param name="data" value="input_data.tsv" ftype="tsv"/>
@@ -115,7 +115,7 @@
             <param name="t" value="0.05"/>
             <param name="t2" value="0.05"/>
             <param name="alpha" value="0"/>
-            <output name="normalized_data" file="normalized_data.tsv" ftype="tsv"/>
+            <output name="normalized_data" file="normalized_data.tsv" ftype="tabular"/>
         </test>
         <test expect_num_outputs="1"><!-- TEST 3 -->
             <param name="data" value="input_data.parquet" ftype="parquet"/>
@@ -139,7 +139,7 @@
             <param name="t" value="0.05"/>
             <param name="t2" value="0.05"/>
             <param name="alpha" value="0"/>
-            <output name="normalized_data" file="normalized_data.tsv" ftype="tsv"/>
+            <output name="normalized_data" file="normalized_data.tsv" ftype="tabular"/>
         </test>
         <test expect_num_outputs="1"><!-- TEST 5 -->
             <param name="input_choice" value="2"/>
@@ -152,7 +152,7 @@
             <param name="t" value="0.05"/>
             <param name="t2" value="0.05"/>
             <param name="alpha" value="0"/>
-            <output name="normalized_data" file="normalized_data.tsv" ftype="tsv"/>
+            <output name="normalized_data" file="normalized_data.tsv" ftype="tabular"/>
         </test>
         <test expect_num_outputs="1"><!-- TEST 6 -->
             <param name="input_choice" value="2"/>
@@ -193,7 +193,7 @@
             <param name="t" value="0.05"/>
             <param name="t2" value="0.05"/>
             <param name="alpha" value="0"/>
-            <output name="normalized_data" file="normalized_data.tsv" ftype="tsv"/>
+            <output name="normalized_data" file="normalized_data.tsv" ftype="tabular"/>
         </test>
         <!-- The following test has different results on three platform I've tried -->
         <!-- <test>

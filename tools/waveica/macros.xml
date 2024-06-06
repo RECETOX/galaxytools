@@ -108,7 +108,7 @@
                     <when input_dataset="data" attribute="ext" value="parquet" format="parquet" />
                 </change_format>
             </data>
-            <data name="metadata" format="tsv" label="Metadata table of ${on_string}">
+            <data name="metadata" format="tabular" label="Metadata table of ${on_string}">
                 <filter>keep_two_output</filter>
                 <change_format>
                     <when input_dataset="data" attribute="ext" value="parquet" format="parquet" />
