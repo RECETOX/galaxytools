@@ -235,8 +235,8 @@
             <param name="t2" value="0.05"/>
             <param name="alpha" value="0"/>
             <param name="keep_two_output" value="TRUE"/>
-            <output name="normalized_data" file="test10_output1.tsv" ftype="tsv"/>
-            <output name="metadata" file="test10_output2.tsv" ftype="tsv"/>
+            <output name="normalized_data" file="test10_output1.tsv" ftype="tabular"/>
+            <output name="metadata" file="test10_output2.tsv" ftype="tabular"/>
         </test>
         <test expect_failure="true"><!-- TEST 11 -->
             <param name="data" value="na_data.csv" ftype="csv"/>
