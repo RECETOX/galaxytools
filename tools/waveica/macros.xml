@@ -97,7 +97,7 @@
         </conditional>
     </xml>
     <xml name="split_output">
-        <param name = "keep_two_output" label="Keep Two Output in recetox-aplcms format" type="boolean" checked="false" 
+        <param name = "keep_two_output" label="Output metadata and data matrix as separate files" type="boolean" checked="false" 
                 truevalue="TRUE" falsevalue="FALSE" help="keep two outputs, one is feature table and second is metadata table" />
     </xml>
 
