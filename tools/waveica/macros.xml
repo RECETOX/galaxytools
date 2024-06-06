@@ -103,7 +103,7 @@
 
     <xml name="outputs">
         <outputs>
-            <data name="normalized_data" format="tsv" label="Normalized table of ${on_string}">
+            <data name="normalized_data" format="tabular" label="Normalized table of ${on_string}">
                 <change_format>
                     <when input_dataset="data" attribute="ext" value="parquet" format="parquet" />
                 </change_format>
