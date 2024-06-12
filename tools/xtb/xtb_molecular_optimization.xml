@@ -42,11 +42,39 @@
     </outputs>
     <tests>
         <test>
-            <param name="coordinates" value="initial_mol.xyz" ftype="xyz"/>
+            <param name="coordinates" value="initial_mol_molname.xyz" ftype="xyz"/>
+            <param name="replace_second_line" value="TRUE" />
             <output name="output">
                 <assert_contents>
+                    <has_text text="Benzophenone"/>
+                </assert_contents>
+            </output>
+        </test>
+        <test>
+            <param name="coordinates" value="initial_mol_molname.xyz" ftype="xyz"/>
+            <param name="replace_second_line" value="FALSE" />
+            <output name="output">
+                <assert_contents>
+                    <has_text text="energy"/>
+                </assert_contents>
+            </output>
+        </test>
+        <test>
+            <param name="coordinates" value="initial_mol_no_molname.xyz" ftype="xyz"/>
+            <param name="replace_second_line" value="TRUE" />
+            <output name="output">
+                <assert_contents>
+                    <has_text text=" "/>
+                </assert_contents>
+            </output>
+        </test>
+        <test>
+            <param name="coordinates" value="initial_mol_no_molname.xyz" ftype="xyz"/>
+            <param name="replace_second_line" value="FALSE" />
+            <output name="output">
+                <assert_contents>
+                    <has_text text="energy"/>
                     <has_text text="xtb"/>
-                    <has_n_lines n="26"/> 
                 </assert_contents>
             </output>
         </test>
