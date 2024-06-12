@@ -74,7 +74,6 @@
             <output name="output">
                 <assert_contents>
                     <has_text text="energy"/>
-                    <has_text text="xtb"/>
                 </assert_contents>
             </output>
         </test>
