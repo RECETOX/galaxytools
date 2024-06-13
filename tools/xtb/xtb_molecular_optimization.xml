@@ -64,7 +64,7 @@
             <param name="replace_second_line" value="TRUE" />
             <output name="output">
                 <assert_contents>
-                    <has_text text=" "/>
+                    <not_has_text text="energy"/>
                 </assert_contents>
             </output>
         </test>
