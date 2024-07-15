@@ -2,7 +2,7 @@ import argparse
 import sys
 
 from matchms.exporting import save_as_mgf, save_as_msp
-from matchms.filtering import add_compound_name, add_fingerprint, add_losses, add_parent_mass, add_precursor_mz, \
+from matchms.filtering import add_compound_name, add_fingerprint, add_parent_mass, add_precursor_mz, \
     add_retention_index, add_retention_time, clean_compound_name
 from matchms.filtering import default_filters, normalize_intensities, reduce_to_number_of_peaks, select_by_mz, \
     select_by_relative_intensity
@@ -16,7 +16,7 @@ def main(argv):
     parser.add_argument("--spectra_format", type=str, required=True, help="Format of spectra file.")
     parser.add_argument("--output", type=str, required=True, help="Filtered mass spectra file.")
     parser.add_argument("-normalise_intensities", action='store_true',
-                        help="Normalize intensities of peaks (and losses) to unit height.")
+                        help="Normalize intensities of peaks to unit height.")
     parser.add_argument("-default_filters", action='store_true',
                         help="Collection of filters that are considered default and that do no require any (factory) arguments.")
     parser.add_argument("-clean_metadata", action='store_true',
@@ -62,7 +62,7 @@ def main(argv):
             spectrum = default_filters(spectrum)
 
         if args.clean_metadata:
-            filters = [add_compound_name, add_precursor_mz, add_fingerprint, add_losses, add_parent_mass,
+            filters = [add_compound_name, add_precursor_mz, add_fingerprint, add_parent_mass,
                        add_retention_index, add_retention_time, clean_compound_name]
             for metadata_filter in filters:
                 spectrum = metadata_filter(spectrum)
