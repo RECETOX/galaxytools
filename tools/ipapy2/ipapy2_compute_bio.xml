@@ -1,0 +1,59 @@
+<tool id="ipapy2_compute_bio" name="IPA compute bio" version="@TOOL_VERSION@+galaxy0" profile="21.05">
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    
+    <requirements>
+        <requirement type="package" version="@TOOL_VERSION@">ipapy2</requirement>
+    </requirements>
+
+    <command detect_errors="exit_code"><![CDATA[
+        python3 '${__tool_directory__}/ipapy2_compute_bio.py' \
+        --DB_MS1 '${DB_MS1}' \
+        --annotations '${annotations}'
+        --biochemical_mode '${biochemical_mode}' \
+        #if $biochemical_mode == "connections"
+            --connection_list '${biochemical_mode.connection_list}' \
+        #end if
+        --bio_out "$bio_out"
+    ]]></command>
+
+    <inputs>
+        <param label="MS1 DB table" name="DB_MS1" type="data" format="csv" help="pandas dataframe containing the MS1 database."/>
+        <param label="annotations" name="annotations" type="data" format="csv" optional="true" help="pandas dataframe containing all the possible annotations for the measured features."/>
+        <conditional name="biochemical_mode">
+            <param name="biochemical_mode" type="select" label="biochemical mode"
+                    help="connections are computed based on the reactions or connections.">
+                    <option value="reactions">reactions</option>
+                    <option value="connections">connections</option>
+            </param>
+            <when value="reactions"></when>
+            <when value="connections">
+                <param name="connection_list" type="text" optional="true" label="connections list provided" 
+                        help="list of possible connections between compounds defined as formulas. Only necessary if mode='connections'."/>           
+            </when>
+        </conditional>
+    </inputs>
+
+    <outputs>
+        <data label="${tool.name} on ${on_string}" name="bio_out" format="csv"/>
+    </outputs>
+
+    <help><![CDATA[
+    ::
+        The IPA method can update the probabilities associated to each possible annotations by considering all possible biochemical connections.
+        Before doing so, it is necessary to provide a pandas dataframe reporting which compounds can be considered biochemically related. 
+        The function Compute_Bio() can be used to compute such a dataframe. 
+    ]]></help>
+
+    <tests>
+        <test>
+            <param name="DB_MS1" value="DB_MS1.csv"/>
+            <param name="annotations" value="annotations.csv"/>
+            <param name="biochemical_mode" value="reactions"/>
+            <output name="bio_out" file="bio_out.csv"/>
+        </test>
+    </tests>
+
+    <expand macro="citations"/>
+</tool>
