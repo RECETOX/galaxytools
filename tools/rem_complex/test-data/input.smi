@@ -1,0 +1,15 @@
+Cl[Si]1Oc2ccccc2O1.[C-]#[O+].[C-]#[O+].[CH]1C=CC=C1.[Fe]
+C[C@@]1(CO)C[C@@H]1C#Cc1ccccc1
+C=C(C)[C@@H]1CC[C@]2(COC(C)=O)CC[C@]3(C)[C@H](CC[C@@H]4[C@@]5(C)CC[C@H](OC(C)=O)C(C)(C)[C@@H]5CC[C@]43C)[C@@H]12
+Cc1ccc(SCCNCC(=O)O)cc1
+COc1ccc(NC2=NC(C)(CO)CS2)cc1
+O=C(c1ccccc1)[C@@H]1[C@@H](c2ccccc2)C(C(F)(F)F)=NN1c1ccccc1
+CC1=CC[C@@H](C(C)C)[C@@H]2C=C(CO)CC[C@H]12
+COc1ccc(CCN(CC(=O)O)P(=O)(OC(C)C)OC(C)C)cc1
+CC[C@]12CCCN([C@@H](C)c3ccccc3)[C@H]1CC(=O)CC2
+CC(=O)CC[C@@H]1[C@@]2(C)CCCC(C)(C)[C@@H]2[C@@H](OC(C)=O)C[C@@]1(C)OC(C)=O
+C=C(C(C)=O)[C@@]1(C(C)(C)C)C=C[C@H](C)O1
+C[C@@H]1[C@@H](OCc2ccccc2)C[C@H]2O[C@@H]1CC2=O
+COc1cc([O-])c2c(c1)C[C@H](C)[N+](C)(C)[C@H]2C.I
+CSc1ccc([C@@H]2c3ccccc3C=[N+](C)[C@H]2CO)cc1.[I-]
+CC([O-])=N[C@H]1CCCC[n+]2csc(c2C)CCOC(=O)[C@@H](N=C(C)[O-])CCCC[n+]2csc(c2C)CCOC1=O.[O-][Cl+3]([O-])([O-])O.[O-][Cl+3]([O-])([O-])O

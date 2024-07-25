@@ -1,0 +1,12 @@
+
+name: gc_derivatization
+owner: recetox
+remote_repository_url: "https://github.com/RECETOX/galaxytools/tree/master/tools/gc_derivatization"
+homepage_url: "https://github.com/RECETOX/gc-meox-tms"
+categories:
+  - Metabolomics
+description: In silico derivatization for GC.
+long_description: |
+    The GC-derivatization tool converts carbonyl groups to C═N-OCH3 (MeOX) and transforms acidic protons into -Si(CH3)3 (TMS). Key functionalities include checking for 
+    specific groups, removing derivatization groups, and adding derivatization groups to molecules.
+type: unrestricted

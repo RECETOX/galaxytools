@@ -6,11 +6,6 @@
             For detailed documentation on the tool, see https://github.com/matchms/matchms/blob/master/README.rst
             and https://matchms.readthedocs.io/en/latest/ for the Python API.
 
-            To get more familiar with the library, there is a `tutorial`_ available which explains how to build a mass spectrometry data processing
-            pipeline with matchms.
-                
-            .. _tutorial: https://medium.com/escience-center/build-your-own-mass-spectrometry-analysis-pipeline-in-python-using-matchms-part-i-d96c718c68ee
-
         Overview
             .. image:: https://github.com/RECETOX/galaxytools/raw/29e54e69dab6ab1263f56d35ea19f5d7f284d728/tools/matchms/images/matchms_galaxytools.png
                :width: 3120

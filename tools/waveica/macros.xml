@@ -96,10 +96,24 @@
             </when>
         </conditional>
     </xml>
+    <xml name="split_output">
+        <param name = "keep_two_output" label="Output metadata and data matrix as separate files" type="boolean" checked="false" 
+                truevalue="TRUE" falsevalue="FALSE" help="Keep two output files, one being the data matrix (feature table) and the second being the  metadata table." />
+    </xml>
 
     <xml name="outputs">
         <outputs>
-             <data format_source="data" name="normalized_data"/>
+            <data name="normalized_data" format="tabular" label="Normalized table of ${on_string}">
+                <change_format>
+                    <when input_dataset="data" attribute="ext" value="parquet" format="parquet" />
+                </change_format>
+            </data>
+            <data name="metadata" format="tabular" label="Metadata table of ${on_string}">
+                <filter>keep_two_output</filter>
+                <change_format>
+                    <when input_dataset="data" attribute="ext" value="parquet" format="parquet" />
+                </change_format>
+            </data>
         </outputs>
     </xml>
 

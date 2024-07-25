@@ -17,12 +17,22 @@
 
 <configfiles>
 <configfile name="matchms_python_cli">
+import matchms
+import pandas as pd
 from matchms.importing import load_from_msp, load_from_mgf
 from matchms.exporting.metadata_export import export_metadata_as_csv
+
+
+if "$harmonize_metadata" == "False":
+    matchms.Metadata.set_key_replacements({})
 
 spectra_list = list(load_from_${input_file.ext}("${input_file}", $harmonize_metadata))
 
 export_metadata_as_csv(spectra_list, "${output_file}")
+
+data = pd.read_csv("${output_file}")
+
+data.to_csv("${output_file}", sep='\t', index=False)
 </configfile>
 </configfiles>
 
@@ -33,17 +43,19 @@ export_metadata_as_csv(spectra_list, "${output_file}")
     </inputs>
 
     <outputs>
-        <data label="matchms extract metadata on ${on_string}" name="output_file" format="csv"/>
+        <data label="matchms extract metadata on ${on_string}" name="output_file" format="tsv"/>
     </outputs>
 
     <tests>
         <test>
             <param name="input_file" value="convert/mgf_out.mgf" ftype="mgf"/>
-            <output name="output_file" file="convert/metadata.csv" ftype="csv" compare="sim_size" delta="0"/>
+            <param name="harmonize_metadata" value="True"/>
+            <output name="output_file" file="convert/metadata.tsv" ftype="tsv" compare="sim_size" delta="0"/>
         </test>
         <test>
             <param name="input_file" value="similarity/RECETOX_Exposome_pesticides_HR_MS_20220323.msp" ftype="msp"/>
-            <output name="output_file" file="convert/metadata.csv" ftype="csv" compare="sim_size" delta="0"/>
+            <param name="harmonize_metadata" value="True"/>
+            <output name="output_file" file="convert/metadata.tsv" ftype="tsv" compare="sim_size" delta="0"/>
         </test>
     </tests>
 

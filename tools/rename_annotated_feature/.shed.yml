@@ -1,0 +1,12 @@
+name: rename_annotated_feature
+owner: recetox
+description: Update column names in an abundance table using a annotation table with spectral matching results
+homepage_url: https://github.com/RECETOX/galaxytools/
+long_description: |
+  Renames column features in the abundance table based on corresponding annotations. 
+  It operates in two modes: 'single' and 'multiple'. In 'single' mode, it selects the 
+  highest scoring match for renaming, while in 'multiple' mode, it includes all matches with scores. 
+categories:
+  - Metabolomics
+remote_repository_url: "https://github.com/RECETOX/galaxytools/tree/master/tools/rename_annotated_feature"
+type: unrestricted

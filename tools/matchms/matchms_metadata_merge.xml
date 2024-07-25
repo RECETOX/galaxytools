@@ -16,10 +16,15 @@
     <requirements>
         <requirement type="package" version="@TOOL_VERSION@">matchms</requirement>
     </requirements>
-
+    
     <command detect_errors='aggressive'><![CDATA[
-        python '${matchms_python_cli}'
+        python3 '${matchms_python_cli}'
     ]]></command>
+
+    <environment_variables>
+        <environment_variable name="OPENBLAS_NUM_THREADS">4</environment_variable>
+        <environment_variable name="RLIMIT_NPROC">4</environment_variable>        
+    </environment_variables>
 
 <configfiles>
 <configfile name="matchms_python_cli">

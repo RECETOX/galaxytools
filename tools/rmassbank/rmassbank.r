@@ -27,11 +27,11 @@ suppressMessages(library("RMassBank", warn.conflicts = TRUE, quietly = TRUE))
 # Read arguments
 args <- commandArgs(trailingOnly = TRUE)
 
-stt <- args[1] #file with settings
-cmp <- args[2] #csv file with compounds
-md <- args[3] #mode
-inf <- args[4] #folder with csv infolist
-files <- (args[5:length(args)]) #one or multiple mzML files
+stt <- args[1] # file with settings
+cmp <- args[2] # csv file with compounds
+md <- args[3] # mode
+inf <- args[4] # folder with csv infolist
+files <- (args[5:length(args)]) # one or multiple mzML files
 
 print(paste0("Used settings file: ", stt))
 print(paste0("Used compound list: ", cmp))

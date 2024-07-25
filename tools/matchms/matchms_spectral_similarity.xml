@@ -94,9 +94,9 @@ scores.to_json("$similarity_scores")
             For more details see this `galaxy training`_.
 
         .. rubric:: **Footnotes**
-        .. [1] SQL join types explained on LearnSQL_.
+        .. [1] SQL join types explained on W3School_.
         
-        .. _LearnSQL: https://learnsql.com/blog/sql-joins-types-explained/
+        .. _W3School: https://www.w3schools.com/sql/sql_join.asp
         .. _galaxy training: https://training.galaxyproject.org/training-material/topics/metabolomics/tutorials/gc_ms_with_xcms/tutorial.html
 
         @HELP_matchms@
