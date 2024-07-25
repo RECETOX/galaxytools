@@ -2,7 +2,7 @@
     <token name="@TOOL_VERSION@">v3.5.2</token>
     <xml name="requirements">
         <requirements>
-            <container type="docker">recetox/recetox-msfinder:v3.5.2-rcx1</container>
+            <container type="docker">recetox/recetox-msfinder:v3.5.2-rcx2</container>
         </requirements>
     </xml>
     <xml name="creator">
@@ -31,7 +31,7 @@
         <param type="float" value="0.01" name="Ms2Tolerance" label="Ms2Tolerance" help="The mass tolerance used for fragment peak matching and annotation." />
         <param name="IsTmsMeoxDerivative" type="boolean" checked="False" truevalue="True" falsevalue="False" label="IsTmsMeoxDerivative"
             help="Check TMS-MeOX derivative to use EIMS database; otherwise, MSMS database is used." />
-        <param type="integer" value="1" name="RelativeAbundanceCutOff" label="RelativeAbundanceCutOff"
+        <param type="integer" value="1" min="0" max="100" name="RelativeAbundanceCutOff" label="RelativeAbundanceCutOff"
             help="Remove peaks with less than specified % relative intensity from the spectra." />
         <param type="float" value="0.001" name="Ms1Tolerance" label="Ms1Tolerance" help="The precursor m/z tolerance to generate formula candidates." />
         <param type="select" name="MassToleranceType" label="MassToleranceType" help="Da stands for Daltons (amu), and Ppm stands for parts per million">
@@ -39,20 +39,38 @@
             <option value="Ppm">Ppm</option>
         </param>
         <param type="integer" value="-1" name="StructurePredictionTimeOut" label="StructurePredictionTimeOut" help="Time out parameter, value of -1 means no timeout" />
-        <param name="LewisAndSeniorCheck" type="boolean" checked="True" truevalue="True" falsevalue="False" label="LewisAndSeniorCheck"
-            help="Generate formula candidates that match the valence rules of formula elements." />
+        <param name="LewisAndSeniorCheck" type="boolean" checked="True" truevalue="True" falsevalue="False" label="LEWIS and SENIOR rules check"
+            help="Generate formula candidates that match the valence rules of formula elements. For an explanation of those rules see 'Seven Golden Rules for heuristic 
+            filtering of molecular formulas obtained by accurate mass spectrometry'" />
+        <param name="element_ratio_check" type="select" value="CommonRange=TRUE" label="element ratio check." 
+            help="Generate formula candidates that satisfy every element ratios (ex. H/C ratio should be between 0 and 3.33 for Common range (99.7%) restriction.)">
+            <option value="CommonRange=TRUE" selected="true">Common Range</option>
+            <option value="ExtendedRange=TRUE">Extended Range</option>
+            <option value="ExtremeRange=TRUE">No restriction</option>
+        </param>
+        <param type="integer" value="2" min="1" max="3" name="TreeDepth" label="Tree Depth"
+            help="The limitation of in silico cleavages, i.e. if the user sets '2', the MS-FINDER program generates fragments up to the second level of product ions."/>
+        <param type="integer" value="20" min="0" max="100" name="IsotopicAbundanceTolerance" label="Isotopic Ratio Tolerance"
+            help="Calculate the isotopic score. The tolerance should be utilized as the sigma value for the Gaussian scoring."/>
+        <param name="ElementProbabilityCheck" type="boolean" checked="True" truevalue="True" falsevalue="False" label="Element probability check"
+            help="Generate formula candidates that satisfy the heuristic rules as described in the Seven Golden Rules paper. For example, if a formula 
+            candidate contains the following element counts, i.e. NOPS all > 1, the element counts of N, O, P, and S should be less than 9, 19, 3, and 2, respectively."/>
+        <param name="IsUseEiFragmentDB" type="boolean" checked="False" truevalue="True" falsevalue="False" label="Use EI fragment database"
+            help="Utilize the fragment ion library for EI-MS spectral mining"/>
     </xml>
-    <!-- Element Checks <xml name="element_check_parameter">
-        <param name="Ocheck" type="boolean" checked="True" truevalue="True" falsevalue="False" label="Ocheck" />
-        <param name="Ncheck" type="boolean" checked="True" truevalue="True" falsevalue="False" label="Ncheck" />
-        <param name="Pcheck" type="boolean" checked="True" truevalue="True" falsevalue="False" label="Pcheck" />
-        <param name="Scheck" type="boolean" checked="True" truevalue="True" falsevalue="False" label="Scheck" />
-        <param name="Fcheck" type="boolean" checked="True" truevalue="True" falsevalue="False" label="Fcheck" />
-        <param name="ClCheck" type="boolean" checked="True" truevalue="True" falsevalue="False" label="ClCheck" />
-        <param name="BrCheck" type="boolean" checked="True" truevalue="True" falsevalue="False" label="BrCheck" />
-        <param name="Icheck" type="boolean" checked="True" truevalue="True" falsevalue="False" label="Icheck" />
-        <param name="SiCheck" type="boolean" checked="True" truevalue="True" falsevalue="False" label="SiCheck" />
-    </xml>  -->
+
+    <xml name="element_select">
+        <option value="Ocheck=True">Oxygen check</option>
+        <option value="Ncheck=True">Nitrogen check</option>
+        <option value="Pcheck=True">Phosphorus check</option>
+        <option value="Scheck=True">Sulfur check</option>
+        <option value="Fcheck=True">Fluorine check</option>
+        <option value="ClCheck=True">Chlorine Check</option>
+        <option value="BrCheck=True">Bromine Check</option>
+        <option value="Icheck=True">Iodine check</option>
+        <option value="SiCheck=True">Silicon Check</option>
+    </xml>
+
     <xml name="output">
         <collection type="list" format="txt" name="output" label="${tool.name} on ${on_string}">
             <discover_datasets pattern="(?P&lt;designation&gt;.+)\.smi" directory="output" ext="smi" />
@@ -74,7 +92,7 @@
         FORMULA, PRECURSORMZ and SMILES (or INCHI) metadata entries are required to be present in the input mass spectral library file.
         Each spectrum has to be separated by a single blank line.
 
-        For detailed documentation of the tool please visit https://mtbinfo-team.github.io/mtbinfo.github.io/MS-FINDER/tutorial
+        For detailed documentation of the tool please visit https://systemsomicslab.github.io/mtbinfo.github.io/MS-FINDER/tutorial
     ]]>
     </token>
 

@@ -1,4 +1,4 @@
-<tool id="matchms_subsetting" name="matchms subsetting" version="@TOOL_VERSION@+galaxy4" profile="21.09">
+<tool id="matchms_subsetting" name="matchms subsetting" version="@TOOL_VERSION@+galaxy0" profile="21.09">
     <description>Extract spectra from a library given unique metadata identifier</description>
     
     <macros>
@@ -87,13 +87,13 @@ matchms.exporting.save_as_msp(filtered_spectra.tolist(), '${output}')
 
     <tests>
         <test>
-            <param name="spectral_library" value="out_matchms_add_key.msp" ftype="msp"/>
+            <param name="spectral_library" value="filtering/input.msp" ftype="msp"/>
             <param name="mode" value="include"/>
             <param name="list_of_identifiers" value="subsetting/identifier.csv" ftype="csv"/>
             <output name="output" file="subsetting/subsetting_output.msp" ftype="msp"/>
         </test>
         <test>
-            <param name="spectral_library" value="out_matchms_add_key.msp" ftype="msp"/>
+            <param name="spectral_library" value="filtering/input.msp" ftype="msp"/>
             <param name="mode" value="exclude"/>
             <param name="list_of_identifiers" value="subsetting/identifier.csv" ftype="csv"/>
             <output name="output" file="subsetting/subsetting_output2.msp" ftype="msp"/>

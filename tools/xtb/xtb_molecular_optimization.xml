@@ -1,8 +1,9 @@
-<tool id="xtb_molecular_optimization" name="xtb molecular optimization" version="@TOOL_VERSION@+galaxy1" profile="21.09">
+<tool id="xtb_molecular_optimization" name="xtb molecular optimization" version="@TOOL_VERSION@+galaxy3" profile="21.09">
     <description>Semiempirical quantum mechanical molecular optimization method</description>
     <macros>
         <import>macros.xml</import>
     </macros>
+    <expand macro="edam"/>
     <expand macro="creator"/>
     <requirements>
         <requirement type="package" version="@TOOL_VERSION@">xtb</requirement>
@@ -10,7 +11,18 @@
     <command detect_errors="exit_code"><![CDATA[
         ln -s '${coordinates}' 'mol.${coordinates.ext}' &&
         xtb 'mol.${coordinates.ext}' --opt '${opt_level}' && 
-        cp 'xtbopt.${coordinates.ext}' '${output}'
+
+        #if $replace_second_line == "FALSE":
+        cp  'xtbopt.${coordinates.ext}' '${output}'
+        #end if
+
+        #if $replace_second_line == "TRUE":
+        cp  'xtbopt.${coordinates.ext}' '${output}' &&
+        awk 'NR==FNR{if(NR==2) line=$0; next} {if(FNR==2) print line; else print $0}' '${coordinates}' '${output}' > final &&
+        mv final '${output}'
+        #end if
+
+
     ]]></command>
     <inputs>
         <param label="Atomic coordinates file" type="data" name="coordinates" format="xyz" help="Initial atomic coordinates file to be optimized."/>
@@ -24,29 +36,48 @@
             <option value="vtight">vtight</option>
             <option value="extreme">extreme</option>
         </param>
+        <param type="boolean" name="replace_second_line" label = "Keep molecule name" truevalue="TRUE" falsevalue="FALSE" checked="false" help = "If YES, the molecule name from the coordinates file is preserved, if it exists. Otherwise, the energy, gnorm, and xtb version are printed." />
     </inputs>
     <outputs>
         <data name="output" format_source="coordinates"  />
     </outputs>
     <tests>
         <test>
-            <param name="coordinates" value="initial_mol.xyz" ftype="xyz"/>
+            <param name="coordinates" value="initial_mol_molname.xyz" ftype="xyz"/>
+            <param name="replace_second_line" value="TRUE" />
             <output name="output">
                 <assert_contents>
-                    <has_text text="xtb"/>
-                    <has_n_lines n="26"/> 
+                    <has_text text="Benzophenone"/>
                 </assert_contents>
             </output>
         </test>
-        <!-- <test>
-            <param name="coordinates" value="initial_mol.coord" ftype="coord"/>
-            <output name="output" file="optimized_mol.coord" ftype="coord">
+        <test>
+            <param name="coordinates" value="initial_mol_molname.xyz" ftype="xyz"/>
+            <param name="replace_second_line" value="FALSE" />
+            <output name="output">
                 <assert_contents>
-                    <has_text text="$coord"/>
-                    <has_n_lines min="26"/> 
+                    <has_text text="energy"/>
                 </assert_contents>
             </output>
-        </test> -->
+        </test>
+        <test>
+            <param name="coordinates" value="initial_mol_no_molname.xyz" ftype="xyz"/>
+            <param name="replace_second_line" value="TRUE" />
+            <output name="output">
+                <assert_contents>
+                    <not_has_text text="energy"/>
+                </assert_contents>
+            </output>
+        </test>
+        <test>
+            <param name="coordinates" value="initial_mol_no_molname.xyz" ftype="xyz"/>
+            <param name="replace_second_line" value="FALSE" />
+            <output name="output">
+                <assert_contents>
+                    <has_text text="energy"/>
+                </assert_contents>
+            </output>
+        </test>
     </tests> 
     <help>
         <![CDATA[

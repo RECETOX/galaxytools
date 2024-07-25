@@ -1,0 +1,7 @@
+
+            xtb2
+            ntraj  2
+            tmax  20.0 
+            tinit  500.0 
+            ieeatm  0.6
+        
