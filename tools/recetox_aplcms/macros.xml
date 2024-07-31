@@ -66,9 +66,10 @@
                The recommended value is the machine's nominal accuracy level (e.g. for FTMS, it is 10)." />
         <param name="baseline_correct" type="float" value="0" label="Baseline correction [unit of signal intensity]"
                help="After grouping the observations, the highest intensity in each group is found. If the highest is lower than this value, the entire group will be deleted." />
+        <param name="grouping_threshold" type="float" min="0" value="Inf" label="Grouping Threshold [unit corresponds to the retention time]"
+               help="Maximum empty space between section of the chromatogram for splitting EICs" />
         <param name="intensity_weighted" type="boolean" checked="false" truevalue="TRUE" falsevalue="FALSE" label="Weight intensity"
                help="Whether to weight the local density by signal intensities in initial peak detection." />
-        <param name="grouping_threshold" type="float" min="0" value="Inf" label="Grouping Threshold (s)" help="Maximum empty space between section of the chromatogram for splitting EICs" />
     </xml>
 
     <xml name="generate_feature_table_params">
