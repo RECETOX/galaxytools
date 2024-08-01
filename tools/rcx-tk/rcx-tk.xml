@@ -30,9 +30,9 @@
     </creator>
     <command><![CDATA[
     #if $input_file.ext == "tabular"
-        #set $input_file_new = str($input_file) + '.tsv'
+        #set $input_file_new = 'input.tsv'
     #else
-        #set $input_file_new = str($input_file) + '.' + str($input_file.ext)
+        #set $input_file_new = 'input.' + str($input_file.ext)
     #end if
        cp ${input_file} ${input_file_new} &&
        python3 -m rcx_tk --method ${method} ${input_file_new} 'output.tsv' 
