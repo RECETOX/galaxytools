@@ -42,7 +42,7 @@
        python3 -m rcx_tk --method ${method} ${input_file_new} 'output.tsv' 
     ]]></command>
     <inputs>
-        <param name="input_file" type="data" format="csv,tabular,tsv,xls,xlsx,txt" label="Input data"/ help="Input data">
+        <param name="input_file" type="data" format="csv,tabular,tsv,xls,xlsx,txt" label="Input data" help="Input data"/>
         <param name="method" type="select" label="Method" help="Which data is processed: metadata or alkane file.">
             <option value="metadata" selected="true">metadata</option>
             <option value="alkanes">alkanes</option>
