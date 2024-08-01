@@ -1,0 +1,9 @@
+name: rcx-tk
+owner: recetox
+remote_repository_url: "https://github.com/RECETOX/galaxytools/tree/master/tools/rcx-tk/"
+homepage_url: "https://github.com/RECETOX/rcx-tk"
+categories:
+  - Metabolomics
+description: "Tools to process metadata or alkane files."
+long_description: "rcx-tk package provides tools to process the metadata or alkane files. On the input, the user is expected to supply a path to the metadata/alkane file in tsv/csv/xls/xlsx file. The file is then converted to a dataframe which is further processed. The main steps are columns rearrangement, validation of the file names and derivation of new metadata: sampleName, sequenceIdentifier, sampleIdentifier and localOrder. Finally, the processed dataframe is saved into user-defined location."
+type: unrestricted
