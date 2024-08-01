@@ -53,6 +53,11 @@
             <param name="input_file" value="mbr_test0.mzml" ftype="mzml"/>
             <output name="output_file" file="remove_noise_docker.parquet" ftype="parquet" />
         </test>
+        <test>
+            <param name="input_file" value="mbr_test0.mzml" ftype="mzml"/>
+            <param name="grouping_threshold" value="2" />
+            <output name="output_file" file="remove_noise_docker_threshold.parquet" ftype="parquet" />
+        </test>
     </tests>
 
     <help>
