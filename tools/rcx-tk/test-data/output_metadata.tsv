@@ -1,0 +1,12 @@
+sampleName	sampleType	class	batch	injectionOrder	sequenceIdentifier	subjectIdentifier	localOrder
+1_instrumental_blank_01	Standard	3	1	1	1_instrumental blank	instrumental blank	1
+4_Alkane_mix_04	Standard	5	1	4	4_Alkane mix	Alkane mix	4
+6_instrumental_blank_06	Standard	3	1	6	6_instrumental blank	instrumental blank	6
+7_procedural_blank_07	Blank	6	1	7	7_procedural blank	procedural blank	7
+8_QC_non-dilute_08	QC	2	1	8	8_QC non-dilute	QC non-dilute	8
+11_QC_16_11	QC	2	1	11	11_QC 16	QC 16	11
+12_QC_8_12	QC	2	1	12	12_QC 8	QC 8	12
+15_QC_non-dilute_15	QC	2	1	15	15_QC non-dilute	QC non-dilute	15
+18_QC_4__18	QC	2	1	18	18_QC 4	QC 4	18
+19_QC_8_19	QC	2	1	19	19_QC 8	QC 8	19
+29_instrument_blank_29	Standard	3	1	29	29_instrument blank	instrument blank	29
