@@ -22,11 +22,11 @@
                 Carbrat = $Carbrat,
                 Sulfrat = $Sulfrat,
                 Sulferr = $Sulferr,
-                Carberr = $Carberrs
+                Carberr = $Carberr
             )
             
-            write.table(result$Mono, file="$mono_out", sep="\t", row.names=FALSE)
-            write.table(result$Iso, file="$iso_out", sep="\t", row.names=FALSE)
+            write.table(result[["Mono"]], file="$mono_out", sep="\t", row.names=FALSE)
+            write.table(result[["Iso"]], file="$iso_out", sep="\t", row.names=FALSE)
         ]]></configfile>
     </configfiles>
     <inputs>
