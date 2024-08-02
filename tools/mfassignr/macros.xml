@@ -1,0 +1,38 @@
+<macros>
+    <token name="@TOOL_VERSION@">1.0.3</token>
+    <xml name="requirements">
+        <requirements>
+            <requirement type="package" version="@TOOL_VERSION@">r-mfassignr</requirement>
+        </requirements>
+    </xml>
+
+    <xml name="creator">
+        <creator>
+            <person
+                givenName="Zargham"
+                familyName="Ahmad"
+                url="https://github.com/zargham-ahmad"
+                identifier="0000-0002-6096-224X" />
+            <organization
+                url="https://www.recetox.muni.cz/"
+                email="GalaxyToolsDevelopmentandDeployment@space.muni.cz"
+                name="RECETOX MUNI" />
+        </creator>
+    </xml>
+
+    <xml name="isofiltr_param">
+        <param name="peaks" type="data" format="tabular" label="Input Peak Data"
+        help="The input data frame containing abundance and peak mass."/>
+        <param name="SN" type="float" value="0" label="Signal-to-Noise Ratio"
+        help="Sets the noise cut for the data; peaks below this value will not be evaluated."/>
+        <param name="Carbrat" type="float" value="60" label="Maximum 13C/12C Ratio"
+        help="Sets the maximum allowed ratio for matching 13C isotopes."/>
+        <param name="Sulfrat" type="float" value="30" label="Maximum 34S/32S Ratio"
+        help="Sets the maximum allowed ratio for matching 34S isotopes."/>
+        <param name="Sulferr" type="float" value="5" label="Maximum Error for 34S Matching (ppm)"
+        help="Sets the maximum allowed error (ppm) for 34S mass matching."/>
+        <param name="Carberr" type="float" value="5" label="Maximum Error for 13C Matching (ppm)"
+        help="Sets the maximum allowed error (ppm) for 13C mass matching."/>
+    </xml>
+
+</macros>
