@@ -36,6 +36,13 @@
         <data name="mono_out" format="tabular" label="Monoisotopic Masses"/>
         <data name="iso_out" format="tabular" label="Isotopic Masses"/>
     </outputs>
+    <tests>
+        <test>
+            <param name="peaks" value="QC1_1_POS_500.tabular" ftype="tabular"/>
+            <output name="mono_out" file="isofiltr_output1.tabular" ftype="tabular"/>
+            <output name="iso_out" file="isofiltr_output2.tabular" ftype="tabular"/>
+        </test>
+    </tests>
     <help>
         IsoFiltR identifies and separates likely isotopic masses from monoisotopic masses in a mass list. 
         This should be done prior to formula assignment to reduce incorrect formula assignments.
