@@ -6,6 +6,12 @@
         </requirements>
     </xml>
 
+    <xml name="refs">
+        <xrefs>
+               <xref type="bio.tools">mfassignr</xref>
+        </xrefs>
+    </xml>
+
     <xml name="creator">
         <creator>
             <person

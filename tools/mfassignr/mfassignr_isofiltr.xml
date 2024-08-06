@@ -6,6 +6,7 @@
         <import>macros.xml</import>
     </macros>
     <expand macro="creator" />
+    <expand macro="refs" />
 
     <expand macro="requirements" />
     <command detect_errors="exit_code"><![CDATA[
