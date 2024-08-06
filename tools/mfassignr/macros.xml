@@ -35,4 +35,21 @@
         help="Sets the maximum allowed error (ppm) for 13C mass matching."/>
     </xml>
 
+    <xml name="citations">
+        <citations>
+            <citation type="doi">10.1021/ac504166t</citation>
+            <citation type="doi">10.1007/978-3-319-54398-7</citation>
+            <citation type="doi">10.1007/s00216-014-8249-y</citation>
+            <citation type="doi">10.1021/ac061949s</citation>
+            <citation type="doi">10.1021/ac400972y</citation>
+            <citation type="doi">10.1021/ac0600306</citation>
+            <citation type="doi">10.1021/ac300244f</citation>
+            <citation type="doi">10.1007/s00216-013-6734-3</citation>
+            <citation type="doi">10.1021/ac504165k</citation>
+            <citation type="doi">10.1021/ac102943z</citation>
+            <citation type="doi">10.1016/j.fuel.2018.08.085</citation>
+            <citation type="doi">10.1021/ac403278t</citation>
+        </citations>        
+    </xml>
+
 </macros>
