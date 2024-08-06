@@ -1,4 +1,4 @@
-<tool id="mfassignr_isofiltr" name=MFAssignR IsoFiltR" version="@TOOL_VERSION@+galaxy0">
+<tool id="mfassignr_isofiltr" name="MFAssignR IsoFiltR" version="@TOOL_VERSION@+galaxy0">
     <description>
         IsoFiltR separates likely isotopic masses from monoisotopic masses in a mass list.
     </description>
