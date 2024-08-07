@@ -31,7 +31,7 @@
         help="The input data frame containing abundance and peak mass."/>
         <param name="SN" type="float" value="0" label="Signal-to-Noise Ratio"
         help="Sets the noise cut for the data; peaks below this value will not be evaluated."/>
-        <param name="Carbrat" type="float" value="60" label="Maximum 13C/12C Ratio"
+        <param name="Carbrat" type="float" value="60" min="5" label="Maximum 13C/12C Ratio"
         help="Sets the maximum allowed ratio for matching 13C isotopes."/>
         <param name="Sulfrat" type="float" value="30" label="Maximum 34S/32S Ratio"
         help="Sets the maximum allowed ratio for matching 34S isotopes."/>
@@ -43,18 +43,7 @@
 
     <xml name="citations">
         <citations>
-            <citation type="doi">10.1021/ac504166t</citation>
-            <citation type="doi">10.1007/978-3-319-54398-7</citation>
-            <citation type="doi">10.1007/s00216-014-8249-y</citation>
-            <citation type="doi">10.1021/ac061949s</citation>
-            <citation type="doi">10.1021/ac400972y</citation>
-            <citation type="doi">10.1021/ac0600306</citation>
-            <citation type="doi">10.1021/ac300244f</citation>
-            <citation type="doi">10.1007/s00216-013-6734-3</citation>
-            <citation type="doi">10.1021/ac504165k</citation>
-            <citation type="doi">10.1021/ac102943z</citation>
-            <citation type="doi">10.1016/j.fuel.2018.08.085</citation>
-            <citation type="doi">10.1021/ac403278t</citation>
+            <citation type="doi">https://doi.org/10.1016/j.envres.2020.110114</citation>
         </citations>        
     </xml>
 

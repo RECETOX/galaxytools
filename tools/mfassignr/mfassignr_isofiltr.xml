@@ -47,6 +47,18 @@
     <help>
         IsoFiltR identifies and separates likely isotopic masses from monoisotopic masses in a mass list. 
         This should be done prior to formula assignment to reduce incorrect formula assignments.
+        
+        The input is a table containing abundance and peak mass in the following format:
+
+        +--------------------+-------------------+------------------------+
+        | mz                 | area              | rt                     |
+        +====================+===================+========================+
+        | 110.03486266079899 | 3410926.862054969 | 190.03735922916195     |
+        +--------------------+-------------------+------------------------+
+        | 110.05988136843429 | 7658687.858       | 241.17645551084158     |
+        +--------------------+-------------------+------------------------+
+        | ...                | ...               | ...                    |
+        +--------------------+-------------------+------------------------+
     </help>
     <expand macro="citations"/>
 </tool>
