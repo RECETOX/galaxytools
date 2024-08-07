@@ -19,7 +19,8 @@
         ]]></configfile>
     </configfiles>
     <inputs>
-        <expand macro="recallist_param"/>
+        <param name="input_file" type="data" format="tabular" label="Input data"
+               help= "Input data frame - output from MFAssign or MFAssignCHO. Recommended are 'Unambiguous' assignments."/>
     </inputs>
     <outputs>
         <data name="recal_series" format="tabular" label="Recalibration series"/>
