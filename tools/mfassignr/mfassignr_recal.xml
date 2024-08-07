@@ -12,59 +12,38 @@
         <configfile name="run_script"><![CDATA[
             df <- read.delim("$input_file", sep="\t")
             peaks <- read.delim("$peaks", sep="\t")
-            #if $input_iso
-            isopeaks <- read.delim("$isopeaks", sep="\t")
-            #end if
             SN <- $sn_ratio * $kmdn
 
-        recal <- MFAssignR::Recal(
-            df = df,
-            peaks = peaks,
-            #if $isopeaks
-            isopeaks = isopeaks,
-            #end if
-            mode = "$ionmode",
-            SN = SN,
-            mzRange = $mzRange,
-            step_O = $step_O,
-            step_H2 = $step_H2,
-            CalPeak = $CalPeak,
-            #if $series1
-            series1 = "$series1",
-            #end if
-            #if $series2
-            series2 = "$series2",
-            #end if
-            #if $series3
-            series3 = "$series3",
-            #end if
-            #if $series4
-            series4 = "$series4",
-            #end if
-            #if $series5
-            series5 = "$series5",
-            #end if
-            #if $series6
-            series6 = "$series6",
-            #end if
-            #if $series7
-            series7 = "$series7",
-            #end if
-            #if $series8
-            series8 = "$series8",
-            #end if
-            #if $series9
-            series9 = "$series9",
-            #end if
-            #if $series10
-            series10 = "$series10",
-            #end if
-        )
+            series <- read.delim('$series', sep='\t')
 
-        write.table(recal[['Mono']], file = '$Mono', row.names= FALSE)
-        write.table(recal[['Iso']], file = '$Iso', row.names= FALSE)
-        write.table(recal[['RecalOut']], file = '$RecalOut', row.names= FALSE)
-        ggplot2::ggsave(filename = "MZplot.png", recal[['MZ']])
+            recal <- MFAssignR::Recal(
+                df = df,
+                peaks = peaks,
+                #if $isopeaks
+                isopeaks = read.delim("$isopeaks", sep="\t"),
+                #end if
+                mode = "$ionmode",
+                SN = SN,
+                mzRange = $mzRange,
+                step_O = $step_O,
+                step_H2 = $step_H2,
+                CalPeak = $CalPeak,
+                series1 = series[1, "Series"],
+                series2 = series[2, "Series"],
+                series3 = series[3, "Series"],
+                series4 = series[4, "Series"],
+                series5 = series[5, "Series"],
+                series6 = series[6, "Series"],
+                series7 = series[7, "Series"],
+                series8 = series[8, "Series"],
+                series9 = series[9, "Series"],
+                series10 = series[10, "Series"]
+            )
+
+            write.table(recal[['Mono']], file = '$Mono', row.names= FALSE, sep="\t")
+            write.table(recal[['Iso']], file = '$Iso', row.names= FALSE, sep="\t")
+            write.table(recal[['RecalList']], file = '$RecalList', row.names= FALSE, sep="\t")
+            ggplot2::ggsave(filename = "MZplot.png", recal[['Plot']])
 
         ]]></configfile>
     </configfiles>
@@ -74,7 +53,7 @@
     <outputs>
         <data name="Mono" format="tabular" label="Recalibrated 'Mono' list"/>
         <data name="Iso" format="tabular" label="Recalibrated 'Iso' list"/>
-        <data name="RecalOut" format="tabular" label="Recalibrants list (RecalOut)"/>
+        <data name="RecalList" format="tabular" label="Recalibrants list (RecalOut)"/>
         <data name="MZplot" format="png" label="MZ plot" from_work_dir="MZplot.png"/>
     </outputs>
     <tests>
