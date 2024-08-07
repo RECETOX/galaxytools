@@ -81,7 +81,9 @@
         <test expect_failure="true"/>
     </tests>
     <help><![CDATA[
-   td
+        Recal() function recalibrates the 'Mono' and 'Iso' outputs from the IsoFiltR() function and prepares a dataframe containing chose recalibrants. Also it outputs a plot for the qualitative assessment of recalibrants. The input to the function is output from MFAssign() or MFAssignCHO(). 
+
+        This function can handle up to 10 homologous series, though it will work with fewer. It is important for recalibrant masses to cover the entire mass range of interest, and they should be among the most abundant peaks in their region of the spectrum, this function helps with visualizing the recalibrants.
     ]]></help>
     <expand macro="citations" />
 </tool>
