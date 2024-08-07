@@ -71,6 +71,28 @@
                help= "A numeric value setting the y axis value for the plot, determined by multiplying the cut by this value"/> 
     </xml>
 
+    <xml name="mfassign_param">
+        <param name="input_mono" type="data" format="tabular" label="Data frame of monoisotopic masses"
+               help= "Input data frame, first column is mass, second column is intensity"/>
+        <param name="input_iso" optional="true" type="data" format="tabular" label="Data frame of isotopic masses"
+               help= "Data frame containing isotopic masses, output from the IsoFiltR function"/>
+        <param name="ppm_err" type="integer" label="ppm_err"
+               help= "Error tolerance (ppm) for formula assignment" value="3"/>
+        <param name="ionmode" type="select" label="Ion mode"
+               help= "The ionization mode.">
+                <option value="neg" >negative</option>
+                <option value="pos" selected="true">positive</option> 
+        </param>
+        <param name="sn_ratio" type="float" label="SN ratio" value="0"
+               help= "Noise multiplier"/>
+        <param name="kmdn" type="float" label="Estimated noise" value="0"
+               help= "Estimated noise, either from the KMDNoise or HistNoise function."/>
+        <param name="lowMW" type="float" label="Lower limit of molecular mass to be assigned" value="100"
+               help= "Lower limit of molecular mass to be assigned."/>
+        <param name="highMW" type="float" label="Upper limit of molecular mass to be assigned" value="1000"
+               help= "Upper limit of molecular mass to be assigned."/>
+    </xml>
+
     <xml name="citations">
         <citations>
             <citation type="doi">10.1016/j.envres.2020.110114</citation>
