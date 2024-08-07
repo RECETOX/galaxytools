@@ -1,0 +1,38 @@
+<tool id="mfassignr_histnoise" name="MFAssignR HistNoise" version="1.0.3+galaxy0">
+    <description>MFAssignR: Noise level assessment using the HistNoise.</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="creator" />
+    <expand macro="requirements" />
+    <command detect_errors="exit_code"><![CDATA[
+        Rscript -e 'source("${run_script}")'
+    ]]></command>
+    <configfiles>
+        <configfile name="run_script"><![CDATA[
+        df <- read.delim("$input_file", sep="\t")
+        assess_noise <- MFAssignR::HistNoise(
+            df = df,
+            SN = $SN,
+            bin = $bin
+        )
+        noise <- assess_noise[['Noise']]
+        write.table(noise, file = '$Noise', row.names= FALSE, col.names = FALSE)
+        ggplot2::ggsave(filename = "histplot.png", assess_noise[['Hist']])
+        ]]></configfile>
+    </configfiles>
+    <inputs>
+        <expand macro="histnoise_param"/>
+    </inputs>
+    <outputs>
+        <data name="Noise" format="txt" label="Noise"/>
+        <data name="Hist_plot" format="png" label="Histogram plot" from_work_dir="histplot.png"/>
+    </outputs>
+    <tests>
+        <test expect_failure="true"/>
+    </tests>
+    <help><![CDATA[
+ HistNoise function creates a histogram using natural log of the intensity, which can be then used to determine the noise level for the data analyze, and also the estimated noise level. The noise level can be then multiplied by whatever value in order to reach the value to be used to cut the data.
+    ]]></help>
+    <expand macro="citations" />
+</tool>

@@ -1,0 +1,79 @@
+<macros>
+    <token name="@TOOL_VERSION@">1.0.3</token>
+    <xml name="requirements">
+        <requirements>
+            <requirement type="package" version="@TOOL_VERSION@">r-mfassignr</requirement>
+        </requirements>
+    </xml>
+
+    <xml name="annotation">
+        <edam_topics>
+               <edam_topic>topic_3172</edam_topic>
+               <edam_topic>data_2536</edam_topic>
+               <edam_topic>operation_3203</edam_topic>
+               <edam_topic>operation_3215</edam_topic>
+               <edam_topic>operation_3627</edam_topic>
+               <edam_topic>operation_3629</edam_topic>
+        </edam_topics>
+    </xml>
+
+    <xml name="creator">
+        <creator>
+            <person
+                givenName="Kristina"
+                familyName="Gomoryova"
+                url="https://github.com/KristinaGomoryova"
+                identifier="0000-0003-4407-3917" />
+        <person
+                givenName="Helge"
+                familyName="Hecht"
+                url="https://github.com/hechth"
+                identifier="0000-0001-6744-996X" />
+        <organization
+                url="https://www.recetox.muni.cz/"
+                email="GalaxyToolsDevelopmentandDeployment@space.muni.cz"
+                name="RECETOX MUNI" />
+        </creator>
+    </xml>
+
+    <xml name="kmdnoise_param">
+        <param name="input_file" type="data" format="tabular" label="Input data"
+               help= "Input data frame, first column is mass, second column is intensity"/>
+        <param name="upper_y" type="float" label="upper limit for the y intercept" value="0.2"
+               help= "The upper y-intercept value to isolate noise peaks in the equation for the KMD plot: y = 0.001123*x + b. Default value is set to 0.2, so that it does not interact with any potentially double-charged peaks."/>
+        <param name="lower_y" type="float" label="lower limit for the y intercept" value="0.05"
+               help="The lower y-intercept value to isolate noise peaks in the equation for the KMD plot: y = 0.001123*x + b. Default value is set to 0.05 to ensure no analyte peaks are incorporated into the noise estimation."/>
+        <param name="upper_x" optional="true" type="float" label="upper limit for the x intercept"
+               help="If not set, it defaults to maximum mass in the mass spectrum."/>
+        <param name="lower_x" optional="true" type="float" label="lower limit for the x intercept"
+               help="If not set, it defaults to minimum mass in the mass spectrum."/>
+    </xml>
+
+    <xml name="histnoise_param">
+        <param name="input_file" type="data" format="tabular" label="Input data"
+               help= "Input data frame, first column is mass, second column is intensity"/>
+        <param name="SN" type="float" label="signal-to-noise threshold" value="0"
+               help= "A numeric value for situations where a predefined noise value is desired, default is 0"/>
+        <param name="bin" type="float" label="bindwidth of the histogram" value="0.01"
+               help= "A numeric value determining the binwidth of the histogram, default is 0.01"/>
+    </xml>
+
+    <xml name="snplot_param">
+        <param name="input_file" type="data" format="tabular" label="Input data"
+               help= "Input data frame, first column is mass, second column is intensity"/>
+        <param name="cut" type="float" label="cut"
+               help= "A numeric value of the intensity cut value being investigated"/>
+        <param name="mass" type="float" label="mass"
+               help= "A numeric value setting a centerpoint to look at the mass spectrum"/>
+        <param name="window_x" type="float" label="window.x" value="0.5"
+               help= "A numeric value setting the +/- range around the mass centerpoint, default is 0.5"/>
+        <param name="window_y" type="float" label="window.y" value="10"  
+               help= "A numeric value setting the y axis value for the plot, determined by multiplying the cut by this value"/> 
+    </xml>
+
+    <xml name="citations">
+        <citations>
+            <citation type="doi">10.1016/j.envres.2020.110114</citation>
+        </citations>
+    </xml>
+</macros>
