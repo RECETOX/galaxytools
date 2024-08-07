@@ -93,6 +93,47 @@
                help= "Upper limit of molecular mass to be assigned."/>
     </xml>
 
+    <xml name="recal_param">
+        <param name="input_file" type="data" format="tabular" label="Input data (Output from MFAssign())"
+               help= "Input data frame, the output from MFAssign() or MFAssignCHO()"/>
+        <param name="peaks" type="data" format="tabular" label="Peaks dataframe (Mono from IsoFiltR())"
+               help= "Peaks data frame, the Mono output from IsoFiltR"/>              
+        <param name="isopeaks" type="data" format="tabular" label="Isopeaks dataframe (Iso from IsoFiltR())"            optional="true" help= "Isoeaks data frame, the Mono output from IsoFiltR"/>
+        <param name="ionmode" type="select" label="Ion mode"
+               help= "The ionization mode.">
+                <option value="neg" >negative</option>
+                <option value="pos" selected="true">positive</option> 
+        </param>
+        <param name="sn_ratio" type="float" label="SN ratio" value="0"
+               help= "Noise multiplier"/>
+        <param name="kmdn" type="float" label="Estimated noise" value="0"
+               help= "Estimated noise, either from the KMDNoise or HistNoise function."/>
+        <param name="mzRange" type="float" label="Mass windows used for the segmented recalibration" value="30"
+               help= "Mass windows used for the segmented recalibration"/>
+        <param name="step_O" type="float" label="Number of oxygen steps for formula extension" value="3"
+               help= "Number of oxygen steps for formula extension"/>
+        <param name="step_H2" type="float" label="Number of H2 steps for formula extension" value="5"
+               help= "Number of H2 steps for formula extension"/>
+         <param name="CalPeak" type="float" label="Maximum allowed recalibrant peaks per mzRange defined segment" value="150" help= "Maximum allowed recalibrant peaks per mzRange defined segment"/>      
+        <section name="series" title="Recalibrant series" >
+              <param name="series1" type="text" label="Series 1" optional="true"/>
+              <param name="series2" type="text" label="Series 2" optional="true"/>
+              <param name="series3" type="text" label="Series 3" optional="true"/>
+              <param name="series4" type="text" label="Series 4" optional="true"/>
+              <param name="series5" type="text" label="Series 5" optional="true"/>
+              <param name="series6" type="text" label="Series 6" optional="true"/>
+              <param name="series7" type="text" label="Series 7" optional="true"/>
+              <param name="series8" type="text" label="Series 8" optional="true"/>
+              <param name="series9" type="text" label="Series 9" optional="true"/>
+              <param name="series10" type="text" label="Series 10" optional="true"/>
+    </section>
+    </xml>
+
+    <xml name="recallist_param">
+        <param name="input_file" type="data" format="tabular" label="Input data"
+               help= "Input data frame - output from MFAssign or MFAssignCHO."/>
+    </xml>
+
     <xml name="citations">
         <citations>
             <citation type="doi">10.1016/j.envres.2020.110114</citation>
