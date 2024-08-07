@@ -28,9 +28,9 @@
             SN = SN
         )
 
-        write.table(MF_assign[['Unambig']], file = '$Unambig', row.names= FALSE)
-        write.table(MF_assign[['Ambig']], file = '$Ambig', row.names= FALSE)
-        write.table(MF_assign[['None']], file = '$None', row.names= FALSE)
+        write.table(MF_assign[['Unambig']], file = '$Unambig', row.names= FALSE, sep = "\t")
+        write.table(MF_assign[['Ambig']], file = '$Ambig', row.names= FALSE, sep = "\t")
+        write.table(MF_assign[['None']], file = '$None', row.names= FALSE, sep = "\t")
 
         dir.create("plots")
         ggplot2::ggsave(filename = file.path("plots", "msassign.png"), MF_assign[['MSAssign']])
