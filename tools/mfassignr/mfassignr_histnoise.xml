@@ -1,5 +1,5 @@
 <tool id="mfassignr_histnoise" name="MFAssignR HistNoise" version="1.0.3+galaxy0">
-    <description>MFAssignR: Noise level assessment using the HistNoise.</description>
+    <description>Noise level assessment using the HistNoise.</description>
     <macros>
         <import>macros.xml</import>
     </macros>

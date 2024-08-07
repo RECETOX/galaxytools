@@ -1,5 +1,5 @@
 <tool id="mfassignr_mfassign" name="MFAssignR MFAssign" version="1.0.3+galaxy0">
-    <description>MFAssignR: Molecular formula assignment.</description>
+    <description>Molecular formula assignment.</description>
     <macros>
         <import>macros.xml</import>
     </macros>

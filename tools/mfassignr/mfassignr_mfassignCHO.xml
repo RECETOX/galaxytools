@@ -1,5 +1,5 @@
 <tool id="mfassignr_mfassignCHO" name="MFAssignR MFAssignCHO" version="1.0.3+galaxy0">
-    <description>MFAssignR: Molecular formula assignment (only with CHO).</description>
+    <description>Molecular formula assignment (only with CHO).</description>
     <macros>
         <import>macros.xml</import>
     </macros>

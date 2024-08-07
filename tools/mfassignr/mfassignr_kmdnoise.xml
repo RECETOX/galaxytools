@@ -1,5 +1,5 @@
 <tool id="mfassignr_kmdnoise" name="MFAssignR KMDNoise" version="1.0.3+galaxy0">
-    <description>MFAssignR: Noise level assessment using the KMDNoise.</description>
+    <description>Noise level assessment using the KMDNoise.</description>
     <macros>
         <import>macros.xml</import>
     </macros>

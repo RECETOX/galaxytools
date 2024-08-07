@@ -1,5 +1,5 @@
 <tool id="mfassignr_snplot" name="MFAssignR SNplot" version="1.0.3+galaxy0">
-    <description>MFAssignR: Noise level assessment using the SNplot function.</description>
+    <description>Noise level assessment using the SNplot function.</description>
     <macros>
         <import>macros.xml</import>
     </macros>
