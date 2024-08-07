@@ -1,0 +1,34 @@
+<tool id="mfassignr_recallist" name="MFAssignR RecalList" version="1.0.3+galaxy0">
+    <description>Identification of candidate series for recalibration.</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="creator" />
+    <expand macro="requirements" />
+    <command detect_errors="exit_code"><![CDATA[
+        Rscript -e 'source("${run_script}")'
+    ]]></command>
+    <configfiles>
+        <configfile name="run_script"><![CDATA[
+            df <- read.delim("$input_file", sep="\t")
+            recal <- MFAssignR::RecalList(
+                df = df
+            )
+
+            write.table(recal, file = '$recal_series', row.names= FALSE, sep = "\t")
+        ]]></configfile>
+    </configfiles>
+    <inputs>
+        <expand macro="recallist_param"/>
+    </inputs>
+    <outputs>
+        <data name="recal_series" format="tabular" label="Recalibration series"/>
+    </outputs>
+    <tests>
+        <test expect_failure="true"/>
+    </tests>
+    <help><![CDATA[
+todo
+    ]]></help>
+    <expand macro="citations" />
+</tool>

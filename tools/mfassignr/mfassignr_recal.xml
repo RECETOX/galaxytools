@@ -1,0 +1,87 @@
+<tool id="mfassignr_recal" name="MFAssignR Recal" version="1.0.3+galaxy0">
+    <description>Internal Mass Recalibration.</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="creator" />
+    <expand macro="requirements" />
+    <command detect_errors="exit_code"><![CDATA[
+        Rscript -e 'source("${run_script}")'
+    ]]></command>
+    <configfiles>
+        <configfile name="run_script"><![CDATA[
+            df <- read.delim("$input_file", sep="\t")
+            peaks <- read.delim("$peaks", sep="\t")
+            #if $input_iso
+            isopeaks <- read.delim("$isopeaks", sep="\t")
+            #end if
+            SN <- $sn_ratio * $kmdn
+
+        recal <- MFAssignR::Recal(
+            df = df,
+            peaks = peaks,
+            #if $isopeaks
+            isopeaks = isopeaks,
+            #end if
+            mode = "$ionmode",
+            SN = SN,
+            mzRange = $mzRange,
+            step_O = $step_O,
+            step_H2 = $step_H2,
+            CalPeak = $CalPeak,
+            #if $series1
+            series1 = "$series1",
+            #end if
+            #if $series2
+            series2 = "$series2",
+            #end if
+            #if $series3
+            series3 = "$series3",
+            #end if
+            #if $series4
+            series4 = "$series4",
+            #end if
+            #if $series5
+            series5 = "$series5",
+            #end if
+            #if $series6
+            series6 = "$series6",
+            #end if
+            #if $series7
+            series7 = "$series7",
+            #end if
+            #if $series8
+            series8 = "$series8",
+            #end if
+            #if $series9
+            series9 = "$series9",
+            #end if
+            #if $series10
+            series10 = "$series10",
+            #end if
+        )
+
+        write.table(recal[['Mono']], file = '$Mono', row.names= FALSE)
+        write.table(recal[['Iso']], file = '$Iso', row.names= FALSE)
+        write.table(recal[['RecalOut']], file = '$RecalOut', row.names= FALSE)
+        ggplot2::ggsave(filename = "MZplot.png", recal[['MZ']])
+
+        ]]></configfile>
+    </configfiles>
+    <inputs>
+        <expand macro="recal_param"/>
+    </inputs>
+    <outputs>
+        <data name="Mono" format="tabular" label="Recalibrated 'Mono' list"/>
+        <data name="Iso" format="tabular" label="Recalibrated 'Iso' list"/>
+        <data name="RecalOut" format="tabular" label="Recalibrants list (RecalOut)"/>
+        <data name="MZplot" format="png" label="MZ plot" from_work_dir="MZplot.png"/>
+    </outputs>
+    <tests>
+        <test expect_failure="true"/>
+    </tests>
+    <help><![CDATA[
+   td
+    ]]></help>
+    <expand macro="citations" />
+</tool>
