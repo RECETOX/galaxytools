@@ -1,4 +1,4 @@
-<tool id="mfassignr_recal" name="MFAssignR Recal" version="@TOOL_VERSION@+galaxy0">
+<tool id="mfassignr_recal" name="MFAssignR Recal" version="@TOOL_VERSION@+galaxy0" profile="23.0">
     <description>Internal mass recalibration using a recalibrant series.</description>
     <macros>
         <import>macros.xml</import>
