@@ -2,6 +2,7 @@
     <description>Noise level assessment using the SNplot function.</description>
     <macros>
         <import>macros.xml</import>
+        <import>help.xml</import>
     </macros>
     <expand macro="creator" />
     <expand macro="requirements" />
@@ -32,7 +33,9 @@
         <test expect_failure="true"/>
     </tests>
     <help><![CDATA[
-    SNplot function plots the mass spectrum with the S/N cut denoted by different colors for the mass spectrum peaks (red indicates noise, blue indicates signal). This is useful for a qualitative look at the effectiveness of the S/N cut being used.
+        @SNPLOT_HELP@
+
+        @GENERAL_HELP@
     ]]></help>
     <expand macro="citations" />
 </tool>

@@ -2,6 +2,7 @@
     <description>Molecular formula assignment.</description>
     <macros>
         <import>macros.xml</import>
+        <import>help.xml</import>
     </macros>
     <expand macro="creator" />
     <expand macro="requirements" />
@@ -59,7 +60,9 @@
         <test expect_failure="true"/>
     </tests>
     <help><![CDATA[
-    MFAssign function assigns the molecular formula to input dataframe, where the first column is mass, second intensity and third column usually retention time. It can be used to assign MF with 12C, 1H, and 16O and a variety of heteroatoms and isotopes, including 2H, 13C, 14N, 15N, 31P, 32S, 34S, 35Cl, 37Cl, 19F, 79Br, 81Br, and 126I. It can also assign Na+ adducts, which are common in positive ion mode.
+        @MFASSIGN_HELP@
+
+        @GENERAL_HELP@
     ]]></help>
     <expand macro="citations" />
 </tool>

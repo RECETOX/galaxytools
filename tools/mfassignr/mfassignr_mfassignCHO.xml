@@ -2,6 +2,7 @@
     <description>Molecular formula assignment (only with CHO).</description>
     <macros>
         <import>macros.xml</import>
+        <import>help.xml</import>
     </macros>
     <expand macro="creator" />
     <expand macro="requirements" />
@@ -59,7 +60,9 @@
         <test expect_failure="true"/>
     </tests>
     <help><![CDATA[
-    MFAssignCHO is a simplified version of MSAssign funcion, which only assigns MF with CHO elements. It is useful for the prelimiary MF assignments prior to the selection of internal recalibration ions in conjunction with RecalList and Recal.
+        @MFASSIGNCHO_HELP@
+
+        @GENERAL_HELP@
     ]]></help>
     <expand macro="citations" />
 </tool>

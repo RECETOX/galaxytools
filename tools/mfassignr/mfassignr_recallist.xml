@@ -2,6 +2,7 @@
     <description>Identification of candidate series for recalibration.</description>
     <macros>
         <import>macros.xml</import>
+        <import>help.xml</import>
     </macros>
     <expand macro="creator" />
     <expand macro="requirements" />
@@ -29,7 +30,9 @@
         <test expect_failure="true"/>
     </tests>
     <help><![CDATA[
-        RecalList() function identifies the homologous series that could be used for recalibration. On the input, there is the output from MFAssign() or MFAssignCHO() functions. It returns a dataframe that contains the CH2 homologous series that contain more than 3 members.
+        @RECALLIST_HELP@
+
+        @GENERAL_HELP@
     ]]></help>
     <expand macro="citations" />
 </tool>

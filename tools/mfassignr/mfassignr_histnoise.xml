@@ -2,6 +2,7 @@
     <description>Noise level assessment using the HistNoise.</description>
     <macros>
         <import>macros.xml</import>
+        <import>help.xml</import>
     </macros>
     <expand macro="creator" />
     <expand macro="requirements" />
@@ -32,7 +33,9 @@
         <test expect_failure="true"/>
     </tests>
     <help><![CDATA[
- HistNoise function creates a histogram using natural log of the intensity, which can be then used to determine the noise level for the data analyze, and also the estimated noise level. The noise level can be then multiplied by whatever value in order to reach the value to be used to cut the data.
+        @HISTNOISE_HELP@
+
+        @GENERAL_HELP@
     ]]></help>
     <expand macro="citations" />
 </tool>

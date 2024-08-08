@@ -2,6 +2,7 @@
     <description>Internal Mass Recalibration.</description>
     <macros>
         <import>macros.xml</import>
+        <import>help.xml</import>
     </macros>
     <expand macro="creator" />
     <expand macro="requirements" />
@@ -60,9 +61,9 @@
         <test expect_failure="true"/>
     </tests>
     <help><![CDATA[
-        Recal() function recalibrates the 'Mono' and 'Iso' outputs from the IsoFiltR() function and prepares a dataframe containing chose recalibrants. Also it outputs a plot for the qualitative assessment of recalibrants. The input to the function is output from MFAssign() or MFAssignCHO(). 
+        @RECAL_HELP@
 
-        It is important for recalibrant masses to cover the entire mass range of interest, and they should be among the most abundant peaks in their region of the spectrum - by default we take first 10 recalibrant series. We recommend to sort the Recalibration Series table based on the Series Score (largest to smallest). In case that error "Gap in recalibrant coverage, try adding more recalibrant series" would occur, we recommend to provide more diverse series.
+        @GENERAL_HELP@
     ]]></help>
     <expand macro="citations" />
 </tool>
