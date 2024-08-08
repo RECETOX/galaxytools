@@ -41,6 +41,10 @@
         ]]></configfile>
     </configfiles>
     <inputs>
+        <param name="input_mono" type="data" format="tabular" label="Data frame of monoisotopic masses"
+               help= "Data frame containing recalibrated monoisotopic masses, output from the Recal function"/>
+        <param name="input_iso" optional="true" type="data" format="tabular" label="Data frame of isotopic masses"
+               help= "Data frame containing recalibrated isotopic masses, output from the Recal function"/>
         <expand macro="mfassign_param"/>
     </inputs>
     <outputs>

@@ -41,6 +41,10 @@
         ]]></configfile>
     </configfiles>
     <inputs>
+        <param name="input_mono" type="data" format="tabular" label="Data frame of monoisotopic masses"
+               help= "Data frame containing monoisotopic masses, output from the IsoFiltR function"/>
+        <param name="input_iso" optional="true" type="data" format="tabular" label="Data frame of isotopic masses"
+               help= "Data frame containing isotopic masses, output from the IsoFiltR function"/>
         <expand macro="mfassign_param"/>
     </inputs>
     <outputs>
