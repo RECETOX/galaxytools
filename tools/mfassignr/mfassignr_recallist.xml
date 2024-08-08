@@ -1,4 +1,4 @@
-<tool id="mfassignr_recallist" name="MFAssignR RecalList" version="1.0.3+galaxy0">
+<tool id="mfassignr_recallist" name="MFAssignR RecalList" version="@TOOL_VERSION@+galaxy0">
     <description>Identification of candidate series for recalibration.</description>
     <macros>
         <import>macros.xml</import>
