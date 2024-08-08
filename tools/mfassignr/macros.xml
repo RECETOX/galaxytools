@@ -6,11 +6,6 @@
         </requirements>
     </xml>
 
-    <xml name="annotation">
-        <edam_topics>
-               <edam_topic>topic_3172</edam_topic>
-        </edam_topics>
-
     <xml name="refs">
         <xrefs>
                <xref type="bio.tools">mfassignr</xref>
