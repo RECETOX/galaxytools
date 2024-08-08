@@ -101,7 +101,7 @@
                help= "Input data frame, the output from MFAssign or MFAssignCHO"/>
         <param name="peaks" type="data" format="tabular" label="Peaks dataframe (Mono from IsoFiltR)"
                help= "Peaks data frame, the Mono output from IsoFiltR"/>              
-        <param name="isopeaks" type="data" format="tabular" label="Isopeaks dataframe (Iso from IsoFiltR)"            optional="true" help= "Isoeaks data frame, the Mono output from IsoFiltR"/>
+        <param name="isopeaks" type="data" format="tabular" label="Isopeaks dataframe (Iso from IsoFiltR)"            optional="true" help= "Isopeaks data frame, the Mono output from IsoFiltR"/>
         <expand macro="ionmode_param" />
         <expand macro="noise_threshold_params" />
         <param name="mzRange" type="float" label="Mass windows used for the segmented recalibration" value="30"
