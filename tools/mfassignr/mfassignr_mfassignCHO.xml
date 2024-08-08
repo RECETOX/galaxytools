@@ -1,4 +1,14 @@
 <tool id="mfassignr_mfassignCHO" name="MFAssignR MFAssignCHO" version="1.0.3+galaxy0">
+    <edam_topics>
+        <edam_topic>topic_3172</edam_topic>    
+    </edam_topics>
+    <edam_data>  
+        <edam_data>data_2536</edam_data>    
+        <edam_data>data_0943</edam_data>    
+    </edam_data>
+    <edam_operations>  
+        <edam_operation>operation_2940</edam_operation>    
+    </edam_operations>
     <description>Molecular formula assignment (only with CHO).</description>
     <macros>
         <import>macros.xml</import>

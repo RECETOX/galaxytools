@@ -1,4 +1,11 @@
 <tool id="mfassignr_histnoise" name="MFAssignR HistNoise" version="1.0.3+galaxy0">
+    <edam_topics>
+        <edam_topic>topic_3172</edam_topic>    
+    </edam_topics>
+    <edam_data>
+        <edam_data>data_3905</edam_data>   
+        <edam_data>data_2536</edam_data>    
+    </edam_data>
     <description>Noise level assessment using the HistNoise.</description>
     <macros>
         <import>macros.xml</import>
