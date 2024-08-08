@@ -1,12 +1,12 @@
 <tool id="mfassignr_mfassign" name="MFAssignR MFAssign" version="1.0.3+galaxy0">
-    <edam_topics>
-        <edam_topic>topic_3172</edam_topic>    
-    </edam_topics>
     <description>Molecular formula assignment.</description>
     <macros>
         <import>macros.xml</import>
         <import>help.xml</import>
     </macros>
+    <edam_topics>
+        <edam_topic>topic_3172</edam_topic>    
+    </edam_topics>
     <expand macro="creator" />
     <expand macro="requirements" />
     <command detect_errors="exit_code"><![CDATA[

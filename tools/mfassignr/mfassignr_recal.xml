@@ -1,15 +1,15 @@
 <tool id="mfassignr_recal" name="MFAssignR Recal" version="1.0.3+galaxy0">
+    <description>Internal mass recalibration using a recalibrant series.</description>
+    <macros>
+        <import>macros.xml</import>
+        <import>help.xml</import>
+    </macros>
     <edam_topics>
         <edam_topic>topic_3172</edam_topic>    
     </edam_topics>
     <edam_operations>  
         <edam_operation>operation_3627</edam_operation>  
     </edam_operations>
-    <description>Internal Mass Recalibration.</description>
-    <macros>
-        <import>macros.xml</import>
-        <import>help.xml</import>
-    </macros>
     <expand macro="creator" />
     <expand macro="requirements" />
     <command detect_errors="exit_code"><![CDATA[
