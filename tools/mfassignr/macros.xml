@@ -86,10 +86,6 @@
     </xml>
 
     <xml name="mfassign_param">
-        <param name="input_mono" type="data" format="tabular" label="Data frame of monoisotopic masses"
-               help= "Input data frame, first column is mass, second column is intensity"/>
-        <param name="input_iso" optional="true" type="data" format="tabular" label="Data frame of isotopic masses"
-               help= "Data frame containing isotopic masses, output from the IsoFiltR function"/>
         <param name="ppm_err" type="integer" label="ppm_err"
                help= "Error tolerance (ppm) for formula assignment" value="3"/>
         <expand macro="ionmode_param" />
@@ -101,11 +97,11 @@
     </xml>
 
     <xml name="recal_param">
-        <param name="input_file" type="data" format="tabular" label="Input data (Output from MFAssign())"
-               help= "Input data frame, the output from MFAssign() or MFAssignCHO()"/>
-        <param name="peaks" type="data" format="tabular" label="Peaks dataframe (Mono from IsoFiltR())"
+        <param name="input_file" type="data" format="tabular" label="Input data (Output from MFAssign)"
+               help= "Input data frame, the output from MFAssign or MFAssignCHO"/>
+        <param name="peaks" type="data" format="tabular" label="Peaks dataframe (Mono from IsoFiltR)"
                help= "Peaks data frame, the Mono output from IsoFiltR"/>              
-        <param name="isopeaks" type="data" format="tabular" label="Isopeaks dataframe (Iso from IsoFiltR())"            optional="true" help= "Isoeaks data frame, the Mono output from IsoFiltR"/>
+        <param name="isopeaks" type="data" format="tabular" label="Isopeaks dataframe (Iso from IsoFiltR)"            optional="true" help= "Isoeaks data frame, the Mono output from IsoFiltR"/>
         <expand macro="ionmode_param" />
         <expand macro="noise_threshold_params" />
         <param name="mzRange" type="float" label="Mass windows used for the segmented recalibration" value="30"
@@ -115,8 +111,8 @@
         <param name="step_H2" type="float" label="Number of H2 steps for formula extension" value="5"
                help= "Number of H2 steps for formula extension"/>
          <param name="CalPeak" type="float" label="Maximum allowed recalibrant peaks per mzRange defined segment" value="150" help= "Maximum allowed recalibrant peaks per mzRange defined segment"/>      
-        <param name="series" type="data" format="tabular" label="Calibration series (Output from RecalList())"
-               help= "Calibration series (Output from RecalList()). At maximum the first 10 rows are used."/>
+        <param name="series" type="data" format="tabular" label="Calibration series (Output from RecalList)"
+               help= "Calibration series (Output from RecalList). At maximum the first 10 rows are used."/>
     </xml>
     <xml name="citations">
         <citations>
