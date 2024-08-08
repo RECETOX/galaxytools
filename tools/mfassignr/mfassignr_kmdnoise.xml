@@ -32,7 +32,7 @@
     </inputs>
     <outputs>
         <data name="Noise" format="txt" label="Noise level estimate by ${tool.name} on ${on_string}"/>
-        <data name="KMD_plot" format="png" label="KMD plot" from_work_dir="KMDplot.png"/>
+        <data name="KMD_plot" format="png" label="KMD plot by ${tool.name} on ${on_string}" from_work_dir="KMDplot.png"/>
     </outputs>
     <tests>
         <test expect_failure="true"/>

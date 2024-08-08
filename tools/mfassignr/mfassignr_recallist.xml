@@ -23,7 +23,7 @@
                help= "Input data frame - output from MFAssign or MFAssignCHO. Recommended are 'Unambiguous' assignments."/>
     </inputs>
     <outputs>
-        <data name="recal_series" format="tabular" label="Recalibration series"/>
+        <data name="recal_series" format="tabular" label="Recalibration series by ${tool.name} on ${on_string}"/>
     </outputs>
     <tests>
         <test expect_failure="true"/>
