@@ -14,7 +14,7 @@
 
     <expand macro="requirements" />
     <command detect_errors="exit_code"><![CDATA[
-        Rscript '${run_script}'
+        Rscript '${mfassignr_isofiltr}'
     ]]>
     </command>
     <configfiles>
