@@ -59,7 +59,7 @@
     </xml>
 
     <xml name="noise_threshold_params">
-       <param name="sn_ratio" type="float" label="SN ratio" value="1"
+       <param name="sn_ratio" type="float" label="SN ratio" value="6"
                help= "Noise multiplier. Recommended value is 6."/>
         <param name="kmdn" type="float" label="Estimated noise" value="0"
                help= "Estimated noise, either from the KMDNoise or HistNoise function."/>
