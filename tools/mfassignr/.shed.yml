@@ -1,0 +1,17 @@
+name: MFAssignR
+owner: recetox
+remote_repository_url: "https://github.com/RECETOX/galaxytools/tree/master/tools/mfassignr"
+homepage_url: "https://github.com/RECETOX/MFAssignR"
+categories:
+  - Metabolomics
+description: "The MFAssignR package was designed for multi-element molecular formula (MF) assignment of ultrahigh resolution mass spectrometry measurements"
+long_description: |
+ "The MFAssignR package was designed for multi-element molecular formula (MF) assignment of ultrahigh resolution mass spectrometry measurements. 
+ A number of tools for internal mass recalibration, MF assignment, signal-to-noise evaluation, and unambiguous MF assignments are provided. "
+auto_tool_repositories:
+  name_template: "{{ tool_id }}"
+  description_template: "{{ tool_name }} tool from the MFAssignR package"
+suite:
+  name: suite_mfassignr
+  description: tools from MFAssignR are used for multi-element molecular formula (MF) assignment of ultrahigh resolution mass spectrometry measurements.
+  type: repository_suite_definition
