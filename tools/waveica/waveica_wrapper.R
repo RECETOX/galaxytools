@@ -194,6 +194,7 @@ enumerate_groups <- function(group) {
     group[grepl("blank", tolower(group))] <- 0
     group[grepl("sample", tolower(group))] <- 1
     group[grepl("qc", tolower(group))] <- 2
+    group[grepl("standard", tolower(group))] <- 3
 
     return(group)
 }

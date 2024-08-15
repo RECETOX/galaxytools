@@ -1,0 +1,67 @@
+<tool id="mfassignr_isofiltr" name="MFAssignR IsoFiltR" version="@TOOL_VERSION@+galaxy1" profile="23.0">
+    <description>Separates likely isotopic masses from monoisotopic masses in a mass list</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <edam_topics>
+        <edam_topic>topic_3172</edam_topic>    
+    </edam_topics>
+    <edam_operations>  
+        <edam_operation>operation_3629</edam_operation>  
+    </edam_operations>
+    <expand macro="creator" />
+    <expand macro="refs" />
+
+    <expand macro="requirements" />
+    <command detect_errors="exit_code"><![CDATA[
+        Rscript '${mfassignr_isofiltr}'
+    ]]>
+    </command>
+    <configfiles>
+        <configfile name="mfassignr_isofiltr"><![CDATA[
+            peaks <- read.table("$peaks", header=TRUE, sep="\t")
+            result <- MFAssignR::IsoFiltR(
+                peaks = peaks,
+                SN = $SN,
+                Carbrat = $Carbrat,
+                Sulfrat = $Sulfrat,
+                Sulferr = $Sulferr,
+                Carberr = $Carberr
+            )
+            
+            write.table(result[["Mono"]], file="$mono_out", sep="\t", row.names=FALSE)
+            write.table(result[["Iso"]], file="$iso_out", sep="\t", row.names=FALSE)
+        ]]></configfile>
+    </configfiles>
+    <inputs>
+        <expand macro="isofiltr_param"/>
+    </inputs>
+    <outputs>
+        <data name="mono_out" format="tabular" label="Monoisotopic Masses"/>
+        <data name="iso_out" format="tabular" label="Isotopic Masses"/>
+    </outputs>
+    <tests>
+        <test>
+            <param name="peaks" value="QC1_1_POS_500.tabular" ftype="tabular"/>
+            <output name="mono_out" file="isofiltr/mono_out.tabular" ftype="tabular"/>
+            <output name="iso_out" file="isofiltr/iso_out.tabular" ftype="tabular"/>
+        </test>
+    </tests>
+    <help>
+        IsoFiltR identifies and separates likely isotopic masses from monoisotopic masses in a mass list. 
+        This should be done prior to formula assignment to reduce incorrect formula assignments.
+        
+        The input is a table containing abundance and peak mass in the following format:
+
+        +--------------------+-------------------+------------------------+
+        | mz                 | area              | rt                     |
+        +====================+===================+========================+
+        | 110.03486266079899 | 3410926.862054969 | 190.03735922916195     |
+        +--------------------+-------------------+------------------------+
+        | 110.05988136843429 | 7658687.858       | 241.17645551084158     |
+        +--------------------+-------------------+------------------------+
+        | ...                | ...               | ...                    |
+        +--------------------+-------------------+------------------------+
+    </help>
+    <expand macro="citations"/>
+</tool>

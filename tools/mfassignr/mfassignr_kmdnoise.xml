@@ -1,0 +1,65 @@
+<tool id="mfassignr_kmdnoise" name="MFAssignR KMDNoise" version="@TOOL_VERSION@+galaxy0" profile="23.0">
+    <description>Noise level assessment using the KMDNoise.</description>
+    <macros>
+        <import>macros.xml</import>
+        <import>help.xml</import>
+    </macros>
+    <edam_topics>
+        <edam_topic>topic_3172</edam_topic>    
+    </edam_topics>
+    <edam_operations>  
+        <edam_operation>operation_2940</edam_operation>    
+    </edam_operations>
+    <expand macro="creator" />
+    <expand macro="requirements" />
+    <command detect_errors="exit_code"><![CDATA[
+        Rscript '${run_script}'
+    ]]></command>
+    <configfiles>
+        <configfile name="run_script"><![CDATA[
+        df <- read.delim("$input_file", sep="\t")
+        names(df)[c(1,2)] <- c("mass", "intensity")
+        assess_noise <- MFAssignR::KMDNoise(
+            df = df,
+            upper.y = $upper_y,
+            lower.y = $lower_y,
+            #if $upper_x
+            upper.x = $upper_x,
+            #end if
+            #if $lower_x
+            lower.x = $lower_x
+            #end if
+        )
+        noise <- assess_noise[['Noise']]
+        write.table(noise, file = '$Noise', row.names= FALSE, col.names = FALSE)
+        ggplot2::ggsave(filename = "KMDplot.png", assess_noise[['KMD']])
+        ]]></configfile>
+    </configfiles>
+    <inputs>
+        <expand macro="kmdnoise_param"/>
+    </inputs>
+    <outputs>
+        <data name="Noise" format="txt" label="Noise level estimate by ${tool.name} on ${on_string}"/>
+        <data name="KMD_plot" format="png" label="KMD plot by ${tool.name} on ${on_string}" from_work_dir="KMDplot.png"/>
+    </outputs>
+    <tests>
+        <test>
+            <param name="input_file" value="QC1_1_POS_500.tabular" />
+            <output name="Noise" ftype="txt">
+                <assert_contents>
+                    <has_text text="3294705.63963789" />
+                </assert_contents>
+            </output>
+            <output name="KMD_plot" ftype="png">
+                <assert_contents>
+                    <has_size size="1164615" delta="200"/>
+                </assert_contents>
+            </output>
+        </test>    </tests>
+    <help><![CDATA[
+        @KMDNOISE_HELP@
+
+        @GENERAL_HELP@
+    ]]></help>
+    <expand macro="citations" />
+</tool>
