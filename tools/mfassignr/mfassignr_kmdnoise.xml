@@ -18,6 +18,7 @@
     <configfiles>
         <configfile name="run_script"><![CDATA[
         df <- read.delim("$input_file", sep="\t")
+        names(df)[c(1,2)] <- c("mass", "intensity")
         assess_noise <- MFAssignR::KMDNoise(
             df = df,
             upper.y = $upper_y,
@@ -42,8 +43,15 @@
         <data name="KMD_plot" format="png" label="KMD plot by ${tool.name} on ${on_string}" from_work_dir="KMDplot.png"/>
     </outputs>
     <tests>
-        <test expect_failure="true"/>
-    </tests>
+        <test>
+            <param name="input_file" value="QC1_1_POS_500.tabular" />
+            <output name="Noise" ftype="txt">
+                <assert_contents>
+                    <has_text text="3294705.63963789" />
+                </assert_contents>
+            </output>
+            <output name="KMD_plot" ftype="png" file="kmdnoise/plot.png"/>
+        </test>    </tests>
     <help><![CDATA[
         @KMDNOISE_HELP@
 

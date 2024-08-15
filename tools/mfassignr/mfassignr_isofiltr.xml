@@ -43,8 +43,8 @@
     <tests>
         <test>
             <param name="peaks" value="QC1_1_POS_500.tabular" ftype="tabular"/>
-            <output name="mono_out" file="isofiltr_output1.tabular" ftype="tabular"/>
-            <output name="iso_out" file="isofiltr_output2.tabular" ftype="tabular"/>
+            <output name="mono_out" file="isofiltr/mono_out.tabular" ftype="tabular"/>
+            <output name="iso_out" file="isofiltr/iso_out.tabular" ftype="tabular"/>
         </test>
     </tests>
     <help>

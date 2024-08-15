@@ -63,7 +63,52 @@
         </collection>
     </outputs>
     <tests>
-        <test expect_failure="true"/>
+        <test>
+            <param name="input_mono" value="isofiltr/mono_out.tabular"/>
+            <param name="input_iso" value="isofiltr/iso_out.tabular"/>
+            <param name="kmdn" value="3294705.63963789"/>
+            <output name="Unambig">
+                <assert_contents>
+                    <has_n_lines n="1331"/>
+                    <has_n_columns n="53"/>
+                </assert_contents>
+            </output>
+            <output name="Ambig">
+                <assert_contents>
+                    <has_n_lines n="1"/>
+                    <has_n_columns n="53"/>
+                </assert_contents>
+            </output>
+            <output name="None">
+                <assert_contents>
+                    <has_n_lines n="5078"/>
+                    <has_n_columns n="3"/>
+                </assert_contents>
+            </output>
+            <output_collection name="plots" type="list" count="4">
+                <element name="MSgroups">
+                    <assert_contents>
+                        <has_size size="146606" delta="100"/>
+                    </assert_contents>
+                </element>
+                <element name="VK">
+                    <assert_contents>
+                        <has_size size="398282" delta="100"/>
+                    </assert_contents>
+                </element>
+                <element name="errorMZ">
+                    <assert_contents>
+                        <has_size size="551073" delta="100"/>
+                    </assert_contents>
+                </element>
+                <element name="msassign">
+                    <assert_contents>
+                        <has_size size="84597" delta="100"/>
+                    </assert_contents>
+                </element>
+
+            </output_collection>
+        </test>
     </tests>
     <help><![CDATA[
         @MFASSIGNCHO_HELP@
