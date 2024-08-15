@@ -67,12 +67,7 @@
             <param name="input_mono" value="isofiltr/mono_out.tabular"/>
             <param name="input_iso" value="isofiltr/iso_out.tabular"/>
             <param name="kmdn" value="3294705.63963789"/>
-            <output name="Unambig">
-                <assert_contents>
-                    <has_n_lines n="1331"/>
-                    <has_n_columns n="53"/>
-                </assert_contents>
-            </output>
+            <output name="Unambig" file="mfassigncho/unambig.tabular"/>
             <output name="Ambig">
                 <assert_contents>
                     <has_n_lines n="1"/>
@@ -106,7 +101,6 @@
                         <has_size size="84597" delta="100"/>
                     </assert_contents>
                 </element>
-
             </output_collection>
         </test>
     </tests>
