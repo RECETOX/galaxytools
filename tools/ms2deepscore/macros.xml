@@ -1,0 +1,146 @@
+<macros>
+    <token name="@TOOL_VERSION@">2.0.0</token>
+
+    <xml name="creator">
+        <creator>
+            <person
+                givenName="Zargham"
+                familyName="Ahmad"
+                url="https://github.com/zargham-ahmad"
+                identifier="0000-0002-6096-224X" />
+            <organization
+                url="https://www.recetox.muni.cz/"
+                email="GalaxyToolsDevelopmentandDeployment@space.muni.cz"
+                name="RECETOX MUNI" />
+        </creator>
+    </xml>
+
+    <xml name="edam">
+        <xrefs>
+            <xref type="bio.tools">ms2deepscore</xref>
+        </xrefs>
+    </xml>
+
+    <xml name="input_param">
+        <conditional name="scores">
+            <param name="use_scores" label="Use Scores Object" type="select">
+                <option value="False" selected="true">FALSE</option>
+                <option value="True">TRUE</option>
+            </param>
+            <when value="True">
+                <param label="Scores object" name="scores_in" type="data" format="json"
+                    help="Scores objects calculated previously using one of the matchms similarity tools." />
+            </when>
+            <when value="False">
+                <param label="Queries spectra" name="queries" type="data" format="msp"
+                    help="Query mass spectra to match against references."/>
+                <param label="Reference spectra" name="references" type="data" format="msp"
+                    help="Reference mass spectra to match against as library."/>
+            </when>
+        </conditional>
+        <param name="model" type="data" format="onnx" label="Pre-trained Model">
+            <help>Select the pre-trained MS2DeepScore model file (onnx format)</help>
+        </param>
+        <param name="model_param" type="data" format="json" label="Model Parameter">
+            <help>Select the pre-trained MS2DeepScore model Parameter</help>
+        </param>
+    </xml>
+
+    <xml name="training_param">
+        <param label="Spectra File" name="spectra" type="data" format="msp,mgf"
+            help="Spectra file that should be used for training. (it will be split in train, val and test)"/>
+        <param name="model_param" type="data" format="json" label="Model Settings" help="json file with the MS2Deepscore model settings."/>
+        <param name="validation_split_fraction" type="integer" min="0" max="100" value="20" label="Validation split fraction" 
+            help="The fraction of the inchikeys that will be used for validation and test"/>
+    </xml>
+
+    <xml name="config_generator">
+        <section name="model_structure" title="Model Structure" expanded="true">
+            <param name="base_dims" type="text" label="Base Dimensions" value="2000,2000,2000" help="The in between layers to be used." />
+            <param name="embedding_dim" type="integer" label="Embedding Dimension" value="400" help="The dimension of the final embedding." />
+            <param name="ionisation_mode" type="select" label="Ionisation Mode">
+                <option value="positive" selected="true">Positive</option>
+                <option value="negative">Negative</option>
+                <option value="both">Both</option>
+            </param>
+        </section>
+        
+        <section name="training_settings" title="Training Settings" expanded="true">
+            <param name="dropout_rate" type="float" label="Dropout Rate" value="0.0" />
+            <param name="learning_rate" type="float" label="Learning Rate" value="0.00025" />
+            <param name="epochs" type="integer" label="Epochs" value="250" />
+            <param name="patience" type="integer" label="Patience" value="20" help="How long the model should keep training if validation does not improve" />
+            <param name="loss_function" type="select" label="Loss Function">
+                <option value="mse" selected="true">Mean Squared Error (mse)</option>
+                <option value="mae">Mean Absolute Error (mae)</option>
+                <option value="rmse">Root Mean Squared Error (rmse)</option>
+                <option value="risk_mae">Risk Aware MAE (risk_aware_mae)</option>
+                <option value="risk_mse">Risk Aware MSE (risk_aware_mse)</option>
+            </param>
+            <param name="weighting_factor" type="integer" label="Weighting Factor" value="0" />
+        </section>
+        
+        <section name="tensorization_settings" title="Tensorization Settings" expanded="true">
+            <param name="min_mz" type="integer" label="Min m/z" value="10" />
+            <param name="max_mz" type="integer" label="Max m/z" value="1000" />
+            <param name="mz_bin_width" type="float" label="m/z Bin Width" value="0.1" />
+            <param name="intensity_scaling" type="float" label="Intensity Scaling" value="0.5" />
+        </section>
+
+        <section name="data_generator_settings" title="Data generator settings" expanded="true">
+            <param name="batch_size" type="integer" value="32" label="Batch Size" help="Number of pairs per batch" />
+        </section>
+
+        <section name="compound_pairs_selection_settings" title="Compound pairs selection settings" expanded="true">
+            <param name="average_pairs_per_bin" type="integer" value="20" label="Average pairs per bin" help="The aimed average number of pairs of spectra per spectrum in each bin." />
+            <param name="random_seed" type="text" label="Random seed" value="None" help="Specify random seed for reproducible random number generation." />
+        </section>
+        
+        <section name="tanimoto_score_settings" title="Tanimoto Score Settings" expanded="true">
+            <param name="fingerprint_type" type="text" value="daylight" label="Fingerprint Type" help="The fingerprint type that should be used for tanimoto score calculations." />
+            <param name="fingerprint_nbits" type="integer" label="Fingerprint Number of Bits" value="2048" help="The number of bits to use for the fingerprint." />
+        </section>
+    </xml>
+
+    <xml name="citations">
+        <citations>
+            <citation type="doi">https://doi.org/10.1186/s13321-021-00558-4</citation>
+            <citation type="doi">https://doi.org/10.1101/2024.03.25.586580</citation>
+        </citations>
+    </xml>
+
+<token name="@init_scores@">
+from matchms.importing import load_from_msp, scores_from_json
+from matchms import Scores
+#if $scores.use_scores == "True"
+scores = scores_from_json("${scores_in}")
+#else
+scores = Scores(references=list(load_from_msp("$references")), queries=list(load_from_msp("$queries")), is_symmetric=False)
+#end if
+</token>
+        
+<token name="@init_logger@">
+from matchms import set_matchms_logger_level
+set_matchms_logger_level("WARNING")
+</token>
+
+<token name="@json_load@">
+import numpy as np
+import json
+
+with open("$model_param", 'r') as json_file:
+    model_params = json.load(json_file)
+
+# Conditionally convert specific keys if they are present
+if 'base_dims' in model_params:
+    model_params['base_dims'] = tuple(model_params['base_dims'])
+
+if 'same_prob_bins' in model_params:
+    model_params['same_prob_bins'] = np.array(model_params['same_prob_bins'])
+
+if 'additional_metadata' in model_params:
+    model_params['additional_metadata'] = [
+        (entry[0], entry[1]) for entry in model_params['additional_metadata']
+    ]
+</token>
+</macros>

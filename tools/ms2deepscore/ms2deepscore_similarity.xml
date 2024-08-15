@@ -1,0 +1,74 @@
+<tool id="ms2deepscore_similarity" name="MS2DeepScore Similarity" version="@TOOL_VERSION@+galaxy0">
+    <description>Compute similarity scores using a pre-trained MS2DeepScore model</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="creator"/>
+    <expand macro="edam" />
+
+    <requirements>
+        <requirement type="package" version="@TOOL_VERSION@">ms2deepscore</requirement>
+        <requirement type="package" version="1.16.2">onnx</requirement>
+    </requirements>
+    
+    <command detect_errors="exit_code"><![CDATA[
+        python3 ${python_wrapper}
+    ]]></command>
+<configfiles>
+<configfile name="python_wrapper">
+@init_logger@
+
+import onnx
+import torch
+from ms2deepscore import MS2DeepScore
+from ms2deepscore.models.SiameseSpectralModel import SiameseSpectralModel
+from ms2deepscore.SettingsMS2Deepscore import SettingsMS2Deepscore
+
+onnx_model = onnx.load("$model")
+
+# Extract the initializers (weights and biases)
+initializers = {init.name: onnx.numpy_helper.to_array(init) for init in onnx_model.graph.initializer}
+
+# Convert NumPy arrays to PyTorch tensors
+state_dict = {name: torch.tensor(np_array) for name, np_array in initializers.items()}
+
+@json_load@
+
+model = SiameseSpectralModel(settings=SettingsMS2Deepscore(**model_params))
+model.load_state_dict(state_dict)
+model.eval()
+
+similarity = MS2DeepScore(model)
+name="MS2DeepScore_similarity_scores"
+
+@init_scores@
+
+layer = similarity.sparse_array(
+    references=scores.references,
+    queries=scores.queries,
+    idx_row = scores._scores.row,
+    idx_col = scores._scores.col,
+    is_symmetric=False)
+
+scores._scores.add_sparse_data(scores._scores.row, scores._scores.col, layer, name)
+
+scores.filter_by_range(name=name, low=0)
+scores.to_json("$similarity_scores")
+</configfile>
+</configfiles>
+    
+    <inputs>
+        <expand macro="input_param" />
+    </inputs>
+    
+    <outputs>
+        <data label="ms2deepscore scores of ${on_string}" name="similarity_scores" format="json"/>
+    </outputs>
+    
+    <help>
+        ms2deepscore provides a Siamese neural network that is trained to predict molecular structural 
+        similarities (Tanimoto scores) from pairs of mass spectrometry spectra.
+    </help>
+    
+    <expand macro="citations"/>
+</tool>
