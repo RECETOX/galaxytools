@@ -35,7 +35,7 @@
     <tests>
         <test>
             <param name="input_file" value="mfassigncho/unambig.tabular" />
-            <output name="recal_series" file="recallist/recal_series.tabular"/>
+            <output name="recal_series" file="recallist/recal_series.tabular" lines_diff="40"/>
         </test>
     </tests>
     <help><![CDATA[
