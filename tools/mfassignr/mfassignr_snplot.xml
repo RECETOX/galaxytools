@@ -1,0 +1,48 @@
+<tool id="mfassignr_snplot" name="MFAssignR SNplot" version="@TOOL_VERSION@+galaxy0" profile="23.0">
+    <description>Noise level assessment using the SNplot function.</description>
+    <macros>
+        <import>macros.xml</import>
+        <import>help.xml</import>
+    </macros>
+    <edam_topics>
+        <edam_topic>topic_3172</edam_topic>    
+    </edam_topics>
+    <expand macro="creator"/>
+    <expand macro="requirements" />
+    <command detect_errors="exit_code"><![CDATA[
+        Rscript '${run_script}'
+    ]]></command>
+    <configfiles>
+        <configfile name="run_script"><![CDATA[
+        SNplot <- MFAssignR::SNplot(
+            df = read.delim("$input_file", sep="\t"),
+            cut = $cut,
+            mass = $mass,
+            window.x = $window_x,
+            window.y = $window_y
+        )
+
+        ggplot2::ggsave(filename = "SNplot.png", SNplot)
+        ]]></configfile>
+    </configfiles>
+    <inputs>
+        <expand macro="snplot_param"/>
+    </inputs>
+    <outputs>
+        <data name="SNplot" format="png" label="SNplot by ${tool.name} on ${on_string}" from_work_dir="SNplot.png"/>
+    </outputs>
+    <tests>
+        <test>
+            <param name="input_file" value="QC1_1_POS_500.tabular"/>
+            <param name="cut" value="3294705.63963789"/>
+            <param name="mass" value="300"/>
+            <output name="SNplot" ftype="png" file="snplot/plot.png" />
+        </test>
+    </tests>
+    <help><![CDATA[
+        @SNPLOT_HELP@
+
+        @GENERAL_HELP@
+    ]]></help>
+    <expand macro="citations" />
+</tool>

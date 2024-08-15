@@ -1,0 +1,53 @@
+<tool id="mfassignr_histnoise" name="MFAssignR HistNoise" version="@TOOL_VERSION@+galaxy0" profile="23.0">
+    <description>Noise level assessment using the HistNoise</description>
+    <macros>
+        <import>macros.xml</import>
+        <import>help.xml</import>
+    </macros>
+    <edam_topics>
+        <edam_topic>topic_3172</edam_topic>    
+    </edam_topics>
+    <expand macro="creator" />
+    <expand macro="requirements" />
+    <command detect_errors="exit_code"><![CDATA[
+        Rscript '${run_script}'
+    ]]></command>
+    <configfiles>
+        <configfile name="run_script"><![CDATA[
+        df <- read.delim("$input_file", sep="\t")
+        assess_noise <- MFAssignR::HistNoise(
+            df = df,
+            SN = $SN,
+            bin = $bin
+        )
+        noise <- assess_noise[['Noise']]
+        write.table(noise, file = '$Noise', row.names= FALSE, col.names = FALSE)
+        ggplot2::ggsave(filename = "histplot.png", assess_noise[['Hist']])
+        ]]></configfile>
+    </configfiles>
+    <inputs>
+        <expand macro="histnoise_param"/>
+    </inputs>
+    <outputs>
+        <data name="Noise" format="txt" label="Noise level estimate by ${tool.name} on ${on_string}"/>
+        <data name="Hist_plot" format="png" label="Histogram plot by ${tool.name} on ${on_string}" from_work_dir="histplot.png"/>
+    </outputs>
+    <tests>
+        <test>
+            <param name="input_file" value="QC1_1_POS_500.tabular" />
+            <output name="Noise" ftype="txt">
+                <assert_contents>
+                    <has_text text="674849323.854921" />
+                </assert_contents>
+            </output>
+            <output name="Hist_plot" ftype="png" file="histnoise/plot.png">
+            </output>
+        </test>
+    </tests>
+    <help><![CDATA[
+        @HISTNOISE_HELP@
+
+        @GENERAL_HELP@
+    ]]></help>
+    <expand macro="citations" />
+</tool>
