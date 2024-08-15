@@ -50,7 +50,11 @@
                     <has_text text="3294705.63963789" />
                 </assert_contents>
             </output>
-            <output name="KMD_plot" ftype="png" file="kmdnoise/plot.png"/>
+            <output name="KMD_plot" ftype="png">
+                <assert_contents>
+                    <has_size size="1164615" delta="200"/>
+                </assert_contents>
+            </output>
         </test>    </tests>
     <help><![CDATA[
         @KMDNOISE_HELP@
