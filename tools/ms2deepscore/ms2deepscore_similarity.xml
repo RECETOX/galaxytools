@@ -8,7 +8,7 @@
 
     <requirements>
         <requirement type="package" version="@TOOL_VERSION@">ms2deepscore</requirement>
-        <requirement type="package" version="1.16.2">onnx</requirement>
+        <requirement type="package" version="@ONNX_VERSION@">onnx</requirement>
     </requirements>
     
     <command detect_errors="exit_code"><![CDATA[
@@ -66,9 +66,9 @@ scores.to_json("$similarity_scores")
     </outputs>
     
     <help>
-        ms2deepscore provides a Siamese neural network that is trained to predict molecular structural 
-        similarities (Tanimoto scores) from pairs of mass spectrometry spectra.
-    </help>
-    
+<![CDATA[
+@HELP@
+]]>
+    </help>   
     <expand macro="citations"/>
 </tool>

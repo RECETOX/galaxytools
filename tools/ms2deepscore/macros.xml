@@ -1,5 +1,6 @@
 <macros>
     <token name="@TOOL_VERSION@">2.0.0</token>
+    <token name="@ONNX_VERSION@">1.16.2</token>
 
     <xml name="creator">
         <creator>
@@ -38,26 +39,24 @@
                     help="Reference mass spectra to match against as library."/>
             </when>
         </conditional>
-        <param name="model" type="data" format="onnx" label="Pre-trained Model">
-            <help>Select the pre-trained MS2DeepScore model file (onnx format)</help>
-        </param>
-        <param name="model_param" type="data" format="json" label="Model Parameter">
-            <help>Select the pre-trained MS2DeepScore model Parameter</help>
-        </param>
+        <param name="model" type="data" format="onnx" label="Model" 
+            help="Select the trained MS2DeepScore model file (onnx format) in the ONNX format as created by the 'MS2DeepScore Training' tool."/>
+        <param name="model_param" type="data" format="json" label="Configuration"
+            help="Select the MS2DeepScore model configurations  in JSON format. Can be created using the 'MS2DeepScore Config Generator' tool."/>
     </xml>
 
     <xml name="training_param">
-        <param label="Spectra File" name="spectra" type="data" format="msp,mgf"
-            help="Spectra file that should be used for training. (it will be split in train, val and test)"/>
+        <param label="Training Dataset" name="spectra" type="data" format="msp,mgf"
+            help="Spectra file that should be used for training. (it will be split in training, validation and test sets)."/>
         <param name="model_param" type="data" format="json" label="Model Settings" help="json file with the MS2Deepscore model settings."/>
-        <param name="validation_split_fraction" type="integer" min="0" max="100" value="20" label="Validation split fraction" 
+        <param name="validation_split_fraction" type="integer" min="0" max="100" value="20" label="Validation split fraction [%]" 
             help="The fraction of the inchikeys that will be used for validation and test"/>
     </xml>
 
     <xml name="config_generator">
         <section name="model_structure" title="Model Structure" expanded="true">
             <param name="base_dims" type="text" label="Base Dimensions" value="2000,2000,2000" help="The in between layers to be used." />
-            <param name="embedding_dim" type="integer" label="Embedding Dimension" value="400" help="The dimension of the final embedding." />
+            <param name="embedding_dim" type="integer" label="Embedding Dimension" value="400" help="The dimension of the final embedding layer." />
             <param name="ionisation_mode" type="select" label="Ionisation Mode">
                 <option value="positive" selected="true">Positive</option>
                 <option value="negative">Negative</option>
@@ -65,7 +64,19 @@
             </param>
         </section>
         
-        <section name="training_settings" title="Training Settings" expanded="true">
+        <section name="tensorization_settings" title="Tensorization Settings" expanded="true">
+            <param name="min_mz" type="integer" label="Min m/z" value="10" />
+            <param name="max_mz" type="integer" label="Max m/z" value="1000" />
+            <param name="mz_bin_width" type="float" label="m/z Bin Width" value="0.1" />
+            <param name="intensity_scaling" type="float" label="Intensity Scaling" value="0.5" />
+        </section>
+                
+        <section name="tanimoto_score_settings" title="Tanimoto Score Settings" expanded="true">
+            <param name="fingerprint_type" type="text" value="daylight" label="Fingerprint Type" help="The fingerprint type that should be used for tanimoto score calculations." />
+            <param name="fingerprint_nbits" type="integer" label="Fingerprint Number of Bits" value="2048" help="The number of bits to use for the fingerprint." />
+        </section>
+
+        <section name="training_settings" title="Training Settings" expanded="false">
             <param name="dropout_rate" type="float" label="Dropout Rate" value="0.0" />
             <param name="learning_rate" type="float" label="Learning Rate" value="0.00025" />
             <param name="epochs" type="integer" label="Epochs" value="250" />
@@ -79,13 +90,6 @@
             </param>
             <param name="weighting_factor" type="integer" label="Weighting Factor" value="0" />
         </section>
-        
-        <section name="tensorization_settings" title="Tensorization Settings" expanded="true">
-            <param name="min_mz" type="integer" label="Min m/z" value="10" />
-            <param name="max_mz" type="integer" label="Max m/z" value="1000" />
-            <param name="mz_bin_width" type="float" label="m/z Bin Width" value="0.1" />
-            <param name="intensity_scaling" type="float" label="Intensity Scaling" value="0.5" />
-        </section>
 
         <section name="data_generator_settings" title="Data generator settings" expanded="true">
             <param name="batch_size" type="integer" value="32" label="Batch Size" help="Number of pairs per batch" />
@@ -95,11 +99,6 @@
             <param name="average_pairs_per_bin" type="integer" value="20" label="Average pairs per bin" help="The aimed average number of pairs of spectra per spectrum in each bin." />
             <param name="random_seed" type="text" label="Random seed" value="None" help="Specify random seed for reproducible random number generation." />
         </section>
-        
-        <section name="tanimoto_score_settings" title="Tanimoto Score Settings" expanded="true">
-            <param name="fingerprint_type" type="text" value="daylight" label="Fingerprint Type" help="The fingerprint type that should be used for tanimoto score calculations." />
-            <param name="fingerprint_nbits" type="integer" label="Fingerprint Number of Bits" value="2048" help="The number of bits to use for the fingerprint." />
-        </section>
     </xml>
 
     <xml name="citations">
@@ -108,6 +107,14 @@
             <citation type="doi">https://doi.org/10.1101/2024.03.25.586580</citation>
         </citations>
     </xml>
+
+
+<token name=@HELP@>
+    ms2deepscore provides a Siamese neural network that is trained to predict molecular structural similarities (Tanimoto scores) from pairs of mass spectrometry spectra.
+    The library provides an intuitive classes to prepare data, train a siamese model, and compute similarities between pairs of spectra.
+    In addition to the prediction of a structural similarity, MS2DeepScore can also make use of Monte-Carlo dropout to assess the model uncertainty.
+</token>
+
 
 <token name="@init_scores@">
 from matchms.importing import load_from_msp, scores_from_json
