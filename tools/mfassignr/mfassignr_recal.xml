@@ -82,7 +82,13 @@
                 </assert_contents>
             </output>
             <output name="Recalibrants" file="recal/recalibrants.tabular"/>
-            <output name="MZplot" file="recal/mzplot.png"/>
+            <output name="MZplot">
+                <assert_contents>
+                    <has_size size="91080" delta="100"/>
+                    <has_image_width width="2100"/>
+                    <has_image_height height="2100"/>
+                </assert_contents>
+            </output>
         </test>
     </tests>
     <help><![CDATA[
