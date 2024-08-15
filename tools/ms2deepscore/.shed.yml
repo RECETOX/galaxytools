@@ -5,7 +5,7 @@ homepage_url: "https://github.com/matchms/ms2deepscore"
 categories:
   - Metabolomics
 description: "Mass spectra similarity scoring using a trained ms2deepscore model."
-long_description: ms2deepscore provides a Siamese neural network that is trained to predict molecular structural similarities (Tanimoto scores) from pairs of mass spectrometry spectra."
+long_description: "ms2deepscore provides a Siamese neural network that is trained to predict molecular structural similarities (Tanimoto scores) from pairs of mass spectrometry spectra."
 auto_tool_repositories:
   name_template: "{{ tool_id }}"
   description_template: "{{ tool_name }} tool from the ms2deepscore package"
