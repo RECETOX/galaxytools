@@ -1,17 +1,20 @@
-<tool id="mfassignr_isofiltr" name="MFAssignR IsoFiltR" version="@TOOL_VERSION@+galaxy0">
-    <description>
-        IsoFiltR separates likely isotopic masses from monoisotopic masses in a mass list.
-    </description>
+<tool id="mfassignr_isofiltr" name="MFAssignR IsoFiltR" version="@TOOL_VERSION@+galaxy0" profile="23.0">
+    <description>Separates likely isotopic masses from monoisotopic masses in a mass list</description>
     <macros>
         <import>macros.xml</import>
     </macros>
+    <edam_topics>
+        <edam_topic>topic_3172</edam_topic>    
+    </edam_topics>
+    <edam_operations>  
+        <edam_operation>operation_3629</edam_operation>  
+    </edam_operations>
     <expand macro="creator" />
     <expand macro="refs" />
 
     <expand macro="requirements" />
     <command detect_errors="exit_code"><![CDATA[
-        Rscript
-            -e 'source("${mfassignr_isofiltr}")'
+        Rscript '${mfassignr_isofiltr}'
     ]]>
     </command>
     <configfiles>
@@ -40,8 +43,8 @@
     <tests>
         <test>
             <param name="peaks" value="QC1_1_POS_500.tabular" ftype="tabular"/>
-            <output name="mono_out" file="isofiltr_output1.tabular" ftype="tabular"/>
-            <output name="iso_out" file="isofiltr_output2.tabular" ftype="tabular"/>
+            <output name="mono_out" file="isofiltr/mono_out.tabular" ftype="tabular"/>
+            <output name="iso_out" file="isofiltr/iso_out.tabular" ftype="tabular"/>
         </test>
     </tests>
     <help>
