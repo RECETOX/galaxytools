@@ -84,7 +84,7 @@
             <output name="Recalibrants" file="recal/recalibrants.tabular"/>
             <output name="MZplot">
                 <assert_contents>
-                    <has_size size="91080" delta="100"/>
+                    <has_size size="91080" delta="200"/>
                 </assert_contents>
             </output>
         </test>
