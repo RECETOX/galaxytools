@@ -1,4 +1,4 @@
-<tool id="recetox_aplcms_recover_weaker_signals" name="recetox-aplcms - recover weaker signals" version="@TOOL_VERSION@+galaxy3" profile="21.09">
+<tool id="recetox_aplcms_recover_weaker_signals" name="recetox-aplcms - recover weaker signals" version="@TOOL_VERSION@+galaxy0" profile="21.09">
     <description>recover weaker signals from raw data using an aligned feature table</description>
     <macros>
         <import>macros.xml</import>

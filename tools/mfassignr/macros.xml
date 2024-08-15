@@ -1,0 +1,141 @@
+<macros>
+    <token name="@TOOL_VERSION@">1.0.3</token>
+    <xml name="requirements">
+        <requirements>
+            <requirement type="package" version="@TOOL_VERSION@">r-mfassignr</requirement>
+        </requirements>
+    </xml>
+
+    <xml name="refs">
+        <xrefs>
+               <xref type="bio.tools">mfassignr</xref>
+        </xrefs>
+    </xml>
+
+    <xml name="creator">
+        <creator>
+            <person
+                givenName="Kristina"
+                familyName="Gomoryova"
+                url="https://github.com/KristinaGomoryova"
+                identifier="0000-0003-4407-3917" />
+            <person
+                givenName="Helge"
+                familyName="Hecht"
+                url="https://github.com/hechth"
+                identifier="0000-0001-6744-996X" />
+            <person
+                givenName="Zargham"
+                familyName="Ahmad"
+                url="https://github.com/zargham-ahmad"
+                identifier="0000-0002-6096-224X" />
+            <organization
+                url="https://www.recetox.muni.cz/"
+                email="GalaxyToolsDevelopmentandDeployment@space.muni.cz"
+                name="RECETOX MUNI" />
+        </creator>
+    </xml>
+
+    <xml name="kmdnoise_param">
+        <param name="input_file" type="data" format="tabular" label="Input data"
+               help= "Input data frame, first column is mass, second column is intensity"/>
+        <param name="upper_y" type="float" label="upper limit for the y intercept" value="0.2"
+               help= "The upper y-intercept value to isolate noise peaks in the equation for the KMD plot: y = 0.001123*x + b. Default value is set to 0.2, so that it does not interact with any potentially double-charged peaks."/>
+        <param name="lower_y" type="float" label="lower limit for the y intercept" value="0.05"
+               help="The lower y-intercept value to isolate noise peaks in the equation for the KMD plot: y = 0.001123*x + b. Default value is set to 0.05 to ensure no analyte peaks are incorporated into the noise estimation."/>
+        <param name="upper_x" optional="true" type="float" label="upper limit for the x intercept"
+               help="If not set, it defaults to maximum mass in the mass spectrum."/>
+        <param name="lower_x" optional="true" type="float" label="lower limit for the x intercept"
+               help="If not set, it defaults to minimum mass in the mass spectrum."/>
+    </xml>
+
+    <xml name="histnoise_param">
+        <param name="input_file" type="data" format="tabular" label="Input data"
+               help= "Input data frame, first column is mass, second column is intensity"/>
+        <param name="SN" type="float" label="signal-to-noise threshold" value="0"
+               help= "A numeric value for situations where a predefined noise value is desired, default is 0"/>
+        <param name="bin" type="float" label="bindwidth of the histogram" value="0.01"
+               help= "A numeric value determining the binwidth of the histogram, default is 0.01"/>
+    </xml>
+
+    <xml name="noise_threshold_params">
+       <param name="sn_ratio" type="float" label="SN ratio" value="6"
+               help= "Noise multiplier. Recommended value is 6."/>
+        <param name="kmdn" type="float" label="Estimated noise" value="0"
+               help= "Estimated noise, either from the KMDNoise or HistNoise function."/>
+    </xml>
+
+    <xml name="snplot_param">
+        <param name="input_file" type="data" format="tabular" label="Input data"
+               help= "Input data frame, first column is mass, second column is intensity"/>
+        <param name="cut" type="float" label="cut"
+               help= "A numeric value of the intensity cut value being investigated"/>
+        <param name="mass" type="float" label="mass"
+               help= "A numeric value setting a centerpoint to look at the mass spectrum"/>
+        <param name="window_x" type="float" label="window.x" value="0.5"
+               help= "A numeric value setting the +/- range around the mass centerpoint, default is 0.5"/>
+        <param name="window_y" type="float" label="window.y" value="10"  
+               help= "A numeric value setting the y axis value for the plot, determined by multiplying the cut by this value"/> 
+    </xml>
+
+    <xml name="ionmode_param">
+       <param name="ionmode" type="select" display="radio" label="Ion mode" help= "The ionization mode.">
+              <option value="neg" >negative</option>
+              <option value="pos" selected="true">positive</option> 
+        </param>
+    </xml>
+
+    <xml name="mfassign_param">
+        <param name="ppm_err" type="integer" label="ppm_err"
+               help= "Error tolerance (ppm) for formula assignment" value="3"/>
+        <expand macro="ionmode_param" />
+        <expand macro="noise_threshold_params" />
+        <param name="lowMW" type="float" label="Lower limit of molecular mass to be assigned" value="100"
+               help= "Lower limit of molecular mass to be assigned."/>
+        <param name="highMW" type="float" label="Upper limit of molecular mass to be assigned" value="1000"
+               help= "Upper limit of molecular mass to be assigned."/>
+    </xml>
+
+    <xml name="recal_param">
+        <param name="input_file" type="data" format="tabular" label="Input data (Output from MFAssign)"
+               help= "Input data frame, the output from MFAssign or MFAssignCHO"/>
+       <param name="series" type="data" format="tabular" label="Calibration series (Output from RecalList)"
+               help= "Calibration series (Output from RecalList). At maximum the first 10 rows are used."/>
+        <param name="peaks" type="data" format="tabular" label="Peaks dataframe (Mono from IsoFiltR)"
+               help= "Peaks data frame, the Mono output from IsoFiltR"/>              
+        <param name="isopeaks" type="data" format="tabular" label="Isopeaks dataframe (Iso from IsoFiltR)" 
+               optional="true" help= "Isopeaks data frame, the Mono output from IsoFiltR"/>
+        <expand macro="ionmode_param" />
+        <expand macro="noise_threshold_params" />
+        <param name="mzRange" type="float" label="Mass windows used for the segmented recalibration" value="30"
+               help= "Mass windows used for the segmented recalibration"/>
+        <param name="step_O" type="float" label="Number of oxygen steps for formula extension" value="3"
+               help= "Number of oxygen steps for formula extension"/>
+        <param name="step_H2" type="float" label="Number of H2 steps for formula extension" value="5"
+               help= "Number of H2 steps for formula extension"/>
+         <param name="CalPeak" type="float" label="Maximum allowed recalibrant peaks per mzRange defined segment" value="150" help= "Maximum allowed recalibrant peaks per mzRange defined segment"/>      
+
+    </xml>
+
+    <xml name="isofiltr_param">
+        <param name="peaks" type="data" format="tabular" label="Input Peak Data"
+        help="The input data frame containing abundance and peak mass."/>
+        <param name="SN" type="float" value="0" label="Signal-to-Noise Ratio"
+        help="Sets the noise cut for the data; peaks below this value will not be evaluated."/>
+        <param name="Carbrat" type="float" value="60" min="5" label="Maximum 13C/12C Ratio"
+        help="Sets the maximum allowed ratio for matching 13C isotopes."/>
+        <param name="Sulfrat" type="float" value="30" label="Maximum 34S/32S Ratio"
+        help="Sets the maximum allowed ratio for matching 34S isotopes."/>
+        <param name="Sulferr" type="float" value="5" label="Maximum Error for 34S Matching (ppm)"
+        help="Sets the maximum allowed error (ppm) for 34S mass matching."/>
+        <param name="Carberr" type="float" value="5" label="Maximum Error for 13C Matching (ppm)"
+        help="Sets the maximum allowed error (ppm) for 13C mass matching."/>
+    </xml>
+
+    <xml name="citations">
+        <citations>
+            <citation type="doi">10.1016/j.envres.2020.110114</citation>
+        </citations>        
+    </xml>
+
+</macros>
