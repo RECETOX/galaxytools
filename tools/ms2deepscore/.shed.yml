@@ -11,5 +11,5 @@ auto_tool_repositories:
   description_template: "{{ tool_name }} tool from the ms2deepscore package"
 suite:
   name: suite_ms2deepscore
-  description: tools from the ms2deepscore suite are used for training a siamese model, and computing the similarities between pairs of spectra..
+  description: tools from the ms2deepscore suite are used for training a siamese model, and computing the similarities between pairs of spectra.
   type: repository_suite_definition
