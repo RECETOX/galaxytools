@@ -1,0 +1,168 @@
+<macros>
+
+<token name="@GENERAL_HELP@">
+General Information
+===================
+
+Overview
+--------
+       
+MFAssignR is an R package for the molecular formula (MF) assignment of ultrahigh resolution mass spectrometry measurements. It contains several functions for the noise assessment, isotope filtering, interal mass recalibration, and MF assignment. 
+
+The MFAssignR package was originally developed by Simeon Schum et al. (2020), the source code can be found on `GitHub`_.
+Please submit eventual Galaxy-related bug reports as `issues`_ on the repository.
+
+.. _GitHub: https://github.com/skschum/MFAssignR
+.. _issues: https://github.com/RECETOX/galaxytools/issues
+
+
+Workflow
+--------
+                   
+.. image:: https://github.com/RECETOX/MFAssignR/raw/master/overview.png
+   :width: 1512
+   :height: 720
+   :scale: 60
+   :alt: A picture of a workflow diagram.
+
+The recommended workflow how to run the MFAssignR package is as follows:
+
+(1) Run KMDNoise() to determine the noise level for the data.
+(2) Check effectiveness of S/N threshold using SNplot().
+(3) Use IsoFiltR() to identify potential 13C and 34S isotope masses.
+(4) Using the S/N threshold, and the two data frames output from IsoFiltR(), run MFAssignCHO() to assign MF with C, H, and O to assess the mass accuracy.
+(5) Use RecalList() to generate a list of the potential recalibrant series.
+(6) After choosing recalibrant series, use Recal() to recalibrate the mass lists.
+(7) Assign MF to the recalibrated mass list using MFAssign().
+(8) Check the output plots from MFAssign() to evaluate the quality of the assignments.
+
+For detailed documentation on the individual steps please see the individual tool wrappers.
+</token>
+
+<token name="@KMDNOISE_HELP@">
+MFAssignR - KMDNoise
+=============================
+
+This tool is the first step of the MFAssignR workflow (can be substitued by HistNoise or run in paralell).
+
+KMDnoise is a Kendrick Mass Defect (KMD) approach for the noise estimation. It selects a subset of the data using the linear equation y=0.1132x + b, where y stands for the KMD value, x for the measured ion mass and b is the y-intercept. The default y-intercepts of 0.05 and 0.2 in KMDNoise are used to isolate the largest analyte free region of noise in most mass spectra. The intensity of the peaks within this “slice” are then averaged and that value is defined as the noise level for the mass spectrum. This value is then multiplied with a user-defined signal-to-noise ratio (typically 3-10) to remove low intensity m/z values.
+
+Output:     
+
+- noise estimate - (this noise level can then be multiplied by the user chosen value (3, 6, 10) in order     to set the signal to noise cut for formula assignment.)
+- KMD plot - bounds of the noise estimation area are highlighted in red
+</token>
+
+<token name="@HISTNOISE_HELP@">
+MFAssignR - HistNoise
+=============================
+
+This tool is the first step of the MFAssignR workflow (can be substitued by KMDNoise or run in paralell (-> SNplot)). 
+
+HistNoise function creates a histogram using natural log of the intensity, which can be then used to determine the noise level for the data analyze, and also the estimated noise level. The noise level can be then multiplied by whatever value in order to reach the value to be used to cut the data.
+
+Output:
+
+- noise estimate - this noise level can then be multiplied by the user chosen value in order to set the signal to noise cut for formula assignment
+- Histogram - shows where the cut is being applied123
+
+</token>
+
+<token name="@SNPLOT_HELP@">
+MFAssignR - SNplot
+=============================
+
+This tool is the second step of the MFAssignR workflow (KMDNoise -> SNplot -> IsoFiltR).
+
+SNplot function plots the mass spectrum with the S/N cut denoted by different colors for the mass spectrum peaks (red indicates noise, blue indicates signal). This is useful for a qualitative look at the effectiveness of the S/N cut being used.
+
+Output:     
+
+- SNplot - S/N colored mass spectrum showing where the cut is being applied
+</token>
+
+<token name="@ISOFILTR_HELP@">
+MFAssignR - IsoFiltR
+=============================
+
+This tool is the third step of the MFAssignR workflow (SNplot -> IsoFiltR -> MFAssignCHO).
+
+IsoFiltR identifies and separates likely isotopic masses from monoisotopic masses in a mass list. This should be done prior to formula assignment to reduce incorrect formula assignments.
+
+Output:     
+
+- A dataframe of monoisotopic and non-matched masses
+- A dataframe of isotopic masses
+</token>
+
+<token name="@MFASSIGNCHO_HELP@">
+MFAssignR - MFAssignCHO
+=============================
+
+This tool is the fourth step of the MFAssignR workflow (IsoFiltR -> MFAssignCHO -> RecalList)
+
+MFAssignCHO is a simplified version of MSAssign funcion, which only assigns MF with CHO elements. It is useful for the prelimiary MF assignments prior to the selection of internal recalibration ions in conjunction with RecalList and Recal.
+
+Output:     
+
+- Unambig - data frame containing unambiguous assignments
+- Ambig - data frame containing ambiguous assignments
+- None - data frame containing unassigned masses
+- MSAssign - ggplot of mass spectrum highlighting assigned/unassigned
+- Error - ggplot of the Error vs. m/z
+- MSgroups - ggplot of mass spectrum colored by molecular group
+- VK - ggplot of van Krevelen plot, colored by molecular group
+</token>
+
+<token name="@RECALLIST_HELP@">
+MFAssignR - RecalList
+=============================
+
+This tool is the fifth step of the MFAssignR workflow (MFAssignCHO -> RecalList -> Recal)
+
+RecalList() function identifies the homologous series that could be used for recalibration. On the input, there is the output from MFAssign() or MFAssignCHO() functions. It returns a dataframe that contains the CH2 homologous series that contain more than 3 members.
+
+Output:     
+
+- Dataframe that contains the CH2 homologous series that contain more than 3 members.
+</token>
+
+<token name="@RECAL_HELP@">
+MFAssignR - Recal
+=============================
+
+This tool is the sixth step of the MFAssignR workflow (RecalList -> Recal -> MFAssign)
+
+Recal() function recalibrates the 'Mono' and 'Iso' outputs from the IsoFiltR() function and prepares a dataframe containing chose recalibrants. Also it outputs a plot for the qualitative assessment of recalibrants. The input to the function is output from MFAssign() or MFAssignCHO(). 
+
+It is important for recalibrant masses to cover the entire mass range of interest, and they should be among the most abundant peaks in their region of the spectrum - by default we take first 10 recalibrant series. We recommend to sort the Recalibration Series table based on the Series Score (largest to smallest). In case that error "Gap in recalibrant coverage, try adding more recalibrant series" would occur, we recommend to provide more diverse series.
+
+Output:     
+
+- Mass spectrum       
+- Recalibrated dataframe of monoisotopic masses   
+- Recalibrated dataframe of isotopic masses
+- Recalibrants list
+</token>
+
+<token name="@MFASSIGN_HELP@">
+MFAssignR - MFAssign
+=============================
+
+This tool is the last step of the MFAssignR workflow (Recal -> MFAssign)
+
+Recal() function recalibrates the 'Mono' and 'Iso' outputs from the IsoFiltR() function and prepares a dataframe containing chose recalibrants. Also it outputs a plot for the qualitative assessment of recalibrants. The input to the function is output from MFAssign() or MFAssignCHO(). 
+
+It is important for recalibrant masses to cover the entire mass range of interest, and they should be among the most abundant peaks in their region of the spectrum - by default we take first 10 recalibrant series. We recommend to sort the Recalibration Series table based on the Series Score (largest to smallest). In case that error "Gap in recalibrant coverage, try adding more recalibrant series" would occur, we recommend to provide more diverse series.
+
+Output:     
+
+- Unambig - data frame containing unambiguous assignments
+- Ambig - data frame containing ambiguous assignments
+- None - data frame containing unassigned masses
+- MSAssign - ggplot of mass spectrum highlighting assigned/unassigned
+- Error - ggplot of the Error vs. m/z
+- MSgroups - ggplot of mass spectrum colored by molecular group
+- VK - ggplot of van Krevelen plot, colored by molecular group
+</token>
+</macros>

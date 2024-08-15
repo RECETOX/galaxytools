@@ -1,0 +1,74 @@
+<tool id="rcx-tk" name="rcx-tk" version="0.1.0+galaxy0" python_template_version="3.5" profile="23.05">
+    <edam_topics>
+        <edam_topic>topic_3172</edam_topic>
+        <edam_topic>topic_0091</edam_topic>
+        <edam_topic>topic_3520</edam_topic>       
+    </edam_topics>
+    <edam_operations>
+        <edam_operation>operation_0336</edam_operation>
+        <edam_operation>operation_3695</edam_operation> 
+    </edam_operations>
+    <requirements>
+        <requirement type="package" version="0.1.0">rcx-tk</requirement>
+    </requirements>
+    <creator>
+        <person
+                givenName="Zargham"
+                familyName="Ahmad"
+                url="https://github.com/zargham-ahmad"
+                identifier="0000-0000-0000-0000"/>
+        <person
+                givenName="Kristina"
+                familyName="Gomoryova"
+                url="https://github.com/KristinaGomoryova"
+                identifier="0000-0003-4407-3917" />
+        <person
+                givenName="Helge"
+                familyName="Hecht"
+                url="https://github.com/hechth"
+                identifier="0000-0001-6744-996X" />
+        <organization 
+                url="https://www.recetox.muni.cz/"
+                email="GalaxyToolsDevelopmentandDeployment@space.muni.cz"
+                name="RECETOX MUNI" />  
+    </creator>
+    <command><![CDATA[
+    #if $input_file.ext == "tabular"
+        #set $input_file_new = 'input.tsv'
+    #else
+        #set $input_file_new = 'input.' + str($input_file.ext)
+    #end if
+       cp ${input_file} ${input_file_new} &&
+       python3 -m rcx_tk --method ${method} ${input_file_new} 'output.tsv' 
+    ]]></command>
+    <inputs>
+        <param name="input_file" type="data" format="csv,tabular,tsv,xls,xlsx,txt" label="Input data" help="Input data"/>
+        <param name="method" type="select" label="Method" help="Which data is processed: metadata or alkane file.">
+            <option value="metadata" selected="true">metadata</option>
+            <option value="alkanes">alkanes</option>
+        </param>
+    </inputs>
+    <outputs>
+        <data name="output_file" format="tabular" from_work_dir = "output.tsv" label="Processed data"/>
+    </outputs>
+    <tests>
+        <test>
+            <param name="input_file" value="input_metadata.tabular"/>
+            <param name="method" value="metadata"/>
+            <output name="output_file" file="output_metadata.tsv"/>
+        </test>
+         <test>
+            <param name="input_file" value="input_alkanes.txt"/>
+            <param name="method" value="alkanes"/>
+            <output name="output_file" file="output_alkanes.tsv"/>
+        </test>
+    </tests>
+    <help><![CDATA[
+    rcx-tk is a tool to process a metadata and/or alkane files. The main steps are columns rearrangement, validation of the file names, and derivation of new columns, such as sampleName, sequenceIdentifier, sampleIdentifier and localOrder. 
+
+    On the input, a metadata or alkane file in any tabular format is expected. On the output, a tsv file is provided.
+    ]]></help>
+    <citations>
+        <citation type="doi">10.5281/zenodo.4471245</citation>
+    </citations>
+</tool>

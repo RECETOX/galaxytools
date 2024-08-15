@@ -70,7 +70,9 @@ settings.save_to_file("$output_file")
     </tests>
     
     <help>
-        This tool generates model parameters for MS2DeepScore in JSON format based on the provided settings.
+<![CDATA[
+@HELP@
+]]>
     </help>
     <expand macro="citations"/>
 </tool>
