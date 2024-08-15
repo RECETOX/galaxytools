@@ -21,6 +21,8 @@
 import onnx
 import torch
 from ms2deepscore import MS2DeepScore
+from matchms import calculate_scores
+from matchms.importing import load_from_msp, scores_from_json
 from ms2deepscore.models.SiameseSpectralModel import SiameseSpectralModel
 from ms2deepscore.SettingsMS2Deepscore import SettingsMS2Deepscore
 
@@ -38,22 +40,24 @@ model = SiameseSpectralModel(settings=SettingsMS2Deepscore(**model_params))
 model.load_state_dict(state_dict)
 model.eval()
 
+#if $scores.use_scores == "True"
+scores_in = scores_from_json("${scores_in}")
+references=scores_in.references
+queries=scores_in.queries
+#else
+references=list(load_from_msp("$references"))
+queries=list(load_from_msp("$queries"))
+#end if
+
 similarity = MS2DeepScore(model)
-name="MS2DeepScore_similarity_scores"
+scores = calculate_scores(references, queries, similarity)
 
-@init_scores@
-
-layer = similarity.sparse_array(
-    references=scores.references,
-    queries=scores.queries,
-    idx_row = scores._scores.row,
-    idx_col = scores._scores.col,
-    is_symmetric=False)
-
-scores._scores.add_sparse_data(scores._scores.row, scores._scores.col, layer, name)
-
-scores.filter_by_range(name=name, low=0)
+#if $scores.use_scores == "True"
+scores_in._scores.add_dense_matrix(scores.to_array(), "MS2DeepScore")
+scores_in.to_json("$similarity_scores")
+#else
 scores.to_json("$similarity_scores")
+#end if
 </configfile>
 </configfiles>
     
@@ -64,6 +68,24 @@ scores.to_json("$similarity_scores")
     <outputs>
         <data label="ms2deepscore scores of ${on_string}" name="similarity_scores" format="json"/>
     </outputs>
+
+    <tests>
+        <test expect_num_outputs="1">
+            <param name="use_scores" value="False"/>
+            <param name="references" value="RECETOX_Exposome_pesticides_HR_MS_20220323.msp" ftype="msp"/>
+            <param name="queries" value="RECETOX_Exposome_pesticides_HR_MS_20220323.msp" ftype="msp"/>
+            <param name="model" value="Trained_model.onnx" ftype="onnx"/>
+            <param name="model_param" value="Model_Parameter_JSON.json" ftype="json"/>
+            <output name="similarity_scores" value="msp_json_score_out.json" ftype="json" compare="diff" />
+        </test>
+        <test expect_num_outputs="1">
+            <param name="use_scores" value="True"/>
+            <param name="scores_in" value="ri_match_60.json" ftype="json"/>
+            <param name="model" value="Trained_model.onnx" ftype="onnx"/>
+            <param name="model_param" value="Model_Parameter_JSON.json" ftype="json"/>
+            <output name="similarity_scores" value="usescore_json_score_out.json" ftype="json" compare="diff" />
+        </test>
+    </tests>
     
     <help>
         ms2deepscore provides a Siamese neural network that is trained to predict molecular structural 

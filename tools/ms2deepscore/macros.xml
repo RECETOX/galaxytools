@@ -108,16 +108,6 @@
             <citation type="doi">https://doi.org/10.1101/2024.03.25.586580</citation>
         </citations>
     </xml>
-
-<token name="@init_scores@">
-from matchms.importing import load_from_msp, scores_from_json
-from matchms import Scores
-#if $scores.use_scores == "True"
-scores = scores_from_json("${scores_in}")
-#else
-scores = Scores(references=list(load_from_msp("$references")), queries=list(load_from_msp("$queries")), is_symmetric=False)
-#end if
-</token>
         
 <token name="@init_logger@">
 from matchms import set_matchms_logger_level
