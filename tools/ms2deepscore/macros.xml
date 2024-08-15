@@ -69,12 +69,10 @@
             <param name="max_mz" type="integer" label="Max m/z" value="1000" />
             <param name="mz_bin_width" type="float" label="m/z Bin Width" value="0.1" />
             <param name="intensity_scaling" type="float" label="Intensity Scaling" value="0.5" />
-        </section>
-                
-        <section name="tanimoto_score_settings" title="Tanimoto Score Settings" expanded="true">
             <param name="fingerprint_type" type="text" value="daylight" label="Fingerprint Type" help="The fingerprint type that should be used for tanimoto score calculations." />
             <param name="fingerprint_nbits" type="integer" label="Fingerprint Number of Bits" value="2048" help="The number of bits to use for the fingerprint." />
         </section>
+                
 
         <section name="training_settings" title="Training Settings" expanded="false">
             <param name="dropout_rate" type="float" label="Dropout Rate" value="0.0" />
@@ -89,13 +87,7 @@
                 <option value="risk_mse">Risk Aware MSE (risk_aware_mse)</option>
             </param>
             <param name="weighting_factor" type="integer" label="Weighting Factor" value="0" />
-        </section>
-
-        <section name="data_generator_settings" title="Data generator settings" expanded="true">
             <param name="batch_size" type="integer" value="32" label="Batch Size" help="Number of pairs per batch" />
-        </section>
-
-        <section name="compound_pairs_selection_settings" title="Compound pairs selection settings" expanded="true">
             <param name="average_pairs_per_bin" type="integer" value="20" label="Average pairs per bin" help="The aimed average number of pairs of spectra per spectrum in each bin." />
             <param name="random_seed" type="text" label="Random seed" value="None" help="Specify random seed for reproducible random number generation." />
         </section>

@@ -19,7 +19,7 @@ import numpy as np
 from typing import Optional
 from ms2deepscore.SettingsMS2Deepscore import SettingsMS2Deepscore
 
-random_seed: Optional[int] = $compound_pairs_selection_settings.random_seed
+random_seed: Optional[int] = $training_settings.random_seed
 
 params = {
     "base_dims": tuple(int(dim.strip()) for dim in "$model_structure.base_dims".split(",")),
@@ -35,12 +35,12 @@ params = {
     "max_mz": $tensorization_settings.max_mz,
     "mz_bin_width": $tensorization_settings.mz_bin_width,
     "intensity_scaling": $tensorization_settings.intensity_scaling,
-    "batch_size": $data_generator_settings.batch_size,
-    "average_pairs_per_bin": $compound_pairs_selection_settings.average_pairs_per_bin,
+    "batch_size": $training_settings.batch_size,
+    "average_pairs_per_bin": $training_settings.average_pairs_per_bin,
     "same_prob_bins": np.array([(0, 0.2), (0.2, 1.0)]),
     "random_seed": random_seed,
-    "fingerprint_type": "$tanimoto_score_settings.fingerprint_type",
-    "fingerprint_nbits": $tanimoto_score_settings.fingerprint_nbits
+    "fingerprint_type": "$tensorization_settings.fingerprint_type",
+    "fingerprint_nbits": $tensorization_settings.fingerprint_nbits
 }
 
 settings = SettingsMS2Deepscore(**params)
