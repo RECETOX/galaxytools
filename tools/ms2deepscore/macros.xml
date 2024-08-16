@@ -55,7 +55,7 @@
 
     <xml name="config_generator">
         <section name="model_structure" title="Model Structure" expanded="true">
-            <repeat name="layers" title="Layer" min="1" default="3" >
+            <repeat name="layers" title="Layer" min="1" default="1" >
                 <param name="dims" type="integer" label="Dimensions" min = "0" value="2000" help="Size of the in-between layer to add." />
             </repeat>
             <param name="embedding_dim" type="integer" label="Embedding Dimension" value="400" help="The dimension of the final embedding layer." />
