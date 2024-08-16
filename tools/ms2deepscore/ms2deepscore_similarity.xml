@@ -89,6 +89,14 @@ scores.to_json("$similarity_scores")
     
     <help>
 <![CDATA[
+Info
+====
+Use a MS2DeepScore model for spectral similarity calculation.
+For security reasons, only ONNX models are supported to be used.
+If you want to use your own model, you can convert it to ONNX using the code contained in the 'MS2DeepScore Model Training' tool.
+
+About
+=====
 @HELP@
 ]]>
     </help>   

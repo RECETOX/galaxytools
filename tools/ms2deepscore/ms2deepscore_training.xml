@@ -77,6 +77,13 @@ torch.onnx.export(
 
     <help>
 <![CDATA[
+Info
+====
+This tool trains a MS2DeepScore model using the provided training data and model configuration.
+The trained model is then exported using ONNX.
+
+About
+=====
 @HELP@
 ]]>
     </help>

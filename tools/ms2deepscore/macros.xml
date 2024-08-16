@@ -55,7 +55,9 @@
 
     <xml name="config_generator">
         <section name="model_structure" title="Model Structure" expanded="true">
-            <param name="base_dims" type="text" label="Base Dimensions" value="2000,2000,2000" help="The in between layers to be used." />
+            <repeat name="layers" title="Layer" min="1" default="3" >
+                <param name="dims" type="integer" label="Dimensions" min = "0" value="2000" help="Size of the in-between layer to add." />
+            </repeat>
             <param name="embedding_dim" type="integer" label="Embedding Dimension" value="400" help="The dimension of the final embedding layer." />
             <param name="ionisation_mode" type="select" label="Ionisation Mode">
                 <option value="positive" selected="true">Positive</option>
@@ -105,6 +107,9 @@
     ms2deepscore provides a Siamese neural network that is trained to predict molecular structural similarities (Tanimoto scores) from pairs of mass spectrometry spectra.
     The library provides an intuitive classes to prepare data, train a siamese model, and compute similarities between pairs of spectra.
     In addition to the prediction of a structural similarity, MS2DeepScore can also make use of Monte-Carlo dropout to assess the model uncertainty.
+    MS2DeepScore is able to identify highly-reliable structural matches and to predict Tanimoto scores for pairs of molecules based on their fragment spectra with a root mean squared error of about 0.15.
+    Furthermore, the prediction uncertainty estimate can be used to select a subset of predictions with a root mean squared error of about 0.1.
+    MS2DeepScore can also be used to create chemically meaningful mass spectral embeddings that could be used to cluster large numbers of spectra.
 </token>
 
 

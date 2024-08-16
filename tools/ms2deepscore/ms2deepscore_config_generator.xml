@@ -21,8 +21,10 @@ from ms2deepscore.SettingsMS2Deepscore import SettingsMS2Deepscore
 
 random_seed: Optional[int] = $training_settings.random_seed
 
+#set dims = tuple([int($layer.dims) for $i, $layer in enumerate($model_structure.layers)])
+
 params = {
-    "base_dims": tuple(int(dim.strip()) for dim in "$model_structure.base_dims".split(",")),
+    "base_dims": $dims,
     "embedding_dim": $model_structure.embedding_dim,
     "ionisation_mode": "$model_structure.ionisation_mode",
     "dropout_rate": $training_settings.dropout_rate,
@@ -58,7 +60,9 @@ settings.save_to_file("$output_file")
 
     <tests>
         <test expect_num_outputs="1">
-            <param name="base_dims" value="20,20" />
+            <param name="layers_0|dims" value="2000"/>
+            <param name="layers_1|dims" value="2000"/>
+            <param name="layers_2|dims" value="2000"/>
             <param name="embedding_dim" value="15" />
             <param name="ionisation_mode" value="negative" />
             <param name="epochs" value="2" />
@@ -71,6 +75,14 @@ settings.save_to_file("$output_file")
     
     <help>
 <![CDATA[
+Info
+====
+This tool generates a configuration file needed to train a MS2DeepScore model using the 'MS2DeepScore Training' tool.
+The generated JSON file contains all the parameters necessary for model training - this includes the model architecture as well as information regarding how to discretize the input tensors.
+If you trained a model offline, you can also upload the JSON file configuration of that trained model into Galaxy and use it for the 'MS2DeepScore' similarity or training module.
+
+About
+=====
 @HELP@
 ]]>
     </help>
