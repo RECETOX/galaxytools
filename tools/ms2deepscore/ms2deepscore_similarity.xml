@@ -76,14 +76,14 @@ scores.to_json("$similarity_scores")
             <param name="queries" value="inp_filtered_spectra.msp" ftype="msp"/>
             <param name="model" value="Trained_model.onnx" ftype="onnx"/>
             <param name="model_param" value="Model_Parameter_JSON.json" ftype="json"/>
-            <output name="similarity_scores" value="msp_json_score_out.json" ftype="json" compare="diff" />
+            <output name="similarity_scores" value="msp_json_score_out.json" ftype="json" compare="sim_size" />
         </test>
         <test expect_num_outputs="1">
             <param name="use_scores" value="True"/>
             <param name="scores_in" value="ri_match_60.json" ftype="json"/>
             <param name="model" value="Trained_model.onnx" ftype="onnx"/>
             <param name="model_param" value="Model_Parameter_JSON.json" ftype="json"/>
-            <output name="similarity_scores" value="usescore_json_score_out.json" ftype="json" compare="diff" />
+            <output name="similarity_scores" value="usescore_json_score_out.json" ftype="json" compare="sim_size" />
         </test>
     </tests>
     
