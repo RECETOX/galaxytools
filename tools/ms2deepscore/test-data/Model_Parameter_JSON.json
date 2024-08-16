@@ -1,9 +1,9 @@
 {
     "base_dims": [
-        200,
-        200
+        20,
+        20
     ],
-    "embedding_dim": 100,
+    "embedding_dim": 15,
     "ionisation_mode": "negative",
     "train_binning_layer": false,
     "train_binning_layer_group_size": 20,
@@ -16,7 +16,7 @@
     "weighting_factor": 0,
     "model_file_name": "ms2deepscore_model.pt",
     "history_plot_file_name": "history.svg",
-    "time_stamp": "2024_08_15_09_50_31",
+    "time_stamp": "2024_08_16_07_50_22",
     "min_mz": 10,
     "max_mz": 1000,
     "mz_bin_width": 0.1,
