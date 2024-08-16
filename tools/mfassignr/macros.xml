@@ -68,9 +68,9 @@
     <xml name="snplot_param">
         <param name="input_file" type="data" format="tabular" label="Input data"
                help= "Input data frame, first column is mass, second column is intensity"/>
-        <param name="cut" type="float" label="cut"
+        <param name="cut" type="float" label="cut" value="0"
                help= "A numeric value of the intensity cut value being investigated"/>
-        <param name="mass" type="float" label="mass"
+        <param name="mass" type="float" label="mass" value="300"
                help= "A numeric value setting a centerpoint to look at the mass spectrum"/>
         <param name="window_x" type="float" label="window.x" value="0.5"
                help= "A numeric value setting the +/- range around the mass centerpoint, default is 0.5"/>
