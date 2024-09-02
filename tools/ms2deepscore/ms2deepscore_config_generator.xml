@@ -1,0 +1,89 @@
+<tool id="ms2deepscore_config_generator" name="MS2DeepScore Configuration Generator" version="@TOOL_VERSION@+galaxy0">
+    <description>Generates model parameters for MS2DeepScore in JSON format</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="creator"/>
+    <expand macro="edam" />
+
+    <requirements>
+        <requirement type="package" version="@TOOL_VERSION@">ms2deepscore</requirement>
+    </requirements>
+
+    <command detect_errors="exit_code"><![CDATA[
+        python3 ${python_wrapper}
+    ]]></command>
+    <configfiles>
+    <configfile name="python_wrapper">
+import numpy as np
+from typing import Optional
+from ms2deepscore.SettingsMS2Deepscore import SettingsMS2Deepscore
+
+random_seed: Optional[int] = $training_settings.random_seed
+
+#set dims = tuple([int($layer.dims) for $i, $layer in enumerate($model_structure.layers)])
+
+params = {
+    "base_dims": $dims,
+    "embedding_dim": $model_structure.embedding_dim,
+    "ionisation_mode": "$model_structure.ionisation_mode",
+    "dropout_rate": $training_settings.dropout_rate,
+    "learning_rate": $training_settings.learning_rate,
+    "epochs": $training_settings.epochs,
+    "patience": $training_settings.patience,
+    "loss_function": "$training_settings.loss_function",
+    "weighting_factor": $training_settings.weighting_factor,
+    "min_mz": $tensorization_settings.min_mz,
+    "max_mz": $tensorization_settings.max_mz,
+    "mz_bin_width": $tensorization_settings.mz_bin_width,
+    "intensity_scaling": $tensorization_settings.intensity_scaling,
+    "batch_size": $training_settings.batch_size,
+    "average_pairs_per_bin": $training_settings.average_pairs_per_bin,
+    "same_prob_bins": np.array([(0, 0.2), (0.2, 1.0)]),
+    "random_seed": random_seed,
+    "fingerprint_type": "$tensorization_settings.fingerprint_type",
+    "fingerprint_nbits": $tensorization_settings.fingerprint_nbits
+}
+
+settings = SettingsMS2Deepscore(**params)
+settings.save_to_file("$output_file")
+</configfile>
+</configfiles>
+
+    <inputs>
+        <expand macro="config_generator" />
+    </inputs>
+    
+    <outputs>
+        <data name="output_file" format="json" label="Model Parameter JSON" />
+    </outputs>
+
+    <tests>
+        <test expect_num_outputs="1">
+            <param name="layers_0|dims" value="20"/>
+            <param name="layers_1|dims" value="20"/>
+            <param name="embedding_dim" value="15" />
+            <param name="ionisation_mode" value="negative" />
+            <param name="epochs" value="2" />
+            <param name="batch_size" value="2" />
+            <param name="average_pairs_per_bin" value="2" />
+            <param name="random_seed" value="42"/>
+            <output name="output_file" value="Model_Parameter_JSON.json" ftype="json" compare="diff" lines_diff="2"/>
+        </test>
+    </tests>
+    
+    <help>
+<![CDATA[
+Info
+====
+This tool generates a configuration file needed to train a MS2DeepScore model using the 'MS2DeepScore Training' tool.
+The generated JSON file contains all the parameters necessary for model training - this includes the model architecture as well as information regarding how to discretize the input tensors.
+If you trained a model offline, you can also upload the JSON file configuration of that trained model into Galaxy and use it for the 'MS2DeepScore' similarity or training module.
+
+About
+=====
+@HELP@
+]]>
+    </help>
+    <expand macro="citations"/>
+</tool>
