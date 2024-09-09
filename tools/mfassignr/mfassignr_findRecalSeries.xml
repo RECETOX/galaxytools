@@ -1,0 +1,53 @@
+<tool id="mfassignr_findRecalSeries" name="MFAssignR FindRecalSeries" version="@TOOL_VERSION@+galaxy1" profile="23.0">
+    <description>Selects most suitable series for recalibration</description>
+    <macros>
+        <import>macros.xml</import>
+        <import>help.xml</import>
+    </macros>
+    <edam_topics>
+        <edam_topic>topic_3172</edam_topic>    
+    </edam_topics>
+    <edam_operations>  
+        <edam_operation>operation_3627</edam_operation>  
+    </edam_operations>
+    <expand macro="creator" />
+    <expand macro="refs" />
+
+    <expand macro="requirements" />
+    <command detect_errors="exit_code"><![CDATA[
+        Rscript '${mfassignr_findrecalseries}'
+    ]]>
+    </command>
+    <configfiles>
+        <configfile name="mfassignr_findrecalseries"><![CDATA[
+            df <- read.table("$input_file", header=TRUE, sep="\t")
+            result <- MFAssignR::find_series(
+                df = df,
+                global_min = $global_min,
+                global_max = $global_max,
+                number_of_combinations = $number_of_combinations,
+                abundance_score_threshold = $abundance_score_threshold,
+                peak_distance_threshold = $peak_distance_threshold,
+                coverage_threshold = $coverage_threshold,
+                fill_series = $fill_series
+            )
+            
+            write.table(final_series, file="$final_series", sep="\t", row.names=FALSE)
+        ]]></configfile>
+    </configfiles>
+    <inputs>
+        <expand macro="findrecalseries_param"/>
+    </inputs>
+    <outputs>
+        <data name="final_series" format="tabular" label="Final recalibration series"/>
+    </outputs>
+    <tests>
+        <test expect_failure="true"/>
+    </tests>
+    <help>
+        @FINDRECALSERIES_HELP@
+
+        @GENERAL_HELP@
+    </help>
+    <expand macro="citations"/>
+</tool>

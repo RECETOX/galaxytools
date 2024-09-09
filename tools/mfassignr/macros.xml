@@ -96,6 +96,26 @@
                help= "Upper limit of molecular mass to be assigned."/>
     </xml>
 
+    <xml name="findrecalseries_param">
+        <param name="input_file" type="data" format="tabular" label="Input data"
+               help= "Recalibration series, output from RecalList"/>
+        <param name="global_min" type="float" label="Global min"
+               help= "A lower bound of the instrument m/z range."/>
+        <param name="global_max" type="float" label="Global max"
+               help= "A higher bound of the instrument m/z range."/>
+        <param name="number_of_combinations" type="integer" label="Number of combinations"
+               help= "Combinations of how many series should be computed." value="5"/>
+        <param name="abundance_score_threshold" type="float" label="Abundance score threshold" value="100"
+               help= "A threshold for filtering abundance score parameter. The series with higher values are better."/>
+        <param name="peak_distance_threshold" type="float" label="Peak distance threshold" value="2"
+               help= "A threshold for the peak distance parameter. The closer this value is to 1, the better."/>
+        <param name="coverage_threshold" type="integer" label="How many % of the m/z range should be covered."
+               help= "How many % of the m/z range should be covered." value="90"/>
+        <param name="fill_series" type="boolean" label="Whether to return top 10 unique series (TRUE) or series only from the best combination."
+               help= "If TRUE, top 10 unique series will be returned, otherwise only the series from the best
+               combination will be returned." value="false"/>
+    </xml>
+
     <xml name="recal_param">
         <param name="input_file" type="data" format="tabular" label="Input data (Output from MFAssign)"
                help= "Input data frame, the output from MFAssign or MFAssignCHO"/>
@@ -104,7 +124,7 @@
         <param name="peaks" type="data" format="tabular" label="Peaks dataframe (Mono from IsoFiltR)"
                help= "Peaks data frame, the Mono output from IsoFiltR"/>              
         <param name="isopeaks" type="data" format="tabular" label="Isopeaks dataframe (Iso from IsoFiltR)" 
-               optional="true" help= "Isopeaks data frame, the Mono output from IsoFiltR"/>
+               help= "Isopeaks data frame, the Mono output from IsoFiltR"/>
         <expand macro="ionmode_param" />
         <expand macro="noise_threshold_params" />
         <param name="mzRange" type="float" label="Mass windows used for the segmented recalibration" value="30"
