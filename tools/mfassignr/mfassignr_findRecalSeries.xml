@@ -21,7 +21,7 @@
     <configfiles>
         <configfile name="mfassignr_findrecalseries"><![CDATA[
             df <- read.table("$input_file", header=TRUE, sep="\t")
-            result <- MFAssignR::find_series(
+            result <- MFAssignR::FindRecalSeries(
                 df = df,
                 global_min = $global_min,
                 global_max = $global_max,
