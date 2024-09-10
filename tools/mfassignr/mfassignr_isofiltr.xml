@@ -2,6 +2,7 @@
     <description>Separates likely isotopic masses from monoisotopic masses in a mass list</description>
     <macros>
         <import>macros.xml</import>
+        <import>help.xml</import>
     </macros>
     <edam_topics>
         <edam_topic>topic_3172</edam_topic>    
