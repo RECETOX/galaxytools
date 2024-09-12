@@ -33,7 +33,7 @@
         <data name="recal_series" format="tabular" label="Recalibration series by ${tool.name} on ${on_string}"/>
     </outputs>
     <tests>
-        <test>
+         <test>
             <param name="input_file" value="mfassigncho/unambig.tabular" />
             <output name="recal_series" file="recallist/recal_series.tabular" lines_diff="100"/>
         </test>

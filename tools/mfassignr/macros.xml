@@ -1,5 +1,5 @@
 <macros>
-    <token name="@TOOL_VERSION@">1.0.3</token>
+    <token name="@TOOL_VERSION@">1.1.1</token>
     <xml name="requirements">
         <requirements>
             <requirement type="package" version="@TOOL_VERSION@">r-mfassignr</requirement>
@@ -111,7 +111,7 @@
                help= "A threshold for the peak distance parameter. The closer this value is to 1, the better."/>
         <param name="coverage_threshold" type="integer" label="How many % of the m/z range should be covered."
                help= "How many % of the m/z range should be covered." value="90"/>
-        <param name="fill_series" type="boolean" label="Whether to return top 10 unique series (TRUE) or series only from the best combination."
+        <param name="fill_series" type="boolean" truevalue="TRUE" falsevalue="FALSE" label="Whether to return top 10 unique series (TRUE) or series only from the best combination."
                help= "If TRUE, top 10 unique series will be returned, otherwise only the series from the best
                combination will be returned." value="false"/>
     </xml>

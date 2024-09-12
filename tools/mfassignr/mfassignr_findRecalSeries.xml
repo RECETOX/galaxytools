@@ -1,4 +1,4 @@
-<tool id="mfassignr_findRecalSeries" name="MFAssignR FindRecalSeries" version="@TOOL_VERSION@+galaxy1" profile="23.0">
+<tool id="mfassignr_findRecalSeries" name="MFAssignR FindRecalSeries" version="@TOOL_VERSION@+galaxy0" profile="23.0">
     <description>Selects most suitable series for recalibration</description>
     <macros>
         <import>macros.xml</import>
@@ -15,11 +15,13 @@
 
     <expand macro="requirements" />
     <command detect_errors="exit_code"><![CDATA[
+        Rscript -e 'packageVersion("MFAssignR")' &&
         Rscript '${mfassignr_findrecalseries}'
     ]]>
     </command>
     <configfiles>
         <configfile name="mfassignr_findrecalseries"><![CDATA[
+            library(dplyr)
             df <- read.table("$input_file", header=TRUE, sep="\t")
             result <- MFAssignR::FindRecalSeries(
                 df = df,
@@ -30,9 +32,9 @@
                 peak_distance_threshold = $peak_distance_threshold,
                 coverage_threshold = $coverage_threshold,
                 fill_series = $fill_series
-            )
+            ) |> dplyr::rename(Series = series)
             
-            write.table(final_series, file="$final_series", sep="\t", row.names=FALSE)
+            write.table(result, file="$final_series", sep="\t", row.names=FALSE)
         ]]></configfile>
     </configfiles>
     <inputs>
@@ -42,7 +44,16 @@
         <data name="final_series" format="tabular" label="Final recalibration series"/>
     </outputs>
     <tests>
-        <test expect_failure="true"/>
+        <test>
+            <param name="input_file" value="recallist/recal_series.tabular"/>
+            <param name="global_min" value="100"/>
+            <param name="global_max" value="500"/>
+            <param name="abundance_score_threshold" value="50"/>
+            <param name="number_of_combinations" value="3"/>
+            <param name="coverage_threshold" value="50"/>
+            <param name="fill_series" value="TRUE"/>
+            <output name="final_series" file="findrecalseries/selected_series.tabular"/>
+        </test>
     </tests>
     <help>
         @FINDRECALSERIES_HELP@
