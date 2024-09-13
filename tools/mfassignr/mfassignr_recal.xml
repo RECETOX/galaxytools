@@ -86,8 +86,8 @@
                 <assert_contents>
                     <has_size size="91080" delta="200"/>
                 </assert_contents>
-            </output>
-        </test>
+            </output> 
+        </test> 
     </tests>
     <help><![CDATA[
         @RECAL_HELP@
