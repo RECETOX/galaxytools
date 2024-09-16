@@ -99,9 +99,9 @@
     <xml name="findrecalseries_param">
         <param name="input_file" type="data" format="tabular" label="Input data"
                help= "Recalibration series, output from RecalList"/>
-        <param name="global_min" type="float" label="Global min"
+        <param name="global_min" type="float" label="Global min" value="0" min="0"
                help= "A lower bound of the instrument m/z range."/>
-        <param name="global_max" type="float" label="Global max"
+        <param name="global_max" type="float" label="Global max" value="1000" min="0"
                help= "A higher bound of the instrument m/z range."/>
         <param name="number_of_combinations" type="integer" label="Number of combinations"
                help= "Combinations of how many series should be computed." value="5"/>
