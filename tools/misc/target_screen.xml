@@ -1,0 +1,57 @@
+<tool id="target_screen" name="ms target screening" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="20.01" license="MIT">
+    <description>Tool to pull out peaks from tables using a list of target ions. Only compatible with recetox-aplcms outputs.</description>
+    <macros>
+        <token name="@TOOL_VERSION@">0.1.0</token>
+        <token name="@VERSION_SUFFIX@">0</token>
+    </macros>
+
+    <requirements>
+        <requirement type="package" version="2.2.3">pandas</requirement>
+        <requirement type="package" version="17.0.0">pyarrow</requirement>
+    </requirements>
+
+    <command detect_errors="exit_code"><![CDATA[
+        python3 '${__tool_directory__}/target_screen.py' --peaks '$peaks' --markers '$markers' --output '$hits' --ppm $ppm --rt_tol $rt
+    ]]></command>
+
+    <inputs>
+        <param name="peaks" type="data" format="parquet"/>
+        <param name="markers" type="data" format="tabular"/>
+        <param name="ppm" type="integer" min="0" max="1000" value="10" label="ppm" help="Tolerance for peak filtering in ppm." />
+        <param name="rt" type="integer" min="0" max="100" value="10" label="rt tolerance" help="Toelrance regarding retention time to filter out peaks" />
+    </inputs>
+
+    <outputs>
+        <data name="hits" format="tabular" label="${tool.name} on ${on_string}" />
+    </outputs>
+
+    <tests>
+        <test>
+            <param name="peaks" value="target_screen/peaks.parquet"/>
+            <param name="markers" value="target_screen/markers.tsv"/>
+            <output name="hits" value="target_screen/out.tsv"/>
+        </test>
+    </tests>
+    <help><![CDATA[
+
+.. class:: infomark
+
+**What it does**
+
+TODO: Fill in help in reStructuredText format (https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html)
+
+Usage
+.....
+
+
+**Input**
+
+
+**Output**
+
+
+    ]]></help>
+    <citations>
+        <citation type="doi"> </citation>
+    </citations>
+</tool>
