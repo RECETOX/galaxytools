@@ -1,4 +1,5 @@
 import argparse
+
 import numpy as np
 import pandas as pd
 
@@ -30,7 +31,7 @@ def find_matches(peaks, markers, ppm, rt_tol):
     matched_peaks = peaks.iloc[match_indices[1]].reset_index(drop=True)
     hits = pd.concat([matched_markers[['formula']].reset_index(drop=True), matched_peaks], axis=1)
 
-     # Calculate mz and rt differences
+    # Calculate mz and rt differences
     hits['mz_diff'] = np.abs(matched_markers['mz'].values - matched_peaks['mz'].values)
     hits['rt_diff'] = np.abs(matched_markers['rt'].values - matched_peaks['rt'].values)
 
@@ -44,7 +45,6 @@ def main():
     parser.add_argument('--output', required=True, help='Path to the output TSV file.')
     parser.add_argument('--ppm', type=int, default=5, help='PPM tolerance for mz matching.')
     parser.add_argument('--rt_tol', type=int, default=10, help='RT tolerance for rt matching.')
-    
     args = parser.parse_args()
 
     peaks = pd.read_parquet(args.peaks)
