@@ -1,5 +1,5 @@
-<tool id="target_screen" name="ms target screening" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="20.01" license="MIT">
-    <description>Tool to pull out peaks from tables using a list of target ions. Only compatible with recetox-aplcms outputs.</description>
+<tool id="target_screen" name="MS target screening" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="20.01" license="MIT">
+    <description>Extract peaks from recetox-aplcms tables using a list of target ions</description>
     <macros>
         <token name="@TOOL_VERSION@">0.1.0</token>
         <token name="@VERSION_SUFFIX@">0</token>
