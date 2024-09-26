@@ -1,12 +1,15 @@
 import argparse
-import pandas as pd
 import numpy as np
+import pandas as pd
+
 
 def mz_match(marker, peak, ppm):
-    return np.abs(marker - peak) <= ((peak + marker)/2) * ppm * 1e-06
+    return np.abs(marker - peak) <= ((peak + marker) / 2) * ppm * 1e-06
+
 
 def rt_match(marker, peak, tol):
     return np.abs(marker - peak) <= tol
+
 
 def find_matches(peaks, markers, ppm, rt_tol):
     # Create a meshgrid of all combinations of mz and rt values
@@ -33,6 +36,7 @@ def find_matches(peaks, markers, ppm, rt_tol):
 
     return hits
 
+
 def main():
     parser = argparse.ArgumentParser(description='Find matches between peaks and markers.')
     parser.add_argument('--peaks', required=True, help='Path to the peaks parquet file.')
@@ -49,6 +53,7 @@ def main():
     hits = find_matches(peaks, markers, args.ppm, args.rt_tol)
 
     hits.to_csv(args.output, sep='\t', index=False)
+
 
 if __name__ == "__main__":
     main()
