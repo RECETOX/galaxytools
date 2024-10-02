@@ -2,7 +2,7 @@
     <description>Extract peaks from recetox-aplcms tables using a list of target ions</description>
     <macros>
         <token name="@TOOL_VERSION@">0.1.0</token>
-        <token name="@VERSION_SUFFIX@">0</token>
+        <token name="@VERSION_SUFFIX@">1</token>
     </macros>
 
     <requirements>
@@ -11,7 +11,7 @@
     </requirements>
 
     <command detect_errors="exit_code"><![CDATA[
-        python3 '${__tool_directory__}/target_screen.py' --peaks '$peaks' --markers '$markers' --output '$hits' --ppm $ppm --rt_tol $rt
+        python3 '${__tool_directory__}/target_screen.py' --peaks '$peaks' --markers '$markers' --output '$hits' --ppm $ppm --rt_tol $rt $advanced_matching --area_tol_frac $area_tol_frac --sigma_tol_frac $sigma_tol_frac
     ]]></command>
 
     <inputs>
@@ -19,6 +19,9 @@
         <param name="markers" type="data" format="tabular"/>
         <param name="ppm" type="integer" min="0" max="1000" value="10" label="ppm" help="Tolerance for peak filtering in ppm." />
         <param name="rt" type="integer" min="0" max="100" value="10" label="rt tolerance" help="Toelrance regarding retention time to filter out peaks" />
+        <param argument="--advanced_matching" type="boolean" truevalue="--advanced_matching" falsevalue="" checked="false" label="" help="TODO" />
+        <param argument="--area_tol_frac" type="float" min="0" max="10" value="0.5" label="" help="TODO" />
+        <param argument="--sigma_tol_frac" type="float" min="0" max="1" value="0.5" label="" help="TODO" />
     </inputs>
 
     <outputs>
@@ -30,6 +33,12 @@
             <param name="peaks" value="target_screen/peaks.parquet"/>
             <param name="markers" value="target_screen/markers.tsv"/>
             <output name="hits" value="target_screen/out.tsv"/>
+        </test>
+        <test>
+            <param name="peaks" value="target_screen/peaks.parquet"/>
+            <param name="markers" value="target_screen/markers.tsv"/>
+            <param name="advanced_matching" value="--advanced_matching"/>
+            <output name="hits" value="target_screen/out_advanced.tsv"/>
         </test>
     </tests>
     <help><![CDATA[
