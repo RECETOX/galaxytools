@@ -21,9 +21,11 @@
     <configfiles>
         <configfile name="mfassignr_isofiltr"><![CDATA[
             peaks <- read.table("$peaks", header=TRUE, sep="\t")
+            SN = $sn_ratio * $kmdn
+
             result <- MFAssignR::IsoFiltR(
                 peaks = peaks,
-                SN = $SN,
+                SN = SN,
                 Carbrat = $Carbrat,
                 Sulfrat = $Sulfrat,
                 Sulferr = $Sulferr,

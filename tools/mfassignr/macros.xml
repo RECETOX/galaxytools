@@ -140,8 +140,7 @@
     <xml name="isofiltr_param">
         <param name="peaks" type="data" format="tabular" label="Input Peak Data"
         help="The input data frame containing abundance and peak mass."/>
-        <param name="SN" type="float" value="0" label="Signal-to-Noise Ratio"
-        help="Sets the noise cut for the data; peaks below this value will not be evaluated."/>
+        <expand macro="noise_threshold_params" />
         <param name="Carbrat" type="float" value="60" min="5" label="Maximum 13C/12C Ratio"
         help="Sets the maximum allowed ratio for matching 13C isotopes."/>
         <param name="Sulfrat" type="float" value="30" label="Maximum 34S/32S Ratio"
