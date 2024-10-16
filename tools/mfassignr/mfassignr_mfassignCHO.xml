@@ -32,7 +32,29 @@
             lowMW = $lowMW,
             highMW = $highMW,
             ppm_err = $ppm_err,
-            SN = SN
+            SN = SN,
+            POEx = $POEx, 
+            NOEx = $NOEx,
+            Ex = $Ex,
+            Mx = $Mx,
+            NH4x = $NH4x,
+            Zx = $Zx,
+            Ox = $Ox,
+            O_Cmin = $O_Cmin,
+            O_Cmax = $O_Cmax,
+            H_Cmin = $H_Cmin,
+            H_Cmax = $H_Cmax,
+            DBEOmin = $DBEOmin,
+            DBEOmax = $DBEOmax,
+            Omin = $Omin,
+            max_def = $max_def,
+            min_def = $min_def,
+            HetCut = $HetCut,
+            NMScut = $NMScut,
+            DeNovo = $DeNovo,
+            nLoop = $nLoop,
+            Ambig = $Ambig,
+            MSMS = $MSMS
         )
 
         write.table(MF_CHO_assign[['Unambig']], file = '$Unambig', row.names= FALSE, sep = "\t")
