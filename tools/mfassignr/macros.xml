@@ -122,7 +122,7 @@
         </param>  
         <param name="DeNovo" optional = "true" type="float" label="DeNovo" value="1000" help= "Sets the de novo cut point for the data."/>  
         <param name="nLoop" optional = "true" type="float" label="nLoop" value="5" help= "Sets the number of times the KMD and z* series assignment loops."/>  
-        <param name="Ambig" optional = "true" type="select" display="radio" label="Ambig" help= "Turns on or off increased ambiguity for assignment.">
+        <param name="ambig_bool" optional = "true" type="select" display="radio" label="Ambig" help= "Turns on or off increased ambiguity for assignment.">
               <option value="on">on</option>
               <option value="off" selected="true">off</option> 
         </param> 

@@ -1,4 +1,4 @@
-<tool id="mfassignr_mfassignCHO" name="MFAssignR MFAssignCHO" version="@TOOL_VERSION@+galaxy0" profile="23.0">
+<tool id="mfassignr_mfassignCHO" name="MFAssignR MFAssignCHO" version="@TOOL_VERSION@+galaxy1" profile="23.0">
     <description>Molecular formula assignment (only with CHO).</description>
     <macros>
         <import>macros.xml</import>
@@ -49,12 +49,12 @@
             Omin = $Omin,
             max_def = $max_def,
             min_def = $min_def,
-            HetCut = $HetCut,
-            NMScut = $NMScut,
+            HetCut = "$HetCut",
+            NMScut = "$NMScut",
             DeNovo = $DeNovo,
             nLoop = $nLoop,
-            Ambig = $Ambig,
-            MSMS = $MSMS
+            Ambig = "$ambig_bool",
+            MSMS = "$MSMS"
         )
 
         write.table(MF_CHO_assign[['Unambig']], file = '$Unambig', row.names= FALSE, sep = "\t")
