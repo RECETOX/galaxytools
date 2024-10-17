@@ -94,39 +94,39 @@
                help= "Lower limit of molecular mass to be assigned."/>
         <param name="highMW" type="float" label="Upper limit of molecular mass to be assigned" value="1000"
                help= "Upper limit of molecular mass to be assigned."/>
-        <param name="POEx" optional = "true" type="float" label="POEx" value="0"
+        <param name="POEx" type="float" label="POEx" value="0"
                help= "If set to 1 and ionMode is positive, positive mode odd electron ions can be assigned."/>              
-        <param name="NOEx" optional = "true" type="float" label="NOEx" value="0"
+        <param name="NOEx" type="float" label="NOEx" value="0"
                help= "If set to 1 and ionMode is negative, negative mode odd electron ions can be assigned."/> 
-        <param name="Ex" optional = "true" type="float" label="Ex" value="0" help= "Sets the amount of Chlorine 37 to be used in assignment."/>  
-        <param name="Mx" optional = "true" type="float" label="Mx" value="0" help= "Sets the amount of Sodium adduct to be used in assignment."/>       
-        <param name="NH4x" optional = "true" type="float" label="NH4x" value="0" help= "Sets the amount of Ammonium adduct to be used in assignment."/>     
-        <param name="Zx" optional = "true" type="float" label="Zx" value="0" help= "Sets the amount of charge to be used in assignment."/>    
-        <param name="Ox" optional = "true" type="float" label="Ox" value="0" help= "Sets the maximum number of oxygen looked for in the CHOFIT core, it limits the number of loops performed."/>  
-        <param name="O_Cmin" optional = "true" type="float" label="O_Cmin" value="0" help= "Sets the minimum allowed oxygen to carbon ratio."/> 
-        <param name="O_Cmax" optional = "true" type="float" label="O_Cmax" value="2.5" help= "Sets the upper limit for oxygen to carbon ratio."/> 
-        <param name="H_Cmin" optional = "true" type="float" label="H_Cmin" value="0.1" help= "Sets the lower limit for hydrogen to carbon ratio."/>     
-        <param name="H_Cmax" optional = "true" type="float" label="H_Cmax" value="3" help= "Sets the upper limit for hydrogen to carbon ratio for assigned formulas."/>          
-        <param name="DBEOmin" optional = "true" type="float" label="DBEOmin" value="-13" help= "Sets the lower limit for DBE minus oxygen QA parameter."/>
-        <param name="DBEOmax" optional = "true" type="float" label="DBEOmax" value="13" help= "Sets the upper limit for DBE minus oxygen QA parameter."/>    
-        <param name="Omin" optional = "true" type="float" label="Omin" value="0" help= "Sets the lower limit for oxygen number in assigned formula."/>    
-        <param name="max_def" optional = "true" type="float" label="max_def" value="0.9" help= "Sets the upper limit of mass defect for using floor() instead of round() for KMD."/>      
-        <param name="min_def" optional = "true" type="float" label="min_def" value="0.5" help= "Sets the lower limit of mass defect for using floor() instead of round() for KMD."/>  
-        <param name = "HetCut" optional = "true" type="select" display="radio" label="HetCut" help= "HetCut turns on or off the high heteroatom QA parameter.">
+        <param name="Ex" type="float" label="Ex" value="0" help= "Sets the amount of Chlorine 37 to be used in assignment."/>  
+        <param name="Mx" type="float" label="Mx" value="0" help= "Sets the amount of Sodium adduct to be used in assignment."/>       
+        <param name="NH4x" type="float" label="NH4x" value="0" help= "Sets the amount of Ammonium adduct to be used in assignment."/>     
+        <param name="Zx" type="float" label="Zx" value="0" help= "Sets the amount of charge to be used in assignment."/>    
+        <param name="Ox" type="float" label="Ox" value="0" help= "Sets the maximum number of oxygen looked for in the CHOFIT core, it limits the number of loops performed."/>  
+        <param name="O_Cmin" type="float" label="O_Cmin" value="0" help= "Sets the minimum allowed oxygen to carbon ratio."/> 
+        <param name="O_Cmax" type="float" label="O_Cmax" value="2.5" help= "Sets the upper limit for oxygen to carbon ratio."/> 
+        <param name="H_Cmin" type="float" label="H_Cmin" value="0.1" help= "Sets the lower limit for hydrogen to carbon ratio."/>     
+        <param name="H_Cmax" type="float" label="H_Cmax" value="3" help= "Sets the upper limit for hydrogen to carbon ratio for assigned formulas."/>          
+        <param name="DBEOmin" type="float" label="DBEOmin" value="-13" help= "Sets the lower limit for DBE minus oxygen QA parameter."/>
+        <param name="DBEOmax" type="float" label="DBEOmax" value="13" help= "Sets the upper limit for DBE minus oxygen QA parameter."/>    
+        <param name="Omin" type="float" label="Omin" value="0" help= "Sets the lower limit for oxygen number in assigned formula."/>    
+        <param name="max_def" type="float" label="max_def" value="0.9" help= "Sets the upper limit of mass defect for using floor() instead of round() for KMD."/>      
+        <param name="min_def" type="float" label="min_def" value="0.5" help= "Sets the lower limit of mass defect for using floor() instead of round() for KMD."/>  
+        <param name = "HetCut" type="select" display="radio" label="HetCut" help= "HetCut turns on or off the high heteroatom QA parameter.">
               <option value="on">on</option>
               <option value="off" selected="true">off</option> 
         </param>  
-        <param name = "NMScut" optional = "true" type="select" display="radio" label="NMScut" help= "NMScut turns on or off the nominal mass series QA parameter.">
+        <param name = "NMScut" type="select" display="radio" label="NMScut" help= "NMScut turns on or off the nominal mass series QA parameter.">
               <option value="on" selected="true">on</option>
               <option value="off">off</option> 
         </param>  
-        <param name="DeNovo" optional = "true" type="float" label="DeNovo" value="1000" help= "Sets the de novo cut point for the data."/>  
-        <param name="nLoop" optional = "true" type="float" label="nLoop" value="5" help= "Sets the number of times the KMD and z* series assignment loops."/>  
-        <param name="ambig_bool" optional = "true" type="select" display="radio" label="Ambig" help= "Turns on or off increased ambiguity for assignment.">
+        <param name="DeNovo" type="float" label="DeNovo" value="1000" help= "Sets the de novo cut point for the data."/>  
+        <param name="nLoop" type="float" label="nLoop" value="5" help= "Sets the number of times the KMD and z* series assignment loops."/>  
+        <param name="ambig_bool" type="select" display="radio" label="Ambig" help= "Turns on or off increased ambiguity for assignment.">
               <option value="on">on</option>
               <option value="off" selected="true">off</option> 
         </param> 
-        <param name = "MSMS" optional = "true" type="select" display="radio" label="MSMS" help= "Turns on or off CH2 KMD prescreening before initial assignment.">
+        <param name = "MSMS" type="select" display="radio" label="MSMS" help= "Turns on or off CH2 KMD prescreening before initial assignment.">
               <option value="on" >on</option>
               <option value="off" selected="true">off</option> 
         </param>
