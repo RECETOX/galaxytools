@@ -4,4 +4,6 @@
             tmax  20.0 
             tinit  500.0 
             ieeatm  0.6
+            tstep 0.5
+            etemp 5000
         
