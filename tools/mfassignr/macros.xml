@@ -99,11 +99,11 @@
                help= "If set to 1 and ionMode is positive, positive mode odd electron ions can be assigned."/>              
               <param name="NOEx" type="float" label="NOEx" value="0"
                help= "If set to 1 and ionMode is negative, negative mode odd electron ions can be assigned."/> 
-              <param name="Ex" type="float" label="Amount of Chlorine 37" value="0" help= "Sets the amount of Chlorine 37 to be used in assignment."/>  
-              <param name="Mx" type="float" label="Amount of Sodium adduct" value="0" help= "Sets the amount of Sodium adduct to be used in assignment."/>       
-              <param name="NH4x" type="float" label="Amount of Ammonium adduct" value="0" help= "Sets the amount of Ammonium adduct to be used in assignment."/>     
-              <param name="Zx" type="float" label="Amount of charge" value="1" help= "Sets the amount of charge to be used in assignment."/>    
-              <param name="Ox" type="float" label="Maximum number of oxygen looked for in the CHOFIT core" value="30" help= "Sets the maximum number of oxygen looked for in the CHOFIT core, it limits the number of loops performed."/>  
+              <param name="Ex" type="integer" label="Amount of Chlorine 37" value="0" help= "Sets the amount of Chlorine 37 to be used in assignment."/>  
+              <param name="Mx" type="integer" label="Amount of Sodium adduct" value="0" help= "Sets the amount of Sodium adduct to be used in assignment."/>       
+              <param name="NH4x" type="integer" label="Amount of Ammonium adduct" value="0" help= "Sets the amount of Ammonium adduct to be used in assignment."/>     
+              <param name="Zx" type="integer" label="Amount of charge" value="1" help= "Sets the amount of charge to be used in assignment."/>    
+              <param name="Ox" type="integer" label="Maximum number of oxygen looked for in the CHOFIT core" value="30" help= "Sets the maximum number of oxygen looked for in the CHOFIT core, it limits the number of loops performed."/>  
               <param name="O_Cmin" type="float" label="Minimum allowed O/C ratio" value="0" help= "Sets the minimum allowed oxygen to carbon ratio."/> 
               <param name="O_Cmax" type="float" label="Upper limit for O/C ratio" value="2.5" help= "Sets the upper limit for oxygen to carbon ratio."/> 
               <param name="H_Cmin" type="float" label="Lower limit for H/C ratio" value="0.1" help= "Sets the lower limit for hydrogen to carbon ratio."/>     
@@ -122,7 +122,7 @@
                      <option value="off">no</option> 
               </param>  
               <param name="DeNovo" type="float" label="De novo cut point for the data" value="1000" help= "Sets the de novo cut point for the data."/>  
-              <param name="nLoop" type="float" label="Number of times the KMD and z* series assignment loops" value="5" help= "Sets the number of times the KMD and z* series assignment loops."/>  
+              <param name="nLoop" type="integer" label="Number of times the KMD and z* series assignment loops" value="5" help= "Sets the number of times the KMD and z* series assignment loops."/>  
               <param name="ambig_bool" type="select" display="radio" label="Turn on the increased ambiguity for assignment?" help= "Turns on or off increased ambiguity for assignment.">
                      <option value="on">yes</option>
                      <option value="off" selected="true">no</option> 
