@@ -126,7 +126,6 @@
                      <option value="on" selected="true">yes</option>
                      <option value="off">no</option> 
               </param>  
-              <param name="DeNovo" type="float" label="De novo cut point for the data" value="1000" help= "Sets the de novo cut point for the data."/>  
               <param name="nLoop" type="integer" label="Number of times the KMD and z* series assignment loops" value="5" help= "Sets the number of times the KMD and z* series assignment loops."/>  
               <param name="ambig_bool" type="select" display="radio" label="Turn on the increased ambiguity for assignment?" help= "Turns on or off increased ambiguity for assignment.">
                      <option value="on">yes</option>
@@ -144,6 +143,7 @@
           <param name="Ex" type="integer" label="Amount of Chlorine 37" value="0" help= "Sets the amount of Chlorine 37 to be used in assignment."/>  
           <expand macro="mfassign_elements_shared" />
           <expand macro="mfassign_advanced_shared" />
+          <param name="DeNovo" type="float" label="De novo cut point for the data" value="1000" help= "Sets the de novo cut point for the data."/>  
         </section>
     </xml>
     
@@ -180,6 +180,7 @@
                      <option value="on" selected="true">yes</option>
                      <option value="off">no</option> 
           </param>
+          <param name="DeNovo" type="float" label="De novo cut point for the data" value="300" help= "Sets the de novo cut point for the data."/>  
        </section>
     </xml>
 
