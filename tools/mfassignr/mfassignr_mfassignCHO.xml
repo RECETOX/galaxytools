@@ -22,6 +22,19 @@
         iso <- read.delim("$input_iso", sep="\t")
         #end if
         SN = $sn_ratio * $kmdn
+        POEx = 0
+        NOEx = 0
+        
+        #if "$assign_typeof_ions"=="yes"
+            #if $ionMode=="pos"
+            POEx = 1
+            NOEx = 0
+            #end if
+            #if $ionMode=="neg"
+            POEx = 0
+            NOEx = 1
+            #end if
+        #end if        
 
         MF_CHO_assign <- MFAssignR::MFAssignCHO(
             peaks = mono,
@@ -33,8 +46,8 @@
             highMW = $highMW,
             ppm_err = $ppm_err,
             SN = SN,
-            POEx = $POEx, 
-            NOEx = $NOEx,
+            POEx = POEx, 
+            NOEx = NOEx,
             Ex = $Ex,
             Mx = $Mx,
             NH4x = $NH4x,

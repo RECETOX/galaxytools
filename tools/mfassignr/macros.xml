@@ -95,10 +95,10 @@
         <param name="highMW" type="float" label="Upper limit of molecular mass to be assigned" value="1000"
                help= "Upper limit of molecular mass to be assigned."/>
         <section name="advanced" title="Advanced" expanded="false">
-              <param name="POEx" type="float" label="POEx" value="0"
-               help= "If set to 1 and ionMode is positive, positive mode odd electron ions can be assigned."/>              
-              <param name="NOEx" type="float" label="NOEx" value="0"
-               help= "If set to 1 and ionMode is negative, negative mode odd electron ions can be assigned."/> 
+              <param name="assign_typeof_ions" type="select" display="radio" label="Assign odd electron ions based on the ionization mode?" help="This parameter determines whether to assign either positive mode odd electron ions (if ionMode is positive) or negative mode odd electron ions (if ionMode is negative).">
+                     <option value="yes">yes</option>
+                     <option value="no" selected="true">no</option>
+              </param>
               <param name="Ex" type="integer" label="Amount of Chlorine 37" value="0" help= "Sets the amount of Chlorine 37 to be used in assignment."/>  
               <param name="Mx" type="integer" label="Amount of Sodium adduct" value="0" help= "Sets the amount of Sodium adduct to be used in assignment."/>       
               <param name="NH4x" type="integer" label="Amount of Ammonium adduct" value="0" help= "Sets the amount of Ammonium adduct to be used in assignment."/>     
