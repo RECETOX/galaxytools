@@ -85,7 +85,7 @@
         </param>
     </xml>
 
-    <xml name="mfassign_param">
+    <xml name="mfassign_required_shared">
         <param name="ppm_err" type="integer" label="ppm_err"
                help= "Error tolerance (ppm) for formula assignment" value="3"/>
         <expand macro="ionmode_param" />
@@ -94,16 +94,21 @@
                help= "Lower limit of molecular mass to be assigned."/>
         <param name="highMW" type="float" label="Upper limit of molecular mass to be assigned" value="1000"
                help= "Upper limit of molecular mass to be assigned."/>
-        <section name="advanced" title="Advanced" expanded="false">
+    </xml>
+
+    <xml name="mfassign_elements_shared">
+        <param name="Mx" type="integer" label="Amount of Sodium adduct" value="0" help= "Sets the amount of Sodium adduct to be used in assignment."/>       
+        <param name="NH4x" type="integer" label="Amount of Ammonium adduct" value="0" help= "Sets the amount of Ammonium adduct to be used in assignment."/>     
+        <param name="Zx" type="integer" label="Amount of charge" value="1" help= "Sets the amount of charge to be used in assignment."/>    
+        <param name="Ox" type="integer" label="Maximum number of oxygen looked for in the CHOFIT core" value="30" help= "Sets the maximum number of oxygen looked for in the CHOFIT core, it limits the number of loops performed."/>  
+    </xml>
+
+    <xml name="mfassign_advanced_shared">
               <param name="assign_typeof_ions" type="select" display="radio" label="Assign odd electron ions based on the ionization mode?" help="This parameter determines whether to assign either positive mode odd electron ions (if ionMode is positive) or negative mode odd electron ions (if ionMode is negative).">
                      <option value="yes">yes</option>
                      <option value="no" selected="true">no</option>
               </param>
-              <param name="Ex" type="integer" label="Amount of Chlorine 37" value="0" help= "Sets the amount of Chlorine 37 to be used in assignment."/>  
-              <param name="Mx" type="integer" label="Amount of Sodium adduct" value="0" help= "Sets the amount of Sodium adduct to be used in assignment."/>       
-              <param name="NH4x" type="integer" label="Amount of Ammonium adduct" value="0" help= "Sets the amount of Ammonium adduct to be used in assignment."/>     
-              <param name="Zx" type="integer" label="Amount of charge" value="1" help= "Sets the amount of charge to be used in assignment."/>    
-              <param name="Ox" type="integer" label="Maximum number of oxygen looked for in the CHOFIT core" value="30" help= "Sets the maximum number of oxygen looked for in the CHOFIT core, it limits the number of loops performed."/>  
+              
               <param name="O_Cmin" type="float" label="Minimum allowed O/C ratio" value="0" help= "Sets the minimum allowed oxygen to carbon ratio."/> 
               <param name="O_Cmax" type="float" label="Upper limit for O/C ratio" value="2.5" help= "Sets the upper limit for oxygen to carbon ratio."/> 
               <param name="H_Cmin" type="float" label="Lower limit for H/C ratio" value="0.1" help= "Sets the lower limit for hydrogen to carbon ratio."/>     
@@ -131,6 +136,50 @@
                      <option value="on" >yes</option>
                      <option value="off" selected="true">no</option> 
               </param>
+    </xml>
+
+    <xml name="mfassigncho_param">
+        <expand macro="mfassign_required_shared" />
+        <section name="advanced" title="Advanced" expanded="false">
+          <param name="Ex" type="integer" label="Amount of Chlorine 37" value="0" help= "Sets the amount of Chlorine 37 to be used in assignment."/>  
+          <expand macro="mfassign_elements_shared" />
+          <expand macro="mfassign_advanced_shared" />
+        </section>
+    </xml>
+    
+    <xml name="mfassign_param">
+        <expand macro="mfassign_required_shared" />
+        <section name="advanced" title="Advanced" expanded="false">
+          <param name="Nx" type="integer" label="Amount of Nitrogen 14" value="0" help= "Sets the maximum allowable number of Nitrogen 14 to be used in assign"/>  
+          <param name="Sx" type="integer" label="Amount of Sulphur 32" value="0" help= "Sets the maximum allowable number of Sulfur 32 to be used in assign"/>  
+          <param name="Px" type="integer" label="Amount of Phosphorus 31" value="0" help= "Sets the maximum allowable number of Phosphorus 31 to be used in assign"/>  
+          <param name="Ex" type="integer" label="Amount of Carbon 13" value="0" help= "Sets the amount of Carbon 13 to be used in assignment."/>  
+          <param name="S34x" type="integer" label="Amount of Sulfur 34" value="0" help= "Sets the amount of Sulfur 34 to be used in assignment."/>  
+          <param name="N15x" type="integer" label="Amount of Nitrogen 15" value="0" help= "Sets the amount of Nitrogen 15 to be used in assignment."/>  
+          <param name="Dx" type="integer" label="Amount of Deuterium" value="0" help= "Sets the amount of Deuterium to be used in assignment."/>
+          <param name="Clx" type="integer" label="Amount of Chlorine" value="0" help= "Sets the amount of Chlorine to be used in assignment."/>
+          <param name="Fx" type="integer" label="Amount of Fluorine" value="0" help= "Sets the amount of Fluorine to be used in assignment."/>
+          <param name="Cl37x" type="integer" label="Amount of Chlorine 37" value="0" help= "Sets the amount of Chlorine 37 to be used in assignment."/>
+          <param name="Br81x" type="integer" label="Amount of Bromine 81" value="0" help= "Sets the amount of Bromine 81 to be used in assignment."/>
+          <param name="Ix" type="integer" label="Amount of Iodine 127" value="0" help= "Sets the amount of Iodine 127 to be used in assignment."/>
+          <expand macro="mfassign_elements_shared" />
+          <param name="Sval" type="integer" label="Valence of Sulphur" value="2" help= "Sets the valence of Sulfur."/>
+          <param name="Nval" type="integer" label="Valence of Nitrogen" value="3" help= "Sets the valence of Nitrogen."/>
+          <param name="S34val" type="integer" label="Valence of Sulphur 34" value="2" help= "Sets the valence of Sulfur 34."/>
+          <param name="N15val" type="integer" label="Valence of Nitrogen 15" value="3" help= "Sets the valence of Nitrogen 15."/>
+          <param name="Pval" type="integer" label="Valence of Phosphorus" value="5" help= "Sets the valence of Phosphorus."/>
+          <param name="iso_err" type="integer" label="Error tolerance (ppm) for polyisotope matching" value="3" help= "Sets the the error tolerance (ppm) for polyisotope matching."/>
+          <expand macro="mfassign_advanced_shared" />
+          <param name = "SulfCheck" type="select" display="radio" label="Turn on the sulfur isotope check?" help= "Turns on or off the sulfur isotope check QA parameter.c">
+                     <option value="on" selected="true">yes</option>
+                     <option value="off">no</option> 
+          </param>  
+          <param name="S34_abund" type="integer" label="Maximum 34S/32S isotope ratio" value="30" help= "Sets the maximum 34S/32S isotope ratio for isotope matching."/>
+          <param name="C13_abund" type="integer" label="Maximum 13C/12C isotope ratio" value="60" help= "Sets the maximum 13C/12C isotope ratio for isotope matching."/>
+          <param name = "N3corr" type="select" display="radio" label="Turn on the correction of N3OS monoisotopic assignments to 13C assignment?" help= "Turns on or off correction of N3OS monoisotopic assignments to 13C assignment.">
+                     <option value="on" selected="true">yes</option>
+                     <option value="off">no</option> 
+          </param>
        </section>
     </xml>
 

@@ -19,6 +19,19 @@
         iso <- read.delim("$input_iso", sep="\t")
         #end if
         SN = $sn_ratio * $kmdn
+        POEx = 0
+        NOEx = 0
+
+        #if "$assign_typeof_ions"=="yes"
+            #if $ionMode=="pos"
+            POEx = 1
+            NOEx = 0
+            #end if
+            #if $ionMode=="neg"
+            POEx = 0
+            NOEx = 1
+            #end if
+        #end if 
 
         MF_assign <- MFAssignR::MFAssign(
             peaks = mono,
@@ -29,7 +42,50 @@
             lowMW = $lowMW,
             highMW = $highMW,
             ppm_err = $ppm_err,
-            SN = SN
+            SN = SN,
+            POEx = POEx, 
+            NOEx = NOEx,
+            Nx = $Nx,
+            Sx = $Sx,
+            Px = $Px,
+            S34x = $S34x,
+            N15x = $N15x,
+            Dx = $Dx,
+            Clx = $Clx,
+            Fx = $Fx,
+            Cl37x = $Cl37x,
+            Br81x = $Br81x,
+            Ix = $Ix,
+            Ex = $Ex,
+            Mx = $Mx,
+            NH4x = $NH4x,
+            Zx = $Zx,
+            Ox = $Ox,
+            O_Cmin = $O_Cmin,
+            O_Cmax = $O_Cmax,
+            H_Cmin = $H_Cmin,
+            H_Cmax = $H_Cmax,
+            DBEOmin = $DBEOmin,
+            DBEOmax = $DBEOmax,
+            Omin = $Omin,
+            max_def = $max_def,
+            min_def = $min_def,
+            HetCut = "$HetCut",
+            NMScut = "$NMScut",
+            DeNovo = $DeNovo,
+            nLoop = $nLoop,
+            Ambig = "$ambig_bool",
+            MSMS = "$MSMS",
+            Sval = $Sval,
+            Nval = $Nval,
+            S34val = $S34val,
+            N15val = $N15val,
+            Pval = $Pval,
+            iso_err = $iso_err,
+            SulfCheck = "$SulfCheck",
+            S34_abund = $S34_abund,
+            C13_abund = $C13_abund,
+            N3corr = "$N3corr"
         )
 
         write.table(MF_assign[['Unambig']], file = '$Unambig', row.names= FALSE, sep = "\t")
