@@ -1,4 +1,4 @@
-<tool id="mfassignr_snplot" name="MFAssignR SNplot" version="@TOOL_VERSION@+galaxy0" profile="23.0">
+<tool id="mfassignr_snplot" name="MFAssignR SNplot" version="@TOOL_VERSION@+galaxy1" profile="23.0">
     <description>Noise level assessment using the SNplot function.</description>
     <macros>
         <import>macros.xml</import>
@@ -14,9 +14,11 @@
     ]]></command>
     <configfiles>
         <configfile name="run_script"><![CDATA[
+        cut = $sn_ratio * $kmdn
+                    
         SNplot <- MFAssignR::SNplot(
             df = read.delim("$input_file", sep="\t"),
-            cut = $cut,
+            cut = cut,
             mass = $mass,
             window.x = $window_x,
             window.y = $window_y
@@ -34,7 +36,7 @@
     <tests>
         <test>
             <param name="input_file" value="QC1_1_POS_500.tabular"/>
-            <param name="cut" value="3294705.63963789"/>
+            <param name="kmdn" value="3294705.63963789"/>
             <param name="mass" value="300"/>
             <output name="SNplot" ftype="png" file="snplot/plot.png" />
         </test>
