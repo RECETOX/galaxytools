@@ -98,8 +98,7 @@
 
     <xml name="mfassign_elements_shared">
         <param name="Mx" type="integer" label="Amount of Sodium adduct" value="0" help= "Sets the amount of Sodium adduct to be used in assignment."/>       
-        <param name="NH4x" type="integer" label="Amount of Ammonium adduct" value="0" help= "Sets the amount of Ammonium adduct to be used in assignment."/>     
-        <param name="Zx" type="integer" label="Amount of charge" min="1" max="5" value="1" help= "Sets the amount of charge to be used in assignment."/>    
+        <param name="NH4x" type="integer" label="Amount of Ammonium adduct" value="0" help= "Sets the amount of Ammonium adduct to be used in assignment."/>       
         <param name="Ox" type="integer" label="Maximum number of oxygen looked for in the CHOFIT core" value="30" help= "Sets the maximum number of oxygen looked for in the CHOFIT core, it limits the number of loops performed."/>  
     </xml>
 
@@ -111,6 +110,7 @@
     </xml>
 
     <xml name="mfassign_advanced_shared">
+       <param name="Zx" type="integer" label="Amount of charge" min="1" max="5" value="1" help= "Sets the amount of charge to be used in assignment."/>  
        <param name="assign_typeof_ions" type="select" display="radio" label="Assign odd electron ions based on the ionization mode?" help="This parameter determines whether to assign either positive mode odd electron ions (if ionMode is positive) or negative mode odd electron ions (if ionMode is negative).">
               <option value="yes">yes</option>
               <option value="no" selected="true">no</option>
@@ -184,11 +184,13 @@
           </section>
 
           <section name="set_valence" title="Set the valence" expanded="false">
-              <expand macro="mfassign_valence_param">,
+              <expand macro="mfassign_valence_param"/>
           </section>
 
           <section name="set_ratios" title="Set the ratios" expanded="false">
               <expand macro="mfassign_ratios_shared" />  
+              <param name="S34_abund" type="integer" min="0" max="100" label="Maximum 34S/32S isotope ratio" value="30" help= "Sets the maximum 34S/32S isotope ratio (in percent) for isotope matching."/>
+              <param name="C13_abund" type="integer" min="0" max="100" label="Maximum 13C/12C isotope ratio" value="60" help= "Sets the maximum 13C/12C isotope ratio (in percent) for isotope matching."/>
           </section>
 
           <section name="other_params" title="Other" expanded="false">
@@ -198,8 +200,6 @@
                      <option value="on" selected="true">yes</option>
                      <option value="off">no</option> 
               </param>  
-              <param name="S34_abund" type="integer" min="0" max="100" label="Maximum 34S/32S isotope ratio" value="30" help= "Sets the maximum 34S/32S isotope ratio (in percent) for isotope matching."/>
-              <param name="C13_abund" type="integer" min="0" max="100" label="Maximum 13C/12C isotope ratio" value="60" help= "Sets the maximum 13C/12C isotope ratio (in percent) for isotope matching."/>
               <param name = "N3corr" type="select" display="radio" label="Turn on the correction of N3OS monoisotopic assignments to 13C assignment?" help= "Turns on or off correction of N3OS monoisotopic assignments to 13C assignment.">
                      <option value="on" selected="true">yes</option>
                      <option value="off">no</option> 
