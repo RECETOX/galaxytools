@@ -26,8 +26,7 @@
             #if $ionMode=="pos"
             POEx = 1
             NOEx = 0
-            #end if
-            #if $ionMode=="neg"
+            #else
             POEx = 0
             NOEx = 1
             #end if
