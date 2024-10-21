@@ -1,4 +1,4 @@
-<tool id="recetox_aplcms_correct_time" name="recetox-aplcms - correct time" version="@TOOL_VERSION@+galaxy0" profile="21.09">
+<tool id="recetox_aplcms_correct_time" name="recetox-aplcms - correct time" version="@TOOL_VERSION@+galaxy1" profile="21.09">
     <description>correct retention time across samples for peak alignment</description>
     <macros>
         <import>macros.xml</import>
@@ -37,8 +37,8 @@
     </configfiles>
 
     <inputs>
-        <param label="Input clustered features table" name="features_table" type="data" format="parquet"
-               help="Mass spectrometry clustered features table." />
+        <param label="Input clustered features table" name="features_table" type="data_collection" collection_type="list" format="parquet"
+               help="Mass spectrometry clustered features tables." />
         <param label="Input template features table" name="template" type="data" format="parquet"
                help="Template features table." />
     </inputs>
