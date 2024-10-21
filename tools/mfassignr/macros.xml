@@ -99,7 +99,7 @@
     <xml name="mfassign_elements_shared">
         <param name="Mx" type="integer" label="Amount of Sodium adduct" value="0" help= "Sets the amount of Sodium adduct to be used in assignment."/>       
         <param name="NH4x" type="integer" label="Amount of Ammonium adduct" value="0" help= "Sets the amount of Ammonium adduct to be used in assignment."/>     
-        <param name="Zx" type="integer" label="Amount of charge" value="1" help= "Sets the amount of charge to be used in assignment."/>    
+        <param name="Zx" type="integer" label="Amount of charge" min="1" max="5" value="1" help= "Sets the amount of charge to be used in assignment."/>    
         <param name="Ox" type="integer" label="Maximum number of oxygen looked for in the CHOFIT core" value="30" help= "Sets the maximum number of oxygen looked for in the CHOFIT core, it limits the number of loops performed."/>  
     </xml>
 
