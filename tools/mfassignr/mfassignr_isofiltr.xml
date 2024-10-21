@@ -1,4 +1,4 @@
-<tool id="mfassignr_isofiltr" name="MFAssignR IsoFiltR" version="@TOOL_VERSION@+galaxy0" profile="23.0">
+<tool id="mfassignr_isofiltr" name="MFAssignR IsoFiltR" version="@TOOL_VERSION@+galaxy1" profile="23.0">
     <description>Separates likely isotopic masses from monoisotopic masses in a mass list</description>
     <macros>
         <import>macros.xml</import>
@@ -21,9 +21,11 @@
     <configfiles>
         <configfile name="mfassignr_isofiltr"><![CDATA[
             peaks <- read.table("$peaks", header=TRUE, sep="\t")
+            SN = $sn_ratio * $kmdn
+
             result <- MFAssignR::IsoFiltR(
                 peaks = peaks,
-                SN = $SN,
+                SN = SN,
                 Carbrat = $Carbrat,
                 Sulfrat = $Sulfrat,
                 Sulferr = $Sulferr,
