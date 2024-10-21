@@ -136,6 +136,14 @@
        </param>
     </xml>
 
+    <xml name="mfassign_valence_param">
+          <param name="Sval" type="integer" label="Valence of Sulphur" value="2" help= "Sets the valence of Sulfur."/>
+          <param name="Nval" type="integer" label="Valence of Nitrogen" value="3" help= "Sets the valence of Nitrogen."/>
+          <param name="S34val" type="integer" label="Valence of Sulphur 34" value="2" help= "Sets the valence of Sulfur 34."/>
+          <param name="N15val" type="integer" label="Valence of Nitrogen 15" value="3" help= "Sets the valence of Nitrogen 15."/>
+          <param name="Pval" type="integer" label="Valence of Phosphorus" value="5" help= "Sets the valence of Phosphorus."/>
+    </xml>
+
     <xml name="mfassigncho_param">
         <expand macro="mfassign_required_shared" />
         <section name="advanced" title="Advanced" expanded="false">
@@ -162,11 +170,7 @@
           <param name="Br81x" type="integer" label="Amount of Bromine 81" value="0" help= "Sets the amount of Bromine 81 to be used in assignment."/>
           <param name="Ix" type="integer" label="Amount of Iodine 127" value="0" help= "Sets the amount of Iodine 127 to be used in assignment."/>
           <expand macro="mfassign_elements_shared" />
-          <param name="Sval" type="integer" label="Valence of Sulphur" value="2" help= "Sets the valence of Sulfur."/>
-          <param name="Nval" type="integer" label="Valence of Nitrogen" value="3" help= "Sets the valence of Nitrogen."/>
-          <param name="S34val" type="integer" label="Valence of Sulphur 34" value="2" help= "Sets the valence of Sulfur 34."/>
-          <param name="N15val" type="integer" label="Valence of Nitrogen 15" value="3" help= "Sets the valence of Nitrogen 15."/>
-          <param name="Pval" type="integer" label="Valence of Phosphorus" value="5" help= "Sets the valence of Phosphorus."/>
+          <expand macro="mfassign_valence_param">
           <param name="iso_err" type="integer" min="0" max="20" label="Error tolerance (ppm) for polyisotope matching" value="3" help= "Sets the the error tolerance (ppm) for polyisotope matching."/>
           <expand macro="mfassign_advanced_shared" />
           <param name = "SulfCheck" type="select" display="radio" label="Turn on the sulfur isotope check?" help= "Turns on or off the sulfur isotope check QA parameter.c">
