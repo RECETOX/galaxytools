@@ -103,15 +103,19 @@
         <param name="Ox" type="integer" label="Maximum number of oxygen looked for in the CHOFIT core" value="30" help= "Sets the maximum number of oxygen looked for in the CHOFIT core, it limits the number of loops performed."/>  
     </xml>
 
+    <xml name="mfassign_ratios_shared">
+       <param name="O_Cmin" type="float" label="Minimum allowed O/C ratio" value="0" help= "Sets the minimum allowed oxygen to carbon ratio."/> 
+       <param name="O_Cmax" type="float" label="Upper limit for O/C ratio" value="2.5" help= "Sets the upper limit for oxygen to carbon ratio."/> 
+       <param name="H_Cmin" type="float" label="Lower limit for H/C ratio" value="0.1" help= "Sets the lower limit for hydrogen to carbon ratio."/>     
+       <param name="H_Cmax" type="float" label="Upper limit for H/C ratio" value="3" help= "Sets the upper limit for hydrogen to carbon ratio for assigned formulas."/>
+    </xml>
+
     <xml name="mfassign_advanced_shared">
        <param name="assign_typeof_ions" type="select" display="radio" label="Assign odd electron ions based on the ionization mode?" help="This parameter determines whether to assign either positive mode odd electron ions (if ionMode is positive) or negative mode odd electron ions (if ionMode is negative).">
               <option value="yes">yes</option>
               <option value="no" selected="true">no</option>
        </param>
-       <param name="O_Cmin" type="float" label="Minimum allowed O/C ratio" value="0" help= "Sets the minimum allowed oxygen to carbon ratio."/> 
-       <param name="O_Cmax" type="float" label="Upper limit for O/C ratio" value="2.5" help= "Sets the upper limit for oxygen to carbon ratio."/> 
-       <param name="H_Cmin" type="float" label="Lower limit for H/C ratio" value="0.1" help= "Sets the lower limit for hydrogen to carbon ratio."/>     
-       <param name="H_Cmax" type="float" label="Upper limit for H/C ratio" value="3" help= "Sets the upper limit for hydrogen to carbon ratio for assigned formulas."/>          
+       <expand macro="mfassign_ratios_shared" />          
        <param name="DBEOmin" type="float" label="Lower limit for DBE minus oxygen QA parameter" value="-13" help= "Sets the lower limit for double bond equivalent (DBE) minus oxygen QA parameter."/>
        <param name="DBEOmax" type="float" label="Upper limit for DBE minus oxygen QA parameter" value="13" help= "Sets the upper limit for double bond equivalent (DBE) minus oxygen QA parameter."/>    
        <param name="Omin" type="integer" min="0" label="Lower limit for number of O in assigned formula" value="0" help= "Sets the lower limit for oxygen number in assigned formula."/>    
