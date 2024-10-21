@@ -183,20 +183,29 @@
               <expand macro="mfassign_elements_shared" />
           </section>
 
-          <expand macro="mfassign_valence_param">
-          <param name="iso_err" type="integer" min="0" max="20" label="Error tolerance (ppm) for polyisotope matching" value="3" help= "Sets the the error tolerance (ppm) for polyisotope matching."/>
-          <expand macro="mfassign_advanced_shared" />
-          <param name = "SulfCheck" type="select" display="radio" label="Turn on the sulfur isotope check?" help= "Turns on or off the sulfur isotope check QA parameter.c">
+          <section name="set_valence" title="Set the valence" expanded="false">
+              <expand macro="mfassign_valence_param">,
+          </section>
+
+          <section name="set_ratios" title="Set the ratios" expanded="false">
+              <expand macro="mfassign_ratios_shared" />  
+          </section>
+
+          <section name="other_params" title="Other" expanded="false">
+              <param name="iso_err" type="integer" min="0" max="20" label="Error tolerance (ppm) for polyisotope matching" value="3" help= "Sets the the error tolerance (ppm) for polyisotope matching."/>
+              <expand macro="mfassign_advanced_shared" />
+               <param name = "SulfCheck" type="select" display="radio" label="Turn on the sulfur isotope check?" help= "Turns on or off the sulfur isotope check QA parameter.c">
                      <option value="on" selected="true">yes</option>
                      <option value="off">no</option> 
-          </param>  
-          <param name="S34_abund" type="integer" min="0" max="100" label="Maximum 34S/32S isotope ratio" value="30" help= "Sets the maximum 34S/32S isotope ratio (in percent) for isotope matching."/>
-          <param name="C13_abund" type="integer" min="0" max="100" label="Maximum 13C/12C isotope ratio" value="60" help= "Sets the maximum 13C/12C isotope ratio (in percent) for isotope matching."/>
-          <param name = "N3corr" type="select" display="radio" label="Turn on the correction of N3OS monoisotopic assignments to 13C assignment?" help= "Turns on or off correction of N3OS monoisotopic assignments to 13C assignment.">
+              </param>  
+              <param name="S34_abund" type="integer" min="0" max="100" label="Maximum 34S/32S isotope ratio" value="30" help= "Sets the maximum 34S/32S isotope ratio (in percent) for isotope matching."/>
+              <param name="C13_abund" type="integer" min="0" max="100" label="Maximum 13C/12C isotope ratio" value="60" help= "Sets the maximum 13C/12C isotope ratio (in percent) for isotope matching."/>
+              <param name = "N3corr" type="select" display="radio" label="Turn on the correction of N3OS monoisotopic assignments to 13C assignment?" help= "Turns on or off correction of N3OS monoisotopic assignments to 13C assignment.">
                      <option value="on" selected="true">yes</option>
                      <option value="off">no</option> 
-          </param>
-          <param name="DeNovo" type="float" label="De novo cut point for the data" value="300" help= "Sets the de novo cut point for the data."/>  
+               </param>
+              <param name="DeNovo" type="float" label="De novo cut point for the data" value="300" help= "Sets the de novo cut point for the data."/>  
+          </section>
        </section>
     </xml>
 
