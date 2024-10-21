@@ -37,9 +37,9 @@
     </configfiles>
 
     <inputs>
-        <param label="Input clustered features table" name="features_table" type="data_collection" collection_type="list" format="parquet"
+        <param label="Input clustered feature tables" name="features_table" type="data_collection" collection_type="list" format="parquet"
                help="Mass spectrometry clustered features tables." />
-        <param label="Input template features table" name="template" type="data" format="parquet"
+        <param label="Input template feature table" name="template" type="data" format="parquet"
                help="Template features table." />
     </inputs>
 
