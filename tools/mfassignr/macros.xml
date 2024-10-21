@@ -157,8 +157,10 @@
           <section name="set_ratios" title="Set the ratios" expanded="false">
               <expand macro="mfassign_ratios_shared" />  
           </section>
-          <expand macro="mfassign_advanced_shared" />
-          <param name="DeNovo" type="float" label="De novo cut point for the data" value="1000" help= "Sets the de novo cut point for the data."/>  
+          <section name="other_params" title="Other" expanded="false">
+              <expand macro="mfassign_advanced_shared" />
+              <param name="DeNovo" type="float" label="De novo cut point for the data" value="1000" help= "Sets the de novo cut point for the data."/> 
+          </section> 
         </section>
     </xml>
     
