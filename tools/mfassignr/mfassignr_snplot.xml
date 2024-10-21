@@ -36,7 +36,7 @@
     <tests>
         <test>
             <param name="input_file" value="QC1_1_POS_500.tabular"/>
-            <param name="kmdn" value="3294705.63963789"/>
+            <param name="kmdn" value="549117.606606315"/>
             <param name="mass" value="300"/>
             <output name="SNplot" ftype="png" file="snplot/plot.png" />
         </test>
