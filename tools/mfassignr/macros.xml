@@ -104,37 +104,36 @@
     </xml>
 
     <xml name="mfassign_advanced_shared">
-              <param name="assign_typeof_ions" type="select" display="radio" label="Assign odd electron ions based on the ionization mode?" help="This parameter determines whether to assign either positive mode odd electron ions (if ionMode is positive) or negative mode odd electron ions (if ionMode is negative).">
-                     <option value="yes">yes</option>
-                     <option value="no" selected="true">no</option>
-              </param>
-              
-              <param name="O_Cmin" type="float" label="Minimum allowed O/C ratio" value="0" help= "Sets the minimum allowed oxygen to carbon ratio."/> 
-              <param name="O_Cmax" type="float" label="Upper limit for O/C ratio" value="2.5" help= "Sets the upper limit for oxygen to carbon ratio."/> 
-              <param name="H_Cmin" type="float" label="Lower limit for H/C ratio" value="0.1" help= "Sets the lower limit for hydrogen to carbon ratio."/>     
-              <param name="H_Cmax" type="float" label="Upper limit for H/C ratio" value="3" help= "Sets the upper limit for hydrogen to carbon ratio for assigned formulas."/>          
-              <param name="DBEOmin" type="float" label="Lower limit for DBE minus oxygen QA parameter" value="-13" help= "Sets the lower limit for DBE minus oxygen QA parameter."/>
-              <param name="DBEOmax" type="float" label="Upper limit for DBE minus oxygen QA parameter" value="13" help= "Sets the upper limit for DBE minus oxygen QA parameter."/>    
-              <param name="Omin" type="float" label="Lower limit for number of O in assigned formula" value="0" help= "Sets the lower limit for oxygen number in assigned formula."/>    
-              <param name="max_def" type="float" label="Upper limit for KMD" value="0.9" help= "Sets the upper limit of mass defect for using floor() instead of round() for KMD."/>      
-              <param name="min_def" type="float" label="Lower limit for KMD" value="0.5" help= "Sets the lower limit of mass defect for using floor() instead of round() for KMD."/>  
-              <param name = "HetCut" type="select" display="radio" label="Turn on the high heteroatom QA parameter?" help= "HetCut turns on or off the high heteroatom QA parameter.">
-                     <option value="on">yes</option>
-                     <option value="off" selected="true">no</option> 
-              </param>  
-              <param name = "NMScut" type="select" display="radio" label="NMScut" help= "Turn on the nominal mass series QA parameter?">
-                     <option value="on" selected="true">yes</option>
-                     <option value="off">no</option> 
-              </param>  
-              <param name="nLoop" type="integer" label="Number of times the KMD and z* series assignment loops" value="5" help= "Sets the number of times the KMD and z* series assignment loops."/>  
-              <param name="ambig_bool" type="select" display="radio" label="Turn on the increased ambiguity for assignment?" help= "Turns on or off increased ambiguity for assignment.">
-                     <option value="on">yes</option>
-                     <option value="off" selected="true">no</option> 
-              </param> 
-              <param name = "MSMS" type="select" display="radio" label="Turn on the CH2 KMD prescreening before initial assignment?" help= "Turns on or off CH2 KMD prescreening before initial assignment.">
-                     <option value="on" >yes</option>
-                     <option value="off" selected="true">no</option> 
-              </param>
+       <param name="assign_typeof_ions" type="select" display="radio" label="Assign odd electron ions based on the ionization mode?" help="This parameter determines whether to assign either positive mode odd electron ions (if ionMode is positive) or negative mode odd electron ions (if ionMode is negative).">
+              <option value="yes">yes</option>
+              <option value="no" selected="true">no</option>
+       </param>
+       <param name="O_Cmin" type="float" label="Minimum allowed O/C ratio" value="0" help= "Sets the minimum allowed oxygen to carbon ratio."/> 
+       <param name="O_Cmax" type="float" label="Upper limit for O/C ratio" value="2.5" help= "Sets the upper limit for oxygen to carbon ratio."/> 
+       <param name="H_Cmin" type="float" label="Lower limit for H/C ratio" value="0.1" help= "Sets the lower limit for hydrogen to carbon ratio."/>     
+       <param name="H_Cmax" type="float" label="Upper limit for H/C ratio" value="3" help= "Sets the upper limit for hydrogen to carbon ratio for assigned formulas."/>          
+       <param name="DBEOmin" type="float" label="Lower limit for DBE minus oxygen QA parameter" value="-13" help= "Sets the lower limit for DBE minus oxygen QA parameter."/>
+       <param name="DBEOmax" type="float" label="Upper limit for DBE minus oxygen QA parameter" value="13" help= "Sets the upper limit for DBE minus oxygen QA parameter."/>    
+       <param name="Omin" type="integer" min="0" label="Lower limit for number of O in assigned formula" value="0" help= "Sets the lower limit for oxygen number in assigned formula."/>    
+       <param name="max_def" type="float" label="Upper limit for KMD" value="0.9" help= "Sets the upper limit of mass defect for using floor() instead of round() for KMD."/>      
+       <param name="min_def" type="float" label="Lower limit for KMD" value="0.5" help= "Sets the lower limit of mass defect for using floor() instead of round() for KMD."/>  
+       <param name = "HetCut" type="select" display="radio" label="Turn on the high heteroatom QA parameter?" help= "HetCut turns on or off the high heteroatom QA parameter.">
+              <option value="on">yes</option>
+              <option value="off" selected="true">no</option> 
+       </param>  
+       <param name = "NMScut" type="select" display="radio" label="NMScut" help= "Turn on the nominal mass series QA parameter?">
+              <option value="on" selected="true">yes</option>
+              <option value="off">no</option> 
+       </param>  
+       <param name="nLoop" type="integer" label="Number of times the KMD and z* series assignment loops" value="5" help= "Sets the number of times the KMD and z* series assignment loops."/>  
+       <param name="ambig_bool" type="select" display="radio" label="Turn on the increased ambiguity for assignment?" help= "Turns on or off increased ambiguity for assignment.">
+              <option value="on">yes</option>
+              <option value="off" selected="true">no</option> 
+       </param> 
+       <param name = "MSMS" type="select" display="radio" label="Turn on the CH2 KMD prescreening before initial assignment?" help= "Turns on or off CH2 KMD prescreening before initial assignment.">
+              <option value="on" >yes</option>
+              <option value="off" selected="true">no</option> 
+       </param>
     </xml>
 
     <xml name="mfassigncho_param">
