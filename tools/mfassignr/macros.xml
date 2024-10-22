@@ -84,7 +84,7 @@
         </param>
     </xml>
 
-    <xml name="mfassign_param">
+    <xml name="mfassign_required_shared">
         <param name="ppm_err" type="integer" label="ppm_err"
                help= "Error tolerance (ppm) for formula assignment" value="3"/>
         <expand macro="ionmode_param" />
@@ -93,6 +93,119 @@
                help= "Lower limit of molecular mass to be assigned."/>
         <param name="highMW" type="float" label="Upper limit of molecular mass to be assigned" value="1000"
                help= "Upper limit of molecular mass to be assigned."/>
+    </xml>
+
+    <xml name="mfassign_elements_shared">
+        <param name="Mx" type="integer" label="Amount of Sodium adduct" value="0" help= "Sets the amount of Sodium adduct to be used in assignment."/>       
+        <param name="NH4x" type="integer" label="Amount of Ammonium adduct" value="0" help= "Sets the amount of Ammonium adduct to be used in assignment."/>       
+        <param name="Ox" type="integer" label="Maximum number of oxygen looked for in the CHOFIT core" value="30" help= "Sets the maximum number of oxygen looked for in the CHOFIT core, it limits the number of loops performed."/>  
+    </xml>
+
+    <xml name="mfassign_ratios_shared">
+       <param name="O_Cmin" type="float" label="Minimum allowed O/C ratio" value="0" help= "Sets the minimum allowed oxygen to carbon ratio."/> 
+       <param name="O_Cmax" type="float" label="Upper limit for O/C ratio" value="2.5" help= "Sets the upper limit for oxygen to carbon ratio."/> 
+       <param name="H_Cmin" type="float" label="Lower limit for H/C ratio" value="0.1" help= "Sets the lower limit for hydrogen to carbon ratio."/>     
+       <param name="H_Cmax" type="float" label="Upper limit for H/C ratio" value="3" help= "Sets the upper limit for hydrogen to carbon ratio for assigned formulas."/>
+    </xml>
+
+    <xml name="mfassign_advanced_shared">
+       <param name="Zx" type="integer" label="Amount of charge" min="1" max="5" value="1" help= "Sets the amount of charge to be used in assignment."/>  
+       <param name="assign_typeof_ions" type="select" display="radio" label="Assign odd electron ions based on the ionization mode?" help="This parameter determines whether to assign either positive mode odd electron ions (if ionMode is positive) or negative mode odd electron ions (if ionMode is negative).">
+              <option value="yes">yes</option>
+              <option value="no" selected="true">no</option>
+       </param>        
+       <param name="DBEOmin" type="float" label="Lower limit for DBE minus oxygen QA parameter" value="-13" help= "Sets the lower limit for double bond equivalent (DBE) minus oxygen QA parameter."/>
+       <param name="DBEOmax" type="float" label="Upper limit for DBE minus oxygen QA parameter" value="13" help= "Sets the upper limit for double bond equivalent (DBE) minus oxygen QA parameter."/>    
+       <param name="Omin" type="integer" min="0" label="Lower limit for number of O in assigned formula" value="0" help= "Sets the lower limit for oxygen number in assigned formula."/>    
+       <param name="max_def" type="float" min="0" max="1" label="Upper limit for KMD" value="0.9" help= "Sets the upper limit of mass defect for using floor() instead of round() for KMD."/>      
+       <param name="min_def" type="float" min="0" max="1" label="Lower limit for KMD" value="0.5" help= "Sets the lower limit of mass defect for using floor() instead of round() for KMD."/>  
+       <param name = "HetCut" type="select" display="radio" label="Turn on the high heteroatom QA parameter?" help= "HetCut turns on or off the high heteroatom QA parameter.">
+              <option value="on">yes</option>
+              <option value="off" selected="true">no</option> 
+       </param>  
+       <param name = "NMScut" type="select" display="radio" label="NMScut" help= "Turn on the nominal mass series QA parameter?">
+              <option value="on" selected="true">yes</option>
+              <option value="off">no</option> 
+       </param>  
+       <param name="nLoop" type="integer" min="1" label="Number of times the KMD and z* series assignment loops" value="5" help= "Sets the number of times the KMD and z* series assignment loops."/>  
+       <param name="ambig_bool" type="select" display="radio" label="Turn on the increased ambiguity for assignment?" help= "Turns on or off increased ambiguity for assignment.">
+              <option value="on">yes</option>
+              <option value="off" selected="true">no</option> 
+       </param> 
+       <param name = "MSMS" type="select" display="radio" label="Turn on the CH2 KMD prescreening before initial assignment?" help= "Turns on or off CH2 KMD prescreening before initial assignment.">
+              <option value="on" >yes</option>
+              <option value="off" selected="true">no</option> 
+       </param>
+    </xml>
+
+    <xml name="mfassign_valence_param">
+          <param name="Sval" type="integer" label="Valence of Sulphur" value="2" help= "Sets the valence of Sulfur."/>
+          <param name="Nval" type="integer" label="Valence of Nitrogen" value="3" help= "Sets the valence of Nitrogen."/>
+          <param name="S34val" type="integer" label="Valence of Sulphur 34" value="2" help= "Sets the valence of Sulfur 34."/>
+          <param name="N15val" type="integer" label="Valence of Nitrogen 15" value="3" help= "Sets the valence of Nitrogen 15."/>
+          <param name="Pval" type="integer" label="Valence of Phosphorus" value="5" help= "Sets the valence of Phosphorus."/>
+    </xml>
+
+    <xml name="mfassigncho_param">
+        <expand macro="mfassign_required_shared" />
+        <section name="advanced" title="Advanced" expanded="false">
+          <section name="elements_amount" title="Set amount of elements" expanded="false">
+              <param name="Ex" type="integer" label="Amount of Chlorine 37" value="0" help= "Sets the amount of Chlorine 37 to be used in assignment."/>  
+              <expand macro="mfassign_elements_shared" />
+          </section>
+          <section name="set_ratios" title="Set the ratios" expanded="false">
+              <expand macro="mfassign_ratios_shared" />  
+          </section>
+          <section name="other_params" title="Other" expanded="false">
+              <expand macro="mfassign_advanced_shared" />
+              <param name="DeNovo" type="float" label="De novo cut point for the data" value="1000" help= "Sets the de novo cut point for the data."/> 
+          </section> 
+        </section>
+    </xml>
+    
+    <xml name="mfassign_param">
+        <expand macro="mfassign_required_shared" />
+        <section name="advanced" title="Advanced" expanded="false">
+          <section name="elements_amount" title="Set amount of elements" expanded="false">
+              <param name="Nx" type="integer" label="Amount of Nitrogen 14" value="0" help= "Sets the maximum allowable number of Nitrogen 14 to be used in assign"/>  
+              <param name="Sx" type="integer" label="Amount of Sulphur 32" value="0" help= "Sets the maximum allowable number of Sulfur 32 to be used in assign"/>  
+              <param name="Px" type="integer" label="Amount of Phosphorus 31" value="0" help= "Sets the maximum allowable number of Phosphorus 31 to be used in assign"/>  
+              <param name="Ex" type="integer" label="Amount of Carbon 13" value="0" help= "Sets the amount of Carbon 13 to be used in assignment."/>  
+              <param name="S34x" type="integer" label="Amount of Sulfur 34" value="0" help= "Sets the amount of Sulfur 34 to be used in assignment."/>  
+              <param name="N15x" type="integer" label="Amount of Nitrogen 15" value="0" help= "Sets the amount of Nitrogen 15 to be used in assignment."/>  
+              <param name="Dx" type="integer" label="Amount of Deuterium" value="0" help= "Sets the amount of Deuterium to be used in assignment."/>
+              <param name="Clx" type="integer" label="Amount of Chlorine" value="0" help= "Sets the amount of Chlorine to be used in assignment."/>
+              <param name="Fx" type="integer" label="Amount of Fluorine" value="0" help= "Sets the amount of Fluorine to be used in assignment."/>
+              <param name="Cl37x" type="integer" label="Amount of Chlorine 37" value="0" help= "Sets the amount of Chlorine 37 to be used in assignment."/>
+              <param name="Br81x" type="integer" label="Amount of Bromine 81" value="0" help= "Sets the amount of Bromine 81 to be used in assignment."/>
+              <param name="Ix" type="integer" label="Amount of Iodine 127" value="0" help= "Sets the amount of Iodine 127 to be used in assignment."/>
+              <expand macro="mfassign_elements_shared" />
+          </section>
+
+          <section name="set_valence" title="Set the valence" expanded="false">
+              <expand macro="mfassign_valence_param"/>
+          </section>
+
+          <section name="set_ratios" title="Set the ratios" expanded="false">
+              <expand macro="mfassign_ratios_shared" />  
+              <param name="S34_abund" type="integer" min="0" max="100" label="Maximum 34S/32S isotope ratio" value="30" help= "Sets the maximum 34S/32S isotope ratio (in percent) for isotope matching."/>
+              <param name="C13_abund" type="integer" min="0" max="100" label="Maximum 13C/12C isotope ratio" value="60" help= "Sets the maximum 13C/12C isotope ratio (in percent) for isotope matching."/>
+          </section>
+
+          <section name="other_params" title="Other" expanded="false">
+              <param name="iso_err" type="integer" min="0" max="20" label="Error tolerance (ppm) for polyisotope matching" value="3" help= "Sets the the error tolerance (ppm) for polyisotope matching."/>
+              <expand macro="mfassign_advanced_shared" />
+               <param name = "SulfCheck" type="select" display="radio" label="Turn on the sulfur isotope check?" help= "Turns on or off the sulfur isotope check QA parameter.c">
+                     <option value="on" selected="true">yes</option>
+                     <option value="off">no</option> 
+              </param>  
+              <param name = "N3corr" type="select" display="radio" label="Turn on the correction of N3OS monoisotopic assignments to 13C assignment?" help= "Turns on or off correction of N3OS monoisotopic assignments to 13C assignment.">
+                     <option value="on" selected="true">yes</option>
+                     <option value="off">no</option> 
+               </param>
+              <param name="DeNovo" type="float" label="De novo cut point for the data" value="300" help= "Sets the de novo cut point for the data."/>  
+          </section>
+       </section>
     </xml>
 
     <xml name="findrecalseries_param">
