@@ -25,7 +25,18 @@
         <requirement type="package" version="1.0.2">r-purrr</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
-        Rscript '${__tool_directory__}/isolib.R' '${input_file}' '${ionization.adducts}' '${threshold}' '${append_adduct}' '${out_format}' '${isotope_library}'
+        Rscript '${__tool_directory__}/isolib.R'
+            '${input_file}'
+            '${ionization.adducts}'
+            '${threshold}'
+            '${append_adduct}'
+            #if '${formatting.out_format}' == "tabular"
+            '${formatting.append_isotopes}'
+            #else
+            'FALSE'
+            #end if
+            '${formatting.out_format}'
+            '${isotope_library}'
     ]]></command>
     <inputs>
         <param name="input_file" type="data" format="tabular" label="Table with input compounds"/>
@@ -49,16 +60,23 @@
         </conditional>
         <param name="threshold" type="float" min="0" max="100" value="1" label="Threshold" help="Probability threshold to use as cutoff for isotopic pattern distribution - this can be used to remove low abundant peaks and improve computation performance." />
         <param name="append_adduct" type="boolean" truevalue="TRUE" falsevalue="FALSE" checked="true" label="Append adduct to compound name" help="Append the adduct string to the compound name for easy identification." />
-        <param name="out_format" type="select" label="Output Format" help="Choose the output format, either MSP or Tabular">
-            <option value="tabular">tabular</option>
-            <option value="msp" selected="true">msp</option>
-        </param>
+        <conditional name="formatting">
+            <param name="out_format" type="select" label="Output Format" help="Choose the output format, either MSP or Tabular">
+                <option value="tabular">tabular</option>
+                <option value="msp" selected="true">msp</option>
+            </param>
+            <when value="tabular">
+                <param name="append_isotopes" type="boolean" truevalue="TRUE" falsevalue="FALSE" checked="false" label="Append isotopes to formula" help="Append the isotopic composition to the formula for easy identification." />
+            </when>
+            <when value="msp">
+            </when>
+        </conditional>
     </inputs>
     <outputs>
         <data name="isotope_library">
             <change_format>
-                <when input="out_format" value="msp" format="msp" />
-                <when input="out_format" value="tabular" format="tabular" />
+                <when input="formatting.out_format" value="msp" format="msp" />
+                <when input="formatting.out_format" value="tabular" format="tabular" />
             </change_format>
         </data>
     </outputs>

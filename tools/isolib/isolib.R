@@ -19,8 +19,9 @@ parse_args <- function() {
         adducts_to_use = c(unlist(strsplit(args[2], ",", fixed = TRUE))),
         threshold = as.numeric(args[3]),
         append_adducts = args[4],
-        out_format=args[5],
-        outfile = args[6]
+        append_isotopes = args[5],
+        out_format=args[6],
+        outfile = args[7]
     )
     return(parsed)
 }
@@ -111,7 +112,7 @@ write_to_msp <- function(spectra, file) {
     export(sps, MsBackendMsp(), file = file)
 }
 
-write_to_table <- function(spectra, file) {
+write_to_table <- function(spectra, file, append_isotopes) {
     entries <- spectra |>
         dplyr::rowwise() |>
         dplyr::mutate(peaks = paste(unlist(mz), collapse=";"))|>
@@ -119,7 +120,14 @@ write_to_table <- function(spectra, file) {
     )
     result <- tidyr::separate_longer_delim(entries, tidyselect::all_of(c("peaks", "isos")), ";") |>
         dplyr::select(-c("mz", "intensity", "isotopes")) |>
-        dplyr::rename(mz = peaks, isotopes=isos)
+        dplyr::rename(mz = peaks, isotopes=isos, rt=retention_time)
+    
+    if(append_isotopes) {
+        result <- dplyr::mutate(result, full_formula = paste0(formula, " (", isotopes, ")")) |>
+            dplyr::select(-all_of(c("formula", "isotopes"))) |>
+            dplyr::rename(formula = full_formula) |>
+            dplyr::relocate(formula, .after = name)
+    }
     readr::write_tsv(result, file=file)
 }
 
@@ -130,7 +138,7 @@ main <- function() {
     if(args$out_format == "msp") {
         write_to_msp(spectra, args$outfile)
     } else if (args$out_format == "tabular") {
-       write_to_table(spectra, args$outfile)
+       write_to_table(spectra, args$outfile, args$append_isotopes)
     }
 }
 
