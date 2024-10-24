@@ -30,7 +30,7 @@
             '${ionization.adducts}'
             '${threshold}'
             '${append_adduct}'
-            #if '${formatting.out_format}' == "tabular"
+            #if $formatting.out_format == "tabular"
             '${formatting.append_isotopes}'
             #else
             'FALSE'
