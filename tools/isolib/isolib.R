@@ -4,22 +4,37 @@ library(MsBackendMsp)
 library(MetaboCoreUtils)
 library(readr)
 
-#' @param args A list of command line arguments.
-main <- function() {
-    data(isotopes)
-    data(adducts)
 
+parse_args <- function() {
     args <- commandArgs(trailingOnly = TRUE)
+
     compound_table <- read_tsv(
         file = args[1],
         col_types = "ccd",
         col_select = tidyselect::all_of(c("name", "formula")) | tidyselect::any_of("rt")
     )
-    adducts_to_use <- c(unlist(strsplit(args[2], ",", fixed = TRUE)))
 
-    chemforms <- compound_table$formula
-    chemforms <- check_chemform(isotopes, chemforms)[, 2]
+    parsed <- list(
+        compound_table = compound_table,
+        adducts_to_use = c(unlist(strsplit(args[2], ",", fixed = TRUE))),
+        threshold = as.numeric(args[3]),
+        append_adducts = args[4],
+        out_format=args[5],
+        outfile = args[6]
+    )
+    return(parsed)
+}
 
+generate_isotope_spectra <- function(compound_table, adducts_to_use, append_adducts, threshold) {
+    data(isotopes)
+    data(adducts)
+
+    monoisotopic <- isotopes |>
+        dplyr::group_by(element) |>
+        dplyr::slice_max(abundance, n = 1) |>
+        dplyr::filter(!stringr::str_detect(element, "\\[|\\]"))
+    
+    chemforms <- check_chemform(isotopes, compound_table$formula)[, 2]
     spectra <- data.frame()
 
     for (current in adducts_to_use) {
@@ -36,7 +51,7 @@ main <- function() {
         adduct_string <- paste0("[", adduct$Name, "]", charge_string)
         precursor_mz <- calculateMass(multiplied_chemforms) + adduct$Mass
 
-        if (args[4] == TRUE) {
+        if (append_adducts == TRUE) {
             names <- paste(compound_table$name, paste0("(", adduct$Name, ")"), sep = " ")
         } else {
             names <- compound_table$name
@@ -60,26 +75,68 @@ main <- function() {
             isotopes = isotopes,
             chemforms = merged_chemforms,
             charge = adduct$Charge,
-            threshold = as.numeric(args[3]),
+            threshold = threshold,
         )
 
         mzs <- list()
         intensities <- list()
+        isos <- list()
+
         for (i in seq_along(patterns)) {
             mzs <- append(mzs, list(patterns[[i]][, 1]))
             intensities <- append(intensities, list(patterns[[i]][, 2]))
+            compositions <- as.data.frame(patterns[[i]][,-c(1,2)]) |>       # select all columns which describe the elemental composition
+                dplyr::select(-tidyselect::any_of(monoisotopic$isotope)) |> # remove all 12C, 35Cl etc.
+                dplyr::select_if(~ !all(. == 0))                            # remove isotopes which don't occur
+            compositions <- compositions |>
+                dplyr::rowwise() |>
+                dplyr::mutate(isotopes = paste(                             # combine elemental composition into single string
+                    purrr::map2_chr(names(compositions), dplyr::c_across(everything()), ~ paste(.x, .y, sep = ":")), collapse = ", ")
+                ) |>
+                dplyr::ungroup() |>
+                dplyr::select(isotopes)
+            isos <- append(isos, list(compositions$isotopes))
         }
 
         spectra_df$mz <- mzs
         spectra_df$intensity <- intensities
+        spectra_df$isotopes <- isos
         spectra <- rbind(spectra, spectra_df)
     }
-
-    sps <- Spectra(spectra)
-    export(sps, MsBackendMsp(), file = args[5])
+    return(spectra)
 }
 
-# Get the command line arguments
-args <- commandArgs(trailingOnly = TRUE)
+write_to_msp <- function(spectra, file) {
+    sps <- Spectra(dplyr::select(spectra, -isotopes))
+    export(sps, MsBackendMsp(), file = file)
+}
+
+write_to_table <- function(spectra, file) {
+    entries <- spectra |>
+        dplyr::rowwise() |>
+        dplyr::mutate(peaks = paste(unlist(mz), collapse=";"))|>
+        dplyr::mutate(isos = paste(unlist(isotopes), collapse=";")
+    )
+    result <- tidyr::separate_longer_delim(entries, tidyselect::all_of(c("peaks", "isos")), ";") |>
+        dplyr::select(-c("mz", "intensity", "isotopes")) |>
+        dplyr::rename(mz = peaks, isotopes=isos)
+    readr::write_tsv(result, file=file)
+}
+
+main <- function() {
+    args <- parse_args()    
+    spectra <- generate_isotope_spectra(args$compound_table, args$adducts_to_use, args$append_adducts, args$threshold)
+
+    if(args$out_format == "msp") {
+        write_to_msp(spectra, args$outfile)
+    } else if (args$out_format == "tabular") {
+       write_to_table(spectra, args$outfile)
+    }
+}
+
 # Call the main function
 main()
+
+# > u <- dplyr::mutate(x, peaks = paste(unlist(mz), collapse=","))
+# > res <- tidyr::separate_longer_delim(u, peaks, ",")
+# > monoisotopic <- isotopes |> dplyr::group_by(element) |> dplyr::slice_max(abundance, n = 1) |> dplyr::filter(!stringr::str_detect(element, "\\[|\\]"))
