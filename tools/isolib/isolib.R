@@ -3,6 +3,7 @@ library(Spectra)
 library(MsBackendMsp)
 library(MetaboCoreUtils)
 library(readr)
+library(tidyselect)
 
 
 parse_args <- function() {
@@ -11,7 +12,7 @@ parse_args <- function() {
   compound_table <- read_tsv(
     file = args[1],
     col_types = "ccd",
-    col_select = tidyselect::all_of(c("name", "formula")) | tidyselect::any_of("rt")
+    col_select = all_of(c("name", "formula")) | any_of("rt")
   )
 
   parsed <- list(
@@ -26,7 +27,10 @@ parse_args <- function() {
   return(parsed)
 }
 
-generate_isotope_spectra <- function(compound_table, adducts_to_use, append_adducts, threshold) {
+generate_isotope_spectra <- function(compound_table,
+                                     adducts_to_use,
+                                     append_adducts,
+                                     threshold) {
   data(isotopes)
   data(adducts)
 
@@ -48,12 +52,18 @@ generate_isotope_spectra <- function(compound_table, adducts_to_use, append_addu
       merged_chemforms <- mergeform(multiplied_chemforms, adduct$Formula_add)
     }
 
-    charge_string <- paste0(if (adduct$Charge > 0) "+" else "-", if (abs(adduct$Charge) > 1) abs(adduct$Charge) else "")
+    charge_string <- paste0(
+      if (adduct$Charge > 0) "+" else "-",
+      if (abs(adduct$Charge) > 1) abs(adduct$Charge) else ""
+    )
     adduct_string <- paste0("[", adduct$Name, "]", charge_string)
     precursor_mz <- calculateMass(multiplied_chemforms) + adduct$Mass
 
     if (append_adducts == TRUE) {
-      names <- paste(compound_table$name, paste0("(", adduct$Name, ")"), sep = " ")
+      names <- paste(
+        compound_table$name,
+        paste0("(", adduct$Name, ")"), sep = " "
+      )
     } else {
       names <- compound_table$name
     }
@@ -86,13 +96,23 @@ generate_isotope_spectra <- function(compound_table, adducts_to_use, append_addu
     for (i in seq_along(patterns)) {
       mzs <- append(mzs, list(patterns[[i]][, 1]))
       intensities <- append(intensities, list(patterns[[i]][, 2]))
-      compositions <- as.data.frame(patterns[[i]][, -c(1, 2)]) |> # select all columns which describe the elemental composition
-        dplyr::select(-tidyselect::any_of(monoisotopic$isotope)) |> # remove all 12C, 35Cl etc.
-        dplyr::select_if(~ !all(. == 0)) # remove isotopes which don't occur
+
+      # select all columns which describe the elemental composition
+      # remove all 12C, 35Cl etc.
+      # remove isotopes which don't occur
+      compositions <- as.data.frame(patterns[[i]][, -c(1, 2)]) |>
+        dplyr::select(-tidyselect::any_of(monoisotopic$isotope)) |>
+        dplyr::select_if(~ !all(. == 0))
+
+      # combine elemental composition into single string
       compositions <- compositions |>
         dplyr::rowwise() |>
-        dplyr::mutate(isotopes = paste( # combine elemental composition into single string
-          purrr::map2_chr(names(compositions), dplyr::c_across(everything()), ~ paste(.x, .y, sep = ":")),
+        dplyr::mutate(isotopes = paste(
+          purrr::map2_chr(
+            names(compositions),
+            dplyr::c_across(everything()),
+            ~ paste(.x, .y, sep = ":")
+          ),
           collapse = ", "
         )) |>
         dplyr::ungroup() |>
@@ -118,12 +138,19 @@ write_to_table <- function(spectra, file, append_isotopes) {
     dplyr::rowwise() |>
     dplyr::mutate(peaks = paste(unlist(mz), collapse = ";")) |>
     dplyr::mutate(isos = paste(unlist(isotopes), collapse = ";"))
-  result <- tidyr::separate_longer_delim(entries, tidyselect::all_of(c("peaks", "isos")), ";") |>
+  result <- tidyr::separate_longer_delim(
+    entries,
+    all_of(c("peaks", "isos")),
+    ";"
+  )
+  result <- result |>
     dplyr::select(-c("mz", "intensity", "isotopes")) |>
     dplyr::rename(mz = peaks, isotopes = isos, rt = retention_time)
 
   if (append_isotopes) {
-    result <- dplyr::mutate(result, full_formula = paste0(formula, " (", isotopes, ")")) |>
+    result <- result |>
+      dplyr::mutate(result,
+                    full_formula = paste0(formula, " (", isotopes, ")")) |>
       dplyr::select(-all_of(c("formula", "isotopes"))) |>
       dplyr::rename(formula = full_formula) |>
       dplyr::relocate(formula, .after = name)

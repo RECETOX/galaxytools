@@ -1,4 +1,4 @@
-name	adduct	formula	charge	ionization_mode	precursor_mz	msLevel	retention_time	mz	isotopes
+name	adduct	formula	charge	ionization_mode	precursor_mz	msLevel	rt	mz	isotopes
 2,4-Dichlorophenoxyacetic acid ou 2,4-D (M-H)	[M-H]-	C8H6Cl2O3	-1	negative	218.962123412	1	484.2	218.962123019909	13C:0, 37Cl:0
 2,4-Dichlorophenoxyacetic acid ou 2,4-D (M-H)	[M-H]-	C8H6Cl2O3	-1	negative	218.962123412	1	484.2	219.965477859909	13C:1, 37Cl:0
 2,4-Dichlorophenoxyacetic acid ou 2,4-D (M-H)	[M-H]-	C8H6Cl2O3	-1	negative	218.962123412	1	484.2	220.959172909909	13C:0, 37Cl:1
