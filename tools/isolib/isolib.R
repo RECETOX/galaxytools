@@ -92,8 +92,8 @@ generate_isotope_spectra <- function(compound_table, adducts_to_use, append_addu
             compositions <- compositions |>
                 dplyr::rowwise() |>
                 dplyr::mutate(isotopes = paste(                             # combine elemental composition into single string
-                    purrr::map2_chr(names(compositions), dplyr::c_across(everything()), ~ paste(.x, .y, sep = ":")), collapse = ", ")
-                ) |>
+                    purrr::map2_chr(names(compositions), dplyr::c_across(everything()), ~ paste(.x, .y, sep = ":")),
+                    collapse = ", ")) |>
                 dplyr::ungroup() |>
                 dplyr::select(isotopes)
             isos <- append(isos, list(compositions$isotopes))
@@ -133,7 +133,12 @@ write_to_table <- function(spectra, file, append_isotopes) {
 
 main <- function() {
     args <- parse_args()    
-    spectra <- generate_isotope_spectra(args$compound_table, args$adducts_to_use, args$append_adducts, args$threshold)
+    spectra <- generate_isotope_spectra(
+        args$compound_table,
+        args$adducts_to_use,
+        args$append_adducts,
+        args$threshold
+    )
 
     if(args$out_format == "msp") {
         write_to_msp(spectra, args$outfile)
@@ -144,7 +149,3 @@ main <- function() {
 
 # Call the main function
 main()
-
-# > u <- dplyr::mutate(x, peaks = paste(unlist(mz), collapse=","))
-# > res <- tidyr::separate_longer_delim(u, peaks, ",")
-# > monoisotopic <- isotopes |> dplyr::group_by(element) |> dplyr::slice_max(abundance, n = 1) |> dplyr::filter(!stringr::str_detect(element, "\\[|\\]"))

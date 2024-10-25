@@ -73,7 +73,7 @@
         </conditional>
     </inputs>
     <outputs>
-        <data name="isotope_library">
+        <data format="msp" name="isotope_library">
             <change_format>
                 <when input="formatting.out_format" value="msp" format="msp" />
                 <when input="formatting.out_format" value="tabular" format="tabular" />
