@@ -93,6 +93,7 @@
         <test>
             <param name="input_file" value="lc_markers_neg.tsv"/>
             <param name="out_format" value="tabular"/>
+            <param name="append_isotopes" value="TRUE" />
             <output name="isotope_library" file="test2.tabular"/>
         </test>
         <test>
