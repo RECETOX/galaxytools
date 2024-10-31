@@ -24,7 +24,7 @@
         <configfile name="mfassignr_findrecalseries"><![CDATA[
             library(dplyr)
             df <- read.table("$input_file", header=TRUE, sep="\t")
-            result <- MFAssignR::FindRecalSeriesSimple(df)
+            result <- MFAssignR::FindRecalSeriesSimple(df) |> dplyr::slice(-1)
             write.table(result, file="$final_series", sep="\t", row.names=FALSE)
         ]]></configfile>
     </configfiles>
