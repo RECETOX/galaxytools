@@ -21,23 +21,6 @@
     </command>
 
     <configfiles>
-        <!-- <configfile name="mfassignr_findrecalseries_deprecated"><![CDATA[
-            library(dplyr)
-            df <- read.table("$input_file", header=TRUE, sep="\t")
-            result <- MFAssignR::FindRecalSeries(
-                df = df,
-                global_min = $global_min,
-                global_max = $global_max,
-                number_of_combinations = $number_of_combinations,
-                abundance_score_threshold = $abundance_score_threshold,
-                peak_distance_threshold = $peak_distance_threshold,
-                coverage_threshold = $coverage_threshold,
-                fill_series = $fill_series
-            ) |> dplyr::rename(Series = series)
-            
-            write.table(result, file="$final_series", sep="\t", row.names=FALSE)
-        ]]></configfile> -->
-
         <configfile name="mfassignr_findrecalseries"><![CDATA[
             library(dplyr)
             df <- read.table("$input_file", header=TRUE, sep="\t")
@@ -47,7 +30,6 @@
     </configfiles>
 
     <inputs>
-        <!-- <expand macro="findrecalseries_param"/> -->
         <param name="input_file" type="data" format="tabular" label="Input data"
         help="Recalibration series, output from RecalList"/>
     </inputs>
@@ -59,12 +41,6 @@
     <tests>
         <test>
             <param name="input_file" value="recallist/recal_series.tabular"/>
-            <!-- <param name="global_min" value="100"/>
-            <param name="global_max" value="500"/>
-            <param name="abundance_score_threshold" value="50"/>
-            <param name="number_of_combinations" value="3"/>
-            <param name="coverage_threshold" value="50"/>
-            <param name="fill_series" value="TRUE"/> -->
             <output name="final_series" file="findrecalseries/selected_series_simple.tabular"/>
         </test>
     </tests>
