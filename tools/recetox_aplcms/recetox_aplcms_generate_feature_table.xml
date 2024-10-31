@@ -73,7 +73,6 @@
     </outputs>
 
     <tests>
-        <test expect_failure="true" />
         <test>
             <param name="profile" value="remove_noise_docker.parquet" />
             <output name="output_file" file="peak_table_galaxy.parquet" />
