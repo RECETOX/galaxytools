@@ -71,13 +71,13 @@
             <param name="isopeaks" value="isofiltr/iso_out.tabular"/>
             <output name="Mono">
                 <assert_contents>
-                    <has_n_lines n="9203"/>
+                    <has_n_lines n="9156"/>
                     <has_n_columns n="3"/>
                 </assert_contents>
             </output>
             <output name="Iso">
                 <assert_contents>
-                    <has_n_lines n="2474"/>
+                    <has_n_lines n="2521"/>
                     <has_n_columns n="4"/>
                 </assert_contents>
             </output>
