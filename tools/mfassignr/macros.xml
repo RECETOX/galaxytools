@@ -1,5 +1,5 @@
 <macros>
-    <token name="@TOOL_VERSION@">1.1.1</token>
+    <token name="@TOOL_VERSION@">1.1.2</token>
     <xml name="requirements">
         <requirements>
             <requirement type="package" version="@TOOL_VERSION@">r-mfassignr</requirement>
@@ -206,26 +206,6 @@
               <param name="DeNovo" type="float" label="De novo cut point for the data" value="300" help= "Sets the de novo cut point for the data."/>  
           </section>
        </section>
-    </xml>
-
-    <xml name="findrecalseries_param">
-        <param name="input_file" type="data" format="tabular" label="Input data"
-               help= "Recalibration series, output from RecalList"/>
-        <param name="global_min" type="float" label="Global min" value="0" min="0"
-               help= "A lower bound of the instrument m/z range."/>
-        <param name="global_max" type="float" label="Global max" value="1000" min="0"
-               help= "A higher bound of the instrument m/z range."/>
-        <param name="number_of_combinations" type="integer" label="Number of combinations"
-               help= "Combinations of how many series should be computed." value="5"/>
-        <param name="abundance_score_threshold" type="float" label="Abundance score threshold" value="100"
-               help= "A threshold for filtering abundance score parameter. The series with higher values are better."/>
-        <param name="peak_distance_threshold" type="float" label="Peak distance threshold" value="2"
-               help= "A threshold for the peak distance parameter. The closer this value is to 1, the better."/>
-        <param name="coverage_threshold" type="integer" label="How many % of the m/z range should be covered."
-               help= "How many % of the m/z range should be covered." value="90"/>
-        <param name="fill_series" type="boolean" truevalue="TRUE" falsevalue="FALSE" label="Whether to return top 10 unique series (TRUE) or series only from the best combination."
-               help= "If TRUE, top 10 unique series will be returned, otherwise only the series from the best
-               combination will be returned." value="false"/>
     </xml>
 
     <xml name="recal_param">
