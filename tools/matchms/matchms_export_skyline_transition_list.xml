@@ -83,6 +83,9 @@ spectra_metadata_df.to_csv("${output_file}", sep='\t', index=False)
     <help>
         Documentation
             Mass spectral libraries are often stored in various formats, such as `msp`, `mgf` or `json`.
+            This tool exports the peaks present in the library in a format that is compatible with Skyline's transition lists.
+            The columns to include in the output can be specified using the multi select.
+            It is recommended to filter the library to the top N most abundant ions and to normalize abundances prior to using this tool.
         
         @HELP_matchms@
     </help>
