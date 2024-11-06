@@ -25,14 +25,11 @@ from matchms.exporting.metadata_export import get_metadata_as_array
 name_key = 'compound_name'
 cols_to_include = [name_key, 'mz', 'intensity']
 
-if "$harmonize_metadata" == "False":
-    matchms.Metadata.set_key_replacements({})
-
 #if $metadata_cols != 'None':
 cols_to_include += '$metadata_cols'.split(',')
 #end if
 
-spectra = list(load_from_${input_file.ext}("${input_file}", $harmonize_metadata))
+spectra = list(load_from_${input_file.ext}("${input_file}", True))
 
 spectra_dict = {}
 for spectrum in spectra:
@@ -51,8 +48,6 @@ spectra_metadata_df.to_csv("${output_file}", sep='\t', index=False)
 
     <inputs>
         <param label="Spectra file" name="input_file" type="data" format="msp,mgf" help="Mass spectral library file."/>
-        <param label="Harmonize metadata" name="harmonize_metadata" type="boolean" truevalue="True" falsevalue="False" hidden="True"
-               checked="true" help="Apply harmonization process on the metadata keys (e.g. parse numeric values, derive precursor mass)."/>
         <param name="metadata_cols" type="select" label="Metadata to include" help="Select the metadata attributes to include in the output file." multiple="true">
             <option value="retention_index">Retention Index</option>
             <option value="precursor_mz">Precursor m/z</option>
