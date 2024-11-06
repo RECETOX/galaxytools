@@ -23,10 +23,14 @@ from matchms.importing import load_from_msp, load_from_mgf
 from matchms.exporting.metadata_export import get_metadata_as_array
 
 name_key = 'compound_name'
-cols_to_include = [name_key, 'retention_index', 'mz', 'intensity']
+cols_to_include = [name_key, 'mz', 'intensity']
 
 if "$harmonize_metadata" == "False":
     matchms.Metadata.set_key_replacements({})
+
+#if $metadata_cols != 'None':
+cols_to_include += '$metadata_cols'.split(',')
+#end if
 
 spectra = list(load_from_${input_file.ext}("${input_file}", $harmonize_metadata))
 
@@ -39,22 +43,42 @@ spectra_metadata_df = pd.DataFrame(spectra_metadata)
 
 spectra_metadata_df['mz'] = spectra_metadata_df[name_key].transform(lambda x: spectra_dict[x].peaks.mz)
 spectra_metadata_df['intensity'] = spectra_metadata_df[name_key].transform(lambda x: spectra_dict[x].peaks.intensities)
-spectra_metadata_df = spectra_metadata_df.explode(['mz', 'intensity']).reset_index(drop=True)
-result = spectra_metadata_df[cols_to_include].rename(columns={'compound_name': 'precursor name', 'retention_index': 'retention index'})
+spectra_metadata_df = spectra_metadata_df.explode(['mz', 'intensity']).reset_index(drop=True)[cols_to_include]
 
-result.to_csv("${output_file}", sep='\t', index=False)
+spectra_metadata_df.to_csv("${output_file}", sep='\t', index=False)
 </configfile>
 </configfiles>
 
     <inputs>
         <param label="Spectra file" name="input_file" type="data" format="msp,mgf" help="Mass spectral library file."/>
-        <param label="Harmonize metadata" name="harmonize_metadata" type="boolean" truevalue="True" falsevalue="False"
+        <param label="Harmonize metadata" name="harmonize_metadata" type="boolean" truevalue="True" falsevalue="False" hidden="True"
                checked="true" help="Apply harmonization process on the metadata keys (e.g. parse numeric values, derive precursor mass)."/>
+        <param name="metadata_cols" type="select" label="Metadata to include" help="Select the metadata attributes to include in the output file." multiple="true">
+            <option value="retention_index">Retention Index</option>
+            <option value="precursor_mz">Precursor m/z</option>
+            <option value="retention_time">Retention Time</option>
+            <option value="formula">Formula</option>
+            <option value="inchikey">InChIKey</option>
+            <option value="adduct">Adduct</option>
+            <option value="ionmode">Ion Mode</option>
+        </param>
     </inputs>
 
     <outputs>
-        <data label="matchms extract metadata on ${on_string}" name="output_file" format="tabular"/>
+        <data label="skyline transition list exported from ${on_string}" name="output_file" format="tabular"/>
     </outputs>
+
+    <tests>
+        <test>
+            <param name="input_file" value="convert/mgf_out.mgf" ftype="mgf"/>
+            <param name="metadata_cols" value="inchikey,formula"/>
+            <output name="output_file" file="skyline/mgf_out.tabular" ftype="tabular"/>
+        </test>
+        <test>
+            <param name="input_file" value="filtering/reduce_to_top_n_peaks.msp" ftype="msp"/>
+            <output name="output_file" file="skyline/reduce_to_top_n_peaks.tabular" ftype="tabular"/>
+        </test>
+    </tests>
 
     <help>
         Documentation
