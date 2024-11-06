@@ -1,0 +1,67 @@
+<tool id="matchms_matchms_export_skyline_transition_list" name="matchms export skyline transition list" version="@TOOL_VERSION@+galaxy0" profile="21.09">
+    <description>creates a transition list with the ions present in the spectra for targeted ion extarction with Skyline</description>
+    <macros>
+        <import>macros.xml</import>
+        <import>help.xml</import>
+    </macros>
+    <expand macro="creator"/>
+    <expand macro="bio.tools"/>
+    
+    <requirements>
+        <requirement type="package" version="@TOOL_VERSION@">matchms</requirement>
+    </requirements>
+
+    <command detect_errors='aggressive'><![CDATA[
+        python ${matchms_python_cli}
+    ]]></command>
+
+<configfiles>
+<configfile name="matchms_python_cli">
+import matchms
+import pandas as pd
+from matchms.importing import load_from_msp, load_from_mgf
+from matchms.exporting.metadata_export import get_metadata_as_array
+
+name_key = 'compound_name'
+cols_to_include = [name_key, 'retention_index', 'mz', 'intensity']
+
+if "$harmonize_metadata" == "False":
+    matchms.Metadata.set_key_replacements({})
+
+spectra = list(load_from_${input_file.ext}("${input_file}", $harmonize_metadata))
+
+spectra_dict = {}
+for spectrum in spectra:
+    spectra_dict[spectrum.get(name_key)] = spectrum
+
+spectra_metadata, _ = get_metadata_as_array(spectra)
+spectra_metadata_df = pd.DataFrame(spectra_metadata)
+
+spectra_metadata_df['mz'] = spectra_metadata_df[name_key].transform(lambda x: spectra_dict[x].peaks.mz)
+spectra_metadata_df['intensity'] = spectra_metadata_df[name_key].transform(lambda x: spectra_dict[x].peaks.intensities)
+spectra_metadata_df = spectra_metadata_df.explode(['mz', 'intensity']).reset_index(drop=True)
+result = spectra_metadata_df[cols_to_include].rename(columns={'compound_name': 'precursor name', 'retention_index': 'retention index'})
+
+result.to_csv("${output_file}", sep='\t', index=False)
+</configfile>
+</configfiles>
+
+    <inputs>
+        <param label="Spectra file" name="input_file" type="data" format="msp,mgf" help="Mass spectral library file."/>
+        <param label="Harmonize metadata" name="harmonize_metadata" type="boolean" truevalue="True" falsevalue="False"
+               checked="true" help="Apply harmonization process on the metadata keys (e.g. parse numeric values, derive precursor mass)."/>
+    </inputs>
+
+    <outputs>
+        <data label="matchms extract metadata on ${on_string}" name="output_file" format="tabular"/>
+    </outputs>
+
+    <help>
+        Documentation
+            Mass spectral libraries are often stored in various formats, such as `msp`, `mgf` or `json`.
+        
+        @HELP_matchms@
+    </help>
+
+    <expand macro="citations"/>
+</tool>
