@@ -35,7 +35,15 @@
             </change_format>
         </data>
     </outputs>
-
+    <tests>
+        <test>
+            <param name="input_dataset" value="query.tabular" ftype="tabular"/>
+            <param name="column" value="3"/>
+            <param name="operation" value="div"/>
+            <param name="operand" value="100"/>
+            <output name="output_dataset" file="arithmetics/query_divide_ri.tabular" ftype="tabular"/>
+        </test>
+    </tests>
     <help>
         This tool performs arithmetic operations on a specified column of a dataframe.
         Supported operations are: multiply, subtract, divide, add, and power.
