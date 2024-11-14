@@ -9,7 +9,7 @@
         <requirement type="package" version="18.0.0">pyarrow</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
-        python3 '$__tool_directory__/pandas_arithmetics.py' 
+        python3 '$__tool_directory__/analysis_pandas_arithmetics.py' 
             --input_dataset '$input_dataset' '$input_dataset.ext' 
             --column '$column' 
             --operation '$operation' 

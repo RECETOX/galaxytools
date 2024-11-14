@@ -21,7 +21,7 @@
         <requirement type="package" version="18.0.0">pyarrow</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
-        python3 '${__tool_directory__}/scipy_interpolate.py' 
+        python3 '${__tool_directory__}/analysis_scipy_interpolate.py' 
         --reference_dataset '$reference_dataset' '$reference_dataset.ext'
         --query_dataset '$query_dataset' '$query_dataset.ext'
         --x_col $x_col
