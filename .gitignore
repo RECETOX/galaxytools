@@ -1,3 +1,5 @@
 .vscode
 **/tool_test_output.html
 **/tool_test_output.json
+**/tmp*
+**/__pycache__
