@@ -40,4 +40,8 @@
         This tool performs arithmetic operations on a specified column of a dataframe.
         Supported operations are: multiply, subtract, divide, add, and power.
     </help>
+    <citations>
+        <citation type="doi">10.5281/zenodo.3509134</citation>
+        <citation type="doi">10.25080/Majora-92bf1922-00a</citation>
+    </citations>
 </tool>
