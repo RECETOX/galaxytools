@@ -63,22 +63,22 @@
         </test>
     </tests>
     <help><![CDATA[
-
 .. class:: infomark
 
 **What it does**
-
-TODO: Fill in help in reStructuredText format (https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html)
+This tool interpolates the values for a column to be added
 
 Usage
 .....
 [1] (https://docs.scipy.org/doc/scipy/tutorial/interpolate.html)
 
 **Input**
+Input a reference table and choose the X (source) and Y (target) columns for the interpolation.
+Choose a query table and the X (source) column for which to calculate the new Y values.
 
 
 **Output**
-
+A table with the interpolated Y column.
 
     ]]></help>
     <citations>
