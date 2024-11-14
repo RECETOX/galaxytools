@@ -18,36 +18,39 @@
     <requirements>
         <requirement type="package" version="@TOOL_VERSION@">scipy</requirement>
         <requirement type="package" version="2.2.3">pandas</requirement>
+        <requirement type="package" version="18.0.0">pyarrow</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
-        python ${python_script}
+        python3 '${__tool_directory__}/scipy_interpolate.py' 
+        --reference_dataset '$reference_dataset' '$reference_dataset.ext'
+        --query_dataset '$query_dataset' '$query_dataset.ext'
+        --x_col $x_col
+        --y_col $y_col
+        --xnew_col $xnew_col
+        --method '$method'
+        --output_dataset '$output_dataset' '$output_dataset.ext'
         ]]></command>
-    <configfiles>
-        <configfile name="python_script">
-import pandas as pd
-from scipy.interpolate import CubicSpline, PchipInterpolator, Akima1DInterpolator
-import numpy as np
-
-reference = pd.read_csv('$reference_dataset', sep='\t')
-query = pd.read_csv('$query_dataset', sep='\t')
-
-model = ${method}(reference['RI'], reference['RT'])
-query['RT'] = model(query['retention_index']).astype(float)
-query.to_csv('$output_dataset', sep='\t', index=False)
-        </configfile>
-    </configfiles>
 
     <inputs>
-        <param argument="--reference_dataset" type="data" format="tabular" label="Reference data" help="Reference dataset to use fopr the interpolation" />
-        <param argument="--query_dataset" type="data" format="tabular" label="Query dataset" help="Query dataset for which to interpolate the values." />
-        <param name="method" type="select" label="Interpolation Method" help="Interpolation uethod to use">
-            <option value="CubicSpline" selected="true">Cubic Spline</option>
-            <option value="PchipInterpolator">Pchip Interpolator</option>
-            <option value="Akima1DInterpolator">Akima1D Interpolator</option>
+        <param argument="--reference_dataset" type="data" format="tabular,csv,tsv,parquet" label="Reference data" help="Reference dataset to use fopr the interpolation" />
+        <param name="x_col" type="data_column" data_ref="reference_dataset" use_header_names="true" label="x (reference)" help="Column from the reference dataset to use as X axis for the interpolator."/>
+        <param name="y_col" type="data_column" data_ref="reference_dataset" use_header_names="true" label="y (reference)" help="Column from the reference dataset to use as Y axis for the interpolator."/>
+        <param argument="--query_dataset" type="data" format="tabular,csv,tsv,parquet" label="Query dataset" help="Query dataset for which to interpolate the values." />
+        <param name="xnew_col" type="data_column" data_ref="query_dataset" use_header_names="true" label="x (query)" help="Column from the query dataset for which to interpolate."/>
+
+        <param name="method" type="select" label="Interpolation method" help="Interpolation method from scipy to use. For more details see [1].">
+            <option value="linear">Piecewise linear</option>
+            <option value="cubic" selected="true">Cubic spline</option>
+            <option value="pchip">Pchip</option>
+            <option value="akima">Akima1D</option>
         </param>
     </inputs>
     <outputs>
-        <data name="output_dataset" format="tabular" label="${tool.name} on ${on_string}" />
+        <data name="output_dataset" format_source="query_dataset" label="${tool.name} on ${on_string}">
+            <change_format>
+                <when input="query_dataset.ext" value="tsv" format="tabular" />
+            </change_format>
+        </data>
     </outputs>
     <tests>
         <!-- Hint: You can use [ctrl+alt+t] after defining the inputs/outputs to auto-scaffold some basic test cases. -->
@@ -62,7 +65,7 @@ TODO: Fill in help in reStructuredText format (https://docutils.sourceforge.io/d
 
 Usage
 .....
-
+[1] (https://docs.scipy.org/doc/scipy/tutorial/interpolate.html)
 
 **Input**
 

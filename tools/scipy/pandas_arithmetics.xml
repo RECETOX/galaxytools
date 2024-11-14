@@ -1,0 +1,43 @@
+<tool id="pandas_arithmetics" name="pandas arithmetics" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="20.01" license="MIT">
+    <description>perform arithmetic operations on a dataframe column</description>
+    <macros>
+        <token name="@TOOL_VERSION@">2.2.3</token>
+        <token name="@VERSION_SUFFIX@">0</token>
+    </macros>
+    <requirements>
+        <requirement type="package" version="@TOOL_VERSION@">pandas</requirement>
+        <requirement type="package" version="18.0.0">pyarrow</requirement>
+    </requirements>
+    <command detect_errors="exit_code"><![CDATA[
+        python3 '$__tool_directory__/pandas_arithmetics.py' 
+            --input_dataset '$input_dataset' '$input_dataset.ext' 
+            --column '$column' 
+            --operation '$operation' 
+            --operand '$operand' 
+            --output_dataset '$output_dataset' '$output_dataset.ext'
+    ]]></command>
+    <inputs>
+        <param name="input_dataset" type="data" format="csv,tsv,tabular,parquet" label="Input Dataset"/>
+        <param name="column" type="data_column" data_ref="input_dataset" use_header_names="true" label="Column" help="Column from the dataset to perform the computation on."/>
+        <param name="operation" type="select" label="Arithmetic Operation">
+            <option value="mul">Multiply</option>
+            <option value="sub">Subtract</option>
+            <option value="div">Divide</option>
+            <option value="add">Add</option>
+            <option value="pow">Power</option>
+        </param>
+        <param name="operand" type="float" label="Operand"/>
+    </inputs>
+    <outputs>
+        <data name="output_dataset" format_source="input_dataset" label="${tool.name} on ${on_string}">
+            <change_format>
+                <when input="input_dataset.ext" value="tsv" format="tabular" />
+            </change_format>
+        </data>
+    </outputs>
+
+    <help>
+        This tool performs arithmetic operations on a specified column of a dataframe.
+        Supported operations are: multiply, subtract, divide, add, and power.
+    </help>
+</tool>
