@@ -53,7 +53,14 @@
         </data>
     </outputs>
     <tests>
-        <!-- Hint: You can use [ctrl+alt+t] after defining the inputs/outputs to auto-scaffold some basic test cases. -->
+        <test>
+            <param name="reference_dataset" value="reference.txt" ftype="tabular"/>
+            <param name="x_col" value="1"/>
+            <param name="y_col" value="2"/>
+            <param name="query_dataset" value="query.tabular" ftype="tabular"/>
+            <param name="xnew_col" value="3"/>
+            <output name="output_dataset" file="interpolate/query_interpolate_rt.tabular" ftype="tabular"/>
+        </test>
     </tests>
     <help><![CDATA[
 
