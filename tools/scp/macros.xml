@@ -48,8 +48,8 @@
             <param name="count_cell_carrier" type="integer" value="200" label="Number of cells in the carrier channel" help="What is the number of cells in the carrier channel?"/> 
             <param name="single_cells" type="select" label="Single-cell channels present in the experiment" multiple="true" help = "What are the single-cell channels present in the experiment?">
                     <options from_dataset="input_annotations">
-                        <column name="name" index="2"/>
-                        <column name="value" index="2"/>
+                        <column name="name" index="3"/>
+                        <column name="value" index="3"/>
                         <filter type="unique_value" name="unique" column="3"/>
                     </options>
             </param>
@@ -76,6 +76,36 @@
             <param name="column_aggregation_peptides" type="text" value="Modified.sequence" label="Which column should be used for the PSM to peptide aggregation?" help= "Which column should be used for the PSM to peptide aggregation."/>
         </section>
 
+        <section name="peptide_filtering" title="Aggregation to peptides" expanded="true">
+            <param name="samples_to_keep" type="select" label="Which samples to keep?" multiple="true" help = "Which samples to keep? We recommend filtering out Carrier and Unused channels at this step.">
+                <options from_dataset="input_annotations">
+                    <column name="name" index="3"/>
+                    <column name="value" index="3"/>
+                    <filter type="unique_value" name="unique" column="3"/>
+                </options>
+            </param>
+            <conditional name="filter_median_intensity">
+                <param type="select" label="Filter based on median relative intensity?" help= "Whether to filter based on median intensity.">
+                    <option value="no" selected="true">no</option> 
+                    <option value="yes">yes</option>
+                </param>     
+                <when value="yes">
+                    <param label="Median intensity threshold" name="median_intensity_threshold" type="float" value="0.4"
+                    help="Threshold for relative median intensity filtering."/>
+                </when>
+            </conditional>
+            <conditional name="filter_median_CV">
+                <param type="select" label="Filter based on median CV?" help= "Whether to filter based on median CV.">
+                    <option value="yes" selected="true">yes</option> 
+                    <option value="no">no</option>
+                </param>     
+                <when value="yes">
+                    <param label="How many peptides per protein are required to compute CV?" name="minimum_peptides_CV" type="integer" value="5" help="Threshold for relative median CV filtering."/>
+                    <param label="Median CV threshold" name="median_CV_threshold" type="float" value="0.65" help="Threshold for median CV filtering."/>
+                </when>
+            </conditional>
+            <param name="remove_blank" type="boolean" checked="true" truevalue="TRUE" falsevalue="FALSE" label="Remove blank sample?" help="Whether to remove the blank sample. If it has been already removed, set to 'false'."/>    
+        </section>
     </xml>
 
     <xml name="citations">
