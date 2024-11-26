@@ -172,11 +172,115 @@
                 <when value="no"/>
             </conditional>
         </section>
+
+        <section name="protein_aggregation" title="Aggregation to proteins" expanded="true">
+            <param name = "aggregation_proteins" type="select" label="Which function to use for the aggregation?" help= "How to aggregate PSMs to proteins?">
+                    <option value="colMedians" selected="true">colMedians()</option> 
+                    <option value="medianPolish">medianPolish()</option>
+                    <option value="colMeans">colMeans()</option>
+                    <option value="colSums">colSums()</option>
+                    <option value="robustSummary">robustSummary()</option>
+            </param>    
+            <param name="column_aggregation_proteins" type="text" value="Leading.razor.protein" label="Which column should be used for the peptide to protein aggregation?" help= "Which column should be used for the peptide to protein aggregation."/>
+        </section>
+
+        <section name="protein_processing" title="Processing protein data" expanded="true">
+            <conditional name="normalization_method_protein">
+                <param type="select" label="How to perform normalization?" name = "choose_normalization_protein" display="radio" help= "How to normalize peptide intensities?">
+                    <option value="simple_prot">Normalize columns or normalize rows (one only).</option> 
+                    <option value="advanced_prot" selected="true">Firstly normalize columns, then rows.</option>
+                </param>  
+                <when value="simple_prot">
+                    <param label="Normalization method" name="normalize_simple_method_prot" type="select" help="Which normalization method to choose?">
+                        <option value="center.mean" selected="true">center.mean</option> 
+                        <option value="sum">sum</option>
+                        <option value="max">max</option>
+                        <option value="center.median">center.median</option>
+                        <option value="div.mean">div.mean</option>
+                        <option value="div.median">div.median</option>
+                        <option value="diff.median">diff.median</option>
+                        <option value="quantiles">quantiles</option>
+                        <option value="vsn">vsn</option>
+                    </param>
+                </when>
+                <when value="advanced_prot">
+                    <param label="Normalization method columns" name="normalize_columns_prot" type="select" help="Which normalization method to choose for columns?">
+                        <option value="colMedians" selected="true">colMedians</option> 
+                        <option value="rowMeans">rowMeans</option> 
+                        <option value="center.mean">center.mean</option> 
+                        <option value="sum">sum</option>
+                        <option value="max">max</option>
+                        <option value="center.median">center.median</option>
+                        <option value="div.mean">div.mean</option>
+                        <option value="div.median">div.median</option>
+                        <option value="diff.median">diff.median</option>
+                        <option value="quantiles">quantiles</option>
+                        <option value="vsn">vsn</option>
+                    </param>
+                    <param label="Normalization method rows" name="normalize_rows_prot" type="select" help="Which normalization method to choose for rows?">
+                        <option value="colMedians">colMedians</option> 
+                        <option value="rowMeans" selected="true">rowMeans</option> 
+                        <option value="center.mean">center.mean</option> 
+                        <option value="sum">sum</option>
+                        <option value="max">max</option>
+                        <option value="center.median">center.median</option>
+                        <option value="div.mean">div.mean</option>
+                        <option value="div.median">div.median</option>
+                        <option value="diff.median">diff.median</option>
+                        <option value="quantiles">quantiles</option>
+                        <option value="vsn">vsn</option>
+                    </param>
+                </when>               
+            </conditional>
+            <param label="Which k to use for the kNN imputation?" name="impute_k" type="integer" value="3" help="Number of k-nearest neighbours to consider for kNN imputation."/>
+        </section>
+
+        <section name="batch_correction" title="Batch correction" expanded="true">
+            <conditional name="select_batch_correction">
+                <param type="select" label="Which batch correction method to use?" name = "batch_correction_method" display="radio" help= "Which method to use for correcting the batch effect?">
+                    <option value="combat" selected="true">ComBat()</option> 
+                    <option value="removebatcheffect">removeBatchEffect()</option>
+                </param>  
+                <when value="combat">
+                    <param label="Which column is the technical variable to be corrected?" name="batch_col" type="text" value = "runCol" help="Which normalization method to choose?"/>
+                </when>
+                <when value="removebatcheffect">
+                    <param label="Which column is the technical variable to be corrected?" name="batch_col" type="text" value = "runCol" help="Which normalization method to choose?"/>
+                    <param label="Which column is the variable to be preserved?" name="preserve_col" type="text" value = "SampleType" help="Which normalization method to choose?"/>
+                </when>
+            </conditional>
+        </section>
+
+        <section name="dimensionality_reduction" title="Dimensionality reduction" expanded="true">
+            <conditional name="PCA_computation">
+                <param type="select" label="Run principal component analysis (PCA)?" name = "run_PCA" display="radio" help= "Run the PCA on imputed batch-corrected protein intensities?">
+                    <option value="yes" selected="true">yes</option> 
+                    <option value="no">no</option>
+                </param>    
+                <when value="yes">
+                    <param label="Number of components" name="ncomponents_PCA" type="integer" value="5" help="Number of components in the PCA analysis."/>
+                </when>
+                <when value="no"/>   
+            </conditional>
+            <conditional name="UMAP_computation">
+                <param type="select" label="Run UMAP on PCA data?" name = "run_UMAP" display="radio" help= "Run the UMAP on PCA-reduced data?">
+                    <option value="yes" selected="true">yes</option> 
+                    <option value="no">no</option>
+                </param>    
+                <when value="yes">
+                    <param label="Number of components" name="ncomponents_UMAP" type="integer" value="2" help="Number of components in the UMAP analysis."/>
+                </when>
+                <when value="no"/>   
+            </conditional>
+        </section>
     </xml>
 
     <xml name="citations">
         <citations>
-            <citation type="doi">10.1016/j.envres.2020.110114</citation>
+            <citation type="doi">10.1002/cpz1.658</citation>
+            <citation type="doi">10.1080/14789450.2021.1988571</citation>
+            <citation type="doi">10.1021/acs.jproteome.3c00227</citation>
+            <citation type="doi">10.1007/978-1-0716-3934-4_14</citation>
         </citations>        
     </xml>
 
