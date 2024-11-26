@@ -1,0 +1,275 @@
+
+<tool id="scp_full_workflow" name="scp: Single Cell Proteomics data analysis" version="@TOOL_VERSION@+galaxy0" profile="23.0">
+    <description>Single Cell Proteomics workflow</description>
+    <macros>
+        <import>macros.xml</import>
+        <import>help.xml</import>
+    </macros>
+    <edam_topics>  
+    </edam_topics>
+    <expand macro="creator" />
+    <expand macro="requirements" />
+    <command detect_errors="exit_code"><![CDATA[
+        Rscript '${run_script}'
+    ]]></command>
+    <configfiles>
+        <configfile name="run_script"><![CDATA[
+        data <- read.delim("$input_data", sep="\t")
+        metadata <- read.delim("$input_annotations", sep="\t")
+
+        scp <- readSCP(assayData = data,
+                       colData = metadata,
+                       runCol = "$runcol",
+                       removeEmptyCols = $remove_empty_columns)
+        
+        number_of_assays <- length(scp)
+
+        scp <- zeroIsNA(scp, i = 1:number_of_assays)
+
+        #if "$filter_reverse"
+        scp <- filterFeatures(scp,
+                        ~ Reverse != "+")
+        #end if
+
+        #if "$filter_contaminants"
+        scp <- filterFeatures(scp,
+                        ~ Potential.contaminant != "+")
+        #end if
+
+        PIF_threshold <- $PIF_threshold
+        scp <- filterFeatures(scp,
+                      ~ !is.na(PIF) & PIF > PIF_threshold)
+
+        keepAssay <- dims(scp)[1, ] > $minimum_features
+        scp <- scp[, , keepAssay]
+
+        number_of_assays <- length(scp)
+
+        single_cell_channels <- paste(c("$single cells"), collapse = "|")
+        scp <- computeSCR(scp,
+                  i = 1:number_of_assays,
+                  colvar = "SampleType",
+                  carrierPattern = "Carrier",
+                  samplePattern = single_cell_channels,
+                  sampleFUN = "mean",
+                  rowDataName = "MeanSCR")
+        
+        scp <- filterFeatures(scp,
+                      ~ !is.na(MeanSCR) &
+                        MeanSCR < $SCR_threshold)    
+        
+        #if ("$qvalue_level" == "PSM")
+        scp <- pep2qvalue(scp,
+                    i = 1:number_of_assays,
+                    PEP = "dart_PEP",
+                    rowDataName = "qvalue")
+  
+        scp <- filterFeatures(scp,
+                        ~ qvalue < $qvalue_threshold)
+        #else
+        scp <- pep2qvalue(scp,
+                    i = 1:number_of_assays,
+                    PEP = "dart_PEP",
+                    groupBy = "Leading.razor.protein",
+                    rowDataName = "qvalue")
+ 
+        scp <- filterFeatures(scp,
+                        ~ qvalue < $qvalue_threshold)
+        #end if
+
+        #if $divide_reference
+        scp <- divideByReference(scp,
+                           i = 1:number_of_assays,
+                           colvar = "SampleType",
+                           samplePattern = ".",
+                           refPattern = "Reference")
+        #end if
+
+        aggregation_fun <- match.fun("$aggregation_peptides")
+        scp <- aggregateFeaturesOverAssays(scp,
+                                   i = 1:number_of_assays,
+                                   fcol = "$column_aggregation_peptides",
+                                   name = paste0("peptide_", names(scp)),
+                                   fun = aggregation_fun, na.rm = TRUE)
+        
+        scp <- joinAssays(scp,
+                  i = grep("peptide", names(scp)),
+                  name = "peptides")
+        
+        keep_samples <- c("$samples_to_keep")
+        scp <- scp[, scp[["SampleType"]] %in% keep_samples, ]
+
+        #if ("$cut_median_intensity" == "yes")
+        medians <- colMedians(assay(scp[["peptides"]]), na.rm = TRUE)
+        scp[["MedianRI"]] <- medians
+        scp <- scp[, !is.na(scp[["MedianRI"]]) & scp[["MedianRI"]] < $median_intensity_threshold, ]
+        #end if
+
+        #if ("$cut_median_CV" == "yes")
+         scp <- medianCVperCell(scp,
+                         i = 1:number_of_assays,
+                         groupBy = "Leading.razor.protein",
+                         nobs = $minimum_peptides_CV,
+                         norm = "div.median",
+                         na.rm = TRUE,
+                         colDataName = "MedianCV")
+  
+        scp <- scp[, !is.na(scp$MedianCV) & scp$MedianCV < $median_CV_threshold, ]
+        #end if
+
+        #if $remove_blank
+        scp <- scp[, scp[["SampleType"]] != "Blank", ]
+        #end if
+
+        #if ("$normalization_method" == "simple")
+        normalize(scp,
+              i = "peptides",
+              name = "peptides_norm",
+              method = "$normalize_simple_method")
+        #else
+        norm_function_col <- match.fun("$normalize_columns")
+        scp <- sweep(scp,
+                 i = "peptides", 
+                 MARGIN = 2,
+                 FUN = "/",
+                 STATS = norm_function_col(assay(scp[["peptides"]]), na.rm = TRUE),
+                 name = "peptides_norm_col")
+
+        norm_function_row <- match.fun("$normalize_rows")
+        scp <- sweep(scp,
+                 i = "peptides_norm_col",
+                 MARGIN = 1,
+                 FUN = "/",
+                 STATS = norm_function_row(assay(scp[["peptides_norm_col"]]),  na.rm = TRUE),
+                 name =  "peptides_norm") 
+        #end if
+
+        scp <- logTransform(scp,
+                    base = $base,
+                    i = "peptides_norm",
+                    name = "peptides_log")
+        
+        #if $remove_missing_peptides
+        scp <- filterNA(scp,
+                  i = "peptides_log",
+                  pNA = $pNA_peptides)
+        #end if
+
+        aggregation_fun_prot <- match.fun("$aggregation_proteins")
+        scp <- aggregateFeatures(scp,
+                         i = "peptides_log",
+                         name = "proteins",
+                         fcol = "$column_aggregation_proteins",
+                         fun = aggregation_fun_prot, na.rm = TRUE)
+
+        #if ("$choose_normalization_protein" == "simple_prot")
+        normalize(scp,
+              i = "proteins",
+              name = "proteins_norm",
+              method = "$normalize_simple_method_prot")
+        #else
+        norm_function_col <- match.fun("$normalize_columns_prot")
+        scp <- sweep(scp,
+                 i = "proteins", 
+                 MARGIN = 2,
+                 FUN = "/",
+                 STATS = norm_function_col(assay(scp[["proteins"]]), na.rm = TRUE),
+                 name = "proteins_norm_col")
+
+        norm_function_row <- match.fun("$normalize_rows_prot")
+        scp <- sweep(scp,
+                 i = "proteins_norm_col",
+                 MARGIN = 1,
+                 FUN = "/",
+                 STATS = norm_function_row(assay(scp[["proteins_norm_col"]]),  na.rm = TRUE),
+                 name =  "proteins_norm") 
+        #end if
+
+        scp <- impute(scp,
+              i = "proteins_norm",
+              name = "proteins_imptd",
+              method = "knn",
+              k = $impute_k, rowmax = 1, colmax= 1,
+              maxp = Inf, rng.seed = 1234)
+
+        #if ("$batch_correction_method" == "combat")
+        sce <- getWithColData(scp, "proteins_imptd")
+        batch <- sce[["$batch_col"]]
+        model <- model.matrix(~ SampleType, data = colData(sce))
+  
+        assay(sce) <- ComBat(dat = assay(sce),
+                       batch = batch,
+                       mod = model)
+  
+        scp <- addAssay(scp,
+                  y = sce,
+                  name = "proteins_batchC")
+        scp <- addAssayLinkOneToOne(scp,
+                              from = "proteins_imptd",
+                              to = "proteins_batchC")
+        #else
+        sce <- getWithColData(scp, "proteins_imptd")
+        assay(sce) <- removeBatchEffect(assay(sce), group = sce[["$preserve_col"]],
+                      batch = sce[["$batch_col"]])
+        scp <- addAssay(scp,
+                  y = sce,
+                  name = "proteins_batchC")
+        scp <- addAssayLinkOneToOne(scp,
+                              from = "proteins_imptd",
+                              to = "proteins_batchC")
+        #end if 
+
+        #if $run_PCA
+        scp[["proteins_batchC"]] <- runPCA(scp[["proteins_batchC"]],
+                                     ncomponents = $ncomponents_PCA,
+                                     ntop = Inf,
+                                     scale = TRUE,
+                                     exprs_values = 1,
+                                     name = "PCA")
+  
+        pca <- plotReducedDim(scp[["proteins_batchC"]],
+                 dimred = "PCA",
+                 colour_by = "SampleType",
+                 point_alpha = 1)
+        #end if
+
+        #if $run_UMAP
+        scp[["proteins_batchC"]] <- runUMAP(scp[["proteins_batchC"]],
+                                      ncomponents = $ncomponents_UMAP,
+                                      ntop = Inf,
+                                      scale = TRUE,
+                                      exprs_values = 1,
+                                      n_neighbors = 3,
+                                      dimred = "PCA",
+                                      name = "UMAP")
+  
+        umap <- plotReducedDim(scp[["proteins_batchC"]],
+                 dimred = "UMAP",
+                 colour_by = "SampleType",
+                 point_alpha = 1)
+        #end if
+
+        assay_df <- as.data.frame(assay(scp, "proteins_batchC"))
+        metadata_df <- as.data.frame(colData(scp))
+        combined_df <- cbind(metadata_df, assay_df)
+        write.table(noise, file = '$Processed_data', row.names= FALSE, col.names = FALSE)
+        ggplot2::ggsave(filename = "PCA.png", pca)
+        ggplot2::ggsave(filename = "UMAP.png", umap)
+        ]]></configfile>
+    </configfiles>
+    <inputs>
+        <expand macro="scp_param"/>
+    </inputs>
+    <outputs>
+        <data name="Processed_data" format="txt" label="Processed scp dataframe"/>
+        <data name="PCA" format="png" label="PCA plot" from_work_dir="PCA.png"/>
+        <data name="UMAP" format="png" label="UMAP plot" from_work_dir="UMAP.png"/>
+    </outputs>
+    <tests>
+    </tests>
+    <help><![CDATA[
+        @SCP_HELP@
+        @GENERAL_HELP@
+    ]]></help>
+    <expand macro="citations" />
+</tool>
