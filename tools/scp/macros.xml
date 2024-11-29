@@ -1,8 +1,10 @@
 <macros>
-    <token name="@TOOL_VERSION@">1.0.0</token>
+    <token name="@TOOL_VERSION@">1.12.0</token>
     <xml name="requirements">
         <requirements>
-            <requirement type="package" version="@TOOL_VERSION@">r-scp</requirement>
+            <requirement type="package" version="@TOOL_VERSION@">bioconductor-scp</requirement>
+            <requirement type="package" version="3.54.0">bioconductor-sva</requirement>
+            <requirement type="package" version="1.34.0">bioconductor-scater</requirement>
         </requirements>
     </xml>
 
@@ -85,7 +87,7 @@
                 </options>
             </param>
             <conditional name="filter_median_intensity">
-                <param type="select" name = "select_median_intensity" label="Filter based on median relative intensity?" help= "Whether to filter based on median intensity.">
+                <param type="select" name = "cut_median_intensity" label="Filter based on median relative intensity?" help= "Whether to filter based on median intensity.">
                     <option value="no" selected="true">no</option> 
                     <option value="yes">yes</option>
                 </param>     
@@ -96,7 +98,7 @@
                 <when value="no"/>
             </conditional>
             <conditional name="filter_median_CV">
-                <param type="select" name = "select_median_CV" label="Filter based on median CV?" help= "Whether to filter based on median CV.">
+                <param type="select" name = "cut_median_CV" label="Filter based on median CV?" help= "Whether to filter based on median CV.">
                     <option value="yes" selected="true">yes</option> 
                     <option value="no">no</option>
                 </param>     
@@ -157,10 +159,10 @@
                     </param>
                 </when>               
             </conditional>
-                <param label="Log transformation base" name="base" type="select" help="Which base to use for the log transformation?">
-                        <option value="2" selected="true">2</option> 
-                        <option value="10">10</option> 
-                </param>
+            <param label="Log transformation base" name="base" type="select" help="Which base to use for the log transformation?">
+                    <option value="2" selected="true">2</option> 
+                    <option value="10">10</option> 
+            </param>
             <conditional name="remove_missing_peptides">
                 <param type="select" name = "remove_peptides" label="Remove peptides with high missing rate?" help= "Whether to remove the peptides with the high missing rate.">
                     <option value="yes" selected="true">yes</option> 
@@ -245,8 +247,8 @@
                     <param label="Which column is the technical variable to be corrected?" name="batch_col" type="text" value = "runCol" help="Which normalization method to choose?"/>
                 </when>
                 <when value="removebatcheffect">
-                    <param label="Which column is the technical variable to be corrected?" name="batch_col" type="text" value = "runCol" help="Which normalization method to choose?"/>
                     <param label="Which column is the variable to be preserved?" name="preserve_col" type="text" value = "SampleType" help="Which normalization method to choose?"/>
+                    <param label="Which column is the technical variable to be corrected?" name="batch_col" type="text" value = "runCol" help="Which normalization method to choose?"/>
                 </when>
             </conditional>
         </section>
