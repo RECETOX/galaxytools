@@ -5,11 +5,16 @@
         <token name="@TOOL_VERSION@">0.1.0</token>
         <token name="@VERSION_SUFFIX@">0</token>
     </macros>
-    <!-- TODO: please annotate this tool with topics and operations from http://edamontology.org -->
-    <!-- TODO: for more information see: https://galaxy-iuc-standards.readthedocs.io/en/latest/best_practices/tool_xml.html#edam-topics-and-operations -->
 
-    <requirements>
-    </requirements>
+    <edam_operations>
+        <edam_operation>operation_1812</edam_operation>
+    </edam_operations>
+
+    <edam_topics>
+        <edam_topic>topic_3316</edam_topic>
+        <edam_topic>topic_3071</edam_topic>
+    </edam_topics>
+
     <expression type="ecma5.1"><![CDATA[{
         // Read the input CSV file
         var data = $job.row.contents;
