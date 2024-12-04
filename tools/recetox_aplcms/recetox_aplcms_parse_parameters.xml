@@ -16,6 +16,30 @@
     </edam_topics>
 
     <expression type="ecma5.1"><![CDATA[{
+        // Expected column names
+        var expectedColumnNames = [
+            "min_run",
+            "sigma_lower",
+            "sigma_higher",
+            "min_sd",
+            "max_sd",
+            "mz_tol",
+            "weighting",
+            "min_pres",
+            "group_threshold"
+        ];
+
+        // Validate column names
+        var columnNames = $job.row.metadata.column_names;
+        if (columnNames.length !== expectedColumnNames.length) {
+            throw new Error("Column count does not match expected count.");
+        }
+        for (var i = 0; i < columnNames.length; i++) {
+            if (columnNames[i] !== expectedColumnNames[i]) {
+                throw new Error("Column names do not match expected names.");
+            }
+        }
+
         // Read the input CSV file
         var data = $job.row.contents;
 
@@ -30,6 +54,15 @@
         var result = {};
         for (var i = 0; i < header.length; i++) {
             result[header[i]] = row[i];
+        }
+
+        // Validate that the float parameters are valid float values
+        var floatParams = ["min_run", "sigma_lower", "sigma_higher", "min_sd", "max_sd", "mz_tol", "min_pres", "group_threshold"];
+        for (var i = 0; i < floatParams.length; i++) {
+            var param = floatParams[i];
+            if (isNaN(parseFloat(result[param]))) {
+                throw new Error("Parameter " + param + " does not contain a valid float value.");
+            }
         }
         
         var weighting;
