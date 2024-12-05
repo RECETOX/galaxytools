@@ -1,13 +1,5 @@
 <macros>
     <token name="@TOOL_VERSION@">1.12.0</token>
-    <xml name="requirements">
-        <requirements>
-            <requirement type="package" version="@TOOL_VERSION@">bioconductor-scp</requirement>
-            <requirement type="package" version="3.54.0">bioconductor-sva</requirement>
-            <requirement type="package" version="1.34.0">bioconductor-scater</requirement>
-        </requirements>
-    </xml>
-
     <xml name="refs">
         <xrefs>
                <xref type="bio.tools">mfassignr</xref>
@@ -20,10 +12,7 @@
                 givenName="Kristina"
                 familyName="Gomoryova"
                 url="https://github.com/KristinaGomoryova"
-                identifier="0000-0003-4407-3917" />
-            <person
-                givenName="Helge"
-                familyName="Hecht"
+                identifier="0000-0003-4407-3917" />ns
                 url="https://github.com/hechth"
                 identifier="0000-0001-6744-996X" />
             <organization
