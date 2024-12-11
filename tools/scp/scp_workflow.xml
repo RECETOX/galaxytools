@@ -228,7 +228,7 @@
                               to = "proteins_batchC")
         #end if 
 
-        #if "$dimensionality_reduction.PCA_computation.run_PCA" == "yes"
+        #if $dimensionality_reduction.PCA_computation.run_PCA == "yes"
         scp[["proteins_batchC"]] <- runPCA(scp[["proteins_batchC"]],
                                      ncomponents = ${dimensionality_reduction.PCA_computation.ncomponents_PCA},
                                      ntop = Inf,
@@ -244,9 +244,9 @@
         ggplot2::ggsave(filename = "PCA.png", pca)
         #end if
 
-        #if "$dimensionality_reduction.PCA_computation.run_UMAP" == "yes"
-        scp[["proteins_batchC"]] <- runUMAP(scp[["proteins_batchC"]],
-                                      ncomponents = ${dimensionality_reduction.PCA_computation.ncomponents_UMAP},
+        #if $dimensionality_reduction.UMAP_computation.run_UMAP == "yes"
+        scp[["proteins_batchC"]] <- scater::runUMAP(scp[["proteins_batchC"]],
+                                      ncomponents = ${dimensionality_reduction.UMAP_computation.ncomponents_UMAP},
                                       ntop = Inf,
                                       scale = TRUE,
                                       exprs_values = 1,
