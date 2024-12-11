@@ -121,7 +121,7 @@
                          norm = "div.median",
                          na.rm = TRUE,
                          colDataName = "MedianCV")
-                         
+
         scp <- scp[, !is.na(colData(scp)[["MedianCV"]]) & colData(scp)[["MedianCV"]] < CV_threshold, ]
         #end if
         
@@ -213,9 +213,9 @@
                         y = sce,
                         name = "proteins_batchC")
 
-        ## scp <- addAssayLinkOneToOne(scp,
-        ##                       from = "proteins_imptd",
-        ##                       to = "proteins_batchC")
+        scp <- addAssayLinkOneToOne(scp,
+                              from = "proteins_imptd",
+                              to = "proteins_batchC")
 
         #else
         sce <- getWithColData(scp, "proteins_imptd")
@@ -240,6 +240,8 @@
                  dimred = "PCA",
                  colour_by = "SampleType",
                  point_alpha = 1)
+
+        ggplot2::ggsave(filename = "PCA.png", pca)
         #end if
 
         #if "$dimensionality_reduction.PCA_computation.run_UMAP" == "yes"
@@ -256,14 +258,13 @@
                  dimred = "UMAP",
                  colour_by = "SampleType",
                  point_alpha = 1)
+        ggplot2::ggsave(filename = "UMAP.png", umap)
         #end if
 
         assay_df <- as.data.frame(assay(scp, "proteins_batchC"))
         metadata_df <- as.data.frame(colData(scp))
-        combined_df <- cbind(metadata_df, assay_df)
-        write.table(noise, file = '$Processed_data', row.names= FALSE, col.names = FALSE)
-        ggplot2::ggsave(filename = "PCA.png", pca)
-        ggplot2::ggsave(filename = "UMAP.png", umap)
+       ## combined_df <- cbind(metadata_df, assay_df)
+        write.table(assay_df, file = '$Processed_data', row.names= FALSE, col.names = FALSE)
         ]]></configfile>
     </configfiles>
     <inputs>
