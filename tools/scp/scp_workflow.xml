@@ -8,7 +8,7 @@
     </edam_topics>
     <expand macro="creator" />
     <command detect_errors="exit_code"><![CDATA[
-    Rscript -e 'source("${run_script}")'
+    Rscript -e 'source("${run_script}")' -e 'source("${__tool_directory__}/utils.R")'
     ]]></command>
     <configfiles>
         <configfile name="run_script"><![CDATA[
@@ -261,10 +261,17 @@
         ggplot2::ggsave(filename = "UMAP.png", umap)
         #end if
 
+        #if $data_export.export_tables == "table_final"
         assay_df <- as.data.frame(assay(scp, "proteins_batchC"))
-        metadata_df <- as.data.frame(colData(scp))
-       ## combined_df <- cbind(metadata_df, assay_df)
-        write.table(assay_df, file = '$Processed_data', row.names= FALSE, col.names = FALSE)
+        row_metadata <- as.data.frame(rowData(scp[["proteins_batchC"]]))
+
+        export_data <- cbind(row_metadata, as.data.frame(assay_df))
+        write.csv(export_data, file = '$Processed_data', sep = "\t")
+        #else
+        export_all_assays(scp)
+        #end if
+
+        
         ]]></configfile>
     </configfiles>
     <inputs>
@@ -272,6 +279,11 @@
     </inputs>
     <outputs>
         <data name="Processed_data" format="txt" label="Processed scp dataframe"/>
+            <filter>data_export['export_tables'] == 'table_final'</filter>
+        </data>
+        <data name="Processed_data" format="txt" label="Processed scp dataframe"/>
+            <filter>data_export['export_tables'] == 'table_final'</filter>
+        </data>
         <data name="PCA" format="png" label="PCA plot" from_work_dir="PCA.png"/>
         <data name="UMAP" format="png" label="UMAP plot" from_work_dir="UMAP.png"/>
     </outputs>

@@ -264,6 +264,13 @@
                 <when value="no"/>   
             </conditional>
         </section>
+
+        <section name="data_export" title="Export data" expanded="true">
+            <param name = "export_tables" type="select" display="radio" label="Which tables to export?" help= "Whether only the final result table (log2 transformed, normalized, imputed, batch-corrected data) should be exported or all intermediate results.">
+                    <option value="table_final" selected="true">Only final table</option>
+                    <option value="table_intermediate">All intermediate results</option>
+            </param>    
+        </section>
     </xml>
 
     <xml name="citations">
