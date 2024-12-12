@@ -8,24 +8,24 @@
     </edam_topics>
     <expand macro="creator" />
     <command detect_errors="exit_code"><![CDATA[
-    Rscript -e 'source("${run_script}")' -e 'source("${__tool_directory__}/utils.R")'
+    Rscript  -e 'source("${__tool_directory__}/utils.R")' -e 'source("${run_script}")'
     ]]></command>
     <configfiles>
         <configfile name="run_script"><![CDATA[
         library("scp")
         library("ggplot2")
         library("dplyr")
-        library("sva")
-        library("scater")   
+        library("sva")  
         library("impute")
 
-        data <- read.delim("$input_data", sep="\t")
+        data_input <- read.delim("$input_data", sep="\t")
 
         metadata <- read.delim("$input_annotations", sep="\t")
 
-        scp <- scp::readSCP(assayData = data,
+        runCol <- colnames(data_input)[$runcol]
+        scp <- scp::readSCP(assayData = data_input,
                        colData = metadata,
-                       runCol = "$runcol",
+                       runCol = runCol,
                        removeEmptyCols = $remove_empty_columns)
         
         number_of_assays <- length(scp)
@@ -76,7 +76,7 @@
         scp <- pep2qvalue(scp,
                     i = 1:number_of_assays,
                     PEP = "dart_PEP",
-                    groupBy = "Leading.razor.protein",
+                    groupBy = "$filtering_data.qvalue_level",
                     rowDataName = "qvalue")
  
         scp <- filterFeatures(scp,
@@ -130,10 +130,11 @@
         #end if
 
         #if $peptide_processing.normalization_method.choose_normalization == "simple"
-        normalize(scp,
+        scp <- QFeatures::normalize(scp,
               i = "peptides",
               name = "peptides_norm",
               method = "${peptide_processing.normalization_method.normalize_simple_method}")
+
         #else
         norm_function_col <- match.fun("$peptide_processing.normalization_method.normalize_columns")
         scp <- sweep(scp,
@@ -157,10 +158,11 @@
                     i = "peptides_norm",
                     name = "peptides_log")
 
-        #if $peptide_processing.remove_missing_peptides.remove_peptides
+        #if $peptide_processing.remove_missing_peptides.remove_peptides == "yes"
+        pNA <-  ${peptide_processing.remove_missing_peptides.pNA_peptides} / 100
         scp <- filterNA(scp,
                   i = "peptides_log",
-                  pNA = ${peptide_processing.remove_missing_peptides.pNA_peptides})
+                  pNA = pNA)
         #end if
 
         aggregation_fun_prot <- match.fun("${protein_aggregation.aggregation_proteins}")
@@ -171,7 +173,7 @@
                          fun = aggregation_fun_prot, na.rm = TRUE)
 
         #if $protein_processing.normalization_method_protein.choose_normalization_protein == "simple_prot"
-        normalize(scp,
+       scp <- QFeatures::normalize(scp,
               i = "proteins",
               name = "proteins_norm",
               method = "${protein_processing.normalization_method_protein.normalize_simple_method_prot}")
@@ -202,7 +204,8 @@
 
         #if $batch_correction.select_batch_correction.batch_correction_method == "combat"
         sce <- getWithColData(scp, "proteins_imptd")
-        batch <- colData(scp)[["${batch_correction.select_batch_correction.batch_col}"]]
+        batch_colname <- colnames(metadata)[${batch_correction.select_batch_correction.batch_col}]
+        batch <- colData(scp)[[batch_colname]]
         model <- model.matrix(~ SampleType, data = colData(sce))
   
         assay(sce) <- ComBat(dat = assay(sce),
@@ -219,7 +222,14 @@
 
         #else
         sce <- getWithColData(scp, "proteins_imptd")
-        assay(sce) <- removeBatchEffect(assay(sce), group = sce[["${batch_correction.select_batch_correction.preserve_col}"]], batch = sce[["${batch_correction.select_batch_correction.batch_col}"]])
+        batch_colname <- colnames(metadata)[${batch_correction.select_batch_correction.batch_col}]
+        preserve_colname <- colnames(metadata)[${batch_correction.select_batch_correction.preserve_col}]
+
+        assay(sce) <- limma::removeBatchEffect(
+            assay(sce),
+            group = sce[[preserve_colname]],
+            batch = sce[[batch_colname]]
+        )
         scp <- addAssay(scp,
                   y = sce,
                   name = "proteins_batchC")
@@ -229,24 +239,23 @@
         #end if 
 
         #if $dimensionality_reduction.PCA_computation.run_PCA == "yes"
-        scp[["proteins_batchC"]] <- runPCA(scp[["proteins_batchC"]],
+        scp[["proteins_batchC"]] <- scater::runPCA(scp[["proteins_batchC"]],
                                      ncomponents = ${dimensionality_reduction.PCA_computation.ncomponents_PCA},
                                      ntop = Inf,
                                      scale = TRUE,
                                      exprs_values = 1,
                                      name = "PCA")
   
-        pca <- plotReducedDim(scp[["proteins_batchC"]],
+        pca <- scater::plotReducedDim(scp[["proteins_batchC"]],
                  dimred = "PCA",
                  colour_by = "SampleType",
                  point_alpha = 1)
 
         ggplot2::ggsave(filename = "PCA.png", pca)
-        #end if
 
-        #if $dimensionality_reduction.UMAP_computation.run_UMAP == "yes"
+        #if $dimensionality_reduction.PCA_computation.UMAP_computation.run_UMAP == "yes"
         scp[["proteins_batchC"]] <- scater::runUMAP(scp[["proteins_batchC"]],
-                                      ncomponents = ${dimensionality_reduction.UMAP_computation.ncomponents_UMAP},
+                                      ncomponents = ${dimensionality_reduction.PCA_computation.UMAP_computation.ncomponents_UMAP},
                                       ntop = Inf,
                                       scale = TRUE,
                                       exprs_values = 1,
@@ -254,20 +263,21 @@
                                       dimred = "PCA",
                                       name = "UMAP")
   
-        umap <- plotReducedDim(scp[["proteins_batchC"]],
+        umap <- scater::plotReducedDim(scp[["proteins_batchC"]],
                  dimred = "UMAP",
                  colour_by = "SampleType",
                  point_alpha = 1)
         ggplot2::ggsave(filename = "UMAP.png", umap)
         #end if
 
-        #if $data_export.export_tables == "table_final"
+        #end if
+
         assay_df <- as.data.frame(assay(scp, "proteins_batchC"))
         row_metadata <- as.data.frame(rowData(scp[["proteins_batchC"]]))
 
         export_data <- cbind(row_metadata, as.data.frame(assay_df))
         write.csv(export_data, file = '$Processed_data', sep = "\t")
-        #else
+        #if $data_export.export_tables
         export_all_assays(scp)
         #end if
 
@@ -278,14 +288,17 @@
         <expand macro="scp_param"/>
     </inputs>
     <outputs>
-        <data name="Processed_data" format="txt" label="Processed scp dataframe"/>
-            <filter>data_export['export_tables'] == 'table_final'</filter>
+        <data name="Processed_data" format="txt" label="Batch-corrected protein levels"/>
+        <collection name="intermediate_outputs" type="list" label="Intermediate outputs">
+            <discover_datasets pattern="__name_and_ext__" directory="outputs" />
+            <filter>data_export['export_tables']</filter>
+        </collection>
+        <data name="PCA" format="png" label="PCA plot" from_work_dir="PCA.png">
+            <filter>dimensionality_reduction['PCA_computation']['run_PCA'] == 'yes'</filter>
         </data>
-        <data name="Processed_data" format="txt" label="Processed scp dataframe"/>
-            <filter>data_export['export_tables'] == 'table_final'</filter>
+        <data name="UMAP" format="png" label="UMAP plot" from_work_dir="UMAP.png">
+            <filter>dimensionality_reduction['PCA_computation']['run_PCA'] == 'yes' and dimensionality_reduction['PCA_computation']['UMAP_computation']['run_UMAP'] == 'yes'</filter>
         </data>
-        <data name="PCA" format="png" label="PCA plot" from_work_dir="PCA.png"/>
-        <data name="UMAP" format="png" label="UMAP plot" from_work_dir="UMAP.png"/>
     </outputs>
     <tests>
     </tests>
