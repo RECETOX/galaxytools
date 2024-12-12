@@ -91,12 +91,12 @@
                            refPattern = "Reference")
         #end if
 
-        aggregation_fun <- match.fun("${peptide_aggregation.aggregation_peptides}")
+        ## aggregation_fun <- match.fun("${peptide_aggregation.aggregation_peptides}")
         scp <- aggregateFeaturesOverAssays(scp,
                                    i = 1:number_of_assays,
                                    fcol = "${peptide_aggregation.column_aggregation_peptides}",
                                    name = paste0("peptide_", names(scp)),
-                                   fun = aggregation_fun, na.rm = TRUE)
+                                   fun = ${peptide_aggregation.aggregation_peptides}, na.rm = TRUE)
 
         scp <- joinAssays(scp,
                   i = grep("peptide", names(scp)),
@@ -104,13 +104,13 @@
    
         keep_samples <- unlist(strsplit("${peptide_filtering.samples_to_keep}", split=","))
         scp <- scp[,colData(scp)[["SampleType"]] %in% keep_samples, ]
- 
+
         #if $peptide_filtering.filter_median_intensity.cut_median_intensity == "yes"
             medians <- colMedians(assay(scp[["peptides"]]), na.rm = TRUE)
             colData(scp)[["MedianRI"]] <- medians
             scp <- scp[, !is.na(colData(scp)[["MedianRI"]]) & colData(scp)[["MedianRI"]] < ${peptide_filtering.filter_median_intensity.median_intensity_threshold}, ]
         #end if
-       
+
         #if $peptide_filtering.filter_median_CV.cut_median_CV == "yes"
         number_of_observations <- ${peptide_filtering.filter_median_CV.minimum_peptides_CV}
         CV_threshold <- ${peptide_filtering.filter_median_CV.median_CV_threshold}
@@ -165,12 +165,12 @@
                   pNA = pNA)
         #end if
 
-        aggregation_fun_prot <- match.fun("${protein_aggregation.aggregation_proteins}")
+        ## aggregation_fun_prot <- match.fun("${protein_aggregation.aggregation_proteins}")
         scp <- aggregateFeatures(scp,
                          i = "peptides_log",
                          name = "proteins",
                          fcol = "${protein_aggregation.column_aggregation_proteins}",
-                         fun = aggregation_fun_prot, na.rm = TRUE)
+                         fun = ${protein_aggregation.aggregation_proteins}, na.rm = TRUE)
 
         #if $protein_processing.normalization_method_protein.choose_normalization_protein == "simple_prot"
        scp <- QFeatures::normalize(scp,

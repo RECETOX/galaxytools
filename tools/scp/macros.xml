@@ -59,10 +59,10 @@
         <section name="peptide_aggregation" title="Aggregation to peptides" expanded="true">
             <param name = "aggregation_peptides" type="select" label="Which function to use for the aggregation?" help= "How to aggregate PSMs to peptides?">
                     <option value="colMedians" selected="true">colMedians()</option> 
-                    <option value="medianPolish">medianPolish()</option>
+                    <option value="MsCoreUtils::medianPolish">medianPolish()</option>
                     <option value="colMeans">colMeans()</option>
                     <option value="colSums">colSums()</option>
-                    <option value="robustSummary">robustSummary()</option>
+                    <option value="MsCoreUtils::robustSummary">robustSummary()</option>
             </param>    
             <param name="column_aggregation_peptides" type="text" hidden = "true" value="Modified.sequence" label="Which column should be used for the PSM to peptide aggregation?" optional = "false" help= "Which column should be used for the PSM to peptide aggregation."/>
         </section>
@@ -92,7 +92,7 @@
                     <option value="no">no</option>
                 </param>     
                 <when value="yes">
-                    <param label="How many peptides per protein are required to compute CV?" name="minimum_peptides_CV" type="integer" value="5" min="1" help="Threshold for relative median CV filtering."/>
+                    <param label="How many peptides per protein are required to compute CV?" name="minimum_peptides_CV" type="integer" value="5" min="1" help="Minimum number of peptides per protein required for the CV computation."/>
                     <param label="Median CV threshold" name="median_CV_threshold" type="float" value="0.65" help="Threshold for median CV filtering."/>
                 </when>
                 <when value="no"/>
@@ -120,31 +120,13 @@
                     </param>
                 </when>
                 <when value="advanced">
-                    <param label="Normalization method columns" name="normalize_columns" type="select" help="Which normalization method to choose for columns?">
+                    <param label="Normalization method columns" name="normalize_columns" type="select" display="radio" help="Which normalization method to choose for columns?">
+                        <option value="colMeans">colMeans</option> 
                         <option value="colMedians" selected="true">colMedians</option> 
-                        <option value="rowMeans">rowMeans</option> 
-                        <option value="center.mean">center.mean</option> 
-                        <option value="sum">sum</option>
-                        <option value="max">max</option>
-                        <option value="center.median">center.median</option>
-                        <option value="div.mean">div.mean</option>
-                        <option value="div.median">div.median</option>
-                        <option value="diff.median">diff.median</option>
-                        <option value="quantiles">quantiles</option>
-                        <option value="vsn">vsn</option>
                     </param>
-                    <param label="Normalization method rows" name="normalize_rows" type="select" help="Which normalization method to choose for rows?">
-                        <option value="colMedians">colMedians</option> 
+                    <param label="Normalization method rows" name="normalize_rows" type="select" display="radio" help="Which normalization method to choose for rows?">
                         <option value="rowMeans" selected="true">rowMeans</option> 
-                        <option value="center.mean">center.mean</option> 
-                        <option value="sum">sum</option>
-                        <option value="max">max</option>
-                        <option value="center.median">center.median</option>
-                        <option value="div.mean">div.mean</option>
-                        <option value="div.median">div.median</option>
-                        <option value="diff.median">diff.median</option>
-                        <option value="quantiles">quantiles</option>
-                        <option value="vsn">vsn</option>
+                        <option value="rowMedians">rowMedians</option> 
                     </param>
                 </when>               
             </conditional>
@@ -167,17 +149,17 @@
         <section name="protein_aggregation" title="Aggregation to proteins" expanded="true">
             <param name = "aggregation_proteins" type="select" label="Which function to use for the aggregation?" help= "How to aggregate PSMs to proteins?">
                     <option value="colMedians" selected="true">colMedians()</option> 
-                    <option value="medianPolish">medianPolish()</option>
+                    <option value="MsCoreUtils::medianPolish">medianPolish()</option>
                     <option value="colMeans">colMeans()</option>
                     <option value="colSums">colSums()</option>
-                    <option value="robustSummary">robustSummary()</option>
+                    <option value="MsCoreUtils::robustSummary">robustSummary()</option>
             </param>    
             <param name="column_aggregation_proteins" type="text" value="Leading.razor.protein" label="Which column should be used for the peptide to protein aggregation?" hidden = "true" optional = "false" help= "Which column should be used for the peptide to protein aggregation."/>
         </section>
 
         <section name="protein_processing" title="Processing protein data" expanded="true">
             <conditional name="normalization_method_protein">
-                <param type="select" label="How to perform normalization?" name = "choose_normalization_protein" display="radio" help= "How to normalize peptide intensities?">
+                <param type="select" label="How to perform normalization?" name = "choose_normalization_protein" display="radio" help= "How to normalize protein intensities?">
                     <option value="simple_prot">Normalize columns or normalize rows (one only).</option> 
                     <option value="advanced_prot" selected="true">Firstly normalize columns, then rows.</option>
                 </param>  
@@ -195,31 +177,13 @@
                     </param>
                 </when>
                 <when value="advanced_prot">
-                    <param label="Normalization method columns" name="normalize_columns_prot" type="select" help="Which normalization method to choose for columns?">
+                    <param label="Normalization method columns" name="normalize_columns_prot" display="radio" type="select" help="Which normalization method to choose for columns?">
+                        <option value="colMeans">colMeans</option> 
                         <option value="colMedians" selected="true">colMedians</option> 
-                        <option value="rowMeans">rowMeans</option> 
-                        <option value="center.mean">center.mean</option> 
-                        <option value="sum">sum</option>
-                        <option value="max">max</option>
-                        <option value="center.median">center.median</option>
-                        <option value="div.mean">div.mean</option>
-                        <option value="div.median">div.median</option>
-                        <option value="diff.median">diff.median</option>
-                        <option value="quantiles">quantiles</option>
-                        <option value="vsn">vsn</option>
                     </param>
-                    <param label="Normalization method rows" name="normalize_rows_prot" type="select" help="Which normalization method to choose for rows?">
-                        <option value="colMedians">colMedians</option> 
+                    <param label="Normalization method rows" name="normalize_rows_prot" display="radio" type="select" help="Which normalization method to choose for rows?">
                         <option value="rowMeans" selected="true">rowMeans</option> 
-                        <option value="center.mean">center.mean</option> 
-                        <option value="sum">sum</option>
-                        <option value="max">max</option>
-                        <option value="center.median">center.median</option>
-                        <option value="div.mean">div.mean</option>
-                        <option value="div.median">div.median</option>
-                        <option value="diff.median">diff.median</option>
-                        <option value="quantiles">quantiles</option>
-                        <option value="vsn">vsn</option>
+                        <option value="rowMedians">rowMedians</option> 
                     </param>
                 </when>               
             </conditional>
