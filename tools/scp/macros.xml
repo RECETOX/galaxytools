@@ -29,6 +29,7 @@
               help= "A data table specifying metadata; sample annotations."/>
        <param name="runcol" type="data_column" data_ref = "input_data" use_header_names = "true" label="Which column specifies the run identifier and batch name?" help= "Column to specify both the run identifier and batch name, has to be present in both tables."/>
        <param name="remove_empty_columns" type="boolean" checked="true" truevalue="TRUE" falsevalue="FALSE" label="Remove empty columns?" help="Whether the empty columns should be removed."/>
+       <param name = "generate_QC_plots" type="boolean" checked="true" truevalue="TRUE" falsevalue="FALSE" label="Generate QC plots?" help= "Whether to generate quality-control plots (distribution of the average SCR, distribution of median CV and median intensities)."/>
 
        <section name="filtering_data" title="Data Filtering" expanded="true">
             <param name="filter_reverse" type="boolean" checked="true" truevalue="TRUE" falsevalue="FALSE" label="Filter reverse sequences?" help="Whether to filter the proteins labelled as 'reverse'."/>

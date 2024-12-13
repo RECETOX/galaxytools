@@ -28,6 +28,8 @@
                        runCol = runCol,
                        removeEmptyCols = $remove_empty_columns)
         
+        dir.create("plots")
+
         number_of_assays <- length(scp)
 
         scp <- zeroIsNA(scp, i = 1:number_of_assays)
@@ -60,6 +62,27 @@
                   sampleFUN = "mean",
                   rowDataName = "MeanSCR")
         
+        #if $generate_QC_plots
+        QC_plot_SCR <- rbindRowData(scp, i = 1:number_of_assays) |>
+                        data.frame() |>
+                        ggplot(aes(x = MeanSCR)) +
+                        geom_histogram() +
+                        geom_vline(xintercept = c(1/$count_cell_carrier, 0.1),
+                                                lty = c(2, 1)) +
+                        scale_x_log10()
+        ggplot2::ggsave(filename = file.path("plots", "QC_plot_SCR.png"), QC_plot_SCR)
+        
+        QC_plot_SCR_col <- rbindRowData(scp, i = 1:number_of_assays) |>
+                            data.frame() |>
+                            ggplot(aes(x = MeanSCR, color = runCol)) +
+                            geom_density() +
+                            geom_vline(xintercept = 0.02, lty = 2) +
+                            geom_vline(xintercept = 1, lty = 1)+
+                            scale_x_log10()        
+        ggplot2::ggsave(filename = file.path("plots", "QC_plot_SCR_col.png"), QC_plot_SCR_col)
+
+        #end if
+
         scp <- filterFeatures(scp,
                       ~ !is.na(MeanSCR) &
                         MeanSCR < ${filtering_data.SCR_threshold})    
@@ -108,6 +131,19 @@
         #if $peptide_filtering.filter_median_intensity.cut_median_intensity == "yes"
             medians <- colMedians(assay(scp[["peptides"]]), na.rm = TRUE)
             colData(scp)[["MedianRI"]] <- medians
+
+            #if generate_QC_plots
+            QC_medianRI <- colData(scp) |>
+                            data.frame() |>
+                            ggplot() +
+                            aes(x = MedianRI,
+                                y = SampleType,
+                                fill = SampleType) +
+                            geom_boxplot() +
+                            scale_x_log10()
+            ggplot2::ggsave(filename = file.path("plots", "QC_medianRI.png"), QC_medianRI)
+            #end if
+
             scp <- scp[, !is.na(colData(scp)[["MedianRI"]]) & colData(scp)[["MedianRI"]] < ${peptide_filtering.filter_median_intensity.median_intensity_threshold}, ]
         #end if
 
@@ -121,6 +157,17 @@
                          norm = "div.median",
                          na.rm = TRUE,
                          colDataName = "MedianCV")
+
+            #if $generate_QC_plots
+            QC_medianCV <- getWithColData(scp, "peptides") |>
+                            colData() |>
+                            data.frame() |>
+                            ggplot(aes(x = MedianCV,
+                                       fill = SampleType)) +
+                            geom_boxplot() +
+                            geom_vline(xintercept = CV_threshold)
+            ggplot2::ggsave(filename = file.path("plots", "QC_medianCV.png"), QC_medianCV)
+            #end if
 
         scp <- scp[, !is.na(colData(scp)[["MedianCV"]]) & colData(scp)[["MedianCV"]] < CV_threshold, ]
         #end if
@@ -251,7 +298,7 @@
                  colour_by = "SampleType",
                  point_alpha = 1)
 
-        ggplot2::ggsave(filename = "PCA.png", pca)
+            ggplot2::ggsave(filename = file.path("plots", "PCA.png"), pca)
 
         #if $dimensionality_reduction.PCA_computation.UMAP_computation.run_UMAP == "yes"
         scp[["proteins_batchC"]] <- scater::runUMAP(scp[["proteins_batchC"]],
@@ -267,7 +314,7 @@
                  dimred = "UMAP",
                  colour_by = "SampleType",
                  point_alpha = 1)
-        ggplot2::ggsave(filename = "UMAP.png", umap)
+        ggplot2::ggsave(filename = file.path("plots", "UMAP.png"), umap)
         #end if
 
         #end if
@@ -293,14 +340,27 @@
             <discover_datasets pattern="__name_and_ext__" directory="outputs" />
             <filter>data_export['export_tables']</filter>
         </collection>
-        <data name="PCA" format="png" label="PCA plot" from_work_dir="PCA.png">
-            <filter>dimensionality_reduction['PCA_computation']['run_PCA'] == 'yes'</filter>
-        </data>
-        <data name="UMAP" format="png" label="UMAP plot" from_work_dir="UMAP.png">
-            <filter>dimensionality_reduction['PCA_computation']['run_PCA'] == 'yes' and dimensionality_reduction['PCA_computation']['UMAP_computation']['run_UMAP'] == 'yes'</filter>
-        </data>
+        <collection name="plots" type="list" label="Plots">
+            <discover_datasets pattern="__name_and_ext__" directory="plots" />
+                <filter>generate_QC_plots</filter>
+                <filter>dimensionality_reduction['PCA_computation']['run_PCA'] == 'yes'</filter>
+                <filter>dimensionality_reduction['PCA_computation']['run_PCA'] == 'yes' and dimensionality_reduction['PCA_computation']['UMAP_computation']['run_UMAP'] == 'yes'</filter>
+        </collection>
     </outputs>
     <tests>
+        <test expect_num_outputs='3'>
+            <param name="input_data" value="evidence_subset.txt" />
+            <param name="input_annotations" value="sampleAnnotation.txt"/>
+            <param name="runcol" value="19"/>
+            <param name="single_cells" value="Macrophage,Monocyte"/>
+            <param name="samples_to_keep" value="Macrophage,Monocyte,Blank"/>
+            <param name="batch_col" value="2"/>
+            <output name="Processed_data">
+                <assert_contents>
+                    <has_n_lines n="90"/>                
+                </assert_contents>
+            </output>
+        </test>
     </tests>
     <help><![CDATA[
         @SCP_HELP@
