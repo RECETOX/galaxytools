@@ -342,9 +342,7 @@
         </collection>
         <collection name="plots" type="list" label="Plots">
             <discover_datasets pattern="__name_and_ext__" directory="plots" />
-                <filter>generate_QC_plots</filter>
-                <filter>dimensionality_reduction['PCA_computation']['run_PCA'] == 'yes'</filter>
-                <filter>dimensionality_reduction['PCA_computation']['run_PCA'] == 'yes' and dimensionality_reduction['PCA_computation']['UMAP_computation']['run_UMAP'] == 'yes'</filter>
+                <filter>generate_QC_plots or dimensionality_reduction['PCA_computation']['run_PCA'] == 'yes' or dimensionality_reduction['PCA_computation']['run_PCA'] == 'yes' and dimensionality_reduction['PCA_computation']['UMAP_computation']['run_UMAP'] == 'yes'</filter>
         </collection>
     </outputs>
     <tests>
