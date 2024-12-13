@@ -28,8 +28,6 @@
                        runCol = runCol,
                        removeEmptyCols = $remove_empty_columns)
         
-        dir.create("plots")
-
         number_of_assays <- length(scp)
 
         scp <- zeroIsNA(scp, i = 1:number_of_assays)
@@ -205,6 +203,14 @@
                     i = "peptides_norm",
                     name = "peptides_log")
 
+        #if $generate_QC_plots
+        QC_boxplot_peptide <- create_boxplots(scp, "peptides", FALSE, "Peptides not normalized")
+        QC_boxplot_peptide_norm <- create_boxplots(scp, "peptides_log", TRUE, "Peptides normalized")
+
+        ggplot2::ggsave(filename = file.path("plots", "QC_boxplot_peptide.png"), QC_boxplot_peptide)
+        ggplot2::ggsave(filename = file.path("plots", "QC_boxplot_peptide_norm.png"), QC_boxplot_peptide_norm)
+        #end if
+
         #if $peptide_processing.remove_missing_peptides.remove_peptides == "yes"
         pNA <-  ${peptide_processing.remove_missing_peptides.pNA_peptides} / 100
         scp <- filterNA(scp,
@@ -240,6 +246,19 @@
                  FUN = "/",
                  STATS = norm_function_row(assay(scp[["proteins_norm_col"]]),  na.rm = TRUE),
                  name =  "proteins_norm") 
+        #end if
+
+        #if $generate_QC_plots
+        QC_boxplot_protein <- create_boxplots(scp, "proteins", TRUE, "Proteins not normalized")
+        QC_boxplot_protein_norm <- create_boxplots(scp, "proteins_norm", TRUE, "Proteins normalized")
+        
+        ggplot2::ggsave(filename = file.path("plots", "QC_boxplot_protein.png"), QC_boxplot_protein)
+        ggplot2::ggsave(filename = file.path("plots", "QC_boxplot_protein_norm.png"), QC_boxplot_protein_norm)
+        
+        png(filename = file.path("plots", "QC_heatmap_proteins.png"))
+        QC_heatmap <- plot_heatmap(scp, "proteins_norm")
+        dev.off()
+        ##ggplot2::ggsave(filename = file.path("plots", "QC_heatmap_proteins.png"), QC_heatmap)
         #end if
 
         scp <- impute(scp,
