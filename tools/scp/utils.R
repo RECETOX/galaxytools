@@ -33,7 +33,6 @@ export_all_assays <- function(qf) {
 }
 
 # Plot the QC boxplots
-dir.create("plots")
 
 create_boxplots <- function(scp, i, is_log2, name) {
   sce <- scp[[i]]
