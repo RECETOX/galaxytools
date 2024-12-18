@@ -373,7 +373,7 @@
         </collection>
     </outputs>
     <tests>
-        <test expect_num_outputs='3'>
+        <test expect_num_outputs='2'>
             <param name="input_data" value="evidence_subset.txt" />
             <param name="input_annotations" value="sampleAnnotation.txt"/>
             <param name="runcol" value="19"/>
@@ -385,6 +385,26 @@
                     <has_n_lines n="90"/>                
                 </assert_contents>
             </output>
+        </test>
+        <test>
+            <param name="input_data" value="evidence_subset.txt" />
+            <param name="input_annotations" value="sampleAnnotation.txt"/>
+            <param name="runcol" value="19"/>
+            <param name="single_cells" value="Macrophage,Monocyte"/>
+            <param name="samples_to_keep" value="Macrophage,Monocyte,Blank"/>
+            <param name="batch_col" value="2"/>
+            <output_collection name="plots" type="list">
+                <element name="PCA" file="PCA.png" ftype="png"/>
+                <element name="QC_boxplot_peptide" file="QC_boxplot_peptide.png" ftype="png"/>
+                <element name="QC_boxplot_peptide_norm" file="QC_boxplot_peptide_norm.png" ftype="png"/>
+                <element name="QC_boxplot_protein" file="QC_boxplot.png" ftype="png"/>
+                <element name="QC_boxplot_protein_norm" file="QC_boxplot_protein_norm.png" ftype="png"/>
+                 <element name="QC_heatmap_proteins" file="QC_heatmap_proteins.png" ftype="png"/>
+                <element name="QC_medianCV" file="QC_medianCV.png" ftype="png"/>
+                <element name="QC_plot_SCR" file="QC_plot_SCR.png" ftype="png"/>
+                <element name="QC_plot_SCR_col" file="QC_plot_SCR_col.png" ftype="png"/>
+                <element name="UMAP" file="UMAP.png" ftype="png"/>
+            </output_collection>
         </test>
     </tests>
     <help><![CDATA[
