@@ -11,12 +11,8 @@ export_assay_with_metadata <- function(qf, assay_name) {
     assay_data <- assay(qf[[assay_name]])
     row_metadata <- as.data.frame(rowData(qf[[assay_name]]))
     col_metadata <- as.data.frame(colData(qf))
-  
-
     # Combine row metadata with assay data
     export_data <- cbind(RowNames = rownames(assay_data), row_metadata, as.data.frame(assay_data))
-  
-
     # Save the table to a CSV file
     output_file <- file.path("outputs", paste0(assay_name, "_export.csv"))
     write.csv(export_data, output_file, row.names = FALSE)
@@ -35,7 +31,6 @@ export_all_assays <- function(qf) {
 }
 
 # Plot the QC boxplots
-
 create_boxplots <- function(scp, i, is_log2, name) {
     sce <- scp[[i]]
   
@@ -55,23 +50,24 @@ create_boxplots <- function(scp, i, is_log2, name) {
     long_data <- long_data %>%
         left_join(col_data, by = "SampleID")
 
-    if (is_log2 == TRUE){
+    if (is_log2 == TRUE) {
         long_data$Value <- log2(long_data$Value)
     }
 
     long_data %>%
-    filter(Value != "NaN") %>%
-        ggplot(aes(x = runCol, y = Value, fill = SampleType))+
+        filter(Value != "NaN") %>%
+        ggplot(aes(x = runCol, y = Value, fill = SampleType)) +
         geom_boxplot() +
         theme_bw() +
-        labs(title = name,
+        labs(
+            title = name,
             x = "Run",
-            y = "Log2 intensity") +
+            y = "Log2 intensity"
+            ) +
         theme(axis.text.x = element_text(angle = 45, hjust=1))
 }
 
 # Heatmap
-
 plot_heatmap <- function(scp, i) {
     sce <- scp[[i]]
     heatmap_mat <- as.matrix(assay(sce))
