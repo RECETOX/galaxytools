@@ -4,12 +4,12 @@
         <import>macros.xml</import>
         <import>help.xml</import>
     </macros>
+    <edam_topics>  
+    </edam_topics>
     <requirements>
         <requirement type="package" version="@TOOL_VERSION@">bioconductor-scp</requirement>
         <requirement type="package" version="3.50">bioconductor-sva</requirement>
     </requirements>
-    <edam_topics>  
-    </edam_topics>
     <expand macro="creator" />
     <command detect_errors="exit_code"><![CDATA[
     Rscript  -e 'source("${__tool_directory__}/utils.R")' -e 'source("${run_script}")'
@@ -390,7 +390,7 @@
                 </assert_contents>
             </output>
         </test>
-        <test>
+        <test expect_num_outputs='2'>
             <param name="input_data" value="evidence_subset.txt" />
             <param name="input_annotations" value="sampleAnnotation.txt"/>
             <param name="runcol" value="19"/>
@@ -410,7 +410,7 @@
                 <element name="UMAP" file="UMAP.png" ftype="png"/>
             </output_collection>
         </test>
-        <test>
+        <test expect_num_outputs='7'>
             <param name="input_data" value="evidence_subset.txt" />
             <param name="input_annotations" value="sampleAnnotation.txt"/>
             <param name="runcol" value="19"/>
