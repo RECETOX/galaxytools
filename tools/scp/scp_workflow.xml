@@ -4,6 +4,10 @@
         <import>macros.xml</import>
         <import>help.xml</import>
     </macros>
+    <requirements>
+        <requirement type="package" version="@TOOL_VERSION@">bioconductor-scp</requirement>
+        <requirement type="package" version="3.50">bioconductor-sva</requirement>
+    </requirements>
     <edam_topics>  
     </edam_topics>
     <expand macro="creator" />
