@@ -3,7 +3,7 @@ library(scp)
 library(tidyr)
 library(tibble)
 
-# Export intermediate results 
+# Export intermediate results
 # Function to export a single assay with metadata
 export_assay_with_metadata <- function(qf, assay_name) {
     # Extract assay data, row metadata, and col metadata
@@ -35,12 +35,12 @@ create_boxplots <- function(scp, i, is_log2, name) {
     assay_data <- as.data.frame(assay(sce)) %>%
         rownames_to_column("FeatureID")
     col_data <- as.data.frame(colData(scp)) %>%
-        rownames_to_column("SampleID") 
+        rownames_to_column("SampleID")
     long_data <- assay_data %>%
         pivot_longer(
-            cols = -FeatureID,  
-            names_to = "SampleID",  
-            values_to = "Value"  
+            cols = -FeatureID,
+            names_to = "SampleID",
+            values_to = "Value"
         )
     long_data <- long_data %>%
         left_join(col_data, by = "SampleID")
@@ -57,7 +57,7 @@ create_boxplots <- function(scp, i, is_log2, name) {
             x = "Run",
             y = "Log2 intensity"
         ) +
-        theme(axis.text.x = element_text(angle = 45, hjust=1))
+        theme(axis.text.x = element_text(angle = 45, hjust = 1))
 }
 
 # Heatmap
