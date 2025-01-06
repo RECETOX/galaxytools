@@ -68,7 +68,7 @@
                     <option value="colSums">colSums()</option>
                     <option value="MsCoreUtils::robustSummary">robustSummary()</option>
             </param>    
-            <param name="column_aggregation_peptides" type="text" hidden = "true" value="Modified.sequence" label="Which column should be used for the PSM to peptide aggregation?" optional = "false" help= "Which column should be used for the PSM to peptide aggregation."/>
+            <param name="column_aggregation_peptides" type="text" value="Modified.sequence" label="Which column should be used for the PSM to peptide aggregation?" optional = "false" help= "Which column should be used for the PSM to peptide aggregation."/>
         </section>
 
         <section name="peptide_filtering" title="Peptide filtering" expanded="true">
@@ -158,7 +158,7 @@
                     <option value="colSums">colSums()</option>
                     <option value="MsCoreUtils::robustSummary">robustSummary()</option>
             </param>    
-            <param name="column_aggregation_proteins" type="text" value="Leading.razor.protein" label="Which column should be used for the peptide to protein aggregation?" hidden = "true" optional = "false" help= "Which column should be used for the peptide to protein aggregation."/>
+            <param name="column_aggregation_proteins" type="text" value="Leading.razor.protein" label="Which column should be used for the peptide to protein aggregation?" optional = "false" help= "Which column should be used for the peptide to protein aggregation."/>
         </section>
 
         <section name="protein_processing" title="Processing protein data" expanded="true">
