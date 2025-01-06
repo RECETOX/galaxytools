@@ -12,7 +12,10 @@
                 givenName="Kristina"
                 familyName="Gomoryova"
                 url="https://github.com/KristinaGomoryova"
-                identifier="0000-0003-4407-3917" />ns
+                identifier="0000-0003-4407-3917" />
+            <person
+                givenName="Helge"
+                familyName="Hecht"
                 url="https://github.com/hechth"
                 identifier="0000-0001-6744-996X" />
             <organization
