@@ -76,7 +76,7 @@
                         geom_vline(xintercept = c(1/$count_cell_carrier, 0.1),
                                                 lty = c(2, 1)) +
                         scale_x_log10()
-        ggplot2::ggsave(filename = file.path("plots", "QC_plot_SCR.png"), QC_plot_SCR)
+        ggplot2::ggsave(filename = file.path("plots", "QC_plot_SCR.pdf"), QC_plot_SCR)
         
         QC_plot_SCR_col <- rbindRowData(scp, i = 1:number_of_assays) |>
                             data.frame() |>
@@ -85,7 +85,7 @@
                             geom_vline(xintercept = 0.02, lty = 2) +
                             geom_vline(xintercept = 1, lty = 1)+
                             scale_x_log10()        
-        ggplot2::ggsave(filename = file.path("plots", "QC_plot_SCR_col.png"), QC_plot_SCR_col)
+        ggplot2::ggsave(filename = file.path("plots", "QC_plot_SCR_col.pdf"), QC_plot_SCR_col)
 
         #end if
 
@@ -147,7 +147,7 @@
                                 fill = SampleType) +
                             geom_boxplot() +
                             scale_x_log10()
-            ggplot2::ggsave(filename = file.path("plots", "QC_medianRI.png"), QC_medianRI)
+            ggplot2::ggsave(filename = file.path("plots", "QC_medianRI.pdf"), QC_medianRI)
             #end if
 
             scp <- scp[, !is.na(colData(scp)[["MedianRI"]]) & colData(scp)[["MedianRI"]] < ${peptide_filtering.filter_median_intensity.median_intensity_threshold}, ]
@@ -172,7 +172,7 @@
                                        fill = SampleType)) +
                             geom_boxplot() +
                             geom_vline(xintercept = CV_threshold)
-            ggplot2::ggsave(filename = file.path("plots", "QC_medianCV.png"), QC_medianCV)
+            ggplot2::ggsave(filename = file.path("plots", "QC_medianCV.pdf"), QC_medianCV)
             #end if
 
         scp <- scp[, !is.na(colData(scp)[["MedianCV"]]) & colData(scp)[["MedianCV"]] < CV_threshold, ]
@@ -215,8 +215,8 @@
         QC_boxplot_peptide <- create_boxplots(scp, "peptides", FALSE, "Peptides not normalized")
         QC_boxplot_peptide_norm <- create_boxplots(scp, "peptides_log", TRUE, "Peptides normalized")
 
-        ggplot2::ggsave(filename = file.path("plots", "QC_boxplot_peptide.png"), QC_boxplot_peptide)
-        ggplot2::ggsave(filename = file.path("plots", "QC_boxplot_peptide_norm.png"), QC_boxplot_peptide_norm)
+        ggplot2::ggsave(filename = file.path("plots", "QC_boxplot_peptide.pdf"), QC_boxplot_peptide)
+        ggplot2::ggsave(filename = file.path("plots", "QC_boxplot_peptide_norm.pdf"), QC_boxplot_peptide_norm)
         #end if
 
         #if $peptide_processing.remove_missing_peptides.remove_peptides == "yes"
@@ -260,11 +260,11 @@
         QC_boxplot_protein <- create_boxplots(scp, "proteins", TRUE, "Proteins not normalized")
         QC_boxplot_protein_norm <- create_boxplots(scp, "proteins_norm", TRUE, "Proteins normalized")
         
-        ggplot2::ggsave(filename = file.path("plots", "QC_boxplot_protein.png"), QC_boxplot_protein)
-        ggplot2::ggsave(filename = file.path("plots", "QC_boxplot_protein_norm.png"), QC_boxplot_protein_norm)
+        ggplot2::ggsave(filename = file.path("plots", "QC_boxplot_protein.pdf"), QC_boxplot_protein)
+        ggplot2::ggsave(filename = file.path("plots", "QC_boxplot_protein_norm.pdf"), QC_boxplot_protein_norm)
         
-        png(
-            filename = file.path("plots", "QC_heatmap_proteins.png"), 
+        pdf(
+            filename = file.path("plots", "QC_heatmap_proteins.pdf"), 
             width = 4, 
             height = 4,
             units = "in",
@@ -272,7 +272,7 @@
         )
         QC_heatmap <- plot_heatmap(scp, "proteins_norm")
         dev.off()
-        ##ggplot2::ggsave(filename = file.path("plots", "QC_heatmap_proteins.png"), QC_heatmap)
+        ##ggplot2::ggsave(filename = file.path("plots", "QC_heatmap_proteins.pdf"), QC_heatmap)
         #end if
 
         scp <- impute(scp,
@@ -331,7 +331,7 @@
                  colour_by = "SampleType",
                  point_alpha = 1)
 
-            ggplot2::ggsave(filename = file.path("plots", "PCA.png"), pca)
+            ggplot2::ggsave(filename = file.path("plots", "PCA.pdf"), pca)
 
         #if $dimensionality_reduction.PCA_computation.UMAP_computation.run_UMAP == "yes"
         scp[["proteins_batchC"]] <- scater::runUMAP(scp[["proteins_batchC"]],
@@ -347,7 +347,7 @@
                  dimred = "UMAP",
                  colour_by = "SampleType",
                  point_alpha = 1)
-        ggplot2::ggsave(filename = file.path("plots", "UMAP.png"), umap)
+        ggplot2::ggsave(filename = file.path("plots", "UMAP.pdf"), umap)
         #end if
 
         #end if
@@ -406,21 +406,21 @@
             <param name="samples_to_keep" value="Macrophage,Monocyte,Blank"/>
             <param name="batch_col" value="2"/>
             <output_collection name="plots" type="list">
-                <element name="PCA" file="PCA.png" ftype="png" compare="sim_size" delta="600">
+                <element name="PCA" file="PCA.pdf" ftype="pdf" compare="sim_size" delta="600">
                     <assert_contents>
                         <has_image_width width="2100"/>
                         <has_image_height height="2100"/>
                     </assert_contents>
                 </element>
-                <element name="QC_boxplot_peptide" file="QC_boxplot_peptide.png" ftype="png"/>
-                <element name="QC_boxplot_peptide_norm" file="QC_boxplot_peptide_norm.png" ftype="png"/>
-                <element name="QC_boxplot_protein" file="QC_boxplot.png" ftype="png"/>
-                <element name="QC_boxplot_protein_norm" file="QC_boxplot_protein_norm.png" ftype="png"/>
-                <element name="QC_heatmap_proteins" file="QC_heatmap_proteins.png" ftype="png"/>
-                <element name="QC_medianCV" file="QC_medianCV.png" ftype="png"/>
-                <element name="QC_plot_SCR" file="QC_plot_SCR.png" ftype="png"/>
-                <element name="QC_plot_SCR_col" file="QC_plot_SCR_col.png" ftype="png"/>
-                <element name="UMAP" file="UMAP.png" ftype="png" compare="sim_size" delta="600">
+                <element name="QC_boxplot_peptide" file="QC_boxplot_peptide.pdf" ftype="pdf"/>
+                <element name="QC_boxplot_peptide_norm" file="QC_boxplot_peptide_norm.pdf" ftype="pdf"/>
+                <element name="QC_boxplot_protein" file="QC_boxplot.pdf" ftype="pdf"/>
+                <element name="QC_boxplot_protein_norm" file="QC_boxplot_protein_norm.pdf" ftype="pdf"/>
+                <element name="QC_heatmap_proteins" file="QC_heatmap_proteins.pdf" ftype="pdf"/>
+                <element name="QC_medianCV" file="QC_medianCV.pdf" ftype="pdf"/>
+                <element name="QC_plot_SCR" file="QC_plot_SCR.pdf" ftype="pdf"/>
+                <element name="QC_plot_SCR_col" file="QC_plot_SCR_col.pdf" ftype="pdf"/>
+                <element name="UMAP" file="UMAP.pdf" ftype="pdf" compare="sim_size" delta="600">
                     <assert_contents>
                         <has_image_width width="2100"/>
                         <has_image_height height="2100"/>
