@@ -121,9 +121,11 @@
         #end if
 
         ## aggregation_fun <- match.fun("${peptide_aggregation.aggregation_peptides}")
+        ## print("${peptide_aggregation.column_aggregation_peptides}")
+        fcol_aggregation <- colnames(data_input)[${peptide_aggregation.column_aggregation_peptides}]
         scp <- aggregateFeaturesOverAssays(scp,
                                    i = 1:number_of_assays,
-                                   fcol = "${peptide_aggregation.column_aggregation_peptides}",
+                                   fcol = fcol_aggregation,
                                    name = paste0("peptide_", names(scp)),
                                    fun = ${peptide_aggregation.aggregation_peptides}, na.rm = TRUE)
 
