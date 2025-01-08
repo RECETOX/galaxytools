@@ -361,6 +361,9 @@
         export_all_assays(scp)
         #end if
 
+        #if $data_export.export_RData
+        save(scp, file='$scp_object')
+        #end if
         
         ]]></configfile>
     </configfiles>
@@ -373,6 +376,9 @@
             <discover_datasets pattern="__name_and_ext__" directory="outputs" />
             <filter>data_export['export_tables']</filter>
         </collection>
+        <data name="scp_object" format="RData" label="scp object as RData">
+            <filter>data_export['export_RData']</filter>
+        </data>
         <collection name="plots" type="list" label="Plots">
             <discover_datasets pattern="__name_and_ext__" directory="plots" />
                 <filter>generate_QC_plots or dimensionality_reduction['PCA_computation']['run_PCA'] == 'yes' or dimensionality_reduction['PCA_computation']['run_PCA'] == 'yes'</filter>

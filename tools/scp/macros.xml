@@ -235,6 +235,7 @@
 
         <section name="data_export" title="Export data" expanded="true">
             <param name="export_tables" type="boolean" checked="false" truevalue="TRUE" falsevalue="FALSE" label="Export intermediate results" help="Whether only the final result table (log2 transformed, normalized, imputed, batch-corrected data) should be exported or all intermediate results."/>
+            <param name="export_RData" type="boolean" checked="false" truevalue="TRUE" falsevalue="FALSE" label="Export scp object as RData" help="Whether to export the scp object as RData."/>
         </section>
     </xml>
 
