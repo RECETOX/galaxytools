@@ -368,7 +368,7 @@
         <expand macro="scp_param"/>
     </inputs>
     <outputs>
-        <data name="Processed_data" format="txt" label="Batch-corrected protein levels"/>
+        <data name="Processed_data" format="tabular" label="Batch-corrected protein levels"/>
         <collection name="intermediate_outputs" type="list" label="Intermediate outputs">
             <discover_datasets pattern="__name_and_ext__" directory="outputs" />
             <filter>data_export['export_tables']</filter>
