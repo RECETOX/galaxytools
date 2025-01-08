@@ -3,6 +3,7 @@ remote_repository_url: "https://github.com/UCLouvain-CBIO/scp"
 homepage_url: "https://uclouvain-cbio.github.io/scp/index.html"
 categories:
   - Proteomics
+  - Single Cell
 repositories:
   scp:
     description: "scp is a package for the single cell proteomics data processing."
