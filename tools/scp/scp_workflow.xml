@@ -1,5 +1,5 @@
 <tool id="scp_full_workflow" name="scp: Single Cell Proteomics data analysis" version="@TOOL_VERSION@+galaxy0" profile="23.0">
-    <description>Single Cell Proteomics workflow</description>
+    <description>Single Cell Proteomics data analysis workflow</description>
     <macros>
         <import>macros.xml</import>
         <import>help.xml</import>
