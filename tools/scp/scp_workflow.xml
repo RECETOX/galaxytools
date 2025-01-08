@@ -444,7 +444,6 @@
         </test>
     </tests>
     <help><![CDATA[
-        @SCP_HELP@
         @GENERAL_HELP@
     ]]></help>
     <expand macro="citations" />
