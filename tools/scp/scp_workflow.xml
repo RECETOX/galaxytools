@@ -356,7 +356,7 @@
         row_metadata <- as.data.frame(rowData(scp[["proteins_batchC"]]))
 
         export_data <- cbind(row_metadata, as.data.frame(assay_df))
-        write.csv(export_data, file = '$Processed_data', sep = "\t")
+        write.table(export_data, file = '$Processed_data', sep = "\t", quote=F)
         #if $data_export.export_tables
         export_all_assays(scp)
         #end if
