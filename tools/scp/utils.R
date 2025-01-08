@@ -13,8 +13,8 @@ export_assay_with_metadata <- function(qf, assay_name) {
     # Combine row metadata with assay data
     export_data <- cbind(RowNames = rownames(assay_data), row_metadata, as.data.frame(assay_data))
     # Save the table to a CSV file
-    output_file <- file.path("outputs", paste0(assay_name, "_export.csv"))
-    write.csv(export_data, output_file, row.names = FALSE)
+    output_file <- file.path("outputs", paste0(assay_name, "_export.txt"))
+    write.table(export_data, output_file, row.names = FALSE, sep = "\t", quote=F)
 }
 
 # Export all assays
