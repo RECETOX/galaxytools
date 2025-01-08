@@ -25,6 +25,14 @@
         </creator>
     </xml>
 
+    <xml name="aggregation_options">
+        <option value="colMedians" selected="true">colMedians()</option> 
+        <option value="MsCoreUtils::medianPolish">medianPolish()</option>
+        <option value="colMeans">colMeans()</option>
+        <option value="colSums">colSums()</option>
+        <option value="MsCoreUtils::robustSummary">robustSummary()</option>
+    </xml>
+
     <xml name="scp_param">
        <param name="input_data" type="data" format="tabular" label="Input evidence table"
               help= "Input file is the evidence.txt table from MaxQuant"/>
@@ -62,11 +70,7 @@
 
         <section name="peptide_aggregation" title="Aggregation to peptides" expanded="true">
             <param name="aggregation_peptides" type="select" label="Which function to use for the aggregation?" help= "How to aggregate PSMs to peptides?">
-                    <option value="colMedians" selected="true">colMedians()</option> 
-                    <option value="MsCoreUtils::medianPolish">medianPolish()</option>
-                    <option value="colMeans">colMeans()</option>
-                    <option value="colSums">colSums()</option>
-                    <option value="MsCoreUtils::robustSummary">robustSummary()</option>
+                <expand macro="aggregation_options"/>
             </param>    
             <param name="column_aggregation_peptides" type="text" value="Modified.sequence" label="Which column should be used for the PSM to peptide aggregation?" optional="false" help="Which column should be used for the PSM to peptide aggregation."/>
         </section>
@@ -151,12 +155,8 @@
         </section>
 
         <section name="protein_aggregation" title="Aggregation to proteins" expanded="true">
-            <param name = "aggregation_proteins" type="select" label="Which function to use for the aggregation?" help= "How to aggregate PSMs to proteins?">
-                    <option value="colMedians" selected="true">colMedians()</option> 
-                    <option value="MsCoreUtils::medianPolish">medianPolish()</option>
-                    <option value="colMeans">colMeans()</option>
-                    <option value="colSums">colSums()</option>
-                    <option value="MsCoreUtils::robustSummary">robustSummary()</option>
+            <param name = "aggregation_proteins" type="select" label="Which function to use for the aggregation?" help= "How to aggregate peptides to proteins?">
+                <expand macro="aggregation_options"/>
             </param>    
             <param name="column_aggregation_proteins" type="text" value="Leading.razor.protein" label="Which column should be used for the peptide to protein aggregation?" optional="false" help="Which column should be used for the peptide to protein aggregation."/>
         </section>
