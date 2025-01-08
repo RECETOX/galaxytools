@@ -32,7 +32,7 @@
               help= "A data table specifying metadata; sample annotations."/>
        <param name="runcol" type="data_column" data_ref="input_data" use_header_names="true" label="Which column specifies the run identifier and batch name?" help= "Column to specify both the run identifier and batch name, has to be present in both tables."/>
        <param name="remove_empty_columns" type="boolean" checked="true" truevalue="TRUE" falsevalue="FALSE" label="Remove empty columns?" help="Whether the empty columns should be removed."/>
-       <param name = "generate_QC_plots" type="boolean" checked="true" truevalue="TRUE" falsevalue="FALSE" label="Generate QC plots?" help= "Whether to generate quality-control plots (distribution of the average SCR, distribution of median CV and median intensities)."/>
+       <param name="generate_QC_plots" type="boolean" checked="true" truevalue="TRUE" falsevalue="FALSE" label="Generate QC plots?" help= "Whether to generate quality-control plots (distribution of the average SCR, distribution of median CV and median intensities)."/>
 
        <section name="filtering_data" title="Data Filtering" expanded="true">
             <param name="filter_reverse" type="boolean" checked="true" truevalue="TRUE" falsevalue="FALSE" label="Filter reverse sequences?" help="Whether to filter the proteins labelled as 'reverse'."/>
@@ -40,17 +40,17 @@
             <param name="PIF_threshold" type="float" value="0.8" min="0" max="1" label="Parental ion fraction (PIF) threshold"
                help="The threshold for parental ion fraction (PIF)"/>
             <param name="minimum_features" type="integer" value="150" min="1" label="Minimum number of PSMs per assay required" help="What is the minimum number of peptide-to-spectrum matches per assay to keep the assay?"/>   
-            <param name="count_cell_carrier" type="integer" value="200" min = "0" label="Number of cells in the carrier channel" help="What is the number of cells in the carrier channel?"/> 
-            <param name="single_cells" type="select" label="Single-cell channels present in the experiment" multiple="true" optional = "false" min = "1" help = "What are the single-cell channels present in the experiment? At least one channel must be selected!">
+            <param name="count_cell_carrier" type="integer" value="200" min="0" label="Number of cells in the carrier channel" help="What is the number of cells in the carrier channel?"/> 
+            <param name="single_cells" type="select" label="Single-cell channels present in the experiment" multiple="true" optional="false" min="1" help="What are the single-cell channels present in the experiment? At least one channel must be selected!">
                     <options from_dataset="input_annotations">
                         <column name="name" index="3"/>
                         <column name="value" index="3"/>
                         <filter type="unique_value" name="unique" column="3"/>
                     </options>
             </param>
-            <param name="SCR_threshold" type="float" value="0.1" min="0" max = "1" label="Mean SCR threshold"
+            <param name="SCR_threshold" type="float" value="0.1" min="0" max="1" label="Mean SCR threshold"
             help="Mean sample-to-carrier (SCR) threshold. 0.1 corresponds to 10%"/> 
-            <param name = "qvalue_level" type="select" display="radio" label="Filter based on PSM, peptide or protein-level q-values?" help= "Whether to perform the q-value computation and filtration on the PSM, peptide or protein level.">
+            <param name="qvalue_level" type="select" display="radio" label="Filter based on PSM, peptide or protein-level q-values?" help= "Whether to perform the q-value computation and filtration on the PSM, peptide or protein level.">
                     <option value="PSM">PSM</option>
                     <option value="Modified.sequence">peptide</option>
                     <option value="Leading.razor.protein" selected="true">protein</option> 
@@ -61,18 +61,18 @@
        </section>
 
         <section name="peptide_aggregation" title="Aggregation to peptides" expanded="true">
-            <param name = "aggregation_peptides" type="select" label="Which function to use for the aggregation?" help= "How to aggregate PSMs to peptides?">
+            <param name="aggregation_peptides" type="select" label="Which function to use for the aggregation?" help= "How to aggregate PSMs to peptides?">
                     <option value="colMedians" selected="true">colMedians()</option> 
                     <option value="MsCoreUtils::medianPolish">medianPolish()</option>
                     <option value="colMeans">colMeans()</option>
                     <option value="colSums">colSums()</option>
                     <option value="MsCoreUtils::robustSummary">robustSummary()</option>
             </param>    
-            <param name="column_aggregation_peptides" type="text" value="Modified.sequence" label="Which column should be used for the PSM to peptide aggregation?" optional = "false" help= "Which column should be used for the PSM to peptide aggregation."/>
+            <param name="column_aggregation_peptides" type="text" value="Modified.sequence" label="Which column should be used for the PSM to peptide aggregation?" optional="false" help="Which column should be used for the PSM to peptide aggregation."/>
         </section>
 
         <section name="peptide_filtering" title="Peptide filtering" expanded="true">
-            <param name="samples_to_keep" type="select" min="1" optional = "false" label="Which samples to keep?" multiple="true" help = "Which samples to keep? We recommend filtering out Carrier and Unused channels at this step.">
+            <param name="samples_to_keep" type="select" min="1" optional="false" label="Which samples to keep?" multiple="true" help="Which samples to keep? We recommend filtering out Carrier and Unused channels at this step.">
                 <options from_dataset="input_annotations">
                     <column name="name" index="3"/>
                     <column name="value" index="3"/>
@@ -80,7 +80,7 @@
                 </options>
             </param>
             <conditional name="filter_median_intensity">
-                <param type="select" name = "cut_median_intensity" label="Filter based on median relative intensity?" help= "Whether to filter based on median intensity.">
+                <param type="select" name="cut_median_intensity" label="Filter based on median relative intensity?" help= "Whether to filter based on median intensity.">
                     <option value="no" selected="true">no</option> 
                     <option value="yes">yes</option>
                 </param>     
@@ -91,7 +91,7 @@
                 <when value="no"/>
             </conditional>
             <conditional name="filter_median_CV">
-                <param type="select" name = "cut_median_CV" label="Filter based on median CV?" help= "Whether to filter based on median CV.">
+                <param type="select" name="cut_median_CV" label="Filter based on median CV?" help="Whether to filter based on median CV.">
                     <option value="yes" selected="true">yes</option> 
                     <option value="no">no</option>
                 </param>     
@@ -134,12 +134,12 @@
                     </param>
                 </when>               
             </conditional>
-            <param label="Log transformation base" name="base" type="select" help="Which base to use for the log transformation?" display = "radio">
+            <param label="Log transformation base" name="base" type="select" help="Which base to use for the log transformation?" display="radio">
                     <option value="2" selected="true">2</option> 
                     <option value="10">10</option> 
             </param>
             <conditional name="remove_missing_peptides">
-                <param type="select" name = "remove_peptides" label="Remove peptides with high missing rate?" help= "Whether to remove the peptides with the high missing rate.">
+                <param type="select" name="remove_peptides" label="Remove peptides with high missing rate?" help= "Whether to remove the peptides with the high missing rate.">
                     <option value="yes" selected="true">yes</option> 
                     <option value="no">no</option>
                 </param>     
@@ -158,12 +158,12 @@
                     <option value="colSums">colSums()</option>
                     <option value="MsCoreUtils::robustSummary">robustSummary()</option>
             </param>    
-            <param name="column_aggregation_proteins" type="text" value="Leading.razor.protein" label="Which column should be used for the peptide to protein aggregation?" optional = "false" help= "Which column should be used for the peptide to protein aggregation."/>
+            <param name="column_aggregation_proteins" type="text" value="Leading.razor.protein" label="Which column should be used for the peptide to protein aggregation?" optional="false" help="Which column should be used for the peptide to protein aggregation."/>
         </section>
 
         <section name="protein_processing" title="Processing protein data" expanded="true">
             <conditional name="normalization_method_protein">
-                <param type="select" label="How to perform normalization?" name = "choose_normalization_protein" display="radio" help= "How to normalize protein intensities?">
+                <param type="select" label="How to perform normalization?" name="choose_normalization_protein" display="radio" help="How to normalize protein intensities?">
                     <option value="simple_prot">Normalize columns or normalize rows (one only).</option> 
                     <option value="advanced_prot" selected="true">Firstly normalize columns, then rows.</option>
                 </param>  
@@ -196,30 +196,30 @@
 
         <section name="batch_correction" title="Batch correction" expanded="true">
             <conditional name="select_batch_correction">
-                <param type="select" label="Which batch correction method to use?" name = "batch_correction_method" display="radio" help= "Which method to use for correcting the batch effect?">
+                <param type="select" label="Which batch correction method to use?" name="batch_correction_method" display="radio" help="Which method to use for correcting the batch effect?">
                     <option value="combat" selected="true">ComBat()</option> 
                     <option value="removebatcheffect">removeBatchEffect()</option>
                 </param>  
                 <when value="combat">
-                    <param name="batch_col" type="data_column" data_ref = "input_annotations" use_header_names = "true" label="Which column is the technical variable to be corrected?" help= "Column to specify both the run identifier and batch name, has to be present in both tables."/>
+                    <param name="batch_col" type="data_column" data_ref="input_annotations" use_header_names="true" label="Which column is the technical variable to be corrected?" help="Column to specify both the run identifier and batch name, has to be present in both tables."/>
                 </when>
                 <when value="removebatcheffect">
-                    <param name="preserve_col" type="data_column" data_ref = "input_annotations" use_header_names = "true" label="Which column is the variable to be preserved?" help= "Which column is the variable to be preserved."/>
-                    <param name="batch_col" type="data_column" data_ref = "input_annotations" use_header_names = "true" label="Which column is the technical variable to be corrected?" help= "Column to specify both the run identifier and batch name, has to be present in both tables."/>
+                    <param name="preserve_col" type="data_column" data_ref="input_annotations" use_header_names="true" label="Which column is the variable to be preserved?" help="Which column is the variable to be preserved."/>
+                    <param name="batch_col" type="data_column" data_ref="input_annotations" use_header_names="true" label="Which column is the technical variable to be corrected?" help="Column to specify both the run identifier and batch name, has to be present in both tables."/>
                 </when>
             </conditional>
         </section>
 
         <section name="dimensionality_reduction" title="Dimensionality reduction" expanded="true">
             <conditional name="PCA_computation">
-                <param type="select" label="Run principal component analysis (PCA)?" name = "run_PCA" display="radio" help= "Run the PCA on imputed batch-corrected protein intensities?">
+                <param type="select" label="Run principal component analysis (PCA)?" name="run_PCA" display="radio" help="Run the PCA on imputed batch-corrected protein intensities?">
                     <option value="yes" selected="true">yes</option> 
                     <option value="no">no</option>
                 </param>    
                 <when value="yes">
                     <param label="Number of components" name="ncomponents_PCA" type="integer" value="5" min="2" help="Number of components in the PCA analysis."/>
                     <conditional name="UMAP_computation">
-                        <param type="select" label="Run UMAP on PCA data?" name = "run_UMAP" display="radio" help= "Run the UMAP on PCA-reduced data?">
+                        <param type="select" label="Run UMAP on PCA data?" name="run_UMAP" display="radio" help="Run the UMAP on PCA-reduced data?">
                             <option value="yes" selected="true">yes</option> 
                             <option value="no">no</option>
                         </param>    
@@ -234,7 +234,7 @@
         </section>
 
         <section name="data_export" title="Export data" expanded="true">
-            <param name = "export_tables" type="boolean" checked="false" truevalue="TRUE" falsevalue="FALSE" label="Export intermediate results" help= "Whether only the final result table (log2 transformed, normalized, imputed, batch-corrected data) should be exported or all intermediate results."/>
+            <param name="export_tables" type="boolean" checked="false" truevalue="TRUE" falsevalue="FALSE" label="Export intermediate results" help="Whether only the final result table (log2 transformed, normalized, imputed, batch-corrected data) should be exported or all intermediate results."/>
         </section>
     </xml>
 
