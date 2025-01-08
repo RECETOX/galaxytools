@@ -121,7 +121,6 @@
         #end if
 
         ## aggregation_fun <- match.fun("${peptide_aggregation.aggregation_peptides}")
-        ## print("${peptide_aggregation.column_aggregation_peptides}")
         fcol_aggregation <- colnames(data_input)[${peptide_aggregation.column_aggregation_peptides}]
         scp <- aggregateFeaturesOverAssays(scp,
                                    i = 1:number_of_assays,
@@ -229,10 +228,11 @@
         #end if
 
         ## aggregation_fun_prot <- match.fun("${protein_aggregation.aggregation_proteins}")
+        fcol_aggregation <- colnames(data_input)[${protein_aggregation.column_aggregation_proteins}]
         scp <- aggregateFeatures(scp,
                          i = "peptides_log",
                          name = "proteins",
-                         fcol = "${protein_aggregation.column_aggregation_proteins}",
+                         fcol = fcol_aggregation,
                          fun = ${protein_aggregation.aggregation_proteins}, na.rm = TRUE)
 
         #if $protein_processing.normalization_method_protein.choose_normalization_protein == "simple_prot"

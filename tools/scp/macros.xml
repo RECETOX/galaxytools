@@ -162,7 +162,7 @@
             <param name = "aggregation_proteins" type="select" label="Which function to use for the aggregation?" help= "How to aggregate peptides to proteins?">
                 <expand macro="aggregation_options"/>
             </param>    
-            <param name="column_aggregation_proteins" type="text" value="Leading.razor.protein" label="Which column should be used for the peptide to protein aggregation?" optional="false" help="Which column should be used for the peptide to protein aggregation."/>
+            <param name="column_aggregation_proteins" type="data_column" data_ref="input_data" use_header_names="true" label="Which column should be used for the peptide to protein aggregation?" help="Which column should be used for the peptide to protein aggregation. Leading.razor.protein is recommended."/>
         </section>
 
         <section name="protein_processing" title="Processing protein data" expanded="true">
