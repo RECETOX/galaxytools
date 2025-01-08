@@ -33,6 +33,18 @@
         <option value="MsCoreUtils::robustSummary">robustSummary()</option>
     </xml>
 
+    <xml name="normalization_options">
+        <option value="center.mean" selected="true">center.mean</option> 
+        <option value="sum">sum</option>
+        <option value="max">max</option>
+        <option value="center.median">center.median</option>
+        <option value="div.mean">div.mean</option>
+        <option value="div.median">div.median</option>
+        <option value="diff.median">diff.median</option>
+        <option value="quantiles">quantiles</option>
+        <option value="vsn">vsn</option>
+    </xml>
+
     <xml name="scp_param">
        <param name="input_data" type="data" format="tabular" label="Input evidence table"
               help= "Input file is the evidence.txt table from MaxQuant"/>
@@ -116,15 +128,7 @@
                 </param>  
                 <when value="simple">
                     <param label="Normalization method" name="normalize_simple_method" type="select" help="Which normalization method to choose?">
-                        <option value="center.mean" selected="true">center.mean</option> 
-                        <option value="sum">sum</option>
-                        <option value="max">max</option>
-                        <option value="center.median">center.median</option>
-                        <option value="div.mean">div.mean</option>
-                        <option value="div.median">div.median</option>
-                        <option value="diff.median">diff.median</option>
-                        <option value="quantiles">quantiles</option>
-                        <option value="vsn">vsn</option>
+                        <expand macro="normalization_options"/>
                     </param>
                 </when>
                 <when value="advanced">
@@ -169,15 +173,7 @@
                 </param>  
                 <when value="simple_prot">
                     <param label="Normalization method" name="normalize_simple_method_prot" type="select" help="Which normalization method to choose?">
-                        <option value="center.mean" selected="true">center.mean</option> 
-                        <option value="sum">sum</option>
-                        <option value="max">max</option>
-                        <option value="center.median">center.median</option>
-                        <option value="div.mean">div.mean</option>
-                        <option value="div.median">div.median</option>
-                        <option value="diff.median">diff.median</option>
-                        <option value="quantiles">quantiles</option>
-                        <option value="vsn">vsn</option>
+                        <expand macro="normalization_options"/>
                     </param>
                 </when>
                 <when value="advanced_prot">
