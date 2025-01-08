@@ -101,7 +101,7 @@
                     <option value="yes">yes</option>
                 </param>     
                 <when value="yes">
-                    <param label="Median intensity threshold" name="median_intensity_threshold" type="float" value="0.4"
+                    <param label="Median intensity threshold" name="median_intensity_threshold" type="float" min="0" value="0.4"
                     help="Threshold for relative median intensity filtering."/>
                 </when>
                 <when value="no"/>
