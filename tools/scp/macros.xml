@@ -30,7 +30,7 @@
               help= "Input file is the evidence.txt table from MaxQuant"/>
        <param name="input_annotations" type="data" format="tabular" label="Sample annotations table"
               help= "A data table specifying metadata; sample annotations."/>
-       <param name="runcol" type="data_column" data_ref = "input_data" use_header_names = "true" label="Which column specifies the run identifier and batch name?" help= "Column to specify both the run identifier and batch name, has to be present in both tables."/>
+       <param name="runcol" type="data_column" data_ref="input_data" use_header_names="true" label="Which column specifies the run identifier and batch name?" help= "Column to specify both the run identifier and batch name, has to be present in both tables."/>
        <param name="remove_empty_columns" type="boolean" checked="true" truevalue="TRUE" falsevalue="FALSE" label="Remove empty columns?" help="Whether the empty columns should be removed."/>
        <param name = "generate_QC_plots" type="boolean" checked="true" truevalue="TRUE" falsevalue="FALSE" label="Generate QC plots?" help= "Whether to generate quality-control plots (distribution of the average SCR, distribution of median CV and median intensities)."/>
 
@@ -39,7 +39,7 @@
             <param name="filter_contaminants" type="boolean" checked="true" truevalue="TRUE" falsevalue="FALSE" label="Filter potential contaminants?" help="Whether to filter the proteins labelled as 'potential contaminant'."/>
             <param name="PIF_threshold" type="float" value="0.8" min="0" max="1" label="Parental ion fraction (PIF) threshold"
                help="The threshold for parental ion fraction (PIF)"/>
-            <param name="minimum_features" type="integer" value="150" min = "1" label="Minimum number of PSMs per assay required" help="What is the minimum number of peptide-to-spectrum matches per assay to keep the assay?"/>   
+            <param name="minimum_features" type="integer" value="150" min="1" label="Minimum number of PSMs per assay required" help="What is the minimum number of peptide-to-spectrum matches per assay to keep the assay?"/>   
             <param name="count_cell_carrier" type="integer" value="200" min = "0" label="Number of cells in the carrier channel" help="What is the number of cells in the carrier channel?"/> 
             <param name="single_cells" type="select" label="Single-cell channels present in the experiment" multiple="true" optional = "false" min = "1" help = "What are the single-cell channels present in the experiment? At least one channel must be selected!">
                     <options from_dataset="input_annotations">
