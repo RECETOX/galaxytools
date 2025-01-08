@@ -34,15 +34,15 @@
     </xml>
 
     <xml name="normalization_options">
-        <option value="center.mean" selected="true">center.mean</option> 
-        <option value="sum">sum</option>
-        <option value="max">max</option>
-        <option value="center.median">center.median</option>
-        <option value="div.mean">div.mean</option>
-        <option value="div.median">div.median</option>
-        <option value="diff.median">diff.median</option>
-        <option value="quantiles">quantiles</option>
-        <option value="vsn">vsn</option>
+        <option value="center.mean" selected="true">Center sample intensities by subtracting the respective column means (center.mean)</option> 
+        <option value="sum">Divide each feature's intensity by the sum of the feature (sum)</option>
+        <option value="max">Divide each feature's intensity by the maximum of the feature (max)</option>
+        <option value="center.median">Center sample intensities by subtracting the respective column medians (center.median)</option>
+        <option value="div.mean">Divide by the column means (div.mean)</option>
+        <option value="div.median">Divide by the column medians (div.median)</option>
+        <option value="diff.median">Center all samples so that they all match the grand median by subtracting the respective columns medians differences to the grand median (diff.median)</option>
+        <option value="quantiles">Quantile normalization (quantiles)</option>
+        <option value="vsn">Variance-stabilizing normalization (vsn)</option>
     </xml>
 
     <xml name="scp_param">
