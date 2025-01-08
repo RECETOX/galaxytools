@@ -402,8 +402,8 @@
             <output_collection name="plots" type="list">
                 <element name="PCA" file="PCA.pdf" ftype="pdf" compare="sim_size" delta="600">
                     <assert_contents>
-                        <has_image_width width="2100"/>
-                        <has_image_height height="2100"/>
+                        <has_image_width width="5900"/>
+                        <has_image_height height="5900"/>
                     </assert_contents>
                 </element>
                 <element name="QC_boxplot_peptide" file="QC_boxplot_peptide.pdf" ftype="pdf"/>
