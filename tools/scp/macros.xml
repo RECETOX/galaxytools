@@ -26,11 +26,11 @@
     </xml>
 
     <xml name="aggregation_options">
-        <option value="colMedians" selected="true">colMedians()</option> 
-        <option value="MsCoreUtils::medianPolish">medianPolish()</option>
-        <option value="colMeans">colMeans()</option>
-        <option value="colSums">colSums()</option>
-        <option value="MsCoreUtils::robustSummary">robustSummary()</option>
+        <option value="colMedians" selected="true">Aggregate using the median of each sample (colMedians)</option> 
+        <option value="MsCoreUtils::medianPolish">Fit an additive model (two way decomposition) using Tukey's median polish procedure (medianPolish)</option>
+        <option value="colMeans">Aggregate using the mean of each sample (colMeans)</option>
+        <option value="colSums">Aggregate using the sum of each sample (colSums)</option>
+        <option value="MsCoreUtils::robustSummary">Calculate a robust aggregation using MASS::rlm() (robustSummary)</option>
     </xml>
 
     <xml name="normalization_options">
