@@ -263,14 +263,8 @@
         ggplot2::ggsave(filename = file.path("plots", "QC_boxplot_protein.pdf"), QC_boxplot_protein)
         ggplot2::ggsave(filename = file.path("plots", "QC_boxplot_protein_norm.pdf"), QC_boxplot_protein_norm)
         
-        pdf(
-            filename = file.path("plots", "QC_heatmap_proteins.pdf"), 
-            width = 4, 
-            height = 4,
-            units = "in",
-            res = 1200
-        )
-        QC_heatmap <- plot_heatmap(scp, "proteins_norm")
+        pdf(file = file.path("plots", "QC_heatmap_proteins.pdf"))
+        plot_heatmap(scp, "proteins_norm")
         dev.off()
         ##ggplot2::ggsave(filename = file.path("plots", "QC_heatmap_proteins.pdf"), QC_heatmap)
         #end if
