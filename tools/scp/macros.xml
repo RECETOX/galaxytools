@@ -113,7 +113,7 @@
                 </param>     
                 <when value="yes">
                     <param label="How many peptides per protein are required to compute CV?" name="minimum_peptides_CV" type="integer" value="5" min="1" help="Minimum number of peptides per protein required for the CV computation."/>
-                    <param label="Median CV threshold" name="median_CV_threshold" type="float" value="0.65" help="Threshold for median CV filtering."/>
+                    <param label="Median CV threshold" name="median_CV_threshold" type="float" value="0.65" help="Threshold for median CV filtering." min="0" max="1"/>
                 </when>
                 <when value="no"/>
             </conditional>
