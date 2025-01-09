@@ -4,8 +4,9 @@
         <import>macros.xml</import>
         <import>help.xml</import>
     </macros>
-    <edam_topics>  
-    </edam_topics>
+    <xrefs>
+        <xref type="bio.tools">scp</xref>
+    </xrefs>
     <requirements>
         <requirement type="package" version="@TOOL_VERSION@">bioconductor-scp</requirement>
         <requirement type="package" version="3.54.0">bioconductor-sva</requirement>
