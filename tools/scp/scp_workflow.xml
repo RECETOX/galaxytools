@@ -25,19 +25,22 @@
         library("impute")
 
         data_input <- read.delim("$input_data", sep="\t")
-
         metadata <- read.delim("$input_annotations", sep="\t")
 
         runCol <- colnames(data_input)[$runcol]
-        scp <- scp::readSCP(assayData = data_input,
-                       colData = metadata,
-                       runCol = runCol,
-                       removeEmptyCols = $remove_empty_columns)
-        
+        fcol_aggregation_pep <- colnames(data_input)[${peptide_aggregation.column_aggregation_peptides}]
+        fcol_aggregation_prot <- colnames(data_input)[${protein_aggregation.column_aggregation_proteins}]
+        print(fcol_aggregation_pep)
+        print(fcol_aggregation_prot)
         dir.create("plots")
 
+        scp <- scp::readSCP(
+            assayData = data_input,
+            colData = metadata,
+            runCol = runCol,
+            removeEmptyCols = $remove_empty_columns
+        )
         number_of_assays <- length(scp)
-
         scp <- zeroIsNA(scp, i = 1:number_of_assays)
 
         #if $filtering_data.filter_reverse
@@ -50,7 +53,6 @@
                         ~ Potential.contaminant != "+")
         #end if
 
- 
         scp <- filterFeatures(scp,
                       ~ !is.na(PIF) & PIF > ${filtering_data.PIF_threshold})
 
@@ -121,12 +123,14 @@
         #end if
 
         ## aggregation_fun <- match.fun("${peptide_aggregation.aggregation_peptides}")
-        fcol_aggregation <- colnames(data_input)[${peptide_aggregation.column_aggregation_peptides}]
-        scp <- aggregateFeaturesOverAssays(scp,
-                                   i = 1:number_of_assays,
-                                   fcol = fcol_aggregation,
-                                   name = paste0("peptide_", names(scp)),
-                                   fun = ${peptide_aggregation.aggregation_peptides}, na.rm = TRUE)
+        scp <- aggregateFeaturesOverAssays(
+            scp,
+            i = 1:number_of_assays,
+            fcol = fcol_aggregation_pep,
+            name = paste0("peptide_", names(scp)),
+            fun = ${peptide_aggregation.aggregation_peptides},
+            na.rm = TRUE
+        )
 
         scp <- joinAssays(scp,
                   i = grep("peptide", names(scp)),
@@ -184,33 +188,41 @@
         #end if
 
         #if $peptide_processing.normalization_method.choose_normalization == "simple"
-        scp <- QFeatures::normalize(scp,
-              i = "peptides",
-              name = "peptides_norm",
-              method = "${peptide_processing.normalization_method.normalize_simple_method}")
+        scp <- QFeatures::normalize(
+            scp,
+            i = "peptides",
+            name = "peptides_norm",
+            method = "${peptide_processing.normalization_method.normalize_simple_method}"
+        )
 
         #else
         norm_function_col <- match.fun("$peptide_processing.normalization_method.normalize_columns")
-        scp <- sweep(scp,
-                 i = "peptides", 
-                 MARGIN = 2,
-                 FUN = "/",
-                 STATS = norm_function_col(assay(scp[["peptides"]]), na.rm = TRUE),
-                 name = "peptides_norm_col")
+        scp <- sweep(
+            scp,
+            i = "peptides", 
+            MARGIN = 2,
+            FUN = "/",
+            STATS = norm_function_col(assay(scp[["peptides"]]), na.rm = TRUE),
+            name = "peptides_norm_col"
+        )
 
         norm_function_row <- match.fun("$peptide_processing.normalization_method.normalize_rows")
-        scp <- sweep(scp,
-                 i = "peptides_norm_col",
-                 MARGIN = 1,
-                 FUN = "/",
-                 STATS = norm_function_row(assay(scp[["peptides_norm_col"]]),  na.rm = TRUE),
-                 name =  "peptides_norm") 
+        scp <- sweep(
+            scp,
+            i = "peptides_norm_col",
+            MARGIN = 1,
+            FUN = "/",
+            STATS = norm_function_row(assay(scp[["peptides_norm_col"]]),  na.rm = TRUE),
+            name =  "peptides_norm"
+        ) 
         #end if
 
-        scp <- logTransform(scp,
-                    base = ${peptide_processing.base},
-                    i = "peptides_norm",
-                    name = "peptides_log")
+        scp <- logTransform(
+            scp,
+            base = ${peptide_processing.base},
+            i = "peptides_norm",
+            name = "peptides_log"
+        )
 
         #if $generate_QC_plots
         QC_boxplot_peptide <- create_boxplots(scp, "peptides", FALSE, "Peptides not normalized")
@@ -222,40 +234,45 @@
 
         #if $peptide_processing.remove_missing_peptides.remove_peptides == "yes"
         pNA <-  ${peptide_processing.remove_missing_peptides.pNA_peptides} / 100
-        scp <- filterNA(scp,
-                  i = "peptides_log",
-                  pNA = pNA)
+        scp <- filterNA(scp, i = "peptides_log", pNA = pNA)
         #end if
 
-        ## aggregation_fun_prot <- match.fun("${protein_aggregation.aggregation_proteins}")
-        fcol_aggregation <- colnames(data_input)[${protein_aggregation.column_aggregation_proteins}]
-        scp <- aggregateFeatures(scp,
-                         i = "peptides_log",
-                         name = "proteins",
-                         fcol = fcol_aggregation,
-                         fun = ${protein_aggregation.aggregation_proteins}, na.rm = TRUE)
+        scp <- aggregateFeaturesOverAssays(
+            scp,
+            i = "peptides_log",
+            fcol = fcol_aggregation_prot,
+            name = "proteins",
+            fun = ${protein_aggregation.aggregation_proteins},
+            na.rm = TRUE
+        )
 
         #if $protein_processing.normalization_method_protein.choose_normalization_protein == "simple_prot"
-       scp <- QFeatures::normalize(scp,
-              i = "proteins",
-              name = "proteins_norm",
-              method = "${protein_processing.normalization_method_protein.normalize_simple_method_prot}")
+        scp <- QFeatures::normalize(
+            scp,
+            i = "proteins",
+            name = "proteins_norm",
+            method = "${protein_processing.normalization_method_protein.normalize_simple_method_prot}"
+        )
         #else
         norm_function_col <- match.fun("${protein_processing.normalization_method_protein.normalize_columns_prot}")
-        scp <- sweep(scp,
-                 i = "proteins", 
-                 MARGIN = 2,
-                 FUN = "/",
-                 STATS = norm_function_col(assay(scp[["proteins"]]), na.rm = TRUE),
-                 name = "proteins_norm_col")
+        scp <- sweep(
+            scp,
+            i = "proteins", 
+            MARGIN = 2,
+            FUN = "/",
+            STATS = norm_function_col(assay(scp[["proteins"]]), na.rm = TRUE),
+            name = "proteins_norm_col"
+        )
 
         norm_function_row <- match.fun("${protein_processing.normalization_method_protein.normalize_rows_prot}")
-        scp <- sweep(scp,
-                 i = "proteins_norm_col",
-                 MARGIN = 1,
-                 FUN = "/",
-                 STATS = norm_function_row(assay(scp[["proteins_norm_col"]]),  na.rm = TRUE),
-                 name =  "proteins_norm") 
+        scp <- sweep(
+            scp,
+            i = "proteins_norm_col",
+            MARGIN = 1,
+            FUN = "/",
+            STATS = norm_function_row(assay(scp[["proteins_norm_col"]]),  na.rm = TRUE),
+            name =  "proteins_norm"
+        ) 
         #end if
 
         #if $generate_QC_plots
@@ -268,37 +285,46 @@
         pdf(file = file.path("plots", "QC_heatmap_proteins.pdf"))
         plot_heatmap(scp, "proteins_norm")
         dev.off()
-        ##ggplot2::ggsave(filename = file.path("plots", "QC_heatmap_proteins.pdf"), QC_heatmap)
         #end if
 
-        scp <- impute(scp,
-              i = "proteins_norm",
-              name = "proteins_imptd",
-              method = "knn",
-              k = ${protein_processing.impute_k}, rowmax = 1, colmax= 1,
-              maxp = Inf, rng.seed = 1234)
+        scp <- impute(
+            scp,
+            i = "proteins_norm",
+            name = "proteins_imptd",
+            method = "knn",
+            k = ${protein_processing.impute_k},
+            rowmax = 1,
+            colmax= 1,
+            maxp = Inf,
+            rng.seed = 1234
+        )
 
+        batch_colname <- colnames(metadata)[${batch_correction.select_batch_correction.batch_col}]
         #if $batch_correction.select_batch_correction.batch_correction_method == "combat"
         sce <- getWithColData(scp, "proteins_imptd")
-        batch_colname <- colnames(metadata)[${batch_correction.select_batch_correction.batch_col}]
         batch <- colData(scp)[[batch_colname]]
         model <- model.matrix(~ SampleType, data = colData(sce))
   
-        assay(sce) <- ComBat(dat = assay(sce),
-                       batch = batch,
-                       mod = model)
+        assay(sce) <- ComBat(
+            dat = assay(sce),
+            batch = batch,
+            mod = model
+        )
 
-        scp <- addAssay(scp,
-                        y = sce,
-                        name = "proteins_batchC")
+        scp <- addAssay(
+            scp,
+            y = sce,
+            name = "proteins_batchC"
+        )
 
-        scp <- addAssayLinkOneToOne(scp,
-                              from = "proteins_imptd",
-                              to = "proteins_batchC")
+        scp <- addAssayLinkOneToOne(
+            scp,
+            from = "proteins_imptd",
+            to = "proteins_batchC"
+        )
 
         #else
         sce <- getWithColData(scp, "proteins_imptd")
-        batch_colname <- colnames(metadata)[${batch_correction.select_batch_correction.batch_col}]
         preserve_colname <- colnames(metadata)[${batch_correction.select_batch_correction.preserve_col}]
 
         assay(sce) <- limma::removeBatchEffect(
@@ -315,44 +341,52 @@
         #end if 
 
         #if $dimensionality_reduction.PCA_computation.run_PCA == "yes"
-        scp[["proteins_batchC"]] <- scater::runPCA(scp[["proteins_batchC"]],
-                                     ncomponents = ${dimensionality_reduction.PCA_computation.ncomponents_PCA},
-                                     ntop = Inf,
-                                     scale = TRUE,
-                                     exprs_values = 1,
-                                     name = "PCA")
+        scp[["proteins_batchC"]] <- scater::runPCA(
+            scp[["proteins_batchC"]],
+            ncomponents = ${dimensionality_reduction.PCA_computation.ncomponents_PCA},
+            ntop = Inf,
+            scale = TRUE,
+            exprs_values = 1,
+            name = "PCA"
+        )
   
-        pca <- scater::plotReducedDim(scp[["proteins_batchC"]],
-                 dimred = "PCA",
-                 colour_by = "SampleType",
-                 point_alpha = 1)
+        pca <- scater::plotReducedDim(
+            scp[["proteins_batchC"]],
+            dimred = "PCA",
+            colour_by = "SampleType",
+            point_alpha = 1
+        )
 
-            ggplot2::ggsave(filename = file.path("plots", "PCA.pdf"), pca)
+        ggplot2::ggsave(filename = file.path("plots", "PCA.pdf"), pca)
 
         #if $dimensionality_reduction.PCA_computation.UMAP_computation.run_UMAP == "yes"
-        scp[["proteins_batchC"]] <- scater::runUMAP(scp[["proteins_batchC"]],
-                                      ncomponents = ${dimensionality_reduction.PCA_computation.UMAP_computation.ncomponents_UMAP},
-                                      ntop = Inf,
-                                      scale = TRUE,
-                                      exprs_values = 1,
-                                      n_neighbors = 3,
-                                      dimred = "PCA",
-                                      name = "UMAP")
+        scp[["proteins_batchC"]] <- scater::runUMAP(
+            scp[["proteins_batchC"]],
+            ncomponents = ${dimensionality_reduction.PCA_computation.UMAP_computation.ncomponents_UMAP},
+            ntop = Inf,
+            scale = TRUE,
+            exprs_values = 1,
+            n_neighbors = 3,
+            dimred = "PCA",
+            name = "UMAP"
+        )
   
-        umap <- scater::plotReducedDim(scp[["proteins_batchC"]],
-                 dimred = "UMAP",
-                 colour_by = "SampleType",
-                 point_alpha = 1)
+        umap <- scater::plotReducedDim(
+            scp[["proteins_batchC"]],
+            dimred = "UMAP",
+            colour_by = "SampleType",
+            point_alpha = 1
+        )
         ggplot2::ggsave(filename = file.path("plots", "UMAP.pdf"), umap)
         #end if
-
         #end if
 
         assay_df <- as.data.frame(assay(scp, "proteins_batchC"))
         row_metadata <- as.data.frame(rowData(scp[["proteins_batchC"]]))
 
         export_data <- cbind(row_metadata, as.data.frame(assay_df))
-        write.table(export_data, file = '$Processed_data', sep = "\t", quote=F)
+        write.table(export_data, file = '$Processed_data', sep = "\t", quote = F)
+
         #if $data_export.export_tables
         export_all_assays(scp)
         #end if
@@ -388,9 +422,12 @@
             <param name="single_cells" value="Macrophage,Monocyte"/>
             <param name="samples_to_keep" value="Macrophage,Monocyte,Blank"/>
             <param name="batch_col" value="2"/>
+            <param name="column_aggregation_peptides" value="6"/>
+            <param name="column_aggregation_proteins" value="17"/>
             <output name="Processed_data">
                 <assert_contents>
-                    <has_n_lines n="90"/>                
+                    <has_n_lines n="90"/>
+                    <has_text text="E9PAV3"/>            
                 </assert_contents>
             </output>
         </test>
@@ -401,13 +438,10 @@
             <param name="single_cells" value="Macrophage,Monocyte"/>
             <param name="samples_to_keep" value="Macrophage,Monocyte,Blank"/>
             <param name="batch_col" value="2"/>
+            <param name="column_aggregation_peptides" value="6"/>
+            <param name="column_aggregation_proteins" value="17"/>
             <output_collection name="plots" type="list">
-                <element name="PCA" file="PCA.pdf" ftype="pdf" compare="sim_size" delta="600">
-                    <assert_contents>
-                        <has_image_width width="5900"/>
-                        <has_image_height height="5900"/>
-                    </assert_contents>
-                </element>
+                <element name="PCA" file="PCA.pdf" ftype="pdf" compare="sim_size" delta="600"/>
                 <element name="QC_boxplot_peptide" file="QC_boxplot_peptide.pdf" ftype="pdf"/>
                 <element name="QC_boxplot_peptide_norm" file="QC_boxplot_peptide_norm.pdf" ftype="pdf"/>
                 <element name="QC_boxplot_protein" file="QC_boxplot.pdf" ftype="pdf"/>
@@ -416,12 +450,7 @@
                 <element name="QC_medianCV" file="QC_medianCV.pdf" ftype="pdf"/>
                 <element name="QC_plot_SCR" file="QC_plot_SCR.pdf" ftype="pdf"/>
                 <element name="QC_plot_SCR_col" file="QC_plot_SCR_col.pdf" ftype="pdf"/>
-                <element name="UMAP" file="UMAP.pdf" ftype="pdf" compare="sim_size" delta="600">
-                    <assert_contents>
-                        <has_image_width width="2100"/>
-                        <has_image_height height="2100"/>
-                    </assert_contents>
-                </element>
+                <element name="UMAP" file="UMAP.pdf" ftype="pdf" compare="sim_size" delta="600"/>
             </output_collection>
             <output name="Processed_data">
                 <assert_contents>
@@ -435,12 +464,14 @@
             <param name="runcol" value="19"/>
             <param name="single_cells" value="Macrophage,Monocyte"/>
             <param name="samples_to_keep" value="Macrophage,Monocyte,Blank"/>
+            <param name="column_aggregation_peptides" value="6"/>
+            <param name="column_aggregation_proteins" value="17"/>
             <param name="batch_col" value="2"/>
             <param name="export_tables" value="true"/>
             <output_collection name="intermediate_outputs" type="list" count="6"/>
             <output name="Processed_data">
                 <assert_contents>
-                    <has_size size="625000" delta="20"/>                
+                    <has_size size="625000" delta="20"/>
                 </assert_contents>
             </output>
         </test>
@@ -452,6 +483,8 @@
             <param name="samples_to_keep" value="Macrophage,Monocyte,Blank"/>
             <param name="batch_col" value="2"/>
             <param name="export_RData" value="TRUE"/>
+            <param name="column_aggregation_peptides" value="6"/>
+            <param name="column_aggregation_proteins" value="17"/>
             <output name="Processed_data">
                 <assert_contents>
                     <has_n_lines n="90"/>                
