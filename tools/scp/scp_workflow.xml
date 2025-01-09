@@ -445,16 +445,16 @@
             <param name="column_aggregation_peptides" value="6"/>
             <param name="column_aggregation_proteins" value="17"/>
             <output_collection name="plots" type="list">
-                <element name="PCA" file="PCA.pdf" ftype="pdf" compare="sim_size" delta="600"/>
-                <element name="QC_boxplot_peptide" file="QC_boxplot_peptide.pdf" ftype="pdf"/>
-                <element name="QC_boxplot_peptide_norm" file="QC_boxplot_peptide_norm.pdf" ftype="pdf"/>
-                <element name="QC_boxplot_protein" file="QC_boxplot.pdf" ftype="pdf"/>
-                <element name="QC_boxplot_protein_norm" file="QC_boxplot_protein_norm.pdf" ftype="pdf"/>
-                <element name="QC_heatmap_proteins" file="QC_heatmap_proteins.pdf" ftype="pdf"/>
-                <element name="QC_medianCV" file="QC_medianCV.pdf" ftype="pdf"/>
-                <element name="QC_plot_SCR" file="QC_plot_SCR.pdf" ftype="pdf"/>
-                <element name="QC_plot_SCR_col" file="QC_plot_SCR_col.pdf" ftype="pdf"/>
-                <element name="UMAP" file="UMAP.pdf" ftype="pdf" compare="sim_size" delta="600"/>
+                <element name="PCA" file="PCA.pdf" ftype="pdf" compare="sim_size" delta="40"/>
+                <element name="QC_boxplot_peptide" file="QC_boxplot_peptide.pdf" ftype="pdf" compare="sim_size" delta="40"/>
+                <element name="QC_boxplot_peptide_norm" file="QC_boxplot_peptide_norm.pdf" ftype="pdf" compare="sim_size" delta="40"/>
+                <element name="QC_boxplot_protein" file="QC_boxplot.pdf" ftype="pdf" compare="sim_size" delta="40"/>
+                <element name="QC_boxplot_protein_norm" file="QC_boxplot_protein_norm.pdf" ftype="pdf" compare="sim_size" delta="40"/>
+                <element name="QC_heatmap_proteins" file="QC_heatmap_proteins.pdf" ftype="pdf" compare="sim_size" delta="40"/>
+                <element name="QC_medianCV" file="QC_medianCV.pdf" ftype="pdf" compare="sim_size" delta="40"/>
+                <element name="QC_plot_SCR" file="QC_plot_SCR.pdf" ftype="pdf" compare="sim_size" delta="40"/>
+                <element name="QC_plot_SCR_col" file="QC_plot_SCR_col.pdf" ftype="pdf" compare="sim_size" delta="40"/>
+                <element name="UMAP" file="UMAP.pdf" ftype="pdf" compare="sim_size" delta="40"/>
             </output_collection>
             <output name="Processed_data">
                 <assert_contents>
