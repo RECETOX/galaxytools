@@ -12,6 +12,9 @@
         <requirement type="package" version="1.80.0">bioconductor-impute</requirement>
         <requirement type="package" version="1.34.0">bioconductor-scater</requirement>
     </requirements>
+    <required_files>
+        <include path="utils.r" />
+    </required_files>
     <expand macro="creator" />
     <command detect_errors="aggressive"><![CDATA[
     Rscript  -e 'source("${__tool_directory__}/utils.R")' -e 'source("${run_script}")'
