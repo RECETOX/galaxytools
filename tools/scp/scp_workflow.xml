@@ -409,7 +409,7 @@
     </inputs>
     <outputs>
         <data name="Processed_data" format="tabular" label="Batch-corrected protein levels"/>
-        <collection name="intermediate_outputs" type="list" label="Intermediate outputs">
+        <collection name="intermediate_outputs" type="list" label="Intermediate outputs" format="tabular">
             <discover_datasets pattern="__name_and_ext__" directory="outputs" />
             <filter>data_export['export_tables']</filter>
         </collection>
