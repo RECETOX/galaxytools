@@ -32,9 +32,10 @@ The recommended workflow how to run the MFAssignR package is as follows:
 (3) Use IsoFiltR() to identify potential 13C and 34S isotope masses.
 (4) Using the S/N threshold, and the two data frames output from IsoFiltR(), run MFAssignCHO() to assign MF with C, H, and O to assess the mass accuracy.
 (5) Use RecalList() to generate a list of the potential recalibrant series.
-(6) After choosing recalibrant series, use Recal() to recalibrate the mass lists.
-(7) Assign MF to the recalibrated mass list using MFAssign().
-(8) Check the output plots from MFAssign() to evaluate the quality of the assignments.
+(6) Choose the most suitable recalibrant series using FindRecalSeries().
+(7) After choosing recalibrant series, use Recal() to recalibrate the mass lists.
+(8) Assign MF to the recalibrated mass list using MFAssign().
+(9) Check the output plots from MFAssign() to evaluate the quality of the assignments.
 
 For detailed documentation on the individual steps please see the individual tool wrappers.
 </token>
@@ -49,8 +50,8 @@ KMDnoise is a Kendrick Mass Defect (KMD) approach for the noise estimation. It s
 
 Output:     
 
-- noise estimate - (this noise level can then be multiplied by the user chosen value (3, 6, 10) in order     to set the signal to noise cut for formula assignment.)
-- KMD plot - bounds of the noise estimation area are highlighted in red
+- noise estimate - this noise level can then be multiplied by the user chosen value (3, 6, 10) in order to set the signal to noise cut for formula assignment.
+- KMD plot - bounds of the noise estimation area are highlighted in red.
 </token>
 
 <token name="@HISTNOISE_HELP@">
@@ -64,7 +65,7 @@ HistNoise function creates a histogram using natural log of the intensity, which
 Output:
 
 - noise estimate - this noise level can then be multiplied by the user chosen value in order to set the signal to noise cut for formula assignment
-- Histogram - shows where the cut is being applied123
+- Histogram - shows where the cut is being applied
 
 </token>
 
@@ -118,7 +119,7 @@ Output:
 MFAssignR - RecalList
 =============================
 
-This tool is the fifth step of the MFAssignR workflow (MFAssignCHO -> RecalList -> Recal)
+This tool is the fifth step of the MFAssignR workflow (MFAssignCHO -> RecalList -> FindRecalSeries)
 
 RecalList() function identifies the homologous series that could be used for recalibration. On the input, there is the output from MFAssign() or MFAssignCHO() functions. It returns a dataframe that contains the CH2 homologous series that contain more than 3 members.
 
@@ -127,11 +128,34 @@ Output:
 - Dataframe that contains the CH2 homologous series that contain more than 3 members.
 </token>
 
+<token name="@FINDRECALSERIES_HELP@">
+MFAssignR - FindRecalSeries
+=============================
+
+This tool is the sixth step of the MFAssignR workflow (RecalList -> FindRecalSeries -> Recal)
+
+This function takes on input the CH2 homologous recalibration series, which are provided by the RecalList function and tries to find the most suitable series combination for recalibration based on the following criteria:
+
+(1) Series should cover the full mass spectral range,
+(2) Series should be optimally long and combined have a “Tall Peak” at least every 100 m/z,
+(3) Abundance score: the higher, the better,
+(4) Peak score: the closer to 0, the better,
+(5) Peak Distance: the closer to 1, the better,
+(6) Series Score: the closer to this value, the better.
+
+Combinations of 5 series are assembled, scores are computed for other metrics (in case of Peak proximity and Peak
+distance, an inverted score is computed) and these are summed. Finally, either a series of the size of combination or top 10 unique series having the highest score are outputted.
+
+Output:     
+
+- Dataframe of n or 10 most suitable recalibrant series.
+</token>
+
 <token name="@RECAL_HELP@">
 MFAssignR - Recal
 =============================
 
-This tool is the sixth step of the MFAssignR workflow (RecalList -> Recal -> MFAssign)
+This tool is the seventh step of the MFAssignR workflow (FindRecalSeries -> Recal -> MFAssign)
 
 Recal() function recalibrates the 'Mono' and 'Iso' outputs from the IsoFiltR() function and prepares a dataframe containing chose recalibrants. Also it outputs a plot for the qualitative assessment of recalibrants. The input to the function is output from MFAssign() or MFAssignCHO(). 
 

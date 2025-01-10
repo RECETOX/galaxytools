@@ -13,3 +13,11 @@ repositories:
       - use_theoretical_mz_annotations.py
       - macros.xml
       - test-data
+  target_screen:
+    description: "Extract peaks from recetox-aplcms tables using a list of target ions"
+    long_description: |
+      "Extract peaks from recetox-aplcms tables using a list of target ions. MZ and RT tolerances are used to find matching features."
+    include:
+      - target_screen.xml
+      - target_screen.py
+      - test-data

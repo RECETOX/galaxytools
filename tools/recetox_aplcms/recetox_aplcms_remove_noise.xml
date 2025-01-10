@@ -30,7 +30,7 @@
                 intensity_weighted = $intensity_weighted,
                 do.plot = FALSE,
                 cache = FALSE,
-                grouping_threshold = as.numeric('$grouping_threshold')
+                grouping_threshold = $grouping_threshold
             )
 
             profile <- save_sample_name(profile, sample_name)
