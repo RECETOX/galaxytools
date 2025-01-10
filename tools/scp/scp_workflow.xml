@@ -345,6 +345,7 @@
         #end if 
 
         #if $dimensionality_reduction.PCA_computation.run_PCA == "yes"
+        PCA_color <- colnames(metadata)[$dimensionality_reduction.PCA_computation.pca_coloring]
         scp[["proteins_batchC"]] <- scater::runPCA(
             scp[["proteins_batchC"]],
             ncomponents = ${dimensionality_reduction.PCA_computation.ncomponents_PCA},
@@ -357,7 +358,7 @@
         pca <- scater::plotReducedDim(
             scp[["proteins_batchC"]],
             dimred = "PCA",
-            colour_by = "SampleType",
+            colour_by = PCA_color,
             point_alpha = 1
         )
 

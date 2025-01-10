@@ -214,6 +214,7 @@
                 </param>    
                 <when value="yes">
                     <param label="Number of components" name="ncomponents_PCA" type="integer" value="5" min="2" help="Number of components in the PCA analysis."/>
+                    <param name="pca_coloring" type="data_column" data_ref="input_annotations" use_header_names="true" label="What column to color the PCA according to?" help="Based on which column from the sampleAnnotation file should be the PCA colored."/>
                     <conditional name="UMAP_computation">
                         <param type="select" label="Run UMAP on PCA data?" name="run_UMAP" display="radio" help="Run the UMAP on PCA-reduced data?">
                             <option value="yes" selected="true">yes</option> 
