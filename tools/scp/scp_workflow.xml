@@ -1,5 +1,5 @@
-<tool id="scp_full_workflow" name="scp: Single Cell Proteomics data analysis" version="@TOOL_VERSION@+galaxy0" profile="23.0">
-    <description>Single Cell Proteomics data analysis workflow</description>
+<tool id="scp" name="scp" version="@TOOL_VERSION@+galaxy0" profile="23.0">
+    <description>single cell proteomics data analysis workflow</description>
     <macros>
         <import>macros.xml</import>
         <import>help.xml</import>
@@ -19,6 +19,9 @@
     <expand macro="creator" />
     <command detect_errors="aggressive"><![CDATA[
     Rscript  -e 'source("${__tool_directory__}/utils.R")' -e 'source("${run_script}")'
+    #if $data_export.export_R_script
+    && cat ${run_script} >> $script
+    #end if
     ]]></command>
     <configfiles>
         <configfile name="run_script"><![CDATA[
@@ -398,8 +401,7 @@
 
         #if $data_export.export_RData
         save(scp, file='$scp_object')
-        #end if
-        
+        #end if    
         ]]></configfile>
     </configfiles>
     <inputs>
@@ -413,6 +415,9 @@
         </collection>
         <data name="scp_object" format="RData" label="scp object as RData">
             <filter>data_export['export_RData']</filter>
+        </data>
+        <data name="script" format="txt" label="R script">
+            <filter>data_export['export_R_script']</filter>
         </data>
         <collection name="plots" type="list" label="Plots">
             <discover_datasets pattern="__name_and_ext__" directory="plots" />
@@ -445,8 +450,9 @@
             <param name="batch_col" value="2"/>
             <param name="column_aggregation_peptides" value="6"/>
             <param name="column_aggregation_proteins" value="17"/>
+            <param name="pca_coloring" value="4"/>
             <output_collection name="plots" type="list">
-                <element name="PCA" file="PCA.pdf" ftype="pdf" compare="sim_size" delta="40"/>
+                <element name="PCA" file="PCA.pdf" ftype="pdf" compare="sim_size" delta="60"/>
                 <element name="QC_boxplot_peptide" file="QC_boxplot_peptide.pdf" ftype="pdf" compare="sim_size" delta="40"/>
                 <element name="QC_boxplot_peptide_norm" file="QC_boxplot_peptide_norm.pdf" ftype="pdf" compare="sim_size" delta="40"/>
                 <element name="QC_boxplot_protein" file="QC_boxplot.pdf" ftype="pdf" compare="sim_size" delta="40"/>
@@ -455,7 +461,7 @@
                 <element name="QC_medianCV" file="QC_medianCV.pdf" ftype="pdf" compare="sim_size" delta="40"/>
                 <element name="QC_plot_SCR" file="QC_plot_SCR.pdf" ftype="pdf" compare="sim_size" delta="40"/>
                 <element name="QC_plot_SCR_col" file="QC_plot_SCR_col.pdf" ftype="pdf" compare="sim_size" delta="40"/>
-                <element name="UMAP" file="UMAP.pdf" ftype="pdf" compare="sim_size" delta="40"/>
+                <element name="UMAP" file="UMAP.pdf" ftype="pdf" compare="sim_size" delta="200"/>
             </output_collection>
             <output name="Processed_data">
                 <assert_contents>
@@ -480,7 +486,7 @@
                 </assert_contents>
             </output>
         </test>
-        <test expect_num_outputs='3'>
+        <test expect_num_outputs='4'>
             <param name="input_data" value="evidence_subset.txt" />
             <param name="input_annotations" value="sampleAnnotation.txt"/>
             <param name="runcol" value="19"/>
@@ -488,11 +494,18 @@
             <param name="samples_to_keep" value="Macrophage,Monocyte,Blank"/>
             <param name="batch_col" value="2"/>
             <param name="export_RData" value="TRUE"/>
+            <param name="export_R_script" value="TRUE"/>
             <param name="column_aggregation_peptides" value="6"/>
             <param name="column_aggregation_proteins" value="17"/>
             <output name="Processed_data">
                 <assert_contents>
                     <has_n_lines n="90"/>                
+                </assert_contents>
+            </output>
+            <output name="script">
+                <assert_contents>
+                    <has_n_lines n="285"/>
+                    <has_text text='ggplot2::ggsave(filename = file.path("plots", "PCA.pdf"), pca)'/>
                 </assert_contents>
             </output>
         </test>

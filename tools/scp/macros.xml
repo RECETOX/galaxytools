@@ -233,6 +233,8 @@
         <section name="data_export" title="Export data" expanded="true">
             <param name="export_tables" type="boolean" checked="false" truevalue="TRUE" falsevalue="FALSE" label="Export intermediate results" help="Whether only the final result table (log2 transformed, normalized, imputed, batch-corrected data) should be exported or all intermediate results."/>
             <param name="export_RData" type="boolean" checked="false" truevalue="TRUE" falsevalue="FALSE" label="Export scp object as RData" help="Whether to export the scp object as RData."/>
+            <param name="export_R_script" type="boolean" checked="false" truevalue="TRUE" falsevalue="FALSE" label="Export the R script to reproduce the analysis"
+                help="Check this box to export the script executed in the Galaxy tool as an R file to be able to reproduce the same processing offline. Not that in this case, the file paths need to be altered and all the dependencies have to be managed manually."/>
         </section>
     </xml>
 
