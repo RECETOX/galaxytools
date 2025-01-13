@@ -2,7 +2,7 @@
     <token name="@TOOL_VERSION@">1.16.0</token>
     <xml name="refs">
         <xrefs>
-               <xref type="bio.tools">mfassignr</xref>
+               <xref type="bio.tools">scp</xref>
         </xrefs>
     </xml>
 
