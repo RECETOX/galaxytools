@@ -18,7 +18,7 @@
     </required_files>
     <expand macro="creator" />
     <command detect_errors="aggressive"><![CDATA[
-    Rscript  -e 'source("${__tool_directory__}/utils.R")' -e 'source("${run_script}")'
+    Rscript  -e 'source("${__tool_directory__}/utils.r")' -e 'source("${run_script}")'
     #if $data_export.export_R_script
     && cat ${run_script} >> $script
     #end if
