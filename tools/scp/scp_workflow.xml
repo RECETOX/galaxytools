@@ -12,6 +12,9 @@
         <requirement type="package" version="3.54.0">bioconductor-sva</requirement>
         <requirement type="package" version="1.80.0">bioconductor-impute</requirement>
         <requirement type="package" version="1.34.0">bioconductor-scater</requirement>
+        <requirement type="package" version="1.16.0">bioconductor-qfeatures</requirement>
+        <requirement type="package" version="3.62.1">bioconductor-limma</requirement>      
+        <requirement type="package" version="1.34.0">bioconductor-scater</requirement>       
     </requirements>
     <required_files>
         <include path="utils.r" />
@@ -30,9 +33,6 @@
         library("dplyr")
         library("sva")  
         library("impute")
-        library("QFeatures")
-        library("limma")
-        library("scater")
 
         data_input <- read.delim("$input_data", sep="\t")
         metadata <- read.delim("$input_annotations", sep="\t")
