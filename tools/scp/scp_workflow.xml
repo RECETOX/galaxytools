@@ -30,6 +30,9 @@
         library("dplyr")
         library("sva")  
         library("impute")
+        library("QFeatures")
+        library("limma")
+        library("scater")
 
         data_input <- read.delim("$input_data", sep="\t")
         metadata <- read.delim("$input_annotations", sep="\t")
