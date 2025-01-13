@@ -413,7 +413,7 @@
             <discover_datasets pattern="__name_and_ext__" directory="outputs" />
             <filter>data_export['export_tables']</filter>
         </collection>
-        <data name="scp_object" format="RData" label="scp object as RData">
+        <data name="scp_object" format="rds" label="scp object as .rds">
             <filter>data_export['export_RData']</filter>
         </data>
         <data name="script" format="txt" label="R script">
