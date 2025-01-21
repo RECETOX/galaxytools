@@ -36,12 +36,10 @@
 
         data_input <- read.delim("$input_data", sep="\t")
         metadata <- read.delim("$input_annotations", sep="\t")
-
         runCol <- colnames(data_input)[$runcol]
         fcol_aggregation_pep <- colnames(data_input)[${peptide_aggregation.column_aggregation_peptides}]
         fcol_aggregation_prot <- colnames(data_input)[${protein_aggregation.column_aggregation_proteins}]
-        print(fcol_aggregation_pep)
-        print(fcol_aggregation_prot)
+
         dir.create("plots")
 
         scp <- scp::readSCP(
@@ -70,8 +68,8 @@
         scp <- scp[, , keepAssay]
         
         number_of_assays <- length(scp)
-
         single_cell_channels <- gsub(",", "|", "${filtering_data.single_cells}")
+
         scp <- computeSCR(scp,
                   i = 1:number_of_assays,
                   colvar = "SampleType",
@@ -98,7 +96,6 @@
                             geom_vline(xintercept = 1, lty = 1)+
                             scale_x_log10()        
         ggplot2::ggsave(filename = file.path("plots", "QC_plot_SCR_col.pdf"), QC_plot_SCR_col)
-
         #end if
 
         scp <- filterFeatures(scp,
@@ -132,7 +129,6 @@
                            refPattern = "Reference")
         #end if
 
-        ## aggregation_fun <- match.fun("${peptide_aggregation.aggregation_peptides}")
         scp <- aggregateFeaturesOverAssays(
             scp,
             i = 1:number_of_assays,
@@ -204,7 +200,6 @@
             name = "peptides_norm",
             method = "${peptide_processing.normalization_method.normalize_simple_method}"
         )
-
         #else
         norm_function_col <- match.fun("$peptide_processing.normalization_method.normalize_columns")
         scp <- sweep(
@@ -332,7 +327,6 @@
             from = "proteins_imptd",
             to = "proteins_batchC"
         )
-
         #else
         sce <- getWithColData(scp, "proteins_imptd")
         preserve_colname <- colnames(metadata)[${batch_correction.select_batch_correction.preserve_col}]
@@ -370,26 +364,26 @@
 
         ggplot2::ggsave(filename = file.path("plots", "PCA.pdf"), pca)
 
-        #if $dimensionality_reduction.PCA_computation.UMAP_computation.run_UMAP == "yes"
-        scp[["proteins_batchC"]] <- scater::runUMAP(
-            scp[["proteins_batchC"]],
-            ncomponents = ${dimensionality_reduction.PCA_computation.UMAP_computation.ncomponents_UMAP},
-            ntop = Inf,
-            scale = TRUE,
-            exprs_values = 1,
-            n_neighbors = 3,
-            dimred = "PCA",
-            name = "UMAP"
-        )
+            #if $dimensionality_reduction.PCA_computation.UMAP_computation.run_UMAP == "yes"
+            scp[["proteins_batchC"]] <- scater::runUMAP(
+                scp[["proteins_batchC"]],
+                ncomponents = ${dimensionality_reduction.PCA_computation.UMAP_computation.ncomponents_UMAP},
+                ntop = Inf,
+                scale = TRUE,
+                exprs_values = 1,
+                n_neighbors = 3,
+                dimred = "PCA",
+                name = "UMAP"
+            )
   
-        umap <- scater::plotReducedDim(
-            scp[["proteins_batchC"]],
-            dimred = "UMAP",
-            colour_by = "SampleType",
-            point_alpha = 1
-        )
-        ggplot2::ggsave(filename = file.path("plots", "UMAP.pdf"), umap)
-        #end if
+            umap <- scater::plotReducedDim(
+                scp[["proteins_batchC"]],
+                dimred = "UMAP",
+                colour_by = "SampleType",
+                point_alpha = 1
+            )
+            ggplot2::ggsave(filename = file.path("plots", "UMAP.pdf"), umap)
+            #end if
         #end if
 
         assay_df <- as.data.frame(assay(scp, "proteins_batchC"))
