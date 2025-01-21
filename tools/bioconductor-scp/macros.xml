@@ -20,10 +20,10 @@
     </xml>
 
     <xml name="aggregation_options">
-        <option value="colMedians" selected="true">Aggregate using the median of each sample (colMedians)</option> 
+        <option value="matrixStats::colMedians" selected="true">Aggregate using the median of each sample (colMedians)</option> 
         <option value="MsCoreUtils::medianPolish">Fit an additive model (two way decomposition) using Tukey's median polish procedure (medianPolish)</option>
-        <option value="colMeans">Aggregate using the mean of each sample (colMeans)</option>
-        <option value="colSums">Aggregate using the sum of each sample (colSums)</option>
+        <option value="BiocGenerics::colMeans">Aggregate using the mean of each sample (colMeans)</option>
+        <option value="BiocGenerics::colSums">Aggregate using the sum of each sample (colSums)</option>
         <option value="MsCoreUtils::robustSummary">Calculate a robust aggregation using MASS::rlm() (robustSummary)</option>
     </xml>
 
@@ -121,12 +121,12 @@
                 </when>
                 <when value="advanced">
                     <param label="Normalization method columns" name="normalize_columns" type="select" display="radio" help="Which normalization method to choose for columns?">
-                        <option value="colMeans">colMeans</option> 
-                        <option value="colMedians" selected="true">colMedians</option> 
+                        <option value="matrixStats::colMeans2">colMeans</option> 
+                        <option value="matrixStats::colMedians" selected="true">colMedians</option> 
                     </param>
                     <param label="Normalization method rows" name="normalize_rows" type="select" display="radio" help="Which normalization method to choose for rows?">
-                        <option value="rowMeans" selected="true">rowMeans</option> 
-                        <option value="rowMedians">rowMedians</option> 
+                        <option value="matrixStats::rowMeans2" selected="true">rowMeans</option> 
+                        <option value="matrixStats::rowMedians">rowMedians</option> 
                     </param>
                 </when>               
             </conditional>
@@ -166,12 +166,12 @@
                 </when>
                 <when value="advanced_prot">
                     <param label="Normalization method columns" name="normalize_columns_prot" display="radio" type="select" help="Which normalization method to choose for columns?">
-                        <option value="colMeans">colMeans</option> 
-                        <option value="colMedians" selected="true">colMedians</option> 
+                        <option value="matrixStats::colMeans2">colMeans</option> 
+                        <option value="matrixStats::colMedians" selected="true">colMedians</option> 
                     </param>
                     <param label="Normalization method rows" name="normalize_rows_prot" display="radio" type="select" help="Which normalization method to choose for rows?">
-                        <option value="rowMeans" selected="true">rowMeans</option> 
-                        <option value="rowMedians">rowMedians</option> 
+                        <option value="matrixStats::rowMeans2" selected="true">rowMeans</option> 
+                        <option value="matrixStats::rowMedians">rowMedians</option> 
                     </param>
                 </when>               
             </conditional>
@@ -232,7 +232,7 @@
             <citation type="doi">10.1080/14789450.2021.1988571</citation>
             <citation type="doi">10.1021/acs.jproteome.3c00227</citation>
             <citation type="doi">10.1007/978-1-0716-3934-4_14</citation>
-            <citation type="doi" >10.1101/2023.12.14.571792</citation>
+            <citation type="doi">10.1101/2023.12.14.571792</citation>
         </citations>        
     </xml>
 

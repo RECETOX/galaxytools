@@ -14,13 +14,14 @@
         <requirement type="package" version="1.34.0">bioconductor-scater</requirement>
         <requirement type="package" version="1.16.0">bioconductor-qfeatures</requirement>
         <requirement type="package" version="3.62.1">bioconductor-limma</requirement>
-        <requirement type="package" version="2.2.1">r-ggplot2</requirement>
+        <requirement type="package" version="3.5.1">r-ggplot2</requirement>
     </requirements>
     <required_files>
         <include path="utils.r" />
     </required_files>
     <expand macro="creator" />
     <command detect_errors="exit_code"><![CDATA[
+    echo ${run_script} &&
     Rscript  -e 'source("${__tool_directory__}/utils.r")' -e 'source("${run_script}")'
     #if $data_export.export_R_script
     && cat ${run_script} >> $script
@@ -28,12 +29,6 @@
     ]]></command>
     <configfiles>
         <configfile name="run_script"><![CDATA[
-        library("scp")
-        library("ggplot2")
-        library("dplyr")
-        library("sva")  
-        library("impute")
-
         data_input <- read.delim("$input_data", sep="\t")
         metadata <- read.delim("$input_annotations", sep="\t")
         runCol <- colnames(data_input)[$runcol]
@@ -49,28 +44,28 @@
             removeEmptyCols = $remove_empty_columns
         )
         number_of_assays <- length(scp)
-        scp <- zeroIsNA(scp, i = 1:number_of_assays)
+        scp <- QFeatures::zeroIsNA(scp, i = 1:number_of_assays)
 
         #if $filtering_data.filter_reverse
-        scp <- filterFeatures(scp,
+        scp <- QFeatures::filterFeatures(scp,
                         ~ Reverse != "+")
         #end if
 
         #if $filtering_data.filter_contaminants
-        scp <- filterFeatures(scp,
+        scp <- QFeatures::filterFeatures(scp,
                         ~ Potential.contaminant != "+")
         #end if
 
-        scp <- filterFeatures(scp,
+        scp <- QFeatures::filterFeatures(scp,
                       ~ !is.na(PIF) & PIF > ${filtering_data.PIF_threshold})
 
-        keepAssay <- dims(scp)[1, ] > ${filtering_data.minimum_features}
+        keepAssay <- QFeatures::dims(scp)[1, ] > ${filtering_data.minimum_features}
         scp <- scp[, , keepAssay]
         
         number_of_assays <- length(scp)
         single_cell_channels <- gsub(",", "|", "${filtering_data.single_cells}")
 
-        scp <- computeSCR(scp,
+        scp <- scp::computeSCR(scp,
                   i = 1:number_of_assays,
                   colvar = "SampleType",
                   carrierPattern = "Carrier",
@@ -79,57 +74,57 @@
                   rowDataName = "MeanSCR")
         
         #if $generate_QC_plots
-        QC_plot_SCR <- rbindRowData(scp, i = 1:number_of_assays) |>
+        QC_plot_SCR <- QFeatures::rbindRowData(scp, i = 1:number_of_assays) |>
                         data.frame() |>
-                        ggplot(aes(x = MeanSCR)) +
-                        geom_histogram() +
-                        geom_vline(xintercept = c(1/$count_cell_carrier, 0.1),
+                        ggplot2::ggplot(ggplot2::aes(x = MeanSCR)) +
+                        ggplot2::geom_histogram() +
+                        ggplot2::geom_vline(xintercept = c(1/$count_cell_carrier, 0.1),
                                                 lty = c(2, 1)) +
-                        scale_x_log10()
+                        ggplot2::scale_x_log10()
         ggplot2::ggsave(filename = file.path("plots", "QC_plot_SCR.pdf"), QC_plot_SCR)
         
-        QC_plot_SCR_col <- rbindRowData(scp, i = 1:number_of_assays) |>
+        QC_plot_SCR_col <- QFeatures::rbindRowData(scp, i = 1:number_of_assays) |>
                             data.frame() |>
-                            ggplot(aes(x = MeanSCR, color = runCol)) +
-                            geom_density() +
-                            geom_vline(xintercept = 0.02, lty = 2) +
-                            geom_vline(xintercept = 1, lty = 1)+
-                            scale_x_log10()        
+                            ggplot2::ggplot(ggplot2::aes(x = MeanSCR, color = runCol)) +
+                            ggplot2::geom_density() +
+                            ggplot2::geom_vline(xintercept = 0.02, lty = 2) +
+                            ggplot2::geom_vline(xintercept = 1, lty = 1)+
+                            ggplot2::scale_x_log10()        
         ggplot2::ggsave(filename = file.path("plots", "QC_plot_SCR_col.pdf"), QC_plot_SCR_col)
         #end if
 
-        scp <- filterFeatures(scp,
+        scp <- QFeatures::filterFeatures(scp,
                       ~ !is.na(MeanSCR) &
                         MeanSCR < ${filtering_data.SCR_threshold})    
 
         #if $filtering_data.qvalue_level == "PSM"
-        scp <- pep2qvalue(scp,
+        scp <- scp::pep2qvalue(scp,
                     i = 1:number_of_assays,
                     PEP = "dart_PEP",
                     rowDataName = "qvalue")
   
-        scp <- filterFeatures(scp,
+        scp <- QFeatures::filterFeatures(scp,
                         ~ qvalue < ${filtering_data.qvalue_threshold})
         #else
-        scp <- pep2qvalue(scp,
+        scp <- scp::pep2qvalue(scp,
                     i = 1:number_of_assays,
                     PEP = "dart_PEP",
                     groupBy = "$filtering_data.qvalue_level",
                     rowDataName = "qvalue")
  
-        scp <- filterFeatures(scp,
+        scp <- QFeatures::filterFeatures(scp,
                         ~ qvalue < ${filtering_data.qvalue_threshold})
         #end if
 
         #if $filtering_data.divide_reference
-        scp <- divideByReference(scp,
+        scp <- scp::divideByReference(scp,
                            i = 1:number_of_assays,
                            colvar = "SampleType",
                            samplePattern = ".",
                            refPattern = "Reference")
         #end if
 
-        scp <- aggregateFeaturesOverAssays(
+        scp <- scp::aggregateFeaturesOverAssays(
             scp,
             i = 1:number_of_assays,
             fcol = fcol_aggregation_pep,
@@ -138,36 +133,36 @@
             na.rm = TRUE
         )
 
-        scp <- joinAssays(scp,
+        scp <- QFeatures::joinAssays(scp,
                   i = grep("peptide", names(scp)),
                   name = "peptides")
    
         keep_samples <- unlist(strsplit("${peptide_filtering.samples_to_keep}", split=","))
-        scp <- scp[,colData(scp)[["SampleType"]] %in% keep_samples, ]
+        scp <- scp[,SummarizedExperiment::colData(scp)[["SampleType"]] %in% keep_samples, ]
 
         #if $peptide_filtering.filter_median_intensity.cut_median_intensity == "yes"
-            medians <- colMedians(assay(scp[["peptides"]]), na.rm = TRUE)
-            colData(scp)[["MedianRI"]] <- medians
+            medians <- colMedians(SummarizedExperiment::assay(scp[["peptides"]]), na.rm = TRUE)
+            SummarizedExperiment::colData(scp)[["MedianRI"]] <- medians
 
             #if $generate_QC_plots
-            QC_medianRI <- colData(scp) |>
+            QC_medianRI <- SummarizedExperimentcolData(scp) |>
                             data.frame() |>
-                            ggplot() +
-                            aes(x = MedianRI,
+                            ggplot2::ggplot() +
+                            ggplot2::aes(x = MedianRI,
                                 y = SampleType,
                                 fill = SampleType) +
-                            geom_boxplot() +
-                            scale_x_log10()
+                            ggplot2::geom_boxplot() +
+                            ggplot2::scale_x_log10()
             ggplot2::ggsave(filename = file.path("plots", "QC_medianRI.pdf"), QC_medianRI)
             #end if
 
-            scp <- scp[, !is.na(colData(scp)[["MedianRI"]]) & colData(scp)[["MedianRI"]] < ${peptide_filtering.filter_median_intensity.median_intensity_threshold}, ]
+            scp <- scp[, !is.na(SummarizedExperiment::colData(scp)[["MedianRI"]]) & SummarizedExperiment::colData(scp)[["MedianRI"]] < ${peptide_filtering.filter_median_intensity.median_intensity_threshold}, ]
         #end if
 
         #if $peptide_filtering.filter_median_CV.cut_median_CV == "yes"
         number_of_observations <- ${peptide_filtering.filter_median_CV.minimum_peptides_CV}
         CV_threshold <- ${peptide_filtering.filter_median_CV.median_CV_threshold}
-        scp <- medianCVperCell(scp,
+        scp <- scp::medianCVperCell(scp,
                          i = 1:number_of_assays,
                          groupBy = "Leading.razor.protein",
                          nobs = number_of_observations,
@@ -176,21 +171,21 @@
                          colDataName = "MedianCV")
 
             #if $generate_QC_plots
-            QC_medianCV <- getWithColData(scp, "peptides") |>
-                            colData() |>
+            QC_medianCV <- MultiAssayExperiment::getWithColData(scp, "peptides") |>
+                            SummarizedExperiment::colData() |>
                             data.frame() |>
-                            ggplot(aes(x = MedianCV,
-                                       fill = SampleType)) +
-                            geom_boxplot() +
-                            geom_vline(xintercept = CV_threshold)
+                            ggplot2::ggplot(ggplot2::aes(x = MedianCV,
+                                fill = SampleType)) +
+                            ggplot2::geom_boxplot() +
+                            ggplot2::geom_vline(xintercept = CV_threshold)
             ggplot2::ggsave(filename = file.path("plots", "QC_medianCV.pdf"), QC_medianCV)
             #end if
 
-        scp <- scp[, !is.na(colData(scp)[["MedianCV"]]) & colData(scp)[["MedianCV"]] < CV_threshold, ]
+        scp <- scp[, !is.na(SummarizedExperiment::colData(scp)[["MedianCV"]]) & SummarizedExperiment::colData(scp)[["MedianCV"]] < CV_threshold, ]
         #end if
         
         #if $peptide_filtering.remove_blank
-        scp <- scp[, colData(scp)[["SampleType"]] != "Blank", ]
+        scp <- scp[, SummarizedExperiment::colData(scp)[["SampleType"]] != "Blank", ]
         #end if
 
         #if $peptide_processing.normalization_method.choose_normalization == "simple"
@@ -201,28 +196,26 @@
             method = "${peptide_processing.normalization_method.normalize_simple_method}"
         )
         #else
-        norm_function_col <- match.fun("$peptide_processing.normalization_method.normalize_columns")
-        scp <- sweep(
+        scp <- QFeatures::sweep(
             scp,
             i = "peptides", 
             MARGIN = 2,
             FUN = "/",
-            STATS = norm_function_col(assay(scp[["peptides"]]), na.rm = TRUE),
+            STATS = ${peptide_processing.normalization_method.normalize_columns}(SummarizedExperiment::assay(scp[["peptides"]]), na.rm = TRUE),
             name = "peptides_norm_col"
         )
 
-        norm_function_row <- match.fun("$peptide_processing.normalization_method.normalize_rows")
-        scp <- sweep(
+        scp <- QFeatures::sweep(
             scp,
             i = "peptides_norm_col",
             MARGIN = 1,
             FUN = "/",
-            STATS = norm_function_row(assay(scp[["peptides_norm_col"]]),  na.rm = TRUE),
+            STATS = ${peptide_processing.normalization_method.normalize_rows}(SummarizedExperiment::assay(scp[["peptides_norm_col"]]),  na.rm = TRUE),
             name =  "peptides_norm"
         ) 
         #end if
 
-        scp <- logTransform(
+        scp <- QFeatures::logTransform(
             scp,
             base = ${peptide_processing.base},
             i = "peptides_norm",
@@ -239,10 +232,10 @@
 
         #if $peptide_processing.remove_missing_peptides.remove_peptides == "yes"
         pNA <-  ${peptide_processing.remove_missing_peptides.pNA_peptides} / 100
-        scp <- filterNA(scp, i = "peptides_log", pNA = pNA)
+        scp <- QFeatures::filterNA(scp, i = "peptides_log", pNA = pNA)
         #end if
 
-        scp <- aggregateFeaturesOverAssays(
+        scp <- scp::aggregateFeaturesOverAssays(
             scp,
             i = "peptides_log",
             fcol = fcol_aggregation_prot,
@@ -259,23 +252,21 @@
             method = "${protein_processing.normalization_method_protein.normalize_simple_method_prot}"
         )
         #else
-        norm_function_col <- match.fun("${protein_processing.normalization_method_protein.normalize_columns_prot}")
-        scp <- sweep(
+        scp <- QFeatures::sweep(
             scp,
             i = "proteins", 
             MARGIN = 2,
             FUN = "/",
-            STATS = norm_function_col(assay(scp[["proteins"]]), na.rm = TRUE),
+            STATS = ${protein_processing.normalization_method_protein.normalize_columns_prot}(SummarizedExperiment::assay(scp[["proteins"]]), na.rm = TRUE),
             name = "proteins_norm_col"
         )
 
-        norm_function_row <- match.fun("${protein_processing.normalization_method_protein.normalize_rows_prot}")
-        scp <- sweep(
+        scp <- QFeatures::sweep(
             scp,
             i = "proteins_norm_col",
             MARGIN = 1,
             FUN = "/",
-            STATS = norm_function_row(assay(scp[["proteins_norm_col"]]),  na.rm = TRUE),
+            STATS = ${protein_processing.normalization_method_protein.normalize_rows_prot}(SummarizedExperiment::assay(scp[["proteins_norm_col"]]),  na.rm = TRUE),
             name =  "proteins_norm"
         ) 
         #end if
@@ -292,7 +283,7 @@
         dev.off()
         #end if
 
-        scp <- impute(
+        scp <- QFeatures::impute(
             scp,
             i = "proteins_norm",
             name = "proteins_imptd",
@@ -306,40 +297,40 @@
 
         batch_colname <- colnames(metadata)[${batch_correction.select_batch_correction.batch_col}]
         #if $batch_correction.select_batch_correction.batch_correction_method == "combat"
-        sce <- getWithColData(scp, "proteins_imptd")
-        batch <- colData(scp)[[batch_colname]]
-        model <- model.matrix(~ SampleType, data = colData(sce))
+        sce <- MultiAssayExperiment::getWithColData(scp, "proteins_imptd")
+        batch <- SummarizedExperiment::colData(scp)[[batch_colname]]
+        model <- stats::model.matrix(~ SampleType, data = SummarizedExperiment::colData(sce))
   
-        assay(sce) <- ComBat(
-            dat = assay(sce),
+        SummarizedExperiment::assay(sce) <- sva::ComBat(
+            dat = SummarizedExperiment::assay(sce),
             batch = batch,
             mod = model
         )
 
-        scp <- addAssay(
+        scp <- QFeatures::addAssay(
             scp,
             y = sce,
             name = "proteins_batchC"
         )
 
-        scp <- addAssayLinkOneToOne(
+        scp <- QFeatures::addAssayLinkOneToOne(
             scp,
             from = "proteins_imptd",
             to = "proteins_batchC"
         )
         #else
-        sce <- getWithColData(scp, "proteins_imptd")
+        sce <- MultiAssayExperiment::getWithColData(scp, "proteins_imptd")
         preserve_colname <- colnames(metadata)[${batch_correction.select_batch_correction.preserve_col}]
 
-        assay(sce) <- limma::removeBatchEffect(
-            assay(sce),
+        SummarizedExperiment::assay(sce) <- limma::removeBatchEffect(
+            SummarizedExperiment::assay(sce),
             group = sce[[preserve_colname]],
             batch = sce[[batch_colname]]
         )
-        scp <- addAssay(scp,
+        scp <- QFeatures::addAssay(scp,
                   y = sce,
                   name = "proteins_batchC")
-        scp <- addAssayLinkOneToOne(scp,
+        scp <- QFeatures::addAssayLinkOneToOne(scp,
                               from = "proteins_imptd",
                               to = "proteins_batchC")
         #end if 
@@ -386,8 +377,8 @@
             #end if
         #end if
 
-        assay_df <- as.data.frame(assay(scp, "proteins_batchC"))
-        row_metadata <- as.data.frame(rowData(scp[["proteins_batchC"]]))
+        assay_df <- as.data.frame(SummarizedExperiment::assay(scp, "proteins_batchC"))
+        row_metadata <- as.data.frame(SummarizedExperiment::rowData(scp[["proteins_batchC"]]))
 
         export_data <- cbind(row_metadata, as.data.frame(assay_df))
         write.table(export_data, file = '$Processed_data', sep = "\t", quote = F)
@@ -480,6 +471,7 @@
             <param name="column_aggregation_proteins" value="17"/>
             <param name="batch_col" value="2"/>
             <param name="export_tables" value="true"/>
+            <param name="pca_coloring" value="4"/>
             <output_collection name="intermediate_outputs" type="list" count="6"/>
             <output name="Processed_data">
                 <assert_contents>
@@ -500,6 +492,7 @@
             <param name="export_R_script" value="TRUE"/>
             <param name="column_aggregation_peptides" value="6"/>
             <param name="column_aggregation_proteins" value="17"/>
+            <param name="pca_coloring" value="4"/>
             <output name="Processed_data">
                 <assert_contents>
                     <has_size size="625000" delta="20"/>
@@ -509,7 +502,7 @@
             </output>
             <output name="script">
                 <assert_contents>
-                    <has_n_lines n="285"/>
+                    <has_n_lines n="271"/>
                     <has_text text='ggplot2::ggsave(filename = file.path("plots", "PCA.pdf"), pca)'/>
                 </assert_contents>
             </output>
