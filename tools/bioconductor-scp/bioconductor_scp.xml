@@ -1,4 +1,4 @@
-<tool id="scp" name="bioconductor-scp" version="@TOOL_VERSION@+galaxy0" profile="23.0">
+<tool id="bioconductor_scp" name="bioconductor-scp" version="@TOOL_VERSION@+galaxy0" profile="23.0">
     <description>single cell proteomics data analysis workflow</description>
     <macros>
         <import>macros.xml</import>
@@ -13,8 +13,8 @@
         <requirement type="package" version="1.80.0">bioconductor-impute</requirement>
         <requirement type="package" version="1.34.0">bioconductor-scater</requirement>
         <requirement type="package" version="1.16.0">bioconductor-qfeatures</requirement>
-        <requirement type="package" version="3.62.1">bioconductor-limma</requirement>      
-        <requirement type="package" version="1.34.0">bioconductor-scater</requirement>       
+        <requirement type="package" version="3.62.1">bioconductor-limma</requirement>
+        <requirement type="package" version="2.2.1">r-ggplot2</requirement>
     </requirements>
     <required_files>
         <include path="utils.r" />
@@ -429,7 +429,7 @@
     </outputs>
     <tests>
         <test expect_num_outputs='2'>
-            <param name="input_data" value="evidence_subset.txt" />
+            <param name="input_data" value="evidence_subset.txt"/>
             <param name="input_annotations" value="sampleAnnotation.txt"/>
             <param name="runcol" value="19"/>
             <param name="single_cells" value="Macrophage,Monocyte"/>
@@ -437,10 +437,12 @@
             <param name="batch_col" value="2"/>
             <param name="column_aggregation_peptides" value="6"/>
             <param name="column_aggregation_proteins" value="17"/>
+            <param name="pca_coloring" value="4"/>
             <output name="Processed_data">
                 <assert_contents>
                     <has_n_lines n="90"/>
-                    <has_text text="E9PAV3"/>            
+                    <has_text text="E9PAV3"/>
+                    <has_size size="625000" delta="20"/>
                 </assert_contents>
             </output>
         </test>
@@ -468,7 +470,9 @@
             </output_collection>
             <output name="Processed_data">
                 <assert_contents>
-                    <has_n_lines n="90"/>                
+                    <has_size size="625000" delta="20"/>
+                    <has_n_lines n="90"/>
+                    <has_text text="E9PAV3"/>
                 </assert_contents>
             </output>
         </test>
@@ -486,6 +490,8 @@
             <output name="Processed_data">
                 <assert_contents>
                     <has_size size="625000" delta="20"/>
+                    <has_n_lines n="90"/>
+                    <has_text text="E9PAV3"/>
                 </assert_contents>
             </output>
         </test>
@@ -502,7 +508,9 @@
             <param name="column_aggregation_proteins" value="17"/>
             <output name="Processed_data">
                 <assert_contents>
-                    <has_n_lines n="90"/>                
+                    <has_size size="625000" delta="20"/>
+                    <has_n_lines n="90"/>
+                    <has_text text="E9PAV3"/>
                 </assert_contents>
             </output>
             <output name="script">

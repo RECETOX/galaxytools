@@ -7,4 +7,4 @@ categories:
 description: "scp is a package for the single cell proteomics data processing."
 long_description: "scp is an R package for the analysis of mass spectrometry-based single cell proteomics data. It builds on the QFeatures package and allows aggregation to peptide or protein level, data transformation such as log2 transformation or normalization, batch correction and imputation of missing values. It also provides several quality control metrics."
 type: unrestricted
-name: scp
+name: bioconductor_scp
