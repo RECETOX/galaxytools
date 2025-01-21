@@ -20,7 +20,7 @@
         <include path="utils.r" />
     </required_files>
     <expand macro="creator" />
-    <command detect_errors="aggressive"><![CDATA[
+    <command detect_errors="exit_code"><![CDATA[
     Rscript  -e 'source("${__tool_directory__}/utils.r")' -e 'source("${run_script}")'
     #if $data_export.export_R_script
     && cat ${run_script} >> $script
