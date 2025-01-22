@@ -1,6 +1,6 @@
 name: tables
 owner: recetox
-remote_repository_url: "https://github.com/RECETOX/galaxytools/tree/master/tools/analysis"
+remote_repository_url: "https://github.com/RECETOX/galaxytools/tree/master/tools/tables"
 homepage_url: "https://github.com/RECETOX/galaxytools"
 categories:
   - Metabolomics
