@@ -2,7 +2,6 @@ import argparse
 
 import numpy as np
 from scipy.interpolate import Akima1DInterpolator, CubicSpline, PchipInterpolator
-
 from utils import LoadDataAction, StoreOutputAction
 
 
