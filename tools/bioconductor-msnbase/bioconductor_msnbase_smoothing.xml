@@ -1,0 +1,94 @@
+<tool id="bioconductor_msnbase_smoothing" name="bioconductor-msnbase smoothing" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="20.01" license="MIT">
+    <description>smooth raw MS data</description>
+    <xrefs>
+        <xref type="bio.tools">msnbase</xref>
+    </xrefs>
+    <macros>
+        <token name="@TOOL_VERSION@">2.32.0</token>
+        <token name="@VERSION_SUFFIX@">0</token>
+    </macros>
+    <!-- TODO: please annotate this tool with topics and operations from http://edamontology.org -->
+    <!-- TODO: for more information see: https://galaxy-iuc-standards.readthedocs.io/en/latest/best_practices/tool_xml.html#edam-topics-and-operations -->
+    <edam_topics>
+        <edam_topic>topic_3170</edam_topic> <!-- Proteomics -->
+        <edam_topic>topic_3391</edam_topic> <!-- Data handling -->
+    </edam_topics>
+    <edam_operations>
+        <edam_operation>operation_3632</edam_operation> <!-- Data smoothing -->
+        <edam_operation>operation_2945</edam_operation> <!-- Data handling -->
+    </edam_operations>
+    <requirements>
+        <requirement type="package" version="@TOOL_VERSION@">bioconductor-msnbase</requirement>
+    </requirements>
+    <command detect_errors="exit_code"><![CDATA[
+    Rscript -e 'source("${run_script}")'
+    ]]></command>
+    <configfiles>
+        <configfile name="run_script"><![CDATA[
+            data_prof <- MSnbase::readMSData("$input_file", mode = "onDisk")
+            #if $smoothing.method == "SavitzkyGolay"
+            data_smoothed <- MSnbase::smooth(data_prof, method = "$method", halfWindowSize = $halfWindowSize, polynomialOrder = $smoothing.polynomial)
+            #else if $smoothing.method == "MovingAverage"
+            data_smoothed <- MSnbase::smooth(data_prof, method = "$method", halfWindowSize = $halfWindowSize, weighted = $smoothing.weighted)
+            #end if
+            MSnbase::writeMSData(
+                data_smoothed,
+                file = "smoothed.mzml",
+                copy = TRUE,
+                outformat = "mzml"
+            )
+        ]]></configfile>
+    </configfiles>
+    <inputs>
+        <param name="input_file" type="data" format="mzml" label="Input mzML File" help="The input mzML file containing the MSnbase data."/>
+
+
+
+        <conditional name="smoothing">
+            <param name="method" type="select" label="Smoothing Method" help="The smoothing method to use.">
+                <option value="SavitzkyGolay">Savitzky-Golay</option>
+                <option value="MovingAverage">Moving Average</option>
+            </param>
+            <when value="SavitzkyGolay">
+                <param label="polynomialOrder" name="polynomial" value="3" min="1" max="7" type="integer" help="Polynomial order for the Savitzky-Golay filter.." />
+            </when>
+            <when value="MovingAverage">
+                <param argument="weighted" type="boolean" truevalue="TRUE" falsevalue="FALSE" checked="false" label="Weighted" help="Whether to weight the moving average depending on the distance from the centre." />
+            </when>
+        </conditional>
+
+        <param name="halfWindowSize" type="integer" label="Half window size" min="2" help="The span parameter for the smoothing method."/>
+    </inputs>
+    <outputs>
+        <data name="output_file" format="mzml" label="Smoothed ${on_string} using ${method}" from_work_dir="smoothed.mzml"/>
+    </outputs>
+    <tests>
+        <test>
+            <param name="input_file" value="test.mzml"/>
+            <param name="method" value="SavitzkyGolay"/>
+            <param name="halfWindowSize" value="4"/>
+            <output name="output_file" file="test_output.mzml"/>
+        </test>
+    </tests>
+    <help><![CDATA[
+
+.. class:: infomark
+
+**What it does**
+
+This tool performs smoothing of MSnbase data using Bioconductor. It supports Savitzky-Golay and Moving Average smoothing methods.
+
+**Input**
+
+- **Input mzML File**: The input mzML file containing the MSnbase data.
+- **Smoothing Method**: The smoothing method to use. Options are Savitzky-Golay and Moving Average.
+- **Span**: The span parameter for the smoothing method.
+
+**Output**
+
+- **Smoothed mzML File**: The output mzML file with smoothed data.
+    ]]></help>
+    <citations>
+        <citation type="doi">10.18129/B9.bioc.MSnbase</citation>
+    </citations>
+</tool>
