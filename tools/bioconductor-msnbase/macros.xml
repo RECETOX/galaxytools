@@ -1,0 +1,29 @@
+<macros>
+    <xml name="creator">
+        <creator>
+            <person
+                givenName="Helge"
+                familyName="Hecht"
+                url="https://github.com/hechth"
+                identifier="0000-0001-6744-996X" />
+            <organization
+                url="https://www.recetox.muni.cz/"
+                email="GalaxyToolsDevelopmentandDeployment@space.muni.cz"
+                name="RECETOX MUNI" />
+        </creator>
+    </xml>
+
+    <xml name="xrefs">
+        <xrefs>
+            <xref type="bio.tools">msnbase</xref>
+        </xrefs>
+    </xml>
+
+    <token name="@TOOL_VERSION@">2.32.0</token>
+    <token name="@VERSION_SUFFIX@">0</token>
+    <xml name="requirements">
+        <requirements>
+            <requirement type="package" version="@TOOL_VERSION@">bioconductor-msnbase</requirement>
+        </requirements>
+    </xml>
+</macros>

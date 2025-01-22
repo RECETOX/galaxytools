@@ -1,11 +1,7 @@
-<tool id="bioconductor_msnbase_smoothing" name="bioconductor-msnbase smoothing" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="20.01" license="MIT">
-    <description>smooth raw MS data</description>
-    <xrefs>
-        <xref type="bio.tools">msnbase</xref>
-    </xrefs>
+<tool id="bioconductor_msnbase_smooth_mz" name="bioconductor-msnbase smooth mz" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="23.0" license="MIT">
+    <description>smooth raw MS data in mass-to-charge ratio domain</description>
     <macros>
-        <token name="@TOOL_VERSION@">2.32.0</token>
-        <token name="@VERSION_SUFFIX@">0</token>
+        <import>macros.xml</import>
     </macros>
     <!-- TODO: please annotate this tool with topics and operations from http://edamontology.org -->
     <!-- TODO: for more information see: https://galaxy-iuc-standards.readthedocs.io/en/latest/best_practices/tool_xml.html#edam-topics-and-operations -->
@@ -17,9 +13,11 @@
         <edam_operation>operation_3632</edam_operation> <!-- Data smoothing -->
         <edam_operation>operation_2945</edam_operation> <!-- Data handling -->
     </edam_operations>
-    <requirements>
-        <requirement type="package" version="@TOOL_VERSION@">bioconductor-msnbase</requirement>
-    </requirements>
+
+    <expand macro="xrefs"/>
+    <expand macro="creator"/>
+    <expand macro="requirements"/>
+
     <command detect_errors="exit_code"><![CDATA[
     Rscript -e 'source("${run_script}")'
     ]]></command>
@@ -41,9 +39,6 @@
     </configfiles>
     <inputs>
         <param name="input_file" type="data" format="mzml" label="Input mzML File" help="The input mzML file containing the MSnbase data."/>
-
-
-
         <conditional name="smoothing">
             <param name="method" type="select" label="Smoothing Method" help="The smoothing method to use.">
                 <option value="SavitzkyGolay">Savitzky-Golay</option>
@@ -56,8 +51,7 @@
                 <param argument="weighted" type="boolean" truevalue="TRUE" falsevalue="FALSE" checked="false" label="Weighted" help="Whether to weight the moving average depending on the distance from the centre." />
             </when>
         </conditional>
-
-        <param name="halfWindowSize" type="integer" label="Half window size" min="2" help="The span parameter for the smoothing method."/>
+        <param name="halfWindowSize" type="integer" label="Half window size" min="2" value="4" help="The span parameter for the smoothing method."/>
     </inputs>
     <outputs>
         <data name="output_file" format="mzml" label="Smoothed ${on_string} using ${method}" from_work_dir="smoothed.mzml"/>
