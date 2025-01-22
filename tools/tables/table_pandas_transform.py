@@ -1,7 +1,7 @@
 import argparse
 
 import numpy as np
-from utils import LoadDataAction, StoreOutputAction, SplitColumnIndicesAction
+from utils import LoadDataAction, SplitColumnIndicesAction, StoreOutputAction
 
 def apply_transformation(df, columns, transformation):
     for column_index in columns:
@@ -26,11 +26,13 @@ def apply_transformation(df, columns, transformation):
             raise ValueError(f"Unsupported transformation: {transformation}")
     return df
 
+
 def main(input_dataset, columns, transformation, output_dataset):
     df = input_dataset
     df = apply_transformation(df, columns, transformation)
     write_func, file_path = output_dataset
     write_func(df, file_path)
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
