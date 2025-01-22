@@ -3,6 +3,7 @@ import argparse
 import numpy as np
 from utils import LoadDataAction, SplitColumnIndicesAction, StoreOutputAction
 
+
 def apply_transformation(df, columns, transformation):
     for column_index in columns:
         column_name = df.columns[column_index]  # Use 0-based index directly
