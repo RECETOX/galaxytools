@@ -43,3 +43,9 @@ class StoreOutputAction(argparse.Action):
         else:
             raise ValueError(f"Unsupported file format: {file_extension}")
         setattr(namespace, self.dest, (write_func, file_path))
+
+
+class SplitColumnIndicesAction(argparse.Action):
+    def __call__(self, parser, namespace, values, option_string=None):
+        indices = [int(x) - 1 for x in values.split(',')]  # Convert to 0-based indices
+        setattr(namespace, self.dest, indices)

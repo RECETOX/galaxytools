@@ -1,0 +1,55 @@
+<tool id="table_pandas_transform" name="table column transformations" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="20.01" license="MIT">
+    <description>apply transformations on multiple columns</description>
+    <macros>
+        <token name="@TOOL_VERSION@">2.2.3</token>
+        <token name="@VERSION_SUFFIX@">0</token>
+    </macros>
+    <requirements>
+        <requirement type="package" version="@TOOL_VERSION@">pandas</requirement>
+        <requirement type="package" version="18.0.0">pyarrow</requirement>
+    </requirements>
+    <command detect_errors="exit_code"><![CDATA[
+        python3 '$__tool_directory__/table_pandas_transform.py' 
+            --input_dataset '$input_dataset' '$input_dataset.ext' 
+            --columns '$columns' 
+            --transformation '$transformation' 
+            --output_dataset '$output_dataset' '$output_dataset.ext'
+    ]]></command>
+    <inputs>
+        <param name="input_dataset" type="data" format="csv,tsv,tabular,parquet" label="Input Dataset"/>
+        <param name="columns" type="data_column" data_ref="input_dataset" use_header_names="true" multiple="true" label="Column" help="Column from the dataset to perform the computation on."/>
+        <param name="transformation" type="select" label="Transformation">
+            <option value="log2">Log2</option>
+            <option value="log10">Log10</option>
+            <option value="ln">Ln</option>
+            <option value="sqrt">Sqrt</option>
+            <option value="exp">Exp</option>
+            <option value="abs">Abs</option>
+            <option value="floor">Floor</option>
+            <option value="ceil">Ceil</option>
+        </param>
+    </inputs>
+    <outputs>
+        <data name="output_dataset" format_source="input_dataset" label="${tool.name} on ${on_string}">
+            <change_format>
+                <when input="input_dataset.ext" value="tsv" format="tabular" />
+            </change_format>
+        </data>
+    </outputs>
+    <tests>
+        <test expect_num_outputs="1">
+            <param name="input_dataset" value="query.tabular" ftype="tabular"/>
+            <param name="columns" value="1,3"/>
+            <param name="transformation" value="ln"/>
+            <output name="output_dataset" file="transform/query_log.tabular" ftype="tabular"/>
+        </test>
+    </tests>
+    <help>
+        This tool applies transformations on multiple columns of a table.
+        Supported transformations are: log2, log10, ln, sqrt, exp, abs, floor, and ceil.
+    </help>
+    <citations>
+        <citation type="doi">10.5281/zenodo.3509134</citation>
+        <citation type="doi">10.25080/Majora-92bf1922-00a</citation>
+    </citations>
+</tool>

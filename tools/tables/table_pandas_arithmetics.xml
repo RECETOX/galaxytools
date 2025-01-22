@@ -1,4 +1,4 @@
-<tool id="pandas_arithmetics" name="pandas arithmetics" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="20.01" license="MIT">
+<tool id="table_pandas_arithmetics" name="table arithmetics" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="20.01" license="MIT">
     <description>perform arithmetic operations on a dataframe column</description>
     <macros>
         <token name="@TOOL_VERSION@">2.2.3</token>

@@ -1,4 +1,4 @@
-<tool id="table_pandas_rename_column" name="rename column" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="20.01" license="MIT">
+<tool id="table_pandas_rename_column" name="table rename column" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="20.01" license="MIT">
     <description>of a table</description>
     <!-- <xrefs>
         <xref type="bio.tools"></xref>
