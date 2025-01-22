@@ -1,5 +1,4 @@
 import argparse
-import pandas as pd
 from utils import LoadDataAction, StoreOutputAction
 
 
