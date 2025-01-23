@@ -8,35 +8,38 @@
     </requirements>
 
     <command detect_errors="exit_code"><![CDATA[
-        python3 '${ipapy2_MS2_annotation_cli}'
+         python3  '${__tool_directory__}/ipapy2_MS2_annotation.py'
+            --mapped_isotope_patterns '${mapped_isotope_patterns}'
+            --MS2_fragmentation_data '${MS2_fragmentation_data}'
+            --all_adducts '${all_adducts}'
+            --MS2_DB '${MS2_DB}'
+            --ppm ${ppm}
+            --me ${me}
+            --ratiosd ${ratiosd}
+            #if $ppmunk
+            --ppmunk ${ppmunk}
+            #else
+                --ppmunk ${ppm}
+            #end if
+            --ratiounk ${ratiounk}
+            #if $ppmthr
+                --ppmthr ${ppmthr}
+            #else
+                --ppmthr 0
+            #end if
+            --pRTNone ${pRTNone}
+            --pRTout ${pRTout}
+            --mzdCS ${mzdCS}
+            --ppmCS ${ppmCS}
+            --CSunk ${CSunk}
+            --evfilt ${evfilt}
     ]]></command>
 
-<configfiles>
-<configfile name="ipapy2_MS2_annotation_cli">
-@init_import@
-import os
-
-df = pd.read_csv('${MS1_table}', keep_default_na=False)
-df = df.replace('', None)
-dfMS2 = pd.read_csv('${MS2_table}', keep_default_na=False)
-dfMS2 = dfMS2.replace('', None)
-allAdds = pd.read_csv('${all_adducts}', keep_default_na=False)
-allAdds = allAdds.replace('', None)
-DBMS2 = pd.read_csv('${DBMS2_table}', keep_default_na=False)
-DBMS2 = DBMS2.replace('', None)
-ppmunk = os.getenv('ppmunk', $ppm)
-ppmthr = os.getenv('ppmthr', 2*$ppm)
-annotations = ipa.MSMSannotation(df, dfMS2, allAdds, DBMS2, ppm=$ppm, ratiosd=$ratiosd, ppmunk=ppmunk, ratiounk=$ratiounk, ppmthr=ppmthr, pRTNone=$pRTNone, pRTout=$pRTout, mzdCS=$mzdCS, ppmCS=$ppmCS, CSunk=$CSunk, evfilt=$evfilt, ncores=int(os.environ.get('GALAXY_SLOTS')))
-@annotation_flatten@
-annotations_flat.to_csv('${output}', index=False)
-</configfile>
-</configfiles>
-
     <inputs>
-        <param label="MS1 table" name="MS1_table" type="data" format="csv" help="pandas dataframe containing the MS1 data." />
-        <param label="MS2 table" name="MS2_table" type="data" format="csv" help="pandas dataframe containing the MS2 data." />
-        <param label="all possible adducts table" name="all_adducts" type="data" format="csv" help="pandas dataframe containing the information on all the possible adducts given the database." />
-        <param label="DBMS2 table" name="DBMS2_table" type="data" format="csv" help="pandas dataframe containing the database containing the MS2 information." />
+        <param label="Mapped isotope patterns" name="mapped_isotope_patterns" type="data" format="csv" help="A csv file containing the MS1 data. Ideally obtained from map_isotope_patterns" />
+        <param label="MS2 fragmentation data" name="MS2_fragmentation_data" type="data" format="csv" help="A csv file containing the MS2 data." />
+        <param label="all possible adducts table" name="all_adducts" type="data" format="csv" help="A csv file containing the information on all the possible adducts given the database." />
+        <param label="MS2 Database" name="MS2_DB" type="data" format="csv" help="A csv file containing the database containing the MS2 information." />
         <param label="ppm" name="ppm" type="float" help="accuracy of the MS instrument used."/>
         <section name="unknown" title="unknown settings">
             <param name="ppmunk" type="float" optional="true">
@@ -54,6 +57,9 @@ annotations_flat.to_csv('${output}', index=False)
         </section>
 
         <section name="optional_settings" title="optional settings">
+            <param name="me" type="float" value="5.48579909065e-04" label="mass of the electron">
+                <help>accurate mass of the electron. Default 5.48579909065e-04</help>
+            </param>
             <param name="ratiosd" type="float" value="0.9" label="intensity ratio">
                 <help>acceptable ratio between predicted intensity and observed intensity of isotopes</help>
             </param>

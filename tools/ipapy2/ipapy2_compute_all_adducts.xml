@@ -24,8 +24,8 @@ all_adducts.to_csv('${all_adducts}', index=False)
 </configfiles>
 
     <inputs>
-        <param label="Adducts data" name="adducts_data" type="data" format="csv" help="Dataframe containing information on all possible adducts."/>
-        <param label="MS database" name="MS1_DB" type="data" format="csv" help="Dataframe containing the MS1 database."/>
+        <param label="Adducts data" name="adducts_data" type="data" format="csv" help="A csv file containing information on all possible adducts."/>
+        <param label="MS database" name="MS1_DB" type="data" format="csv" help="A csv file containing the MS1 database."/>
         <expand macro="ionisation"/>
     </inputs>
 

@@ -18,7 +18,7 @@ clustered_df.to_csv('${clustered_MS1_intensities}', index=False)
 </configfile>
     </configfiles>
     <inputs>
-        <param label="Unclustered data" name="unclustered_MS1_intensities" type="data" format="csv" help="a dataframe containing the measured intensities across several samples, yet to be clustered"/>
+        <param label="Unclustered data" name="unclustered_MS1_intensities" type="data" format="csv" help="a csv file containing the measured intensities across several samples, yet to be clustered"/>
         <section name="clustering" title="clustering settings">
             <param name="Cthr" type="float" value="0.8">
                 <label>correlation threshold</label>

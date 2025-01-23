@@ -23,7 +23,7 @@ clustered_df.to_csv('${mapped_isotope_patterns}', index=False)
 </configfiles>
 
     <inputs>
-        <param label="IPA dataframe" name="clustered_MS1_intensities" type="data" format="csv" help="a dataframe of clustered MS1 intensities." />
+        <param label="IPA dataframe" name="clustered_MS1_intensities" type="data" format="csv" help="A csv file of clustered MS1 intensities." />
         <expand macro="ionisation"/>
         <section name="isotope" title="isotope settings">
             <param name="isoDiff" type="float" value="1">
