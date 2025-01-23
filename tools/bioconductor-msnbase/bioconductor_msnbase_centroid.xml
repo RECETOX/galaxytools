@@ -36,14 +36,19 @@
         ]]></configfile>
     </configfiles>
     <inputs>
-        <param name="input_file" type="data" format="mzml" label="Input mzML File" help="The input mzML file containing the MS data."/>
-        <param argument="mslevel" type="boolean" truevalue="2" falsevalue="1" checked="false" label="MS2" help="Does the dataset contain MS2 data?" />
-        <param name="halfWindowSize" type="integer" label="Half window size" min="1" value="2" help="The window size parameter for the centroiding method."/>
-        <param name="estimate_noise_method" type="select" label="Noise estimation method" help="Method to choose to estimate the noise in the spectrum.">
+        <param name="input_file" type="data" format="mzml" label="Input mzML File"
+            help="The input mzML file containing the mass spectrometry data to be centroided."/>
+        <param argument="mslevel" type="boolean" truevalue="2" falsevalue="1" checked="false" label="MS2"
+            help="Specify if the dataset contains MS2 (tandem mass spectrometry) data." />
+        <param name="halfWindowSize" type="integer" label="Half window size" min="1" value="2"
+            help="The half window size for the centroiding method. This determines the number of data points on either side of the center point to include in the centroiding calculation."/>
+        <param name="estimate_noise_method" type="select" label="Noise estimation method"
+            help="Method to choose to estimate the noise in the spectrum.">
             <option value="MAD" selected="true">Median Absolute Deviation</option>
             <option value="SuperSmoother">Friedman's Super Smoother</option>
         </param>
-        <param argument="--snr" type="float" min="0" value="3" label="Signal-to-noise ratio (SNR)" help="Signal-to-noise ratio to remove noisy signal." />
+        <param argument="--snr" type="float" min="0" value="3" label="Signal-to-noise ratio (SNR)"
+            help="The signal-to-noise ratio threshold for removing noisy signals." />
         <conditional name="refinement">
             <param name="method" type="select" label="Peak refinement method" 
                 help="The method refines the m/z value of the identified centroids by considering data points that belong (most likely) to the same mass peak.
@@ -54,42 +59,84 @@
                 <option value="descendPeak">Descend Peak</option>
             </param>
             <when value="kNeighbors">
-                <param argument="--k" type="integer" min="1" max="10" value="2" label="K" help="Number of 2*K nearest neighbours for mz interpolation." />
+                <param argument="--k" type="integer" min="1" max="10" value="2" label="K"
+                    help="The number of 2*K nearest neighbors to consider for m/z interpolation during peak refinement."/>
             </when>
             <when value="descendPeak">
-                <param argument="--signal_percentage" type="integer" min="0" max="100" value="20" label="Intensity threshold (%)" help="Signal intensity cutoff threshold for including values in mz calculation." />
-                <param argument="stop_at_two" type="boolean" truevalue="TRUE" falsevalue="FALSE" checked="false" label="Stop at two" help="Stop the descend only once two increasing scans are encountered instead of at the first encounter." />
+                <param argument="--signal_percentage" type="integer" min="0" max="100" value="20" label="Intensity threshold (%)"
+                    help="The signal intensity cutoff threshold (as a percentage) for including values in the m/z calculation during peak refinement." />
+                <param argument="stop_at_two" type="boolean" truevalue="TRUE" falsevalue="FALSE" checked="false" label="Stop at two"
+                    help="Specify whether to stop the descent only after encountering two increasing scans, instead of stopping at the first increasing scan." />
             </when>
             <when value="none"/>
         </conditional>
     </inputs>
     <outputs>
-        <data name="output_file" format="mzml" label="${on_string} centroided" from_work_dir="centroided.mzml"/>
+        <data name="output_file" format="mzml" label="${on_string} centroided with refinement ${refinement.method}" from_work_dir="centroided.mzml"/>
     </outputs>
     <tests>
         <test>
             <param name="input_file" value="29_qc_no_dil_milliq_subset.mzML"/>
-            <output name="output_file" file="test_output_centroided.mzml" lines_diff="10"/>
+            <output name="output_file">
+                <assert_contents>
+                    <expand macro="assertions_centroiding"/>
+                </assert_contents>
+            </output>
+        </test>
+        <test>
+            <param name="input_file" value="29_qc_no_dil_milliq_subset.mzML"/>
+            <param name="method" value="kNeighbors"/>
+            <param name="k" value="3"/>
+            <output name="output_file">
+                <assert_contents>
+                    <expand macro="assertions_centroiding"/>
+                </assert_contents>
+            </output>
+        </test>
+        <test>
+            <param name="input_file" value="29_qc_no_dil_milliq_subset.mzML"/>
+            <param name="method" value="descendPeak"/>
+            <param name="signal_percentage" value="10"/>
+            <output name="output_file">
+                <assert_contents>
+                    <expand macro="assertions_centroiding"/>
+                </assert_contents>
+            </output>
         </test>
     </tests>
     <help><![CDATA[
-
-.. class:: infomark
+        .. class:: infomark
 
 **What it does**
 
-TODO: Fill in help in reStructuredText format (https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html)
+This tool performs centroiding on mass spectrometry data using the MSnbase package in R. Centroiding is a process that converts profile mode data to centroid mode by identifying the peaks in the mass spectrum and representing them as single points.
 
-Usage
-.....
+**Usage**
 
+1. **Input**: Provide the input mzML file containing the mass spectrometry data to be centroided.
+2. **Parameters**:
+   - **Input mzML File**: The input mzML file containing the mass spectrometry data to be centroided.
+   - **MS2**: Specify if the dataset contains MS2 (tandem mass spectrometry) data.
+   - **Half window size**: The number of data points on either side of the center point to include in the centroiding calculation.
+   - **Noise estimation method**: Choose the method to estimate the noise in the spectrum. Options include Median Absolute Deviation (MAD) and Friedman's Super Smoother.
+   - **Signal-to-noise ratio (SNR)**: The signal-to-noise ratio threshold for removing noisy signals. A higher value will result in more noise being filtered out.
+   - **Peak refinement method**: Select the method to refine the m/z value of the identified centroids. Options include None, K-Neighbors, and Descend Peak.
+     - **K**: The number of 2*K nearest neighbors to consider for m/z interpolation during peak refinement (only applicable if K-Neighbors method is selected).
+     - **Intensity threshold (%)**: The signal intensity cutoff threshold (as a percentage) for including values in the m/z calculation during peak refinement (only applicable if Descend Peak method is selected).
+     - **Stop at two**: Specify whether to stop the descent only after encountering two increasing scans, instead of stopping at the first increasing scan (only applicable if Descend Peak method is selected).
+3. **Output**: The centroided mzML file.
 
 **Input**
 
+- **Input mzML File**: The input mzML file containing the mass spectrometry data to be centroided.
 
 **Output**
 
+- **Output mzML File**: The resulting mzML file after applying the centroiding algorithm.
 
-    ]]></help>
+**References**
+
+For more detailed information, please refer to the original documentation available via Bioconductor: https://bioconductor.org/packages/release/bioc/html/MSnbase.html
+        ]]></help>
         <expand macro="citations"/>
 </tool>

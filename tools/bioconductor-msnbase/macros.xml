@@ -31,4 +31,15 @@
             <citation type="doi">10.18129/B9.bioc.MSnbase</citation>
         </citations>
     </xml>
+    <xml name="assertions_smoothing">
+        <has_text text='id="sf_ru_0"'/>
+        <has_text text="f3fdaed6b23f3690e004d16921be328018771bf1"/>
+        <has_n_lines n="1775"/>
+    </xml>
+
+    <xml name="assertions_centroiding">
+        <has_n_lines n="1512"/>
+        <has_text text='accession="MS:1000035" name="peak picking"'/>
+        <has_size size="129630" delta="50"/>
+    </xml>
 </macros>
