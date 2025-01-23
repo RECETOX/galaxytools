@@ -113,8 +113,8 @@ This tool performs centroiding on mass spectrometry data using the MSnbase packa
 
 **Usage**
 
-1. **Input**: Provide the input mzML file containing the mass spectrometry data to be centroided.
-2. **Parameters**:
+- **Input**: Provide the input mzML file containing the mass spectrometry data to be centroided.
+- **Parameters**:
    - **Input mzML File**: The input mzML file containing the mass spectrometry data to be centroided.
    - **MS2**: Specify if the dataset contains MS2 (tandem mass spectrometry) data.
    - **Half window size**: The number of data points on either side of the center point to include in the centroiding calculation.
@@ -124,7 +124,7 @@ This tool performs centroiding on mass spectrometry data using the MSnbase packa
      - **K**: The number of 2*K nearest neighbors to consider for m/z interpolation during peak refinement (only applicable if K-Neighbors method is selected).
      - **Intensity threshold (%)**: The signal intensity cutoff threshold (as a percentage) for including values in the m/z calculation during peak refinement (only applicable if Descend Peak method is selected).
      - **Stop at two**: Specify whether to stop the descent only after encountering two increasing scans, instead of stopping at the first increasing scan (only applicable if Descend Peak method is selected).
-3. **Output**: The centroided mzML file.
+- **Output**: The centroided mzML file.
 
 **Input**
 

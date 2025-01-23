@@ -83,14 +83,14 @@ This tool performs chromatogram smoothing on mass spectrometry data using the MS
 
 **Usage**
 
-1. **Input**: Provide the input mzML file containing the mass spectrometry data to be smoothed.
-2. **Parameters**:
+- **Input**: Provide the input mzML file containing the mass spectrometry data to be smoothed.
+- **Parameters**:
    - **Half window size**: The number of data points on either side of the center point to include in the smoothing calculation.
    - **Weighted**: Whether to apply a weighted moving average.
    - **QTOF**: Indicate if the data was acquired using a QTOF instrument.
    - **ppm tolerance**: The parts-per-million tolerance for considering mz values as belonging to the same ion.
    - **Function to combine intensities**: Choose the function to combine the intensity values within the moving window.
-3. **Output**: The smoothed mzML file.
+- **Output**: The smoothed mzML file.
 
 **Input**
 

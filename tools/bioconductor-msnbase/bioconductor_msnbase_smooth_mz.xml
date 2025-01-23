@@ -88,27 +88,14 @@
 
 This tool performs smoothing of MSnbase data using Bioconductor. It supports Savitzky-Golay and Moving Average smoothing methods. Smoothing is a technique used to reduce noise and improve the signal quality in mass spectrometry data.
 
-**Input**
-
-- **Input mzML File**: The input mzML file containing the data to be smoothed. This file should be in mzML format.
-
-**Smoothing Method**
-
-- **Smoothing Method**: The smoothing method to use. Options are:
-  - **Savitzky-Golay**: A digital filter that can smooth data while preserving the shape and height of waveform peaks.
-  - **Moving Average**: A simple and commonly used method for smoothing data by averaging adjacent points.
-
-**Savitzky-Golay Parameters**
-
-- **Polynomial Order**: The polynomial order for the Savitzky-Golay filter. This determines the degree of the polynomial used for smoothing. The default value is 3, and it can range from 1 to 7.
-
-**Moving Average Parameters**
-
-- **Weighted**: Whether to weight the moving average depending on the distance from the centre. If checked, the moving average will be weighted.
-
-**General Parameters**
-
-- **Half Window Size**: The half window size parameter for the smoothing method. This determines the number of points on either side of the central point to include in the smoothing window. The default value is 4, and it must be at least 2.
+- **Parameters**
+    - **Input mzML File**: The input mzML file containing the data to be smoothed. This file should be in mzML format.
+    - **Smoothing Method**: The smoothing method to use. Options are:
+        - **Savitzky-Golay**: A digital filter that can smooth data while preserving the shape and height of waveform peaks.
+            - **Polynomial Order**: The polynomial order for the Savitzky-Golay filter. This determines the degree of the polynomial used for smoothing. The default value is 3, and it can range from 1 to 7.
+        - **Moving Average**: A simple and commonly used method for smoothing data by averaging adjacent points.
+            - **Weighted**: Whether to weight the moving average depending on the distance from the centre. If checked, the moving average will be weighted.
+    - **Half Window Size**: The half window size parameter for the smoothing method. This determines the number of points on either side of the central point to include in the smoothing window. The default value is 4, and it must be at least 2.
 
 **Output**
 
