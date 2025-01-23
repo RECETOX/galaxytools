@@ -68,7 +68,7 @@ annotations_flat.to_csv('${output}', index=False)
 
     <tests>
         <test>
-            <param name="MS1_table" value="MS1_data.csv"/>
+            <param name="MS1_table" value="isotope_patterns.csv"/>
             <param name="all_adducts" value="all_adducts.csv"/>
             <param name="ppm" value="3"/>
             <output name="output" file="annotations.csv"/>
