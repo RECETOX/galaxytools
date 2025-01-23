@@ -1,5 +1,5 @@
 <tool id="bioconductor_msnbase_smooth_chromatogram" name="bioconductor-msnbase smooth chromatogram" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="20.01" license="MIT">
-    <description>smooth consecutive spectra using a moving window filter</description>
+    <description>smooth consecutive spectra using a moving window filter (combineSpectraMovingWindow)</description>
     <macros>
         <import>macros.xml</import>
     </macros>
