@@ -41,7 +41,7 @@
         <param name="input_file" type="data" format="mzml" label="Input mzML File" help="The input mzML file containing the MSnbase data."/>
         <conditional name="smoothing">
             <param name="method" type="select" label="Smoothing Method" help="The smoothing method to use.">
-                <option value="SavitzkyGolay">Savitzky-Golay</option>
+                <option value="SavitzkyGolay" selected="true">Savitzky-Golay</option>
                 <option value="MovingAverage">Moving Average</option>
             </param>
             <when value="SavitzkyGolay">
@@ -58,10 +58,8 @@
     </outputs>
     <tests>
         <test>
-            <param name="input_file" value="test.mzml"/>
-            <param name="method" value="SavitzkyGolay"/>
-            <param name="halfWindowSize" value="4"/>
-            <output name="output_file" file="test_output.mzml"/>
+            <param name="input_file" value="29_qc_no_dil_milliq_subset.mzML"/>
+            <output name="output_file" file="test_output_smoothed_mz.mzml" lines_diff="10"/>
         </test>
     </tests>
     <help><![CDATA[
@@ -81,8 +79,6 @@ This tool performs smoothing of MSnbase data using Bioconductor. It supports Sav
 **Output**
 
 - **Smoothed mzML File**: The output mzML file with smoothed data.
-    ]]></help>
-    <citations>
-        <citation type="doi">10.18129/B9.bioc.MSnbase</citation>
-    </citations>
+     ]]></help>
+        <expand macro="citations"/>
 </tool>

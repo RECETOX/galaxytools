@@ -27,7 +27,7 @@
             data_smoothed <- MSnbase::combineSpectraMovingWindow(
                 data_prof,
                 halfWindowSize = ${halfWindowSize},
-                intensityFun = base::mean,
+                intensityFun = ${intensity_function},
                 mzd = 0,
                 timeDomain = $qtof,
                 weighted = $weighted,
@@ -48,12 +48,22 @@
         <param name="weighted" type="boolean" truevalue="TRUE" falsevalue="FALSE" checked="false" label="Weighted" help="Whether to weight the moving average depending on the distance from the centre." />
         <param name="qtof" type="boolean" truevalue="TRUE" falsevalue="FALSE" checked="false" label="QTOF" help="Whether to data was acquired using a QTOF instrument." />
         <param argument="--ppm" type="integer" min="0" value="3" label="ppm tolerance" help="Tolerance for which mz values are considered to belong to the same ion." />
+        <param name="intensity_function" type="select" label="Function to combine intensities" help="Function used to combine the intensity values of the same m/z value.">
+            <option value="base::mean" selected="true">mean</option>
+            <option value="stats::median">median</option>
+            <option value="min">min</option>
+            <option value="max">max</option>
+            <option value="sum">sum</option>
+        </param>
     </inputs>
     <outputs>
         <data name="output_file" format="mzml" label="Chromatogram smoothing on ${on_string}" from_work_dir="smoothed.mzml"/>
     </outputs>
     <tests>
-        <!-- Hint: You can use [ctrl+alt+t] after defining the inputs/outputs to auto-scaffold some basic test cases. -->
+        <test>
+            <param name="input_file" value="29_qc_no_dil_milliq_subset.mzML"/>
+            <output name="output_file" file="test_output_smoothed_rt.mzml" lines_diff="10"/>
+        </test>
     </tests>
     <help><![CDATA[
 
@@ -74,7 +84,5 @@ Usage
 
 
     ]]></help>
-    <citations>
-        <citation type="doi"> </citation>
-    </citations>
+    <expand macro="citations"/>
 </tool>

@@ -26,4 +26,9 @@
             <requirement type="package" version="@TOOL_VERSION@">bioconductor-msnbase</requirement>
         </requirements>
     </xml>
+    <xml name="citations">
+        <citations>
+            <citation type="doi">10.18129/B9.bioc.MSnbase</citation>
+        </citations>
+    </xml>
 </macros>
