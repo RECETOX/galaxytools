@@ -2,7 +2,7 @@ import argparse
 import logging
 
 
-from utils import LoadDataAction, StoreOutputAction, SplitColumnIndicesAction
+from utils import LoadDataAction, SplitColumnIndicesAction, StoreOutputAction
 
 
 # Constants for operations
