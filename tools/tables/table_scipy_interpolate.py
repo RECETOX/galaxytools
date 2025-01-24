@@ -1,9 +1,11 @@
 import argparse
 import logging
-import numpy as np
-from scipy.interpolate import Akima1DInterpolator, CubicSpline, PchipInterpolator
-import pandas as pd
 from typing import Callable, Tuple
+
+
+import numpy as np
+import pandas as pd
+from scipy.interpolate import Akima1DInterpolator, CubicSpline, PchipInterpolator
 from utils import LoadDataAction, StoreOutputAction
 
 

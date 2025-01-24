@@ -1,9 +1,12 @@
 import argparse
 import logging
-import pandas as pd
-import numpy as np
 from typing import List, Tuple
+
+
+import numpy as np
+import pandas as pd
 from utils import LoadDataAction, SplitColumnIndicesAction, StoreOutputAction
+
 
 # Define the available transformations
 TRANSFORMATIONS = {
