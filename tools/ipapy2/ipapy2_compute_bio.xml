@@ -9,17 +9,17 @@
 
     <command detect_errors="exit_code"><![CDATA[
         python3 '${__tool_directory__}/ipapy2_compute_bio.py'
-        --DB_MS1 '${DB_MS1}'
+        --MS1_DB '${MS1_DB}'
         --annotations '${annotations}'
         --biochemical_mode '${biochemical_mode.biochemical_mode}'
         #if $biochemical_mode.biochemical_mode == "connections"
             --connection_list '${biochemical_mode.connection_list}'
         #end if
-        --bio_out "${bio_out}"
+        --compute_bio_output "${compute_bio_output}"
     ]]></command>
 
     <inputs>
-        <param label="MS1 DB table" name="DB_MS1" type="data" format="csv" help="pandas dataframe containing the MS1 database."/>
+        <param label="MS1 DB table" name="MS1_DB" type="data" format="csv" help="pandas dataframe containing the MS1 database."/>
         <param label="annotations" name="annotations" type="data" format="csv" optional="true" help="pandas dataframe containing all the possible annotations for the measured features."/>
         <conditional name="biochemical_mode">
             <param name="biochemical_mode" type="select" label="biochemical mode"
@@ -28,28 +28,24 @@
                     <option value="connections">connections</option>
             </param>
             <when value="reactions">
-                <!-- <param name="biochemical_mode" type="hidden" value="reactions"/> -->
             </when>
             <when value="connections">
-                <!-- <param name="biochemical_mode" type="hidden" value="connections"/> -->
                 <param name="connection_list" type="text" optional="true" label="connections list provided" 
                         help="list of possible connections between compounds defined as formulas. Only necessary if mode='connections'."/>           
             </when>
         </conditional>
-        <param label="bio_out" name="bio_out" type="text" format="csv" help="Output file path for the dataframe."/>
     </inputs>
 
     <outputs>
-        <data label="${tool.name} on ${on_string}" name="bio_out" format="csv"/>
+        <data label="${tool.name} on ${on_string}" name="compute_bio_output" format="csv"/>
     </outputs>
 
     <tests>
         <test>
-            <param name="DB_MS1" value="DB_MS1.csv"/>
+            <param name="MS1_DB" value="MS1_DB.csv"/>
             <param name="annotations" value="MS1_annotations.csv"/>
             <param name="biochemical_mode" value="reactions"/>
-            <param name="bio_out" value="bio_out.csv"/>
-            <output name="bio_out" file="bio_out.csv"/>
+            <output name="compute_bio_output" file="compute_bio_output.csv"/>
         </test>
     </tests>
     

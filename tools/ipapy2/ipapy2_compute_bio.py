@@ -5,8 +5,8 @@ from ipaPy2 import ipa
 
 
 def main(args):
-    DB_MS1 = pd.read_csv(args.DB_MS1)
-    DB_MS1 = DB_MS1.replace("", None)
+    MS1_DB = pd.read_csv(args.MS1_DB)
+    MS1_DB = MS1_DB.replace("", None)
 
     if args.annotations:
         annotations_df = pd.read_csv(args.annotations, keep_default_na=False)
@@ -110,13 +110,13 @@ def main(args):
         ]
 
     Bio = ipa.Compute_Bio(
-        DB_MS1,
+        MS1_DB,
         annotations=annotations,
         mode=args.biochemical_mode,
         connections=connections,
         ncores=int(os.environ.get("GALAXY_SLOTS")),
     )
-    Bio.to_csv(args.bio_out, index=False)
+    Bio.to_csv(args.compute_bio_output, index=False)
 
 
 if __name__ == "__main__":
@@ -124,7 +124,7 @@ if __name__ == "__main__":
         description="cluster features before IPA pipeline."
     )
     parser.add_argument(
-        "--DB_MS1",
+        "--MS1_DB",
         type=str,
         required=True,
         help="a dataframe containing the measured intensities across several samples.",
@@ -132,7 +132,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--annotations",
         type=str,
-        help="Default value 0.8. Minimum correlation allowed in each cluster.",
+        help="a dataframe containing the annotations of the features.",
     )
     parser.add_argument(
         "--biochemical_mode",
@@ -144,7 +144,7 @@ if __name__ == "__main__":
         "--connection_list", type=str, help="intensity mode. Default 'max' or 'ave'."
     )
     parser.add_argument(
-        "--bio_out", type=str, required=True, help="Output file path for the dataframe."
+        "--compute_bio_output", type=str, required=True, help="Output file path for the dataframe."
     )
     args = parser.parse_args()
 

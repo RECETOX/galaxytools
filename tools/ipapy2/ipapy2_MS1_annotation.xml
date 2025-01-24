@@ -12,6 +12,7 @@
         --mapped_isotope_patterns '${mapped_isotope_patterns}'
         --all_adducts '${all_adducts}'
         --ppm ${ppm}
+        --me ${me}
         --ratiosd ${ratiosd}
         #if $ppmunk
             --ppmunk ${ppmunk}
@@ -26,6 +27,7 @@
         #end if
         --pRTNone ${pRTNone}
         --pRTout ${pRTout}
+        --MS1_annotations ${MS1_annotations}
     ]]></command>
 
     <inputs>
@@ -43,6 +45,10 @@
             </param>
         </section>
         <section name="optional_settings" title="optional settings">
+            <param name="me" type="float" value="5.48579909065e-04">
+                <label>mass of the electron.</label>
+                <help>accurate mass of the electron. Default 5.48579909065e-04.</help>
+            </param>
             <param name="ratiosd" type="float" value="0.9" optional="true">
                 <label>intensity ratio</label>
                 <help>acceptable ratio between predicted intensity and observed intensity of isotopes</help>

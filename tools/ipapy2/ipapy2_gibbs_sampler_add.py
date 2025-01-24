@@ -1,10 +1,12 @@
+import os
+
 import argparse
 import pandas as pd
 from ipaPy2 import ipa
 
 
 def main(args):
-    df = pd.read_csv(args.MS1_table, keep_default_na=False)
+    df = pd.read_csv(args.mapped_isotope_patterns, keep_default_na=False)
     df = df.replace("", None)
 
     annotations_df = pd.read_csv(args.annotations, keep_default_na=False)
@@ -16,7 +18,7 @@ def main(args):
     for peak_id, group in grouped:
         annotations[peak_id] = group.drop('peak_id', axis=1)
 
-    if args.zs:
+    if args.zs and args.zs.lower() != 'none' and os.path.isfile(args.zs):
         zs = []
         with open(args.zs, "r") as f:
             for line in f:
@@ -24,9 +26,7 @@ def main(args):
         
     else:
         zs = None
-    
-    if args.integrating_mode == "adducts":
-        zs = ipa.Gibbs_sampler_add(
+    zs = ipa.Gibbs_sampler_add(
             df,
             annotations,
             noits=args.noits,
@@ -35,35 +35,6 @@ def main(args):
             all_out=args.all_out,
             zs=zs,
         )
-    else:
-        
-        Bio = pd.read_csv(args.Bio, keep_default_na=False)
-        
-        if args.integrating_mode == "biochemical":
-            zs = ipa.Gibbs_sampler_bio(
-                df,
-                annotations,
-                Bio=Bio,
-                noits=args.noits,
-                burn=args.burn,
-                delta_bio=args.delta_bio,
-                all_out=args.all_out,
-                zs=zs,
-            )
-        else:
-            zs = ipa.Gibbs_sampler_bio_add(
-                df,
-                annotations,
-                Bio=Bio,
-                noits=args.noits,
-                burn=args.burn,
-                delta_bio=args.delta_bio,
-                delta_add=args.delta_add,
-                all_out=args.all_out,
-                zs=zs,
-            )
-  
-
    
     annotations_flat = pd.DataFrame()
     for peak_id in annotations:
@@ -74,7 +45,7 @@ def main(args):
 
     annotations_flat.to_csv(args.annotations_out, index=False)
 
-    if args.gibbs_out:
+    if args.all_out:
         with open(args.zs_out, "w") as f:
             for s in zs:
                 f.write(str(s) + "\n")
@@ -116,43 +87,36 @@ if __name__ == "__main__":
     )
     parser.add_argument(
         "--delta_add", 
-        type=int, 
-        help="intensity mode. Default 'max' or 'ave'."
+        type=float, 
+        default=1,
+        help="""parameter used when computing the conditional priors. The
+               parameter must be positive. The smaller the parameter the more
+               weight the adducts connections have on the posterior
+               probabilities. Default 1."""
     )
-
-
-
-    
     parser.add_argument(
-        "--integrating_mode",
+        "--all_out", 
+        type=bool, 
+        default=False,
+        help="""logical value. If true the list of assignments found in each
+             iteration is returned by the function. Default False."""
+    )
+    parser.add_argument(
+        "--zs", 
         type=str,
-        required=True,
-        help="Default value 0.8. Minimum correlation allowed in each cluster.",
+        help="""a txt file containing the list of assignments computed in a previous run of the Gibbs sampler. 
+        Optional, default None."""
     )
     parser.add_argument(
-        "--Bio", type=str, help="intensity mode. Default 'max' or 'ave'."
-    )
-   
-    
-    parser.add_argument(
-        "--delta_bio", type=float, help="intensity mode. Default 'max' or 'ave'."
-    )
-    
-    parser.add_argument(
-        "--all_out", type=str, help="intensity mode. Default 'max' or 'ave'."
-    )
-    parser.add_argument(
-        "--zs", type=str, help="intensity mode. Default 'max' or 'ave'."
-    )
-    parser.add_argument(
-        "--gibbs_out", type=str, help="intensity mode. Default 'max' or 'ave'."
+        "--zs_out", 
+        type=str, 
+        default="gibbs_sample_add_zs.txt",
+        help="file name to save the list of assignments computed in the current run of the Gibbs sampler."
     )
     parser.add_argument(
         "--annotations_out",
         type=str,
-        default="annotations.csv",
-        help="a dataframe of clustered features.",
+        default="gibbs_sample_add_annotations.csv",
     )
-    parser.add_argument("--zs_out", type=str, help="a dataframe of clustered features.")
     args = parser.parse_args()
     main(args)

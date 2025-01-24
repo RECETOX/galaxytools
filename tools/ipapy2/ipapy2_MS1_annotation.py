@@ -11,14 +11,16 @@ def main(args):
     all_adducts = pd.read_csv(args.all_adducts, keep_default_na=False)
     all_adducts = all_adducts.replace("", None)
     ncores = int(os.environ.get("GALAXY_SLOTS")) if args.ncores is None else args.ncores
+    ppmunk = args.ppmunk if args.ppmunk else args.ppm
     ppmthr = args.ppmthr if args.ppmthr else 2 * args.ppm
 
     annotations = ipa.MS1annotation(
         df,
         all_adducts,
         ppm=args.ppm,
+        me=args.me,
         ratiosd=args.ratiosd,
-        ppmunk=args.ppmunk,
+        ppmunk=ppmunk,
         ratiounk=args.ratiounk,
         ppmthr=ppmthr,
         pRTNone=args.pRTNone,
@@ -57,6 +59,18 @@ if __name__ == "__main__":
         help="accuracy of the MS instrument used.",
     )
     parser.add_argument(
+        "--me",
+        type=float,
+        default=5.48579909065e-04,
+        help="accurate mass of the electron. Default 5.48579909065e-04",
+    )
+    parser.add_argument(
+        "--ratiosd",
+        type=float,
+        default=0.9,
+        help="acceptable ratio between predicted intensity and observed intensity of isotopes.",
+    )
+    parser.add_argument(
         "--ppmunk",
         type=float,
         help="pm associated to the 'unknown' annotation. If not provided equal to ppm.",
@@ -66,12 +80,6 @@ if __name__ == "__main__":
         type=float,
         default=0.5,
         help="isotope ratio associated to the 'unknown' annotation.",
-    )
-    parser.add_argument(
-        "--ratiosd",
-        type=float,
-        default=0.9,
-        help="acceptable ratio between predicted intensity and observed intensity of isotopes.",
     )
     parser.add_argument(
         "--ppmthr",

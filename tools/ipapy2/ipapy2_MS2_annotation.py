@@ -80,7 +80,7 @@ if __name__ == "__main__":
         help="accuracy of the MS instrument used.",
     )
     parser.add_argument(
-        "me",
+        "--me",
         type=float,
         default=5.48579909065e-04,
         help="accurate mass of the electron. Default 5.48579909065e-04",
@@ -121,7 +121,7 @@ if __name__ == "__main__":
         help="multiplicative factor for the RT if measured RT is outside the RTrange present in the database.",
     )
     parser.add_argument(
-        "mzdCS",
+        "--mzdCS",
         type=int,
         default=0,
         help="""maximum mz difference allowed when computing cosine similarity
@@ -129,7 +129,7 @@ if __name__ == "__main__":
            must be set to 0. Default 0.""",
     )
     parser.add_argument(
-        "ppmCS",
+        "--ppmCS",
         type=int,
         default=10,
         help="""maximum ppm allowed when computing cosine similarity scores.
@@ -137,7 +137,7 @@ if __name__ == "__main__":
            set to 0. Default 10.""",
     )
     parser.add_argument(
-        "CSunk",
+        "--CSunk",
         type=float,
         default=0.7,
         help="""cosine similarity score associated with the 'unknown' annotation.
