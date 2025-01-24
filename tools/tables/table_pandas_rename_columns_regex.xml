@@ -19,12 +19,12 @@
     ]]></command>
     
     <inputs>
-        <param name="input_dataset" type="data" format="csv,tsv,tabular,parquet" label="Input Dataset"/>
-        <param name="columns" type="data_column" multiple="true" use_header_names="true" min="1" label="Columns to Rename"/>
-        <param name="regex_check" type="text" label="Regex to Check For">
+        <param name="input_dataset" type="data" format="csv,tsv,tabular,parquet" label="Input Dataset" help="The input dataset in CSV, TSV, tabular, or Parquet format."/>
+        <param name="columns" type="data_column" data_ref="input_dataset" multiple="true" use_header_names="true" min="1" label="Columns to Rename"  help="Select one or more columns from the dataset to rename. You can select columns by their header names."/>
+        <param name="regex_check" type="text" label="Regex to Check For" help="The regular expression pattern to search for in the column names. This pattern will be used to identify parts of the column names to be replaced.">
             <expand macro="regex_sanitizer"/>
         </param>
-        <param name="regex_replace" type="text" label="Regex to Replace With">
+        <param name="regex_replace" type="text" label="Regex to Replace With" help="The regular expression pattern to replace the matched parts of the column names with. This pattern will be used to rename the columns.">
             <expand macro="regex_sanitizer"/>
         </param>
     </inputs>
@@ -42,7 +42,20 @@
     </tests>
 
     <help><![CDATA[
-        This tool renames columns in a table using the specified regex patterns.
+This tool renames columns in a table using the specified regex patterns.
+
+Inputs
+------
+
+- **Input Dataset**: The input dataset in CSV, TSV, tabular, or Parquet format.
+- **Columns to Rename**: Select one or more columns from the dataset to rename. You can select columns by their header names.
+- **Regex to Check For**: The regular expression pattern to search for in the column names. This pattern will be used to identify parts of the column names to be replaced.
+- **Regex to Replace With**: The regular expression pattern to replace the matched parts of the column names with. This pattern will be used to rename the columns.
+
+Outputs
+-------
+
+- **Output Dataset**: The output dataset with the renamed columns.
     ]]></help>
 
     <citations>

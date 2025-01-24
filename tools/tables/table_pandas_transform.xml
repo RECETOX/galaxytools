@@ -43,10 +43,21 @@
             <output name="output_dataset" file="transform/query_log.tabular" ftype="tabular"/>
         </test>
     </tests>
-    <help>
-        This tool applies transformations on multiple columns of a table.
-        Supported transformations are: log2, log10, ln, sqrt, exp, abs, floor, and ceil.
-    </help>
+    <help><![CDATA[
+This tool applies mathematical transformations to specified columns in a dataframe.
+
+Inputs
+------
+
+- **Input Dataset**: The input dataset in CSV, TSV, tabular, or Parquet format.
+- **Columns to Transform**: Select one or more columns from the dataset to transform. You can select columns by their header names.
+- **Transformation**: The mathematical transformation to apply to the selected columns. Choose from log, log10, ln, sqrt, exp, abs, floor, or ceil.
+
+Outputs
+-------
+
+- **Output Dataset**: The output dataset with the transformed columns.
+    ]]></help>
     <citations>
         <citation type="doi">10.5281/zenodo.3509134</citation>
         <citation type="doi">10.25080/Majora-92bf1922-00a</citation>

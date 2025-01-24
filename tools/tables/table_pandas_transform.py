@@ -1,43 +1,73 @@
 import argparse
-
+import logging
+import pandas as pd
 import numpy as np
+from typing import List, Tuple
 from utils import LoadDataAction, SplitColumnIndicesAction, StoreOutputAction
 
+# Define the available transformations
+TRANSFORMATIONS = {
+    "log": np.log,
+    "log10": np.log10,
+    "ln": np.log,
+    "sqrt": np.sqrt,
+    "exp": np.exp,
+    "abs": np.abs,
+    "floor": np.floor,
+    "ceil": np.ceil,
+}
 
-def apply_transformation(df, columns, transformation):
-    for column_index in columns:
-        column_name = df.columns[column_index]  # Use 0-based index directly
-        if transformation == "log2":
-            df[column_name] = np.log2(df[column_name])
-        elif transformation == "log10":
-            df[column_name] = np.log10(df[column_name])
-        elif transformation == "ln":
-            df[column_name] = np.log(df[column_name])
-        elif transformation == "sqrt":
-            df[column_name] = np.sqrt(df[column_name])
-        elif transformation == "exp":
-            df[column_name] = np.exp(df[column_name])
-        elif transformation == "abs":
-            df[column_name] = np.abs(df[column_name])
-        elif transformation == "floor":
-            df[column_name] = np.floor(df[column_name])
-        elif transformation == "ceil":
-            df[column_name] = np.ceil(df[column_name])
-        else:
-            raise ValueError(f"Unsupported transformation: {transformation}")
-    return df
+def apply_transformation(df: pd.DataFrame, columns: List[int], transformation: str) -> pd.DataFrame:
+    """
+    Apply the specified transformation to the given columns of the dataframe.
 
+    Parameters:
+    df (pd.DataFrame): The input dataframe.
+    columns (List[int]): The 0-based indices of the columns to transform.
+    transformation (str): The transformation to apply.
 
-def main(input_dataset, columns, transformation, output_dataset):
-    df = input_dataset
-    df = apply_transformation(df, columns, transformation)
-    write_func, file_path = output_dataset
-    write_func(df, file_path)
+    Returns:
+    pd.DataFrame: The dataframe with the transformation applied.
+    """
+    try:
+        transform_func = TRANSFORMATIONS[transformation]
+        for column_index in columns:
+            column_name = df.columns[column_index]
+            df[column_name] = transform_func(df[column_name])
+        return df
+    except KeyError as e:
+        logging.error(f"Invalid transformation: {e}")
+        raise
+    except IndexError as e:
+        logging.error(f"Invalid column index: {e}")
+        raise
+    except Exception as e:
+        logging.error(f"Error applying transformation: {e}")
+        raise
 
+def main(input_dataset: Tuple[pd.DataFrame, str], columns: List[int], transformation: str, output_dataset: Tuple[Callable[[pd.DataFrame, str], None], str]) -> None:
+    """
+    Main function to load the dataset, apply the transformation, and save the result.
+
+    Parameters:
+    input_dataset (Tuple[pd.DataFrame, str]): The input dataset and its file extension.
+    columns (List[int]): The 0-based indices of the columns to transform.
+    transformation (str): The transformation to apply.
+    output_dataset (Tuple[Callable[[pd.DataFrame, str], None], str]): The output dataset and its file extension.
+    """
+    try:
+        df, _ = input_dataset
+        df = apply_transformation(df, columns, transformation)
+        write_func, file_path = output_dataset
+        write_func(df, file_path)
+    except Exception as e:
+        logging.error(f"Error in main function: {e}")
+        raise
 
 if __name__ == "__main__":
+    logging.basicConfig(level=logging.INFO)
     parser = argparse.ArgumentParser(
-        description="Apply transformations on multiple dataframe columns."
+        description="Apply mathematical transformations to dataframe columns."
     )
     parser.add_argument(
         "--input_dataset",
@@ -55,7 +85,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--transformation",
         type=str,
-        choices=["log", "log10", "ln", "sqrt", "exp", "abs", "floor", "ceil"],
+        choices=TRANSFORMATIONS.keys(),
         required=True,
         help="Transformation to apply",
     )
@@ -68,9 +98,11 @@ if __name__ == "__main__":
     )
 
     args = parser.parse_args()
+    # Adjust column indices to be 0-based
+    column_indices = [index - 1 for index in args.columns]
     main(
         args.input_dataset,
-        args.columns,
+        column_indices,
         args.transformation,
         args.output_dataset
     )

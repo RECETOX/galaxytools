@@ -67,7 +67,19 @@
         </test>
     </tests>
     <help><![CDATA[
-        blub
+This tool renames columns in a table.
+
+Inputs
+------
+
+- **Input Dataset**: The input dataset in CSV, TSV, tabular, or Parquet format.
+- **Columns to Rename**: Specify the columns to rename and their new names. You can use the "repeat" function to rename multiple columns.
+
+Outputs
+-------
+
+- **Output Dataset**: The output dataset with the renamed columns.
+
     ]]></help>
     <citations>
         <citation type="doi">10.5281/zenodo.3509134</citation>

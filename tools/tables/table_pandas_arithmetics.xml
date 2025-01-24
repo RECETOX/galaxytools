@@ -16,16 +16,16 @@
             --output_dataset '$output_dataset' '$output_dataset.ext'
     ]]></command>
     <inputs>
-        <param name="input_dataset" type="data" format="csv,tsv,tabular,parquet" label="Input Dataset"/>
-        <param name="column" type="data_column" data_ref="input_dataset" use_header_names="true" label="Column" help="Column from the dataset to perform the computation on."/>
-        <param name="operation" type="select" label="Arithmetic Operation">
+        <param name="input_dataset" type="data" format="csv,tsv,tabular,parquet" label="Input Dataset" help="The input dataset in CSV, TSV, tabular, or Parquet format."/>
+        <param name="column" type="data_column" data_ref="input_dataset" use_header_names="true" label="Column" help="The column from the dataset to perform the arithmetic operation on."/>
+        <param name="operation" type="select" label="Arithmetic Operation" help="The arithmetic operation to perform on the selected column. Choose from Multiply, Subtract, Divide, Add, or Power.">
             <option value="mul">Multiply</option>
             <option value="sub">Subtract</option>
             <option value="div">Divide</option>
             <option value="add">Add</option>
             <option value="pow">Power</option>
         </param>
-        <param name="operand" type="float" label="Operand"/>
+        <param name="operand" type="float" label="Operand" help="The operand value to use in the arithmetic operation. This value will be applied to each element in the selected column."/>
     </inputs>
     <outputs>
         <data name="output_dataset" format_source="input_dataset" label="${tool.name} on ${on_string}">
@@ -43,10 +43,23 @@
             <output name="output_dataset" file="arithmetics/query_divide_ri.tabular" ftype="tabular"/>
         </test>
     </tests>
-    <help>
-        This tool performs arithmetic operations on a specified column of a dataframe.
-        Supported operations are: multiply, subtract, divide, add, and power.
-    </help>
+    <help><![CDATA[
+This tool performs arithmetic operations on a specified column of a dataframe.
+Supported operations are: multiply, subtract, divide, add, and power.
+
+Inputs
+------
+
+- **Input Dataset**: The input dataset in CSV, TSV, tabular, or Parquet format.
+- **Column**: The column from the dataset to perform the arithmetic operation on. Select the column by its header name.
+- **Arithmetic Operation**: The arithmetic operation to perform on the selected column. Choose from Multiply, Subtract, Divide, Add, or Power.
+- **Operand**: The operand value to use in the arithmetic operation. This value will be applied to each element in the selected column.
+
+Outputs
+-------
+
+- **Output Dataset**: The output dataset with the arithmetic operation applied to the specified column.
+        ]]></help>
     <citations>
         <citation type="doi">10.5281/zenodo.3509134</citation>
         <citation type="doi">10.25080/Majora-92bf1922-00a</citation>
