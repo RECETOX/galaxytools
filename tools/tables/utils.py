@@ -1,6 +1,8 @@
 import argparse
+from typing import Tuple
+
+
 import pandas as pd
-from typing import Callable, Tuple
 
 
 class KeyValuePairsAction(argparse.Action):
