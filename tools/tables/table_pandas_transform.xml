@@ -9,6 +9,7 @@
     </requirements>
     <required_files>
         <include path="table_pandas_transform.py" />
+        <include path="utils.py" />
     </required_files>
     <expand macro="creator" />
     <command detect_errors="exit_code"><![CDATA[
