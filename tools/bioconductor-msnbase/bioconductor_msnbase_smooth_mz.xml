@@ -1,0 +1,105 @@
+<tool id="bioconductor_msnbase_smooth_mz" name="bioconductor-msnbase smooth mz" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="23.0" license="MIT">
+    <description>smooth raw MS data in mass-to-charge ratio domain</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+
+    <edam_topics>
+        <edam_topic>topic_3170</edam_topic> <!-- Proteomics -->
+        <edam_topic>topic_3391</edam_topic> <!-- Data handling -->
+    </edam_topics>
+    <edam_operations>
+        <edam_operation>operation_3632</edam_operation> <!-- Data smoothing -->
+        <edam_operation>operation_2945</edam_operation> <!-- Data handling -->
+    </edam_operations>
+
+    <expand macro="xrefs"/>
+    <expand macro="creator"/>
+    <expand macro="requirements"/>
+
+    <command detect_errors="exit_code"><![CDATA[
+        Rscript "${run_script}"
+    ]]></command>
+    <configfiles>
+        <configfile name="run_script"><![CDATA[
+            data_prof <- MSnbase::readMSData("$input_file", mode = "onDisk")
+            #if $smoothing.method == "SavitzkyGolay"
+            data_smoothed <- MSnbase::smooth(data_prof, method = "$method", halfWindowSize = $halfWindowSize, polynomialOrder = $smoothing.polynomial)
+            #else if $smoothing.method == "MovingAverage"
+            data_smoothed <- MSnbase::smooth(data_prof, method = "$method", halfWindowSize = $halfWindowSize, weighted = $smoothing.weighted)
+            #end if
+            MSnbase::writeMSData(
+                data_smoothed,
+                file = "smoothed.mzml",
+                copy = TRUE,
+                outformat = "mzml"
+            )
+        ]]></configfile>
+    </configfiles>
+    <inputs>
+        <param name="input_file" type="data" format="mzml" label="Input mzML File" help="The input mzML file containing the raw MS data."/>
+        <conditional name="smoothing">
+            <param name="method" type="select" label="Smoothing Method" help="The smoothing method to use.">
+                <option value="SavitzkyGolay" selected="true">Savitzky-Golay</option>
+                <option value="MovingAverage">Moving Average</option>
+            </param>
+            <when value="SavitzkyGolay">
+                <param label="polynomialOrder" name="polynomial" value="3" min="1" max="7" type="integer" 
+                    help="Polynomial order for the Savitzky-Golay filter. This determines the degree of the polynomial used for smoothing."/>
+            </when>
+            <when value="MovingAverage">
+                <param argument="weighted" type="boolean" truevalue="TRUE" falsevalue="FALSE" checked="false" label="Weighted" 
+                    help="Whether to weight the moving average depending on the distance from the centre. If checked, the moving average will be weighted."/>
+            </when>
+        </conditional>
+        <param name="halfWindowSize" type="integer" label="Half window size" min="2" value="4" 
+            help="The half window size parameter for the smoothing method. This determines the number of points on either side of the central point to include in the smoothing window."/>
+    </inputs>
+    <outputs>
+        <data name="output_file" format="mzml" label="Smoothed ${on_string} using ${method}" from_work_dir="smoothed.mzml"/>
+    </outputs>
+    <tests>
+        <test>
+            <param name="input_file" value="29_qc_no_dil_milliq_subset.mzML"/>
+            <output name="output_file">
+                <assert_contents>
+                    <expand macro="assertions_smoothing"/>
+                    <has_size size="319526" delta="100"/>
+                </assert_contents>
+            </output>
+        </test>
+        <test>
+            <param name="input_file" value="29_qc_no_dil_milliq_subset.mzML"/>
+            <param name="method" value="MovingAverage"/>
+            <param name="weighted" value="TRUE"/>
+            <output name="output_file">
+                <assert_contents>
+                    <expand macro="assertions_smoothing"/>
+                    <has_size size="308803" delta="100"/>
+                </assert_contents>
+            </output>
+        </test>
+    </tests>
+    <help><![CDATA[
+
+.. class:: infomark
+
+**What it does**
+
+This tool performs smoothing of MSnbase data using Bioconductor. It supports Savitzky-Golay and Moving Average smoothing methods. Smoothing is a technique used to reduce noise and improve the signal quality in mass spectrometry data.
+
+- **Parameters**
+    - **Input mzML File**: The input mzML file containing the data to be smoothed. This file should be in mzML format.
+    - **Smoothing Method**: The smoothing method to use. Options are:
+        - **Savitzky-Golay**: A digital filter that can smooth data while preserving the shape and height of waveform peaks.
+            - **Polynomial Order**: The polynomial order for the Savitzky-Golay filter. This determines the degree of the polynomial used for smoothing. The default value is 3, and it can range from 1 to 7.
+        - **Moving Average**: A simple and commonly used method for smoothing data by averaging adjacent points.
+            - **Weighted**: Whether to weight the moving average depending on the distance from the centre. If checked, the moving average will be weighted.
+    - **Half Window Size**: The half window size parameter for the smoothing method. This determines the number of points on either side of the central point to include in the smoothing window. The default value is 4, and it must be at least 2.
+
+**Output**
+
+- **Smoothed mzML File**: The output mzML file with smoothed data. The file will be in mzML format.
+     ]]></help>
+        <expand macro="citations"/>
+</tool>
