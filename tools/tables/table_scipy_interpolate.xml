@@ -31,7 +31,7 @@
         --x_col $x_col
         --y_col $y_col
         --xnew_col $xnew_col
-        --method '$method'
+        --model '$model'
         --output_dataset '$output_dataset' '$output_dataset.ext'
         ]]></command>
 
@@ -42,7 +42,7 @@
         <param argument="--query_dataset" type="data" format="tabular,csv,tsv,parquet" label="Query dataset" help="Query dataset for which to interpolate the values." />
         <param name="xnew_col" type="data_column" data_ref="query_dataset" use_header_names="true" label="x (query)" help="Column from the query dataset for which to interpolate."/>
 
-        <param name="method" type="select" label="Interpolation method" help="Interpolation method from scipy to use. For more details see [1].">
+        <param name="model" type="select" label="Interpolation model" help="Interpolation model from scipy to use. For more details see [1].">
             <option value="linear">Piecewise linear</option>
             <option value="cubic" selected="true">Cubic spline</option>
             <option value="pchip">Pchip</option>

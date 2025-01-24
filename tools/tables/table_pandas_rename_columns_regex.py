@@ -110,11 +110,9 @@ if __name__ == "__main__":
     )
 
     args = parser.parse_args()
-    # Adjust column indices to be 0-based
-    column_indices = [index - 1 for index in args.columns]
     main(
         args.input_dataset,
-        column_indices,
+        args.columns,
         args.regex_check,
         args.regex_replace,
         args.output_dataset,

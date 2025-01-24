@@ -68,7 +68,7 @@ def main(
     output_dataset (Tuple[Callable[[pd.DataFrame, str], None], str]): The output dataset and its file extension.
     """
     try:
-        df, _ = input_dataset
+        df = input_dataset
         df = apply_transformation(df, columns, transformation)
         write_func, file_path = output_dataset
         write_func(df, file_path)
@@ -111,6 +111,4 @@ if __name__ == "__main__":
     )
 
     args = parser.parse_args()
-    # Adjust column indices to be 0-based
-    column_indices = [index - 1 for index in args.columns]
-    main(args.input_dataset, column_indices, args.transformation, args.output_dataset)
+    main(args.input_dataset, args.columns, args.transformation, args.output_dataset)

@@ -86,8 +86,8 @@ def interpolate_data(
 
 
 def main(
-    reference_dataset: Tuple[pd.DataFrame, str],
-    query_dataset: Tuple[pd.DataFrame, str],
+    reference_dataset: pd.DataFrame,
+    query_dataset: pd.DataFrame,
     x_col: int,
     y_col: int,
     xnew_col: int,
@@ -107,11 +107,7 @@ def main(
     output_dataset (Tuple[Callable[[pd.DataFrame, str], None], str]): The output dataset and its file extension.
     """
     try:
-        reference_df, _ = reference_dataset
-        query_df, _ = query_dataset
-        interpolate_data(
-            reference_df, query_df, x_col, y_col, xnew_col, model, output_dataset
-        )
+        interpolate_data(reference_dataset, query_dataset, x_col, y_col, xnew_col, model, output_dataset)
     except Exception as e:
         logging.error(f"Error in main function: {e}")
         raise

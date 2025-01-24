@@ -1,17 +1,19 @@
 import argparse
 import logging
 
+import numpy as np
+
 
 from utils import LoadDataAction, SplitColumnIndicesAction, StoreOutputAction
 
 
 # Constants for operations
 OPERATIONS = {
-    "mul": lambda x, y: x * y,
-    "sub": lambda x, y: x - y,
-    "div": lambda x, y: x / y,
-    "add": lambda x, y: x + y,
-    "pow": lambda x, y: x**y,
+    "mul": np.multiply,
+    "sub": np.subtract,
+    "div": np.divide,
+    "add": np.add,
+    "pow": np.power,
 }
 
 
@@ -46,8 +48,7 @@ def main(input_dataset, column_indices, operation, operand, output_dataset):
     output_dataset (tuple): The output dataset and its file extension.
     """
     try:
-        df = input_dataset
-        df = perform_operation(df, column_indices, operation, operand)
+        df = perform_operation(input_dataset, column_indices, operation, operand)
         write_func, file_path = output_dataset
         write_func(df, file_path)
     except Exception as e:
@@ -95,11 +96,9 @@ if __name__ == "__main__":
     )
 
     args = parser.parse_args()
-    # Adjust column indices to be 0-based
-    column_indices = [index - 1 for index in args.columns]
     main(
         args.input_dataset,
-        column_indices,
+        args.columns,
         args.operation,
         args.operand,
         args.output_dataset,
