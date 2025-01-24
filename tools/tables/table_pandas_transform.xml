@@ -7,6 +7,10 @@
     <requirements>
         <expand macro="requirement_pandas_pyarrow"/>
     </requirements>
+    <required_files>
+        <include path="table_pandas_transform.py" />
+    </required_files>
+    <expand macro="creator" />
     <command detect_errors="exit_code"><![CDATA[
         python3 '$__tool_directory__/table_pandas_transform.py' 
             --input_dataset '$input_dataset' '$input_dataset.ext' 

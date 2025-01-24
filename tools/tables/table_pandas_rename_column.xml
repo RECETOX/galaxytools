@@ -18,6 +18,10 @@
     <requirements>
         <expand macro="requirement_pandas_pyarrow"/>
     </requirements>
+    <required_files>
+        <include path="table_pandas_rename_column.py" />
+    </required_files>
+    <expand macro="creator" />
     <command detect_errors="exit_code"><![CDATA[
         #set rename_dict = " ".join([str($key_value_pair.column) + '=' + str($key_value_pair.new_name) for $key_value_pair in $columns_selection])
         python3 '$__tool_directory__/table_pandas_rename_column.py' 

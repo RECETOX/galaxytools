@@ -19,6 +19,10 @@
         <requirement type="package" version="@SCIPY_VERSION@">scipy</requirement>
         <expand macro="requirement_pandas_pyarrow"/>
     </requirements>
+    <required_files>
+        <include path="table_scipy_interpolate.py" />
+    </required_files>
+    <expand macro="creator" />
     <command detect_errors="exit_code"><![CDATA[
         python3 '${__tool_directory__}/table_scipy_interpolate.py' 
         --reference_dataset '$reference_dataset' '$reference_dataset.ext'
