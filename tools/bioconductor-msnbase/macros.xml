@@ -16,6 +16,7 @@
     <xml name="xrefs">
         <xrefs>
             <xref type="bio.tools">msnbase</xref>
+            <xref type="bioconductor">msnbase</xref>
         </xrefs>
     </xml>
 

@@ -7,7 +7,7 @@
     <expand macro="creator"/>
     <expand macro="requirements"/>
     <command detect_errors="exit_code"><![CDATA[
-        Rscript -e 'source("${run_script}")'
+        Rscript "${run_script}"
     ]]></command>
     <configfiles>
         <configfile name="run_script"><![CDATA[
