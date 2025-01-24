@@ -1,0 +1,21 @@
+name: bioconductor-msnbase
+owner: recetox
+remote_repository_url: "https://github.com/RECETOX/galaxytools/tree/master/tools/bioconductor-msnbase"
+homepage_url: "https://bioconductor.org/packages/release/bioc/html/MSnbase.html"
+categories:
+  - Metabolomics
+  - Proteomics
+description: "MSnbase provides infrastructure for manipulation, processing and visualisation of mass spectrometry and proteomics data, ranging from raw to quantitative and annotated data. "
+long_description: |
+ "MSnbase is an R/Bioconductor package that provides infrastructure for plotting, manipulation and processing mass spectrometry and proteomics data.
+ The project was started by Laurent Gatto in October 2010 (Mon Oct 4 23:35:23 2010, according to the git log) and has, since then,
+ benefited from various contributions, in particular Sebastian Gibb and Johannes Rainer.
+ The official package page is the Bioconductor landing page (release or devel versions).
+ The github page page is for active development, issue tracking and forking/pulling purposes."
+auto_tool_repositories:
+  name_template: "{{ tool_id }}"
+  description_template: "{{ tool_name }} tool from the bioconductor-msnbase package"
+suite:
+  name: suite_bioconductor_msnbase
+  description: MSnbase is an R/Bioconductor package that provides infrastructure for plotting, manipulation and processing mass spectrometry and proteomics data.
+  type: repository_suite_definition

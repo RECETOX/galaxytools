@@ -1,0 +1,46 @@
+<macros>
+    <xml name="creator">
+        <creator>
+            <person
+                givenName="Helge"
+                familyName="Hecht"
+                url="https://github.com/hechth"
+                identifier="0000-0001-6744-996X" />
+            <organization
+                url="https://www.recetox.muni.cz/"
+                email="GalaxyToolsDevelopmentandDeployment@space.muni.cz"
+                name="RECETOX MUNI" />
+        </creator>
+    </xml>
+
+    <xml name="xrefs">
+        <xrefs>
+            <xref type="bio.tools">msnbase</xref>
+            <xref type="bioconductor">msnbase</xref>
+        </xrefs>
+    </xml>
+
+    <token name="@TOOL_VERSION@">2.32.0</token>
+    <token name="@VERSION_SUFFIX@">0</token>
+    <xml name="requirements">
+        <requirements>
+            <requirement type="package" version="@TOOL_VERSION@">bioconductor-msnbase</requirement>
+        </requirements>
+    </xml>
+    <xml name="citations">
+        <citations>
+            <citation type="doi">10.18129/B9.bioc.MSnbase</citation>
+        </citations>
+    </xml>
+    <xml name="assertions_smoothing">
+        <has_text text='id="sf_ru_0"'/>
+        <has_text text="f3fdaed6b23f3690e004d16921be328018771bf1"/>
+        <has_n_lines n="1775"/>
+    </xml>
+
+    <xml name="assertions_centroiding">
+        <has_n_lines n="1512"/>
+        <has_text text='accession="MS:1000035" name="peak picking"'/>
+        <has_size size="129630" delta="50"/>
+    </xml>
+</macros>
