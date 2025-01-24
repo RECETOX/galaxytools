@@ -1,21 +1,22 @@
-<tool id="table_rename_columns_regex" name="table rename columns via regex" version="@PANDAS_VERSION@+galaxy@VERSION_SUFFIX@" profile="20.01" license="MIT">
-    <description>Rename columns in a table using regex</description>
+<tool id="table_pandas_rename_columns_regex" name="table rename columns via regex" version="@PANDAS_VERSION@+galaxy@VERSION_SUFFIX@" profile="20.01" license="MIT">
+    <description>rename columns in a table using regex</description>
     <macros>
         <import>macros.xml</import>
         <token name="@VERSION_SUFFIX@">0</token>
     </macros>
+
     <requirements>
         <expand macro="requirement_pandas_pyarrow"/>
     </requirements>
 
-    <command>
-        python3 '$__tool_directory__/table_pandas_transform.py' 
+    <command detect_errors="exit_code"><![CDATA[
+        python3 '$__tool_directory__/table_pandas_rename_columns_regex.py' 
             --input_dataset '$input_dataset' '$input_dataset.ext'
             --columns '$columns'
             --regex_check "$regex_check"
             --regex_replace "$regex_replace"
             --output_dataset '$output_dataset' '$output_dataset.ext'
-    </command>
+    ]]></command>
     
     <inputs>
         <param name="input_dataset" type="data" format="csv,tsv,tabular,parquet" label="Input Dataset"/>
@@ -27,6 +28,7 @@
             <expand macro="regex_sanitizer"/>
         </param>
     </inputs>
+
     <outputs>
         <data name="output_dataset" format_source="input_dataset" label="${tool.name} on ${on_string}">
             <change_format>
@@ -34,12 +36,15 @@
             </change_format>
         </data>
     </outputs>
+
     <tests>
-        
+        <test expect_failure="true"/>
     </tests>
-    <help>
+
+    <help><![CDATA[
         This tool renames columns in a table using the specified regex patterns.
-    </help>
+    ]]></help>
+
     <citations>
         <citation type="doi">10.5281/zenodo.3509134</citation>
         <citation type="doi">10.25080/Majora-92bf1922-00a</citation>
