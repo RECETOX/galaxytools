@@ -1,0 +1,33 @@
+<macros>
+    <token name="@PANDAS_VERSION@">2.2.3</token>
+    <token name="@SCIPY_VERSION@">1.14.1</token>
+
+    <xml name="requirement_pandas_pyarrow">
+        <requirement type="package" version="@PANDAS_VERSION@">pandas</requirement>
+        <requirement type="package" version="18.0.0">pyarrow</requirement>
+    </xml>
+
+    <xml name="regex_sanitizer">
+        <sanitizer>
+            <valid initial="string.ascii_letters,string.digits">
+                <add value="^"/>
+                <add value="$"/>
+                <add value="("/>
+                <add value=")"/>
+                <add value="|"/>
+                <add value="?"/>
+                <add value="*"/>
+                <add value="+"/>
+                <add value="{"/>
+                <add value="}"/>
+                <add value="\"/>
+                <add value="["/>
+                <add value="]"/>
+                <add value="."/>
+                <add value=","/>
+            </valid>
+        </sanitizer>
+        <validator type="empty_field" />
+        <validator type="regex" message="Pattern must not end with backslash.">.*[^\\]$</validator>
+    </xml>
+</macros>

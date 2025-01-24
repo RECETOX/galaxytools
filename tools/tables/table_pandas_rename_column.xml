@@ -1,10 +1,10 @@
-<tool id="table_pandas_rename_column" name="table rename column" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="20.01" license="MIT">
+<tool id="table_pandas_rename_column" name="table rename column" version="@PANDAS_VERSION@+galaxy@VERSION_SUFFIX@" profile="20.01" license="MIT">
     <description>of a table</description>
     <!-- <xrefs>
         <xref type="bio.tools"></xref>
     </xrefs> -->
     <macros>
-        <token name="@TOOL_VERSION@">2.2.3</token>
+        <import>macros.xml</import>
         <token name="@VERSION_SUFFIX@">0</token>
     </macros>
     <!-- TODO: please annotate this tool with topics and operations from http://edamontology.org -->
@@ -16,7 +16,7 @@
         <edam_operation>operation_TODO</edam_operation>
     </edam_operations> -->
     <requirements>
-        <requirement type="package" version="@TOOL_VERSION@">pandas</requirement>
+        <expand macro="requirement_pandas_pyarrow"/>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
         #set rename_dict = " ".join([str($key_value_pair.column) + '=' + str($key_value_pair.new_name) for $key_value_pair in $columns_selection])

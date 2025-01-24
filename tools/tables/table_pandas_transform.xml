@@ -1,12 +1,11 @@
-<tool id="table_pandas_transform" name="table column transformations" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="20.01" license="MIT">
+<tool id="table_pandas_transform" name="table column transformations" version="@PANDAS_VERSION@+galaxy@VERSION_SUFFIX@" profile="20.01" license="MIT">
     <description>apply transformations on multiple columns</description>
     <macros>
-        <token name="@TOOL_VERSION@">2.2.3</token>
+        <import>macros.xml</import>
         <token name="@VERSION_SUFFIX@">0</token>
     </macros>
     <requirements>
-        <requirement type="package" version="@TOOL_VERSION@">pandas</requirement>
-        <requirement type="package" version="18.0.0">pyarrow</requirement>
+        <expand macro="requirement_pandas_pyarrow"/>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
         python3 '$__tool_directory__/table_pandas_transform.py' 

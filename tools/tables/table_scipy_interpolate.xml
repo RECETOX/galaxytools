@@ -1,10 +1,10 @@
-<tool id="scipy_interpolate" name="scipy interpolate" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="20.01" license="MIT">
+<tool id="table_scipy_interpolate" name="table scipy interpolate" version="@SCIPY_VERSION@+galaxy@VERSION_SUFFIX@" profile="20.01" license="MIT">
     <description>interpolate data using the scipy.interpolate library</description>
     <!-- <xrefs>
         <xref type="bio.tools"></xref>
     </xrefs> -->
     <macros>
-        <token name="@TOOL_VERSION@">1.14.1</token>
+        <import>macros.xml</import>
         <token name="@VERSION_SUFFIX@">0</token>
     </macros>
     <!-- TODO: please annotate this tool with topics and operations from http://edamontology.org -->
@@ -16,9 +16,8 @@
         <edam_operation>operation_TODO</edam_operation>
     </edam_operations> -->
     <requirements>
-        <requirement type="package" version="@TOOL_VERSION@">scipy</requirement>
-        <requirement type="package" version="2.2.3">pandas</requirement>
-        <requirement type="package" version="18.0.0">pyarrow</requirement>
+        <requirement type="package" version="@SCIPY_VERSION@">scipy</requirement>
+        <expand macro="requirement_pandas_pyarrow"/>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
         python3 '${__tool_directory__}/table_scipy_interpolate.py' 
