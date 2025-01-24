@@ -17,7 +17,9 @@ def rename_columns(df, rename_dict):
     pd.DataFrame: The dataframe with renamed columns.
     """
     try:
-        rename_map = {df.columns[key - 1]: value for key, value in rename_dict.items()}  # Convert 1-based index to column name
+        rename_map = {
+            df.columns[key - 1]: value for key, value in rename_dict.items()
+        }  # Convert 1-based index to column name
         return df.rename(columns=rename_map)
     except IndexError as e:
         logging.error(f"Invalid column index: {e}")
@@ -25,6 +27,7 @@ def rename_columns(df, rename_dict):
     except Exception as e:
         logging.error(f"Error renaming columns: {e}")
         raise
+
 
 def main(input_dataset, rename_dict, output_dataset):
     """
@@ -43,6 +46,7 @@ def main(input_dataset, rename_dict, output_dataset):
     except Exception as e:
         logging.error(f"Error in main function: {e}")
         raise
+
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)

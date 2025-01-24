@@ -6,8 +6,15 @@ import pandas as pd
 from typing import Callable, Tuple
 from utils import LoadDataAction, StoreOutputAction
 
+
 class InterpolationModelAction(argparse.Action):
-    def __call__(self, parser: argparse.ArgumentParser, namespace: argparse.Namespace, values: str, option_string: str = None) -> None:
+    def __call__(
+        self,
+        parser: argparse.ArgumentParser,
+        namespace: argparse.Namespace,
+        values: str,
+        option_string: str = None,
+    ) -> None:
         """
         Custom argparse action to map interpolation method names to their corresponding functions.
 
@@ -27,7 +34,16 @@ class InterpolationModelAction(argparse.Action):
             raise ValueError(f"Unknown interpolation method: {values}")
         setattr(namespace, self.dest, interpolators[values])
 
-def interpolate_data(reference: pd.DataFrame, query: pd.DataFrame, x_col: int, y_col: int, xnew_col: int, model: Callable, output_dataset: Tuple[Callable[[pd.DataFrame, str], None], str]) -> None:
+
+def interpolate_data(
+    reference: pd.DataFrame,
+    query: pd.DataFrame,
+    x_col: int,
+    y_col: int,
+    xnew_col: int,
+    model: Callable,
+    output_dataset: Tuple[Callable[[pd.DataFrame, str], None], str],
+) -> None:
     """
     Interpolate data using the specified model.
 
@@ -48,10 +64,14 @@ def interpolate_data(reference: pd.DataFrame, query: pd.DataFrame, x_col: int, y
 
         # Check if y_col already exists in the query dataset
         if y_col_name in query.columns:
-            raise ValueError(f"Column '{y_col_name}' already exists in the query dataset.")
+            raise ValueError(
+                f"Column '{y_col_name}' already exists in the query dataset."
+            )
 
         if model == np.interp:
-            query[y_col_name] = model(query[xnew_col_name], reference[x_col_name], reference[y_col_name])
+            query[y_col_name] = model(
+                query[xnew_col_name], reference[x_col_name], reference[y_col_name]
+            )
         else:
             model_instance = model(reference[x_col_name], reference[y_col_name])
             query[y_col_name] = model_instance(query[xnew_col_name]).astype(float)
@@ -62,7 +82,16 @@ def interpolate_data(reference: pd.DataFrame, query: pd.DataFrame, x_col: int, y
         logging.error(f"Error in interpolate_data function: {e}")
         raise
 
-def main(reference_dataset: Tuple[pd.DataFrame, str], query_dataset: Tuple[pd.DataFrame, str], x_col: int, y_col: int, xnew_col: int, model: Callable, output_dataset: Tuple[Callable[[pd.DataFrame, str], None], str]) -> None:
+
+def main(
+    reference_dataset: Tuple[pd.DataFrame, str],
+    query_dataset: Tuple[pd.DataFrame, str],
+    x_col: int,
+    y_col: int,
+    xnew_col: int,
+    model: Callable,
+    output_dataset: Tuple[Callable[[pd.DataFrame, str], None], str],
+) -> None:
     """
     Main function to load the datasets, perform interpolation, and save the result.
 
@@ -78,10 +107,13 @@ def main(reference_dataset: Tuple[pd.DataFrame, str], query_dataset: Tuple[pd.Da
     try:
         reference_df, _ = reference_dataset
         query_df, _ = query_dataset
-        interpolate_data(reference_df, query_df, x_col, y_col, xnew_col, model, output_dataset)
+        interpolate_data(
+            reference_df, query_df, x_col, y_col, xnew_col, model, output_dataset
+        )
     except Exception as e:
         logging.error(f"Error in main function: {e}")
         raise
+
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
@@ -143,5 +175,5 @@ if __name__ == "__main__":
         args.y_col,
         args.xnew_col,
         args.model,
-        args.output_dataset
+        args.output_dataset,
     )

@@ -5,7 +5,10 @@ import pandas as pd
 from typing import List, Tuple
 from utils import LoadDataAction, SplitColumnIndicesAction, StoreOutputAction
 
-def rename_columns(df: pd.DataFrame, columns: List[int], regex_check: str, regex_replace: str) -> pd.DataFrame:
+
+def rename_columns(
+    df: pd.DataFrame, columns: List[int], regex_check: str, regex_replace: str
+) -> pd.DataFrame:
     """
     Rename columns in the dataframe based on regex patterns.
 
@@ -38,7 +41,14 @@ def rename_columns(df: pd.DataFrame, columns: List[int], regex_check: str, regex
         logging.error(f"Error renaming columns: {e}")
         raise
 
-def main(input_dataset: Tuple[pd.DataFrame, str], columns: List[int], regex_check: str, regex_replace: str, output_dataset: Tuple[callable, str]) -> None:
+
+def main(
+    input_dataset: Tuple[pd.DataFrame, str],
+    columns: List[int],
+    regex_check: str,
+    regex_replace: str,
+    output_dataset: Tuple[callable, str],
+) -> None:
     """
     Main function to load the dataset, rename columns, and save the result.
 
@@ -57,6 +67,7 @@ def main(input_dataset: Tuple[pd.DataFrame, str], columns: List[int], regex_chec
     except Exception as e:
         logging.error(f"Error in main function: {e}")
         raise
+
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
@@ -99,4 +110,10 @@ if __name__ == "__main__":
     args = parser.parse_args()
     # Adjust column indices to be 0-based
     column_indices = [index - 1 for index in args.columns]
-    main(args.input_dataset, column_indices, args.regex_check, args.regex_replace, args.output_dataset)
+    main(
+        args.input_dataset,
+        column_indices,
+        args.regex_check,
+        args.regex_replace,
+        args.output_dataset,
+    )

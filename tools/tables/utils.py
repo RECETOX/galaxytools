@@ -23,8 +23,11 @@ class KeyValuePairsAction(argparse.Action):
                 key, value = item.split("=")
                 key_value_pairs[int(key)] = value  # Convert key to integer
             except ValueError:
-                parser.error(f"Invalid format for --rename: {item}. Expected format: key=value")
+                parser.error(
+                    f"Invalid format for --rename: {item}. Expected format: key=value"
+                )
         setattr(namespace, self.dest, key_value_pairs)
+
 
 class LoadDataAction(argparse.Action):
     def __call__(self, parser, namespace, values, option_string=None):
@@ -75,7 +78,13 @@ def write_parquet(df: pd.DataFrame, file_path: str) -> None:
 
 
 class StoreOutputAction(argparse.Action):
-    def __call__(self, parser: argparse.ArgumentParser, namespace: argparse.Namespace, values: Tuple[str, str], option_string: str = None) -> None:
+    def __call__(
+        self,
+        parser: argparse.ArgumentParser,
+        namespace: argparse.Namespace,
+        values: Tuple[str, str],
+        option_string: str = None,
+    ) -> None:
         """
         Custom argparse action to store the output function and file path based on file extension.
 
@@ -99,7 +108,13 @@ class StoreOutputAction(argparse.Action):
 
 
 class SplitColumnIndicesAction(argparse.Action):
-    def __call__(self, parser: argparse.ArgumentParser, namespace: argparse.Namespace, values: str, option_string: str = None) -> None:
+    def __call__(
+        self,
+        parser: argparse.ArgumentParser,
+        namespace: argparse.Namespace,
+        values: str,
+        option_string: str = None,
+    ) -> None:
         """
         Custom argparse action to split a comma-separated list of column indices and convert to 0-based indices.
 
@@ -109,5 +124,5 @@ class SplitColumnIndicesAction(argparse.Action):
         values (str): The comma-separated list of 1-based column indices.
         option_string (str): The option string.
         """
-        indices = [int(x) - 1 for x in values.split(',')]  # Convert to 0-based indices
+        indices = [int(x) - 1 for x in values.split(",")]  # Convert to 0-based indices
         setattr(namespace, self.dest, indices)

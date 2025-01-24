@@ -8,8 +8,9 @@ OPERATIONS = {
     "sub": lambda x, y: x - y,
     "div": lambda x, y: x / y,
     "add": lambda x, y: x + y,
-    "pow": lambda x, y: x ** y,
+    "pow": lambda x, y: x**y,
 }
+
 
 def perform_operation(df, column_indices, operation, operand):
     """
@@ -28,6 +29,7 @@ def perform_operation(df, column_indices, operation, operand):
         column_name = df.columns[column_index]
         df[column_name] = OPERATIONS[operation](df[column_name], operand)
     return df
+
 
 def main(input_dataset, column_indices, operation, operand, output_dataset):
     """
@@ -48,6 +50,7 @@ def main(input_dataset, column_indices, operation, operand, output_dataset):
     except Exception as e:
         logging.error(f"Error in main function: {e}")
         raise
+
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
@@ -91,4 +94,10 @@ if __name__ == "__main__":
     args = parser.parse_args()
     # Adjust column indices to be 0-based
     column_indices = [index - 1 for index in args.columns]
-    main(args.input_dataset, column_indices, args.operation, args.operand, args.output_dataset)
+    main(
+        args.input_dataset,
+        column_indices,
+        args.operation,
+        args.operand,
+        args.output_dataset,
+    )

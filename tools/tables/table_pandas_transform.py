@@ -17,7 +17,10 @@ TRANSFORMATIONS = {
     "ceil": np.ceil,
 }
 
-def apply_transformation(df: pd.DataFrame, columns: List[int], transformation: str) -> pd.DataFrame:
+
+def apply_transformation(
+    df: pd.DataFrame, columns: List[int], transformation: str
+) -> pd.DataFrame:
     """
     Apply the specified transformation to the given columns of the dataframe.
 
@@ -45,7 +48,13 @@ def apply_transformation(df: pd.DataFrame, columns: List[int], transformation: s
         logging.error(f"Error applying transformation: {e}")
         raise
 
-def main(input_dataset: Tuple[pd.DataFrame, str], columns: List[int], transformation: str, output_dataset: Tuple[Callable[[pd.DataFrame, str], None], str]) -> None:
+
+def main(
+    input_dataset: Tuple[pd.DataFrame, str],
+    columns: List[int],
+    transformation: str,
+    output_dataset: Tuple[Callable[[pd.DataFrame, str], None], str],
+) -> None:
     """
     Main function to load the dataset, apply the transformation, and save the result.
 
@@ -63,6 +72,7 @@ def main(input_dataset: Tuple[pd.DataFrame, str], columns: List[int], transforma
     except Exception as e:
         logging.error(f"Error in main function: {e}")
         raise
+
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
@@ -100,9 +110,4 @@ if __name__ == "__main__":
     args = parser.parse_args()
     # Adjust column indices to be 0-based
     column_indices = [index - 1 for index in args.columns]
-    main(
-        args.input_dataset,
-        column_indices,
-        args.transformation,
-        args.output_dataset
-    )
+    main(args.input_dataset, column_indices, args.transformation, args.output_dataset)
