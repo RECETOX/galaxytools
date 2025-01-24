@@ -1,9 +1,8 @@
 import argparse
 import logging
 
+
 import numpy as np
-
-
 from utils import LoadDataAction, SplitColumnIndicesAction, StoreOutputAction
 
 
