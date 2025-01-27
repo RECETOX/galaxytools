@@ -1,0 +1,38 @@
+<macros>
+ 
+<token name="@GENERAL_HELP@">
+Scp Help section
+===================
+ 
+Overview
+--------
+The `scp` tool facilitates the processing of the mass spectrometry-based single cell proteomics (SCP) data. It builds on the `scp` R package developed in the laboratory of prof. Laurent Gatto and provides functions for the peptide-to-spectrum match (PSM), peptide or protein-level filtering, normalization, transformation and imputation of missing values.
+
+The source code can be found in the following Github repository or on BioConductor:
+.. _GitHub: https://github.com/UCLouvain-CBIO/scp/
+.. _issues: https://github.com/UCLouvain-CBIO/scp/issues
+.. _Bioconductor: https://www.bioconductor.org/packages/release/bioc/html/scp.html
+
+Workflow
+--------
+
+The scp workflow currently supports the processing of MaxQuant results and requires two input files:
+
+- evidence.txt file (output from MaxQuant)
+- sampleAnnotation file (provided by user). The SampleAnnotation file is a metadata file, describing annotation of individual samples (such as quantification column names, batches, sample types, etc.). Please note, that the run identifier column MUST be present in both evidence and sampleAnnotation files.
+
+The workflow starts at the level of PSM. Firstly, the data are filtered extensively to keep only the most reliable identifications: reverse sequences and potential contaminants are removed, as well as PSMs below certain parental ion fraction threshold or not passing a q-value threshold. Also batches with very few features are excluded.
+
+Subsequently, PSMs are aggregated to peptide level. On the peptide level, another filtering is applied based on median relative intensity or median CV. Peptide-level intensities are then normalized and log2 transformed. 
+
+Such intensities are then further aggregated to the protein level, where they undergo another normalization and imputation of missing values. 
+
+Because of the unavoidable batch effects present in the single-cell data, scp offers two methods for the batch correction: ComBat and removeBatchEffect() from the limma package. 
+
+Finally, dimenson reduction such as PCA or UMAP (on the PCA components) is provided. PCA and UMAP plots are then provided alongside with the (optional) quality controls plots within the `Plots` collection.
+
+Final log2 transformed, normalized, imputed and batch-corrected data are provided, with the option to export also intermediate results. 
+
+Due to the internal complexity of data formats handling, we opted for one form with pre-defined settings for the whole processing pipeline. However, we highly recommend to check also QC plots and intermediate results and based on that adjust the workflow settings. 
+</token>
+</macros>
