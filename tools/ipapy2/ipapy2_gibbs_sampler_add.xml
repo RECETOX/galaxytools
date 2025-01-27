@@ -28,23 +28,29 @@
         <param name="delta_add" type="float" value="1" min="0" label="adducts weight" help="parameter used when computing the conditional priors. The parameter must be positive. The smaller the parameter the more weight the adducts connections have on the posterior probabilities. Default 1." />
         <param label="return each iteration" name="all_out" type="boolean" value="false" optional="true" help="logical value. If true the list of assignments found in each iteration is returned by the function. Default False."/>
         <param label="previous Gibbs sampler" name="zs" type="data" format="txt" optional="true" help="list of assignments computed in a previous run of the Gibbs sampler. Optional, default None."/>
-        <param label="Gibbs sampler output" name="zs_out" type="data" format="txt" optional="true" help="file name to save the list of assignments computed in the current run of the Gibbs sampler."/>
     </inputs>
 
     <outputs>
         <data label="${tool.name} annotations on ${on_string}" name="annotations_out" format="csv"/>
-        <data label="${tool.name} zs on ${on_string}" name="zs_out" optional="true">
+        <data label="${tool.name} zs on ${on_string}" name="zs_out" format="csv">
             <filter>options['all_out']</filter>
         </data>
     </outputs>
 
     <tests>
-        <test>
+        <test  expect_num_outputs="1">
             <param name="mapped_isotope_patterns" value="mapped_isotope_patterns.csv"/>
-            <param name="annotations" value="test_Gibbs_sampler_add_annotations.csv"/>
+            <param name="annotations" value="clean_annotations.csv"/>
             <param name="noits" value="1000"/>
             <param name="delta_add" value="0.1"/>
-            <output name="annotations_out" file="gibbs_sample_add_annotations.csv" />
+            <!-- Not the best way to test, but the results are stochastic hence difficult to test-->
+            <output name="annotations_out">
+                <assert_contents>
+                    <has_n_columns n="15"  sep=","/>
+                    <has_n_lines n="15" delta="5" />
+                    <has_line line="id,name,formula,adduct,m/z,charge,RT range,ppm,isotope pattern score,fragmentation pattern score,prior,post,post Gibbs,chi-square pval,peak_id" />
+                </assert_contents>
+            </output>
         </test>
     </tests>
 

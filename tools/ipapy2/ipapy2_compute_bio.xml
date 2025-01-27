@@ -42,10 +42,17 @@
 
     <tests>
         <test>
-            <param name="MS1_DB" value="MS1_DB.csv"/>
-            <param name="annotations" value="MS1_annotations.csv"/>
+            <param name="MS1_DB" value="compute_bio_db.csv"/>
+            <param name="annotations" value="clean_annotations.csv"/>
             <param name="biochemical_mode" value="reactions"/>
-            <output name="compute_bio_output" file="compute_bio_output.csv"/>
+            <!-- Not the best way to test, but the results are stochastic hence difficult to test-->
+            <output name="compute_bio_output">
+                <assert_contents>
+                    <has_text text="C00079" />
+                    <has_n_columns n="2"  sep=","/>
+                    <has_n_lines n="2" delta="3" />
+                </assert_contents>
+            </output>
         </test>
     </tests>
     
