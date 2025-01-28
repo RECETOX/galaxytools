@@ -72,6 +72,17 @@
         <data name="boxplot" format="png" label="Boxplot on ${on_string}" from_work_dir="boxplot.png"/>
     </outputs>
     <tests>
+        <test expect_num_outputs='1'>
+            <param name="input_data" value="test_data.txt"/>
+            <param name="has_rownames" value="true"/>
+            <param name="log2_transform" value="false"/>  
+            <param name="use_grouping" value="false"/>  
+            <output name="boxplot" ftype="png">
+                <assert_contents>
+                    <has_size size="1164615" delta="200"/>
+                </assert_contents>
+            </output>          
+        </test>
     </tests>
     <help><![CDATA[
         @GENERAL_HELP@
