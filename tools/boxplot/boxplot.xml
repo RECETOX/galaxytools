@@ -1,4 +1,4 @@
-<tool id="boxplot" name="boxplot" version="@TOOL_VERSION@+galaxy0" profile="23.0">
+<tool id="recetox-boxplot" name="recetox-boxplot" version="@TOOL_VERSION@+galaxy0" profile="23.0">
     <description>Boxplot visualization tool</description>
     <macros>
         <import>macros.xml</import>
@@ -37,15 +37,30 @@
         metadata_input <- data.frame(lapply(metadata_input, as.factor))
 
         data_long <- dplyr::left_join(data_long, metadata_input, by = c("samples" = sampleID_column))
-        print(head(data_long))
+
+        #if $grouping_boxplot.facet_x
+        facet_x <- rlang::sym(colnames(metadata_input)[$grouping_boxplot.facet_x])
+        #else 
+        facet_x <- NULL
+        #end if
+ 
+        #if $grouping_boxplot.facet_y
+        facet_y <- rlang::sym(colnames(metadata_input)[$grouping_boxplot.facet_y])
+        #else
+        facet_y <- NULL
+        #end if 
+
+        print(is.null(facet_y))
 
         plot_boxplot <- ggplot2::ggplot(data_long, ggplot2::aes_string(x = plotting_column, y = "intensity")) +
                                         ggplot2::geom_boxplot() +
-                                        ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust=1))
+                                        ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust=1)) +
+                                        ggplot2::facet_grid(rows = if(!is.null(facet_y)) dplyr::vars(!!facet_y) else NULL,
+                                                            cols = if(!is.null(facet_x)) dplyr::vars(!!facet_x) else NULL)
         #else
-        plot_boxplot <- ggplot2::ggplot(data_long, ggplot2::aes(x = conditions, y = intensity)) +
+        plot_boxplot <- ggplot2::ggplot(data_long, ggplot2::aes(x = samples, y = intensity)) +
                                         ggplot2::geom_boxplot() +
-                                        ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust=1))
+                                        ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust=1)) 
         #end if 
 
         ggplot2::ggsave(filename = "boxplot.png", plot_boxplot)
