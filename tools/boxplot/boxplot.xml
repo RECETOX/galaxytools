@@ -50,8 +50,6 @@
         facet_y <- NULL
         #end if 
 
-        print(is.null(facet_y))
-
         plot_boxplot <- ggplot2::ggplot(data_long, ggplot2::aes_string(x = plotting_column, y = "intensity")) +
                                         ggplot2::geom_boxplot() +
                                         ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust=1)) +

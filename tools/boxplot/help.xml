@@ -1,7 +1,15 @@
 <macros>
  
 <token name="@GENERAL_HELP@">
-Scp Help section
+recetox-boxplot help
 ===================
+recetox-boxplot tool can be used to plot boxplots for the tabular data. On the input, a dataframe containing only columns to be plotted (i.e. we recommend to pre-filter the table for only numerical column with eventually first column holding the rownames) is expected. 
+
+Typically, rows are features, columns are samples - if one wishes to plot the boxplots for the features, we recommend to transpose the table beforehand.
+
+It is possible to use also different variable for the plotting - in that case, a metadata table can be supplied. The metadata table must contain a column which will map to the data table (e.g. SampleName).
+
+It is also possible to use faceting, meaning splitting the plot based on multiple variables. One can then choose which variable to split the x axis and y axis on.
+
  </token>
 </macros>
