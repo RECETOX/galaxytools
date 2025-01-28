@@ -2,7 +2,7 @@
  
 <token name="@GENERAL_HELP@">
 recetox-boxplot help
-===================
+=====================
 recetox-boxplot tool can be used to plot boxplots for the tabular data. On the input, a dataframe containing only columns to be plotted (i.e. we recommend to pre-filter the table for only numerical column with eventually first column holding the rownames) is expected. 
 
 Typically, rows are features, columns are samples - if one wishes to plot the boxplots for the features, we recommend to transpose the table beforehand.
