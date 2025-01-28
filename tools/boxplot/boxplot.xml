@@ -1,0 +1,67 @@
+<tool id="boxplot" name="boxplot" version="@TOOL_VERSION@+galaxy0" profile="23.0">
+    <description>Boxplot visualization tool</description>
+    <macros>
+        <import>macros.xml</import>
+        <import>help.xml</import>
+    </macros>
+    <xrefs>
+    </xrefs>
+    <expand macro="creator" />
+    <expand macro="requirements" />
+    <command detect_errors="exit_code"><![CDATA[
+        Rscript '${run_script}'
+    ]]></command>
+    <configfiles>
+        <configfile name="run_script"><![CDATA[
+        
+        data_input <- read.delim("$input_data", sep="\t", check.names = "false")
+
+        #if $has_rownames
+        rownames(data_input) <- data_input[, 1]
+        data_input <- data_input[ ,-1]
+        #end if
+        
+        data_long <- tidyr::pivot_longer(data_input,
+                                         cols = c(1:ncol(data_input)),
+                                         names_to = "samples",
+                                         values_to = "intensity")
+
+        #if $log2_transform
+        data_long[["intensity"]] <- log2(data_long[["intensity"]])
+        #end if 
+
+        #if $grouping_boxplot.use_grouping == "yes"
+        metadata_input <- read.delim("$grouping_boxplot.input_metadata", sep="\t",  check.names = "false")
+        sampleID_column <- colnames(metadata_input)[$grouping_boxplot.sampleID]
+        plotting_column <- colnames(metadata_input)[$grouping_boxplot.groupingCol]
+        metadata_input <- data.frame(lapply(metadata_input, as.factor))
+
+        data_long <- dplyr::left_join(data_long, metadata_input, by = c("samples" = sampleID_column))
+        print(head(data_long))
+
+        plot_boxplot <- ggplot2::ggplot(data_long, ggplot2::aes_string(x = plotting_column, y = "intensity")) +
+                                        ggplot2::geom_boxplot() +
+                                        ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust=1))
+        #else
+        plot_boxplot <- ggplot2::ggplot(data_long, ggplot2::aes(x = conditions, y = intensity)) +
+                                        ggplot2::geom_boxplot() +
+                                        ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust=1))
+        #end if 
+
+        ggplot2::ggsave(filename = "boxplot.png", plot_boxplot)
+
+        ]]></configfile>
+    </configfiles>
+    <inputs>
+        <expand macro="boxplot_param"/>
+    </inputs>
+    <outputs>
+        <data name="boxplot" format="png" label="Boxplot on ${on_string}" from_work_dir="boxplot.png"/>
+    </outputs>
+    <tests>
+    </tests>
+    <help><![CDATA[
+        @GENERAL_HELP@
+    ]]></help>
+    <expand macro="citations" />
+</tool>

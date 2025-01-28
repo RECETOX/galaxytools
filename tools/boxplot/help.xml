@@ -1,0 +1,7 @@
+<macros>
+ 
+<token name="@GENERAL_HELP@">
+Scp Help section
+===================
+ </token>
+</macros>
