@@ -1,0 +1,92 @@
+<tool id="table_pandas_rename_column" name="table rename column" version="@PANDAS_VERSION@+galaxy@VERSION_SUFFIX@" profile="20.01" license="MIT">
+    <description>of a table</description>
+    <!-- <xrefs>
+        <xref type="bio.tools"></xref>
+    </xrefs> -->
+    <macros>
+        <import>macros.xml</import>
+        <token name="@VERSION_SUFFIX@">0</token>
+    </macros>
+    <!-- TODO: please annotate this tool with topics and operations from http://edamontology.org -->
+    <!-- TODO: for more information see: https://galaxy-iuc-standards.readthedocs.io/en/latest/best_practices/tool_xml.html#edam-topics-and-operations -->
+    <!-- <edam_topics>
+        <edam_topic>topic_TODO</edam_topic>
+    </edam_topics>
+    <edam_operations>
+        <edam_operation>operation_TODO</edam_operation>
+    </edam_operations> -->
+    <requirements>
+        <expand macro="requirement_pandas_pyarrow"/>
+    </requirements>
+    <required_files>
+        <include path="table_pandas_rename_column.py" />
+        <include path="utils.py" />
+    </required_files>
+    <expand macro="creator" />
+    <command detect_errors="exit_code"><![CDATA[
+        #set rename_dict = " ".join([str($key_value_pair.column) + '=' + str($key_value_pair.new_name) for $key_value_pair in $columns_selection])
+        python3 '$__tool_directory__/table_pandas_rename_column.py' 
+            --input_dataset '$input_dataset' '$input_dataset.ext' 
+            --rename $rename_dict
+            --output_dataset '$output_dataset' '$output_dataset.ext' 
+    ]]></command>
+    <inputs>
+        <param name="input_dataset" type="data" format="csv,tsv,tabular,parquet" label="Input Dataset"/>
+        <repeat name="columns_selection" title="Rename column" min="1">
+            <param name="column" type="data_column" data_ref="input_dataset" use_header_names="true" label="Column" help="Column from the dataset to rename."/>
+            <param argument="new_name" type="text" value="" label="New column name" help="New name for the column">
+                <sanitizer invalid_char="">
+                    <valid initial="string.letters,string.digits">
+                        <add value="_" />
+                    </valid>
+                </sanitizer>
+                <validator type="regex">[0-9a-zA-Z_]+</validator>
+            </param>
+        </repeat>
+    </inputs>
+    <outputs>
+        <data name="output_dataset" format_source="input_dataset" label="${tool.name} on ${on_string}">
+            <change_format>
+                <when input="input_dataset.ext" value="tsv" format="tabular" />
+            </change_format>
+        </data>
+    </outputs>
+    <tests>
+        <test>
+            <param name="input_dataset" value="reference.txt" ftype="tabular"/>
+            <param name="column" value="2"/>
+            <param name="new_name" value="retention_time"/>
+            <output name="output_dataset" file="rename/reference_rt_renamed.tabular" ftype="tabular"/>
+        </test>
+        <test>
+            <param name="input_dataset" value="reference.txt" ftype="tabular"/>
+            <repeat name="columns_selection">
+                <param name="column" value="2"/>
+                <param name="new_name" value="retention_time"/>
+            </repeat>
+            <repeat name="columns_selection">
+                <param name="column" value="1"/>
+                <param name="new_name" value="retention_index"/>
+            </repeat>
+            <output name="output_dataset" file="rename/reference_both_renamed.tabular" ftype="tabular"/>
+        </test>
+    </tests>
+    <help><![CDATA[
+This tool renames columns in a table.
+
+Inputs
+------
+
+- **Input Dataset**: The input dataset in CSV, TSV, tabular, or Parquet format.
+- **Columns to Rename**: Specify the columns to rename and their new names. You can use the "repeat" function to rename multiple columns.
+
+Outputs
+-------
+
+- **Output Dataset**: The output dataset with the renamed columns.
+
+    ]]></help>
+    <citations>
+        <citation type="doi">10.5281/zenodo.3509134</citation>
+    </citations>
+</tool>
