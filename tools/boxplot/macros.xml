@@ -47,7 +47,7 @@
                     <param name="input_metadata" type="data" format="tabular" label="Input metadata table" help= "Input metadata file in a tabular format"/>
                     <param name="sampleID" type="data_column" data_ref="input_metadata" use_header_names="true" label="Sample identification column in metadata table" help="Column containing sample names - it should correspond to the colNames in the data table."/>
                     <param name="groupingCol" type="data_column" data_ref="input_metadata" use_header_names="true" label="Plotting column" help="Which column from the metadata table should be plotted on x axis?"/>
-                    <param name="colorCol" type="data_column" data_ref="input_metadata" use_header_names="true" label="Color the boxplot based on a variable?" help="Which column from the metadata table should be used for coloring?"/>
+                    <param name="colorCol" type="data_column" data_ref="input_metadata" use_header_names="true" label="Color the boxplot based on a variable?" help="Which column from the metadata table should be used for coloring?" optional = "true">
                     <param name="facet_x" type="data_column" data_ref="input_metadata" use_header_names="true" label="Column to use as facet on x-axis" optional="true" help="If using faceting, which column should be plotted on x-axis? Default 'Nothing selected' means no faceting will be done on x-axis."/>
                     <param name="facet_y" type="data_column" data_ref="input_metadata" use_header_names="true" label="Column to use as facet on y-axis" optional="true" help="If using faceting, which column should be plotted on y-axis? Default 'Nothing selected' means no faceting will be done on y-axis."/>
                 </when>
