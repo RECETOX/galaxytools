@@ -1,11 +1,5 @@
 <macros>
     <token name="@TOOL_VERSION@">1.1.2</token>
-    <xml name="requirements">
-        <requirements>
-            <requirement type="package" version="@TOOL_VERSION@">r-mfassignr</requirement>
-        </requirements>
-    </xml>
-
     <xml name="refs">
         <xrefs>
                <xref type="bio.tools">mfassignr</xref>

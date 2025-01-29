@@ -52,16 +52,16 @@
         facet_y <- rlang::sym(colnames(metadata_input)[$grouping_boxplot.facet_y])
         #else
         facet_y <- NULL
-        #end if 
+        #end if
 
-        plot_boxplot <- ggplot2::ggplot(data_long, ggplot2::aes_string(x = plotting_column, y = "intensity")) +
+        plot_boxplot <- ggplot2::ggplot(data_long, ggplot2::aes(x = !!rlang::sym(plotting_column), y = intensity)) +
                                         ggplot2::geom_boxplot() +
                                         ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust=1)) +
                                         ggplot2::facet_grid(rows = if(!is.null(facet_y)) dplyr::vars(!!facet_y) else NULL,
                                                             cols = if(!is.null(facet_x)) dplyr::vars(!!facet_x) else NULL,
                                                             scales = "free") +
-                                        ggplot2::xlab($xlab) + 
-                                        ggplot2::ylab($ylab)
+                                        ggplot2::xlab("$xlab") + 
+                                        ggplot2::ylab("$ylab")
 
         #else 
         plot_boxplot <- ggplot2::ggplot(data_long, ggplot2::aes(x = samples, y = intensity)) +
