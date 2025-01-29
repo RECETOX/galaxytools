@@ -40,7 +40,7 @@
         plotting_column <- colnames(metadata_input)[$grouping_boxplot.groupingCol]
         metadata_input <- data.frame(lapply(metadata_input, as.factor))
 
-        data_long <- dplyr::left_join(data_long, metadata_input, by = c("samples" = sampleID_column))
+        data_long <- dplyr::left_join(data_long, metadata_input, by = c("samples" = sampleID_column), keep = TRUE)
 
         #if $grouping_boxplot.facet_x
         facet_x <- rlang::sym(colnames(metadata_input)[$grouping_boxplot.facet_x])
