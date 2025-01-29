@@ -62,6 +62,7 @@
                                                             scales = "free") +
                                         ggplot2::xlab($xlab) + 
                                         ggplot2::ylab($ylab)
+
         #else 
         plot_boxplot <- ggplot2::ggplot(data_long, ggplot2::aes(x = samples, y = intensity)) +
                                         ggplot2::geom_boxplot() +
@@ -69,6 +70,10 @@
                                         ggplot2::xlab("$xlab") + 
                                         ggplot2::ylab("$ylab")
         #end if 
+
+        #if $flip_axes == "true"
+        plot_boxplot <- plot_boxplot + ggplot2::coord_flip()
+        #end if
 
         ggplot2::ggsave(filename = "boxplot.png", plot_boxplot)
 

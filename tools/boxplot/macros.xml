@@ -37,6 +37,7 @@
                 <option value="log2">Log2 transformation</option> 
                 <option value="log10">Log10 transformation</option> 
         </param>
+        <param name="flip_axes" type="boolean" checked="false" truevalue="TRUE" falsevalue="FALSE" label="Plot the boxplots horizontally? (flip the axes)" help="Whether to flip the axes, so the boxplots will be horizontal instead of vertical."/> 
        <conditional name="grouping_boxplot">
                 <param type="select" name="use_grouping" label="Plot boxplot based on column from the metadata table?" help="Whether to base the boxplot on a different variable than column names from the input table.">
                     <option value="no" selected="true">no</option> 
