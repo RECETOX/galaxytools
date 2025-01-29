@@ -26,9 +26,13 @@
                                          names_to = "samples",
                                          values_to = "intensity")
 
-        #if $log2_transform
+        #if $transform_data == "replace_zero"
+        data_long[data_long == 0] <- NA
+        #else if $transform_data == "log2"
         data_long[["intensity"]] <- log2(data_long[["intensity"]])
-        #end if 
+        #else if $transform_data == "log10"
+        data_long[["intensity"]] <- log10(data_long[["intensity"]])        
+        #end if
 
         #if $grouping_boxplot.use_grouping == "yes"
         metadata_input <- read.delim("$grouping_boxplot.input_metadata", sep="\t",  check.names = "false")
@@ -54,11 +58,13 @@
                                         ggplot2::geom_boxplot() +
                                         ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust=1)) +
                                         ggplot2::facet_grid(rows = if(!is.null(facet_y)) dplyr::vars(!!facet_y) else NULL,
-                                                            cols = if(!is.null(facet_x)) dplyr::vars(!!facet_x) else NULL)
+                                                            cols = if(!is.null(facet_x)) dplyr::vars(!!facet_x) else NULL,
+                                                            scales = "free")
         #else
         plot_boxplot <- ggplot2::ggplot(data_long, ggplot2::aes(x = samples, y = intensity)) +
                                         ggplot2::geom_boxplot() +
-                                        ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust=1)) 
+                                        ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust=1)) +
+                                        ggplot2::coord_flip()
         #end if 
 
         ggplot2::ggsave(filename = "boxplot.png", plot_boxplot)
