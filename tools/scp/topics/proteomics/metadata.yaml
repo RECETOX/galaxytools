@@ -1,0 +1,11 @@
+---
+name: proteomics
+type: use
+title: Single Cell Proteomics data analysis
+summary: This is the Galaxy training for the bioconductor-scp tool, which allows an
+  analysis of the single cell proteomics data.
+requirements:
+- type: internal
+  topic_name: introduction
+docker_image: ''
+editorial_board: []
