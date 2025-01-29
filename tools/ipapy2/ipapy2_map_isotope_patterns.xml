@@ -8,22 +8,17 @@
     </requirements>
 
     <command detect_errors="exit_code"><![CDATA[
-        python3 '${ipapy2_map_isotope_cli}'
+        python3 '${__tool_directory__}/ipapy2_map_isotope_patterns.py'
+        --input_dataset '${clustered_MS1_intensities}' '${clustered_MS1_intensities.ext}'
+        --isoDiff ${isoDiff}
+        --ppm ${ppm}
+        --ionisation ${ionisation}
+        --isotope_ratio ${isotope_ratio}
+        --output_dataset '${mapped_isotope_patterns}' '${mapped_isotope_patterns.ext}'
     ]]></command>
 
-<configfiles>
-<configfile name="ipapy2_map_isotope_cli">
-@init_import@
-
-clustered_df = pd.read_csv('${clustered_MS1_intensities}')
-<!-- The function call below updates the passed dataframe in place hence it returns nothing -->
-ipa.map_isotope_patterns(clustered_df, isoDiff=$isotope.isoDiff, ppm=$isotope.ppm, ionisation=int(${ionisation}), MinIsoRatio=$isotope.isotope_ratio)
-clustered_df.to_csv('${mapped_isotope_patterns}', index=False)
-</configfile>
-</configfiles>
-
     <inputs>
-        <param label="IPA dataframe" name="clustered_MS1_intensities" type="data" format="csv" help="A csv file of clustered MS1 intensities." />
+        <param label="IPA dataframe" name="clustered_MS1_intensities" type="data" format="csv,tsv,tabular,parquet" help="A csv file of clustered MS1 intensities." />
         <expand macro="ionisation"/>
         <section name="isotope" title="isotope settings">
             <param name="isoDiff" type="float" value="1">
@@ -34,22 +29,28 @@ clustered_df.to_csv('${mapped_isotope_patterns}', index=False)
                 <label>ppm between isotopes</label>
                 <help>Maximum ppm value allowed between 2 isotopes. Default value 100.</help>
             </param>
-            <param name="isotope_ratio" type="float" min="0" max="100" value="0.5">
+            <param name="isotope_ratio" type="float" min="0" max="100" value="1">
                 <label>isotope ratio</label>
-                <help>mininum intensity ratio expressed (Default value 0.5%). 
+                <help>mininum intensity ratio expressed (Default value 1%). 
 				Only isotopes with intensity higher than MinIsoRatio% of the main isotope are considered</help>
             </param>
         </section>
     </inputs>
     
     <outputs>
-         <data label="${tool.name} on ${on_string}" name="mapped_isotope_patterns" format="csv"/>
+         <data label="${tool.name} on ${on_string}" name="mapped_isotope_patterns" format_source="clustered_MS1_intensities"/>
    </outputs>
     
     <tests>
         <test>
             <param name="clustered_MS1_intensities" value="clustered_MS1_intensities.csv"/>
-            <output name="mapped_isotope_patterns" file="mapped_isotope_patterns.csv"/>
+            <output name="mapped_isotope_patterns">
+                <assert_contents>
+                    <has_n_columns n="8"  sep=","/>
+                    <has_n_lines n="50" delta="5" />
+                    <has_line line="ids,rel.ids,mzs,RTs,Int,relationship,isotope pattern,charge" />
+                </assert_contents>
+            </output>
         </test>
     </tests>
 

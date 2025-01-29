@@ -31,8 +31,8 @@
     ]]></command>
 
     <inputs>
-        <param label="Mapped isotope patterns" name="mapped_isotope_patterns" type="data" format="csv" help="A csv file containing the MS1 data. Ideally obtained from map_isotope_patterns" />
-        <param label="all possible adducts" name="all_adducts" type="data" format="csv" help="A csv file containing the information on all the possible adducts given the database. Ideally obtained from compute_all_adducts" />
+        <param label="Mapped isotope patterns" name="mapped_isotope_patterns" type="data" format="csv,tsv,tarbular,parquet" help="A csv file containing the MS1 data. Ideally obtained from map_isotope_patterns" />
+        <param label="all possible adducts" name="all_adducts" type="data" format="csv,tsv,tarbular,parquet" help="A csv file containing the information on all the possible adducts given the database. Ideally obtained from compute_all_adducts" />
         <param label="ppm" name="ppm" type="float" help="accuracy of the MS instrument used."/>
         <section name="unknown" title="unknown settings">
             <param name="ppmunk" type="float" optional="true">
@@ -69,7 +69,7 @@
     </inputs>
 
     <outputs>
-        <data label="${tool.name} on ${on_string}" name="MS1_annotations" format="csv"/>
+        <data label="${tool.name} on ${on_string}" name="MS1_annotations" format="csv,tsv,tarbular,parquet"/>
     </outputs>
 
     <tests>

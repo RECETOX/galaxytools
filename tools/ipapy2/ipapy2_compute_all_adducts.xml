@@ -8,29 +8,21 @@
     </requirements>
 
     <command detect_errors="exit_code"><![CDATA[
-        python3 '${ipapy2_compute_all_adducts_cli}'
+        python3 '${__tool_directory__}/ipapy2_compute_all_adducts.py'
+        --input_dataset_adduct '${adducts_data}' '${adducts_data.ext}'
+        --input_dataset_database ${MS1_DB} ${MS1_DB.ext}
+        --ionisation ${ionisation}
+        --output_dataset '${all_adducts}' '${all_adducts.ext}'
+        --ncores \${GALAXY_SLOTS:-1}
     ]]></command>
-
-<configfiles>
-<configfile name="ipapy2_compute_all_adducts_cli">
-@init_import@
-import os
-
-adducts_df = pd.read_csv('${adducts_data}')
-MS1_DB_df = pd.read_csv('${MS1_DB}')
-all_adducts = ipa.compute_all_adducts(adducts_df, MS1_DB_df, ionisation=int(${ionisation}), ncores=int(os.environ.get('GALAXY_SLOTS')))
-all_adducts.to_csv('${all_adducts}', index=False)
-</configfile>
-</configfiles>
-
     <inputs>
-        <param label="Adducts data" name="adducts_data" type="data" format="csv" help="A csv file containing information on all possible adducts."/>
-        <param label="MS database" name="MS1_DB" type="data" format="csv" help="A csv file containing the MS1 database."/>
+        <param label="Adducts data" name="adducts_data" type="data" format="csv,tsv,tabular,parquet" help="A csv,tsv,tabular or parquet file containing information on all possible adducts."/>
+        <param label="MS database" name="MS1_DB" type="data" format="csv,tsv,tabular,parquet" help="A csv,tsv,tabular or parquet file containing the MS1 database."/>
         <expand macro="ionisation"/>
     </inputs>
 
     <outputs>
-        <data label="${tool.name} on ${on_string}" name="all_adducts" format="csv"/>
+        <data label="${tool.name} on ${on_string}" name="all_adducts" format_source="adducts_data"/>
     </outputs>
     
     <tests>

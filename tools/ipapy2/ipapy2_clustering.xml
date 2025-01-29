@@ -6,19 +6,16 @@
         <requirement type="package" version="@TOOL_VERSION@">ipapy2</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
-        python3 '${ipapy2_clustering_cli}'
-    ]]></command>
-    <configfiles>
-        <configfile name="ipapy2_clustering_cli">
-@init_import@
+        python3 '${__tool_directory__}/ipapy2_clustering.py'
+        --input_dataset '${unclustered_MS1_intensities}' '${unclustered_MS1_intensities.ext}'
+        --Cthr ${Cthr}
+        --RTwin ${RTwin}
+        --Intmode ${Intmode}
+        --output_dataset '${clustered_MS1_intensities}' '${clustered_MS1_intensities.ext}'
 
-unclustered_df = pd.read_csv('${unclustered_MS1_intensities}')
-clustered_df = ipa.clusterFeatures(unclustered_df, Cthr=$clustering.Cthr, RTwin=$clustering.RTwin, Intmode='${clustering.Intmode}')
-clustered_df.to_csv('${clustered_MS1_intensities}', index=False)
-</configfile>
-    </configfiles>
+    ]]></command>
     <inputs>
-        <param label="Unclustered data" name="unclustered_MS1_intensities" type="data" format="csv" help="a csv file containing the measured intensities across several samples, yet to be clustered"/>
+        <param label="Unclustered data" name="unclustered_MS1_intensities" type="data" format="csv,tsv,tabular,parquet" help="a csv file containing the measured intensities across several samples, yet to be clustered"/>
         <section name="clustering" title="clustering settings">
             <param name="Cthr" type="float" value="0.8">
                 <label>correlation threshold</label>
@@ -28,14 +25,16 @@ clustered_df.to_csv('${clustered_MS1_intensities}', index=False)
                 <label>RT threshold</label>
                 <help>Maximum difference in RT time between features in the same cluster. Default value 1.</help>
             </param>
-            <param name="Intmode" type="text" value="max">
+            <param name="Intmode" type="select">
                 <label>intensity mode</label>
                 <help>intensity mode. Default 'max' or 'ave'.</help>
+                <option value="max" selected="true">max</option>
+                <option value="ave">ave</option>
             </param>
         </section>
     </inputs>
     <outputs>
-        <data label="${tool.name} on ${on_string}" name="clustered_MS1_intensities" format="csv"/>
+        <data label="${tool.name} on ${on_string}" name="clustered_MS1_intensities" format_source="unclustered_MS1_intensities" />
     </outputs>
     <tests>
         <test>
@@ -48,7 +47,6 @@ clustered_df.to_csv('${clustered_MS1_intensities}', index=False)
     The data must be organized in a pandas dataframe containing the following columns:
 
     - **ids**: an unique numeric id for each mass spectrometry feature 
-    - **rel.ids**: relation ids. Features must be clustered based on correlation/peak shape/retention time. Features in the same cluster are likely to come from the same metabolite.
     - **mzs**: mass-to-charge ratios, usually the average across different samples.
     - **RTs**: retention times in seconds, usually the average across different samples.
     - **Int**: representative (e.g., maximum or average) intensity detected for each feature across samples (either peak area or peak intensity)

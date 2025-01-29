@@ -9,7 +9,7 @@ def main(args):
     df = pd.read_csv(args.mapped_isotope_patterns, keep_default_na=False)
     df = df.replace("", None)
     dfMS2 = pd.read_csv(args.MS2_fragmentation_data, keep_default_na=False)
-    dfMS2 = dfMS2.replace('', None)
+    dfMS2 = dfMS2.replace("", None)
     all_adducts = pd.read_csv(args.all_adducts, keep_default_na=False)
     all_adducts = all_adducts.replace("", None)
     MS2_DB = pd.read_csv(args.MS2_DB, keep_default_na=False)
@@ -19,22 +19,22 @@ def main(args):
     ppmthr = args.ppmthr if args.ppmthr else 2 * args.ppm
 
     annotations = ipa.MSMSannotation(
-        df, 
-        dfMS2, 
-        all_adducts, 
-        MS2_DB, 
-        ppm=args.ppm, 
-        ratiosd=args.ratiosd, 
-        ppmunk=args.ppmunk, 
-        ratiounk=args.ratiounk, 
-        ppmthr=ppmthr, 
-        pRTNone=args.pRTNone, 
-        pRTout=args.pRTout, 
-        mzdCS=args.mzdCS, 
-        ppmCS=args.ppmCS, 
-        CSunk=args.CSunk, 
-        evfilt=args.evfilt, 
-        ncores=ncores
+        df,
+        dfMS2,
+        all_adducts,
+        MS2_DB,
+        ppm=args.ppm,
+        ratiosd=args.ratiosd,
+        ppmunk=args.ppmunk,
+        ratiounk=args.ratiounk,
+        ppmthr=ppmthr,
+        pRTNone=args.pRTNone,
+        pRTout=args.pRTout,
+        mzdCS=args.mzdCS,
+        ppmCS=args.ppmCS,
+        CSunk=args.CSunk,
+        evfilt=args.evfilt,
+        ncores=ncores,
     )
     annotations_flat = pd.DataFrame()
     for peak_id in annotations:
@@ -84,7 +84,6 @@ if __name__ == "__main__":
         type=float,
         default=5.48579909065e-04,
         help="accurate mass of the electron. Default 5.48579909065e-04",
-
     )
     parser.add_argument(
         "--ratiosd",

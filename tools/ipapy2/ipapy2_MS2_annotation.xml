@@ -37,10 +37,10 @@
     ]]></command>
 
     <inputs>
-        <param label="Mapped isotope patterns" name="mapped_isotope_patterns" type="data" format="csv" help="A csv file containing the MS1 data. Ideally obtained from map_isotope_patterns" />
-        <param label="MS2 fragmentation data" name="MS2_fragmentation_data" type="data" format="csv" help="A csv file containing the MS2 data." />
-        <param label="all possible adducts table" name="all_adducts" type="data" format="csv" help="A csv file containing the information on all the possible adducts given the database." />
-        <param label="MS2 Database" name="MS2_DB" type="data" format="csv" help="A csv file containing the database containing the MS2 information." />
+        <param label="Mapped isotope patterns" name="mapped_isotope_patterns" type="data" format="csv,tsv,tarbular,parquet" help="A csv file containing the MS1 data. Ideally obtained from map_isotope_patterns" />
+        <param label="MS2 fragmentation data" name="MS2_fragmentation_data" type="data" format="csv,tsv,tarbular,parquet" help="A csv file containing the MS2 data." />
+        <param label="all possible adducts table" name="all_adducts" type="data" format="csv,tsv,tarbular,parquet" help="A csv file containing the information on all the possible adducts given the database." />
+        <param label="MS2 Database" name="MS2_DB" type="data" format="csv,tsv,tarbular,parquet" help="A csv file containing the database containing the MS2 information." />
         <param label="ppm" name="ppm" type="float" help="accuracy of the MS instrument used."/>
         <section name="unknown" title="unknown settings">
             <param name="ppmunk" type="float" optional="true">
@@ -90,7 +90,7 @@
     </inputs>
 
     <outputs>
-        <data label="${tool.name} on ${on_string}" name="MS2_annotations" format="csv"/>
+        <data label="${tool.name} on ${on_string}" name="MS2_annotations" format="csv,tsv,tarbular,parquet"/>
     </outputs>
 
     <tests>

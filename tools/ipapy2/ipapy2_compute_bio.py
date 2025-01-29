@@ -144,7 +144,10 @@ if __name__ == "__main__":
         "--connection_list", type=str, help="intensity mode. Default 'max' or 'ave'."
     )
     parser.add_argument(
-        "--compute_bio_output", type=str, required=True, help="Output file path for the dataframe."
+        "--compute_bio_output",
+        type=str,
+        required=True,
+        help="Output file path for the dataframe.",
     )
     args = parser.parse_args()
 

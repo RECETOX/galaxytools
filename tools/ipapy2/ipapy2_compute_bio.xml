@@ -19,8 +19,8 @@
     ]]></command>
 
     <inputs>
-        <param label="MS1 DB table" name="MS1_DB" type="data" format="csv" help="pandas dataframe containing the MS1 database."/>
-        <param label="annotations" name="annotations" type="data" format="csv" optional="true" help="pandas dataframe containing all the possible annotations for the measured features."/>
+        <param label="MS1 DB table" name="MS1_DB" type="data" format="csv,tsv,tarbular,parquet" help="pandas dataframe containing the MS1 database."/>
+        <param label="annotations" name="annotations" type="data" format="csv,tsv,tarbular,parquet" optional="true" help="pandas dataframe containing all the possible annotations for the measured features."/>
         <conditional name="biochemical_mode">
             <param name="biochemical_mode" type="select" label="biochemical mode"
                     help="connections are computed based on the reactions or connections.">
@@ -37,7 +37,7 @@
     </inputs>
 
     <outputs>
-        <data label="${tool.name} on ${on_string}" name="compute_bio_output" format="csv"/>
+        <data label="${tool.name} on ${on_string}" name="compute_bio_output" format="csv,tsv,tarbular,parquet"/>
     </outputs>
 
     <tests>

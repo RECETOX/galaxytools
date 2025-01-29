@@ -8,23 +8,23 @@ def main(args):
     df = df.replace("", None)
 
     annotations_df = pd.read_csv(args.annotations, keep_default_na=False)
-    annotations_df['post'] = annotations_df['post'].replace('', 0)
+    annotations_df["post"] = annotations_df["post"].replace("", 0)
     annotations_df = annotations_df.replace("", None)
     annotations = {}
 
-    grouped = annotations_df.groupby('peak_id')
+    grouped = annotations_df.groupby("peak_id")
     for peak_id, group in grouped:
-        annotations[peak_id] = group.drop('peak_id', axis=1)
+        annotations[peak_id] = group.drop("peak_id", axis=1)
 
     if args.zs:
         zs = []
         with open(args.zs, "r") as f:
             for line in f:
                 zs.append(int(line.strip()))
-        
+
     else:
         zs = None
-    
+
     if args.integrating_mode == "adducts":
         zs = ipa.Gibbs_sampler_add(
             df,
@@ -36,9 +36,9 @@ def main(args):
             zs=zs,
         )
     else:
-        
+
         Bio = pd.read_csv(args.Bio, keep_default_na=False)
-        
+
         if args.integrating_mode == "biochemical":
             zs = ipa.Gibbs_sampler_bio(
                 df,
@@ -62,15 +62,12 @@ def main(args):
                 all_out=args.all_out,
                 zs=zs,
             )
-  
 
-   
     annotations_flat = pd.DataFrame()
     for peak_id in annotations:
         annotation = annotations[peak_id]
         annotation["peak_id"] = peak_id
         annotations_flat = pd.concat([annotations_flat, annotation])
-    
 
     annotations_flat.to_csv(args.annotations_out, index=False)
 
@@ -78,7 +75,6 @@ def main(args):
         with open(args.zs_out, "w") as f:
             for s in zs:
                 f.write(str(s) + "\n")
-        
 
 
 if __name__ == "__main__":
@@ -112,9 +108,7 @@ if __name__ == "__main__":
         help="Default value 1. Maximum difference in RT time between features in the same cluster.",
     )
     parser.add_argument(
-        "--burn", 
-        type=int, 
-        help="intensity mode. Default 'max' or 'ave'."
+        "--burn", type=int, help="intensity mode. Default 'max' or 'ave'."
     )
     parser.add_argument(
         "--delta_bio", type=float, help="intensity mode. Default 'max' or 'ave'."
