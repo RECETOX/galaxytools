@@ -2,7 +2,7 @@
     <description>perform arithmetic operations on a dataframe column</description>
     <macros>
         <import>macros.xml</import>
-        <token name="@VERSION_SUFFIX@">0</token>
+        <token name="@VERSION_SUFFIX@">1</token>
     </macros>
     <requirements>
         <expand macro="requirement_pandas_pyarrow"/>
@@ -30,7 +30,7 @@
             <option value="add">Add</option>
             <option value="pow">Power</option>
         </param>
-        <param name="operand" type="float" label="Operand" help="The operand value to use in the arithmetic operation. This value will be applied to each element in the selected column."/>
+        <param name="operand" type="float" label="Operand" value="0" help="The operand value to use in the arithmetic operation. This value will be applied to each element in the selected column."/>
     </inputs>
     <outputs>
         <data name="output_dataset" format_source="input_dataset" label="${tool.name} on ${on_string}">
