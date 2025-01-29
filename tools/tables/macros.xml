@@ -44,6 +44,8 @@
                 <add value="]"/>
                 <add value="."/>
                 <add value=","/>
+                <add value="_"/>
+                <add value="-"/>
             </valid>
         </sanitizer>
         <validator type="empty_field" />

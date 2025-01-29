@@ -1,8 +1,10 @@
 import argparse
 import logging
+from typing import List, Tuple
 
 
 import numpy as np
+import pandas as pd
 from utils import LoadDataAction, SplitColumnIndicesAction, StoreOutputAction
 
 
@@ -16,7 +18,7 @@ OPERATIONS = {
 }
 
 
-def perform_operation(df, column_indices, operation, operand):
+def perform_operation(df: pd.DataFrame, column_indices: List[int], operation: str, operand: float):
     """
     Perform the specified arithmetic operation on the given columns of the dataframe.
 
@@ -35,7 +37,7 @@ def perform_operation(df, column_indices, operation, operand):
     return df
 
 
-def main(input_dataset, column_indices, operation, operand, output_dataset):
+def main(input_dataset: pd.DataFrame, column_indices: List[int], operation: str, operand: float, output_dataset: Tuple[callable, str]):
     """
     Main function to load the dataset, perform the operation, and save the result.
 

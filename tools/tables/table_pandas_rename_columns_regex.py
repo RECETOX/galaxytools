@@ -45,7 +45,7 @@ def rename_columns(
 
 
 def main(
-    input_dataset: Tuple[pd.DataFrame, str],
+    input_dataset: pd.DataFrame,
     columns: List[int],
     regex_check: str,
     regex_replace: str,
@@ -62,10 +62,8 @@ def main(
     output_dataset (Tuple[callable, str]): The output dataset and its file extension.
     """
     try:
-        df, _ = input_dataset
-        df = rename_columns(df, columns, regex_check, regex_replace)
         write_func, file_path = output_dataset
-        write_func(df, file_path)
+        write_func(rename_columns(input_dataset, columns, regex_check, regex_replace), file_path)
     except Exception as e:
         logging.error(f"Error in main function: {e}")
         raise

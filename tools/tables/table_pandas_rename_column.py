@@ -1,11 +1,12 @@
 import argparse
 import logging
+from typing import Tuple
 
-
+import pandas as pd
 from utils import KeyValuePairsAction, LoadDataAction, StoreOutputAction
 
 
-def rename_columns(df, rename_dict):
+def rename_columns(df: pd.DataFrame, rename_dict: dict):
     """
     Rename columns in the dataframe based on the provided dictionary.
 
@@ -29,20 +30,18 @@ def rename_columns(df, rename_dict):
         raise
 
 
-def main(input_dataset, rename_dict, output_dataset):
+def main(input_dataset: pd.DataFrame, rename_dict: dict, output_dataset: Tuple[callable, str]):
     """
     Main function to load the dataset, rename columns, and save the result.
 
     Parameters:
-    input_dataset (tuple): The input dataset and its file extension.
+    input_dataset (pd.DataFrame): The input dataset .
     rename_dict (dict): A dictionary with 1-based column index as key and new column name as value.
-    output_dataset (tuple): The output dataset and its file extension.
+    output_dataset (tuple): The function to store the output dataset and the path.
     """
     try:
-        df = input_dataset
-        df = rename_columns(df, rename_dict)
         write_func, file_path = output_dataset
-        write_func(df, file_path)
+        write_func(rename_columns(input_dataset, rename_dict), file_path)
     except Exception as e:
         logging.error(f"Error in main function: {e}")
         raise

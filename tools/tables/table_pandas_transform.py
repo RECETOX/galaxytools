@@ -53,7 +53,7 @@ def apply_transformation(
 
 
 def main(
-    input_dataset: Tuple[pd.DataFrame, str],
+    input_dataset: pd.DataFrame,
     columns: List[int],
     transformation: str,
     output_dataset: Tuple[Callable[[pd.DataFrame, str], None], str],
@@ -62,14 +62,13 @@ def main(
     Main function to load the dataset, apply the transformation, and save the result.
 
     Parameters:
-    input_dataset (Tuple[pd.DataFrame, str]): The input dataset and its file extension.
+    input_dataset (pd.DataFrame): The input dataset.
     columns (List[int]): The 0-based indices of the columns to transform.
     transformation (str): The transformation to apply.
     output_dataset (Tuple[Callable[[pd.DataFrame, str], None], str]): The output dataset and its file extension.
     """
     try:
-        df = input_dataset
-        df = apply_transformation(df, columns, transformation)
+        df = apply_transformation(input_dataset, columns, transformation)
         write_func, file_path = output_dataset
         write_func(df, file_path)
     except Exception as e:

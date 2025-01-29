@@ -34,7 +34,7 @@
         </param>
     </inputs>
     <outputs>
-        <data name="output_dataset" format_source="input_dataset" label="${tool.name} on ${on_string}">
+        <data name="output_dataset" format_source="input_dataset" label="${transformation} transform on ${on_string}">
             <change_format>
                 <when input="input_dataset.ext" value="tsv" format="tabular" />
             </change_format>
