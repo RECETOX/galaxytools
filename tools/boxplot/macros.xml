@@ -51,6 +51,8 @@
                 </when>
                 <when value="no"/>
         </conditional>  
+        <param name="xlab" type="text" value="Samples" label="Label for the x axis" optional="true"/>
+        <param name="ylab" type="text" value="Intensity" label="Label for the y axis"  optional="true"/>
     </xml>
 
     <xml name="citations">

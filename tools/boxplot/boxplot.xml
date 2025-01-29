@@ -59,12 +59,15 @@
                                         ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust=1)) +
                                         ggplot2::facet_grid(rows = if(!is.null(facet_y)) dplyr::vars(!!facet_y) else NULL,
                                                             cols = if(!is.null(facet_x)) dplyr::vars(!!facet_x) else NULL,
-                                                            scales = "free")
-        #else
+                                                            scales = "free") +
+                                        ggplot2::xlab($xlab) + 
+                                        ggplot2::ylab($ylab)
+        #else 
         plot_boxplot <- ggplot2::ggplot(data_long, ggplot2::aes(x = samples, y = intensity)) +
                                         ggplot2::geom_boxplot() +
                                         ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust=1)) +
-                                        ggplot2::coord_flip()
+                                        ggplot2::xlab("$xlab") + 
+                                        ggplot2::ylab("$ylab")
         #end if 
 
         ggplot2::ggsave(filename = "boxplot.png", plot_boxplot)
