@@ -1,89 +1,93 @@
 import argparse
-import os
-
-import pandas as pd
 from ipaPy2 import ipa
+from utils import LoadDataAction, StoreOutputAction, flattern_annotations
 
 
-def main(args):
-    df = pd.read_csv(args.mapped_isotope_patterns, keep_default_na=False)
-    df = df.replace("", None)
-    dfMS2 = pd.read_csv(args.MS2_fragmentation_data, keep_default_na=False)
-    dfMS2 = dfMS2.replace("", None)
-    all_adducts = pd.read_csv(args.all_adducts, keep_default_na=False)
-    all_adducts = all_adducts.replace("", None)
-    MS2_DB = pd.read_csv(args.MS2_DB, keep_default_na=False)
-    MS2_DB = MS2_DB.replace("", None)
-
-    ncores = int(os.environ.get("GALAXY_SLOTS")) if args.ncores is None else args.ncores
-    ppmthr = args.ppmthr if args.ppmthr else 2 * args.ppm
+def main(
+    input_dataset_mapped_isotope_patterns,
+    input_dataset_MS2,
+    input_dataset_adducts,
+    input_dataset_MS2_DB,
+    ppm,
+    ratiosd,
+    ppmunk,
+    ratiounk,
+    ppmthr,
+    pRTNone,
+    pRTout,
+    mzdCS,
+    ppmCS,
+    CSunk,
+    evfilt,
+    output_dataset,
+    ncores,
+):
+    ncores = ncores if ncores else 1
+    ppmunk = ppmunk if ppmunk else ppm
+    ppmthr = ppmthr if ppmthr else 2 * ppm
 
     annotations = ipa.MSMSannotation(
-        df,
-        dfMS2,
-        all_adducts,
-        MS2_DB,
-        ppm=args.ppm,
-        ratiosd=args.ratiosd,
-        ppmunk=args.ppmunk,
-        ratiounk=args.ratiounk,
+        input_dataset_mapped_isotope_patterns,
+        input_dataset_MS2,
+        input_dataset_adducts,
+        input_dataset_MS2_DB,
+        ppm=ppm,
+        ratiosd=ratiosd,
+        ppmunk=ppmunk,
+        ratiounk=ratiounk,
         ppmthr=ppmthr,
-        pRTNone=args.pRTNone,
-        pRTout=args.pRTout,
-        mzdCS=args.mzdCS,
-        ppmCS=args.ppmCS,
-        CSunk=args.CSunk,
-        evfilt=args.evfilt,
+        pRTNone=pRTNone,
+        pRTout=pRTout,
+        mzdCS=mzdCS,
+        ppmCS=ppmCS,
+        CSunk=CSunk,
+        evfilt=evfilt,
         ncores=ncores,
     )
-    annotations_flat = pd.DataFrame()
-    for peak_id in annotations:
-        annotation = annotations[peak_id]
-        annotation["peak_id"] = peak_id
-        annotations_flat = pd.concat([annotations_flat, annotation])
-    annotations_file = (
-        args.MS2_annotations if args.MS2_annotations else "MS2_annotations.csv"
-    )
-    annotations_flat.to_csv(annotations_file, index=False)
+    annotations_flat = flattern_annotations(annotations)
+    write_func, file_path = output_dataset
+    write_func(annotations_flat, file_path)
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "--mapped_isotope_patterns",
-        type=str,
-        required=True,
-        help="A csv file containing the MS1 data. Ideally obtained from map_isotope_patterns",
+    parser = argparse.ArgumentParser(
+        """Annotation of the dataset base on the MS1 and MS2 information. Prior
+    probabilities are based on mass only, while post probabilities are based
+    on mass, RT, previous knowledge and isotope patterns."""
     )
     parser.add_argument(
-        "--MS2_fragmentation_data",
-        type=str,
+        "--input_dataset_mapped_isotope_patterns",
+        nargs=2,
+        action=LoadDataAction,
         required=True,
-        help="A csv file containing the MS2 fragmentation data",
+        help="A dataset containing the MS1 data. Ideally obtained from map_isotope_patterns",
     )
     parser.add_argument(
-        "--all_adducts",
-        type=str,
+        "--input_dataset_MS2",
+        nargs=2,
+        action=LoadDataAction,
         required=True,
-        help="A csv file containing the information on all the possible adducts given the database. Ideally obtained from compute_all_adducts",
+        help="A dataset containing the MS2 fragmentation data",
     )
     parser.add_argument(
-        "--MS2_DB",
-        type=str,
+        "--input_dataset_adducts",
+        nargs=2,
+        action=LoadDataAction,
         required=True,
-        help="A csv file containing the MS2 database",
+        help="A dataset containing the information on all the possible adducts given the database. Ideally obtained from compute_all_adducts",
+    )
+    parser.add_argument(
+        "--input_dataset_MS2_DB",
+        nargs=2,
+        action=LoadDataAction,
+        required=True,
+        help="A dataset containing the MS2 database",
     )
     parser.add_argument(
         "--ppm",
         type=float,
         required=True,
         help="accuracy of the MS instrument used.",
-    )
-    parser.add_argument(
-        "--me",
-        type=float,
-        default=5.48579909065e-04,
-        help="accurate mass of the electron. Default 5.48579909065e-04",
     )
     parser.add_argument(
         "--ratiosd",
@@ -150,8 +154,10 @@ if __name__ == "__main__":
             collision energy are considered.""",
     )
     parser.add_argument(
-        "--MS2_annotations",
-        type=str,
+        "--output_dataset",
+        nargs=2,
+        action=StoreOutputAction,
+        required=True,
         help="MS2 annotation file for outputting results.",
     )
     parser.add_argument(
@@ -161,4 +167,22 @@ if __name__ == "__main__":
         help="number of cores to use for the computation.",
     )
     args = parser.parse_args()
-    main(args)
+    main(
+        args.input_dataset_mapped_isotope_patterns,
+        args.input_dataset_MS2,
+        args.input_dataset_adducts,
+        args.input_dataset_MS2_DB,
+        args.ppm,
+        args.ratiosd,
+        args.ppmunk,
+        args.ratiounk,
+        args.ppmthr,
+        args.pRTNone,
+        args.pRTout,
+        args.mzdCS,
+        args.ppmCS,
+        args.CSunk,
+        args.evfilt,
+        args.output_dataset,
+        args.ncores,
+    )

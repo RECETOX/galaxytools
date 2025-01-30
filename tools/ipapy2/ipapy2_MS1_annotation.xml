@@ -8,11 +8,11 @@
     </requirements>
 
     <command detect_errors="exit_code"><![CDATA[
+        #set $computed_ppmthr = float($ppm) * 2
         python3  '${__tool_directory__}/ipapy2_MS1_annotation.py'
-        --mapped_isotope_patterns '${mapped_isotope_patterns}'
-        --all_adducts '${all_adducts}'
+        --input_dataset_database '${mapped_isotope_patterns}' '${mapped_isotope_patterns.ext}'
+        --input_dataset_adducts '${all_adducts}' '${all_adducts.ext}'
         --ppm ${ppm}
-        --me ${me}
         --ratiosd ${ratiosd}
         #if $ppmunk
             --ppmunk ${ppmunk}
@@ -23,53 +23,28 @@
         #if $ppmthr
             --ppmthr ${ppmthr}
         #else
-            --ppmthr 0
+            --ppmthr ${computed_ppmthr}
         #end if
         --pRTNone ${pRTNone}
         --pRTout ${pRTout}
-        --MS1_annotations ${MS1_annotations}
+        --output_dataset '${MS1_annotations}' '${MS1_annotations.ext}'
+        --ncores \${GALAXY_SLOTS:-1}
     ]]></command>
 
     <inputs>
-        <param label="Mapped isotope patterns" name="mapped_isotope_patterns" type="data" format="csv,tsv,tarbular,parquet" help="A csv file containing the MS1 data. Ideally obtained from map_isotope_patterns" />
-        <param label="all possible adducts" name="all_adducts" type="data" format="csv,tsv,tarbular,parquet" help="A csv file containing the information on all the possible adducts given the database. Ideally obtained from compute_all_adducts" />
-        <param label="ppm" name="ppm" type="float" help="accuracy of the MS instrument used."/>
+        <param label="Mapped isotope patterns" name="mapped_isotope_patterns" type="data" format="csv,tsv,tabular,parquet" help="A dataset containing the MS1 data. Ideally obtained from map_isotope_patterns" />
+        <param label="all possible adducts" name="all_adducts" type="data" format="csv,tsv,tabular,parquet" help="A dataset containing the information on all the possible adducts given the database. Ideally obtained from compute_all_adducts" />
+        <expand macro="ppm"/>
         <section name="unknown" title="unknown settings">
-            <param name="ppmunk" type="float" optional="true">
-                <label>ppm for unknown</label>
-                <help>ppm associated to the 'unknown' annotation. If not provided equal to ppm.</help>
-            </param>
-            <param name="ratiounk" type="float" optional="true" value="0.5">
-                <label>isotope ratio for unknown</label>
-                <help>isotope ratio associated to the 'unknown' annotation.</help>
-            </param>
+            <expand macro="ms_unknown"/>
         </section>
         <section name="optional_settings" title="optional settings">
-            <param name="me" type="float" value="5.48579909065e-04">
-                <label>mass of the electron.</label>
-                <help>accurate mass of the electron. Default 5.48579909065e-04.</help>
-            </param>
-            <param name="ratiosd" type="float" value="0.9" optional="true">
-                <label>intensity ratio</label>
-                <help>acceptable ratio between predicted intensity and observed intensity of isotopes</help>
-            </param>
-            <param name="ppmthr" type="float" optional="true">
-                <label>ppm threshold</label>
-                <help>maximum ppm possible for the annotations. if not provided equal to 2*ppm.</help>
-            </param>
-            <param name="pRTNone" type="float" optional="true" value="0.8">
-                <label>no RT factor</label>
-                <help>multiplicative factor for the RT if no RTrange present in the database.</help>
-            </param>
-            <param name="pRTout" type="float" optional="true" value="0.4">
-                <label>outside RT factor</label>
-                <help>multiplicative factor for the RT if measured RT is outside the RTrange present in the database.</help>
-            </param>
+            <expand macro="ms_options"/>
         </section>
     </inputs>
 
     <outputs>
-        <data label="${tool.name} on ${on_string}" name="MS1_annotations" format="csv,tsv,tarbular,parquet"/>
+        <data label="${tool.name} on ${on_string}" name="MS1_annotations" format_source="mapped_isotope_patterns"/>
     </outputs>
 
     <tests>
@@ -83,7 +58,7 @@
 
     <help><![CDATA[
     ::
-        Annotation of the dataset base on the MS1 information. Prior probabilities
+        Annotation of the dataset based on the MS1 information. Prior probabilities
         are based on mass only, while post probabilities are based on mass, RT,
         previous knowledge and isotope patterns.
     ]]></help>

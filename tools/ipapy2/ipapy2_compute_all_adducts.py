@@ -3,7 +3,9 @@ from ipaPy2 import ipa
 from utils import LoadDataAction, StoreOutputAction
 
 
-def main(input_dataset_adducts, input_dataset_database, ionisation, output_dataset, ncores):
+def main(
+    input_dataset_adducts, input_dataset_database, ionisation, output_dataset, ncores
+):
     adducts_df = input_dataset_adducts
     database_df = input_dataset_database
     write_func, file_path = output_dataset
@@ -42,7 +44,7 @@ if __name__ == "__main__":
         default=1,
         help="Number of cores to use for parallel processing.",
     )
-    
+
     parser.add_argument(
         "--output_dataset",
         nargs=2,
@@ -58,5 +60,5 @@ if __name__ == "__main__":
         args.input_dataset_database,
         args.ionisation,
         args.output_dataset,
-        args.ncores
+        args.ncores,
     )

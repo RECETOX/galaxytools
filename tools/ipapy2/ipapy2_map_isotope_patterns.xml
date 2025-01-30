@@ -25,10 +25,7 @@
                 <label>isotope difference</label>
                 <help>Difference between isotopes of charge 1.</help>
             </param>
-            <param name="ppm" type="float" value="100">
-                <label>ppm between isotopes</label>
-                <help>Maximum ppm value allowed between 2 isotopes. Default value 100.</help>
-            </param>
+            <expand macro="ppm_100"/>
             <param name="isotope_ratio" type="float" min="0" max="100" value="1">
                 <label>isotope ratio</label>
                 <help>mininum intensity ratio expressed (Default value 1%). 

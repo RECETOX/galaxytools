@@ -1,68 +1,70 @@
 import argparse
-import os
-
-import pandas as pd
 from ipaPy2 import ipa
+from utils import LoadDataAction, StoreOutputAction, flattern_annotations
 
 
-def main(args):
-    df = pd.read_csv(args.mapped_isotope_patterns, keep_default_na=False)
-    df = df.replace("", None)
-    all_adducts = pd.read_csv(args.all_adducts, keep_default_na=False)
-    all_adducts = all_adducts.replace("", None)
-    ncores = int(os.environ.get("GALAXY_SLOTS")) if args.ncores is None else args.ncores
-    ppmunk = args.ppmunk if args.ppmunk else args.ppm
-    ppmthr = args.ppmthr if args.ppmthr else 2 * args.ppm
+def main(
+    input_dataset_database,
+    input_dataset_adduct,
+    ppm,
+    ratiosd,
+    ppmunk,
+    ratiounk,
+    ppmthr,
+    pRTNone,
+    pRTout,
+    output_dataset,
+    ncores,
+):
+    write_func, file_path = output_dataset
+    ncores = ncores if ncores else 1
+    ppmunk = ppmunk if ppmunk else ppm
+    ppmthr = ppmthr if ppmthr else 2 * ppm
 
     annotations = ipa.MS1annotation(
-        df,
-        all_adducts,
-        ppm=args.ppm,
-        me=args.me,
-        ratiosd=args.ratiosd,
+        input_dataset_database,
+        input_dataset_adduct,
+        ppm=ppm,
+        ratiosd=ratiosd,
         ppmunk=ppmunk,
-        ratiounk=args.ratiounk,
+        ratiounk=ratiounk,
         ppmthr=ppmthr,
-        pRTNone=args.pRTNone,
-        pRTout=args.pRTout,
-        ncores=int(ncores),
+        pRTNone=pRTNone,
+        pRTout=pRTout,
+        ncores=ncores,
     )
-    annotations_flat = pd.DataFrame()
-    for peak_id in annotations:
-        annotation = annotations[peak_id]
-        annotation["peak_id"] = peak_id
-        annotations_flat = pd.concat([annotations_flat, annotation])
-    annotations_file = (
-        args.MS1_annotations if args.MS1_annotations else "MS1_annotations.csv"
-    )
-    annotations_flat.to_csv(annotations_file, index=False)
+    annotations_flat = flattern_annotations(annotations)
+    write_func(annotations_flat, file_path)
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "--mapped_isotope_patterns",
-        type=str,
-        required=True,
-        help="A csv file containing the MS1 data. Ideally obtained from map_isotope_patterns",
+    parser = argparse.ArgumentParser(
+        """
+    Annotation of the dataset based on the MS1 information. Prior probabilities
+        are based on mass only, while post probabilities are based on mass, RT,
+        previous knowledge and isotope patterns.
+    """
     )
     parser.add_argument(
-        "--all_adducts",
-        type=str,
+        "--input_dataset_database",
+        nargs=2,
+        action=LoadDataAction,
         required=True,
-        help="A csv file containing the information on all the possible adducts given the database. Ideally obtained from compute_all_adducts",
+        help="A dataset containing the MS1 data. Ideally obtained from map_isotope_patterns",
+    )
+    parser.add_argument(
+        "--input_dataset_adducts",
+        nargs=2,
+        action=LoadDataAction,
+        required=True,
+        help="A dataset containing information on all possible adducts.",
     )
     parser.add_argument(
         "--ppm",
         type=float,
         required=True,
+        default=100,
         help="accuracy of the MS instrument used.",
-    )
-    parser.add_argument(
-        "--me",
-        type=float,
-        default=5.48579909065e-04,
-        help="accurate mass of the electron. Default 5.48579909065e-04",
     )
     parser.add_argument(
         "--ratiosd",
@@ -99,9 +101,11 @@ if __name__ == "__main__":
         help="multiplicative factor for the RT if measured RT is outside the RTrange present in the database.",
     )
     parser.add_argument(
-        "--MS1_annotations",
-        type=str,
-        help="MS1 annotation file for outputting results.",
+        "--output_dataset",
+        nargs=2,
+        action=StoreOutputAction,
+        required=True,
+        help="MS1 annotated data",
     )
     parser.add_argument(
         "--ncores",
@@ -110,4 +114,16 @@ if __name__ == "__main__":
         help="number of cores to use for the computation.",
     )
     args = parser.parse_args()
-    main(args)
+    main(
+        args.input_dataset_database,
+        args.input_dataset_adducts,
+        args.ppm,
+        args.ratiosd,
+        args.ppmunk,
+        args.ratiounk,
+        args.ppmthr,
+        args.pRTNone,
+        args.pRTout,
+        args.output_dataset,
+        args.ncores,
+    )

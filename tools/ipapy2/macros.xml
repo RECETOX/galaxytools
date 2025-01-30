@@ -24,16 +24,47 @@
         </param>
     </xml>
 
-<token name="@init_import@">
-import pandas as pd
-from ipaPy2 import ipa
-</token> 
+    <xml name="ppm_100">
+        <param name="ppm" type="float" value="100">
+            <label>ppm between isotopes</label>
+            <help>Maximum ppm value allowed between 2 isotopes. Default value 100.</help>
+        </param>
+    </xml>
 
-<token name="@annotation_flatten@">
-annotations_flat = pd.DataFrame()
-for peak_id in annotations:
-    annotation = annotations[peak_id]
-    annotation["peak_id"] = peak_id
-    annotations_flat = pd.concat([annotations_flat, annotation])
-</token> 
+    <xml name="ppm">
+        <param name="ppm" type="float">
+            <label>ppm between isotopes</label>
+            <help>Maximum ppm value allowed between 2 isotopes. Default value 100.</help>
+        </param>
+    </xml>
+
+    <xml name="ms_unknown">
+        <param name="ppmunk" type="float" optional="true">
+            <label>ppm for unknown</label>
+            <help>ppm associated to the 'unknown' annotation. If not provided equal to ppm.</help>
+        </param>
+        <param name="ratiounk" type="float" optional="true" value="0.5">
+            <label>isotope ratio for unknown</label>
+            <help>isotope ratio associated to the 'unknown' annotation.</help>
+        </param>
+    </xml>
+
+    <xml name="ms_options">
+        <param name="ratiosd" type="float" value="0.9" optional="true">
+            <label>intensity ratio</label>
+            <help>acceptable ratio between predicted intensity and observed intensity of isotopes</help>
+        </param>
+        <param name="ppmthr" type="float" optional="true">
+            <label>ppm threshold</label>
+            <help>maximum ppm possible for the annotations. if not provided equal to 2*ppm.</help>
+        </param>
+        <param name="pRTNone" type="float" optional="true" value="0.8">
+            <label>no RT factor</label>
+            <help>multiplicative factor for the RT if no RTrange present in the database.</help>
+        </param>
+        <param name="pRTout" type="float" optional="true" value="0.4">
+            <label>outside RT factor</label>
+            <help>multiplicative factor for the RT if measured RT is outside the RTrange present in the database.</help>
+        </param>
+    </xml>
 </macros>

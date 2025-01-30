@@ -18,12 +18,15 @@ class LoadDataAction(argparse.Action):
         :param option_string: Option string
         :return: None
         """
+        
         file_path, file_extension = values
         file_extension = file_extension.lower()
         if file_extension == "csv":
-            df = pd.read_csv(file_path).replace("", None)
+            df = pd.read_csv(file_path, keep_default_na=False).replace("", None)
         elif file_extension in ["tsv", "tabular"]:
-            df = pd.read_csv(file_path, sep="\t").replace("", None)
+            df = pd.read_csv(file_path, sep="\t", keep_default_na=False).replace(
+                "", None
+            )
         elif file_extension == "parquet":
             df = pd.read_parquet(file_path).replace("", None)
         else:
@@ -92,3 +95,21 @@ class StoreOutputAction(argparse.Action):
         else:
             raise ValueError(f"Unsupported file format: {file_extension}")
         setattr(namespace, self.dest, (write_func, file_path))
+
+
+def flattern_annotations(annotations: dict) -> pd.DataFrame:
+    """
+    Flatten the annotations dictionary and convert it to a dataframe.
+
+    Parameters:
+    annotations (dict): The annotations dictionary.
+
+    Returns:
+    pd.DataFrame: The flattened annotations dataframe.
+    """
+    annotations_flat = pd.DataFrame()
+    for peak_id in annotations:
+        annotation = annotations[peak_id]
+        annotation["peak_id"] = peak_id
+        annotations_flat = pd.concat([annotations_flat, annotation])
+    return annotations_flat
