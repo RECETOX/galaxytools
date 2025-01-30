@@ -69,6 +69,7 @@
                                         ggplot2::ylab("$ylab")
 
         #else 
+
         plot_boxplot <- ggplot2::ggplot(data_long, ggplot2::aes(x = samples, y = intensity)) +
                                         ggplot2::geom_boxplot() +
                                         ggplot2::theme_bw()+
@@ -81,7 +82,9 @@
         plot_boxplot <- plot_boxplot + ggplot2::coord_flip()
         #end if
 
-        ggplot2::ggsave(filename = "boxplot.png", plot_boxplot)
+    ##    ggplot2::ggsave(filename = "boxplot.png", plot_boxplot)
+        ggplot2::ggsave(filename = "boxplot.pdf", plot_boxplot, width = 10, height = 9000, limitsize = FALSE, units = "cm")
+
 
         ]]></configfile>
     </configfiles>
