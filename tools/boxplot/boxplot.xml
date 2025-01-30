@@ -16,14 +16,20 @@
     ]]></command>
     <configfiles>
         <configfile name="run_script"><![CDATA[
-        
+
+        #if $input_data.ext == "csv"
+        data_input <- read.csv("$input_data", check.names = "false")
+        #else if $input_data.ext in ["tsv", "txt", "tabular"]
         data_input <- read.delim("$input_data", sep="\t", check.names = "false")
+        #else if $input_data.ext == "parquet"
+        data_input <- arrow::read_parquet("$input_data")
+        #end if
 
         #if $has_rownames
         rownames(data_input) <- data_input[, 1]
         data_input <- data_input[ ,-1]
         #end if
-        
+
         data_long <- tidyr::pivot_longer(data_input,
                                          cols = c(1:ncol(data_input)),
                                          names_to = "samples",
@@ -82,8 +88,8 @@
         plot_boxplot <- plot_boxplot + ggplot2::coord_flip()
         #end if
 
-    ##    ggplot2::ggsave(filename = "boxplot.png", plot_boxplot)
-        ggplot2::ggsave(filename = "boxplot.pdf", plot_boxplot, width = 10, height = 9000, limitsize = FALSE, units = "cm")
+        ggplot2::ggsave(filename = "boxplot.png", plot_boxplot)
+    ##    ggplot2::ggsave(filename = "boxplot.pdf", plot_boxplot, width = 10, height = 9000, limitsize = FALSE, units = "cm")
 
 
         ]]></configfile>
