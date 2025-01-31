@@ -107,7 +107,7 @@
         <test expect_num_outputs='1'>
             <param name="input_data" value="test_data.txt"/>
             <param name="has_rownames" value="true"/>
-            <param name="log2_transform" value="false"/>  
+            <param name="transform_data" value="false"/>  
             <param name="use_grouping" value="false"/>  
             <output name="boxplot" ftype="png">
                 <assert_contents>
