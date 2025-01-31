@@ -1,0 +1,123 @@
+<tool id="recetox-boxplot" name="recetox-boxplot" version="@TOOL_VERSION@+galaxy0" profile="23.0">
+    <description>Boxplot visualization tool</description>
+    <macros>
+        <import>macros.xml</import>
+        <import>help.xml</import>
+    </macros>
+    <xrefs>
+    </xrefs>
+    <expand macro="creator" />
+    <expand macro="requirements" />
+    <command detect_errors="exit_code"><![CDATA[
+        Rscript '${run_script}'
+        #if $export_R_script
+        && cat ${run_script} >> $script
+        #end if
+    ]]></command>
+    <configfiles>
+        <configfile name="run_script"><![CDATA[
+
+        #if $input_data.ext == "csv"
+        data_input <- read.csv("$input_data", check.names = "false")
+        #else if $input_data.ext in ["tsv", "txt", "tabular"]
+        data_input <- read.delim("$input_data", sep="\t", check.names = "false")
+        #else if $input_data.ext == "parquet"
+        data_input <- arrow::read_parquet("$input_data")
+        #end if
+
+        #if $has_rownames
+        rownames(data_input) <- data_input[, 1]
+        data_input <- data_input[ ,-1]
+        #end if
+
+        data_long <- tidyr::pivot_longer(data_input,
+                                         cols = c(1:ncol(data_input)),
+                                         names_to = "samples",
+                                         values_to = "intensity")
+
+        #if $transform_data == "replace_zero"
+        data_long[data_long == 0] <- NA
+        #else if $transform_data == "log2"
+        data_long[["intensity"]] <- log2(data_long[["intensity"]])
+        #else if $transform_data == "log10"
+        data_long[["intensity"]] <- log10(data_long[["intensity"]])        
+        #end if
+
+        #if $grouping_boxplot.use_grouping == "yes"
+        metadata_input <- read.delim("$grouping_boxplot.input_metadata", sep="\t",  check.names = "false")
+        sampleID_column <- colnames(metadata_input)[$grouping_boxplot.sampleID]
+        plotting_column <- colnames(metadata_input)[$grouping_boxplot.groupingCol]
+        coloring_column <- colnames(metadata_input)[$grouping_boxplot.colorCol]
+        metadata_input <- data.frame(lapply(metadata_input, as.factor))
+
+        data_long <- dplyr::left_join(data_long, metadata_input, by = c("samples" = sampleID_column), keep = TRUE)
+
+        #if $grouping_boxplot.facet_x
+        facet_x <- rlang::sym(colnames(metadata_input)[$grouping_boxplot.facet_x])
+        #else 
+        facet_x <- NULL
+        #end if
+ 
+        #if $grouping_boxplot.facet_y
+        facet_y <- rlang::sym(colnames(metadata_input)[$grouping_boxplot.facet_y])
+        #else
+        facet_y <- NULL
+        #end if
+
+        plot_boxplot <- ggplot2::ggplot(data_long, ggplot2::aes(x = !!rlang::sym(plotting_column), y = intensity, fill = !!rlang::sym(coloring_column))) +
+                                        ggplot2::geom_boxplot() +
+                                        ggplot2::theme_bw()+
+                                        ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust=1)) +
+                                        ggplot2::facet_grid(rows = if(!is.null(facet_y)) dplyr::vars(!!facet_y) else NULL,
+                                                            cols = if(!is.null(facet_x)) dplyr::vars(!!facet_x) else NULL,
+                                                            scales = "free") +
+                                        ggplot2::xlab("$xlab") + 
+                                        ggplot2::ylab("$ylab")
+
+        #else 
+
+        plot_boxplot <- ggplot2::ggplot(data_long, ggplot2::aes(x = samples, y = intensity)) +
+                                        ggplot2::geom_boxplot() +
+                                        ggplot2::theme_bw()+
+                                        ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust=1)) +
+                                        ggplot2::xlab("$xlab") + 
+                                        ggplot2::ylab("$ylab")
+        #end if 
+
+        #if $flip_axes == "true"
+        plot_boxplot <- plot_boxplot + ggplot2::coord_flip()
+        #end if
+
+        ggplot2::ggsave(filename = "boxplot.png", plot_boxplot)
+    ##    ggplot2::ggsave(filename = "boxplot.pdf", plot_boxplot, width = 10, height = 9000, limitsize = FALSE, units = "cm")
+
+
+        ]]></configfile>
+    </configfiles>
+    <inputs>
+        <expand macro="boxplot_param"/>
+    </inputs>
+    <outputs>
+        <data name="boxplot" format="png" label="Boxplot on ${on_string}" from_work_dir="boxplot.png"/>        
+        <data name="script" format="txt" label="R script">
+            <filter>export_R_script</filter>
+        </data>
+    </outputs>
+    <tests>
+        <test expect_num_outputs='1'>
+            <param name="input_data" value="test_data.txt"/>
+            <param name="has_rownames" value="true"/>
+            <param name="log2_transform" value="false"/>  
+            <param name="use_grouping" value="false"/>  
+            <output name="boxplot" ftype="png">
+                <assert_contents>
+                    <has_size size="1164615" delta="200"/>
+                </assert_contents>
+            </output>          
+        </test>
+    </tests>
+    <help><![CDATA[
+        @GENERAL_HELP@
+    ]]></help>
+    <expand macro="citations" />
+</tool>
