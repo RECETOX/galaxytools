@@ -5,17 +5,19 @@
     
     <requirements>
         <requirement type="package" version="@TOOL_VERSION@">ipapy2</requirement>
+        <expand macro="extra_requirements"/>
     </requirements>
 
     <command detect_errors="exit_code"><![CDATA[
         python3 '${__tool_directory__}/ipapy2_compute_bio.py'
-        --MS1_DB '${MS1_DB}'
-        --annotations '${annotations}'
+        --input_dataset_database '${MS1_DB}' '${MS1_DB.ext}'
+        --input_dataset_annotations '${annotations}' '${annotations.ext}'
         --biochemical_mode '${biochemical_mode.biochemical_mode}'
         #if $biochemical_mode.biochemical_mode == "connections"
             --connection_list '${biochemical_mode.connection_list}'
         #end if
-        --compute_bio_output "${compute_bio_output}"
+        --output_dataset "${compute_bio_output}" "${compute_bio_output.ext}"
+        --ncores \${GALAXY_SLOTS:-1}
     ]]></command>
 
     <inputs>
@@ -37,7 +39,7 @@
     </inputs>
 
     <outputs>
-        <data label="${tool.name} on ${on_string}" name="compute_bio_output" format="csv,tsv,tabular,parquet"/>
+        <data label="${tool.name} on ${on_string}" name="compute_bio_output" format_source="MS1_DB"/>
     </outputs>
 
     <tests>

@@ -5,40 +5,44 @@
     
     <requirements>
         <requirement type="package" version="@TOOL_VERSION@">ipapy2</requirement>
+        <expand macro="extra_requirements"/>
     </requirements>
 
     <command detect_errors="exit_code"><![CDATA[
         python3 '${__tool_directory__}/ipapy2_gibbs_sampler_add.py'
-        --mapped_isotope_patterns '${mapped_isotope_patterns}'
-        --annotations '${annotations}'
+        --input_dataset_mapped_isotope_patterns '${mapped_isotope_patterns}' '${mapped_isotope_patterns.ext}'
+        --input_dataset_annotations '${annotations}' '${annotations.ext}'
         --noits '${noits}'
         --burn '${burn}'
         --delta_add '${delta_add}'
         --all_out '${all_out}'
-        --zs '${zs}'
-        --zs_out '${zs_out}'
-        --annotations_out '${annotations_out}'
+        #if $zs:
+            --zs '${zs}' '${zs.ext}'
+        #else:
+            --zs '' ''
+        #end if
+        #if $zs_out:
+            --zs_out '${zs_out}' '${zs_out.ext}'
+        #else:
+            --zs_out '' ''
+        #end if
+        --output_dataset '${annotations_out}' '${annotations_out.ext}'
     ]]></command>
 
     <inputs>
-        <param label="Mapped isotope patterns" name="mapped_isotope_patterns" type="data" format="csv,tsv,tabular,parquet" help="A csv file containing the MS1 data. Ideally obtained from map_isotope_patterns."/>
-        <param label="annotations" name="annotations" type="data" format="csv,tsv,tabular,parquet" help="pandas dataframe containing all the possible annotations for the measured features."/>
-        <param label="gibbs sampler iterations" name="noits" type="integer" value="1000" help="number of iterations if the Gibbs sampler to be run."/>
-        <param label="ignored iterations" name="burn" type="integer" optional="true" value="10" help="number of iterations to be ignored when computing posterior probabilities. If None, is set to 10% of total iterations."/>
+        <expand macro="gibbs"/>
         <param name="delta_add" type="float" value="1" min="0" label="adducts weight" help="parameter used when computing the conditional priors. The parameter must be positive. The smaller the parameter the more weight the adducts connections have on the posterior probabilities. Default 1." />
-        <param label="return each iteration" name="all_out" type="boolean" value="false" optional="true" help="logical value. If true the list of assignments found in each iteration is returned by the function. Default False."/>
-        <param label="previous Gibbs sampler" name="zs" type="data" format="txt" optional="true" help="list of assignments computed in a previous run of the Gibbs sampler. Optional, default None."/>
     </inputs>
 
     <outputs>
-        <data label="${tool.name} annotations on ${on_string}" name="annotations_out" format="csv,tsv,tabular,parquet"/>
-        <data label="${tool.name} zs on ${on_string}" name="zs_out" format="csv,tsv,tabular,parquet">
+        <data label="${tool.name} annotations on ${on_string}" name="annotations_out" format_source="mapped_isotope_patterns"/>
+        <data label="${tool.name} zs on ${on_string}" name="zs_out" format="txt">
             <filter>options['all_out']</filter>
         </data>
     </outputs>
 
     <tests>
-        <test  expect_num_outputs="1">
+        <test  expect_num_outputs="2">
             <param name="mapped_isotope_patterns" value="mapped_isotope_patterns.csv"/>
             <param name="annotations" value="clean_annotations.csv"/>
             <param name="noits" value="1000"/>

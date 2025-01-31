@@ -5,6 +5,7 @@
     
     <requirements>
         <requirement type="package" version="@TOOL_VERSION@">ipapy2</requirement>
+        <expand macro="extra_requirements"/>
     </requirements>
 
     <command detect_errors="exit_code"><![CDATA[

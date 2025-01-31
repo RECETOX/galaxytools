@@ -67,4 +67,17 @@
             <help>multiplicative factor for the RT if measured RT is outside the RTrange present in the database.</help>
         </param>
     </xml>
+    <xml name="gibbs">
+        <param label="Mapped isotope patterns" name="mapped_isotope_patterns" type="data" format="csv,tsv,tabular,parquet" help="A csv file containing the MS1 data. Ideally obtained from map_isotope_patterns."/>
+        <param label="annotations" name="annotations" type="data" format="csv,tsv,tabular,parquet" help="pandas dataframe containing all the possible annotations for the measured features."/>
+        <param label="gibbs sampler iterations" name="noits" type="integer" value="1000" help="number of iterations if the Gibbs sampler to be run."/>
+        <param label="ignored iterations" name="burn" type="integer" optional="true" value="10" help="number of iterations to be ignored when computing posterior probabilities. If None, is set to 10% of total iterations."/>
+        <param label="output Gibbs parameter" name="all_out" type="boolean" value="false" optional="true" help="logical value. If true the list of assignments found in each iteration is returned by the function. Default False."/>
+        <param label="previous Gibbs sampler" name="zs" type="data" format="txt" optional="true" help="list of assignments computed in a previous run of the Gibbs sampler. Optional, default None."/>
+    </xml>
+
+    <xml name="extra_requirements">
+        <requirement type="package" version="19.0.0">pyarrow</requirement>
+        <requirement type="package" version="2024.11.0">fastparquet</requirement>
+    </xml>
 </macros>

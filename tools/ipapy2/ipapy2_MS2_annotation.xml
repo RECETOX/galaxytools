@@ -5,6 +5,7 @@
     
     <requirements>
         <requirement type="package" version="@TOOL_VERSION@">ipapy2</requirement>
+        <expand macro="extra_requirements"/>
     </requirements>
 
     <command detect_errors="exit_code"><![CDATA[
@@ -80,7 +81,12 @@
             <param name="all_adducts" value="all_adducts.csv"/>
             <param name="MS2_DB" value="MS2_DB.csv"/>
             <param name="ppm" value="3"/>
-            <output name="MS2_annotations" file="MS2_annotations.csv"/>
+            <output name="MS2_annotations">
+                <assert_contents>
+                    <has_n_columns n="13"  sep=","/>
+                    <has_n_lines n="158" delta="5" />
+                </assert_contents>
+            </output>
         </test>
     </tests>
 

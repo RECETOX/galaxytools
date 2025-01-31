@@ -1,27 +1,29 @@
 import argparse
-import os
-import pandas as pd
 from ipaPy2 import ipa
+from utils import LoadDataAction, StoreOutputAction, group_by_peak_id
 
 
-def main(args):
-    MS1_DB = pd.read_csv(args.MS1_DB)
-    MS1_DB = MS1_DB.replace("", None)
+def main(
+    input_dataset_database,
+    input_dataset_annotations,
+    biochemical_mode,
+    connection_list,
+    output_dataset,
+    ncores,
+):
+    """
+    Compute matrix of biochemical connections. Either based on a list of
+    possible connections in the form of a list of formulas or based on the
+    reactions present in the database.
+    """
 
-    if args.annotations:
-        annotations_df = pd.read_csv(args.annotations, keep_default_na=False)
-        annotations_df = annotations_df.replace("", None)
-        annotations = {}
-        keys = set(annotations_df["peak_id"])
-        for i in keys:
-            annotations[i] = annotations_df[annotations_df["peak_id"] == i].drop(
-                "peak_id", axis=1
-            )
+    if input_dataset_annotations is not None:
+        annotations = group_by_peak_id(input_dataset_annotations)
     else:
         annotations = None
 
-    if args.biochemical_mode == "connections" and args.connection_list:
-        connections = args.connection_list
+    if biochemical_mode == "connections" and connection_list:
+        connections = connection_list
     else:
         connections = [
             "C3H5NO",
@@ -110,29 +112,34 @@ def main(args):
         ]
 
     Bio = ipa.Compute_Bio(
-        MS1_DB,
+        input_dataset_database,
         annotations=annotations,
-        mode=args.biochemical_mode,
+        mode=biochemical_mode,
         connections=connections,
-        ncores=int(os.environ.get("GALAXY_SLOTS")),
+        ncores=ncores,
     )
-    Bio.to_csv(args.compute_bio_output, index=False)
+    write_func, file_path = output_dataset
+    write_func(Bio, file_path)
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
-        description="cluster features before IPA pipeline."
+        description=""" Compute matrix of biochemical connections. Either based on a list of
+    possible connections in the form of a list of formulas or based on the
+    reactions present in the database."""
     )
     parser.add_argument(
-        "--MS1_DB",
-        type=str,
+        "--input_dataset_database",
+        nargs=2,
+        action=LoadDataAction,
         required=True,
-        help="a dataframe containing the measured intensities across several samples.",
+        help="a datset containing the database against which the annotationis performed.",
     )
     parser.add_argument(
-        "--annotations",
-        type=str,
-        help="a dataframe containing the annotations of the features.",
+        "--input_dataset_annotations",
+        nargs=2,
+        action=LoadDataAction,
+        help="a datset containing the annotations of the features.",
     )
     parser.add_argument(
         "--biochemical_mode",
@@ -144,11 +151,25 @@ if __name__ == "__main__":
         "--connection_list", type=str, help="intensity mode. Default 'max' or 'ave'."
     )
     parser.add_argument(
-        "--compute_bio_output",
-        type=str,
+        "--output_dataset",
+        nargs=2,
+        action=StoreOutputAction,
         required=True,
         help="Output file path for the dataframe.",
     )
+    parser.add_argument(
+        "--ncores",
+        type=int,
+        default=None,
+        help="number of cores to use for the computation.",
+    )
     args = parser.parse_args()
 
-    main(args)
+    main(
+        args.input_dataset_database,
+        args.input_dataset_annotations,
+        args.biochemical_mode,
+        args.connection_list,
+        args.output_dataset,
+        args.ncores,
+    )
