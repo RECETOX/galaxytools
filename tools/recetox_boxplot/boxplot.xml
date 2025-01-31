@@ -89,8 +89,6 @@
         #end if
 
         ggplot2::ggsave(filename = "boxplot.png", plot_boxplot)
-    ##    ggplot2::ggsave(filename = "boxplot.pdf", plot_boxplot, width = 10, height = 9000, limitsize = FALSE, units = "cm")
-
 
         ]]></configfile>
     </configfiles>
