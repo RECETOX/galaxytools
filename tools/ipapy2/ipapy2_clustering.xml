@@ -18,11 +18,11 @@
     <inputs>
         <param label="Unclustered data" name="unclustered_MS1_intensities" type="data" format="csv,tsv,tabular,parquet" help="a csv file containing the measured intensities across several samples, yet to be clustered"/>
         <section name="clustering" title="clustering settings">
-            <param name="Cthr" type="float" value="0.8">
+            <param name="Cthr" type="float" value="0.8" min="0" max="1">
                 <label>correlation threshold</label>
                 <help>Minimum correlation allowed in each cluster. Default value 0.8.</help>
             </param>
-            <param name="RTwin" type="float" value="1">
+            <param name="RTwin" type="float" value="1" min="0">
                 <label>RT threshold</label>
                 <help>Maximum difference in RT time between features in the same cluster. Default value 1.</help>
             </param>

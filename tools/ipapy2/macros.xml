@@ -25,37 +25,37 @@
     </xml>
 
     <xml name="ppm">
-        <param name="ppm" type="float" value="100">
+        <param name="ppm" type="float" value="100" min="0">
             <label>ppm between isotopes</label>
             <help>Maximum ppm value allowed between 2 isotopes. Default value 100.</help>
         </param>
     </xml>
 
     <xml name="ms_unknown">
-        <param name="ppmunk" type="float" optional="true">
+        <param name="ppmunk" type="float" optional="true" min="0">
             <label>ppm for unknown</label>
             <help>ppm associated to the 'unknown' annotation. If not provided equal to ppm.</help>
         </param>
-        <param name="ratiounk" type="float" optional="true" value="0.5">
+        <param name="ratiounk" type="float" optional="true" value="0.5" min="0">
             <label>isotope ratio for unknown</label>
             <help>isotope ratio associated to the 'unknown' annotation.</help>
         </param>
     </xml>
 
     <xml name="ms_options">
-        <param name="ratiosd" type="float" value="0.9" optional="true">
+        <param name="ratiosd" type="float" value="0.9" optional="true" min="0">
             <label>intensity ratio</label>
             <help>acceptable ratio between predicted intensity and observed intensity of isotopes</help>
         </param>
-        <param name="ppmthr" type="float" optional="true">
+        <param name="ppmthr" type="float" optional="true" min="0">
             <label>ppm threshold</label>
             <help>maximum ppm possible for the annotations. if not provided equal to 2*ppm.</help>
         </param>
-        <param name="pRTNone" type="float" optional="true" value="0.8">
+        <param name="pRTNone" type="float" optional="true" value="0.8" min="0">
             <label>no RT factor</label>
             <help>multiplicative factor for the RT if no RTrange present in the database.</help>
         </param>
-        <param name="pRTout" type="float" optional="true" value="0.4">
+        <param name="pRTout" type="float" optional="true" value="0.4" min="0">
             <label>outside RT factor</label>
             <help>multiplicative factor for the RT if measured RT is outside the RTrange present in the database.</help>
         </param>
