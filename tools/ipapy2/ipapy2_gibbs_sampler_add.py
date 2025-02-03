@@ -99,7 +99,7 @@ if __name__ == "__main__":
         "--zs",
         nargs=2,
         action=LoadTextAction,
-        help="""a txt file containing the list of assignments computed in a previous run of the Gibbs sampler. 
+        help="""a txt file containing the list of assignments computed in a previous run of the Gibbs sampler.
         Optional, default None.""",
     )
     parser.add_argument(

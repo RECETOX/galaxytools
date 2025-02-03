@@ -10,18 +10,18 @@ from utils import (
 
 
 def main(
-        input_dataset_mapped_isotope_patterns,
-        input_dataset_annotations,
-        integrating_mode,
-        input_dataset_bio,
-        noits,
-        burn,
-        delta_bio,
-        delta_add,
-        all_out,
-        zs,
-        zs_out,
-        output_dataset,
+    input_dataset_mapped_isotope_patterns,
+    input_dataset_annotations,
+    integrating_mode,
+    input_dataset_bio,
+    noits,
+    burn,
+    delta_bio,
+    delta_add,
+    all_out,
+    zs,
+    zs_out,
+    output_dataset,
 ):
     annotations_df = input_dataset_annotations
     annotations_df["post"] = annotations_df["post"].replace("", 0)
@@ -146,7 +146,7 @@ if __name__ == "__main__":
         "--zs",
         nargs=2,
         action=LoadTextAction,
-        help="""a txt file containing the list of assignments computed in a previous run of the Gibbs sampler. 
+        help="""a txt file containing the list of assignments computed in a previous run of the Gibbs sampler.
         Optional, default None.""",
     )
     parser.add_argument(
