@@ -1,11 +1,13 @@
 import argparse
+
+
 from ipaPy2 import ipa
 from utils import (
-    LoadDataAction,
-    StoreOutputAction,
-    LoadTextAction,
-    group_by_peak_id,
     flattern_annotations,
+    group_by_peak_id,
+    LoadDataAction,
+    LoadTextAction,
+    StoreOutputAction,
 )
 
 

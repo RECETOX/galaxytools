@@ -1,13 +1,14 @@
 import argparse
+
+
 from ipaPy2 import ipa
 from utils import LoadDataAction, StoreOutputAction
 
 
 def main(input_dataset, Cthr, RTwin, Intmode, output_dataset):
-    unclustered_df = input_dataset
     write_func, file_path = output_dataset
     clustered_df = ipa.clusterFeatures(
-        unclustered_df, Cthr=Cthr, RTwin=RTwin, Intmode=Intmode
+        input_dataset, Cthr=Cthr, RTwin=RTwin, Intmode=Intmode
     )
     write_func(clustered_df, file_path)
 

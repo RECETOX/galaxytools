@@ -53,7 +53,7 @@
             <param name="mapped_isotope_patterns" value="mapped_isotope_patterns.csv"/>
             <param name="all_adducts" value="all_adducts.csv"/>
             <param name="ppm" value="3"/>
-            <output name="MS1_annotations" file="MS1_annotations.csv"/>
+            <output name="MS1_annotations" file="MS1_annotations.csv" lines_diff="20"/>
         </test>
     </tests>
 

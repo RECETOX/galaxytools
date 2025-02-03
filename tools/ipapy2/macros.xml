@@ -24,15 +24,8 @@
         </param>
     </xml>
 
-    <xml name="ppm_100">
-        <param name="ppm" type="float" value="100">
-            <label>ppm between isotopes</label>
-            <help>Maximum ppm value allowed between 2 isotopes. Default value 100.</help>
-        </param>
-    </xml>
-
     <xml name="ppm">
-        <param name="ppm" type="float">
+        <param name="ppm" type="float" value="100">
             <label>ppm between isotopes</label>
             <help>Maximum ppm value allowed between 2 isotopes. Default value 100.</help>
         </param>

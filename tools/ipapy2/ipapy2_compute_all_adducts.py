@@ -1,4 +1,6 @@
 import argparse
+
+
 from ipaPy2 import ipa
 from utils import LoadDataAction, StoreOutputAction
 
@@ -6,10 +8,14 @@ from utils import LoadDataAction, StoreOutputAction
 def main(
     input_dataset_adducts, input_dataset_database, ionisation, output_dataset, ncores
 ):
-    adducts_df = input_dataset_adducts
-    database_df = input_dataset_database
     write_func, file_path = output_dataset
-    adducts_df = ipa.compute_all_adducts(adducts_df, database_df, ionisation, ncores)
+    adducts_df = ipa.compute_all_adducts(
+        input_dataset_adducts,
+        input_dataset_database,
+        ionisation,
+        ncores
+    )
+    
     write_func(adducts_df, file_path)
 
 
