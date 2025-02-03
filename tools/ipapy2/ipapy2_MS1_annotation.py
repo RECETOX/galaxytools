@@ -19,9 +19,6 @@ def main(
     ncores,
 ):
     write_func, file_path = output_dataset
-    ncores = ncores if ncores else 1
-    ppmunk = ppmunk if ppmunk else ppm
-    ppmthr = ppmthr if ppmthr else 2 * ppm
 
     annotations = ipa.MS1annotation(
         input_dataset_database,

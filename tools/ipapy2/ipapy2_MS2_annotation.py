@@ -24,10 +24,6 @@ def main(
     output_dataset,
     ncores,
 ):
-    ncores = ncores if ncores else 1
-    ppmunk = ppmunk if ppmunk else ppm
-    ppmthr = ppmthr if ppmthr else 2 * ppm
-
     annotations = ipa.MSMSannotation(
         input_dataset_mapped_isotope_patterns,
         input_dataset_MS2,
