@@ -2,7 +2,7 @@ import argparse
 
 
 from ipaPy2 import ipa
-from utils import LoadDataAction, StoreOutputAction, flattern_annotations
+from utils import flattern_annotations, LoadDataAction, StoreOutputAction
 
 
 def main(

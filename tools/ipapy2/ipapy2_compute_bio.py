@@ -2,7 +2,7 @@ import argparse
 
 
 from ipaPy2 import ipa
-from utils import LoadDataAction, StoreOutputAction, group_by_peak_id
+from utils import group_by_peak_id, LoadDataAction, StoreOutputAction
 
 
 def main(

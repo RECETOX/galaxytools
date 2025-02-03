@@ -15,7 +15,7 @@ def main(
         ionisation,
         ncores
     )
-    
+
     write_func(adducts_df, file_path)
 
 
@@ -50,7 +50,6 @@ if __name__ == "__main__":
         default=1,
         help="Number of cores to use for parallel processing.",
     )
-
     parser.add_argument(
         "--output_dataset",
         nargs=2,
