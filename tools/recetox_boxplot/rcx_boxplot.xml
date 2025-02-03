@@ -118,7 +118,7 @@
     </outputs>
 
     <tests>
-        <test>
+        <test expect_num_outputs="1">
             <param name="input_data" value="test_data.txt"/>
             <param name="has_rownames" value="true"/>
             <output name="boxplot" ftype="png">
@@ -127,13 +127,14 @@
                 </assert_contents>
             </output>          
         </test>
-        <test>
+        <test expect_num_outputs="2">
             <param name="input_data" value="test_data.txt"/>
             <param name="has_rownames" value="true"/>
             <param name="use_grouping" value="yes"/>
             <param name="input_metadata" value="test_expDesign.txt"/>
             <param name="sampleID" value="1"/>
             <param name="groupingCol" value="1"/>
+            <param name="export_R_script" value="TRUE"/>
             <output name="boxplot" ftype="png">
                 <assert_contents>
                     <has_size size="1164615" delta="200"/>
