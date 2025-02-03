@@ -47,7 +47,6 @@
         metadata_input <- read.delim("$grouping_boxplot.input_metadata", sep="\t",  check.names = "false")
         sampleID_column <- colnames(metadata_input)[$grouping_boxplot.sampleID]
         plotting_column <- colnames(metadata_input)[$grouping_boxplot.groupingCol]
-        coloring_column <- colnames(metadata_input)[$grouping_boxplot.colorCol]
         metadata_input <- data.frame(lapply(metadata_input, as.factor))
 
         data_long <- dplyr::left_join(data_long, metadata_input, by = c("samples" = sampleID_column), keep = TRUE)
@@ -64,7 +63,13 @@
         facet_y <- NULL
         #end if
 
-        plot_boxplot <- ggplot2::ggplot(data_long, ggplot2::aes(x = !!rlang::sym(plotting_column), y = intensity, fill = !!rlang::sym(coloring_column))) +
+        plot_boxplot <- ggplot2::ggplot(data_long, ggplot2::aes(
+            x = !!rlang::sym(plotting_column),
+            y = intensity,
+            #if $grouping_boxplot.colorCol
+            fill = !!rlang::sym(colnames(metadata_input)[$grouping_boxplot.colorCol])
+            #end if
+        )) +
                                         ggplot2::geom_boxplot() +
                                         ggplot2::theme_bw()+
                                         ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust=1)) +
