@@ -4,16 +4,17 @@
         <import>macros.xml</import>
         <import>help.xml</import>
     </macros>
-    <xrefs>
-    </xrefs>
+
     <expand macro="creator" />
     <expand macro="requirements" />
+
     <command detect_errors="exit_code"><![CDATA[
         Rscript '${run_script}'
         #if $export_R_script
         && cat ${run_script} >> $script
         #end if
     ]]></command>
+
     <configfiles>
         <configfile name="run_script"><![CDATA[
 
@@ -30,17 +31,18 @@
         data_input <- data_input[ ,-1]
         #end if
 
+        y_colname <- "intensity"
         data_long <- tidyr::pivot_longer(data_input,
                                          cols = c(1:ncol(data_input)),
                                          names_to = "samples",
-                                         values_to = "intensity")
+                                         values_to = y_colname)
 
         #if $transform_data == "replace_zero"
         data_long[data_long == 0] <- NA
         #else if $transform_data == "log2"
-        data_long[["intensity"]] <- log2(data_long[["intensity"]])
+        data_long[[y_colname]] <- log2(data_long[[y_colname]])
         #else if $transform_data == "log10"
-        data_long[["intensity"]] <- log10(data_long[["intensity"]])        
+        data_long[[y_colname]] <- log10(data_long[[y_colname]])        
         #end if
 
         #if $grouping_boxplot.use_grouping == "yes"
@@ -103,21 +105,35 @@
 
         ]]></configfile>
     </configfiles>
+
     <inputs>
         <expand macro="boxplot_param"/>
     </inputs>
+
     <outputs>
         <data name="boxplot" format="png" label="Boxplot on ${on_string}" from_work_dir="boxplot.png"/>        
         <data name="script" format="txt" label="R script">
             <filter>export_R_script</filter>
         </data>
     </outputs>
+
     <tests>
-        <test expect_num_outputs='1'>
+        <test>
             <param name="input_data" value="test_data.txt"/>
             <param name="has_rownames" value="true"/>
-            <param name="transform_data" value="none"/>  
-            <param name="use_grouping" value="false"/>  
+            <output name="boxplot" ftype="png">
+                <assert_contents>
+                    <has_size size="1164615" delta="200"/>
+                </assert_contents>
+            </output>          
+        </test>
+        <test>
+            <param name="input_data" value="test_data.txt"/>
+            <param name="has_rownames" value="true"/>
+            <param name="use_grouping" value="yes"/>
+            <param name="input_metadata" value="test_expDesign.txt"/>
+            <param name="sampleID" value="1"/>
+            <param name="groupingCol" value="1"/>
             <output name="boxplot" ftype="png">
                 <assert_contents>
                     <has_size size="1164615" delta="200"/>
@@ -125,8 +141,10 @@
             </output>          
         </test>
     </tests>
+
     <help><![CDATA[
         @GENERAL_HELP@
     ]]></help>
+
     <expand macro="citations" />
 </tool>
