@@ -1,0 +1,65 @@
+<tool id="ipapy2_gibbs_sampler_add" name="ipaPy2 gibbs sampler additive" version="@TOOL_VERSION@+galaxy0" profile="21.05">
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    
+    <expand macro="requirements"/>
+
+    <command detect_errors="exit_code"><![CDATA[
+        python3 '${__tool_directory__}/ipapy2_gibbs_sampler_add.py'
+        --input_dataset_mapped_isotope_patterns '${mapped_isotope_patterns}' '${mapped_isotope_patterns.ext}'
+        --input_dataset_annotations '${annotations}' '${annotations.ext}'
+        --noits '${noits}'
+        --burn '${burn}'
+        --delta_add '${delta_add}'
+        --all_out '${all_out}'
+        #if $zs:
+            --zs '${zs}' '${zs.ext}'
+        #else:
+            --zs '' ''
+        #end if
+        #if $zs_out:
+            --zs_out '${zs_out}' '${zs_out.ext}'
+        #else:
+            --zs_out '' ''
+        #end if
+        --output_dataset '${annotations_out}' '${annotations_out.ext}'
+    ]]></command>
+
+    <inputs>
+        <expand macro="gibbs"/>
+        <param name="delta_add" type="float" value="1" min="0" label="adducts weight" help="parameter used when computing the conditional priors. The parameter must be positive. The smaller the parameter the more weight the adducts connections have on the posterior probabilities. Default 1." />
+    </inputs>
+
+    <outputs>
+        <data label="${tool.name} annotations on ${on_string}" name="annotations_out" format_source="mapped_isotope_patterns"/>
+        <data label="${tool.name} zs on ${on_string}" name="zs_out" format="txt">
+            <filter>options['all_out']</filter>
+        </data>
+    </outputs>
+
+    <tests>
+        <test  expect_num_outputs="2">
+            <param name="mapped_isotope_patterns" value="mapped_isotope_patterns.csv"/>
+            <param name="annotations" value="clean_annotations.csv"/>
+            <param name="noits" value="1000"/>
+            <param name="delta_add" value="0.1"/>
+            <!-- Not the best way to test, but the results are stochastic hence difficult to test-->
+            <output name="annotations_out">
+                <assert_contents>
+                    <has_n_columns n="15"  sep=","/>
+                    <has_n_lines n="15" delta="5" />
+                    <has_line line="id,name,formula,adduct,m/z,charge,RT range,ppm,isotope pattern score,fragmentation pattern score,prior,post,post Gibbs,chi-square pval,peak_id" />
+                </assert_contents>
+            </output>
+        </test>
+    </tests>
+
+    <help><![CDATA[
+        ::
+            Gibbs sampler for the IPA model.
+            <expand macro="references"/>
+    ]]></help>
+
+    <expand macro="citations"/>
+</tool>
