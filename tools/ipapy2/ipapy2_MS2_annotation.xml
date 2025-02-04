@@ -16,11 +16,11 @@
         --ppm ${ppm}
         --ratiosd ${ratiosd}
         #if $ppmunk
-        --ppmunk ${ppmunk}
+            --ppmunk ${ppmunk}
         #else
             --ppmunk ${ppm}
         #end if
-        --ratiounk ${ratiounk}
+            --ratiounk ${ratiounk}
         #if $ppmthr
             --ppmthr ${ppmthr}
         #else
@@ -81,7 +81,7 @@
             <param name="ppm" value="3"/>
             <output name="MS2_annotations">
                 <assert_contents>
-                    <has_n_columns n="13"  sep=","/>
+                    <has_n_columns n="13" sep=","/>
                     <has_n_lines n="158" delta="5" />
                 </assert_contents>
             </output>
