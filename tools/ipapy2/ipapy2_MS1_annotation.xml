@@ -62,6 +62,11 @@
         Annotation of the dataset based on the MS1 information. Prior probabilities
         are based on mass only, while post probabilities are based on mass, RT,
         previous knowledge and isotope patterns.
+
+        https://github.com/francescodc87/ipaPy2#usage
+
+        https://academic.oup.com/bioinformatics/article/39/7/btad455/7230779
+
     ]]></help>
 
     <expand macro="citations"/>
