@@ -63,9 +63,7 @@
         are based on mass only, while post probabilities are based on mass, RT,
         previous knowledge and isotope patterns.
 
-        https://github.com/francescodc87/ipaPy2#usage
-
-        https://academic.oup.com/bioinformatics/article/39/7/btad455/7230779
+        <expand macro="references"/>
 
     ]]></help>
 

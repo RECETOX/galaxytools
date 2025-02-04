@@ -1,8 +1,6 @@
-import argparse
-
-
 from ipaPy2 import ipa
-from utils import LoadDataAction, StoreOutputAction
+
+from utils import CustomArgumentParser
 
 
 def main(input_dataset, isoDiff, ppm, ionisation, isotope_ratio, output_dataset):
@@ -19,13 +17,11 @@ def main(input_dataset, isoDiff, ppm, ionisation, isotope_ratio, output_dataset)
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(
-        description="mapping isotope patterns in MS1 data."
-    )
+    parser = CustomArgumentParser(description="mapping isotope patterns in MS1 data.")
     parser.add_argument(
         "--input_dataset",
         nargs=2,
-        action=LoadDataAction,
+        action="load_data",
         required=True,
         help="A dataset containing clustered MS1 intensities.",
     )
@@ -58,14 +54,6 @@ if __name__ == "__main__":
                 isotopes with intensity higher than MinIsoRatio% of the main isotope\
                 are considered.",
     )
-    parser.add_argument(
-        "--output_dataset",
-        nargs=2,
-        action=StoreOutputAction,
-        required=True,
-        help="The mapped isotope patterns file path.",
-    )
-
     args = parser.parse_args()
     main(
         args.input_dataset,

@@ -98,7 +98,11 @@
 
     <help><![CDATA[
         ::
-            Gibbs sampler for the IPA model.
+        Gibbs sampler considering both biochemical and adducts connections. The
+        function computes the posterior probabilities of the annotations
+        considering the possible biochemical connections reported in Bio and the
+        possible adducts connection.
+            <expand macro="references"/>
     ]]></help>
 
     <expand macro="citations"/>

@@ -1,8 +1,8 @@
 import argparse
 
-
 from ipaPy2 import ipa
-from utils import flattern_annotations, LoadDataAction, StoreOutputAction
+
+from utils import MSArgumentParser, flattern_annotations
 
 
 def main(
@@ -37,7 +37,7 @@ def main(
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(
+    parser = MSArgumentParser(
         """
     Annotation of the dataset based on the MS1 information. Prior probabilities
         are based on mass only, while post probabilities are based on mass, RT,
@@ -47,71 +47,18 @@ if __name__ == "__main__":
     parser.add_argument(
         "--input_dataset_database",
         nargs=2,
-        action=LoadDataAction,
+        action="load_data",
         required=True,
         help="A dataset containing the MS1 data. Ideally obtained from map_isotope_patterns",
     )
     parser.add_argument(
         "--input_dataset_adducts",
         nargs=2,
-        action=LoadDataAction,
+        action="load_data",
         required=True,
         help="A dataset containing information on all possible adducts.",
     )
-    parser.add_argument(
-        "--ppm",
-        type=float,
-        required=True,
-        default=100,
-        help="accuracy of the MS instrument used.",
-    )
-    parser.add_argument(
-        "--ratiosd",
-        type=float,
-        default=0.9,
-        help="acceptable ratio between predicted intensity and observed intensity of isotopes.",
-    )
-    parser.add_argument(
-        "--ppmunk",
-        type=float,
-        help="pm associated to the 'unknown' annotation. If not provided equal to ppm.",
-    )
-    parser.add_argument(
-        "--ratiounk",
-        type=float,
-        default=0.5,
-        help="isotope ratio associated to the 'unknown' annotation.",
-    )
-    parser.add_argument(
-        "--ppmthr",
-        type=float,
-        help="maximum ppm possible for the annotations. if not provided equal to 2*ppm.",
-    )
-    parser.add_argument(
-        "--pRTNone",
-        type=float,
-        default=0.8,
-        help="multiplicative factor for the RT if no RTrange present in the database.",
-    )
-    parser.add_argument(
-        "--pRTout",
-        type=float,
-        default=0.4,
-        help="multiplicative factor for the RT if measured RT is outside the RTrange present in the database.",
-    )
-    parser.add_argument(
-        "--output_dataset",
-        nargs=2,
-        action=StoreOutputAction,
-        required=True,
-        help="MS1 annotated data",
-    )
-    parser.add_argument(
-        "--ncores",
-        type=int,
-        default=None,
-        help="number of cores to use for the computation.",
-    )
+
     args = parser.parse_args()
     main(
         args.input_dataset_database,

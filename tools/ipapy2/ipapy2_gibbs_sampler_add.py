@@ -1,14 +1,6 @@
-import argparse
-
-
 from ipaPy2 import ipa
-from utils import (
-    flattern_annotations,
-    group_by_peak_id,
-    LoadDataAction,
-    LoadTextAction,
-    StoreOutputAction,
-)
+
+from utils import GibbsArgumentParser, flattern_annotations, group_by_peak_id
 
 
 def main(
@@ -52,71 +44,22 @@ def main(
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(
-        description="cluster features before IPA pipeline."
-    )
+    parser = GibbsArgumentParser(description="cluster features before IPA pipeline.")
     parser.add_argument(
         "--input_dataset_mapped_isotope_patterns",
         nargs=2,
-        action=LoadDataAction,
+        action="load_data",
         required=True,
         help="A dataset containing the MS1 data. Ideally obtained from map_isotope_patterns",
     )
     parser.add_argument(
         "--input_dataset_annotations",
         nargs=2,
-        action=LoadDataAction,
+        action="load_data",
         required=True,
         help="a datset containing the annotations of the features.",
     )
-    parser.add_argument(
-        "--noits",
-        type=int,
-        help="number of iterations if the Gibbs sampler to be run",
-    )
-    parser.add_argument(
-        "--burn",
-        type=int,
-        default=None,
-        help="""number of iterations to be ignored when computing posterior
-          probabilities. If None, is set to 10% of total iterations""",
-    )
-    parser.add_argument(
-        "--delta_add",
-        type=float,
-        default=1,
-        help="""parameter used when computing the conditional priors. The
-               parameter must be positive. The smaller the parameter the more
-               weight the adducts connections have on the posterior
-               probabilities. Default 1.""",
-    )
-    parser.add_argument(
-        "--all_out",
-        type=bool,
-        default=False,
-        help="""logical value. If true the list of assignments found in each
-             iteration is returned by the function. Default False.""",
-    )
-    parser.add_argument(
-        "--zs",
-        nargs=2,
-        action=LoadTextAction,
-        help="""a txt file containing the list of assignments computed in a previous run of the Gibbs sampler.
-        Optional, default None.""",
-    )
-    parser.add_argument(
-        "--zs_out",
-        nargs=2,
-        action=StoreOutputAction,
-        help="file to save the list of assignments computed in the current run of the Gibbs sampler.",
-    )
-    parser.add_argument(
-        "--output_dataset",
-        nargs=2,
-        action=StoreOutputAction,
-        required=True,
-        help="A file path for the output results from Gibbs Add.",
-    )
+
     args = parser.parse_args()
     main(
         args.input_dataset_mapped_isotope_patterns,

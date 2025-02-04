@@ -38,6 +38,8 @@
     <help><![CDATA[
     ::
         compute all adducts table based on the information present in the database
+
+        <expand macro="references"/>
     ]]></help>
 
     <expand macro="citations"/>

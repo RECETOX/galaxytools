@@ -15,15 +15,6 @@
         </param>
     </xml>
 
-    <xml name="bio_connections">
-        <param label="connections list provided" name="connection_list" type="select" optional="true" multiple="true" display="checkboxes">
-            <help>list of possible connections between compounds defined as formulas. Only necessary if mode='connections'.</help>
-            <option value="C3H5NO">C3H5NO</option>
-            <option value="C6H12N4O">C6H12N4O</option>
-            <option value="C4H6N2O2">C4H6N2O2</option>
-        </param>
-    </xml>
-
     <xml name="ppm">
         <param name="ppm" type="float" value="100" min="0">
             <label>ppm between isotopes</label>
@@ -73,4 +64,15 @@
         <requirement type="package" version="19.0.0">pyarrow</requirement>
         <requirement type="package" version="2024.11.0">fastparquet</requirement>
     </xml>
+    
+    <xml name="references">
+        <section name="Extra references">
+            <ul>
+                <li><a href="https://github.com/francescodc87/ipaPy2#usage">https://github.com/francescodc87/ipaPy2#usage</a></li>
+                <li><a href="https://academic.oup.com/bioinformatics/article/39/7/btad455/7230779">https://academic.oup.com/bioinformatics/article/39/7/btad455/7230779</a></li>
+                <li><a href="https://pubs.acs.org/doi/full/10.1021/acs.analchem.9b02354">https://pubs.acs.org/doi/full/10.1021/acs.analchem.9b02354</a></li>
+            </ul>
+        </section>
+    </xml>
+    
 </macros>

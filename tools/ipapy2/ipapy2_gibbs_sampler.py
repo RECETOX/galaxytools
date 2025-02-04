@@ -1,14 +1,6 @@
-import argparse
-
-
 from ipaPy2 import ipa
-from utils import (
-    flattern_annotations,
-    group_by_peak_id,
-    LoadDataAction,
-    LoadTextAction,
-    StoreOutputAction,
-)
+
+from utils import GibbsArgumentParser, flattern_annotations, group_by_peak_id
 
 
 def main(
@@ -78,20 +70,23 @@ def main(
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(
-        description="cluster features before IPA pipeline."
+    parser = GibbsArgumentParser(
+        description="""Gibbs sampler considering both biochemical and adducts connections. The
+    function computes the posterior probabilities of the annotations
+    considering the possible biochemical connections reported in Bio and the
+    possible adducts connection.""",
     )
     parser.add_argument(
         "--input_dataset_mapped_isotope_patterns",
         nargs=2,
-        action=LoadDataAction,
+        action="load_data",
         required=True,
         help="a dataframe containing the measured intensities across several samples.",
     )
     parser.add_argument(
         "--input_dataset_annotations",
         nargs=2,
-        action=LoadDataAction,
+        action="load_data",
         required=True,
         help="a datset containing the annotations of the features.",
     )
@@ -105,22 +100,11 @@ if __name__ == "__main__":
     parser.add_argument(
         "--input_dataset_bio",
         nargs=2,
-        action=LoadDataAction,
+        action="load_data",
         type=str,
         help="""dataframe (2 columns), reporting all the possible connections between
          compounds. It uses the unique ids from the database. It could be the
          output of Compute_Bio() or Compute_Bio_Parallel()""",
-    )
-    parser.add_argument(
-        "--noits",
-        type=int,
-        help="number of iterations if the Gibbs sampler to be run",
-    )
-    parser.add_argument(
-        "--burn",
-        type=int,
-        help="""number of iterations to be ignored when computing posterior
-          probabilities. If None, is set to 10% of total iterations""",
     )
     parser.add_argument(
         "--delta_bio",
@@ -129,40 +113,6 @@ if __name__ == "__main__":
                parameter must be positive. The smaller the parameter the more
                weight the adducts connections have on the posterior
                probabilities. Default 1.""",
-    )
-    parser.add_argument(
-        "--delta_add",
-        type=float,
-        help=""" parameter used when computing the conditional priors. The
-               parameter must be positive. The smaller the parameter the more
-               weight the adducts connections have on the posterior
-               probabilities. Default 1.""",
-    )
-    parser.add_argument(
-        "--all_out",
-        type=str,
-        help="""logical value. If true the list of assignments found in each
-            iteration is returned by the function. Default False.""",
-    )
-    parser.add_argument(
-        "--zs",
-        nargs=2,
-        action=LoadTextAction,
-        help="""a txt file containing the list of assignments computed in a previous run of the Gibbs sampler.
-        Optional, default None.""",
-    )
-    parser.add_argument(
-        "--zs_out",
-        nargs=2,
-        action=StoreOutputAction,
-        help="file to save the list of assignments computed in the current run of the Gibbs sampler.",
-    )
-    parser.add_argument(
-        "--output_dataset",
-        nargs=2,
-        action=StoreOutputAction,
-        required=True,
-        help="A file path for the output results from Gibbs Add.",
     )
     args = parser.parse_args()
     main(

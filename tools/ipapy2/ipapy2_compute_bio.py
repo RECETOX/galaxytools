@@ -1,8 +1,6 @@
-import argparse
-
-
 from ipaPy2 import ipa
-from utils import group_by_peak_id, LoadDataAction, StoreOutputAction
+
+from utils import CustomArgumentParser, group_by_peak_id
 
 
 def main(
@@ -125,7 +123,7 @@ def main(
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(
+    parser = CustomArgumentParser(
         description=""" Compute matrix of biochemical connections. Either based on a list of
     possible connections in the form of a list of formulas or based on the
     reactions present in the database."""
@@ -133,31 +131,26 @@ if __name__ == "__main__":
     parser.add_argument(
         "--input_dataset_database",
         nargs=2,
-        action=LoadDataAction,
+        action="load_data",
         required=True,
         help="a datset containing the database against which the annotationis performed.",
     )
     parser.add_argument(
         "--input_dataset_annotations",
         nargs=2,
-        action=LoadDataAction,
+        action="load_data",
         help="a datset containing the annotations of the features.",
     )
     parser.add_argument(
         "--biochemical_mode",
         type=str,
         required=True,
-        help="Default value 1. Maximum difference in RT time between features in the same cluster.",
+        help="""either 'reactions' (connections are computed based on the reactions
+          present in the database) or 'connections' (connections are computed
+          based on the list of connections provided). Default 'reactions'. """,
     )
     parser.add_argument(
         "--connection_list", type=str, help="intensity mode. Default 'max' or 'ave'."
-    )
-    parser.add_argument(
-        "--output_dataset",
-        nargs=2,
-        action=StoreOutputAction,
-        required=True,
-        help="Output file path for the dataframe.",
     )
     parser.add_argument(
         "--ncores",

@@ -61,6 +61,7 @@
     <help><![CDATA[
         ::
             Gibbs sampler for the IPA model.
+            <expand macro="references"/>
     ]]></help>
 
     <expand macro="citations"/>

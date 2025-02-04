@@ -1,8 +1,6 @@
-import argparse
-
-
 from ipaPy2 import ipa
-from utils import LoadDataAction, StoreOutputAction
+
+from utils import CustomArgumentParser
 
 
 def main(
@@ -10,30 +8,27 @@ def main(
 ):
     write_func, file_path = output_dataset
     adducts_df = ipa.compute_all_adducts(
-        input_dataset_adducts,
-        input_dataset_database,
-        ionisation,
-        ncores
+        input_dataset_adducts, input_dataset_database, ionisation, ncores
     )
 
     write_func(adducts_df, file_path)
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(
+    parser = CustomArgumentParser(
         description=" Clustering MS1 features based on correlation across samples."
     )
     parser.add_argument(
         "--input_dataset_adducts",
         nargs=2,
-        action=LoadDataAction,
+        action="load_data",
         required=True,
         help="A dataset containing information on all possible adducts.",
     )
     parser.add_argument(
         "--input_dataset_database",
         nargs=2,
-        action=LoadDataAction,
+        action="load_data",
         required=True,
         help="The MS1 database.",
     )
@@ -50,15 +45,6 @@ if __name__ == "__main__":
         default=1,
         help="Number of cores to use for parallel processing.",
     )
-    parser.add_argument(
-        "--output_dataset",
-        nargs=2,
-        action=StoreOutputAction,
-        required=True,
-        help="A file path for all possible\
-                adducts given the database.",
-    )
-
     args = parser.parse_args()
     main(
         args.input_dataset_adducts,

@@ -1,7 +1,6 @@
 import argparse
 from typing import Tuple
 
-
 import pandas as pd
 
 
@@ -171,3 +170,113 @@ def group_by_peak_id(df: pd.DataFrame) -> dict:
     for i in keys:
         annotations[i] = df[df["peak_id"] == i].drop("peak_id", axis=1)
     return annotations
+
+
+class CustomArgumentParser(argparse.ArgumentParser):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.register("action", "load_data", LoadDataAction)
+        self.register("action", "store_output", StoreOutputAction)
+        self.register("action", "load_text", LoadTextAction)
+        self.add_argument(
+            "--output_dataset",
+            nargs=2,
+            action="store_output",
+            required=True,
+            help="A file path for the output results.",
+        )
+
+
+class MSArgumentParser(CustomArgumentParser):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.add_argument(
+            "--ncores",
+            type=int,
+            default=1,
+            help="The number of cores to use for parallel processing.",
+        )
+        self.add_argument(
+            "--pRTout",
+            type=float,
+            default=0.4,
+            help="multiplicative factor for the RT if measured RT is outside the RTrange present in the database.",
+        )
+        self.add_argument(
+            "--pRTNone",
+            type=float,
+            default=0.8,
+            help="multiplicative factor for the RT if no RTrange present in the database.",
+        )
+        self.add_argument(
+            "--ppmthr",
+            type=float,
+            help="maximum ppm possible for the annotations. if not provided equal to 2*ppm.",
+        )
+        self.add_argument(
+            "--ppm",
+            type=float,
+            required=True,
+            default=100,
+            help="accuracy of the MS instrument used.",
+        )
+        self.add_argument(
+            "--ratiosd",
+            type=float,
+            default=0.9,
+            help="acceptable ratio between predicted intensity and observed intensity of isotopes.",
+        )
+        self.add_argument(
+            "--ppmunk",
+            type=float,
+            help="pm associated to the 'unknown' annotation. If not provided equal to ppm.",
+        )
+        self.add_argument(
+            "--ratiounk",
+            type=float,
+            default=0.5,
+            help="isotope ratio associated to the 'unknown' annotation.",
+        )
+
+
+class GibbsArgumentParser(CustomArgumentParser):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.add_argument(
+            "--noits",
+            type=int,
+            help="number of iterations if the Gibbs sampler to be run",
+        )
+        self.add_argument(
+            "--burn",
+            type=int,
+            help="""number of iterations to be ignored when computing posterior
+          probabilities. If None, is set to 10% of total iterations""",
+        )
+        self.add_argument(
+            "--delta_add",
+            type=float,
+            default=1,
+            help="""parameter used when computing the conditional priors. The
+                parameter must be positive. The smaller the parameter the more
+                weight the adducts connections have on the posterior
+                probabilities. Default 1.""",
+        )
+        self.add_argument(
+            "--all_out",
+            type=bool,
+            help="Output all the Gibbs sampler results.",
+        )
+        self.add_argument(
+            "--zs_out",
+            nargs=2,
+            action="store_output",
+            help="A file path for the output results of the Gibbs sampler.",
+        )
+        self.add_argument(
+            "--zs",
+            nargs=2,
+            action="load_text",
+            help="""a txt file containing the list of assignments computed in a previous run of the Gibbs sampler.
+            Optional, default None.""",
+        )

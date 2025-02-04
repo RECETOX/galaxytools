@@ -2,12 +2,10 @@
     <macros>
         <import>macros.xml</import>
     </macros>
-    
     <requirements>
         <requirement type="package" version="@TOOL_VERSION@">ipapy2</requirement>
         <expand macro="extra_requirements"/>
     </requirements>
-
     <command detect_errors="exit_code"><![CDATA[
         python3 '${__tool_directory__}/ipapy2_map_isotope_patterns.py'
         --input_dataset '${clustered_MS1_intensities}' '${clustered_MS1_intensities.ext}'
@@ -17,9 +15,8 @@
         --isotope_ratio ${isotope_ratio}
         --output_dataset '${mapped_isotope_patterns}' '${mapped_isotope_patterns.ext}'
     ]]></command>
-
     <inputs>
-        <param label="IPA dataframe" name="clustered_MS1_intensities" type="data" format="csv,tsv,tabular,parquet" help="A csv file of clustered MS1 intensities." />
+        <param label="IPA dataframe" name="clustered_MS1_intensities" type="data" format="csv,tsv,tabular,parquet" help="A csv file of clustered MS1 intensities."/>
         <expand macro="ionisation"/>
         <section name="isotope" title="isotope settings">
             <param name="isoDiff" type="float" value="1">
@@ -34,28 +31,26 @@
             </param>
         </section>
     </inputs>
-    
     <outputs>
-         <data label="${tool.name} on ${on_string}" name="mapped_isotope_patterns" format_source="clustered_MS1_intensities"/>
-   </outputs>
-    
+        <data label="${tool.name} on ${on_string}" name="mapped_isotope_patterns" format_source="clustered_MS1_intensities"/>
+    </outputs>
     <tests>
         <test>
             <param name="clustered_MS1_intensities" value="clustered_MS1_intensities.csv"/>
             <output name="mapped_isotope_patterns">
                 <assert_contents>
-                    <has_n_columns n="8"  sep=","/>
-                    <has_n_lines n="50" delta="5" />
-                    <has_line line="ids,rel.ids,mzs,RTs,Int,relationship,isotope pattern,charge" />
+                    <has_n_columns n="8" sep=","/>
+                    <has_n_lines n="50" delta="5"/>
+                    <has_line line="ids,rel.ids,mzs,RTs,Int,relationship,isotope pattern,charge"/>
                 </assert_contents>
             </output>
         </test>
     </tests>
-
     <help><![CDATA[
 	::
 		mapping isotope patterns in MS1 data.
+        
+        <expand macro="references"/>
     ]]></help>
-
     <expand macro="citations"/>
 </tool>

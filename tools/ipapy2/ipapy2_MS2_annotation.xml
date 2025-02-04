@@ -95,6 +95,7 @@
         Annotation of the dataset base on the MS1 and MS2 information. Prior
         probabilities are based on mass only, while post probabilities are based
         on mass, RT, previous knowledge and isotope patterns.
+        <expand macro="references"/>
     ]]></help>
 
     <expand macro="citations"/>

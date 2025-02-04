@@ -63,6 +63,8 @@
         The IPA method can update the probabilities associated to each possible annotations by considering all possible biochemical connections.
         Before doing so, it is necessary to provide a pandas dataframe reporting which compounds can be considered biochemically related. 
         The function Compute_Bio() can be used to compute such a dataframe. 
+
+        <expand macro="references"/>
     ]]></help>
 
     <expand macro="citations"/>
