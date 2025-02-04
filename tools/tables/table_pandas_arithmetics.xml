@@ -1,0 +1,72 @@
+<tool id="table_pandas_arithmetics" name="table arithmetics" version="@PANDAS_VERSION@+galaxy@VERSION_SUFFIX@" profile="20.01" license="MIT">
+    <description>perform arithmetic operations on a dataframe column</description>
+    <macros>
+        <import>macros.xml</import>
+        <token name="@VERSION_SUFFIX@">1</token>
+    </macros>
+    <requirements>
+        <expand macro="requirement_pandas_pyarrow"/>
+    </requirements>
+    <required_files>
+        <include path="table_pandas_arithmetics.py" />
+        <include path="utils.py" />
+    </required_files>
+    <expand macro="creator" />
+    <command detect_errors="exit_code"><![CDATA[
+        python3 '$__tool_directory__/table_pandas_arithmetics.py' 
+            --input_dataset '$input_dataset' '$input_dataset.ext' 
+            --column '$column' 
+            --operation '$operation' 
+            --operand '$operand' 
+            --output_dataset '$output_dataset' '$output_dataset.ext'
+    ]]></command>
+    <inputs>
+        <param name="input_dataset" type="data" format="csv,tsv,tabular,parquet" label="Input Dataset" help="The input dataset in CSV, TSV, tabular, or Parquet format."/>
+        <param name="column" type="data_column" data_ref="input_dataset" use_header_names="true" label="Column" help="The column from the dataset to perform the arithmetic operation on."/>
+        <param name="operation" type="select" label="Arithmetic Operation" help="The arithmetic operation to perform on the selected column. Choose from Multiply, Subtract, Divide, Add, or Power.">
+            <option value="mul">Multiply</option>
+            <option value="sub">Subtract</option>
+            <option value="div">Divide</option>
+            <option value="add">Add</option>
+            <option value="pow">Power</option>
+        </param>
+        <param name="operand" type="float" label="Operand" value="0" help="The operand value to use in the arithmetic operation. This value will be applied to each element in the selected column."/>
+    </inputs>
+    <outputs>
+        <data name="output_dataset" format_source="input_dataset" label="${tool.name} on ${on_string}">
+            <change_format>
+                <when input="input_dataset.ext" value="tsv" format="tabular" />
+            </change_format>
+        </data>
+    </outputs>
+    <tests>
+        <test>
+            <param name="input_dataset" value="query.tabular" ftype="tabular"/>
+            <param name="column" value="3"/>
+            <param name="operation" value="div"/>
+            <param name="operand" value="100"/>
+            <output name="output_dataset" file="arithmetics/query_divide_ri.tabular" ftype="tabular"/>
+        </test>
+    </tests>
+    <help><![CDATA[
+This tool performs arithmetic operations on a specified column of a dataframe.
+Supported operations are: multiply, subtract, divide, add, and power.
+
+Inputs
+------
+
+- **Input Dataset**: The input dataset in CSV, TSV, tabular, or Parquet format.
+- **Column**: The column from the dataset to perform the arithmetic operation on. Select the column by its header name.
+- **Arithmetic Operation**: The arithmetic operation to perform on the selected column. Choose from Multiply, Subtract, Divide, Add, or Power.
+- **Operand**: The operand value to use in the arithmetic operation. This value will be applied to each element in the selected column.
+
+Outputs
+-------
+
+- **Output Dataset**: The output dataset with the arithmetic operation applied to the specified column.
+        ]]></help>
+    <citations>
+        <citation type="doi">10.5281/zenodo.3509134</citation>
+        <citation type="doi">10.25080/Majora-92bf1922-00a</citation>
+    </citations>
+</tool>
