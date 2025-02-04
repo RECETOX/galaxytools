@@ -36,7 +36,7 @@
         <param label="Mapped isotope patterns" name="mapped_isotope_patterns" type="data" format="csv,tsv,tabular,parquet" help="A dataset containing the MS1 data. Ideally obtained from map_isotope_patterns" />
         <param label="all possible adducts" name="all_adducts" type="data" format="csv,tsv,tabular,parquet" help="A dataset containing the information on all the possible adducts given the database. Ideally obtained from compute_all_adducts" />
         <expand macro="ppm"/>
-        <section name="unknown" title="unknown settings">
+        <section name="unknown" title="settings for the identification of unknowns">
             <expand macro="ms_unknown"/>
         </section>
         <section name="optional_settings" title="optional settings">
