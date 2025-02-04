@@ -60,19 +60,24 @@
         <param label="previous Gibbs sampler" name="zs" type="data" format="txt" optional="true" help="list of assignments computed in a previous run of the Gibbs sampler. Optional, default None."/>
     </xml>
 
-    <xml name="extra_requirements">
-        <requirement type="package" version="19.0.0">pyarrow</requirement>
-        <requirement type="package" version="2024.11.0">fastparquet</requirement>
+    <xml name="requirements">
+        <requirements>
+            <requirement type="package" version="@TOOL_VERSION@">ipapy2</requirement>
+            <requirement type="package" version="19.0.0">pyarrow</requirement>
+            <requirement type="package" version="2024.11.0">fastparquet</requirement>
+        </requirements>
     </xml>
     
-    <xml name="references">
-        <section name="Extra references">
-            <ul>
-                <li><a href="https://github.com/francescodc87/ipaPy2#usage">https://github.com/francescodc87/ipaPy2#usage</a></li>
-                <li><a href="https://academic.oup.com/bioinformatics/article/39/7/btad455/7230779">https://academic.oup.com/bioinformatics/article/39/7/btad455/7230779</a></li>
-                <li><a href="https://pubs.acs.org/doi/full/10.1021/acs.analchem.9b02354">https://pubs.acs.org/doi/full/10.1021/acs.analchem.9b02354</a></li>
-            </ul>
-        </section>
-    </xml>
+    <token name="@REFERENCES@"><![CDATA[
+        .. _extra-references:
+    
+        Extra references
+        ----------------
+    
+        * `ipaPy2 Usage Manual <https://github.com/francescodc87/ipaPy2#usage>`_
+        * `Bioinformatics Article <https://academic.oup.com/bioinformatics/article/39/7/btad455/7230779>`_
+        * `Analytical Chemistry Article <https://pubs.acs.org/doi/full/10.1021/acs.analchem.9b02354>`_
+        ]]>
+    </token>
     
 </macros>

@@ -1,12 +1,10 @@
-<tool id="ipapy2_compute_bio" name="IPA compute bio" version="@TOOL_VERSION@+galaxy0" profile="21.05">
+<tool id="ipapy2_compute_bio" name="ipaPy2 compute bio" version="@TOOL_VERSION@+galaxy0" profile="21.05">
+    <description>compute list of biochemical connections to improve annotation accuracy</description>
     <macros>
         <import>macros.xml</import>
     </macros>
     
-    <requirements>
-        <requirement type="package" version="@TOOL_VERSION@">ipapy2</requirement>
-        <expand macro="extra_requirements"/>
-    </requirements>
+    <expand macro="requirements"/>
 
     <command detect_errors="exit_code"><![CDATA[
         python3 '${__tool_directory__}/ipapy2_compute_bio.py'

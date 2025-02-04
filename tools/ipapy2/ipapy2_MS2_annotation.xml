@@ -1,12 +1,10 @@
-<tool id="ipapy2_MS2_annotation" name="IPA MS2 annotation" version="@TOOL_VERSION@+galaxy0" profile="21.05">
+<tool id="ipapy2_MS2_annotation" name="ipaPy2 MS2 annotation" version="@TOOL_VERSION@+galaxy0" profile="21.05">
+    <description>annotate features from MS2 using a supplied MS2 database</description>
     <macros>
         <import>macros.xml</import>
     </macros>
     
-    <requirements>
-        <requirement type="package" version="@TOOL_VERSION@">ipapy2</requirement>
-        <expand macro="extra_requirements"/>
-    </requirements>
+    <expand macro="requirements"/>
 
     <command detect_errors="exit_code"><![CDATA[
         #set $computed_ppmthr = float($ppm) * 2

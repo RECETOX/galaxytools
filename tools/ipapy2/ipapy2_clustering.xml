@@ -1,11 +1,9 @@
-<tool id="ipapy2_clustering" name="IPA clustering" version="@TOOL_VERSION@+galaxy0" profile="21.05">
+<tool id="ipapy2_clustering" name="ipaPy2 clustering" version="@TOOL_VERSION@+galaxy0" profile="21.05">
+    <description>clustering MS1 features based on correlation across samples as preparation for ipaPy2</description>
     <macros>
         <import>macros.xml</import>
     </macros>
-    <requirements>
-        <requirement type="package" version="@TOOL_VERSION@">ipapy2</requirement>
-        <expand macro="extra_requirements"/>
-    </requirements>
+    <expand macro="requirements"/>
     <command detect_errors="exit_code"><![CDATA[
         python3 '${__tool_directory__}/ipapy2_clustering.py'
         --input_dataset '${unclustered_MS1_intensities}' '${unclustered_MS1_intensities.ext}'
@@ -17,7 +15,7 @@
     ]]></command>
     <inputs>
         <param label="Unclustered data" name="unclustered_MS1_intensities" type="data" format="csv,tsv,tabular,parquet" help="a csv file containing the measured intensities across several samples, yet to be clustered"/>
-        <section name="clustering" title="clustering settings">
+        <section name="clustering" title="clustering settings" expanded="true">
             <param name="Cthr" type="float" value="0.8" min="0" max="1">
                 <label>correlation threshold</label>
                 <help>Minimum correlation allowed in each cluster. Default value 0.8.</help>
@@ -67,8 +65,8 @@
     +----+------+-----+-------------+-------------+-------------+
     | 3  | 300  | 30  | 1100        | 1200        | 1300        |
     +----+------+-----+-------------+-------------+-------------+
-    
-    <expand macro="references"/>
+
+    @REFERENCES@
     ]]></help>
     <expand macro="citations"/>
 </tool>

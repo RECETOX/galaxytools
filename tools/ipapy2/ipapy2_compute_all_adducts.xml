@@ -1,12 +1,10 @@
-<tool id="ipapy2_compute_all_adducts" name="IPA compute all adducts" version="@TOOL_VERSION@+galaxy0" profile="21.05">
+<tool id="ipapy2_compute_all_adducts" name="ipaPy2 compute all adducts" version="@TOOL_VERSION@+galaxy0" profile="21.05">
+    <description>compute the compound database with adducts</description>
     <macros>
         <import>macros.xml</import>
     </macros>
     
-    <requirements>
-        <requirement type="package" version="@TOOL_VERSION@">ipapy2</requirement>
-        <expand macro="extra_requirements"/>
-    </requirements>
+    <expand macro="requirements"/>
 
     <command detect_errors="exit_code"><![CDATA[
         python3 '${__tool_directory__}/ipapy2_compute_all_adducts.py'
@@ -36,8 +34,53 @@
     </tests>
     
     <help><![CDATA[
-    ::
-        compute all adducts table based on the information present in the database
+    Summary
+        This step calculates all possible combinations of adducts and compounds given the adduct and compound databases.
+        It is therefore recommended to not repeat this step if not necessary and to re-use a previously calculated database with adducts.
+        If a new adduct-database needs to be computed, make sure to only include the adducts that you would really expect in the data
+        (e.g. only the actually used ionization mode, multimers, adducts based on mobile phase).
+
+        Example of `adducts.csv` file:
+
+        .. list-table:: Example adducts.csv
+           :header-rows: 1
+
+           * - name
+             - calc
+             - Charge
+             - Mult
+             - Mass
+             - Ion_mode
+             - Formula_add
+             - Formula_ded
+             - Multi
+           * - [M+H]+
+             - 1.0073
+             - 1
+             - 1
+             - 1.0073
+             - positive
+             - H
+             - FALSE
+             - 1
+           * - [M+Na]+
+             - 22.9892
+             - 1
+             - 1
+             - 22.9892
+             - positive
+             - Na
+             - FALSE
+             - 1
+           * - [M+K]+
+             - 38.9632
+             - 1
+             - 1
+             - 38.9632
+             - positive
+             - K
+             - FALSE
+             - 1
 
         <expand macro="references"/>
     ]]></help>
