@@ -69,5 +69,5 @@
         @GENERAL_HELP@
     ]]></help>
 
-    <expand macro="citations" />
+    <expand macro="citations_upset" />
 </tool>
