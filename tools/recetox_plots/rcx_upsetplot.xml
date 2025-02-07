@@ -58,7 +58,8 @@
 
     <tests>
         <test expect_num_outputs="1">
-            <param name="input_data" value="test_data.txt"/>
+            <param name="input_data" value="upsetplot_test_data.txt"/>
+            <param name="sort_by" value="freq"/>
             <output name="upsetplot" ftype="png">
                 <assert_contents>
                     <has_size size="1164615" delta="200"/>

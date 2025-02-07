@@ -73,7 +73,9 @@
 
     <tests>
         <test expect_num_outputs="1">
-            <param name="input_data" value="test_data.txt"/>
+            <param name="input_data" value="barplot_test_data.txt"/>
+            <param name="quant_col" value="3"/>
+            <param name="grouping_col" value="4"/>
             <output name="barplot" ftype="png">
                 <assert_contents>
                     <has_size size="1164615" delta="200"/>
