@@ -143,7 +143,7 @@
     </tests>
 
     <help><![CDATA[
-        @GENERAL_HELP@
+        @BOXPLOT_HELP@
     ]]></help>
 
     <expand macro="citations" />

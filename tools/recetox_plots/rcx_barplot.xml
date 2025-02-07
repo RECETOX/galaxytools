@@ -83,7 +83,7 @@
     </tests>
 
     <help><![CDATA[
-        @GENERAL_HELP@
+        @BARPLOT_HELP@
     ]]></help>
 
     <expand macro="citations_upset" />
