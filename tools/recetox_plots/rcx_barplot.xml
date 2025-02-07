@@ -86,5 +86,5 @@
         @BARPLOT_HELP@
     ]]></help>
 
-    <expand macro="citations_upset" />
+    <expand macro="citations" />
 </tool>
