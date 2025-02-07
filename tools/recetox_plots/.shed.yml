@@ -4,6 +4,13 @@ remote_repository_url: "https://github.com/RECETOX/galaxytools/tree/master/tools
 homepage_url: "https://github.com/RECETOX/galaxytools"
 categories:
   - Visualization
-description: "recetox-boxplot is a tool for plotting boxplots from a tabular/csv/parquet data file."
-long_description: "recetox-boxplot is a tool for the boxplot visualization. It allows creating boxplots either for all columns present in the data table or based on a metadata table. It is possible to also use faceting, color based on a metadata column variable, add custom x and y-axis labels and transform the data."
+description: "recetox_plots is a suite comprising various plotting tools."
+long_description: "recetox_plots comprises different visualization tools including boxplot, barplot and upset plot. For the input, any tabular, csv or parquet file is supported."
 type: unrestricted
+auto_tool_repositories:
+  name_template: "{{ tool_id }}"
+  description_template: "{{ tool_name }} tool from the recetox_plots"
+suite:
+  name: suite_recetox_plots
+  description: Visualization tools developed at RECETOX.
+  type: repository_suite_definition
