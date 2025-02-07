@@ -57,7 +57,7 @@
     <tests>
         <test expect_num_outputs="1">
             <param name="input_data" value="test_data.txt"/>
-            <output name="upsetplot" ftype="pdf">
+            <output name="upsetplot" ftype="png">
                 <assert_contents>
                     <has_size size="1164615" delta="200"/>
                 </assert_contents>
