@@ -71,7 +71,7 @@
                     <option value="freq" selected="true">frequency</option> 
                     <option value="degree">degree</option>
         </param>
-        <param label="Number of intersections to plot" optional="true" name="nintersects" type="integer" value="0" help="Number of intersections to plot. If value set to NA, all intersections will be plotted."/>  
+        <param label="Number of intersections to plot" optional="true" name="nintersects" type="integer" value="0" help="Number of intersections to plot. If value set to 0, all intersections will be plotted."/>  
         <param name="group_by_sets" type="boolean" checked="false" truevalue="TRUE" falsevalue="FALSE" label="Group bars by sets?" help="Whether group bars for each set (based on their set size)."/>   
         <param name="empty_intersections" type="boolean" checked="false" truevalue="TRUE" falsevalue="FALSE" label="Include empty intersections?" help="Whether to plot also empty intersections to the limit of number of intersections. Otherwise, empty intersections are by default omitted."/>   
         <expand macro="export_data"/>
