@@ -28,8 +28,12 @@
         </requirements>
     </xml>
 
+    <xml name="data_input">
+        <param name="input_data" type="data" format="csv,tsv,txt,tabular,parquet" label="Input table" help= "Input file in a tabular/tsv/csv/parquet format"/>
+    </xml>
+
     <xml name="boxplot_param">
-       <param name="input_data" type="data" format="csv,tsv,txt,tabular,parquet" label="Input table" help= "Input file in a tabular/tsv/csv/parquet format"/>
+        <expand macro="data_input"/>
         <param name="has_rownames" type="boolean" checked="false" truevalue="TRUE" falsevalue="FALSE" label="Does the first column of input table contain rownames?" help="Whether the first column of the input data table identifies the rownames (e.g. proteinID) - i.e. it is not a part of data matrix to be plotted."/>
         <param name="transform_data" type="select" display="radio" label="Should the quantitative variable be transformed?" optional="false" help="Whether to transform the quantitative variable (e.g. intensity, counts, etc.)">
                 <option value="none" selected="true">No transformation</option>
@@ -37,7 +41,6 @@
                 <option value="log2">Log2 transformation</option> 
                 <option value="log10">Log10 transformation</option> 
         </param>
-c
         <conditional name="grouping_boxplot">
                 <param type="select" name="use_grouping" label="Plot boxplot based on a column from the metadata table?" help="Whether to base the boxplot on a different variable than column names (usually corresponding to the samples) from the input table.">
                     <option value="no" selected="true">no</option> 
@@ -59,7 +62,7 @@ c
     </xml>
 
     <xml name="upsetplot_param">
-        <param name="input_data" type="data" format="csv,tsv,txt,tabular,parquet" label="Input table" help= "Input file in a tabular/tsv/csv/parquet format"/>
+        <expand macro="data_input"/>
         <param type="select" name="sort_by" display="radio" label="Sort the bars based on frequency, degree or both?" help="Whether to sort the bars in UpSet plot based on frequency (largest frequency first), or degree (largest overlap first)">
                     <option value="freq" selected="true">frequency</option> 
                     <option value="degree">degree</option>
@@ -67,6 +70,15 @@ c
         <param label="Number of intersections to plot" optional="true" name="nintersects" type="integer" value="0" help="Number of intersections to plot. If value set to NA, all intersections will be plotted."/>  
         <param name="group_by_sets" type="boolean" checked="false" truevalue="TRUE" falsevalue="FALSE" label="Group bars by sets?" help="Whether group bars for each set (based on their set size)."/>   
         <param name="empty_intersections" type="boolean" checked="false" truevalue="TRUE" falsevalue="FALSE" label="Include empty intersections?" help="Whether to plot also empty intersections to the limit of number of intersections. Otherwise, empty intersections are by default omitted."/>   
+        <expand macro="export_data"/>
+    </xml>
+
+    <xml name="barplot_param">
+        <param name="input_data" type="data" format="csv,tsv,txt,tabular,parquet" label="Input table in a long format" help= "Input file in a tabular/tsv/csv/parquet format"/>
+        <param name="quant_col" type="data_column" data_ref="input_data" use_header_names="true" label="Which column contains the quantitative information?"  help="Select the column containing quantitative information."/>
+        <param name="grouping_col" type="data_column" data_ref="input_data" use_header_names="true" label="Which column contains the categories?" help="Select the column which contains the categories."/>
+        <param name="color_col" type="data_column" data_ref="input_data" use_header_names="true" optional="true" label="Which column to color according to?" help="Select the column which contains levels for color."/>
+        <param name="position" type="boolean" checked="false" truevalue="TRUE" falsevalue="FALSE" label="Use position dodge?" help="If a column for color is specified, should be the categories placed side-by-side or stacked (default)?"/>   
         <expand macro="export_data"/>
     </xml>
 
