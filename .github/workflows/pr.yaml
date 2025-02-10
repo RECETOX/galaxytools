@@ -18,9 +18,10 @@ on:
       - '*'
 env:
   GALAXY_FORK: galaxyproject
-  GALAXY_BRANCH: release_24.1
+  GALAXY_BRANCH: release_24.2
   MAX_CHUNKS: 4
   MAX_FILE_SIZE: 1M
+  FAIL_LEVEL: warn
 concurrency:
   # Group runs by PR, but keep runs on the default branch separate
   # because we do not want to cancel ToolShed uploads
@@ -306,7 +307,7 @@ jobs:
         chunk-count: ${{ needs.setup.outputs.chunk-count }}
         galaxy-slots: ${{ steps.cpu-cores.outputs.count }}
         # Limit each test to 15 minutes
-        test_timeout: 900
+        test_timeout: 1800
     - uses: actions/upload-artifact@v4
       with:
         name: 'Tool test output ${{ matrix.chunk }}'

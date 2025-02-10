@@ -1,0 +1,16 @@
+name: recetox_plots
+owner: recetox
+remote_repository_url: "https://github.com/RECETOX/galaxytools/tree/master/tools"
+homepage_url: "https://github.com/RECETOX/galaxytools"
+categories:
+  - Visualization
+description: "recetox_plots is a suite comprising various plotting tools."
+long_description: "recetox_plots comprises different visualization tools including boxplot, barplot and upset plot. For the input, any tabular, csv or parquet file is supported."
+type: unrestricted
+auto_tool_repositories:
+  name_template: "{{ tool_id }}"
+  description_template: "{{ tool_name }} tool from the recetox_plots"
+suite:
+  name: suite_recetox_plots
+  description: Visualization tools developed at RECETOX.
+  type: repository_suite_definition
