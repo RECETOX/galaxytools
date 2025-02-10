@@ -10,9 +10,8 @@
     </required_files>
     <expand macro="creator" />
 
-
     <command detect_errors="exit_code"><![CDATA[
-        Rscript  -e 'source("${__tool_directory__}/utils.r")' -e 'source("${run_script}")'
+        Rscript -e 'source("${__tool_directory__}/utils.r")' -e 'source("${run_script}")'
         #if $export_R_script
         && cat ${run_script} >> $script
         #end if
@@ -20,7 +19,6 @@
 
     <configfiles>
         <configfile name="run_script"><![CDATA[
-
         file_name <- "$input_data"
         file_extension <- "$input_data.ext"
         data_input <- load_data(file_name, file_extension)
@@ -64,27 +62,29 @@
         facet_y <- NULL
         #end if
 
-        plot_boxplot <- ggplot2::ggplot(data_long, ggplot2::aes(
-            x = !!rlang::sym(plotting_column),
-            y = intensity,
-            #if $grouping_boxplot.colorCol
-            fill = !!rlang::sym(colnames(metadata_input)[$grouping_boxplot.colorCol])
-            #end if
-        )) +
-                                        ggplot2::geom_boxplot() +
-                                        ggplot2::theme_bw()+
-                                        ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust=1)) +
-                                        ggplot2::facet_grid(rows = if(!is.null(facet_y)) dplyr::vars(!!facet_y) else NULL,
-                                                            cols = if(!is.null(facet_x)) dplyr::vars(!!facet_x) else NULL,
-                                                            scales = "free")
+        plot_boxplot <- ggplot2::ggplot(
+            data_long, ggplot2::aes(
+                x = !!rlang::sym(plotting_column),
+                y = intensity,
+                #if $grouping_boxplot.colorCol
+                fill = !!rlang::sym(colnames(metadata_input)[$grouping_boxplot.colorCol])
+                #end if
+            )) + ggplot2::geom_boxplot() +
+                 ggplot2::theme_bw()+
+                 ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust=1)) +
+                 ggplot2::facet_grid(rows = if(!is.null(facet_y)) dplyr::vars(!!facet_y) else NULL,
+                                     cols = if(!is.null(facet_x)) dplyr::vars(!!facet_x) else NULL,
+                                     scales = "free")
 
 
         #else 
 
-        plot_boxplot <- ggplot2::ggplot(data_long, ggplot2::aes(x = samples, y = intensity)) +
-                                        ggplot2::geom_boxplot() +
-                                        ggplot2::theme_bw()+
-                                        ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust=1))
+        plot_boxplot <- ggplot2::ggplot(
+            data_long,
+            ggplot2::aes(x = samples, y = intensity)
+        ) + ggplot2::geom_boxplot() +
+            ggplot2::theme_bw()+
+            ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust=1))
 
         #end if
 
@@ -101,7 +101,6 @@
         #end if
 
         ggplot2::ggsave(filename = "boxplot.png", plot_boxplot)
-
         ]]></configfile>
     </configfiles>
 
@@ -118,7 +117,7 @@
 
     <tests>
         <test expect_num_outputs="1">
-            <param name="input_data" value="boxplot_test_data.txt"/>
+            <param name="input_data" value="boxplot_test_data.txt" ftype="tabular"/>
             <param name="has_rownames" value="true"/>
             <output name="boxplot" ftype="png">
                 <assert_contents>
@@ -127,7 +126,7 @@
             </output>          
         </test>
         <test expect_num_outputs="2">
-            <param name="input_data" value="boxplot_test_data.txt"/>
+            <param name="input_data" value="boxplot_test_data.txt" ftype="tabular"/>
             <param name="has_rownames" value="true"/>
             <param name="use_grouping" value="yes"/>
             <param name="input_metadata" value="boxplot_test_expDesign.txt"/>
@@ -146,5 +145,5 @@
         @BOXPLOT_HELP@
     ]]></help>
 
-    <expand macro="citations" />
+    <expand macro="citations"/>
 </tool>
