@@ -1,0 +1,105 @@
+<tool id="bioconductor_msnbase_smooth_chromatogram" name="bioconductor-msnbase smooth chromatogram" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="20.01" license="MIT">
+    <description>smooth consecutive spectra using a moving window filter (combineSpectraMovingWindow)</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <edam_topics>
+        <edam_topic>topic_3170</edam_topic> <!-- Proteomics -->
+        <edam_topic>topic_3391</edam_topic> <!-- Data handling -->
+    </edam_topics>
+    <edam_operations>
+        <edam_operation>operation_3632</edam_operation> <!-- Data smoothing -->
+        <edam_operation>operation_2945</edam_operation> <!-- Data handling -->
+    </edam_operations>
+
+    <expand macro="xrefs"/>
+    <expand macro="creator"/>
+    <expand macro="requirements"/>
+
+    <command detect_errors="exit_code"><![CDATA[
+        Rscript "${run_script}"
+    ]]></command>
+    <configfiles>
+        <configfile name="run_script"><![CDATA[
+            data_prof <- MSnbase::readMSData("$input_file", mode = "onDisk")
+            data_smoothed <- MSnbase::combineSpectraMovingWindow(
+                data_prof,
+                halfWindowSize = ${halfWindowSize},
+                intensityFun = ${intensity_function},
+                mzd = 0,
+                timeDomain = $qtof,
+                weighted = $weighted,
+                ppm = $ppm,
+                BPPARAM = BiocParallel::bpparam()
+            )
+            MSnbase::writeMSData(
+                data_smoothed,
+                file = "smoothed.mzml",
+                copy = TRUE,
+                outformat = "mzml"
+            )
+        ]]></configfile>
+    </configfiles>
+    <inputs>
+        <param name="input_file" type="data" format="mzml" label="Input mzML File" help="The input mzML file containing the MSnbase data."/>
+        <param name="halfWindowSize" type="integer" label="Half window size" min="2" value="4"
+            help="The half window size for the moving window smoothing method. This determines the number of data points on either side of the center point to include in the smoothing calculation."/>
+        <param name="weighted" type="boolean" truevalue="TRUE" falsevalue="FALSE" checked="false" label="Weighted"
+            help="Specify whether to apply a weighted moving average, where the weights depend on the distance from the center of the window." />
+        <param name="qtof" type="boolean" truevalue="TRUE" falsevalue="FALSE" checked="false" label="QTOF"
+            help="Indicate if the data was acquired using a QTOF (Quadrupole Time-of-Flight) instrument, which affects the time domain processing." />
+        <param argument="--ppm" type="integer" min="0" value="3" label="ppm tolerance"
+            help="The parts-per-million (ppm) tolerance for considering mz values as belonging to the same ion. A higher value allows for more variation in mz values." />
+        <param name="intensity_function" type="select" label="Function to combine intensities"
+            help="Choose the function to combine the intensity values of the same m/z value within the moving window. Options include mean, median, min, max, and sum.">
+            <option value="base::mean" selected="true">mean</option>
+            <option value="stats::median">median</option>
+            <option value="min">min</option>
+            <option value="max">max</option>
+            <option value="sum">sum</option>
+        </param>
+    </inputs>
+    <outputs>
+        <data name="output_file" format="mzml" label="Chromatogram smoothing on ${on_string}" from_work_dir="smoothed.mzml"/>
+    </outputs>
+    <tests>
+        <test>
+            <param name="input_file" value="29_qc_no_dil_milliq_subset.mzML"/>
+            <output name="output_file">
+                <assert_contents>
+                    <expand macro="assertions_smoothing"/>
+                    <has_size size="173532" delta="100"/>
+                </assert_contents>
+            </output>
+        </test>
+    </tests>
+    <help><![CDATA[
+
+.. class:: infomark
+
+**What it does**
+
+This tool performs chromatogram smoothing on mass spectrometry data using the MSnbase package in R. It applies a moving window smoothing method to the input mzML file, which helps in reducing noise and improving the signal quality.
+
+**Usage**
+
+- **Input**: Provide the input mzML file containing the mass spectrometry data to be smoothed.
+- **Parameters**:
+   - **Half window size**: The number of data points on either side of the center point to include in the smoothing calculation.
+   - **Weighted**: Whether to apply a weighted moving average.
+   - **QTOF**: Indicate if the data was acquired using a QTOF instrument.
+   - **ppm tolerance**: The parts-per-million tolerance for considering mz values as belonging to the same ion.
+   - **Function to combine intensities**: Choose the function to combine the intensity values within the moving window.
+- **Output**: The smoothed mzML file.
+
+**Input**
+
+- **Input mzML File**: The input mzML file containing the MSnbase data to be smoothed.
+
+**Output**
+
+- **Output mzML File**: The resulting mzML file after applying the smoothing algorithm.
+
+    ]]></help>
+    <expand macro="citations"/>
+</tool>

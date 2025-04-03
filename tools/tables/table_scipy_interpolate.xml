@@ -1,0 +1,92 @@
+<tool id="table_scipy_interpolate" name="table scipy interpolate" version="@SCIPY_VERSION@+galaxy@VERSION_SUFFIX@" profile="20.01" license="MIT">
+    <description>interpolate data using the scipy.interpolate library</description>
+    <!-- <xrefs>
+        <xref type="bio.tools"></xref>
+    </xrefs> -->
+    <macros>
+        <import>macros.xml</import>
+        <token name="@VERSION_SUFFIX@">0</token>
+    </macros>
+    <!-- TODO: please annotate this tool with topics and operations from http://edamontology.org -->
+    <!-- TODO: for more information see: https://galaxy-iuc-standards.readthedocs.io/en/latest/best_practices/tool_xml.html#edam-topics-and-operations -->
+    <!-- <edam_topics>
+        <edam_topic>topic_TODO</edam_topic>
+    </edam_topics>
+    <edam_operations>
+        <edam_operation>operation_TODO</edam_operation>
+    </edam_operations> -->
+    <requirements>
+        <requirement type="package" version="@SCIPY_VERSION@">scipy</requirement>
+        <expand macro="requirement_pandas_pyarrow"/>
+    </requirements>
+    <required_files>
+        <include path="table_scipy_interpolate.py" />
+        <include path="utils.py" />
+    </required_files>
+    <expand macro="creator" />
+    <command detect_errors="exit_code"><![CDATA[
+        python3 '${__tool_directory__}/table_scipy_interpolate.py' 
+        --reference_dataset '$reference_dataset' '$reference_dataset.ext'
+        --query_dataset '$query_dataset' '$query_dataset.ext'
+        --x_col $x_col
+        --y_col $y_col
+        --xnew_col $xnew_col
+        --model '$model'
+        --output_dataset '$output_dataset' '$output_dataset.ext'
+        ]]></command>
+
+    <inputs>
+        <param argument="--reference_dataset" type="data" format="tabular,csv,tsv,parquet" label="Reference data" help="Reference dataset to use fopr the interpolation" />
+        <param name="x_col" type="data_column" data_ref="reference_dataset" use_header_names="true" label="x (reference)" help="Column from the reference dataset to use as X axis for the interpolator."/>
+        <param name="y_col" type="data_column" data_ref="reference_dataset" use_header_names="true" label="y (reference)" help="Column from the reference dataset to use as Y axis for the interpolator."/>
+        <param argument="--query_dataset" type="data" format="tabular,csv,tsv,parquet" label="Query dataset" help="Query dataset for which to interpolate the values." />
+        <param name="xnew_col" type="data_column" data_ref="query_dataset" use_header_names="true" label="x (query)" help="Column from the query dataset for which to interpolate."/>
+
+        <param name="model" type="select" label="Interpolation model" help="Interpolation model from scipy to use. For more details see [1].">
+            <option value="linear">Piecewise linear</option>
+            <option value="cubic" selected="true">Cubic spline</option>
+            <option value="pchip">Pchip</option>
+            <option value="akima">Akima1D</option>
+        </param>
+    </inputs>
+    <outputs>
+        <data name="output_dataset" format_source="query_dataset" label="${tool.name} on ${on_string}">
+            <change_format>
+                <when input="query_dataset.ext" value="tsv" format="tabular" />
+            </change_format>
+        </data>
+    </outputs>
+    <tests>
+        <test>
+            <param name="reference_dataset" value="reference.txt" ftype="tabular"/>
+            <param name="x_col" value="1"/>
+            <param name="y_col" value="2"/>
+            <param name="query_dataset" value="query.tabular" ftype="tabular"/>
+            <param name="xnew_col" value="3"/>
+            <output name="output_dataset" file="interpolate/query_interpolate_rt.tabular" ftype="tabular"/>
+        </test>
+    </tests>
+    <help><![CDATA[
+.. class:: infomark
+
+**What it does**
+This tool interpolates the values for a column to be added
+
+Usage
+.....
+[1] (https://docs.scipy.org/doc/scipy/tutorial/interpolate.html)
+
+**Input**
+Input a reference table and choose the X (source) and Y (target) columns for the interpolation.
+Choose a query table and the X (source) column for which to calculate the new Y values.
+
+
+**Output**
+A table with the interpolated Y column.
+
+    ]]></help>
+    <citations>
+        <citation type="doi">10.25080/Majora-92bf1922-00a</citation>
+        <citation type="doi">10.1038/s41592-019-0686-2</citation>
+    </citations>
+</tool>
