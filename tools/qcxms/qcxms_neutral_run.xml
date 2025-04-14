@@ -66,7 +66,7 @@ rename_files_with_folder_name(path)
         </param>
         <section name="keywords" title="Advanced method parameters" expanded="false" 
             help="List of advanced keywords to specify the method - for more information see [1].">
-            <param name="tmax" type="integer" value="20" label="Maximum MD time (sampling) [ps]"
+            <param name="tmax" type="integer" value="5" label="Maximum MD time (sampling) [ps]"
             help="MD time for the mean-free-path (mfp) simulation in the EI mode."/>
             <param name="tinit" type="integer" value="500" label="Initial Temperature [K]"/>
             <param name="ieeatm" type="float" value="0.6" label="Impact excess energy (IEE) per atom [eV/atom]" />
