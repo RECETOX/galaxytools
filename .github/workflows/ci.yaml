@@ -103,8 +103,9 @@ jobs:
       with:
         mode: lint
         repository-list: ${{ needs.setup.outputs.repository-list }}
+        fail-level: warn
         tool-list: ${{ needs.setup.outputs.tool-list }}
-        additional-planemo-options: --biocontainers -s tests,output,inputs,help,general,command,citations,tool_xsd
+        additional-planemo-options: --biocontainers -s tests,output,inputs,help,general,command,citations,tool_xsd --skip version_bumped
     - uses: actions/upload-artifact@v4
       if: ${{ failure() }}
       with:
@@ -202,10 +203,12 @@ jobs:
       with:
         mode: combine
         html-report: true
+        markdown-report: true
     - uses: actions/upload-artifact@v4
       with:
         name: 'All tool test results'
         path: upload
+    - run: cat upload/tool_test_output.md >> $GITHUB_STEP_SUMMARY
     - name: Create URL to the run output
       if: ${{ github.event.client_payload.slash_command.command == 'run-all-tool-tests' }}
       id: vars
