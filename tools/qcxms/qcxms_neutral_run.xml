@@ -1,4 +1,4 @@
-<tool id="qcxms_neutral_run" name="QCxMS neutral run" version="@TOOL_VERSION@+galaxy5" profile="22.09">
+<tool id="qcxms_neutral_run" name="QCxMS neutral run" version="@TOOL_VERSION@+galaxy6" profile="22.09">
     <description>required as first step to prepare for the production runs</description>
     
     <macros>
@@ -29,10 +29,11 @@ ${QC_Level}
 ntraj  ${keywords.ntraj}
 #end if
 tmax  ${keywords.tmax} 
+etemp  ${keywords.etemp}
 tinit  ${keywords.tinit} 
 ieeatm  ${keywords.ieeatm}
 tstep  ${keywords.tstep}
-etemp  ${keywords.etemp}]]>
+]]>
         </configfile>
         <configfile filename="rename.py">
 import os
@@ -65,13 +66,13 @@ rename_files_with_folder_name(path)
         </param>
         <section name="keywords" title="Advanced method parameters" expanded="false" 
             help="List of advanced keywords to specify the method - for more information see [1].">
-            <param name="tmax" type="float" value="20.0" label="Maximum MD time (sampling) [ps]"
+            <param name="tmax" type="integer" value="5" label="Maximum MD time (sampling) [ps]"
             help="MD time for the mean-free-path (mfp) simulation in the EI mode."/>
-            <param name="tinit" type="float" value="500.0" label="Initial Temperature [K]"/>
+            <param name="tinit" type="integer" value="500" label="Initial Temperature [K]"/>
             <param name="ieeatm" type="float" value="0.6" label="Impact excess energy (IEE) per atom [eV/atom]" />
             <param name="ntraj" type="integer" optional="true" min="2" label="Number of trajectories[#]" help="Default is 25 * no. of atoms if unspecified."/>
             <param name="tstep" type="float" value="0.5" label="MD time step (tstep) [fs]" help="Default is 0.5 fs."/>
-            <param name="etemp" type="float" value="5000" label="Electronic temperature (etemp) [K]" help="Default is 5000 K."/>
+            <param name="etemp" type="integer" value="5000" label="Electronic temperature (etemp) [K]" help="Default is 5000 K."/>
         </section>
         <param name="store_extended_output" type="boolean" value="false" label="Store additional outputs?" help="Output the logfile and generated trajectory."/>
     </inputs>
@@ -120,7 +121,7 @@ rename_files_with_folder_name(path)
             </output>
             <output name="log">
                 <assert_contents>
-                    <has_size value="10518" delta="500"/>
+                    <has_size value="11103" delta="500"/>
                 </assert_contents>
             </output>
         </test>
