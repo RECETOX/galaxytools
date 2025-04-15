@@ -121,7 +121,7 @@ rename_files_with_folder_name(path)
             </output>
             <output name="log">
                 <assert_contents>
-                    <has_size value="10518" delta="500"/>
+                    <has_size value="11103" delta="500"/>
                 </assert_contents>
             </output>
         </test>
