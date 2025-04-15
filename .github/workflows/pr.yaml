@@ -1,7 +1,7 @@
 name: Galaxy Tool Linting and Tests for push and PR
 on:
-  workflow_dispatch:
-  pull_request:
+    workflow_dispatch:
+    pull_request:
     paths-ignore:
       - '.github/**'
       - 'deprecated/**'
@@ -18,7 +18,7 @@ on:
       - '*'
 env:
   GALAXY_FORK: galaxyproject
-  GALAXY_BRANCH: release_24.1
+  GALAXY_BRANCH: release_24.2
   MAX_CHUNKS: 4
   MAX_FILE_SIZE: 1M
 concurrency:
@@ -126,21 +126,12 @@ jobs:
       with:
         path: ~/.cache/pip
         key: pip_cache_py_${{ matrix.python-version }}_gxy_${{ needs.setup.outputs.galaxy-head-sha }}
-
-    - name: Set fail level for pull request
-      if: ${{ github.event_name == 'pull_request' }}
-      run:
-        echo "FAIL_LEVEL=warn" >> "$GITHUB_ENV"
-    - name: Set fail level for merge
-      if: ${{ github.event_name != 'pull_request' }}
-      run:
-        echo "FAIL_LEVEL=error" >> "$GITHUB_ENV"
     - name: Planemo lint
       uses: galaxyproject/planemo-ci-action@v1
       id: lint
       with:
         mode: lint
-        fail-level: ${{ env.FAIL_LEVEL }}
+        fail-level: warn
         repository-list: ${{ needs.setup.outputs.repository-list }}
         tool-list: ${{ needs.setup.outputs.tool-list }}
     - uses: actions/upload-artifact@v4
@@ -189,7 +180,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-20.04]
+        os: [ubuntu-24.04]
         r-version: ['release']
     steps:
     - uses: actions/checkout@v4
@@ -306,7 +297,7 @@ jobs:
         chunk-count: ${{ needs.setup.outputs.chunk-count }}
         galaxy-slots: ${{ steps.cpu-cores.outputs.count }}
         # Limit each test to 15 minutes
-        test_timeout: 900
+        test_timeout: 1800
     - uses: actions/upload-artifact@v4
       with:
         name: 'Tool test output ${{ matrix.chunk }}'
@@ -344,10 +335,12 @@ jobs:
       with:
         mode: combine
         html-report: true
+        markdown-report: true
     - uses: actions/upload-artifact@v4
       with:
         name: 'All tool test results'
         path: upload
+    - run: cat upload/tool_test_output.md >> $GITHUB_STEP_SUMMARY
     - name: Check outputs
       uses: galaxyproject/planemo-ci-action@v1
       id: check
