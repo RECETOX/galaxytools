@@ -1,4 +1,4 @@
-<tool id="qcxms_production_run" name="QCxMS production run" version="@TOOL_VERSION@+galaxy3" profile="22.09">
+<tool id="qcxms_production_run" name="QCxMS production run" version="@TOOL_VERSION@+galaxy4" profile="22.09">
     <description>Production run to obtain a QCxMS simulated mass spectrum</description>
     
     <macros>
@@ -41,9 +41,9 @@ shutil.copy2(os.path.join(os.path.dirname('$xyz_file'), '$xyz_file'), os.path.jo
     </configfiles>
 
     <inputs>
-        <param type="data" name="in_file" label="in files [.in]" format="txt,text"/>
-        <param type="data" name="start_file" label="start files [.start]" format="txt,text"/>
-        <param type="data" name="xyz_file" label="xyz files [.xyz]" format="xyz,txt,text"/>
+        <param type="data" name="in_file" label="in files [.in]" format="txt"/>
+        <param type="data" name="start_file" label="start files [.start]" format="txt"/>
+        <param type="data" name="xyz_file" label="xyz files [.xyz]" format="xyz,txt"/>
         <param name="store_extended_output" type="boolean" value="false" label="Store additional outputs" help="Output the logfile."/>
     </inputs>
 
