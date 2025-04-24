@@ -101,22 +101,28 @@ rm -f ${converted_library}.tmp1 ${converted_library}.tmp2 ${converted_library}.t
 
     <tests>
         <test>
+            <conditional name="output_file">
+                <param name="output_format" value="mgf"/>
+            </conditional>
             <param name="spectral_library" value="similarity/RECETOX_Exposome_pesticides_HR_MS_20220323.msp" ftype="msp"/>
             <param name="harmonization_metadata" value="False"/>
-            <param name="output_format" value="mgf"/>
             <output name="converted_library" file="convert/mgf_out.mgf" ftype="mgf"/>
         </test>
         <test>
+            <conditional name="output_file">
+                <param name="output_format" value="json"/>
+            </conditional>
             <param name="spectral_library" value="similarity/RECETOX_Exposome_pesticides_HR_MS_20220323.msp" ftype="msp"/>
             <param name="harmonization_metadata" value="False"/>
-            <param name="output_format" value="json"/>
             <output name="converted_library" file="convert/json_out.json" ftype="json"/>
         </test>
         <test>
+            <conditional name="output_file">
+                <param name="output_format" value="msp"/>
+            </conditional>
             <param name="spectral_library" value="convert/mgf_out.mgf" ftype="mgf"/>
             <param name="harmonization_metadata" value="False"/>
             <param name="export_peak_comments" value="False"/>
-            <param name="output_format" value="msp"/>
             <param name="export_style" value="matchms"/>
             <output name="converted_library" file="convert/msp_out.msp" ftype="msp"/>
         </test>
