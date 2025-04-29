@@ -121,9 +121,9 @@ rm -f ${converted_library}.tmp1 ${converted_library}.tmp2 ${converted_library}.t
                 <param name="output_format" value="msp"/>
                 <param name="harmonization_metadata" value="False"/>
                 <param name="export_peak_comments" value="False"/>
+                <param name="export_style" value="matchms"/>
             </conditional>
             <param name="spectral_library" value="convert/mgf_out.mgf" ftype="mgf"/>
-            <param name="export_style" value="matchms"/>
             <output name="converted_library" file="convert/msp_out.msp" ftype="msp"/>
         </test>
         <test>
