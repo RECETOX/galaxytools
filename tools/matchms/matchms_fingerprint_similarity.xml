@@ -64,8 +64,8 @@ scores.to_json("$scores_out")
                 <param name="use_scores" value="False"/>
                 <param name="queries" value="similarity/rcx_gc-ei_ms_subset.msp" ftype="msp"/>
                 <param name="references" value="similarity/rcx_exposome_pesticides_subset.msp" ftype="msp"/>
-                <param name="fingerprint_similarity" value="dice" />
             </conditional>
+            <param name="fingerprint_similarity" value="dice" />
             <output name="scores_out" value="fingerprints/dice.json" ftype="json" />
         </test>
         <test>
@@ -73,16 +73,16 @@ scores.to_json("$scores_out")
                 <param name="use_scores" value="False"/>
                 <param name="queries" value="similarity/rcx_gc-ei_ms_subset.msp" ftype="msp"/>
                 <param name="references" value="similarity/rcx_exposome_pesticides_subset.msp" ftype="msp"/>
-                <param name="fingerprint_similarity" value="cosine" />
             </conditional>
+            <param name="fingerprint_similarity" value="cosine" />
             <output name="scores_out" value="fingerprints/cosine.json" ftype="json" />
         </test>
         <test>
             <conditional name="scores">
                 <param name="use_scores" value="True"/>
                 <param name="scores_in" value="metadata_match/inner_join_ri_20.json" ftype="json"/>
-                <param name="fingerprint_similarity" value="jaccard" />
             </conditional>
+            <param name="fingerprint_similarity" value="jaccard" />
             <output name="scores_out" value="fingerprints/jaccard_scores.json" ftype="json" />
         </test>
     </tests>
