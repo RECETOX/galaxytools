@@ -90,7 +90,10 @@ scores.to_json("$scores_out")
                 <param name="queries" value="similarity/rcx_gc-ei_ms_subset.msp" ftype="msp"/>
                 <param name="references" value="similarity/rcx_gc-ei_ms_subset.msp" ftype="msp"/>
             </conditional>
-            <param name="tolerance" value="60.0" />
+            <conditional name="matching">
+                <param name="matching_type" value="difference" />
+                <param name="tolerance" value="60.0" />
+            </conditional>
             <output name="scores_out" value="metadata_match/ri_match_60.json" ftype="json" />
         </test>
         <test>
@@ -123,7 +126,10 @@ scores.to_json("$scores_out")
                 <param name="scores_in" value="metadata_match/ri_match_60.json" ftype="json"/>
                 <param name="join_type" value="inner" />
             </conditional>
-            <param name="tolerance" value="20.0" />
+            <conditional name="matching">
+                <param name="matching_type" value="difference" />
+                <param name="tolerance" value="20.0" />
+            </conditional>
             <output name="scores_out" value="metadata_match/inner_join_ri_20.json" ftype="json" />
         </test>
         <test>
@@ -132,7 +138,10 @@ scores.to_json("$scores_out")
                 <param name="scores_in" value="metadata_match/ri_match_60.json" ftype="json"/>
                 <param name="join_type" value="left" />
             </conditional>
-            <param name="tolerance" value="20.0" />
+            <conditional name="matching">
+                <param name="matching_type" value="difference" />
+                <param name="tolerance" value="20.0" />
+            </conditional>
             <output name="scores_out" value="metadata_match/left_join_ri_20.json" ftype="json" />
         </test>
         <test>
