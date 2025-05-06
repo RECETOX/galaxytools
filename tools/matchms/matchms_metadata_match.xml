@@ -85,45 +85,66 @@ scores.to_json("$scores_out")
 
     <tests>
         <test>
-            <param name="queries" value="similarity/rcx_gc-ei_ms_subset.msp" ftype="msp"/>
-            <param name="references" value="similarity/rcx_gc-ei_ms_subset.msp" ftype="msp"/>
+            <conditional name="scores">
+                <param name="use_scores" value="False"/>
+                <param name="queries" value="similarity/rcx_gc-ei_ms_subset.msp" ftype="msp"/>
+                <param name="references" value="similarity/rcx_gc-ei_ms_subset.msp" ftype="msp"/>
+            </conditional>
             <param name="tolerance" value="60.0" />
             <output name="scores_out" value="metadata_match/ri_match_60.json" ftype="json" />
         </test>
         <test>
-            <param name="queries" value="similarity/rcx_gc-ei_ms_subset.msp" ftype="msp"/>
-            <param name="references" value="similarity/rcx_gc-ei_ms_subset.msp" ftype="msp"/>
-            <param name="matching_type" value="equal_match" />
-            <param name="metadata_match_field" value="smiles" />
+            <conditional name="scores">
+                <param name="use_scores" value="False"/>
+                <param name="queries" value="similarity/rcx_gc-ei_ms_subset.msp" ftype="msp"/>
+                <param name="references" value="similarity/rcx_gc-ei_ms_subset.msp" ftype="msp"/>
+            </conditional>
+            <conditional name="matching">
+                <param name="matching_type" value="equal_match" />
+                <param name="metadata_match_field" value="smiles" />
+            </conditional>
             <output name="scores_out" value="metadata_match/smiles.json" ftype="json" />
         </test>
         <test>
-            <param name="use_scores" value="True"/>
-            <param name="scores_in" value="metadata_match/smiles.json" ftype="json"/>
-            <param name="matching_type" value="equal_match" />
-            <param name="metadata_match_field" value="inchikey" />
-            <param name="join_type" value="inner" />
+            <conditional name="scores">     
+                <param name="use_scores" value="True"/>
+                <param name="scores_in" value="metadata_match/smiles.json" ftype="json"/>
+                <param name="join_type" value="inner" />
+            </conditional>
+            <conditional name="matching">
+                <param name="matching_type" value="equal_match" />
+                <param name="metadata_match_field" value="inchikey" />
+            </conditional>
             <output name="scores_out" value="metadata_match/inchi_key_inner.json" ftype="json" />
         </test>
         <test>
-            <param name="use_scores" value="True"/>
-            <param name="scores_in" value="metadata_match/ri_match_60.json" ftype="json"/>
+            <conditional name="scores"> 
+                <param name="use_scores" value="True"/>
+                <param name="scores_in" value="metadata_match/ri_match_60.json" ftype="json"/>
+                <param name="join_type" value="inner" />
+            </conditional>
             <param name="tolerance" value="20.0" />
-            <param name="join_type" value="inner" />
             <output name="scores_out" value="metadata_match/inner_join_ri_20.json" ftype="json" />
         </test>
         <test>
-            <param name="use_scores" value="True"/>
-            <param name="scores_in" value="metadata_match/ri_match_60.json" ftype="json"/>
+            <conditional name="scores"> 
+                <param name="use_scores" value="True"/>
+                <param name="scores_in" value="metadata_match/ri_match_60.json" ftype="json"/>
+                <param name="join_type" value="left" />
+            </conditional>
             <param name="tolerance" value="20.0" />
-            <param name="join_type" value="left" />
             <output name="scores_out" value="metadata_match/left_join_ri_20.json" ftype="json" />
         </test>
         <test>
-            <param name="queries" value="similarity/rcx_gc-ei_ms_subset.msp" ftype="msp"/>
-            <param name="references" value="similarity/rcx_gc-ei_ms_subset.msp" ftype="msp"/>
-            <param name="matching_type" value="equal_match" />
-            <param name="metadata_match_field" value="formula" />
+            <conditional name="scores"> 
+                <param name="use_scores" value="False"/>
+                <param name="queries" value="similarity/rcx_gc-ei_ms_subset.msp" ftype="msp"/>
+                <param name="references" value="similarity/rcx_gc-ei_ms_subset.msp" ftype="msp"/>
+            </conditional>
+            <conditional name="matching">
+                <param name="matching_type" value="equal_match" />
+                <param name="metadata_match_field" value="formula" />
+            </conditional>
             <output name="scores_out" value="metadata_match/formula.json" ftype="json" />
         </test>
     </tests>
