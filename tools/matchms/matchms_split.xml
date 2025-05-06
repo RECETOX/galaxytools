@@ -50,8 +50,11 @@
     </outputs>
     <tests>
         <test>
+            <conditional name="method">
+                <param name="split_type" value="one-per-file" />
+            </conditional>
             <param name="msp_input" value="split/sample_input.msp"  />
-            <param name="split_type" value="one-per-file" />
+            
             <output_collection name="sample" type="list">
                 <element name="0"         file="split/one-per-file/0.msp"         ftype="msp" compare="diff"/>
                 <element name="1"     file="split/one-per-file/1.msp"     ftype="msp" compare="diff"/>
@@ -66,8 +69,11 @@
             </output_collection>
         </test>
         <test>
+            <conditional name="method">
+                <param name="split_type" value="num-chunks" />
+            </conditional>
             <param name="msp_input" value="split/sample_input.msp"  />
-            <param name="split_type" value="num-chunks" />
+            
             <param name="num_chunks" value="2" />
             <output_collection name="sample" type="list">
                 <element name="chunk_0" file="split/num-chunks/chunk_0.msp" ftype="msp" compare="diff"/>
@@ -75,8 +81,11 @@
             </output_collection>
         </test>
         <test>
+            <conditional name="method">
+                 <param name="split_type" value="chunk-size" />
+            </conditional>
             <param name="msp_input" value="split/sample_input.msp"  />
-            <param name="split_type" value="chunk-size" />
+           
             <param name="chunk_size" value="4" />
             <output_collection name="sample" type="list">
                 <element name="chunk_0" file="split/chunk-size/chunk_0.msp" ftype="msp" compare="diff"/>
