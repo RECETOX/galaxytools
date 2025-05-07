@@ -43,19 +43,19 @@ data.to_csv("${output_file}", sep='\t', index=False)
     </inputs>
 
     <outputs>
-        <data label="matchms extract metadata on ${on_string}" name="output_file" format="tsv"/>
+        <data label="matchms extract metadata on ${on_string}" name="output_file" format="tabular"/>
     </outputs>
 
     <tests>
         <test>
             <param name="input_file" value="convert/mgf_out.mgf" ftype="mgf"/>
             <param name="harmonize_metadata" value="True"/>
-            <output name="output_file" file="convert/metadata.tsv" ftype="tsv" compare="sim_size" delta="0"/>
+            <output name="output_file" file="convert/metadata.tsv" ftype="tabular" compare="sim_size" delta="0"/>
         </test>
         <test>
             <param name="input_file" value="similarity/RECETOX_Exposome_pesticides_HR_MS_20220323.msp" ftype="msp"/>
             <param name="harmonize_metadata" value="True"/>
-            <output name="output_file" file="convert/metadata.tsv" ftype="tsv" compare="sim_size" delta="0"/>
+            <output name="output_file" file="convert/metadata.tsv" ftype="tabular" compare="sim_size" delta="0"/>
         </test>
     </tests>
 
