@@ -1,4 +1,4 @@
-<tool id="matchms_fingerprint_similarity" name="matchms fingerprint similarity" version="@TOOL_VERSION@+galaxy0" profile="21.09">
+<tool id="matchms_fingerprint_similarity" name="matchms fingerprint similarity" version="@TOOL_VERSION@+galaxy1" profile="21.09">
     <description>calculate similarity between molecular fingerprints calculated from structural spectrum metadata descriptors</description>
 
     <macros>
@@ -60,20 +60,28 @@ scores.to_json("$scores_out")
 
     <tests>
         <test>
-            <param name="queries" value="similarity/rcx_gc-ei_ms_subset.msp" ftype="msp"/>
-            <param name="references" value="similarity/rcx_exposome_pesticides_subset.msp" ftype="msp"/>
+            <conditional name="scores">
+                <param name="use_scores" value="False"/>
+                <param name="queries" value="similarity/rcx_gc-ei_ms_subset.msp" ftype="msp"/>
+                <param name="references" value="similarity/rcx_exposome_pesticides_subset.msp" ftype="msp"/>
+            </conditional>
             <param name="fingerprint_similarity" value="dice" />
             <output name="scores_out" value="fingerprints/dice.json" ftype="json" />
         </test>
         <test>
-            <param name="queries" value="similarity/rcx_gc-ei_ms_subset.msp" ftype="msp"/>
-            <param name="references" value="similarity/rcx_exposome_pesticides_subset.msp" ftype="msp"/>
+            <conditional name="scores">
+                <param name="use_scores" value="False"/>
+                <param name="queries" value="similarity/rcx_gc-ei_ms_subset.msp" ftype="msp"/>
+                <param name="references" value="similarity/rcx_exposome_pesticides_subset.msp" ftype="msp"/>
+            </conditional>
             <param name="fingerprint_similarity" value="cosine" />
             <output name="scores_out" value="fingerprints/cosine.json" ftype="json" />
         </test>
         <test>
-            <param name="use_scores" value="True"/>
-            <param name="scores_in" value="metadata_match/inner_join_ri_20.json" ftype="json"/>
+            <conditional name="scores">
+                <param name="use_scores" value="True"/>
+                <param name="scores_in" value="metadata_match/inner_join_ri_20.json" ftype="json"/>
+            </conditional>
             <param name="fingerprint_similarity" value="jaccard" />
             <output name="scores_out" value="fingerprints/jaccard_scores.json" ftype="json" />
         </test>

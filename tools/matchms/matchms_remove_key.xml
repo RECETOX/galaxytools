@@ -1,4 +1,4 @@
-<tool id="matchms_remove_key" name="matchms remove key" version="@TOOL_VERSION@+galaxy0" profile="21.09">
+<tool id="matchms_remove_key" name="matchms remove key" version="@TOOL_VERSION@+galaxy1" profile="21.09">
     <description>Remove metadata entry for all spectra in a library</description>
     
     <macros>
@@ -60,7 +60,9 @@ matchms.exporting.save_as_msp(new_spectra, "${output}")
     <tests>
         <test>
             <param name="spectral_library" value="filtering/input.msp" ftype="msp"/>
-            <param name="key" value="ionmode"/>
+            <repeat name="attribute_repeat">
+                <param name="key" value="ionmode"/>
+            </repeat>
             <output name="output" file="remove_key/out_matchms_remove_key.msp" ftype="msp"/>
         </test>
         <test>
