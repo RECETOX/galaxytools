@@ -14,6 +14,16 @@ parse_args <- function() {
         col_types = "ccd",
         col_select = all_of(c("name", "formula")) | any_of("rt")
     )
+    # Handle missing or empty rel_to argument
+    rel_to_value <- if (length(args) >= 8 && args[8] != "") {
+        if (args[8] == "none") 0 else as.numeric(args[8])
+    } else {
+        0  # Default value is 0
+    }
+
+    if (!rel_to_value %in% c(0, 1, 2, 3, 4)) {
+        stop("Invalid value for rel_to. Expected 'none' (0), or a numeric value between 0 and 4.")
+    }
 
     parsed <- list(
         compound_table = compound_table,
@@ -22,7 +32,8 @@ parse_args <- function() {
         append_adducts = args[4],
         append_isotopes = args[5],
         out_format = args[6],
-        outfile = args[7]
+        outfile = args[7],
+        rel_to = rel_to_value
     )
     return(parsed)
 }
@@ -30,7 +41,9 @@ parse_args <- function() {
 generate_isotope_spectra <- function(compound_table,
                                      adducts_to_use,
                                      append_adducts,
-                                     threshold) {
+                                     threshold,
+                                     rel_to) {
+    
     data(isotopes)
     data(adducts)
 
@@ -88,6 +101,7 @@ generate_isotope_spectra <- function(compound_table,
             chemforms = merged_chemforms,
             charge = adduct$Charge,
             threshold = threshold,
+            rel_to = rel_to,
         )
 
         mzs <- list()
@@ -166,7 +180,8 @@ main <- function() {
         args$compound_table,
         args$adducts_to_use,
         args$append_adducts,
-        args$threshold
+        args$threshold,
+        args$rel_to
     )
 
     if (args$out_format == "msp") {

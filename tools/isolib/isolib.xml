@@ -37,6 +37,7 @@
             #end if
             '${formatting.out_format}'
             '${isotope_library}'
+            '${rel_to}'
     ]]></command>
     <inputs>
         <param name="input_file" type="data" format="tabular" label="Table with input compounds"/>
@@ -58,7 +59,16 @@
                 </param>
             </when>
         </conditional>
-        <param name="threshold" type="float" min="0" max="100" value="1" label="Threshold" help="Probability threshold to use as cutoff for isotopic pattern distribution - this can be used to remove low abundant peaks and improve computation performance." />
+        <param name="threshold" type="float" min="0.0001" max="1.0" value="0.1"
+       label="Threshold"
+       help="Relative intensity threshold (0.0001 to 1.0) for isotopic peaks. Peaks below this fraction of the base peak will be excluded to reduce noise and improve performance." />
+       <param name="rel_to" type="select" value="0" label="Probability Reference" help="Defines how isotope peak probabilities are normalized for pruning — e.g., relative to the most intense, monoisotopic, or as absolute values.">
+            <option value="0">Most intense peak</option>
+            <option value="1">Most abundant isotopes per element</option>
+            <option value="2">Absolute probability</option>
+            <option value="3">Most intense peak (threshold as percentage)</option>
+            <option value="4">Monoisotopic peak (threshold as percentage)</option>
+        </param>
         <param name="append_adduct" type="boolean" truevalue="TRUE" falsevalue="FALSE" checked="true" label="Append adduct to compound name" help="Append the adduct string to the compound name for easy identification." />
         <conditional name="formatting">
             <param name="out_format" type="select" label="Output Format" help="Choose the output format, either MSP or Tabular">
@@ -102,6 +112,27 @@
             <param name="adducts" value="M-H,2M-H"/>
             <output name="isotope_library" file="test3.tabular"/>
         </test>
+        <test>
+            <param name="input_file" value="lc_markers_neg.tsv" />
+            <param name="adducts" value="M-H,2M-H"/>
+            <param name="threshold" value="0.05" />
+            <param name="append_adduct" value="FALSE" />
+            <param name="out_format" value="tabular" />
+            <param name="append_isotopes" value="FALSE" />
+            <param name="rel_to" value="2" />
+            <output name="isotope_library" file="expected_output_1.tsv" />
+        </test>
+
+        <test>
+            <param name="input_file" value="lc_markers_neg.tsv" />
+            <param name="adducts" value="M-H,2M-H"/>
+            <param name="threshold" value="0.01" />
+            <param name="append_adduct" value="TRUE" />
+            <param name="out_format" value="msp" />
+            <param name="rel_to" value="3" />
+            <output name="isotope_library" file="expected_output_2.msp" />
+        </test>
+
     </tests>
     <help><![CDATA[
         This tool computes isotopic patterns for given compounds and adduct forms.
