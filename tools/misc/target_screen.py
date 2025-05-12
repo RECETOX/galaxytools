@@ -1,7 +1,8 @@
 import argparse
+from typing import Tuple
+
 import numpy as np
 import pandas as pd
-from typing import Any, Tuple
 
 
 class LoadDataAction(argparse.Action):
@@ -86,7 +87,7 @@ def find_matches(peaks: pd.DataFrame, markers: pd.DataFrame, ppm: int, rt_tol: i
     # Calculate mz and rt differences
     matched_markers['mz_diff'] = np.abs(matched_markers['mz'].values - matched_peaks['mz'].values)
     matched_markers['rt_diff'] = np.abs(matched_markers['rt'].values - matched_peaks['rt'].values)
-    
+
     # Drop mz and rt columns from the marker table
     matched_markers = matched_markers.drop(columns=['mz', 'rt'])
 
