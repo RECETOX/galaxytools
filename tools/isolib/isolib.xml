@@ -165,8 +165,10 @@
         <!-- Test 6: Tabular output with rel_to = 2 and append_isotopes = TRUE -->
         <test>
             <param name="input_file" value="lc_markers_neg.tsv"/>
-            <param name="out_format" value="tabular"/>
-            <param name="append_isotopes" value="TRUE"/>
+            <conditional name="formatting">
+                <param name="out_format" value="tabular"/>
+                <param name="append_isotopes" value="TRUE"/>
+            </conditional>
             <conditional name="rel_to">
                 <param name="value" value="2"/>
                 <param name="threshold" value="0.01"/>
@@ -177,7 +179,10 @@
         <!-- Test 7: Tabular output with rel_to = 3 and custom adducts -->
         <test>
             <param name="input_file" value="lc_markers_neg.tsv"/>
-            <param name="out_format" value="tabular"/>
+            <conditional name="formatting">
+                <param name="out_format" value="tabular"/>
+                <param name="append_isotopes" value="FALSE"/>
+            </conditional>
             <param name="adducts" value="M-H,2M-H"/>
             <conditional name="rel_to">
                 <param name="value" value="3"/>
