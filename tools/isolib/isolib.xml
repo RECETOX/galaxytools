@@ -1,4 +1,4 @@
-<tool id="isolib" name="isolib" version="2.6+galaxy0" profile="21.09">
+<tool id="isolib" name="isolib" version="2.6+galaxy1" profile="21.09">
     <description>create an isotopic pattern library for given compounds and adducts based on enviPat</description>
     <creator>
         <person
@@ -37,7 +37,7 @@
             #end if
             '${formatting.out_format}'
             '${isotope_library}'
-            '${rel_to}'
+            '${rel_to.value}'
     ]]></command>
     <inputs>
         <param name="input_file" type="data" format="tabular" label="Table with input compounds"/>
@@ -59,16 +59,36 @@
                 </param>
             </when>
         </conditional>
-        <param name="threshold" type="float" min="0.0001" max="1.0" value="0.1"
-       label="Threshold"
-       help="Relative intensity threshold (0.0001 to 1.0) for isotopic peaks. Peaks below this fraction of the base peak will be excluded to reduce noise and improve performance." />
-       <param name="rel_to" type="select" value="0" label="Probability Reference" help="Defines how isotope peak probabilities are normalized for pruning — e.g., relative to the most intense, monoisotopic, or as absolute values.">
-            <option value="0">Most intense peak</option>
-            <option value="1">Most abundant isotopes per element</option>
-            <option value="2">Absolute probability</option>
-            <option value="3">Most intense peak (threshold as percentage)</option>
-            <option value="4">Monoisotopic peak (threshold as percentage)</option>
-        </param>
+       <conditional name="rel_to">
+            <param name="value" type="select" label="Intensity normalization mode">
+                <option value="0" selected="true">0 - Relative to most intense peak</option>
+                <option value="1">1 - Relative to monoisotopic peak</option>
+                <option value="2">2 - No normalization (absolute probabilities)</option>
+                <option value="3">3 - Prune by most intense peak (%), output absolute</option>
+                <option value="4">4 - Prune by mono peak (%), output absolute</option>
+            </param>
+
+            <when value="0">
+                <param name="threshold" type="float" label="Threshold (% of base peak)" value="1.0" min="0" max="100"
+                    help="Remove peaks below this % of the most intense peak"/>
+            </when>
+            <when value="1">
+                <param name="threshold" type="float" label="Threshold (% of monoisotopic peak)" value="1.0" min="0" max="100"
+                    help="Remove peaks below this % of the monoisotopic peak"/>
+            </when>
+            <when value="2">
+                <param name="threshold" type="float" label="Threshold (absolute probability)" value="0.0001" min="0" max="1"
+                    help="Remove peaks with probability below this absolute value"/>
+            </when>
+            <when value="3">
+                <param name="threshold" type="float" label="Threshold (% of base peak)" value="1.0" min="0" max="100"
+                    help="Remove peaks below this % of the most intense peak (output is not normalized)"/>
+            </when>
+            <when value="4">
+                <param name="threshold" type="float" label="Threshold (% of monoisotopic peak)" value="1.0" min="0" max="100"
+                    help="Remove peaks below this % of the monoisotopic peak (output is not normalized)"/>
+            </when>
+        </conditional>
         <param name="append_adduct" type="boolean" truevalue="TRUE" falsevalue="FALSE" checked="true" label="Append adduct to compound name" help="Append the adduct string to the compound name for easy identification." />
         <conditional name="formatting">
             <param name="out_format" type="select" label="Output Format" help="Choose the output format, either MSP or Tabular">
@@ -92,56 +112,142 @@
     </outputs>
 
     <tests>
+        <!-- Test 1: Default settings with rel_to = 0 -->
         <test>
             <param name="input_file" value="lc_markers_neg.tsv"/>
+            <conditional name="rel_to">
+                <param name="value" value="0"/>
+                <param name="threshold" value="1.0"/>
+            </conditional>
             <output name="isotope_library" file="test0.msp"/>
         </test>
+
+        <!-- Test 2: rel_to = 1 (Relative to monoisotopic peak) -->
         <test>
             <param name="input_file" value="markers_no_rt.tsv"/>
+            <conditional name="rel_to">
+                <param name="value" value="1"/>
+                <param name="threshold" value="1.0"/>
+            </conditional>
             <output name="isotope_library" file="test1.msp"/>
         </test>
+
+        <!-- Test 3: rel_to = 2 (No normalization, absolute probabilities) -->
+        <test>
+            <param name="input_file" value="lc_markers_neg.tsv"/>
+            <conditional name="rel_to">
+                <param name="value" value="2"/>
+                <param name="threshold" value="0.0001"/>
+            </conditional>
+            <output name="isotope_library" file="test2.msp"/>
+        </test>
+
+        <!-- Test 4: rel_to = 3 (Prune by most intense peak, output absolute) -->
+        <test>
+            <param name="input_file" value="lc_markers_neg.tsv"/>
+            <conditional name="rel_to">
+                <param name="value" value="3"/>
+                <param name="threshold" value="5.0"/>
+            </conditional>
+            <output name="isotope_library" file="test3.msp"/>
+        </test>
+
+        <!-- Test 5: rel_to = 4 (Prune by monoisotopic peak, output absolute) -->
+        <test>
+            <param name="input_file" value="lc_markers_neg.tsv"/>
+            <conditional name="rel_to">
+                <param name="value" value="4"/>
+                <param name="threshold" value="2.0"/>
+            </conditional>
+            <output name="isotope_library" file="test4.msp"/>
+        </test>
+
+        <!-- Test 6: Tabular output with rel_to = 2 and append_isotopes = TRUE -->
         <test>
             <param name="input_file" value="lc_markers_neg.tsv"/>
             <param name="out_format" value="tabular"/>
-            <param name="append_isotopes" value="TRUE" />
-            <output name="isotope_library" file="test2.tabular"/>
+            <param name="append_isotopes" value="TRUE"/>
+            <conditional name="rel_to">
+                <param name="value" value="2"/>
+                <param name="threshold" value="0.01"/>
+            </conditional>
+            <output name="isotope_library" file="test5.tabular"/>
         </test>
+
+        <!-- Test 7: Tabular output with rel_to = 3 and custom adducts -->
         <test>
             <param name="input_file" value="lc_markers_neg.tsv"/>
             <param name="out_format" value="tabular"/>
             <param name="adducts" value="M-H,2M-H"/>
-            <output name="isotope_library" file="test3.tabular"/>
-        </test>
-        <test>
-            <param name="input_file" value="lc_markers_neg.tsv" />
-            <param name="adducts" value="M-H,2M-H"/>
-            <param name="threshold" value="0.05" />
-            <param name="append_adduct" value="FALSE" />
-            <param name="out_format" value="tabular" />
-            <param name="append_isotopes" value="FALSE" />
-            <param name="rel_to" value="2" />
-            <output name="isotope_library" file="expected_output_1.tsv" />
+            <conditional name="rel_to">
+                <param name="value" value="3"/>
+                <param name="threshold" value="10.0"/>
+            </conditional>
+            <output name="isotope_library" file="test6.tabular"/>
         </test>
 
+        <!-- Test 8: Positive ionization mode with rel_to = 0 -->
         <test>
-            <param name="input_file" value="lc_markers_neg.tsv" />
-            <param name="adducts" value="M-H,2M-H"/>
-            <param name="threshold" value="0.01" />
-            <param name="append_adduct" value="TRUE" />
-            <param name="out_format" value="msp" />
-            <param name="rel_to" value="3" />
-            <output name="isotope_library" file="expected_output_2.msp" />
+            <param name="input_file" value="lc_markers_neg.tsv"/>
+            <conditional name="ionization">
+                <param name="ionization" value="positive"/>
+                <param name="adducts" value="M+H"/>
+            </conditional>
+            <conditional name="rel_to">
+                <param name="value" value="0"/>
+                <param name="threshold" value="1.0"/>
+            </conditional>
+            <output name="isotope_library" file="test7.msp"/>
         </test>
-
     </tests>
     <help><![CDATA[
         This tool computes isotopic patterns for given compounds and adduct forms.
+
         The compound table input file should contain the following columns:
-        - name: compound name
-        - formula: compound formula
-        - rt (optional): retention time
+        - **name**: Compound name.
+        - **formula**: Compound formula.
+        - **rt** (optional): Retention time.
 
         The output is a spectral library in the MSP format.
+
+        ## Parameters:
+
+        ### **rel_to Modes**:
+        - **0**: Normalize to the most intense peak (threshold in percentage).
+        - **1**: Normalize to the monoisotopic peak (threshold in percentage).
+        - **2**: No normalization (threshold is an absolute probability).
+        - **3**: Prune by percentage of most intense peak, output absolute intensities.
+        - **4**: Prune by percentage of monoisotopic peak, output absolute intensities.
+
+        ### **Threshold Behavior**:
+        The threshold's units and behavior change based on the selected **rel_to** mode. Use this to tailor output to your downstream needs.
+
+        #### **Threshold for Modes 0, 1, 3, 4 (Percentage of Peak Intensity)**:
+        - The threshold is a **percentage** of the most intense or monoisotopic peak.
+        - Example 1: To remove isotopes with a probability of less than 1% of the most intense peak, set the threshold to `1` and select **rel_to = 0**.
+        - Example 2: To remove isotopes with a probability of less than 1% of the monoisotopic peak, set the threshold to `1` and select **rel_to = 1**.
+        - Example 3: To remove isotopes with a probability of less than 1% of the most intense peak but output absolute intensities, set the threshold to `1` and select **rel_to = 3**.
+        - Example 4: To remove isotopes with a probability of less than 1% of the monoisotopic peak but output absolute intensities, set the threshold to `1` and select **rel_to = 4**.
+
+        #### **Threshold for Mode 2 (Absolute Probability)**:
+        - The threshold is an **absolute probability** (e.g., `0.01`, `0.0005`, etc.).
+        - Example 1: To remove isotopes with a probability of less than `0.01`, set the threshold to `0.01` and select **rel_to = 2**.
+        - **Important**: Be cautious with very small threshold values in **rel_to = 2**. If the threshold is too low (e.g., `0.0001`), it may prune almost all peaks, resulting in a sparse or empty output. Similarly, a threshold that is too high may result in no isotopes being removed.
+        - Consider using threshold values like `0.01`, `0.1`, or `0.5` depending on your data.
+
+        ### **General Guidance**:
+        - **Threshold Selection**:
+        - For **modes 0, 1, 3, and 4**: The threshold is **relative** to the most intense or monoisotopic peak, and a **percentage** threshold works well for most data sets.
+        - For **mode 2**: The threshold is **absolute**, and users must be careful not to choose a value that’s too small or too large.
+        
+        #### Example Scenarios:
+        1. **Scenario 1**: You have a dataset with peaks that vary significantly in intensity. You want to keep isotopes that are at least 1% of the most intense peak. Set the threshold to `1` and use **rel_to = 0** or **rel_to = 3**.
+        2. **Scenario 2**: You want to remove isotopes with an absolute probability below `0.005` regardless of peak intensity. Set the threshold to `0.005` and use **rel_to = 2**.
+
+
+
+
+        @TOOL_VERSION@
     ]]></help>
     <citations>
         <citation type="doi">10.1021/acs.analchem.5b00941</citation>

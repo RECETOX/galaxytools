@@ -1,0 +1,214 @@
+name	adduct	formula	charge	ionization_mode	precursor_mz	msLevel	rt	mz	isotopes
+2,4-Dichlorophenoxyacetic acid ou 2,4-D (M-H)	[M-H]-	C8H6Cl2O3	-1	negative	218.962123412	1	484.2	218.962123019909	37Cl:0
+2,4-Dichlorophenoxyacetic acid ou 2,4-D (M-H)	[M-H]-	C8H6Cl2O3	-1	negative	218.962123412	1	484.2	220.959172909909	37Cl:1
+2,4-Dichlorophenoxyacetic acid ou 2,4-D (M-H)	[M-H]-	C8H6Cl2O3	-1	negative	218.962123412	1	484.2	222.956222799909	37Cl:2
+2-diethylamino-6-methyl pyrimidin-4-ol/one (M-H)	[M-H]-	C9H15N3O1	-1	negative	180.1142361	1	451.8	180.114235677909	patterns[[i]][, -c(1, 2)]:9
+2-diethylamino-6-methyl pyrimidin-4-ol/one (M-H)	[M-H]-	C9H15N3O1	-1	negative	180.1142361	1	451.8	180.114235677909	patterns[[i]][, -c(1, 2)]:0
+2-diethylamino-6-methyl pyrimidin-4-ol/one (M-H)	[M-H]-	C9H15N3O1	-1	negative	180.1142361	1	451.8	180.114235677909	patterns[[i]][, -c(1, 2)]:14
+2-diethylamino-6-methyl pyrimidin-4-ol/one (M-H)	[M-H]-	C9H15N3O1	-1	negative	180.1142361	1	451.8	180.114235677909	patterns[[i]][, -c(1, 2)]:0
+2-diethylamino-6-methyl pyrimidin-4-ol/one (M-H)	[M-H]-	C9H15N3O1	-1	negative	180.1142361	1	451.8	180.114235677909	patterns[[i]][, -c(1, 2)]:3
+2-diethylamino-6-methyl pyrimidin-4-ol/one (M-H)	[M-H]-	C9H15N3O1	-1	negative	180.1142361	1	451.8	180.114235677909	patterns[[i]][, -c(1, 2)]:0
+2-diethylamino-6-methyl pyrimidin-4-ol/one (M-H)	[M-H]-	C9H15N3O1	-1	negative	180.1142361	1	451.8	180.114235677909	patterns[[i]][, -c(1, 2)]:1
+2-diethylamino-6-methyl pyrimidin-4-ol/one (M-H)	[M-H]-	C9H15N3O1	-1	negative	180.1142361	1	451.8	180.114235677909	patterns[[i]][, -c(1, 2)]:0
+2-diethylamino-6-methyl pyrimidin-4-ol/one (M-H)	[M-H]-	C9H15N3O1	-1	negative	180.1142361	1	451.8	180.114235677909	patterns[[i]][, -c(1, 2)]:0
+3,5,6-Trichloro-2-pyridinol (M-H)	[M-H]-	C5H2Cl3N1O1	-1	negative	195.912920724	1	499.2	195.912920371909	37Cl:0
+3,5,6-Trichloro-2-pyridinol (M-H)	[M-H]-	C5H2Cl3N1O1	-1	negative	195.912920724	1	499.2	197.909970261909	37Cl:1
+3,5,6-Trichloro-2-pyridinol (M-H)	[M-H]-	C5H2Cl3N1O1	-1	negative	195.912920724	1	499.2	199.907020151909	37Cl:2
+3-phenoxybenzoic acid (M-H)	[M-H]-	C13H10O3	-1	negative	213.05571818	1	517.8	213.055717727909	13C:0
+3-phenoxybenzoic acid (M-H)	[M-H]-	C13H10O3	-1	negative	213.05571818	1	517.8	214.059072567909	13C:1
+4-Fluoro-3-phenoxybenzoic acid (M-H)	[M-H]-	C13H9F1O3	-1	negative	231.04629636800001	1	532.2	231.046295895909	13C:0
+4-Fluoro-3-phenoxybenzoic acid (M-H)	[M-H]-	C13H9F1O3	-1	negative	231.04629636800001	1	532.2	232.049650735909	13C:1
+4-nitrophenol (M-H)	[M-H]-	C6H5N1O3	-1	negative	138.01966702000001	1	165	138.019666577909	patterns[[i]][, -c(1, 2)]:6
+4-nitrophenol (M-H)	[M-H]-	C6H5N1O3	-1	negative	138.01966702000001	1	165	138.019666577909	patterns[[i]][, -c(1, 2)]:0
+4-nitrophenol (M-H)	[M-H]-	C6H5N1O3	-1	negative	138.01966702000001	1	165	138.019666577909	patterns[[i]][, -c(1, 2)]:4
+4-nitrophenol (M-H)	[M-H]-	C6H5N1O3	-1	negative	138.01966702000001	1	165	138.019666577909	patterns[[i]][, -c(1, 2)]:0
+4-nitrophenol (M-H)	[M-H]-	C6H5N1O3	-1	negative	138.01966702000001	1	165	138.019666577909	patterns[[i]][, -c(1, 2)]:1
+4-nitrophenol (M-H)	[M-H]-	C6H5N1O3	-1	negative	138.01966702000001	1	165	138.019666577909	patterns[[i]][, -c(1, 2)]:0
+4-nitrophenol (M-H)	[M-H]-	C6H5N1O3	-1	negative	138.01966702000001	1	165	138.019666577909	patterns[[i]][, -c(1, 2)]:3
+4-nitrophenol (M-H)	[M-H]-	C6H5N1O3	-1	negative	138.01966702000001	1	165	138.019666577909	patterns[[i]][, -c(1, 2)]:0
+4-nitrophenol (M-H)	[M-H]-	C6H5N1O3	-1	negative	138.01966702000001	1	165	138.019666577909	patterns[[i]][, -c(1, 2)]:0
+6-Chloronicotinic acid (M-H)	[M-H]-	C6H4Cl1N1O2	-1	negative	155.985780048	1	172.2	155.985779635909	37Cl:0
+6-Chloronicotinic acid (M-H)	[M-H]-	C6H4Cl1N1O2	-1	negative	155.985780048	1	172.2	157.982829525909	37Cl:1
+Acetochlor mercapturate (M-H)	[M-H]-	C19H28N2O5S1	-1	negative	395.164616996	1	607.2	395.164616293909	13C:0
+Acetochlor mercapturate (M-H)	[M-H]-	C19H28N2O5S1	-1	negative	395.164616996	1	607.2	396.167971133909	13C:1
+Alachlor mercapturate (M-H)	[M-H]-	C19H28N2O5S1	-1	negative	395.164616996	1	607.2	395.164616293909	13C:0
+Alachlor mercapturate (M-H)	[M-H]-	C19H28N2O5S1	-1	negative	395.164616996	1	607.2	396.167971133909	13C:1
+Bentazone (M-H)	[M-H]-	C10H12N2O3S1	-1	negative	239.049587244	1	747.6	239.049586541909	13C:0
+Bentazone (M-H)	[M-H]-	C10H12N2O3S1	-1	negative	239.049587244	1	747.6	240.052941381909	13C:1
+Diethylthiophosphate (M-H)	[M-H]-	C4H11O3P1S1	-1	negative	169.009375842	1	177	169.009374979909	patterns[[i]][, -c(1, 2)]:1
+Diethylthiophosphate (M-H)	[M-H]-	C4H11O3P1S1	-1	negative	169.009375842	1	177	169.009374979909	patterns[[i]][, -c(1, 2)]:4
+Diethylthiophosphate (M-H)	[M-H]-	C4H11O3P1S1	-1	negative	169.009375842	1	177	169.009374979909	patterns[[i]][, -c(1, 2)]:0
+Diethylthiophosphate (M-H)	[M-H]-	C4H11O3P1S1	-1	negative	169.009375842	1	177	169.009374979909	patterns[[i]][, -c(1, 2)]:10
+Diethylthiophosphate (M-H)	[M-H]-	C4H11O3P1S1	-1	negative	169.009375842	1	177	169.009374979909	patterns[[i]][, -c(1, 2)]:0
+Diethylthiophosphate (M-H)	[M-H]-	C4H11O3P1S1	-1	negative	169.009375842	1	177	169.009374979909	patterns[[i]][, -c(1, 2)]:3
+Diethylthiophosphate (M-H)	[M-H]-	C4H11O3P1S1	-1	negative	169.009375842	1	177	169.009374979909	patterns[[i]][, -c(1, 2)]:0
+Diethylthiophosphate (M-H)	[M-H]-	C4H11O3P1S1	-1	negative	169.009375842	1	177	169.009374979909	patterns[[i]][, -c(1, 2)]:0
+Diethylthiophosphate (M-H)	[M-H]-	C4H11O3P1S1	-1	negative	169.009375842	1	177	169.009374979909	patterns[[i]][, -c(1, 2)]:1
+Diethylthiophosphate (M-H)	[M-H]-	C4H11O3P1S1	-1	negative	169.009375842	1	177	169.009374979909	patterns[[i]][, -c(1, 2)]:0
+Diethylthiophosphate (M-H)	[M-H]-	C4H11O3P1S1	-1	negative	169.009375842	1	177	169.009374979909	patterns[[i]][, -c(1, 2)]:0
+Diethylthiophosphate (M-H)	[M-H]-	C4H11O3P1S1	-1	negative	169.009375842	1	177	169.009374979909	patterns[[i]][, -c(1, 2)]:0
+Fenhexamid (M-H)	[M-H]-	C14H17Cl2N1O2	-1	negative	300.056358144	1	689.4	300.056357761909	13C:0, 37Cl:0
+Fenhexamid (M-H)	[M-H]-	C14H17Cl2N1O2	-1	negative	300.056358144	1	689.4	301.059712601909	13C:1, 37Cl:0
+Fenhexamid (M-H)	[M-H]-	C14H17Cl2N1O2	-1	negative	300.056358144	1	689.4	302.053407651909	13C:0, 37Cl:1
+Fenhexamid (M-H)	[M-H]-	C14H17Cl2N1O2	-1	negative	300.056358144	1	689.4	304.050457541909	13C:0, 37Cl:2
+Fenvalerate free acid (M-H)	[M-H]-	C11H13Cl1O2	-1	negative	211.053131336	1	585	211.053130913909	13C:0, 37Cl:0
+Fenvalerate free acid (M-H)	[M-H]-	C11H13Cl1O2	-1	negative	211.053131336	1	585	212.056485753909	13C:1, 37Cl:0
+Fenvalerate free acid (M-H)	[M-H]-	C11H13Cl1O2	-1	negative	211.053131336	1	585	213.050180803909	13C:0, 37Cl:1
+Fipronil (M-H)	[M-H]-	C12H4Cl2F6N4O1S1	-1	negative	434.931430428	1	750	434.931429685909	13C:0, 37Cl:0
+Fipronil (M-H)	[M-H]-	C12H4Cl2F6N4O1S1	-1	negative	434.931430428	1	750	435.934784525909	13C:1, 37Cl:0
+Fipronil (M-H)	[M-H]-	C12H4Cl2F6N4O1S1	-1	negative	434.931430428	1	750	436.928479575909	13C:0, 37Cl:1
+Fipronil (M-H)	[M-H]-	C12H4Cl2F6N4O1S1	-1	negative	434.931430428	1	750	438.925529465909	13C:0, 37Cl:2
+Fipronil sulfone (M-H)	[M-H]-	C12H4Cl2F6N4O2S1	-1	negative	450.92634504800003	1	771	450.926344305909	13C:0, 37Cl:0
+Fipronil sulfone (M-H)	[M-H]-	C12H4Cl2F6N4O2S1	-1	negative	450.92634504800003	1	771	451.929699145909	13C:1, 37Cl:0
+Fipronil sulfone (M-H)	[M-H]-	C12H4Cl2F6N4O2S1	-1	negative	450.92634504800003	1	771	452.923394195909	13C:0, 37Cl:1
+Fipronil sulfone (M-H)	[M-H]-	C12H4Cl2F6N4O2S1	-1	negative	450.92634504800003	1	771	454.920444085909	13C:0, 37Cl:2
+Hydroxy-tebuconazole (M-H)	[M-H]-	C16H22Cl1N3O2	-1	negative	322.132778624	1	696.6	322.132778231909	13C:0, 37Cl:0
+Hydroxy-tebuconazole (M-H)	[M-H]-	C16H22Cl1N3O2	-1	negative	322.132778624	1	696.6	323.136133071909	13C:1, 37Cl:0
+Hydroxy-tebuconazole (M-H)	[M-H]-	C16H22Cl1N3O2	-1	negative	322.132778624	1	696.6	324.129828121909	13C:0, 37Cl:1
+Fluopyram (M-H)	[M-H]-	C16H11Cl1F6N2O1	-1	negative	395.039133972	1	725.4	395.039133449909	13C:0, 37Cl:0
+Fluopyram (M-H)	[M-H]-	C16H11Cl1F6N2O1	-1	negative	395.039133972	1	725.4	396.042488289909	13C:1, 37Cl:0
+Fluopyram (M-H)	[M-H]-	C16H11Cl1F6N2O1	-1	negative	395.039133972	1	725.4	397.036183339909	13C:0, 37Cl:1
+Mecoprop (M-H)	[M-H]-	C10H11Cl1O3	-1	negative	213.032395892	1	544.8	213.032395469909	13C:0, 37Cl:0
+Mecoprop (M-H)	[M-H]-	C10H11Cl1O3	-1	negative	213.032395892	1	544.8	214.035750309909	13C:1, 37Cl:0
+Mecoprop (M-H)	[M-H]-	C10H11Cl1O3	-1	negative	213.032395892	1	544.8	215.029445359909	13C:0, 37Cl:1
+p-Toluenesulfonamide (M-H)	[M-H]-	C7H9N1O2S1	-1	negative	170.028123528	1	362.4	170.028122815909	patterns[[i]][, -c(1, 2)]:7
+p-Toluenesulfonamide (M-H)	[M-H]-	C7H9N1O2S1	-1	negative	170.028123528	1	362.4	170.028122815909	patterns[[i]][, -c(1, 2)]:0
+p-Toluenesulfonamide (M-H)	[M-H]-	C7H9N1O2S1	-1	negative	170.028123528	1	362.4	170.028122815909	patterns[[i]][, -c(1, 2)]:8
+p-Toluenesulfonamide (M-H)	[M-H]-	C7H9N1O2S1	-1	negative	170.028123528	1	362.4	170.028122815909	patterns[[i]][, -c(1, 2)]:0
+p-Toluenesulfonamide (M-H)	[M-H]-	C7H9N1O2S1	-1	negative	170.028123528	1	362.4	170.028122815909	patterns[[i]][, -c(1, 2)]:1
+p-Toluenesulfonamide (M-H)	[M-H]-	C7H9N1O2S1	-1	negative	170.028123528	1	362.4	170.028122815909	patterns[[i]][, -c(1, 2)]:0
+p-Toluenesulfonamide (M-H)	[M-H]-	C7H9N1O2S1	-1	negative	170.028123528	1	362.4	170.028122815909	patterns[[i]][, -c(1, 2)]:2
+p-Toluenesulfonamide (M-H)	[M-H]-	C7H9N1O2S1	-1	negative	170.028123528	1	362.4	170.028122815909	patterns[[i]][, -c(1, 2)]:0
+p-Toluenesulfonamide (M-H)	[M-H]-	C7H9N1O2S1	-1	negative	170.028123528	1	362.4	170.028122815909	patterns[[i]][, -c(1, 2)]:0
+p-Toluenesulfonamide (M-H)	[M-H]-	C7H9N1O2S1	-1	negative	170.028123528	1	362.4	170.028122815909	patterns[[i]][, -c(1, 2)]:1
+p-Toluenesulfonamide (M-H)	[M-H]-	C7H9N1O2S1	-1	negative	170.028123528	1	362.4	170.028122815909	patterns[[i]][, -c(1, 2)]:0
+p-Toluenesulfonamide (M-H)	[M-H]-	C7H9N1O2S1	-1	negative	170.028123528	1	362.4	170.028122815909	patterns[[i]][, -c(1, 2)]:0
+p-Toluenesulfonamide (M-H)	[M-H]-	C7H9N1O2S1	-1	negative	170.028123528	1	362.4	170.028122815909	patterns[[i]][, -c(1, 2)]:0
+Triclosan (M-H)	[M-H]-	C12H7Cl3O2	-1	negative	286.943886504	1	811.8	286.943886141909	13C:0, 37Cl:0
+Triclosan (M-H)	[M-H]-	C12H7Cl3O2	-1	negative	286.943886504	1	811.8	287.947240981909	13C:1, 37Cl:0
+Triclosan (M-H)	[M-H]-	C12H7Cl3O2	-1	negative	286.943886504	1	811.8	288.940936031909	13C:0, 37Cl:1
+Triclosan (M-H)	[M-H]-	C12H7Cl3O2	-1	negative	286.943886504	1	811.8	289.944290871909	13C:1, 37Cl:1
+Triclosan (M-H)	[M-H]-	C12H7Cl3O2	-1	negative	286.943886504	1	811.8	290.937985921909	13C:0, 37Cl:2
+Triclosan glucuronide (M-H)	[M-H]-	C18H15Cl3O8	-1	negative	462.97597448	1	665.4	462.975974117909	13C:0, 37Cl:0
+Triclosan glucuronide (M-H)	[M-H]-	C18H15Cl3O8	-1	negative	462.97597448	1	665.4	463.979328957909	13C:1, 37Cl:0
+Triclosan glucuronide (M-H)	[M-H]-	C18H15Cl3O8	-1	negative	462.97597448	1	665.4	464.973024007909	13C:0, 37Cl:1
+Triclosan glucuronide (M-H)	[M-H]-	C18H15Cl3O8	-1	negative	462.97597448	1	665.4	465.976378847909	13C:1, 37Cl:1
+Triclosan glucuronide (M-H)	[M-H]-	C18H15Cl3O8	-1	negative	462.97597448	1	665.4	466.970073897909	13C:0, 37Cl:2
+Triclosan sulfate (M-H)	[M-H]-	C12H7Cl3O5S1	-1	negative	366.900701364	1	695.4	366.900700731909	13C:0, 37Cl:0
+Triclosan sulfate (M-H)	[M-H]-	C12H7Cl3O5S1	-1	negative	366.900701364	1	695.4	367.904055571909	13C:1, 37Cl:0
+Triclosan sulfate (M-H)	[M-H]-	C12H7Cl3O5S1	-1	negative	366.900701364	1	695.4	368.897750621909	13C:0, 37Cl:1
+Triclosan sulfate (M-H)	[M-H]-	C12H7Cl3O5S1	-1	negative	366.900701364	1	695.4	369.901105461909	13C:1, 37Cl:1
+Triclosan sulfate (M-H)	[M-H]-	C12H7Cl3O5S1	-1	negative	366.900701364	1	695.4	370.894800511909	13C:0, 37Cl:2
+acetamiprid-N-desmethyl (M-H)	[M-H]-	C9H9N4Cl1	-1	negative	207.044297968	1	402.6	207.044297585909	37Cl:0
+acetamiprid-N-desmethyl (M-H)	[M-H]-	C9H9N4Cl1	-1	negative	207.044297968	1	402.6	209.041347475909	37Cl:1
+2,4-Dichlorophenoxyacetic acid ou 2,4-D (2M-H)	[2M-H]-	C8H6Cl2O3	-1	negative	438.931522824	1	484.2	438.931522491909	13C:0, 37Cl:0
+2,4-Dichlorophenoxyacetic acid ou 2,4-D (2M-H)	[2M-H]-	C8H6Cl2O3	-1	negative	438.931522824	1	484.2	439.934877331909	13C:1, 37Cl:0
+2,4-Dichlorophenoxyacetic acid ou 2,4-D (2M-H)	[2M-H]-	C8H6Cl2O3	-1	negative	438.931522824	1	484.2	440.928572381909	13C:0, 37Cl:1
+2,4-Dichlorophenoxyacetic acid ou 2,4-D (2M-H)	[2M-H]-	C8H6Cl2O3	-1	negative	438.931522824	1	484.2	441.931927221909	13C:1, 37Cl:1
+2,4-Dichlorophenoxyacetic acid ou 2,4-D (2M-H)	[2M-H]-	C8H6Cl2O3	-1	negative	438.931522824	1	484.2	442.925622271909	13C:0, 37Cl:2
+2,4-Dichlorophenoxyacetic acid ou 2,4-D (2M-H)	[2M-H]-	C8H6Cl2O3	-1	negative	438.931522824	1	484.2	444.922672161909	13C:0, 37Cl:3
+2-diethylamino-6-methyl pyrimidin-4-ol/one (2M-H)	[2M-H]-	C9H15N3O1	-1	negative	361.2357482	1	451.8	361.235747807909	13C:0
+2-diethylamino-6-methyl pyrimidin-4-ol/one (2M-H)	[2M-H]-	C9H15N3O1	-1	negative	361.2357482	1	451.8	362.239102647909	13C:1
+3,5,6-Trichloro-2-pyridinol (2M-H)	[2M-H]-	C5H2Cl3N1O1	-1	negative	392.833117448	1	499.2	392.833117195909	13C:0, 37Cl:0
+3,5,6-Trichloro-2-pyridinol (2M-H)	[2M-H]-	C5H2Cl3N1O1	-1	negative	392.833117448	1	499.2	394.830167085909	13C:0, 37Cl:1
+3,5,6-Trichloro-2-pyridinol (2M-H)	[2M-H]-	C5H2Cl3N1O1	-1	negative	392.833117448	1	499.2	395.833521925909	13C:1, 37Cl:1
+3,5,6-Trichloro-2-pyridinol (2M-H)	[2M-H]-	C5H2Cl3N1O1	-1	negative	392.833117448	1	499.2	396.827216975909	13C:0, 37Cl:2
+3,5,6-Trichloro-2-pyridinol (2M-H)	[2M-H]-	C5H2Cl3N1O1	-1	negative	392.833117448	1	499.2	398.824266865909	13C:0, 37Cl:3
+3-phenoxybenzoic acid (2M-H)	[2M-H]-	C13H10O3	-1	negative	427.11871236	1	517.8	427.118711907909	13C:0
+3-phenoxybenzoic acid (2M-H)	[2M-H]-	C13H10O3	-1	negative	427.11871236	1	517.8	428.122066747909	13C:1
+4-Fluoro-3-phenoxybenzoic acid (2M-H)	[2M-H]-	C13H9F1O3	-1	negative	463.099868736	1	532.2	463.099868243909	13C:0
+4-Fluoro-3-phenoxybenzoic acid (2M-H)	[2M-H]-	C13H9F1O3	-1	negative	463.099868736	1	532.2	464.103223083909	13C:1
+4-nitrophenol (2M-H)	[2M-H]-	C6H5N1O3	-1	negative	277.04661004	1	165	277.046609607909	13C:0
+4-nitrophenol (2M-H)	[2M-H]-	C6H5N1O3	-1	negative	277.04661004	1	165	278.049964447909	13C:1
+6-Chloronicotinic acid (2M-H)	[2M-H]-	C6H4Cl1N1O2	-1	negative	312.978836096	1	172.2	312.978835723909	13C:0, 37Cl:0
+6-Chloronicotinic acid (2M-H)	[2M-H]-	C6H4Cl1N1O2	-1	negative	312.978836096	1	172.2	313.982190563909	13C:1, 37Cl:0
+6-Chloronicotinic acid (2M-H)	[2M-H]-	C6H4Cl1N1O2	-1	negative	312.978836096	1	172.2	314.975885613909	13C:0, 37Cl:1
+6-Chloronicotinic acid (2M-H)	[2M-H]-	C6H4Cl1N1O2	-1	negative	312.978836096	1	172.2	316.972935503909	13C:0, 37Cl:2
+Acetochlor mercapturate (2M-H)	[2M-H]-	C19H28N2O5S1	-1	negative	791.336509992	1	607.2	791.336509039909	13C:0
+Acetochlor mercapturate (2M-H)	[2M-H]-	C19H28N2O5S1	-1	negative	791.336509992	1	607.2	792.339863879909	13C:1
+Alachlor mercapturate (2M-H)	[2M-H]-	C19H28N2O5S1	-1	negative	791.336509992	1	607.2	791.336509039909	13C:0
+Alachlor mercapturate (2M-H)	[2M-H]-	C19H28N2O5S1	-1	negative	791.336509992	1	607.2	792.339863879909	13C:1
+Bentazone (2M-H)	[2M-H]-	C10H12N2O3S1	-1	negative	479.106450488	1	747.6	479.106449535909	13C:0
+Bentazone (2M-H)	[2M-H]-	C10H12N2O3S1	-1	negative	479.106450488	1	747.6	480.109804375909	13C:1
+Diethylthiophosphate (2M-H)	[2M-H]-	C4H11O3P1S1	-1	negative	339.026027684	1	177	339.026026411909	patterns[[i]][, -c(1, 2)]:2
+Diethylthiophosphate (2M-H)	[2M-H]-	C4H11O3P1S1	-1	negative	339.026027684	1	177	339.026026411909	patterns[[i]][, -c(1, 2)]:8
+Diethylthiophosphate (2M-H)	[2M-H]-	C4H11O3P1S1	-1	negative	339.026027684	1	177	339.026026411909	patterns[[i]][, -c(1, 2)]:0
+Diethylthiophosphate (2M-H)	[2M-H]-	C4H11O3P1S1	-1	negative	339.026027684	1	177	339.026026411909	patterns[[i]][, -c(1, 2)]:21
+Diethylthiophosphate (2M-H)	[2M-H]-	C4H11O3P1S1	-1	negative	339.026027684	1	177	339.026026411909	patterns[[i]][, -c(1, 2)]:0
+Diethylthiophosphate (2M-H)	[2M-H]-	C4H11O3P1S1	-1	negative	339.026027684	1	177	339.026026411909	patterns[[i]][, -c(1, 2)]:6
+Diethylthiophosphate (2M-H)	[2M-H]-	C4H11O3P1S1	-1	negative	339.026027684	1	177	339.026026411909	patterns[[i]][, -c(1, 2)]:0
+Diethylthiophosphate (2M-H)	[2M-H]-	C4H11O3P1S1	-1	negative	339.026027684	1	177	339.026026411909	patterns[[i]][, -c(1, 2)]:0
+Diethylthiophosphate (2M-H)	[2M-H]-	C4H11O3P1S1	-1	negative	339.026027684	1	177	339.026026411909	patterns[[i]][, -c(1, 2)]:2
+Diethylthiophosphate (2M-H)	[2M-H]-	C4H11O3P1S1	-1	negative	339.026027684	1	177	339.026026411909	patterns[[i]][, -c(1, 2)]:0
+Diethylthiophosphate (2M-H)	[2M-H]-	C4H11O3P1S1	-1	negative	339.026027684	1	177	339.026026411909	patterns[[i]][, -c(1, 2)]:0
+Diethylthiophosphate (2M-H)	[2M-H]-	C4H11O3P1S1	-1	negative	339.026027684	1	177	339.026026411909	patterns[[i]][, -c(1, 2)]:0
+Fenhexamid (2M-H)	[2M-H]-	C14H17Cl2N1O2	-1	negative	601.1199922879999	1	689.4	601.119991975909	13C:0, 37Cl:0
+Fenhexamid (2M-H)	[2M-H]-	C14H17Cl2N1O2	-1	negative	601.1199922879999	1	689.4	602.123346815909	13C:1, 37Cl:0
+Fenhexamid (2M-H)	[2M-H]-	C14H17Cl2N1O2	-1	negative	601.1199922879999	1	689.4	603.117041865909	13C:0, 37Cl:1
+Fenhexamid (2M-H)	[2M-H]-	C14H17Cl2N1O2	-1	negative	601.1199922879999	1	689.4	604.120396705909	13C:1, 37Cl:1
+Fenhexamid (2M-H)	[2M-H]-	C14H17Cl2N1O2	-1	negative	601.1199922879999	1	689.4	605.114091755909	13C:0, 37Cl:2
+Fenhexamid (2M-H)	[2M-H]-	C14H17Cl2N1O2	-1	negative	601.1199922879999	1	689.4	606.117446595909	13C:1, 37Cl:2
+Fenhexamid (2M-H)	[2M-H]-	C14H17Cl2N1O2	-1	negative	601.1199922879999	1	689.4	607.111141645909	13C:0, 37Cl:3
+Fenvalerate free acid (2M-H)	[2M-H]-	C11H13Cl1O2	-1	negative	423.113538672	1	585	423.113538279909	13C:0, 37Cl:0
+Fenvalerate free acid (2M-H)	[2M-H]-	C11H13Cl1O2	-1	negative	423.113538672	1	585	424.116893119909	13C:1, 37Cl:0
+Fenvalerate free acid (2M-H)	[2M-H]-	C11H13Cl1O2	-1	negative	423.113538672	1	585	425.110588169909	13C:0, 37Cl:1
+Fenvalerate free acid (2M-H)	[2M-H]-	C11H13Cl1O2	-1	negative	423.113538672	1	585	426.113943009909	13C:1, 37Cl:1
+Fenvalerate free acid (2M-H)	[2M-H]-	C11H13Cl1O2	-1	negative	423.113538672	1	585	427.107638059909	13C:0, 37Cl:2
+Fipronil (2M-H)	[2M-H]-	C12H4Cl2F6N4O1S1	-1	negative	870.8701368559999	1	750	870.870135823909	13C:0, 37Cl:0
+Fipronil (2M-H)	[2M-H]-	C12H4Cl2F6N4O1S1	-1	negative	870.8701368559999	1	750	871.873490663909	13C:1, 37Cl:0
+Fipronil (2M-H)	[2M-H]-	C12H4Cl2F6N4O1S1	-1	negative	870.8701368559999	1	750	872.867185713909	13C:0, 37Cl:1
+Fipronil (2M-H)	[2M-H]-	C12H4Cl2F6N4O1S1	-1	negative	870.8701368559999	1	750	873.870540553909	13C:1, 37Cl:1
+Fipronil (2M-H)	[2M-H]-	C12H4Cl2F6N4O1S1	-1	negative	870.8701368559999	1	750	874.864235603909	13C:0, 37Cl:2
+Fipronil (2M-H)	[2M-H]-	C12H4Cl2F6N4O1S1	-1	negative	870.8701368559999	1	750	875.867590443909	13C:1, 37Cl:2
+Fipronil (2M-H)	[2M-H]-	C12H4Cl2F6N4O1S1	-1	negative	870.8701368559999	1	750	876.861285493909	13C:0, 37Cl:3
+Fipronil sulfone (2M-H)	[2M-H]-	C12H4Cl2F6N4O2S1	-1	negative	902.859966096	1	771	902.859965063909	13C:0, 37Cl:0
+Fipronil sulfone (2M-H)	[2M-H]-	C12H4Cl2F6N4O2S1	-1	negative	902.859966096	1	771	903.863319903909	13C:1, 37Cl:0
+Fipronil sulfone (2M-H)	[2M-H]-	C12H4Cl2F6N4O2S1	-1	negative	902.859966096	1	771	904.857014953909	13C:0, 37Cl:1
+Fipronil sulfone (2M-H)	[2M-H]-	C12H4Cl2F6N4O2S1	-1	negative	902.859966096	1	771	905.860369793909	13C:1, 37Cl:1
+Fipronil sulfone (2M-H)	[2M-H]-	C12H4Cl2F6N4O2S1	-1	negative	902.859966096	1	771	906.854064843909	13C:0, 37Cl:2
+Fipronil sulfone (2M-H)	[2M-H]-	C12H4Cl2F6N4O2S1	-1	negative	902.859966096	1	771	907.857419683909	13C:1, 37Cl:2
+Fipronil sulfone (2M-H)	[2M-H]-	C12H4Cl2F6N4O2S1	-1	negative	902.859966096	1	771	908.851114733909	13C:0, 37Cl:3
+Hydroxy-tebuconazole (2M-H)	[2M-H]-	C16H22Cl1N3O2	-1	negative	645.272833248	1	696.6	645.272832915909	13C:0, 37Cl:0
+Hydroxy-tebuconazole (2M-H)	[2M-H]-	C16H22Cl1N3O2	-1	negative	645.272833248	1	696.6	646.276187755909	13C:1, 37Cl:0
+Hydroxy-tebuconazole (2M-H)	[2M-H]-	C16H22Cl1N3O2	-1	negative	645.272833248	1	696.6	647.269882805909	13C:0, 37Cl:1
+Hydroxy-tebuconazole (2M-H)	[2M-H]-	C16H22Cl1N3O2	-1	negative	645.272833248	1	696.6	648.273237645909	13C:1, 37Cl:1
+Hydroxy-tebuconazole (2M-H)	[2M-H]-	C16H22Cl1N3O2	-1	negative	645.272833248	1	696.6	649.266932695909	13C:0, 37Cl:2
+Fluopyram (2M-H)	[2M-H]-	C16H11Cl1F6N2O1	-1	negative	791.0855439439999	1	725.4	791.085543351909	13C:0, 37Cl:0
+Fluopyram (2M-H)	[2M-H]-	C16H11Cl1F6N2O1	-1	negative	791.0855439439999	1	725.4	792.088898191909	13C:1, 37Cl:0
+Fluopyram (2M-H)	[2M-H]-	C16H11Cl1F6N2O1	-1	negative	791.0855439439999	1	725.4	793.082593241909	13C:0, 37Cl:1
+Fluopyram (2M-H)	[2M-H]-	C16H11Cl1F6N2O1	-1	negative	791.0855439439999	1	725.4	794.085948081909	13C:1, 37Cl:1
+Fluopyram (2M-H)	[2M-H]-	C16H11Cl1F6N2O1	-1	negative	791.0855439439999	1	725.4	795.079643131909	13C:0, 37Cl:2
+Mecoprop (2M-H)	[2M-H]-	C10H11Cl1O3	-1	negative	427.072067784	1	544.8	427.072067391909	13C:0, 37Cl:0
+Mecoprop (2M-H)	[2M-H]-	C10H11Cl1O3	-1	negative	427.072067784	1	544.8	428.075422231909	13C:1, 37Cl:0
+Mecoprop (2M-H)	[2M-H]-	C10H11Cl1O3	-1	negative	427.072067784	1	544.8	429.069117281909	13C:0, 37Cl:1
+Mecoprop (2M-H)	[2M-H]-	C10H11Cl1O3	-1	negative	427.072067784	1	544.8	430.072472121909	13C:1, 37Cl:1
+Mecoprop (2M-H)	[2M-H]-	C10H11Cl1O3	-1	negative	427.072067784	1	544.8	431.066167171909	13C:0, 37Cl:2
+p-Toluenesulfonamide (2M-H)	[2M-H]-	C7H9N1O2S1	-1	negative	341.063523056	1	362.4	341.063522083909	13C:0
+p-Toluenesulfonamide (2M-H)	[2M-H]-	C7H9N1O2S1	-1	negative	341.063523056	1	362.4	342.066876923909	13C:1
+Triclosan (2M-H)	[2M-H]-	C12H7Cl3O2	-1	negative	574.8950490079999	1	811.8	574.895048735909	13C:0, 37Cl:0
+Triclosan (2M-H)	[2M-H]-	C12H7Cl3O2	-1	negative	574.8950490079999	1	811.8	575.898403575909	13C:1, 37Cl:0
+Triclosan (2M-H)	[2M-H]-	C12H7Cl3O2	-1	negative	574.8950490079999	1	811.8	576.892098625909	13C:0, 37Cl:1
+Triclosan (2M-H)	[2M-H]-	C12H7Cl3O2	-1	negative	574.8950490079999	1	811.8	577.895453465909	13C:1, 37Cl:1
+Triclosan (2M-H)	[2M-H]-	C12H7Cl3O2	-1	negative	574.8950490079999	1	811.8	578.889148515909	13C:0, 37Cl:2
+Triclosan (2M-H)	[2M-H]-	C12H7Cl3O2	-1	negative	574.8950490079999	1	811.8	579.892503355909	13C:1, 37Cl:2
+Triclosan (2M-H)	[2M-H]-	C12H7Cl3O2	-1	negative	574.8950490079999	1	811.8	580.886198405909	13C:0, 37Cl:3
+Triclosan glucuronide (2M-H)	[2M-H]-	C18H15Cl3O8	-1	negative	926.9592249599999	1	665.4	926.959224687909	13C:0, 37Cl:0
+Triclosan glucuronide (2M-H)	[2M-H]-	C18H15Cl3O8	-1	negative	926.9592249599999	1	665.4	927.962579527909	13C:1, 37Cl:0
+Triclosan glucuronide (2M-H)	[2M-H]-	C18H15Cl3O8	-1	negative	926.9592249599999	1	665.4	928.956274577909	13C:0, 37Cl:1
+Triclosan glucuronide (2M-H)	[2M-H]-	C18H15Cl3O8	-1	negative	926.9592249599999	1	665.4	929.959629417909	13C:1, 37Cl:1
+Triclosan glucuronide (2M-H)	[2M-H]-	C18H15Cl3O8	-1	negative	926.9592249599999	1	665.4	930.953324467909	13C:0, 37Cl:2
+Triclosan glucuronide (2M-H)	[2M-H]-	C18H15Cl3O8	-1	negative	926.9592249599999	1	665.4	931.956679307909	13C:1, 37Cl:2
+Triclosan glucuronide (2M-H)	[2M-H]-	C18H15Cl3O8	-1	negative	926.9592249599999	1	665.4	932.950374357909	13C:0, 37Cl:3
+Triclosan glucuronide (2M-H)	[2M-H]-	C18H15Cl3O8	-1	negative	926.9592249599999	1	665.4	933.953729197909	13C:1, 37Cl:3
+Triclosan sulfate (2M-H)	[2M-H]-	C12H7Cl3O5S1	-1	negative	734.8086787279999	1	695.4	734.808677915909	13C:0, 37Cl:0
+Triclosan sulfate (2M-H)	[2M-H]-	C12H7Cl3O5S1	-1	negative	734.8086787279999	1	695.4	735.812032755909	13C:1, 37Cl:0
+Triclosan sulfate (2M-H)	[2M-H]-	C12H7Cl3O5S1	-1	negative	734.8086787279999	1	695.4	736.805727805909	13C:0, 37Cl:1
+Triclosan sulfate (2M-H)	[2M-H]-	C12H7Cl3O5S1	-1	negative	734.8086787279999	1	695.4	737.809082645909	13C:1, 37Cl:1
+Triclosan sulfate (2M-H)	[2M-H]-	C12H7Cl3O5S1	-1	negative	734.8086787279999	1	695.4	738.802777695909	13C:0, 37Cl:2
+Triclosan sulfate (2M-H)	[2M-H]-	C12H7Cl3O5S1	-1	negative	734.8086787279999	1	695.4	739.806132535909	13C:1, 37Cl:2
+Triclosan sulfate (2M-H)	[2M-H]-	C12H7Cl3O5S1	-1	negative	734.8086787279999	1	695.4	740.799827585909	13C:0, 37Cl:3
+acetamiprid-N-desmethyl (2M-H)	[2M-H]-	C9H9N4Cl1	-1	negative	415.095871936	1	402.6	415.095871623909	13C:0, 37Cl:0
+acetamiprid-N-desmethyl (2M-H)	[2M-H]-	C9H9N4Cl1	-1	negative	415.095871936	1	402.6	416.099226463909	13C:1, 37Cl:0
+acetamiprid-N-desmethyl (2M-H)	[2M-H]-	C9H9N4Cl1	-1	negative	415.095871936	1	402.6	417.092921513909	13C:0, 37Cl:1
+acetamiprid-N-desmethyl (2M-H)	[2M-H]-	C9H9N4Cl1	-1	negative	415.095871936	1	402.6	418.096276353909	13C:1, 37Cl:1
+acetamiprid-N-desmethyl (2M-H)	[2M-H]-	C9H9N4Cl1	-1	negative	415.095871936	1	402.6	419.089971403909	13C:0, 37Cl:2
