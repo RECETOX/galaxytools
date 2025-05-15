@@ -189,7 +189,7 @@
             </conditional>
             <conditional name="rel_to">
                 <param name="value" value="3"/>
-                <param name="threshold" value="10.0"/>
+                <param name="threshold" value="1.0"/>
             </conditional>
             <output name="isotope_library" file="test6.tabular"/>
         </test>
