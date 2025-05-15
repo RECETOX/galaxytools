@@ -37,19 +37,20 @@ def main(
 
 
 if __name__ == "__main__":
-    parser = MSArgumentParser(
-        """
+    parser = MSArgumentParser("""
     Annotation of the dataset based on the MS1 information. Prior probabilities
         are based on mass only, while post probabilities are based on mass, RT,
         previous knowledge and isotope patterns.
-    """
-    )
+    """)
     parser.add_argument(
         "--input_dataset_database",
         nargs=2,
         action="load_data",
         required=True,
-        help="A dataset containing the MS1 data. Ideally obtained from map_isotope_patterns",
+        help=(
+            "A dataset containing the MS1 data. Ideally obtained from"
+            " map_isotope_patterns"
+        ),
     )
     parser.add_argument(
         "--input_dataset_adducts",

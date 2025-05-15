@@ -95,7 +95,10 @@ if __name__ == "__main__":
         type=str,
         required=True,
         choices=["adducts", "biochemical", "biochemical_adducts"],
-        help="The mode of integration. Options are 'adducts', 'biochemical', or 'biochemical_adducts'.",
+        help=(
+            "The mode of integration. Options are 'adducts', 'biochemical', or"
+            " 'biochemical_adducts'."
+        ),
     )
     parser.add_argument(
         "--input_dataset_bio",

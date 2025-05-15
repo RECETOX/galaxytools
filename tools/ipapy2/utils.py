@@ -200,18 +200,27 @@ class MSArgumentParser(CustomArgumentParser):
             "--pRTout",
             type=float,
             default=0.4,
-            help="multiplicative factor for the RT if measured RT is outside the RTrange present in the database.",
+            help=(
+                "multiplicative factor for the RT if measured RT is outside the RTrange"
+                " present in the database."
+            ),
         )
         self.add_argument(
             "--pRTNone",
             type=float,
             default=0.8,
-            help="multiplicative factor for the RT if no RTrange present in the database.",
+            help=(
+                "multiplicative factor for the RT if no RTrange present in the"
+                " database."
+            ),
         )
         self.add_argument(
             "--ppmthr",
             type=float,
-            help="maximum ppm possible for the annotations. if not provided equal to 2*ppm.",
+            help=(
+                "maximum ppm possible for the annotations. if not provided equal to"
+                " 2*ppm."
+            ),
         )
         self.add_argument(
             "--ppm",
@@ -224,12 +233,18 @@ class MSArgumentParser(CustomArgumentParser):
             "--ratiosd",
             type=float,
             default=0.9,
-            help="acceptable ratio between predicted intensity and observed intensity of isotopes.",
+            help=(
+                "acceptable ratio between predicted intensity and observed intensity of"
+                " isotopes."
+            ),
         )
         self.add_argument(
             "--ppmunk",
             type=float,
-            help="pm associated to the 'unknown' annotation. If not provided equal to ppm.",
+            help=(
+                "pm associated to the 'unknown' annotation. If not provided equal to"
+                " ppm."
+            ),
         )
         self.add_argument(
             "--ratiounk",

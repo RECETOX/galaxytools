@@ -56,7 +56,10 @@ if __name__ == "__main__":
         nargs=2,
         action="load_data",
         required=True,
-        help="A dataset containing the MS1 data. Ideally obtained from map_isotope_patterns",
+        help=(
+            "A dataset containing the MS1 data. Ideally obtained from"
+            " map_isotope_patterns"
+        ),
     )
     parser.add_argument(
         "--input_dataset_MS2",
@@ -70,7 +73,10 @@ if __name__ == "__main__":
         nargs=2,
         action="load_data",
         required=True,
-        help="A dataset containing the information on all the possible adducts given the database. Ideally obtained from compute_all_adducts",
+        help=(
+            "A dataset containing the information on all the possible adducts given the"
+            " database. Ideally obtained from compute_all_adducts"
+        ),
     )
     parser.add_argument(
         "--input_dataset_MS2_DB",

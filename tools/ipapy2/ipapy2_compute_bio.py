@@ -133,7 +133,9 @@ if __name__ == "__main__":
         nargs=2,
         action="load_data",
         required=True,
-        help="a datset containing the database against which the annotationis performed.",
+        help=(
+            "a datset containing the database against which the annotationis performed."
+        ),
     )
     parser.add_argument(
         "--input_dataset_annotations",

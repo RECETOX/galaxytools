@@ -29,15 +29,19 @@ if __name__ == "__main__":
         "--isoDiff",
         type=float,
         default=1,
-        help="Default value 1. Difference between isotopes of charge 1, does\
-              not need to be exact",
+        help=(
+            "Default value 1. Difference between isotopes of charge 1, does            "
+            "  not need to be exact"
+        ),
     )
     parser.add_argument(
         "--ppm",
         type=float,
         default=100,
-        help="Default value 100. Maximum ppm value allowed between 2 isotopes.\
-            It is very high on purpose",
+        help=(
+            "Default value 100. Maximum ppm value allowed between 2 isotopes.          "
+            "  It is very high on purpose"
+        ),
     )
     parser.add_argument(
         "--ionisation",
@@ -50,9 +54,11 @@ if __name__ == "__main__":
         "--isotope_ratio",
         type=float,
         default=1,
-        help="mininum intensity ratio expressed (Default value 1%). Only\
-                isotopes with intensity higher than MinIsoRatio% of the main isotope\
-                are considered.",
+        help=(
+            "mininum intensity ratio expressed (Default value 1%). Only               "
+            " isotopes with intensity higher than MinIsoRatio% of the main isotope     "
+            "           are considered."
+        ),
     )
     args = parser.parse_args()
     main(

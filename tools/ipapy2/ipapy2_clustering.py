@@ -34,7 +34,10 @@ if __name__ == "__main__":
         "--RTwin",
         type=float,
         default=1,
-        help="Maximum difference in RT time between features in the same cluster. Default value 1.",
+        help=(
+            "Maximum difference in RT time between features in the same cluster."
+            " Default value 1."
+        ),
     )
 
     parser.add_argument(

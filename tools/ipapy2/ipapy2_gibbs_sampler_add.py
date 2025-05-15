@@ -50,7 +50,10 @@ if __name__ == "__main__":
         nargs=2,
         action="load_data",
         required=True,
-        help="A dataset containing the MS1 data. Ideally obtained from map_isotope_patterns",
+        help=(
+            "A dataset containing the MS1 data. Ideally obtained from"
+            " map_isotope_patterns"
+        ),
     )
     parser.add_argument(
         "--input_dataset_annotations",
