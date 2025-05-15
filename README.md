@@ -7,5 +7,8 @@ Developed and maintained in [RECETOX](https://www.recetox.muni.cz/en) in collabo
 
 Deployed and available at our Galaxy instance: https://umsa.cerit-sc.cz/.
 
+All code in this repository is licensed under the MIT license. 
+All data files (everything except files with extensions .py, .R, .xml, .yml, .sh) are licensed under CC0.
+
 ---
 From Brno with ♥️

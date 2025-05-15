@@ -6,6 +6,30 @@ library(readr)
 library(tidyselect)
 
 
+isotopes <- data.frame(
+    element = character(),
+    abundance = numeric(),
+    isotope = character()
+)
+element <- character()
+abundance <- numeric()
+adducts <- data.frame(
+    Name = character(),
+    Mult = numeric(),
+    Formula_add = character(),
+    Formula_ded = character(),
+    Charge = numeric(),
+    Ion_mode = character(),
+    Mass = numeric()
+)
+mz <- numeric()
+peaks <- numeric()
+isos <- character()
+retention_time <- numeric()
+full_formula <- character()
+name <- character()
+
+
 parse_args <- function() {
     args <- commandArgs(trailingOnly = TRUE)
 
@@ -14,6 +38,19 @@ parse_args <- function() {
         col_types = "ccd",
         col_select = all_of(c("name", "formula")) | any_of("rt")
     )
+    # Handle missing or empty rel_to argument
+    rel_to_value <- if (length(args) >= 8 && args[8] != "") {
+        if (args[8] == "none") 0 else as.numeric(args[8])
+    } else {
+        0 # Default value is 0
+    }
+
+    if (!rel_to_value %in% c(0, 1, 2, 3, 4)) {
+        stop(
+            "Invalid value for rel_to. Expected 'none' (0),",
+            " or a numeric value between 0 and 4."
+        )
+    }
 
     parsed <- list(
         compound_table = compound_table,
@@ -22,15 +59,17 @@ parse_args <- function() {
         append_adducts = args[4],
         append_isotopes = args[5],
         out_format = args[6],
-        outfile = args[7]
+        outfile = args[7],
+        rel_to = rel_to_value
     )
-    return(parsed)
+    parsed
 }
 
 generate_isotope_spectra <- function(compound_table,
                                      adducts_to_use,
                                      append_adducts,
-                                     threshold) {
+                                     threshold,
+                                     rel_to) {
     data(isotopes)
     data(adducts)
 
@@ -39,17 +78,23 @@ generate_isotope_spectra <- function(compound_table,
         dplyr::slice_max(abundance, n = 1) |>
         dplyr::filter(!stringr::str_detect(element, "\\[|\\]"))
 
-    chemforms <- check_chemform(isotopes, compound_table$formula)[, 2]
+    chemforms <- enviPat::check_chemform(isotopes, compound_table$formula)[, 2]
     spectra <- data.frame()
 
     for (current in adducts_to_use) {
         adduct <- adducts[adducts$Name == current, ]
-        multiplied_chemforms <- multiform(chemforms, adduct$Mult)
+        multiplied_chemforms <- enviPat::multiform(chemforms, adduct$Mult)
 
         if (adduct$Ion_mode == "negative") {
-            merged_chemforms <- subform(multiplied_chemforms, adduct$Formula_ded)
+            merged_chemforms <- enviPat::subform(
+                multiplied_chemforms,
+                adduct$Formula_ded
+            )
         } else {
-            merged_chemforms <- mergeform(multiplied_chemforms, adduct$Formula_add)
+            merged_chemforms <- enviPat::mergeform(
+                multiplied_chemforms,
+                adduct$Formula_add
+            )
         }
 
         charge_string <- paste0(
@@ -57,7 +102,8 @@ generate_isotope_spectra <- function(compound_table,
             if (abs(adduct$Charge) > 1) abs(adduct$Charge) else ""
         )
         adduct_string <- paste0("[", adduct$Name, "]", charge_string)
-        precursor_mz <- calculateMass(multiplied_chemforms) + adduct$Mass
+        precursor_mass <- MetaboCoreUtils::calculateMass(multiplied_chemforms)
+        precursor_mz <- precursor_mass + adduct$Mass
 
         if (append_adducts == TRUE) {
             names <- paste(
@@ -88,6 +134,7 @@ generate_isotope_spectra <- function(compound_table,
             chemforms = merged_chemforms,
             charge = adduct$Charge,
             threshold = threshold,
+            rel_to = rel_to,
         )
 
         mzs <- list()
@@ -126,12 +173,12 @@ generate_isotope_spectra <- function(compound_table,
         spectra_df$isotopes <- isos
         spectra <- rbind(spectra, spectra_df)
     }
-    return(spectra)
+    spectra
 }
 
 write_to_msp <- function(spectra, file) {
-    sps <- Spectra(dplyr::select(spectra, -isotopes))
-    export(sps, MsBackendMsp(), file = file)
+    sps <- Spectra::Spectra(dplyr::select(spectra, -isotopes))
+    Spectra::export(sps, MsBackendMsp::MsBackendMsp(), file = file)
 }
 
 write_to_table <- function(spectra, file, append_isotopes) {
@@ -166,7 +213,8 @@ main <- function() {
         args$compound_table,
         args$adducts_to_use,
         args$append_adducts,
-        args$threshold
+        args$threshold,
+        args$rel_to
     )
 
     if (args$out_format == "msp") {
