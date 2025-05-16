@@ -97,39 +97,45 @@
             <conditional name="input_num">
                 <param name="data" value="input_data.csv" ftype="csv"/>
             </conditional>
-            <param name="mode" value="batchwise"/>
-            <param name="wavelet_filter" value="d"/>
-            <param name="wavelet_length" value="2"/>
-            <param name="k" value="20"/>
-            <param name="t" value="0.05"/>
-            <param name="t2" value="0.05"/>
-            <param name="alpha" value="0"/>
+            <conditional name="batch_correction">
+                <param name="mode" value="batchwise"/>
+                <param name="wavelet_filter" value="d"/>
+                <param name="wavelet_length" value="2"/>
+                <param name="k" value="20"/>
+                <param name="t" value="0.05"/>
+                <param name="t2" value="0.05"/>
+                <param name="alpha" value="0"/>
+            </conditional>
             <output name="normalized_data" file="normalized_data.tsv" ftype="tabular"/>
         </test>
         <test expect_num_outputs="1"><!-- TEST 2 -->
             <conditional name="input_num">
                 <param name="data" value="input_data.tsv" ftype="tsv"/>
             </conditional>
-            <param name="mode" value="batchwise"/>
-            <param name="wavelet_filter" value="d"/>
-            <param name="wavelet_length" value="2"/>
-            <param name="k" value="20"/>
-            <param name="t" value="0.05"/>
-            <param name="t2" value="0.05"/>
-            <param name="alpha" value="0"/>
+            <conditional name="batch_correction">
+                <param name="mode" value="batchwise"/>
+                <param name="wavelet_filter" value="d"/>
+                <param name="wavelet_length" value="2"/>
+                <param name="k" value="20"/>
+                <param name="t" value="0.05"/>
+                <param name="t2" value="0.05"/>
+                <param name="alpha" value="0"/>
+            </conditional>
             <output name="normalized_data" file="normalized_data.tsv" ftype="tabular"/>
         </test>
         <test expect_num_outputs="1"><!-- TEST 3 -->
             <conditional name="input_num">
                 <param name="data" value="input_data.parquet" ftype="parquet"/>
             </conditional>
-            <param name="mode" value="batchwise"/>
-            <param name="wavelet_filter" value="d"/>
-            <param name="wavelet_length" value="2"/>
-            <param name="k" value="20"/>
-            <param name="t" value="0.05"/>
-            <param name="t2" value="0.05"/>
-            <param name="alpha" value="0"/>
+            <conditional name="batch_correction">
+                <param name="mode" value="batchwise"/>
+                <param name="wavelet_filter" value="d"/>
+                <param name="wavelet_length" value="2"/>
+                <param name="k" value="20"/>
+                <param name="t" value="0.05"/>
+                <param name="t2" value="0.05"/>
+                <param name="alpha" value="0"/>
+            </conditional>
             <output name="normalized_data" file="normalized_data.parquet" ftype="parquet"/>
         </test>
         <test expect_num_outputs="1"><!-- TEST 4 -->
@@ -138,13 +144,15 @@
                 <param name="data" value="feature_table.csv" ftype="csv"/>
                 <param name="metadata" value="metadata.csv" ftype="csv"/>
             </conditional>
-            <param name="mode" value="batchwise"/>
-            <param name="wavelet_filter" value="d"/>
-            <param name="wavelet_length" value="2"/>
-            <param name="k" value="20"/>
-            <param name="t" value="0.05"/>
-            <param name="t2" value="0.05"/>
-            <param name="alpha" value="0"/>
+            <conditional name="batch_correction">
+                <param name="mode" value="batchwise"/>
+                <param name="wavelet_filter" value="d"/>
+                <param name="wavelet_length" value="2"/>
+                <param name="k" value="20"/>
+                <param name="t" value="0.05"/>
+                <param name="t2" value="0.05"/>
+                <param name="alpha" value="0"/>
+            </conditional>
             <output name="normalized_data" file="normalized_data.tsv" ftype="tabular"/>
         </test>
         <test expect_num_outputs="1"><!-- TEST 5 -->
@@ -153,13 +161,15 @@
                 <param name="data" value="feature_table.tsv" ftype="tabular"/>
                 <param name="metadata" value="metadata.tsv" ftype="tabular"/>
             </conditional>
-            <param name="mode" value="batchwise"/>
-            <param name="wavelet_filter" value="d"/>
-            <param name="wavelet_length" value="2"/>
-            <param name="k" value="20"/>
-            <param name="t" value="0.05"/>
-            <param name="t2" value="0.05"/>
-            <param name="alpha" value="0"/>
+            <conditional name="batch_correction">
+                <param name="mode" value="batchwise"/>
+                <param name="wavelet_filter" value="d"/>
+                <param name="wavelet_length" value="2"/>
+                <param name="k" value="20"/>
+                <param name="t" value="0.05"/>
+                <param name="t2" value="0.05"/>
+                <param name="alpha" value="0"/>
+            </conditional>
             <output name="normalized_data" file="normalized_data.tsv" ftype="tabular"/>
         </test>
         <test expect_num_outputs="1"><!-- TEST 6 -->
@@ -182,15 +192,17 @@
                 <param name="input_choice" value="2"/>
                 <param name="data" value="feature_table_transpose_version.parquet" ftype="parquet"/>
                 <param name="metadata" value="metadata.parquet" ftype="parquet"/>
+                <param name="transpose_feature_table" value="TRUE"/>
             </conditional>
-            <param name="transpose_feature_table" value="TRUE"/>
-            <param name="mode" value="batchwise"/>
-            <param name="wavelet_filter" value="d"/>
-            <param name="wavelet_length" value="2"/>
-            <param name="k" value="20"/>
-            <param name="t" value="0.05"/>
-            <param name="t2" value="0.05"/>
-            <param name="alpha" value="0"/>
+            <conditional name="batch_correction">
+                <param name="mode" value="batchwise"/>
+                <param name="wavelet_filter" value="d"/>
+                <param name="wavelet_length" value="2"/>
+                <param name="k" value="20"/>
+                <param name="t" value="0.05"/>
+                <param name="t2" value="0.05"/>
+                <param name="alpha" value="0"/>
+            </conditional>
             <output name="normalized_data" file="normalized_data.parquet" compare="sim_size" delta="200" ftype="parquet"/>
         </test>
         <test expect_num_outputs="1"><!-- TEST 8 -->
@@ -198,15 +210,17 @@
                 <param name="input_choice" value="2"/>
                 <param name="data" value="feature_table_transpose_version.csv" ftype="csv"/>
                 <param name="metadata" value="metadata.csv" ftype="csv"/>
+                <param name="transpose_feature_table" value="TRUE"/>
             </conditional>
-            <param name="transpose_feature_table" value="TRUE"/>
-            <param name="mode" value="batchwise"/>
-            <param name="wavelet_filter" value="d"/>
-            <param name="wavelet_length" value="2"/>
-            <param name="k" value="20"/>
-            <param name="t" value="0.05"/>
-            <param name="t2" value="0.05"/>
-            <param name="alpha" value="0"/>
+            <conditional name="batch_correction">
+                <param name="mode" value="batchwise"/>
+                <param name="wavelet_filter" value="d"/>
+                <param name="wavelet_length" value="2"/>
+                <param name="k" value="20"/>
+                <param name="t" value="0.05"/>
+                <param name="t2" value="0.05"/>
+                <param name="alpha" value="0"/>
+            </conditional>
             <output name="normalized_data" file="normalized_data.tsv" ftype="tabular"/>
         </test>
         <test expect_num_outputs="2"><!-- TEST 9 -->
@@ -214,15 +228,17 @@
                 <param name="input_choice" value="2"/>
                 <param name="data" value="feature_table_transpose_version.parquet" ftype="parquet"/>
                 <param name="metadata" value="metadata.parquet" ftype="parquet"/>
+                <param name="transpose_feature_table" value="TRUE"/>
             </conditional>
-            <param name="transpose_feature_table" value="TRUE"/>
-            <param name="mode" value="batchwise"/>
-            <param name="wavelet_filter" value="d"/>
-            <param name="wavelet_length" value="2"/>
-            <param name="k" value="20"/>
-            <param name="t" value="0.05"/>
-            <param name="t2" value="0.05"/>
-            <param name="alpha" value="0"/>
+            <conditional name="batch_correction">
+                <param name="mode" value="batchwise"/>
+                <param name="wavelet_filter" value="d"/>
+                <param name="wavelet_length" value="2"/>
+                <param name="k" value="20"/>
+                <param name="t" value="0.05"/>
+                <param name="t2" value="0.05"/>
+                <param name="alpha" value="0"/>
+            </conditional>
             <param name="keep_two_output" value="TRUE"/>
             <output name="normalized_data" file="test9_output1.parquet" ftype="parquet"/>
             <output name="metadata" file="test9_output2.parquet" ftype="parquet"/>
@@ -232,15 +248,17 @@
                 <param name="input_choice" value="2"/>
                 <param name="data" value="feature_table_transpose_version.csv" ftype="csv"/>
                 <param name="metadata" value="metadata.csv" ftype="csv"/>
+                <param name="transpose_feature_table" value="TRUE"/>
             </conditional>
-            <param name="transpose_feature_table" value="TRUE"/>
-            <param name="mode" value="batchwise"/>
-            <param name="wavelet_filter" value="d"/>
-            <param name="wavelet_length" value="2"/>
-            <param name="k" value="20"/>
-            <param name="t" value="0.05"/>
-            <param name="t2" value="0.05"/>
-            <param name="alpha" value="0"/>
+            <conditional name="batch_correction">
+                <param name="mode" value="batchwise"/>
+                <param name="wavelet_filter" value="d"/>
+                <param name="wavelet_length" value="2"/>
+                <param name="k" value="20"/>
+                <param name="t" value="0.05"/>
+                <param name="t2" value="0.05"/>
+                <param name="alpha" value="0"/>
+            </conditional>
             <param name="keep_two_output" value="TRUE"/>
             <output name="normalized_data" file="test10_output1.tsv" ftype="tabular"/>
             <output name="metadata" file="test10_output2.tsv" ftype="tabular"/>
