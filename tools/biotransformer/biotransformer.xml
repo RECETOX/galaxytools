@@ -1,4 +1,4 @@
-<tool id="biotransformer" name="BioTransformer" version="@TOOL_VERSION@+galaxy2" profile="21.09">
+<tool id="biotransformer" name="BioTransformer" version="@TOOL_VERSION@+galaxy4" profile="21.09">
     <macros>
         <import>macros.xml</import>
     </macros>
@@ -45,9 +45,9 @@
     </inputs>
 
     <outputs>
-        <data format="tsv" name="output_file" label="BioTransformer on ${on_string}"/>
-        <data format="tsv" name="output_file2" label="BioTransformer with filter on ${on_string}"/>
-        <data format="tsv" name="output_file3" label="BioTransformer with super filter on ${on_string}"/>
+        <data format="tabular" name="output_file" label="BioTransformer on ${on_string}"/>
+        <data format="tabular" name="output_file2" label="BioTransformer with filter on ${on_string}"/>
+        <data format="tabular" name="output_file3" label="BioTransformer with super filter on ${on_string}"/>
     </outputs>
 
     <tests>
@@ -59,20 +59,20 @@
             <param name="input_file" value="smiles.csv"/>
             <output name="output_file">
                 <assert_contents>
-                    <has_size value="8600" delta="300"/>
-                    <has_n_lines n="225" delta="10"/>
+                    <has_size value="9356" delta="300"/>
+                    <has_n_lines n="250" delta="25"/>
                 </assert_contents>
             </output>
             <output name="output_file2">
                 <assert_contents>
-                    <has_size value="8600" delta="300"/>
-                    <has_n_lines n="225" delta="10"/>
+                    <has_size value="9356" delta="300"/>
+                    <has_n_lines n="250" delta="25"/>
                 </assert_contents>
             </output>
             <output name="output_file3">
                 <assert_contents>
-                    <has_size value="7400" delta="300"/>
-                    <has_n_lines n="186" delta="10"/>
+                    <has_size value="8135" delta="300"/>
+                    <has_n_lines n="200" delta="25"/>
                 </assert_contents>
             </output>
         </test>

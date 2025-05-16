@@ -1,0 +1,55 @@
+<tool id="mfassignr_findRecalSeries" name="MFAssignR FindRecalSeries" version="@TOOL_VERSION@+galaxy1" profile="23.0">
+    <description>Selects most suitable series for recalibration</description>
+    <macros>
+        <import>macros.xml</import>
+        <import>help.xml</import>
+    </macros>
+    <edam_topics>
+        <edam_topic>topic_3172</edam_topic>    
+    </edam_topics>
+    <edam_operations>  
+        <edam_operation>operation_3627</edam_operation>  
+    </edam_operations>
+    <expand macro="creator" />
+    <expand macro="refs" />
+    <expand macro="requirements" />
+
+    <command detect_errors="exit_code"><![CDATA[
+        Rscript -e 'packageVersion("MFAssignR")' &&
+        Rscript '${mfassignr_findrecalseries}'
+    ]]>
+    </command>
+
+    <configfiles>
+        <configfile name="mfassignr_findrecalseries"><![CDATA[
+            library(dplyr)
+            df <- read.table("$input_file", header=TRUE, sep="\t")
+            result <- MFAssignR::FindRecalSeriesSimple(df) |> dplyr::slice(-1)
+            write.table(result, file="$final_series", sep="\t", row.names=FALSE)
+        ]]></configfile>
+    </configfiles>
+
+    <inputs>
+        <param name="input_file" type="data" format="tabular" label="Input data"
+        help="Recalibration series, output from RecalList"/>
+    </inputs>
+
+    <outputs>
+        <data name="final_series" format="tabular" label="Final recalibration series"/>
+    </outputs>
+
+    <tests>
+        <test>
+            <param name="input_file" value="recallist/recal_series.tabular"/>
+            <output name="final_series" file="findrecalseries/selected_series_simple.tabular"/>
+        </test>
+    </tests>
+
+    <help>
+        @FINDRECALSERIES_HELP@
+
+        @GENERAL_HELP@
+    </help>
+
+    <expand macro="citations"/>
+</tool>

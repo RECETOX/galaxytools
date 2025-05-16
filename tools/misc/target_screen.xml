@@ -1,0 +1,105 @@
+<tool id="target_screen" name="MS Target Screening" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="20.01" license="MIT">
+    <description>Extract peaks from recetox-aplcms tables using a list of target ions</description>
+    <macros>
+        <token name="@TOOL_VERSION@">0.1.0</token>
+        <token name="@VERSION_SUFFIX@">1</token>
+    </macros>
+
+    <requirements>
+        <requirement type="package" version="2.2.3">pandas</requirement>
+        <requirement type="package" version="17.0.0">pyarrow</requirement>
+    </requirements>
+
+    <command detect_errors="exit_code"><![CDATA[
+        python3 '${__tool_directory__}/target_screen.py' --peaks '$peaks' '$peaks.ext' --markers '$markers' '$markers.ext' --output '$hits' --ppm $ppm --rt_tol $rt
+    ]]></command>
+
+    <inputs>
+        <param name="peaks" type="data" format="parquet,tabular,tsv,csv" label="Peaks Table" help="Input table containing detected peaks in Parquet format. Each row should represent a peak with columns for m/z, retention time, and intensity." />
+        <param name="markers" type="data" format="parquet,tabular,tsv,csv" label="Target Markers Table" help="Input table containing target markers in tabular format. Each row should represent a marker with columns for m/z and retention time." />
+        <param name="ppm" type="integer" min="0" max="1000" value="10" label="Mass Tolerance (ppm)" help="Tolerance for filtering peaks based on mass-to-charge ratio (m/z) in parts per million (ppm). The tolerance is applied symmetrically (±), so a value of 10 will match peaks within ±10 ppm of the target m/z." />
+        <param name="rt" type="integer" min="0" max="100" value="10" label="Retention Time Tolerance" help="Tolerance for filtering peaks based on retention time in the same units as the input data. The tolerance is applied symmetrically (±), so a value of 10 will match peaks within ±10 units of the target retention time." />
+    </inputs>
+
+    <outputs>
+        <data name="hits" format="tabular" label="Filtered Peaks (${tool.name} on ${on_string})" />
+    </outputs>
+
+    <tests>
+        <test>
+            <param name="peaks" value="target_screen/peaks.parquet"/>
+            <param name="markers" value="target_screen/markers.tsv"/>
+            <output name="hits" value="target_screen/out.tsv"/>
+        </test>
+    </tests>
+    <help><![CDATA[
+
+.. class:: infomark
+
+**What it does**
+
+This tool extracts peaks from a table of detected peaks based on a list of target markers. Peaks are matched to markers using a specified tolerance for mass-to-charge ratio (ppm) and retention time. Both tolerances are applied symmetrically (±). For example, if the retention time tolerance is set to 10, peaks within ±10 units of the target retention time will be matched.
+
+**Inputs**
+
+1. **Peaks Table (Parquet Format)**:
+   A table containing detected peaks. The table should be in Parquet format and include the following columns:
+   
+   - `mz`: Mass-to-charge ratio (m/z) of the peak.
+   - `rt`: Retention time of the peak.
+   - `intensity`: Intensity of the peak.
+
+   Example Peaks Table:
+
+   .. list-table:: Example Peaks Table
+      :header-rows: 1
+
+      * - mz
+        - rt
+        - intensity
+      * - 100.123
+        - 5.2
+        - 1500
+      * - 200.456
+        - 10.5
+        - 3000
+
+2. **Target Markers Table (Tabular Format)**:
+   A table containing target markers. The table should be in tabular format and include the following columns:
+   
+   - `mz`: Mass-to-charge ratio (m/z) of the marker.
+   - `rt`: Retention time of the marker.
+
+   Example Markers Table:
+
+   .. list-table:: Example Markers Table
+      :header-rows: 1
+
+      * - mz
+        - rt
+      * - 100.123
+        - 5.2
+      * - 200.456
+        - 10.5
+
+**Parameters**
+
+- **Mass Tolerance (ppm)**:
+  The tolerance for matching peaks to markers based on their mass-to-charge ratio (m/z). The value is specified in parts per million (ppm). The tolerance is applied symmetrically (±), so a value of 10 will match peaks within ±10 ppm of the target m/z.
+
+- **Retention Time Tolerance**:
+  The tolerance for matching peaks to markers based on their retention time. The value is specified in the same units as the input data. The tolerance is applied symmetrically (±), so a value of 10 will match peaks within ±10 units of the target retention time.
+
+**Outputs**
+
+- **Filtered Peaks Table**:
+  A tabular file containing the peaks that matched the target markers based on the specified tolerances.
+
+**Example Usage**
+
+This tool can be used to filter peaks from a mass spectrometry dataset based on a list of known target markers, enabling targeted analysis of specific compounds.
+    ]]></help>
+    <citations>
+        <citation type="doi">10.25080/Majora-92bf1922-00a</citation>
+    </citations>
+</tool>

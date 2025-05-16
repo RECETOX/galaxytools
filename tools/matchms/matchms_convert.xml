@@ -1,4 +1,4 @@
-<tool id="matchms_convert" name="matchms convert" version="@TOOL_VERSION@+galaxy0" profile="21.05">
+<tool id="matchms_convert" name="matchms convert" version="@TOOL_VERSION@+galaxy1" profile="21.05">
     <description>convert between mass spectral library formats (.mgf/.msp/.json) using matchms</description>
     
     <macros>
@@ -99,52 +99,75 @@ rm -f ${converted_library}.tmp1 ${converted_library}.tmp2 ${converted_library}.t
         </data>
     </outputs>
 
-    <tests>
-        <test>
-            <param name="spectral_library" value="similarity/RECETOX_Exposome_pesticides_HR_MS_20220323.msp" ftype="msp"/>
-            <param name="harmonization_metadata" value="False"/>
+<tests>
+    <!-- Test 1: Convert to MGF -->
+    <test>
+        <conditional name="output_file">
             <param name="output_format" value="mgf"/>
-            <output name="converted_library" file="convert/mgf_out.mgf" ftype="mgf"/>
-        </test>
-        <test>
-            <param name="spectral_library" value="similarity/RECETOX_Exposome_pesticides_HR_MS_20220323.msp" ftype="msp"/>
-            <param name="harmonization_metadata" value="False"/>
+        </conditional>
+        <param name="spectral_library" value="similarity/RECETOX_Exposome_pesticides_HR_MS_20220323.msp" ftype="msp"/>
+        <param name="harmonization_metadata" value="False"/>
+        <output name="converted_library" file="convert/mgf_out.mgf" ftype="mgf"/>
+    </test>
+
+    <!-- Test 2: Convert to JSON -->
+    <test>
+        <conditional name="output_file">
             <param name="output_format" value="json"/>
-            <output name="converted_library" file="convert/json_out.json" ftype="json"/>
-        </test>
-        <test>
-            <param name="spectral_library" value="convert/mgf_out.mgf" ftype="mgf"/>
-            <param name="harmonization_metadata" value="False"/>
-            <param name="export_peak_comments" value="False"/>
+        </conditional>
+        <param name="spectral_library" value="similarity/RECETOX_Exposome_pesticides_HR_MS_20220323.msp" ftype="msp"/>
+        <param name="harmonization_metadata" value="False"/>
+        <output name="converted_library" file="convert/json_out.json" ftype="json"/>
+    </test>
+
+    <!-- Test 3: Convert to MSP with matchms style -->
+    <test>
+        <conditional name="output_file">
             <param name="output_format" value="msp"/>
-            <param name="export_style" value="matchms"/>
-            <output name="converted_library" file="convert/msp_out.msp" ftype="msp"/>
-        </test>
-        <test>
-            <param name="spectral_library" value="convert/mgf_out.mgf" ftype="mgf"/>
-            <param name="harmonization_metadata" value="True"/>
             <param name="export_peak_comments" value="False"/>
-            <param name="output_format" value="msp"/>
             <param name="export_style" value="matchms"/>
-            <output name="converted_library" file="convert/harmonized_msp_out.msp" ftype="msp"/>
-        </test>
-        <test>
-            <param name="spectral_library" value="convert/mgf_out.mgf" ftype="mgf"/>
-            <param name="harmonization_metadata" value="True"/>
+        </conditional>
+        <param name="spectral_library" value="convert/mgf_out.mgf" ftype="mgf"/>
+        <param name="harmonization_metadata" value="False"/>
+        <output name="converted_library" file="convert/msp_out.msp" ftype="msp"/>
+    </test>
+
+    <!-- Test 4: Convert to MSP with harmonization -->
+    <test>
+        <conditional name="output_file">
+            <param name="output_format" value="msp"/>
+            <param name="export_peak_comments" value="False"/>
+            <param name="export_style" value="matchms"/>
+        </conditional>
+        <param name="spectral_library" value="convert/mgf_out.mgf" ftype="mgf"/>
+        <param name="harmonization_metadata" value="True"/>
+        <output name="converted_library" file="convert/harmonized_msp_out.msp" ftype="msp"/>
+    </test>
+
+    <!-- Test 5: Convert to MSP with peak comments -->
+    <test>
+        <conditional name="output_file">
+            <param name="output_format" value="msp"/>
             <param name="export_peak_comments" value="True"/>
-            <param name="output_format" value="msp"/>
             <param name="export_style" value="matchms"/>
-            <output name="converted_library" file="convert/harmonized_msp_peakcomments_out.msp" ftype="msp"/>
-        </test>
-        <test>
-            <param name="spectral_library" value="convert/mgf_out.mgf" ftype="mgf"/>
-            <param name="harmonization_metadata" value="True"/>
-            <param name="export_peak_comments" value="False"/>
+        </conditional>
+        <param name="spectral_library" value="convert/mgf_out.mgf" ftype="mgf"/>
+        <param name="harmonization_metadata" value="True"/>
+        <output name="converted_library" file="convert/harmonized_msp_peakcomments_out.msp" ftype="msp"/>
+    </test>
+
+    <!-- Test 6: Convert to MSP with ms-lima style -->
+    <test>
+        <conditional name="output_file">
             <param name="output_format" value="msp"/>
+            <param name="export_peak_comments" value="False"/>
             <param name="export_style" value="ms_lima"/>
-            <output name="converted_library" file="convert/ms_lima_output.msp" ftype="msp"/>
-        </test>
-    </tests>
+        </conditional>
+        <param name="spectral_library" value="convert/mgf_out.mgf" ftype="mgf"/>
+        <param name="harmonization_metadata" value="True"/>
+        <output name="converted_library" file="convert/ms_lima_output.msp" ftype="msp"/>
+    </test>
+</tests>
 
 
     <help><![CDATA[

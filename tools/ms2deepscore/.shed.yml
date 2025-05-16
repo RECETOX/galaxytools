@@ -1,0 +1,16 @@
+name: ms2deepscore
+owner: recetox
+remote_repository_url: "https://github.com/RECETOX/galaxytools/tree/master/tools/ms2deepscore"
+homepage_url: "https://github.com/matchms/ms2deepscore"
+categories:
+  - Metabolomics
+description: "Mass spectra similarity scoring using a trained ms2deepscore model."
+long_description: "ms2deepscore provides a Siamese neural network that is trained to predict molecular structural similarities (Tanimoto scores) from pairs of mass spectrometry spectra."
+auto_tool_repositories:
+  name_template: "{{ tool_id }}"
+  description_template: "{{ tool_name }} tool from the ms2deepscore package."
+suite:
+  name: suite_ms2deepscore
+  description: tools from the ms2deepscore suite are used for training a siamese model, and computing the similarities between pairs of spectra.
+  type: repository_suite_definition
+  

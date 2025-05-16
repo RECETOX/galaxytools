@@ -1,0 +1,104 @@
+<tool id="ms2deepscore_similarity" name="MS2DeepScore Similarity" version="@TOOL_VERSION@+galaxy0">
+    <description>Compute similarity scores using a pre-trained MS2DeepScore model</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="creator"/>
+    <expand macro="edam" />
+
+    <requirements>
+        <requirement type="package" version="@TOOL_VERSION@">ms2deepscore</requirement>
+        <requirement type="package" version="@ONNX_VERSION@">onnx</requirement>
+    </requirements>
+    
+    <command detect_errors="exit_code"><![CDATA[
+        python3 ${python_wrapper}
+    ]]></command>
+<configfiles>
+<configfile name="python_wrapper">
+@init_logger@
+
+import onnx
+import torch
+from ms2deepscore import MS2DeepScore
+from matchms import calculate_scores
+from matchms.importing import load_from_msp, scores_from_json
+from ms2deepscore.models.SiameseSpectralModel import SiameseSpectralModel
+from ms2deepscore.SettingsMS2Deepscore import SettingsMS2Deepscore
+
+onnx_model = onnx.load("$model")
+
+# Extract the initializers (weights and biases)
+initializers = {init.name: onnx.numpy_helper.to_array(init) for init in onnx_model.graph.initializer}
+
+# Convert NumPy arrays to PyTorch tensors
+state_dict = {name: torch.tensor(np_array) for name, np_array in initializers.items()}
+
+@json_load@
+
+model = SiameseSpectralModel(settings=SettingsMS2Deepscore(**model_params))
+model.load_state_dict(state_dict)
+model.eval()
+
+#if $scores.use_scores == "True"
+scores_in = scores_from_json("${scores_in}")
+references=scores_in.references
+queries=scores_in.queries
+#else
+references=list(load_from_msp("$references"))
+queries=list(load_from_msp("$queries"))
+#end if
+
+similarity = MS2DeepScore(model)
+scores = calculate_scores(references, queries, similarity)
+
+#if $scores.use_scores == "True"
+scores_in._scores.add_dense_matrix(scores.to_array(), "MS2DeepScore")
+scores_in.to_json("$similarity_scores")
+#else
+scores.to_json("$similarity_scores")
+#end if
+</configfile>
+</configfiles>
+    
+    <inputs>
+        <expand macro="input_param" />
+    </inputs>
+    
+    <outputs>
+        <data label="ms2deepscore scores of ${on_string}" name="similarity_scores" format="json"/>
+    </outputs>
+
+    <tests>
+        <test expect_num_outputs="1">
+            <param name="use_scores" value="False"/>
+            <param name="references" value="inp_filtered_library.msp" ftype="msp"/>
+            <param name="queries" value="inp_filtered_spectra.msp" ftype="msp"/>
+            <param name="model" value="Trained_model.onnx" ftype="onnx"/>
+            <param name="model_param" value="Model_Parameter_JSON.json" ftype="json"/>
+            <output name="similarity_scores" value="msp_json_score_out.json" ftype="json" compare="sim_size" />
+        </test>
+        <test expect_num_outputs="1">
+            <param name="use_scores" value="True"/>
+            <param name="scores_in" value="ri_match_60.json" ftype="json"/>
+            <param name="model" value="Trained_model.onnx" ftype="onnx"/>
+            <param name="model_param" value="Model_Parameter_JSON.json" ftype="json"/>
+            <output name="similarity_scores" value="usescore_json_score_out.json" ftype="json" compare="sim_size" />
+        </test>
+    </tests>
+    
+    <help>
+<![CDATA[
+Info
+====
+Use a MS2DeepScore model for spectral similarity calculation.
+For security reasons, only ONNX models are supported to be used.
+If you want to use your own model, you can convert it to ONNX using the code contained in the 'MS2DeepScore Model Training' tool.
+
+About
+=====
+@HELP@
+]]>
+    </help>   
+    <expand macro="citations"/>
+</tool>

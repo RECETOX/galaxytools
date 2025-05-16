@@ -1,0 +1,217 @@
+<tool id="ipapy2_compute_bio" name="ipaPy2 compute bio" version="@TOOL_VERSION@+galaxy0" profile="@PROFILE@">
+    <description>compute list of biochemical connections to improve annotation accuracy</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    
+    <expand macro="requirements"/>
+
+    <command detect_errors="exit_code"><![CDATA[
+        python3 '${__tool_directory__}/ipapy2_compute_bio.py'
+        --input_dataset_database '${MS1_DB}' '${MS1_DB.ext}'
+        --input_dataset_annotations '${annotations}' '${annotations.ext}'
+        --biochemical_mode '${biochemical_mode.biochemical_mode}'
+        #if $biochemical_mode.biochemical_mode == "connections"
+            --connection_list '${biochemical_mode.connection_list}'
+        #end if
+        --output_dataset "${compute_bio_output}" "${compute_bio_output.ext}"
+        --ncores \${GALAXY_SLOTS:-1}
+    ]]></command>
+
+    <inputs>
+        <param label="MS1 DB table" name="MS1_DB" type="data" format="csv,tsv,tabular,parquet" help="pandas dataframe containing the MS1 database."/>
+        <param label="annotations" name="annotations" type="data" format="csv,tsv,tabular,parquet" optional="true" help="pandas dataframe containing all the possible annotations for the measured features."/>
+        <conditional name="biochemical_mode">
+            <param name="biochemical_mode" type="select" label="biochemical mode"
+                    help="connections are computed based on the reactions or connections.">
+                    <option value="reactions" selected="true">reactions</option>
+                    <option value="connections">connections</option>
+            </param>
+            <when value="reactions">
+            </when>
+            <when value="connections">
+            <param name="connection_list" type="select" multiple="true" label="connections list provided" help="list of possible connections between compounds defined as formulas.">
+                    <option value="C3H5NO">C3H5NO</option>
+                    <option value="C6H12N4O">C6H12N4O</option>
+                    <option value="C6H10N2O3S2">C6H10N2O3S2</option>
+                    <option value="C3H5NOS">C3H5NOS</option>
+                    <option value="C5H7NO3">C5H7NO3</option>
+                    <option value="C5H8N2O2">C5H8N2O2</option>
+                    <option value="C2H3NO">C2H3NO</option>
+                    <option value="C6H7N3O">C6H7N3O</option>
+                    <option value="C6H11NO">C6H11NO</option>
+                    <option value="C6H12N2O">C6H12N2O</option>
+                    <option value="C5H9NOS">C5H9NOS</option>
+                    <option value="C9H9NO">C9H9NO</option>
+                    <option value="C5H7NO">C5H7NO</option>
+                    <option value="C3H5NO2">C3H5NO2</option>
+                    <option value="C4H7NO2">C4H7NO2</option>
+                    <option value="C11H10N2O">C11H10N2O</option>
+                    <option value="C9H9NO2">C9H9NO2</option>
+                    <option value="C5H9NO">C5H9NO</option>
+                    <option value="C4H4O2">C4H4O2</option>
+                    <option value="C3H5O">C3H5O</option>
+                    <option value="C10H12N5O6P">C10H12N5O6P</option>
+                    <option value="C10H15N2O3S">C10H15N2O3S</option>
+                    <option value="C10H14N2O2S">C10H14N2O2S</option>
+                    <option value="CH2ON">CH2ON</option>
+                    <option value="C21H34N7O16P3S">C21H34N7O16P3S</option>
+                    <option value="C21H33N7O15P3S">C21H33N7O15P3S</option>
+                    <option value="C10H15N3O5S">C10H15N3O5S</option>
+                    <option value="C5H7">C5H7</option>
+                    <option value="C3H2O3">C3H2O3</option>
+                    <option value="C16H30O">C16H30O</option>
+                    <option value="C8H8NO5P">C8H8NO5P</option>
+                    <option value="CH3N2O">CH3N2O</option>
+                    <option value="C5H4N5">C5H4N5</option>
+                    <option value="C10H11N5O3">C10H11N5O3</option>
+                    <option value="C10H13N5O9P2">C10H13N5O9P2</option>
+                    <option value="C9H13N3O10P2">C9H13N3O10P2</option>
+                    <option value="C9H12N3O7P">C9H12N3O7P</option>
+                    <option value="C4H4N3O">C4H4N3O</option>
+                    <option value="C10H13N5O10P2">C10H13N5O10P2</option>
+                    <option value="C10H12N5O7P">C10H12N5O7P</option>
+                    <option value="C5H4N5O">C5H4N5O</option>
+                    <option value="C10H11N5O4">C10H11N5O4</option>
+                    <option value="C10H14N2O10P2">C10H14N2O10P2</option>
+                    <option value="C10H12N2O4">C10H12N2O4</option>
+                    <option value="C5H5N2O2">C5H5N2O2</option>
+                    <option value="C10H13N2O7P">C10H13N2O7P</option>
+                    <option value="C9H12N2O11P2">C9H12N2O11P2</option>
+                    <option value="C9H11N2O8P">C9H11N2O8P</option>
+                    <option value="C4H3N2O2">C4H3N2O2</option>
+                    <option value="C9H10N2O5">C9H10N2O5</option>
+                    <option value="C2H3O2">C2H3O2</option>
+                    <option value="C2H2O">C2H2O</option>
+                    <option value="C2H2">C2H2</option>
+                    <option value="CO2">CO2</option>
+                    <option value="CHO2">CHO2</option>
+                    <option value="H2O">H2O</option>
+                    <option value="H3O6P2">H3O6P2</option>
+                    <option value="C2H4">C2H4</option>
+                    <option value="CO">CO</option>
+                    <option value="C2O2">C2O2</option>
+                    <option value="H2">H2</option>
+                    <option value="O">O</option>
+                    <option value="P">P</option>
+                    <option value="CH2">CH2</option>
+                    <option value="HPO3">HPO3</option>
+                    <option value="NH2">NH2</option>
+                    <option value="PP">PP</option>
+                    <option value="NH">NH</option>
+                    <option value="SO3">SO3</option>
+                    <option value="N">N</option>
+                    <option value="C6H10O5">C6H10O5</option>
+                    <option value="C6H10O6">C6H10O6</option>
+                    <option value="C5H8O4">C5H8O4</option>
+                    <option value="C12H20O11">C12H20O11</option>
+                    <option value="C6H11O8P">C6H11O8P</option>
+                    <option value="C6H8O6">C6H8O6</option>
+                    <option value="C4H6N2O2">C4H6N2O2</option>
+                    <option value="C4H5NO3">C4H5NO3</option>
+                    <option value="C18H30O15">C18H30O15</option>
+                </param>
+            </when>
+        </conditional>
+    </inputs>
+
+    <outputs>
+        <data label="${tool.name} on ${on_string}" name="compute_bio_output" format_source="MS1_DB"/>
+    </outputs>
+
+    <tests>
+        <test>
+            <param name="MS1_DB" value="compute_bio_db.csv"/>
+            <param name="annotations" value="clean_annotations.csv"/>
+            <param name="biochemical_mode" value="reactions"/>
+            <!-- Not the best way to test, but the results are stochastic hence difficult to test-->
+            <output name="compute_bio_output">
+                <assert_contents>
+                    <has_text text="C00079" />
+                    <has_n_columns n="2"  sep=","/>
+                    <has_n_lines n="2" delta="3" />
+                </assert_contents>
+            </output>
+        </test>
+    </tests>
+    
+    <help><![CDATA[
+
+.. _ipapy2_compute_bio:
+
+===============================
+ipaPy2 Compute Bio Connections
+===============================
+
+**Tool Description**
+
+This tool generates a table of biochemical connections between compounds in your MS1 database. These connections are used by the IPA method to update annotation probabilities by considering known biochemical relationships, such as reactions or user-defined connections. The resulting table can be used in downstream annotation refinement tools (e.g., the ipaPy2 Gibbs sampler).
+
+How it works
+------------
+
+- The tool examines the compounds in your MS1 database and determines which pairs are biochemically related.
+- Two modes are available:
+  
+  - **Reactions mode**: Connections are computed based on known biochemical reactions (recommended for most users).
+  - **Connections mode**: Connections are computed based on a user-provided list of possible connections (e.g., specific transformation formulas).
+
+- The output is a two-column table listing all pairs of compounds that are considered biochemically connected.
+
+Inputs
+------
+
+1. **MS1 DB table**  
+   A table (CSV, TSV, Parquet, or Tabular) containing the MS1 database of compounds.
+
+2. **Annotations**  
+   (Optional) Table of possible annotations for the measured features.
+
+3. **Biochemical mode**  
+   - **reactions**: Compute connections based on known biochemical reactions.
+   - **connections**: Use a user-provided list of possible connections (formulas).
+
+4. **Connections list**  
+   (Only required if using "connections" mode)  
+   A list of possible connections between compounds, defined as formulas.
+
+Outputs
+-------
+
+- **compute_bio_output**  
+  A two-column table listing all pairs of compounds that are considered biochemically connected. This table can be used as input for downstream annotation refinement tools.
+
+Example
+-------
+
+Suppose you have an MS1 database (`compute_bio_db.csv`) and want to compute biochemical connections using the reactions mode:
+
+.. code-block::
+
+    MS1_DB: compute_bio_db.csv
+    biochemical_mode: reactions
+
+Alternatively, to use a custom list of connections:
+
+.. code-block::
+
+    MS1_DB: compute_bio_db.csv
+    biochemical_mode: connections
+    connection_list: [C2H4O2, C6H12O6, ...]
+
+Notes
+-----
+
+- The output table is essential for integrating biochemical knowledge into annotation refinement.
+- Ensure your input files are correctly formatted and contain the required columns.
+- The tool supports multiple file formats for flexibility.
+
+References
+----------
+
+- For more details on biochemical connection computation and its use in IPA, refer to the ipaPy2 documentation or associated publications.
+
+    ]]></help>
+
+    <expand macro="citations"/>
+</tool>

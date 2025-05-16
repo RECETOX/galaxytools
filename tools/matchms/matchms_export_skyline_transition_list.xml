@@ -1,0 +1,89 @@
+<tool id="matchms_matchms_export_skyline_transition_list" name="matchms export skyline transition list" version="@TOOL_VERSION@+galaxy0" profile="21.09">
+    <description>creates a transition list with the ions present in the spectra for targeted ion extarction with Skyline</description>
+    <macros>
+        <import>macros.xml</import>
+        <import>help.xml</import>
+    </macros>
+    <expand macro="creator"/>
+    <expand macro="bio.tools"/>
+    
+    <requirements>
+        <requirement type="package" version="@TOOL_VERSION@">matchms</requirement>
+    </requirements>
+
+    <command detect_errors='aggressive'><![CDATA[
+        python ${matchms_python_cli}
+    ]]></command>
+
+<configfiles>
+<configfile name="matchms_python_cli">
+import matchms
+import pandas as pd
+from matchms.importing import load_from_msp, load_from_mgf
+from matchms.exporting.metadata_export import get_metadata_as_array
+
+name_key = 'compound_name'
+cols_to_include = [name_key, 'mz', 'intensity']
+
+#if $metadata_cols != 'None':
+cols_to_include += '$metadata_cols'.split(',')
+#end if
+
+spectra = list(load_from_${input_file.ext}("${input_file}", True))
+
+spectra_dict = {}
+for spectrum in spectra:
+    spectra_dict[spectrum.get(name_key)] = spectrum
+
+spectra_metadata, _ = get_metadata_as_array(spectra)
+spectra_metadata_df = pd.DataFrame(spectra_metadata)
+
+spectra_metadata_df['mz'] = spectra_metadata_df[name_key].transform(lambda x: spectra_dict[x].peaks.mz)
+spectra_metadata_df['intensity'] = spectra_metadata_df[name_key].transform(lambda x: spectra_dict[x].peaks.intensities)
+spectra_metadata_df = spectra_metadata_df.explode(['mz', 'intensity']).reset_index(drop=True)[cols_to_include]
+
+spectra_metadata_df.to_csv("${output_file}", sep='\t', index=False)
+</configfile>
+</configfiles>
+
+    <inputs>
+        <param label="Spectra file" name="input_file" type="data" format="msp,mgf" help="Mass spectral library file."/>
+        <param name="metadata_cols" type="select" label="Metadata to include" help="Select the metadata attributes to include in the output file." multiple="true">
+            <option value="retention_index">Retention Index</option>
+            <option value="precursor_mz">Precursor m/z</option>
+            <option value="retention_time">Retention Time</option>
+            <option value="formula">Formula</option>
+            <option value="inchikey">InChIKey</option>
+            <option value="adduct">Adduct</option>
+            <option value="ionmode">Ion Mode</option>
+        </param>
+    </inputs>
+
+    <outputs>
+        <data label="skyline transition list exported from ${on_string}" name="output_file" format="tabular"/>
+    </outputs>
+
+    <tests>
+        <test>
+            <param name="input_file" value="convert/mgf_out.mgf" ftype="mgf"/>
+            <param name="metadata_cols" value="inchikey,formula"/>
+            <output name="output_file" file="skyline/mgf_out.tabular" ftype="tabular"/>
+        </test>
+        <test>
+            <param name="input_file" value="filtering/reduce_to_top_n_peaks.msp" ftype="msp"/>
+            <output name="output_file" file="skyline/reduce_to_top_n_peaks.tabular" ftype="tabular"/>
+        </test>
+    </tests>
+
+    <help>
+        Documentation
+            Mass spectral libraries are often stored in various formats, such as `msp`, `mgf` or `json`.
+            This tool exports the peaks present in the library in a format that is compatible with Skyline's transition lists.
+            The columns to include in the output can be specified using the multi select.
+            It is recommended to filter the library to the top N most abundant ions and to normalize abundances prior to using this tool.
+        
+        @HELP_matchms@
+    </help>
+
+    <expand macro="citations"/>
+</tool>

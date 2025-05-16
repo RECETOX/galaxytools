@@ -1,0 +1,91 @@
+<tool id="ms2deepscore_training" name="MS2DeepScore Model Training" version="@TOOL_VERSION@+galaxy0">
+    <description>Compute similarity scores using a pre-trained MS2DeepScore model</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="creator"/>
+    <expand macro="edam" />
+
+    <requirements>
+        <requirement type="package" version="@TOOL_VERSION@">ms2deepscore</requirement>
+        <requirement type="package" version="@ONNX_VERSION@">onnx</requirement>
+    </requirements>
+    
+    <command detect_errors="exit_code"><![CDATA[
+        mkdir processing;
+        cp $spectra processing/input."$spectra.ext";
+        python3 ${python_wrapper}
+    ]]></command>
+<configfiles>
+<configfile name="python_wrapper">
+import onnx
+import os
+import torch
+from ms2deepscore.models import load_model
+from ms2deepscore.SettingsMS2Deepscore import SettingsMS2Deepscore
+from ms2deepscore.wrapper_functions.training_wrapper_functions import train_ms2deepscore_wrapper, StoreTrainingData
+
+@json_load@
+
+settings = SettingsMS2Deepscore(**model_params)
+file = "processing/input.$spectra.ext"
+directory = train_ms2deepscore_wrapper(file, settings, $validation_split_fraction)
+
+expected_file_names = StoreTrainingData(file)
+pt_model_path = os.path.join(expected_file_names.trained_models_folder, directory, settings.model_file_name)
+
+model = load_model(pt_model_path)
+model.eval()
+
+batch_size = 1
+number_of_bins = settings.number_of_bins()
+additional_inputs = len(settings.additional_metadata)
+
+# Create dummy inputs
+spectra_tensors_1 = torch.randn(batch_size, number_of_bins)
+spectra_tensors_2 = torch.randn(batch_size, number_of_bins)
+metadata_1 = torch.randn(batch_size, additional_inputs)
+metadata_2 = torch.randn(batch_size, additional_inputs)
+
+# Export the model to ONNX
+torch.onnx.export(
+    model,
+    (spectra_tensors_1, spectra_tensors_2, metadata_1, metadata_2),
+    "$onnx_trained_model",
+    verbose=True
+)
+
+</configfile>
+</configfiles>
+    
+    <inputs>
+        <expand macro="training_param" />
+    </inputs>
+    
+    <outputs>
+        <data label="Trained model" name="onnx_trained_model" format="onnx"/>
+    </outputs>
+
+    <tests>
+        <test expect_num_outputs="1">
+            <param name="spectra" value="clean_spectra.mgf" ftype="mgf"/>
+            <param name="model_param" value="Model_Parameter_JSON.json" ftype="json" />
+            <param name="validation_split_fraction" value="5"/>
+            <output name="onnx_trained_model" value="Trained_model.onnx" ftype="onnx" compare="sim_size"/>
+        </test>
+    </tests>
+
+    <help>
+<![CDATA[
+Info
+====
+This tool trains a MS2DeepScore model using the provided training data and model configuration.
+The trained model is then exported using ONNX.
+
+About
+=====
+@HELP@
+]]>
+    </help>
+    <expand macro="citations"/>
+</tool>
