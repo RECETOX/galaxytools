@@ -125,8 +125,8 @@ Inputs
 5. **Parameters**  
    - **ppm**: Mass tolerance in parts per million for matching.
    - **Cosine similarity thresholds**:  
-     - ``mzdCS``: Maximum m/z difference for cosine similarity (set to 0 to use ``ppmCS``).
-     - ``ppmCS``: Maximum ppm for cosine similarity (set to 0 to use ``mzdCS``).
+   - ``mzdCS``: Maximum m/z difference for cosine similarity (set to 0 to use ``ppmCS``).
+   - ``ppmCS``: Maximum ppm for cosine similarity (set to 0 to use ``mzdCS``).
    - **evfilt**: If set to True, only spectra acquired with the same collision energy are considered.
    - **Unknown settings**: Parameters for handling unknowns, such as cosine similarity threshold for unknown annotations.
 
@@ -141,7 +141,7 @@ Example
 
 Suppose you have mapped isotope patterns, MS2 fragmentation data, a list of all adducts, and an MS2 database. You can use this tool to annotate your features as follows:
 
-.. code-block:: none
+.. code-block::
 
     mapped_isotope_patterns.csv
     MS2_fragmentation_data.tsv

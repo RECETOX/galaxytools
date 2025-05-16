@@ -99,7 +99,7 @@ Example
 
 Suppose you have a file `clustered_MS1_intensities.csv` with clustered MS1 features. You can use this tool to detect isotope patterns as follows:
 
-.. code-block:: none
+.. code-block::
 
     clustered_MS1_intensities.csv
 

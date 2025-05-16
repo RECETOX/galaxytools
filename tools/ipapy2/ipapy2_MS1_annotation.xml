@@ -99,7 +99,7 @@ Example
 
 Suppose you have mapped isotope patterns and a list of all adducts. You can use this tool to annotate your features as follows:
 
-.. code-block:: none
+.. code-block::
 
     mapped_isotope_patterns.csv
     all_adducts.csv

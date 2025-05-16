@@ -79,7 +79,6 @@
         <option value='C2H3NO'>C2H3NO</option>
         <option value='C6H7N3O'>C6H7N3O</option>
         <option value='C6H11NO'>C6H11NO</option>
-        <option value='C6H11NO'>C6H11NO</option>
         <option value='C6H12N2O'>C6H12N2O</option>
         <option value='C5H9NOS'>C5H9NOS</option>
         <option value='C9H9NO'>C9H9NO</option>
@@ -106,7 +105,6 @@
         <option value='C5H4N5'>C5H4N5</option>
         <option value='C10H11N5O3'>C10H11N5O3</option>
         <option value='C10H13N5O9P2'>C10H13N5O9P2</option>
-        <option value='C10H12N5O6P'>C10H12N5O6P</option>
         <option value='C9H13N3O10P2'>C9H13N3O10P2</option>
         <option value='C9H12N3O7P'>C9H12N3O7P</option>
         <option value='C4H4N3O'>C4H4N3O</option>
@@ -135,7 +133,6 @@
         <option value='H2'>H2</option>
         <option value='O'>O</option>
         <option value='P'>P</option>
-        <option value='C2H2O'>C2H2O</option>
         <option value='CH2'>CH2</option>
         <option value='HPO3'>HPO3</option>
         <option value='NH2'>NH2</option>
@@ -149,7 +146,6 @@
         <option value='C12H20O11'>C12H20O11</option>
         <option value='C6H11O8P'>C6H11O8P</option>
         <option value='C6H8O6'>C6H8O6</option>
-        <option value='C6H10O5'>C6H10O5</option>
         <option value='C18H30O15'>C18H30O15</option>
     </xml>
 </macros>

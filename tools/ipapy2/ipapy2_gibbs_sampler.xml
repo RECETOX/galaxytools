@@ -160,7 +160,7 @@ Example
 
 Suppose you have mapped isotope patterns and an initial annotation table. You can run the Gibbs sampler as follows:
 
-.. code-block:: none
+.. code-block::
 
     mapped_isotope_patterns.parquet
     clean_annotations.csv
