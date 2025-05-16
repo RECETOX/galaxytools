@@ -22,11 +22,9 @@ def main(
         annotations = None
 
     if biochemical_mode == "connections" and connection_list:
-        connections = connection_list
+        connections = connection_list.split(",")
     else:
-        raise ValueError(
-            "biochemical_mode must be 'connections' and connection_list must be provided."
-        )
+        connections = []
 
     Bio = ipa.Compute_Bio(
         input_dataset_database,
@@ -69,7 +67,7 @@ if __name__ == "__main__":
           based on the list of connections provided). Default 'reactions'. """,
     )
     parser.add_argument(
-        "--connection_list", type=str, help="intensity mode. Default 'max' or 'ave'."
+        "--connection_list", type=str, help="list of connections"
     )
     parser.add_argument(
         "--ncores",
