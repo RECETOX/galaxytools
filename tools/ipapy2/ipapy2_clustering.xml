@@ -1,4 +1,4 @@
-<tool id="ipapy2_clustering" name="ipaPy2 clustering" version="@TOOL_VERSION@+galaxy0" profile="21.05">
+<tool id="ipapy2_clustering" name="ipaPy2 clustering" version="@TOOL_VERSION@+galaxy0" profile="@PROFILE@">
     <description>clustering MS1 features based on correlation across samples as preparation for ipaPy2</description>
     <macros>
         <import>macros.xml</import>

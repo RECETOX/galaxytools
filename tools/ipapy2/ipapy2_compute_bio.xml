@@ -1,4 +1,4 @@
-<tool id="ipapy2_compute_bio" name="ipaPy2 compute bio" version="@TOOL_VERSION@+galaxy0" profile="21.05">
+<tool id="ipapy2_compute_bio" name="ipaPy2 compute bio" version="@TOOL_VERSION@+galaxy0" profile="@PROFILE@">
     <description>compute list of biochemical connections to improve annotation accuracy</description>
     <macros>
         <import>macros.xml</import>
