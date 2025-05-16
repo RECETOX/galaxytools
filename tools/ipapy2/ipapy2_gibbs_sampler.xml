@@ -95,12 +95,90 @@
     </tests>
 
     <help><![CDATA[
-        ::
-        Gibbs sampler considering both biochemical and adducts connections. The
-        function computes the posterior probabilities of the annotations
-        considering the possible biochemical connections reported in Bio and the
-        possible adducts connection.
-            <expand macro="references"/>
+
+.. _ipapy2_gibbs_sampler:
+
+==========================
+ipaPy2 Gibbs Sampler Tool
+==========================
+
+**Tool Description**
+
+This tool implements a Gibbs sampler that integrates multiple sources of information—biochemical connections and adducts connections—to improve the accuracy of metabolite annotation. By iteratively sampling from the posterior distribution, the tool refines annotation probabilities based on both network and chemical relationships.
+
+How it works
+------------
+
+- The Gibbs sampler updates annotation probabilities by considering:
+  - **Adducts connections**: Relationships between features that can be explained by known adduct transformations.
+  - **Biochemical connections**: Relationships between compounds based on known biochemical pathways or reactions.
+- The user can select to use only adducts, only biochemical connections, or both.
+- The influence of each connection type is controlled by the `adducts weight` and `biochemical weight` parameters: smaller values increase the influence of the respective connection type on the posterior probabilities.
+- The process is stochastic, so results may vary between runs.
+
+Inputs
+------
+
+1. **Mapped isotope patterns**  
+   Dataset containing mapped isotope patterns (e.g., output from the ipaPy2 map isotope patterns tool).
+
+2. **Annotations**  
+   Initial annotation table to be refined by the Gibbs sampler.
+
+3. **Integrating mode**  
+   - **adducts**: Use only adducts connections.
+   - **biochemical**: Use only biochemical connections (requires a biochemical connections table).
+   - **both**: Use both adducts and biochemical connections.
+
+4. **Adducts weight (`delta_add`)**  
+   Controls the influence of adducts connections (smaller = more influence).
+
+5. **Biochemical connections**  
+   Table (2 columns) reporting all possible biochemical connections between compounds (required if using biochemical mode).
+
+6. **Biochemical weight (`delta_bio`)**  
+   Controls the influence of biochemical connections (smaller = more influence).
+
+7. **Other parameters**  
+   - **noits**: Number of Gibbs sampler iterations.
+   - **burn**: Number of burn-in iterations.
+   - **all_out**: Output all intermediate results.
+   - **zs**: Optional input for initial state.
+   - **zs_out**: Optional output for sampled states.
+
+Outputs
+-------
+
+- **annotations_out**  
+  Refined annotation table with updated posterior probabilities.
+
+- **zs_out**  
+  (Optional) File containing sampled states from the Gibbs sampler (if `all_out` is enabled).
+
+Example
+-------
+
+Suppose you have mapped isotope patterns and an initial annotation table. You can run the Gibbs sampler as follows:
+
+.. code-block:: none
+
+    mapped_isotope_patterns.parquet
+    clean_annotations.csv
+
+Choose the integrating mode (e.g., both), set the weights, and run the tool. The output will be a refined annotation table.
+
+Notes
+-----
+
+- The results are stochastic; repeated runs may yield slightly different outputs.
+- For best results, ensure all input files are correctly formatted and contain the required columns.
+- The biochemical connections table should use unique IDs consistent with your annotation table.
+
+References
+----------
+
+- For more details on the Gibbs sampling algorithm and its application in metabolomics, refer to the ipaPy2 documentation or associated publications.
+
     ]]></help>
 
     <expand macro="citations"/>

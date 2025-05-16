@@ -56,12 +56,66 @@
     </tests>
 
     <help><![CDATA[
-    ::
-        Annotation of the dataset based on the MS1 information. Prior probabilities
-        are based on mass only, while post probabilities are based on mass, RT,
-        previous knowledge and isotope patterns.
 
-        <expand macro="references"/>
+.. _ipapy2_ms1_annotation:
+
+==========================
+ipaPy2 MS1 Annotation Tool
+==========================
+
+**Tool Description**
+
+This tool annotates clustered features in your dataset using MS1 information and a supplied adducts table. It calculates prior and posterior probabilities for each feature, leveraging mass, retention time (RT), chemical knowledge, and isotope patterns to provide high-confidence annotations.
+
+How it works
+------------
+
+- **Prior probabilities** are calculated using only the mass information.
+- **Posterior probabilities** incorporate mass, RT, prior knowledge, and isotope patterns for more accurate annotation.
+- The tool matches features in your data to possible adducts and database entries, considering user-defined tolerances for mass (ppm) and other optional parameters.
+
+Inputs
+------
+
+1. **Mapped isotope patterns**  
+   Dataset containing MS1 data, ideally obtained from the ``map_isotope_patterns`` tool.
+
+2. **All possible adducts**  
+   Table listing all possible adducts for the database, ideally obtained from the ``compute_all_adducts`` tool.
+
+3. **Parameters**  
+   - **ppm**: Mass tolerance in parts per million for matching.
+   - **Unknown settings**: Parameters for handling unknowns, such as ppm and ratio thresholds.
+   - **Optional settings**: Additional parameters for advanced annotation control.
+
+Outputs
+-------
+
+- **MS1_annotations**  
+  Annotated dataset with additional columns describing the best-matching database entries, probabilities, and isotope pattern scores.
+
+Example
+-------
+
+Suppose you have mapped isotope patterns and a list of all adducts. You can use this tool to annotate your features as follows:
+
+.. code-block:: none
+
+    mapped_isotope_patterns.csv
+    all_adducts.csv
+
+Set the desired tolerances (e.g., ``ppm = 3``) and run the tool. The output will be a table with annotations for each feature.
+
+Notes
+-----
+
+- For best results, ensure your input files are correctly formatted and contain the required columns.
+- The tool is designed to be flexible and can handle various input formats (CSV, TSV, Parquet, Tabular).
+
+References
+----------
+
+- For more details on the annotation algorithm and scoring, refer to the ipaPy2 documentation or associated publications.
 
     ]]></help>
 

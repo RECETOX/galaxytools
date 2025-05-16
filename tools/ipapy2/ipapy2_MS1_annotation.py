@@ -1,8 +1,5 @@
-import argparse
-
 from ipaPy2 import ipa
-
-from utils import MSArgumentParser, flattern_annotations
+from utils import flattern_annotations, MSArgumentParser
 
 
 def main(

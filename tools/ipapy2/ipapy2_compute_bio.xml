@@ -30,8 +30,11 @@
             <when value="reactions">
             </when>
             <when value="connections">
-                <param name="connection_list" type="text" optional="true" label="connections list provided" 
-                        help="list of possible connections between compounds defined as formulas. Only necessary if mode='connections'."/>           
+                <param name="connection_list" type="select" multiple="true" optional="true" label="connections list provided" 
+                        help="list of possible connections between compounds defined as formulas. Only necessary if mode='connections'.">
+                <expand macro="connections"/>
+            </param>
+
             </when>
         </conditional>
     </inputs>
@@ -57,12 +60,81 @@
     </tests>
     
     <help><![CDATA[
-    ::
-        The IPA method can update the probabilities associated to each possible annotations by considering all possible biochemical connections.
-        Before doing so, it is necessary to provide a pandas dataframe reporting which compounds can be considered biochemically related. 
-        The function Compute_Bio() can be used to compute such a dataframe. 
 
-        <expand macro="references"/>
+.. _ipapy2_compute_bio:
+
+===============================
+ipaPy2 Compute Bio Connections
+===============================
+
+**Tool Description**
+
+This tool generates a table of biochemical connections between compounds in your MS1 database. These connections are used by the IPA method to update annotation probabilities by considering known biochemical relationships, such as reactions or user-defined connections. The resulting table can be used in downstream annotation refinement tools (e.g., the ipaPy2 Gibbs sampler).
+
+How it works
+------------
+
+- The tool examines the compounds in your MS1 database and determines which pairs are biochemically related.
+- Two modes are available:
+  
+  - **Reactions mode**: Connections are computed based on known biochemical reactions (recommended for most users).
+  - **Connections mode**: Connections are computed based on a user-provided list of possible connections (e.g., specific transformation formulas).
+
+- The output is a two-column table listing all pairs of compounds that are considered biochemically connected.
+
+Inputs
+------
+
+1. **MS1 DB table**  
+   A table (CSV, TSV, Parquet, or Tabular) containing the MS1 database of compounds.
+
+2. **Annotations**  
+   (Optional) Table of possible annotations for the measured features.
+
+3. **Biochemical mode**  
+   - **reactions**: Compute connections based on known biochemical reactions.
+   - **connections**: Use a user-provided list of possible connections (formulas).
+
+4. **Connections list**  
+   (Only required if using "connections" mode)  
+   A list of possible connections between compounds, defined as formulas.
+
+Outputs
+-------
+
+- **compute_bio_output**  
+  A two-column table listing all pairs of compounds that are considered biochemically connected. This table can be used as input for downstream annotation refinement tools.
+
+Example
+-------
+
+Suppose you have an MS1 database (`compute_bio_db.csv`) and want to compute biochemical connections using the reactions mode:
+
+.. code-block:: none
+
+    MS1_DB: compute_bio_db.csv
+    biochemical_mode: reactions
+
+Alternatively, to use a custom list of connections:
+
+.. code-block:: none
+
+    MS1_DB: compute_bio_db.csv
+    biochemical_mode: connections
+    connection_list: [C2H4O2, C6H12O6, ...]
+
+Notes
+-----
+
+- The output table is essential for integrating biochemical knowledge into annotation refinement.
+- Ensure your input files are correctly formatted and contain the required columns.
+- The tool supports multiple file formats for flexibility.
+
+References
+----------
+
+- For more details on biochemical connection computation and its use in IPA, refer to the ipaPy2 documentation or associated publications.
+
     ]]></help>
 
     <expand macro="citations"/>

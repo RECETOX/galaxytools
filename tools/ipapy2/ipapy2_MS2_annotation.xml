@@ -89,11 +89,79 @@
     </tests>
 
     <help><![CDATA[
-    ::
-        Annotation of the dataset base on the MS1 and MS2 information. Prior
-        probabilities are based on mass only, while post probabilities are based
-        on mass, RT, previous knowledge and isotope patterns.
-        <expand macro="references"/>
+
+.. _ipapy2_ms2_annotation:
+
+==========================
+ipaPy2 MS2 Annotation Tool
+==========================
+
+**Tool Description**
+
+This tool performs annotation of features in your dataset using MS2 fragmentation data and a supplied MS2 database. It integrates MS1 and MS2 information to provide high-confidence annotations, leveraging prior and posterior probabilities based on mass, retention time (RT), known chemical knowledge, and isotope patterns.
+
+How it works
+------------
+
+- **Prior probabilities** are calculated using only the mass information.
+- **Posterior probabilities** incorporate mass, RT, prior knowledge, and isotope patterns for more accurate annotation.
+- The tool matches features in your data to entries in the MS2 database, considering user-defined tolerances for mass (ppm), retention time, and cosine similarity thresholds for spectral matching.
+
+Inputs
+------
+
+1. **Mapped isotope patterns**  
+   Dataset containing MS1 data, ideally obtained from the ``map_isotope_patterns`` tool.
+
+2. **MS2 fragmentation data**  
+   Dataset with MS2 spectra. If a CSV file fails, try using a TSV file.
+
+3. **All possible adducts table**  
+   Table listing all possible adducts for the database.
+
+4. **MS2 Database**  
+   Reference database containing MS2 information for annotation.
+
+5. **Parameters**  
+   - **ppm**: Mass tolerance in parts per million for matching.
+   - **Cosine similarity thresholds**:  
+     - ``mzdCS``: Maximum m/z difference for cosine similarity (set to 0 to use ``ppmCS``).
+     - ``ppmCS``: Maximum ppm for cosine similarity (set to 0 to use ``mzdCS``).
+   - **evfilt**: If set to True, only spectra acquired with the same collision energy are considered.
+   - **Unknown settings**: Parameters for handling unknowns, such as cosine similarity threshold for unknown annotations.
+
+Outputs
+-------
+
+- **MS2_annotations**  
+  Annotated dataset with additional columns describing the best-matching database entries, probabilities, and spectral similarity scores.
+
+Example
+-------
+
+Suppose you have mapped isotope patterns, MS2 fragmentation data, a list of all adducts, and an MS2 database. You can use this tool to annotate your features as follows:
+
+.. code-block:: none
+
+    mapped_isotope_patterns.csv
+    MS2_fragmentation_data.tsv
+    all_adducts.csv
+    MS2_DB.csv
+
+Set the desired tolerances (e.g., ``ppm = 3``) and run the tool. The output will be a table with annotations for each feature.
+
+Notes
+-----
+
+- For best results, ensure your input files are correctly formatted and contain the required columns.
+- If you encounter issues with CSV files, try converting them to TSV format.
+- The tool is designed to be flexible and can handle various input formats (CSV, TSV, Parquet, Tabular).
+
+References
+----------
+
+- For more details on the annotation algorithm and scoring, refer to the ipaPy2 documentation or associated publications.
+
     ]]></help>
 
     <expand macro="citations"/>

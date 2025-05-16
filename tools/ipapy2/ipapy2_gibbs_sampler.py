@@ -1,6 +1,5 @@
 from ipaPy2 import ipa
-
-from utils import GibbsArgumentParser, flattern_annotations, group_by_peak_id
+from utils import flattern_annotations, GibbsArgumentParser, group_by_peak_id
 
 
 def main(

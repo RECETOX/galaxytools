@@ -67,17 +67,89 @@
             <requirement type="package" version="2024.11.0">fastparquet</requirement>
         </requirements>
     </xml>
-    
-    <token name="@REFERENCES@"><![CDATA[
-        .. _extra-references:
-    
-        Extra references
-        ----------------
-    
-        * `ipaPy2 Usage Manual <https://github.com/francescodc87/ipaPy2#usage>`_
-        * `Bioinformatics Article <https://academic.oup.com/bioinformatics/article/39/7/btad455/7230779>`_
-        * `Analytical Chemistry Article <https://pubs.acs.org/doi/full/10.1021/acs.analchem.9b02354>`_
-        ]]>
-    </token>
-    
+
+    <xml name="connections">
+        <option value='C3H5NO'>C3H5NO</option>
+        <option value='C6H12N4O'>C6H12N4O</option>
+        <option value='C4H6N2O2'>C4H6N2O2</option>                                                                                                          "C4H5NO3
+        <option value='C3H5NOS'>C3H5NOS</option>
+        <option value='C6H10N2O3S2'>C6H10N2O3S2</option>
+        <option value='C5H7NO3'>C5H7NO3</option>
+        <option value='C5H8N2O2'>C5H8N2O2</option>
+        <option value='C2H3NO'>C2H3NO</option>
+        <option value='C6H7N3O'>C6H7N3O</option>
+        <option value='C6H11NO'>C6H11NO</option>
+        <option value='C6H11NO'>C6H11NO</option>
+        <option value='C6H12N2O'>C6H12N2O</option>
+        <option value='C5H9NOS'>C5H9NOS</option>
+        <option value='C9H9NO'>C9H9NO</option>
+        <option value='C5H7NO'>C5H7NO</option>
+        <option value='C3H5NO2'>C3H5NO2</option>
+        <option value='C4H7NO2'>C4H7NO2</option>
+        <option value='C11H10N2O'>C11H10N2O</option>
+        <option value='C9H9NO2'>C9H9NO2</option>
+        <option value='C5H9NO'>C5H9NO</option>
+        <option value='C4H4O2'>C4H4O2</option>
+        <option value='C3H5O'>C3H5O</option>
+        <option value='C10H12N5O6P'>C10H12N5O6P</option>
+        <option value='C10H15N2O3S'>C10H15N2O3S</option>
+        <option value='C10H14N2O2S'>C10H14N2O2S</option>
+        <option value='CH2ON'>CH2ON</option>
+        <option value='C21H34N7O16P3S'>C21H34N7O16P3S</option>
+        <option value='C21H33N7O15P3S'>C21H33N7O15P3S</option>
+        <option value='C10H15N3O5S'>C10H15N3O5S</option>
+        <option value='C5H7'>C5H7</option>
+        <option value='C3H2O3'>C3H2O3</option>
+        <option value='C16H30O'>C16H30O</option>
+        <option value='C8H8NO5P'>C8H8NO5P</option>
+        <option value='CH3N2O'>CH3N2O</option>
+        <option value='C5H4N5'>C5H4N5</option>
+        <option value='C10H11N5O3'>C10H11N5O3</option>
+        <option value='C10H13N5O9P2'>C10H13N5O9P2</option>
+        <option value='C10H12N5O6P'>C10H12N5O6P</option>
+        <option value='C9H13N3O10P2'>C9H13N3O10P2</option>
+        <option value='C9H12N3O7P'>C9H12N3O7P</option>
+        <option value='C4H4N3O'>C4H4N3O</option>
+        <option value='C10H13N5O10P2'>C10H13N5O10P2</option>
+        <option value='C10H12N5O7P'>C10H12N5O7P</option>
+        <option value='C5H4N5O'>C5H4N5O</option>
+        <option value='C10H11N5O4'>C10H11N5O4</option>
+        <option value='C10H14N2O10P2'>C10H14N2O10P2</option>
+        <option value='C10H12N2O4'>C10H12N2O4</option>
+        <option value='C5H5N2O2'>C5H5N2O2</option>
+        <option value='C10H13N2O7P'>C10H13N2O7P</option>
+        <option value='C9H12N2O11P2'>C9H12N2O11P2</option>
+        <option value='C9H11N2O8P'>C9H11N2O8P</option>
+        <option value='C4H3N2O2'>C4H3N2O2</option>
+        <option value='C9H10N2O5'>C9H10N2O5</option>
+        <option value='C2H3O2'>C2H3O2</option>
+        <option value='C2H2O'>C2H2O</option>
+        <option value='C2H2'>C2H2</option>
+        <option value='CO2'>CO2</option>
+        <option value='CHO2'>CHO2</option>
+        <option value='H2O'>H2O</option>
+        <option value='H3O6P2'>H3O6P2</option>
+        <option value='C2H4'>C2H4</option>
+        <option value='CO'>CO</option>
+        <option value='C2O2'>C2O2</option>
+        <option value='H2'>H2</option>
+        <option value='O'>O</option>
+        <option value='P'>P</option>
+        <option value='C2H2O'>C2H2O</option>
+        <option value='CH2'>CH2</option>
+        <option value='HPO3'>HPO3</option>
+        <option value='NH2'>NH2</option>
+        <option value='PP'>PP</option>
+        <option value='NH'>NH</option>
+        <option value='SO3'>SO3</option>
+        <option value='N'>N</option>
+        <option value='C6H10O5'>C6H10O5</option>
+        <option value='C6H10O6'>C6H10O6</option>
+        <option value='C5H8O4'>C5H8O4</option>
+        <option value='C12H20O11'>C12H20O11</option>
+        <option value='C6H11O8P'>C6H11O8P</option>
+        <option value='C6H8O6'>C6H8O6</option>
+        <option value='C6H10O5'>C6H10O5</option>
+        <option value='C18H30O15'>C18H30O15</option>
+    </xml>
 </macros>

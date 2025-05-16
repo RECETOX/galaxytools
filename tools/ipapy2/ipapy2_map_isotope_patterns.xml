@@ -47,10 +47,76 @@
         </test>
     </tests>
     <help><![CDATA[
-	::
-		mapping isotope patterns in MS1 data.
-        
-        <expand macro="references"/>
+
+.. _ipapy2_map_isotope_patterns:
+
+==================================
+ipaPy2 Map Isotope Patterns Tool
+==================================
+
+**Tool Description**
+
+This tool detects and annotates isotope patterns in clustered MS1 intensities. It is designed to process output from feature clustering tools and identify isotopic relationships within each cluster, providing key information for downstream annotation and quantification.
+
+How it works
+------------
+
+- The tool examines clusters of MS1 features and searches for isotopic peaks based on user-defined mass difference (`isotope difference`), intensity ratio (`isotope ratio`), and mass accuracy (`ppm`).
+- Only isotopes with intensity higher than the specified minimum ratio (default 1%) of the main isotope are considered.
+- The ionisation mode is also taken into account for accurate isotope detection.
+
+Inputs
+------
+
+1. **IPA dataframe**  
+   A file (CSV, TSV, Parquet, or Tabular) containing clustered MS1 intensities. Each row should represent a detected feature with its associated cluster.
+
+2. **Isotope settings**  
+   - **isotope difference**: The expected mass difference between isotopes of charge 1 (default: 1).
+   - **ppm**: Mass tolerance in parts per million for matching isotopic peaks.
+   - **isotope ratio**: Minimum intensity ratio (in %) for considering a peak as an isotope (default: 1%).
+
+3. **Ionisation mode**  
+   Specify the ionisation mode (e.g., positive or negative) relevant for your experiment.
+
+Outputs
+-------
+
+- **mapped_isotope_patterns**  
+  A table with annotated isotope patterns for each cluster. The output includes columns such as:
+
+  - `ids`
+  - `rel.ids`
+  - `mzs`
+  - `RTs`
+  - `Int`
+  - `relationship`
+  - `isotope pattern`
+  - `charge`
+
+Example
+-------
+
+Suppose you have a file `clustered_MS1_intensities.csv` with clustered MS1 features. You can use this tool to detect isotope patterns as follows:
+
+.. code-block:: none
+
+    clustered_MS1_intensities.csv
+
+Set the isotope difference, ppm, and isotope ratio as needed, then run the tool. The output will be a table with isotope pattern annotations for each cluster.
+
+Notes
+-----
+
+- Ensure your input file is correctly formatted and contains the required columns.
+- The tool supports multiple file formats (CSV, TSV, Parquet, Tabular) for flexibility.
+- Adjust the isotope detection parameters to match your experimental setup for optimal results.
+
+References
+----------
+
+- For more details on isotope pattern detection and the ipaPy2 workflow, refer to the ipaPy2 documentation or associated publications.
+
     ]]></help>
     <expand macro="citations"/>
 </tool>

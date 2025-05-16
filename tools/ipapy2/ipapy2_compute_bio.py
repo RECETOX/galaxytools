@@ -1,5 +1,4 @@
 from ipaPy2 import ipa
-
 from utils import CustomArgumentParser, group_by_peak_id
 
 

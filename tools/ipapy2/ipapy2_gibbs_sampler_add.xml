@@ -56,9 +56,82 @@
     </tests>
 
     <help><![CDATA[
-        ::
-            Gibbs sampler for the IPA model.
-            <expand macro="references"/>
+
+.. _ipapy2_gibbs_sampler_add:
+
+=======================================
+ipaPy2 Gibbs Sampler Additive Tool
+=======================================
+
+**Tool Description**
+
+This tool implements a Gibbs sampler for the IPA (Integrated Probabilistic Annotation) model, focusing on additive (adducts-based) connections between features. It refines metabolite annotation probabilities by iteratively sampling from the posterior distribution, considering relationships between features that can be explained by known adduct transformations.
+
+How it works
+------------
+
+- The Gibbs sampler updates annotation probabilities by considering **adducts connections**: relationships between features that can be explained by known adduct transformations.
+- The influence of adducts connections is controlled by the ``adducts weight`` (`delta_add`) parameter: smaller values increase the influence of adducts connections on the posterior probabilities.
+- The process is stochastic, so results may vary between runs.
+- Optionally, the sampler can output the sampled states (`zs_out`) for further analysis.
+
+Inputs
+------
+
+1. **Mapped isotope patterns**  
+   Dataset containing mapped isotope patterns (e.g., output from the ipaPy2 map isotope patterns tool).
+
+2. **Annotations**  
+   Initial annotation table to be refined by the Gibbs sampler.
+
+3. **Number of iterations (`noits`)**  
+   Number of Gibbs sampler iterations to perform.
+
+4. **Burn-in (`burn`)**  
+   Number of initial iterations to discard (burn-in period).
+
+5. **Adducts weight (`delta_add`)**  
+   Parameter used when computing the conditional priors. Must be positive. The smaller the value, the more weight adducts connections have on the posterior probabilities (default: 1).
+
+6. **All out (`all_out`)**  
+   If enabled, outputs all intermediate results including sampled states.
+
+7. **zs**  
+   (Optional) Input file for initial state of the sampler.
+
+Outputs
+-------
+
+- **annotations_out**  
+  Refined annotation table with updated posterior probabilities.
+
+- **zs_out**  
+  (Optional) File containing sampled states from the Gibbs sampler (if `all_out` is enabled).
+
+Example
+-------
+
+Suppose you have mapped isotope patterns and an initial annotation table. You can run the Gibbs sampler as follows:
+
+.. code-block:: none
+
+    mapped_isotope_patterns.csv
+    clean_annotations.csv
+
+Set the number of iterations (e.g., ``noits = 1000``) and the adducts weight (e.g., ``delta_add = 0.1``), then run the tool. The output will be a refined annotation table and, optionally, a file with sampled states.
+
+Notes
+-----
+
+- The results are stochastic; repeated runs may yield slightly different outputs.
+- For best results, ensure all input files are correctly formatted and contain the required columns.
+- The tool supports multiple file formats (CSV, TSV, Parquet, Tabular) for flexibility.
+
+References
+----------
+
+- For more details on the Gibbs sampling algorithm and its application in metabolomics, refer to the ipaPy2 documentation or associated publications.
+
     ]]></help>
 
     <expand macro="citations"/>
