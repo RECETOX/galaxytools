@@ -22,29 +22,14 @@
 
     <xml name="annotation">
         <xrefs>
-               <xref type="bio.tools">waveica</xref>
+            <xref type="bio.tools">waveica</xref>
         </xrefs>
      </xml>
 
     <xml name="input_data">
-        <param type="data" name="data" label="Feature table" format="csv,tsv,parquet" help=""/>
+        <param type="data" name="data" label="Feature table" format="csv,tsv,tabular,parquet" help=""/>
     </xml>
-    <xml name="general_parameters">
-        <param type="integer" value="20" name="k" label="Number of components to decompose" help="maximal component that ICA decomposes"/>
-        <param type="float" value="0" name="alpha" label="Alpha" help="trade-off value between the independence of samples (temporal ICA) and variables (spatial ICA), should be between 0 and 1"/>
-    </xml>
-    <xml name="batchwise_parameters">
-        <param type="float" value="0.05" name="t" label="Batch-association threshold" help="threshold to consider a component associate with the batch,
-        should be between 0 and 1"/>
-        <param type="float" value="0.05" name="t2" label="Group-association threshold" help="threshold to consider a component associate with the group,
-        should be between 0 and 1"/>
-    </xml>
-    <xml name="singlebatch_parameters">
-        <param type="float" value="0" name="cutoff" label="Cutoff" help="threshold of the variation explained by the injection order for independent components, should be between 0 and 1"/>
-    </xml>
-    <xml name="exclude_blanks">
-        <param name="exclude_blanks" type="boolean" checked="false" truevalue="TRUE" falsevalue="FALSE" label="Remove blanks" help="Excludes blank samples from the output" />
-    </xml>
+
     <xml name="wf">
         <conditional name="wf">
             <param type="select" name="wavelet_filter" label="Wavelet transform filter" help="wavelet function and filter length [1] (see footnotes for more details)">
