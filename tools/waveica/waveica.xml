@@ -18,8 +18,8 @@
             -e 'normalized_data <- waveica(
                 file = "$input_num.data",
                 #if $input_num.input_choice == "2":
-                    metadata = "$input_num.input_metadata.metadata",
-                    ext = "$input_num.data.ext,$input_num.input_metadata.metadata.ext",
+                    metadata = "$input_num.metadata",
+                    ext = "$input_num.data.ext,$input_num.metadata.ext",
                     transpose = $input_num.transpose_feature_table,
                 #else:
                     ext = "$input_num.data.ext",
@@ -36,8 +36,8 @@
             -e 'normalized_data <- waveica_singlebatch( 
                 file = "$input_num.data",
                 #if $input_num.input_choice == "2":
-                    metadata = "$input_num.input_metadata.metadata",
-                    ext = "$input_num.data.ext,$input_num.input_metadata.metadata.ext",
+                    metadata = "$input_num.metadata",
+                    ext = "$input_num.data.ext,$input_num.metadata.ext",
                     transpose = $input_num.transpose_feature_table,
                 #else:
                     ext = "$input_num.data.ext",
@@ -65,9 +65,7 @@
             </when>
             <when value="2">
                 <expand macro="input_data"/>
-                <section name="input_metadata" title="Input metadata table" expanded="true">
-                    <param name="metadata" label="Input metadata" type="data" format="csv,tsv,tabular,parquet" help="" />
-                </section>
+                <param name="metadata" label="Input metadata" type="data" format="csv,tsv,tabular,parquet" help="" />
                 <param name = "transpose_feature_table" label="Transpose feature table" type="boolean" checked="false" 
                 truevalue="TRUE" falsevalue="FALSE" help="Swap sample names with feature names as column headers (to fit recetox-aplcms outputs)." />
             </when>
@@ -96,7 +94,9 @@
 
     <tests>
         <test expect_num_outputs="1"><!-- TEST 1 -->
-            <param name="data" value="input_data.csv" ftype="csv"/>
+            <conditional name="input_num">
+                <param name="data" value="input_data.csv" ftype="csv"/>
+            </conditional>
             <param name="mode" value="batchwise"/>
             <param name="wavelet_filter" value="d"/>
             <param name="wavelet_length" value="2"/>
@@ -107,7 +107,9 @@
             <output name="normalized_data" file="normalized_data.tsv" ftype="tabular"/>
         </test>
         <test expect_num_outputs="1"><!-- TEST 2 -->
-            <param name="data" value="input_data.tsv" ftype="tsv"/>
+            <conditional name="input_num">
+                <param name="data" value="input_data.tsv" ftype="tsv"/>
+            </conditional>
             <param name="mode" value="batchwise"/>
             <param name="wavelet_filter" value="d"/>
             <param name="wavelet_length" value="2"/>
@@ -118,7 +120,9 @@
             <output name="normalized_data" file="normalized_data.tsv" ftype="tabular"/>
         </test>
         <test expect_num_outputs="1"><!-- TEST 3 -->
-            <param name="data" value="input_data.parquet" ftype="parquet"/>
+            <conditional name="input_num">
+                <param name="data" value="input_data.parquet" ftype="parquet"/>
+            </conditional>
             <param name="mode" value="batchwise"/>
             <param name="wavelet_filter" value="d"/>
             <param name="wavelet_length" value="2"/>
