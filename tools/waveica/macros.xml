@@ -22,12 +22,12 @@
 
     <xml name="annotation">
         <xrefs>
-               <xref type="bio.tools">waveica</xref>
+            <xref type="bio.tools">waveica</xref>
         </xrefs>
      </xml>
 
     <xml name="input_data">
-        <param type="data" name="data" label="Feature table" format="csv,tsv,parquet" help=""/>
+        <param type="data" name="data" label="Feature table" format="csv,tsv,tabular,parquet" help=""/>
     </xml>
     <xml name="general_parameters">
         <param type="integer" value="20" name="k" label="Number of components to decompose" help="maximal component that ICA decomposes"/>

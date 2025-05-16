@@ -17,7 +17,7 @@ read_file <- function(file, metadata, ft_ext, mt_ext, transpose) {
 read_data <- function(file, ext) {
     if (ext == "csv") {
         data <- read.csv(file, header = TRUE)
-    } else if (ext == "tsv") {
+    } else if (ext == "tsv" || ext == "tabular") {
         data <- read.csv(file, header = TRUE, sep = "\t")
     } else {
         data <- arrow::read_parquet(file)
