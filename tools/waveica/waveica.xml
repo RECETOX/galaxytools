@@ -222,10 +222,14 @@
             <output name="metadata" file="test10_output2.tsv" ftype="tabular"/>
         </test>
         <test expect_failure="true"><!-- TEST 11 -->
-            <param name="data" value="na_data.csv" ftype="csv"/>
+            <conditional name="input_num">
+                <param name="data" value="na_data.csv" ftype="csv"/>
+            </conditional>
         </test>
         <test expect_failure="true"><!-- TEST 12 -->
-            <param name="data" value="incomplete_metadata_data.csv" ftype="csv"/>
+            <conditional name="input_num">
+                <param name="data" value="incomplete_metadata_data.csv" ftype="csv"/>
+            </conditional>
         </test>
     </tests>
 
