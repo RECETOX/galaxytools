@@ -1,4 +1,8 @@
-<tool id="rcx-tk" name="rcx-tk" version="0.1.0+galaxy0" python_template_version="3.5" profile="23.05">
+<tool id="rcx-tk" name="rcx-tk" version="@TOOL_VERSION@+galaxy1" profile="23.05">
+    <description>Processes and standardizes metadata or alkane files by rearranging columns, validating file names, and deriving new columns for downstream analysis.</description>
+    <macros>
+    <token name="@TOOL_VERSION@">0.1.0</token>
+    </macros>
     <edam_topics>
         <edam_topic>topic_3172</edam_topic>
         <edam_topic>topic_0091</edam_topic>
@@ -9,7 +13,7 @@
         <edam_operation>operation_3695</edam_operation> 
     </edam_operations>
     <requirements>
-        <requirement type="package" version="0.1.0">rcx-tk</requirement>
+        <requirement type="package" version="@TOOL_VERSION@">rcx-tk</requirement>
     </requirements>
     <creator>
         <person
@@ -32,7 +36,7 @@
                 email="GalaxyToolsDevelopmentandDeployment@space.muni.cz"
                 name="RECETOX MUNI" />  
     </creator>
-    <command><![CDATA[
+    <command detect_errors="aggressive"><![CDATA[
     #if $input_file.ext == "tabular"
         #set $input_file_new = 'input.tsv'
     #else
@@ -42,14 +46,14 @@
        python3 -m rcx_tk --method ${method} ${input_file_new} 'output.tsv' 
     ]]></command>
     <inputs>
-        <param name="input_file" type="data" format="csv,tabular,tsv,xls,xlsx,txt" label="Input data" help="Input data"/>
-        <param name="method" type="select" label="Method" help="Which data is processed: metadata or alkane file.">
-            <option value="metadata" selected="true">metadata</option>
-            <option value="alkanes">alkanes</option>
+        <param name="input_file" type="data" format="csv,tabular,tsv,xls,xlsx,txt" label="Input data file" help="Upload your sample metadata (sequence) or alkane file."/>
+        <param name="method" type="select" label="Processing method" help="Select whether to process a metadata file or an alkane file. This determines the column arrangement and validation steps.">
+            <option value="metadata" selected="true">Metadata file</option>
+            <option value="alkanes">Alkane file</option>
         </param>
     </inputs>
     <outputs>
-        <data name="output_file" format="tabular" from_work_dir = "output.tsv" label="Processed data"/>
+        <data name="output_file" format="tabular" from_work_dir = "output.tsv" label="Processed ${method} (dataset ${input_file.id})"/>
     </outputs>
     <tests>
         <test>
@@ -64,9 +68,50 @@
         </test>
     </tests>
     <help><![CDATA[
-    rcx-tk is a tool to process a metadata and/or alkane files. The main steps are columns rearrangement, validation of the file names, and derivation of new columns, such as sampleName, sequenceIdentifier, sampleIdentifier and localOrder. 
 
-    On the input, a metadata or alkane file in any tabular format is expected. On the output, a tsv file is provided.
+.. _rcx_tk:
+
+======================================
+rcx-tk: Metadata/Alkane File Processor
+======================================
+
+**Tool Description**
+
+rcx-tk is a tool for processing sample metadata (sequence) and alkane files. It standardizes your input by rearranging columns, validating file names, and deriving new columns such as `sampleName`, `sequenceIdentifier`, `sampleIdentifier`, and `localOrder`. This ensures your data is ready for downstream analysis and compatible with standardized workflows.
+
+How it works
+------------
+
+- **Column rearrangement**: Ensures columns are in the correct order for further processing.
+- **File name validation**: Checks that file names follow expected conventions.
+- **Derivation of new columns**: Automatically generates useful columns for sample tracking and analysis.
+
+Inputs
+------
+
+1. **Input data file**  
+   Upload your sample metadata (sequence) or alkane file. Supported formats: CSV, TSV, tabular, XLS, XLSX, or TXT.
+
+2. **Processing method**  
+   Select whether to process a metadata file or an alkane file. This determines the column arrangement and validation steps.
+
+Outputs
+-------
+
+- **Processed file**  
+  A standardized TSV file with rearranged columns and additional derived columns, ready for downstream analysis.
+
+Example
+-------
+
+Suppose you have a metadata file in CSV or tabular format. Select "Metadata file" as the processing method and upload your file. The tool will output a processed TSV file with standardized columns and additional identifiers.
+
+Notes
+-----
+
+- Ensure your input file is correctly formatted and contains the necessary columns for your chosen processing method.
+- The tool supports a variety of input formats for flexibility.
+- The output file can be directly used in downstream data analysis workflows.
     ]]></help>
     <citations>
         <citation type="doi">10.5281/zenodo.4471245</citation>
