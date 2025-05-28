@@ -48,7 +48,7 @@
     </configfiles>
 
     <inputs>
-        <param label="Input spectra dataset" name="input_file" type="data" format="msp,mgf,json,csv,tsv,xlsx" />
+        <param label="Input spectra dataset" name="input_file" type="data" format="msp,mgf,json,csv,tabular,xlsx" />
 
         <repeat name="ordered_jobs" title="Ordered conversions">
             <param name="ordered_jobs_select" type="select" label="Available conversions" multiple="false" optional="true">
@@ -84,8 +84,8 @@
             <change_format>
                 <when input="input_file.ext" value="mgf" format="mgf" />
                 <when input="input_file.ext" value="json" format="json" />
-                <when input="input_file.ext" value="csv" format="tsv" />
-                <when input="input_file.ext" value="tsv" format="tsv" />
+                <when input="input_file.ext" value="csv" format="tabular" />
+                <when input="input_file.ext" value="tsv" format="tabular" />
                 <when input="input_file.ext" value="xlsx" format="xlsx" />
             </change_format>
         </data>    
