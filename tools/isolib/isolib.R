@@ -86,11 +86,15 @@ generate_isotope_spectra <- function(compound_table,
     multiplied_chemforms <- enviPat::multiform(chemforms, adduct$Mult)
 
     if (adduct$Ion_mode == "negative") {
-      merged_chemforms <- enviPat::subform(multiplied_chemforms, 
-                                           adduct$Formula_ded)
+      merged_chemforms <- enviPat::subform(
+        multiplied_chemforms,
+        adduct$Formula_ded
+      )
     } else {
-      merged_chemforms <- enviPat::mergeform(multiplied_chemforms, 
-                                             adduct$Formula_add)
+      merged_chemforms <- enviPat::mergeform(
+        multiplied_chemforms,
+        adduct$Formula_add
+      )
     }
 
     charge_string <- paste0(
@@ -144,7 +148,7 @@ generate_isotope_spectra <- function(compound_table,
       # select all columns which describe the elemental composition
       # remove all 12C, 35Cl etc.
       # remove isotopes which don't occur
-      compositions <- as.data.frame(patterns[[i]][, -c(1, 2)]) |>
+      compositions <- as.data.frame(patterns[[i]][, -c(1, 2), drop = FALSE]) |>
         dplyr::select(-tidyselect::any_of(monoisotopic$isotope)) |>
         dplyr::select_if(~ !all(. == 0))
 
@@ -194,7 +198,11 @@ write_to_table <- function(spectra, file, append_isotopes) {
   if (append_isotopes) {
     result <- result |>
       dplyr::mutate(result,
-        full_formula = paste0(formula, " (", isotopes, ")")
+        full_formula = ifelse(
+          is.na(isotopes) | isotopes == "",
+          formula,
+          paste0(formula, " (", isotopes, ")")
+        )
       ) |>
       dplyr::select(-all_of(c("formula", "isotopes"))) |>
       dplyr::rename(formula = full_formula) |>
