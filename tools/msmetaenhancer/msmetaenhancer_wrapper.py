@@ -56,7 +56,7 @@ def main(argv):
     if args.file_format == 'xlsx':
         handle_xlsx_file(app, args.output_file)
     else:
-        if args.file_format == 'csv':
+        if args.file_format in ['csv', 'tsv', 'tabular']:
             app.save_data(args.output_file, file_format="tsv")
         else:
             app.save_data(args.output_file, file_format=args.file_format)

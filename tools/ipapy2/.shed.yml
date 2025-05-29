@@ -1,0 +1,15 @@
+name: ipaPy2
+owner: recetox
+remote_repository_url: "https://github.com/RECETOX/galaxytools/tree/master/tools/ipapy2"
+homepage_url: "https://github.com/francescodc87/ipaPy2"
+categories:
+  - Metabolomics
+description: "Mass spectrometry data annotation tool."
+long_description: "New Python implementation of the Integrated Probabilistic Annotation (IPA) - A Bayesian annotation method for LC/MS data integrating biochemical relations, isotope patterns and adduct formation."
+auto_tool_repositories:
+  name_template: "{{ tool_id }}"
+  description_template: "{{ tool_name }} tool from the ipaPy2 package"
+suite:
+  name: suite_ipapy2
+  description: tools from the ipaPy2 suite are used for annotation of mass spectrometry data
+  type: repository_suite_definition
