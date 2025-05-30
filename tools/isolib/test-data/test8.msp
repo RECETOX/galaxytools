@@ -1,0 +1,2126 @@
+NAME: Glyphosate (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C3H8N1O5P1
+charge: 1
+ionization_mode: positive
+precursor_mz: 170.021284986
+Num Peaks: 1
+170.021285308091 100
+
+NAME: Chlormequat chloride (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C5H13N1Cl1
+charge: 1
+ionization_mode: positive
+precursor_mz: 123.080928096
+Num Peaks: 2
+123.080928588091 100
+125.077978478091 31.9957761351637
+
+NAME: (Aminomethyl)phosphonic acid (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C1H6N1O3P1
+charge: 1
+ionization_mode: positive
+precursor_mz: 112.015805682
+Num Peaks: 1
+112.015806004091 100
+
+NAME: alpha-Fluoro-beta-alanine (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C3H6N1O2F1
+charge: 1
+ionization_mode: positive
+precursor_mz: 108.045532652
+Num Peaks: 1
+108.045533094091 100
+
+NAME: 5-fluorouracil (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C4H3N2O2F1
+charge: 1
+ionization_mode: positive
+precursor_mz: 131.025131556
+Num Peaks: 1
+131.025132008091 100
+
+NAME: Gemcitabine (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C9H11N3O4F2
+charge: 1
+ionization_mode: positive
+precursor_mz: 264.079038272
+retention_time: 1.1
+Num Peaks: 1
+264.079038714091 100
+
+NAME: Cyclophosphamide (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C7H15N2O2Cl2P1
+charge: 1
+ionization_mode: positive
+precursor_mz: 261.03209571
+retention_time: 4.2
+Num Peaks: 3
+261.032096102091 100
+263.029145992091 63.9915522703273
+265.026195882091 10.2372969049151
+
+NAME: Cytarabine (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C9H13N3O5
+charge: 1
+ionization_mode: positive
+precursor_mz: 244.092796516
+retention_time: 0.8
+Num Peaks: 1
+244.092796998091 100
+
+NAME: Ifosfamide (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C7H15N2O2Cl2P1
+charge: 1
+ionization_mode: positive
+precursor_mz: 261.03209571
+retention_time: 3.9
+Num Peaks: 3
+261.032096102091 100
+263.029145992091 63.9915522703273
+265.026195882091 10.2372969049151
+
+NAME: Paraquat dichloride (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C12H14N2
+charge: 1
+ionization_mode: positive
+precursor_mz: 187.122974448
+Num Peaks: 2
+187.122974920091 100
+188.126329760091 12.9788739512787
+
+NAME: Acetaminophen sulfate (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C8H9N1O5S1
+charge: 1
+ionization_mode: positive
+precursor_mz: 232.027419388
+retention_time: 0.5
+Num Peaks: 1
+232.027419580091 100
+
+NAME: Acetaminophen mercapturate (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C13H16N2O5S1
+charge: 1
+ionization_mode: positive
+precursor_mz: 313.085268612
+retention_time: 2.3
+Num Peaks: 2
+313.085268814091 100
+314.088623654091 14.0604467805519
+
+NAME: Resorcinol (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C6H6O2
+charge: 1
+ionization_mode: positive
+precursor_mz: 111.044055432
+Num Peaks: 1
+111.044055884091 100
+
+NAME: Caffeic acid 3-O-sulfate (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C9H8O7S1
+charge: 1
+ionization_mode: positive
+precursor_mz: 261.006349596
+Num Peaks: 1
+261.006349778091 100
+
+NAME: Omethoate (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C5H12N1O4P1S1
+charge: 1
+ionization_mode: positive
+precursor_mz: 214.029741494
+retention_time: 1.3
+Num Peaks: 1
+214.029741546091 100
+
+NAME: Malathion dicarboxylic Acid (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C6H11O6P1S2
+charge: 1
+ionization_mode: positive
+precursor_mz: 274.980742702
+retention_time: 4.3
+Num Peaks: 1
+274.980742474091 100
+
+NAME: 4-Nitrophenol (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C6H5N1O3
+charge: 1
+ionization_mode: positive
+precursor_mz: 140.03421902
+Num Peaks: 1
+140.034219482091 100
+
+NAME: 2-(diethylamino)-6-methylpyrimidin-4-ol (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C9H15N3O1
+charge: 1
+ionization_mode: positive
+precursor_mz: 182.1287881
+retention_time: 1.6
+Num Peaks: 1
+182.128788582091 100
+
+NAME: O,O-Dimethyldithiophosphate (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C2H7O2P1S2
+charge: 1
+ionization_mode: positive
+precursor_mz: 158.969784094
+retention_time: 4.3
+Num Peaks: 1
+158.969783866091 100
+
+NAME: 1,3-Dichloro-2-propanol (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C3H6O1Cl2
+charge: 1
+ionization_mode: positive
+precursor_mz: 128.986846172
+Num Peaks: 3
+128.986846684091 100
+130.983896574091 63.9915522703273
+132.980946464091 10.2372969049151
+
+NAME: Acetaminophen (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C8H9N1O2
+charge: 1
+ionization_mode: positive
+precursor_mz: 152.070604528
+retention_time: 1.5
+Num Peaks: 1
+152.070604990091 100
+
+NAME: Methylparaben (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C8H8O3
+charge: 1
+ionization_mode: positive
+precursor_mz: 153.054620116
+retention_time: 6.8
+Num Peaks: 1
+153.054620568091 100
+
+NAME: Butylparaben (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C11H14O3
+charge: 1
+ionization_mode: positive
+precursor_mz: 195.101570308
+retention_time: 6.8
+Num Peaks: 2
+195.101570760091 100
+196.104925600091 11.8973011220055
+
+NAME: Bentazone (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C10H12N2O3S1
+charge: 1
+ionization_mode: positive
+precursor_mz: 241.064139244
+Num Peaks: 2
+241.064139446091 100
+242.067494286091 10.8157282927322
+
+NAME: 2,4-Dihydroxybenzophenone (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C13H10O3
+charge: 1
+ionization_mode: positive
+precursor_mz: 215.07027018
+retention_time: 7.2
+Num Peaks: 2
+215.070270632091 100
+216.073625472091 14.0604467805519
+
+NAME: 2,6-Diethylaniline (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C10H15N1
+charge: 1
+ionization_mode: positive
+precursor_mz: 150.12772548
+retention_time: 5.1
+Num Peaks: 2
+150.127725942091 100
+151.131080782091 10.8157282927322
+
+NAME: DEET (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C12H17N1O1
+charge: 1
+ionization_mode: positive
+precursor_mz: 192.138290164
+retention_time: 5.8
+Num Peaks: 2
+192.138290626091 100
+193.141645466091 12.9788739512787
+
+NAME: 2,4-Dichlorophenol (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C6H4O1Cl2
+charge: 1
+ionization_mode: positive
+precursor_mz: 162.971196108
+retention_time: 0.8
+Num Peaks: 3
+162.971196620091 100
+164.968246510091 63.9915522703273
+166.965296400091 10.2372969049151
+
+NAME: 3-Phenoxybenzoic acid (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C13H10O3
+charge: 1
+ionization_mode: positive
+precursor_mz: 215.07027018
+retention_time: 7.16
+Num Peaks: 2
+215.070270632091 100
+216.073625472091 14.0604467805519
+
+NAME: 3,5,6-Trichloro-2-pyridinol (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C5H2N1O1Cl3
+charge: 1
+ionization_mode: positive
+precursor_mz: 197.927472724
+retention_time: 6.8
+Num Peaks: 3
+197.927473276091 100
+199.924523166091 95.987328405491
+201.921573056091 30.7118907147453
+
+NAME: Perfluorohexanesulfonic acid (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C6H1O3F13S1
+charge: 1
+ionization_mode: positive
+precursor_mz: 400.951157752
+Num Peaks: 1
+400.951157674091 100
+
+NAME: 2,4-Dibromophenol (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C6H4O1Br2
+charge: 1
+ionization_mode: positive
+precursor_mz: 250.870164948
+Num Peaks: 3
+250.870167000091 51.3993104846887
+252.868120100091 100
+254.866073200091 48.6387847701716
+
+NAME: Bisphenol A (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C15H16O2
+charge: 1
+ionization_mode: positive
+precursor_mz: 229.122305752
+retention_time: 7.1
+Num Peaks: 2
+229.122306204091 100
+230.125661044091 16.2235924390984
+
+NAME: Benzophenone (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C13H10O1
+charge: 1
+ionization_mode: positive
+precursor_mz: 183.08044094
+retention_time: 7.2
+Num Peaks: 2
+183.080441392091 100
+184.083796232091 14.0604467805519
+
+NAME: Tris(1,3-dichloro-2-propyl) phosphate (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C9H15O4Cl6P1
+charge: 1
+ionization_mode: positive
+precursor_mz: 428.89118767
+retention_time: 7.4
+Num Peaks: 4
+428.891188162091 52.0902090209021
+430.888238052091 100
+432.885287942091 79.9894403379092
+434.882337832091 34.1243230163836
+
+NAME: Ibuprofen (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C13H18O2
+charge: 1
+ionization_mode: positive
+precursor_mz: 207.137955816
+Num Peaks: 2
+207.137956268091 100
+208.141311108091 14.0604467805519
+
+NAME: Ipconazole (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C18H24N3O1Cl1
+charge: 1
+ionization_mode: positive
+precursor_mz: 334.168066068
+retention_time: 7.6
+Num Peaks: 3
+334.168066580091 100
+335.171421420091 19.468310926918
+336.165116470091 31.9957761351637
+
+NAME: Chlorfenvinphos (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C12H14O4Cl3P1
+charge: 1
+ionization_mode: positive
+precursor_mz: 358.976804598
+retention_time: 7.4
+Num Peaks: 5
+358.976805000091 100
+359.980159840091 12.9788739512787
+360.973854890091 95.987328405491
+361.977209730091 12.4580743629486
+362.970904780091 30.7118907147453
+
+NAME: Fipronil sulfone (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C12H4N4O2Cl2F6S1
+charge: 1
+ionization_mode: positive
+precursor_mz: 452.940897048
+retention_time: 7.24
+Num Peaks: 4
+452.940897210091 100
+453.944252050091 12.9788739512787
+454.937947100091 63.9915522703273
+456.934996990091 10.2372969049151
+
+NAME: 2,3,4,5-Tetrachlorophenol (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C6H2O1Cl4
+charge: 1
+ionization_mode: positive
+precursor_mz: 230.893251404
+Num Peaks: 4
+230.893251976091 78.1353135313531
+232.890301866091 100
+234.887351756091 47.9936642027455
+236.884401646091 10.2372969049151
+
+NAME: Tris(2,3-dibromopropyl) phosphate (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C9H15O4Br6P1
+charge: 1
+ionization_mode: positive
+precursor_mz: 692.58809419
+Num Peaks: 5
+694.586052402091 31.7026694196172
+696.584005502091 77.0989657270331
+698.581958602091 100
+700.579911702091 72.9581771552574
+702.577864802091 28.388776607029
+
+NAME: Mono-2-ethylhexyl phthalate (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C16H22O4
+charge: 1
+ionization_mode: positive
+precursor_mz: 279.159085184
+retention_time: 8.04
+Num Peaks: 2
+279.159085636091 100
+280.162440476091 17.3051652683716
+
+NAME: Fipronil (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C12H4N4O1Cl2F6S1
+charge: 1
+ionization_mode: positive
+precursor_mz: 436.945982428
+retention_time: 7.07
+Num Peaks: 4
+436.945982590091 100
+437.949337430091 12.9788739512787
+438.943032480091 63.9915522703273
+440.940082370091 10.2372969049151
+
+NAME: Perfluorooctanesulfonic acid (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C8H1O3F17S1
+charge: 1
+ionization_mode: positive
+precursor_mz: 500.944770632
+Num Peaks: 1
+500.944770474091 100
+
+NAME: 2,3,4,5-Tetrabromophenol (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C6H2O1Br4
+charge: 1
+ionization_mode: positive
+precursor_mz: 406.691189084
+Num Peaks: 5
+406.691192736091 17.6125941220095
+408.689145836091 68.5324139795849
+410.687098936091 100
+412.685052036091 64.8517130268955
+414.683005136091 15.7715425594605
+
+NAME: Perfluorooctanoic acid (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C8H1O2F15
+charge: 1
+ionization_mode: positive
+precursor_mz: 414.980978572
+Num Peaks: 1
+414.980978724091 100
+
+NAME: Triclosan (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C12H7O2Cl3
+charge: 1
+ionization_mode: positive
+precursor_mz: 288.958438504
+retention_time: 5.65
+Num Peaks: 5
+288.958439046091 100
+289.961793886091 12.9788739512787
+290.955488936091 95.987328405491
+291.958843776091 12.4580743629486
+292.952538826091 30.7118907147453
+
+NAME: Perfluorononanoic acid (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C9H1O2F17
+charge: 1
+ionization_mode: positive
+precursor_mz: 464.977785012
+Num Peaks: 1
+464.977785124091 100
+
+NAME: Paclitaxel (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C47H51N1O14
+charge: 1
+ionization_mode: positive
+precursor_mz: 854.338231312
+retention_time: 8
+Num Peaks: 3
+854.338231774091 100
+855.341586614091 50.8339229758415
+856.344941454091 12.6455356760887
+
+NAME: Acetaminophen glucuronide (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C14H17N1O8
+charge: 1
+ionization_mode: positive
+precursor_mz: 328.102692504
+retention_time: 3
+Num Peaks: 2
+328.102692966091 100
+329.106047806091 15.1420196098251
+
+NAME: Lidocaine (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C14H22N2O1
+charge: 1
+ionization_mode: positive
+precursor_mz: 235.180489324
+retention_time: 1.7
+Num Peaks: 2
+235.180489796091 100
+236.183844636091 15.1420196098251
+
+NAME: Bis(1,3-dichloro-2-propyl) phosphate (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C6H11O4Cl4P1
+charge: 1
+ionization_mode: positive
+precursor_mz: 318.922182182
+retention_time: 6.3
+Num Peaks: 4
+318.922182614091 78.1353135313531
+320.919232504091 100
+322.916282394091 47.9936642027455
+324.913332284091 10.2372969049151
+
+NAME: Irinotecan Hydrochloride Trihydrate (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C33H38N4O6
+charge: 1
+ionization_mode: positive
+precursor_mz: 587.286410936
+retention_time: 6.8
+Num Peaks: 2
+587.286411428091 100
+588.289766268091 35.6919033660164
+
+NAME: 5-Azacytidine (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C8H12N4O5
+charge: 1
+ionization_mode: positive
+precursor_mz: 245.088045484
+Num Peaks: 1
+245.088045976091 100
+
+NAME: Dacarbazine (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C6H10N6O1
+charge: 1
+ionization_mode: positive
+precursor_mz: 183.09888494
+retention_time: 1
+Num Peaks: 1
+183.098885452091 100
+
+NAME: 1,1,1,3,3,3-Hexafluoro-2-(fluoromethoxy)propane (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C4H3O1F7
+charge: 1
+ionization_mode: positive
+precursor_mz: 201.014488256
+Num Peaks: 1
+201.014488568091 100
+
+NAME: Tamoxifen Citrate (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C26H29N1O1
+charge: 1
+ionization_mode: positive
+precursor_mz: 372.232190548
+retention_time: 7.1
+Num Peaks: 2
+372.232191010091 100
+373.235545850091 28.1208935611038
+
+NAME: Amoxicillin (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C16H19N3O5S1
+charge: 1
+ionization_mode: positive
+precursor_mz: 366.111817708
+retention_time: 1.2
+Num Peaks: 2
+366.111817920091 100
+367.115172760091 17.3051652683716
+
+NAME: Bisphenol S Bis-b-d-Glucuronide (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C24H26O16S1
+charge: 1
+ionization_mode: positive
+precursor_mz: 603.101431752
+Num Peaks: 2
+603.101431934091 100
+604.104786774091 25.9577479025574
+
+NAME: Pentafluoroethanesulfonic acid (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C2H1O3F5S1
+charge: 1
+ionization_mode: positive
+precursor_mz: 200.963931992
+Num Peaks: 1
+200.963932074091 100
+
+NAME: Crotetamide (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C12H22N2O2
+charge: 1
+ionization_mode: positive
+precursor_mz: 227.175403944
+retention_time: 4.2
+Num Peaks: 2
+227.175404416091 100
+228.178759256091 12.9788739512787
+
+NAME: Deoxynivalenol (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C15H20O6
+charge: 1
+ionization_mode: positive
+precursor_mz: 297.13326436
+retention_time: 2.2
+Num Peaks: 2
+297.133264812091 100
+298.136619652091 16.2235924390984
+
+NAME: Cotinine (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C10H12N2O1
+charge: 1
+ionization_mode: positive
+precursor_mz: 177.102239004
+retention_time: 1
+Num Peaks: 2
+177.102239476091 100
+178.105594316091 10.8157282927322
+
+NAME: Hydroxycotinine (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C10H12N2O2
+charge: 1
+ionization_mode: positive
+precursor_mz: 193.097153624
+retention_time: 0.9
+Num Peaks: 2
+193.097154096091 100
+194.100508936091 10.8157282927322
+
+NAME: Bisphenol A b-D-Glucuronide (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C21H24O8
+charge: 1
+ionization_mode: positive
+precursor_mz: 405.154393728
+Num Peaks: 2
+405.154394180091 100
+406.157749020091 22.7130294147377
+
+NAME: Fumonisin b1 (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C34H59N1O15
+charge: 1
+ionization_mode: positive
+precursor_mz: 722.395746188
+retention_time: 6
+Num Peaks: 2
+722.395746650091 100
+723.399101490091 36.7734761952896
+
+NAME: Vincristine (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C46H56N4O10
+charge: 1
+ionization_mode: positive
+precursor_mz: 825.406919992
+retention_time: 5.6
+Num Peaks: 3
+825.406920484091 100
+826.410275324091 49.7523501465683
+827.413630164091 12.1074277749786
+
+NAME: alpha-Hexabromocyclododecane (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C12H18Br6
+charge: 1
+ionization_mode: positive
+precursor_mz: 636.658149176
+Num Peaks: 7
+638.656107528091 31.7026694196172
+640.654060628091 77.0989657270331
+641.657415468091 10.0065775794512
+642.652013728091 100
+643.655368568091 12.9788739512787
+644.649966828091 72.9581771552574
+646.647919928091 28.388776607029
+
+NAME: Etoposide (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C29H32O13
+charge: 1
+ionization_mode: positive
+precursor_mz: 589.191567084
+retention_time: 7.3
+Num Peaks: 2
+589.191567536091 100
+590.194922376091 31.3656120489235
+
+NAME: Methotrexate (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C20H22N8O5
+charge: 1
+ionization_mode: positive
+precursor_mz: 455.178591804
+retention_time: 3.3
+Num Peaks: 2
+455.178592336091 100
+456.181947176091 21.6314565854645
+
+NAME: Aminopterin (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C19H20N8O5
+charge: 1
+ionization_mode: positive
+precursor_mz: 441.16294174
+retention_time: 2.6
+Num Peaks: 2
+441.162942272091 100
+442.166297112091 20.5498837561912
+
+NAME: Bisphenol A sulfate (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C15H16O5S1
+charge: 1
+ionization_mode: positive
+precursor_mz: 309.079120612
+Num Peaks: 2
+309.079120794091 100
+310.082475634091 16.2235924390984
+
+NAME: Ciprofloxacin (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C17H18N3O3F1
+charge: 1
+ionization_mode: positive
+precursor_mz: 332.140495656
+retention_time: 4.3
+Num Peaks: 2
+332.140496118091 100
+333.143850958091 18.3867380976448
+
+NAME: Benzo[a]anthracene (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C18H12
+charge: 1
+ionization_mode: positive
+precursor_mz: 229.101176384
+Num Peaks: 2
+229.101176836091 100
+230.104531676091 19.468310926918
+
+NAME: Dibutyl decanedioate (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C18H34O4
+charge: 1
+ionization_mode: positive
+precursor_mz: 315.252985568
+retention_time: 7.7
+Num Peaks: 2
+315.252986020091 100
+316.256340860091 19.468310926918
+
+NAME: Benzo[a]pyrene (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C20H12
+charge: 1
+ionization_mode: positive
+precursor_mz: 253.101176384
+Num Peaks: 2
+253.101176836091 100
+254.104531676091 21.6314565854645
+
+NAME: Indeno[1,2,3-cd]pyrene (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C22H12
+charge: 1
+ionization_mode: positive
+precursor_mz: 277.101176384
+Num Peaks: 2
+277.101176836091 100
+278.104531676091 23.7946022440109
+
+NAME: 2,2',4,4',5,5'-Hexachlorobiphenyl (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C12H4Cl6
+charge: 1
+ionization_mode: positive
+precursor_mz: 358.851692208
+Num Peaks: 6
+358.851692840091 52.0902090209021
+360.848742730091 100
+361.852097570091 12.9788739512787
+362.845792620091 79.9894403379092
+363.849147460091 10.3817286357905
+364.842842510091 34.1243230163836
+
+NAME: Bis(2-ethylhexyl) terephthalate (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C24H38O4
+charge: 1
+ionization_mode: positive
+precursor_mz: 391.284285696
+retention_time: 8
+Num Peaks: 2
+391.284286148091 100
+392.287640988091 25.9577479025574
+
+NAME: Bis(2-ethylhexyl) phthalate (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C24H38O4
+charge: 1
+ionization_mode: positive
+precursor_mz: 391.284285696
+retention_time: 8.04
+Num Peaks: 2
+391.284286148091 100
+392.287640988091 25.9577479025574
+
+NAME: Tris(2-ethylhexyl) trimellitate (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C33H54O6
+charge: 1
+ionization_mode: positive
+precursor_mz: 547.399315448
+retention_time: 9.9
+Num Peaks: 2
+547.399315900091 100
+548.402670740091 35.6919033660164
+
+NAME: Bis(2-ethylhexyl) tetrabromophthalate (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C24H34O4Br4
+charge: 1
+ionization_mode: positive
+precursor_mz: 702.926333968
+Num Peaks: 8
+702.926337620091 17.6125941220095
+704.924290720091 68.5324139795849
+705.927645560091 17.7894712523576
+706.922243820091 100
+707.925598660091 25.9577479025574
+708.920196920091 64.8517130268955
+709.923551760091 16.8340441780115
+710.918150020091 15.7715425594605
+
+NAME: Abamectin (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C48H72O14
+charge: 1
+ionization_mode: positive
+precursor_mz: 873.499482984
+Num Peaks: 3
+873.499483436091 100
+874.502838276091 51.9154958051147
+875.506193116091 13.1953415750491
+
+NAME: Acetamiprid (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C10H11N4Cl1
+charge: 1
+ionization_mode: positive
+precursor_mz: 223.074500032
+retention_time: 4.13
+Num Peaks: 3
+223.074500554091 100
+224.077855394091 10.8157282927322
+225.071550444091 31.9957761351637
+
+NAME: Ametryn (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C9H17N5S1
+charge: 1
+ionization_mode: positive
+precursor_mz: 228.127742544
+retention_time: 5.66
+Num Peaks: 1
+228.127742776091 100
+
+NAME: Amitraz (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C19H23N3
+charge: 1
+ionization_mode: positive
+precursor_mz: 294.196473736
+retention_time: 7.97
+Num Peaks: 2
+294.196474218091 100
+295.199829058091 20.5498837561912
+
+NAME: Azoxystrobin (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C22H17N3O5
+charge: 1
+ionization_mode: positive
+precursor_mz: 404.124096644
+retention_time: 7.51
+Num Peaks: 2
+404.124097126091 100
+405.127451966091 23.7946022440109
+
+NAME: Benalaxyl (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C20H23N1O3
+charge: 1
+ionization_mode: positive
+precursor_mz: 326.175069596
+retention_time: 7.6
+Num Peaks: 2
+326.175070058091 100
+327.178424898091 21.6314565854645
+
+NAME: Benzoximate (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C18H18N1O5Cl1
+charge: 1
+ionization_mode: positive
+precursor_mz: 364.094626356
+retention_time: 7.68
+Num Peaks: 3
+364.094626848091 100
+365.097981688091 19.468310926918
+366.091676738091 31.9957761351637
+
+NAME: Boscalid (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C18H12N2O1Cl2
+charge: 1
+ionization_mode: positive
+precursor_mz: 343.039944364
+retention_time: 7.4
+Num Peaks: 5
+343.039944896091 100
+344.043299736091 19.468310926918
+345.036994786091 63.9915522703273
+346.040349626091 12.4580743629486
+347.034044676091 10.2372969049151
+
+NAME: Butafenacil (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C20H18N2O6Cl1F3
+charge: 1
+ionization_mode: positive
+precursor_mz: 475.087824636
+retention_time: 7.31
+Num Peaks: 3
+475.087825078091 100
+476.091179918091 21.6314565854645
+477.084874968091 31.9957761351637
+
+NAME: Carbetamide (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C12H16N2O3
+charge: 1
+ionization_mode: positive
+precursor_mz: 237.123368372
+retention_time: 4.92
+Num Peaks: 2
+237.123368844091 100
+238.126723684091 12.9788739512787
+
+NAME: Carfentrazone ethyl (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C15H14N3O3Cl2F3
+charge: 1
+ionization_mode: positive
+precursor_mz: 412.043707328
+retention_time: 7.43
+Num Peaks: 5
+412.043707810091 100
+413.047062650091 16.2235924390984
+414.040757700091 63.9915522703273
+415.044112540091 10.3817286357905
+416.037807590091 10.2372969049151
+
+NAME: Chlorantraniliprole (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C18H14N5O2Br1Cl2
+charge: 1
+ionization_mode: positive
+precursor_mz: 481.978068148
+retention_time: 7.3
+Num Peaks: 9
+481.978069510091 100
+482.981424350091 19.468310926918
+483.975119400091 63.9915522703273
+483.976022610091 97.2775695403433
+484.978474240091 12.4580743629486
+484.979377450091 18.9382997002629
+485.972169290091 10.2372969049151
+485.973072500091 62.2494267597128
+486.976427340091 12.118911951805
+
+NAME: Clofentezine (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C14H8N4Cl2
+charge: 1
+ionization_mode: positive
+precursor_mz: 303.019877616
+retention_time: 7.93
+Num Peaks: 4
+303.019878168091 100
+304.023233008091 15.1420196098251
+305.016928058091 63.9915522703273
+307.013977948091 10.2372969049151
+
+NAME: Cymoxanil (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C7H10N4O3
+charge: 1
+ionization_mode: positive
+precursor_mz: 199.08256618
+retention_time: 3.61
+Num Peaks: 1
+199.082566672091 100
+
+NAME: Cyprodinil (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C14H15N3
+charge: 1
+ionization_mode: positive
+precursor_mz: 226.13387348
+retention_time: 7.39
+Num Peaks: 2
+226.133873962091 100
+227.137228802091 15.1420196098251
+
+NAME: Cyromazine (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C6H10N6
+charge: 1
+ionization_mode: positive
+precursor_mz: 167.10397032
+retention_time: 0.81
+Num Peaks: 1
+167.103970832091 100
+
+NAME: Dimoxystrobin (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C19H22N2O3
+charge: 1
+ionization_mode: positive
+precursor_mz: 327.170318564
+retention_time: 7.58
+Num Peaks: 2
+327.170319036091 100
+328.173673876091 20.5498837561912
+
+NAME: Dinotefuran (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C7H14N4O3
+charge: 1
+ionization_mode: positive
+precursor_mz: 203.113866308
+retention_time: 1.54
+Num Peaks: 1
+203.113866800091 100
+
+NAME: Doramectin (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C50H74O14
+charge: 1
+ionization_mode: positive
+precursor_mz: 899.515133048
+Num Peaks: 3
+899.515133500091 100
+900.518488340091 54.0786414636612
+901.521843180091 14.3300473665205
+
+NAME: Eprinomectin (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C49H73N1O14
+charge: 1
+ionization_mode: positive
+precursor_mz: 900.510382016
+Num Peaks: 3
+900.510382478091 100
+901.513737318091 52.997068634388
+902.517092158091 13.7568454718597
+
+NAME: Famoxadon (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C22H18N2O4
+charge: 1
+ionization_mode: positive
+precursor_mz: 375.133933056
+Num Peaks: 2
+375.133933528091 100
+376.137288368091 23.7946022440109
+
+NAME: Fenazaquin (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C20H22N2O1
+charge: 1
+ionization_mode: positive
+precursor_mz: 307.180489324
+retention_time: 9.68
+Num Peaks: 2
+307.180489796091 100
+308.183844636091 21.6314565854645
+
+NAME: Fenhexamid (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C14H17N1O2Cl2
+charge: 1
+ionization_mode: positive
+precursor_mz: 302.070910144
+retention_time: 7.28
+Num Peaks: 4
+302.070910666091 100
+303.074265506091 15.1420196098251
+304.067960556091 63.9915522703273
+306.065010446091 10.2372969049151
+
+NAME: Fenpyroximate (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C24H27N3O4
+charge: 1
+ionization_mode: positive
+precursor_mz: 422.207432344
+retention_time: 8.51
+Num Peaks: 2
+422.207432826091 100
+423.210787666091 25.9577479025574
+
+NAME: Flonicamid (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C9H6N3O1F3
+charge: 1
+ionization_mode: positive
+precursor_mz: 230.053572472
+retention_time: 1.75
+Num Peaks: 1
+230.053572894091 100
+
+NAME: Fluazinam (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C13H4N4O4Cl2F6
+charge: 1
+ionization_mode: positive
+precursor_mz: 464.958655288
+Num Peaks: 4
+464.958655720091 100
+465.962010560091 14.0604467805519
+466.955705610091 63.9915522703273
+468.952755500091 10.2372969049151
+
+NAME: Fludioxonil (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C12H6N2O2F2
+charge: 1
+ionization_mode: positive
+precursor_mz: 249.047009872
+retention_time: 7.07
+Num Peaks: 2
+249.047010304091 100
+250.050365144091 12.9788739512787
+
+NAME: Fluoxastrobin (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C21H16N4O5Cl1F1
+charge: 1
+ionization_mode: positive
+precursor_mz: 459.086601512
+retention_time: 7.62
+Num Peaks: 3
+459.086602014091 100
+460.089956854091 22.7130294147377
+461.083651904091 31.9957761351637
+
+NAME: Flutolanil (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C17H16N1O2F3
+charge: 1
+ionization_mode: positive
+precursor_mz: 324.120589412
+retention_time: 7.01
+Num Peaks: 2
+324.120589814091 100
+325.123944654091 18.3867380976448
+
+NAME: Furalaxyl (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C17H19N1O4
+charge: 1
+ionization_mode: positive
+precursor_mz: 302.138684088
+retention_time: 7.04
+Num Peaks: 2
+302.138684550091 100
+303.142039390091 18.3867380976448
+
+NAME: Halofenozide (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C18H19N2O2Cl1
+charge: 1
+ionization_mode: positive
+precursor_mz: 331.120781528
+retention_time: 7.09
+Num Peaks: 3
+331.120782030091 100
+332.124136870091 19.468310926918
+333.117831920091 31.9957761351637
+
+NAME: Imazalil (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C14H14N2O1Cl2
+charge: 1
+ionization_mode: positive
+precursor_mz: 297.055594428
+retention_time: 5.14
+Num Peaks: 4
+297.055594960091 100
+298.058949800091 15.1420196098251
+299.052644850091 63.9915522703273
+301.049694740091 10.2372969049151
+
+NAME: Imidacloprid (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C9H10N5O2Cl1
+charge: 1
+ionization_mode: positive
+precursor_mz: 256.05957824
+retention_time: 3.88
+Num Peaks: 2
+256.059578772091 100
+258.056628662091 31.9957761351637
+
+NAME: Ivermectin (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C48H74O14
+charge: 1
+ionization_mode: positive
+precursor_mz: 875.515133048
+Num Peaks: 3
+875.515133500091 100
+876.518488340091 51.9154958051147
+877.521843180091 13.1953415750491
+
+NAME: Kresoxim methyl (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C18H19N1O4
+charge: 1
+ionization_mode: positive
+precursor_mz: 314.138684088
+retention_time: 7.6
+Num Peaks: 2
+314.138684550091 100
+315.142039390091 19.468310926918
+
+NAME: Mandipropamid (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C23H22N1O4Cl1
+charge: 1
+ionization_mode: positive
+precursor_mz: 412.131011864
+retention_time: 7.54
+Num Peaks: 3
+412.131012356091 100
+413.134367196091 24.8761750732841
+414.128062246091 31.9957761351637
+
+NAME: Mepanipyrim (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C14H13N3
+charge: 1
+ionization_mode: positive
+precursor_mz: 224.118223416
+retention_time: 7.5
+Num Peaks: 2
+224.118223898091 100
+225.121578738091 15.1420196098251
+
+NAME: Mepronil (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C17H19N1O2
+charge: 1
+ionization_mode: positive
+precursor_mz: 270.148854848
+retention_time: 7.26
+Num Peaks: 2
+270.148855310091 100
+271.152210150091 18.3867380976448
+
+NAME: Metaflumizone (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C24H16N4O2F6
+charge: 1
+ionization_mode: positive
+precursor_mz: 507.125021072
+retention_time: 7.64
+Num Peaks: 2
+507.125021444091 100
+508.128376284091 25.9577479025574
+
+NAME: Metalaxyl (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C15H21N1O4
+charge: 1
+ionization_mode: positive
+precursor_mz: 280.154334152
+retention_time: 6.64
+Num Peaks: 2
+280.154334614091 100
+281.157689454091 16.2235924390984
+
+NAME: Methoxyfenozide (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C22H28N2O3
+charge: 1
+ionization_mode: positive
+precursor_mz: 369.217268756
+retention_time: 7.21
+Num Peaks: 2
+369.217269228091 100
+370.220624068091 23.7946022440109
+
+NAME: Moxidectin (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C37H53N1O8
+charge: 1
+ionization_mode: positive
+precursor_mz: 640.384393656
+retention_time: 8.67
+Num Peaks: 2
+640.384394118091 100
+641.387748958091 40.0181946831093
+
+NAME: Myclobutanil (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C15H17N4Cl1
+charge: 1
+ionization_mode: positive
+precursor_mz: 289.121450224
+retention_time: 7.08
+Num Peaks: 3
+289.121450746091 100
+290.124805586091 16.2235924390984
+291.118500636091 31.9957761351637
+
+NAME: Nitenpyram (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C11H15N4O2Cl1
+charge: 1
+ionization_mode: positive
+precursor_mz: 271.0956294
+retention_time: 1.69
+Num Peaks: 3
+271.095629922091 100
+272.098984762091 11.8973011220055
+273.092679812091 31.9957761351637
+
+NAME: Oxadixyl (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C14H18N2O4
+charge: 1
+ionization_mode: positive
+precursor_mz: 279.133933056
+retention_time: 5.4
+Num Peaks: 2
+279.133933528091 100
+280.137288368091 15.1420196098251
+
+NAME: Picoxystrobin (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C18H16N1O4F3
+charge: 1
+ionization_mode: positive
+precursor_mz: 368.110418652
+retention_time: 7.33
+Num Peaks: 2
+368.110419054091 100
+369.113773894091 19.468310926918
+
+NAME: Piperonyl butoxide (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C19H30O5
+charge: 1
+ionization_mode: positive
+precursor_mz: 339.21660006
+Num Peaks: 2
+339.216600512091 100
+340.219955352091 20.5498837561912
+
+NAME: Prochloraz (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C15H16N3O2Cl3
+charge: 1
+ionization_mode: positive
+precursor_mz: 376.038085792
+retention_time: 7.67
+Num Peaks: 5
+376.038086364091 100
+377.041441204091 16.2235924390984
+378.035136254091 95.987328405491
+379.038491094091 15.5725929536857
+380.032186144091 30.7118907147453
+
+NAME: Prometon (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C10H19N5O1
+charge: 1
+ionization_mode: positive
+precursor_mz: 226.166236228
+retention_time: 4.22
+Num Peaks: 2
+226.166236730091 100
+227.169591570091 10.8157282927322
+
+NAME: Pymetrozine (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C10H11N5O1
+charge: 1
+ionization_mode: positive
+precursor_mz: 218.103635972
+retention_time: 1.47
+Num Peaks: 2
+218.103636474091 100
+219.106991314091 10.8157282927322
+
+NAME: Pyracarbolid (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C13H15N1O2
+charge: 1
+ionization_mode: positive
+precursor_mz: 218.11755472
+retention_time: 5.83
+Num Peaks: 2
+218.117555182091 100
+219.120910022091 14.0604467805519
+
+NAME: Pyrimethanil (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C12H13N3
+charge: 1
+ionization_mode: positive
+precursor_mz: 200.118223416
+retention_time: 6.88
+Num Peaks: 2
+200.118223898091 100
+201.121578738091 12.9788739512787
+
+NAME: Pyriproxyfen (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C20H19N1O3
+charge: 1
+ionization_mode: positive
+precursor_mz: 322.143769468
+retention_time: 8.01
+Num Peaks: 2
+322.143769930091 100
+323.147124770091 21.6314565854645
+
+NAME: Quinoxyfen (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C15H8N1O1Cl2F1
+charge: 1
+ionization_mode: positive
+precursor_mz: 308.003973456
+retention_time: 8.34
+Num Peaks: 5
+308.003973958091 100
+309.007328798091 16.2235924390984
+310.001023848091 63.9915522703273
+311.004378688091 10.3817286357905
+311.998073738091 10.2372969049151
+
+NAME: Rotenone (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C23H22O6
+charge: 1
+ionization_mode: positive
+precursor_mz: 395.148914424
+retention_time: 8.44
+Num Peaks: 2
+395.148914876091 100
+396.152269716091 24.8761750732841
+
+NAME: Secbumeton (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C10H19N5O1
+charge: 1
+ionization_mode: positive
+precursor_mz: 226.166236228
+retention_time: 4.22
+Num Peaks: 2
+226.166236730091 100
+227.169591570091 10.8157282927322
+
+NAME: Spiroxamine (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C18H35N1O2
+charge: 1
+ionization_mode: positive
+precursor_mz: 298.27405536
+retention_time: 5.76
+Num Peaks: 2
+298.274055822091 100
+299.277410662091 19.468310926918
+
+NAME: Tebufenozide (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C22H28N2O2
+charge: 1
+ionization_mode: positive
+precursor_mz: 353.222354136
+retention_time: 7.29
+Num Peaks: 2
+353.222354608091 100
+354.225709448091 23.7946022440109
+
+NAME: Tebufenpyrad (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C18H24N3O1Cl1
+charge: 1
+ionization_mode: positive
+precursor_mz: 334.168066068
+retention_time: 7.71
+Num Peaks: 3
+334.168066580091 100
+335.171421420091 19.468310926918
+336.165116470091 31.9957761351637
+
+NAME: Terbumeton (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C10H19N5O1
+charge: 1
+ionization_mode: positive
+precursor_mz: 226.166236228
+retention_time: 4.22
+Num Peaks: 2
+226.166236730091 100
+227.169591570091 10.8157282927322
+
+NAME: Triadimefon (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C14H16N3O2Cl1
+charge: 1
+ionization_mode: positive
+precursor_mz: 294.100380432
+retention_time: 7.19
+Num Peaks: 3
+294.100380944091 100
+295.103735784091 15.1420196098251
+296.097430834091 31.9957761351637
+
+NAME: Trifloxystrobin (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C20H19N2O4F3
+charge: 1
+ionization_mode: positive
+precursor_mz: 409.136967748
+retention_time: 7.58
+Num Peaks: 2
+409.136968160091 100
+410.140323000091 21.6314565854645
+
+NAME: Zoxamide (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C14H16N1O2Cl3
+charge: 1
+ionization_mode: positive
+precursor_mz: 336.031937792
+retention_time: 7.57
+Num Peaks: 5
+336.031938344091 100
+337.035293184091 15.1420196098251
+338.028988234091 95.987328405491
+339.032343074091 14.5344200901067
+340.026038124091 30.7118907147453
+
+NAME: Acibenzolar-S-methyl (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C8H6N2O1S2
+charge: 1
+ionization_mode: positive
+precursor_mz: 210.999430812
+retention_time: 7.84
+Num Peaks: 1
+210.999430744091 100
+
+NAME: Bupirimate (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C13H24N4O3S1
+charge: 1
+ionization_mode: positive
+precursor_mz: 317.164187628
+retention_time: 7.1
+Num Peaks: 2
+317.164187850091 100
+318.167542690091 14.0604467805519
+
+NAME: Buprofezin (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C16H23N3O1S1
+charge: 1
+ionization_mode: positive
+precursor_mz: 306.163459356
+retention_time: 7.55
+Num Peaks: 2
+306.163459568091 100
+307.166814408091 17.3051652683716
+
+NAME: Carboxin (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C12H13N1O2S1
+charge: 1
+ionization_mode: positive
+precursor_mz: 236.073975656
+retention_time: 6.69
+Num Peaks: 2
+236.073975848091 100
+237.077330688091 12.9788739512787
+
+NAME: Clethodim (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C17H26N1O3Cl1S1
+charge: 1
+ionization_mode: positive
+precursor_mz: 360.139468372
+retention_time: 7.81
+Num Peaks: 3
+360.139468594091 100
+361.142823434091 18.3867380976448
+362.136518484091 31.9957761351637
+
+NAME: Clothianidin (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C6H8N5O2Cl1S1
+charge: 1
+ionization_mode: positive
+precursor_mz: 250.015999176
+retention_time: 3.5
+Num Peaks: 2
+250.015999438091 100
+252.013049328091 31.9957761351637
+
+NAME: Cyazofamid (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C13H13N4O2Cl1S1
+charge: 1
+ionization_mode: positive
+precursor_mz: 325.052050336
+retention_time: 7.4
+Num Peaks: 3
+325.052050588091 100
+326.055405428091 14.0604467805519
+327.049100478091 31.9957761351637
+
+NAME: Ethiprole (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C13H9N4O1Cl2F3S1
+charge: 1
+ionization_mode: positive
+precursor_mz: 396.989897928
+retention_time: 6.87
+Num Peaks: 4
+396.989898150091 100
+397.993252990091 14.0604467805519
+398.986948040091 63.9915522703273
+400.983997930091 10.2372969049151
+
+NAME: Ethofumesate (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C13H18O5S1
+charge: 1
+ionization_mode: positive
+precursor_mz: 287.094770676
+retention_time: 6.95
+Num Peaks: 2
+287.094770858091 100
+288.098125698091 14.0604467805519
+
+NAME: Fenamidone (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C17H17N3O1S1
+charge: 1
+ionization_mode: positive
+precursor_mz: 312.116509164
+retention_time: 7.28
+Num Peaks: 2
+312.116509376091 100
+313.119864216091 18.3867380976448
+
+NAME: Fipronil (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C12H4N4O1Cl2F6S1
+charge: 1
+ionization_mode: positive
+precursor_mz: 436.945982428
+retention_time: 7.08
+Num Peaks: 4
+436.945982590091 100
+437.949337430091 12.9788739512787
+438.943032480091 63.9915522703273
+440.940082370091 10.2372969049151
+
+NAME: Flubendiamide (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C23H22N2O4F7I1S1
+charge: 1
+ionization_mode: positive
+precursor_mz: 683.030599724
+retention_time: 7.31
+Num Peaks: 2
+683.030599786091 100
+684.033954626091 24.8761750732841
+
+NAME: Flufenacet (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C14H13N3O2F4S1
+charge: 1
+ionization_mode: positive
+precursor_mz: 364.073736536
+retention_time: 7.14
+Num Peaks: 2
+364.073736668091 100
+365.077091508091 15.1420196098251
+
+NAME: Hexythiazox (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C17H21N2O2Cl1S1
+charge: 1
+ionization_mode: positive
+precursor_mz: 353.108502592
+retention_time: 8.01
+Num Peaks: 3
+353.108502824091 100
+354.111857664091 18.3867380976448
+355.105552714091 31.9957761351637
+
+NAME: Mefenacet (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C16H14N2O2S1
+charge: 1
+ionization_mode: positive
+precursor_mz: 299.084874688
+retention_time: 7.73
+Num Peaks: 2
+299.084874890091 100
+300.088229730091 17.3051652683716
+
+NAME: Mesotrione (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C14H13N1O7S1
+charge: 1
+ionization_mode: positive
+precursor_mz: 340.048548756
+Num Peaks: 2
+340.048548948091 100
+341.051903788091 15.1420196098251
+
+NAME: Methoprotryne (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C11H21N5O1S1
+charge: 1
+ionization_mode: positive
+precursor_mz: 272.153957292
+retention_time: 6.34
+Num Peaks: 2
+272.153957524091 100
+273.157312364091 11.8973011220055
+
+NAME: Metribuzin (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C8H14N4O1S1
+charge: 1
+ionization_mode: positive
+precursor_mz: 215.096108068
+retention_time: 5.56
+Num Peaks: 1
+215.096108290091 100
+
+NAME: Prometryne (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C10H19N5S1
+charge: 1
+ionization_mode: positive
+precursor_mz: 242.143392608
+retention_time: 6.31
+Num Peaks: 2
+242.143392840091 100
+243.146747680091 10.8157282927322
+
+NAME: Propargite (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C19H26O4S1
+charge: 1
+ionization_mode: positive
+precursor_mz: 351.162456312
+retention_time: 7.69
+Num Peaks: 2
+351.162456494091 100
+352.165811334091 20.5498837561912
+
+NAME: Prothioconazole (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C14H15N3O1Cl2S1
+charge: 1
+ionization_mode: positive
+precursor_mz: 344.03856446
+Num Peaks: 4
+344.038564732091 100
+345.041919572091 15.1420196098251
+346.035614622091 63.9915522703273
+348.032664512091 10.2372969049151
+
+NAME: Pyridaben (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C19H25N2O1Cl1S1
+charge: 1
+ionization_mode: positive
+precursor_mz: 365.1448881
+retention_time: 8.08
+Num Peaks: 3
+365.144888332091 100
+366.148243172091 20.5498837561912
+367.141938222091 31.9957761351637
+
+NAME: Simetryn (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C8H15N5S1
+charge: 1
+ionization_mode: positive
+precursor_mz: 214.11209248
+retention_time: 4.97
+Num Peaks: 1
+214.112092712091 100
+
+NAME: Sulfentrazone (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C11H10N4O3Cl2F2S1
+charge: 1
+ionization_mode: positive
+precursor_mz: 386.98914898
+retention_time: 5.92
+Num Peaks: 4
+386.989149222091 100
+387.992504062091 11.8973011220055
+388.986199112091 63.9915522703273
+390.983249002091 10.2372969049151
+
+NAME: Terbutryn (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C10H19N5S1
+charge: 1
+ionization_mode: positive
+precursor_mz: 242.143392608
+retention_time: 6.31
+Num Peaks: 2
+242.143392840091 100
+243.146747680091 10.8157282927322
+
+NAME: Thiabendazole (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C10H7N3S1
+charge: 1
+ionization_mode: positive
+precursor_mz: 202.043344224
+retention_time: 3.3
+Num Peaks: 2
+202.043344436091 100
+203.046699276091 10.8157282927322
+
+NAME: Thiacloprid (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C10H9N4Cl1S1
+charge: 1
+ionization_mode: positive
+precursor_mz: 253.030920968
+retention_time: 5.32
+Num Peaks: 3
+253.030921220091 100
+254.034276060091 10.8157282927322
+255.027971110091 31.9957761351637
+
+NAME: Thiamethoxam (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C8H10N5O3Cl1S1
+charge: 1
+ionization_mode: positive
+precursor_mz: 292.02656386
+retention_time: 2.88
+Num Peaks: 2
+292.026564122091 100
+294.023614012091 31.9957761351637
+
+NAME: Thiofanox (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C9H18N2O2S1
+charge: 1
+ionization_mode: positive
+precursor_mz: 219.116174816
+Num Peaks: 1
+219.116175018091 100
+
+NAME: Tricyclazole (M+H)
+msLevel: MS1
+PRECURSORTYPE: [M+H]+
+FORMULA: C9H7N3S1
+charge: 1
+ionization_mode: positive
+precursor_mz: 190.043344224
+Num Peaks: 1
+190.043344436091 100
+
