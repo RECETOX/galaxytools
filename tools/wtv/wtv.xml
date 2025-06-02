@@ -1,0 +1,96 @@
+<tool id="wtv" name="wtv" version="0.1.0+galaxy0" python_template_version="3.5" profile="21.09">
+    <creator>
+         <person
+            givenName="Frank"
+            familyName="Acquaye"
+            url="https://github.com/acquayefrank"
+            identifier="0000-0002-9465-4018" />
+        <person
+            givenName="Helge"
+            familyName="Hecht"
+            url="https://github.com/hechth"
+            identifier="0000-0001-6744-996X" />
+        <organization
+            url="https://www.recetox.muni.cz/"
+            email="GalaxyToolsDevelopmentandDeployment@space.muni.cz"
+            name="RECETOX MUNI" />
+    </creator>
+    <requirements>
+         <requirement type="package" version="0.0.2">wtv</requirement>
+    </requirements>
+    <command detect_errors="exit_code"><![CDATA[
+        wtv-cli --msp_path ${input_file} --outpath . --mz_min ${mz_min} --mz_max ${mz_max} --rt_window ${rt_window} --min_ion_intensity_percent ${min_ion_intensity_percent} --min_ion_num ${min_ion_num} --prefer_mz_threshold ${prefer_mz_threshold} --similarity_threshold ${similarity_threshold} --fr_factor ${fr_factor} --retention_time_max ${retention_time_max}  
+    ]]></command>
+    <inputs>
+        <param type="data" name="input_file" format="msp" label="Input MSP file" help="MSP file to be processed." />
+        <param type="integer" name="mz_min" value="35" label="Minimum m/z value" help="Minimum m/z value (default: 35)." />
+        <param type="integer" name="mz_max" value="400" label="Maximum m/z value" help="Maximum m/z value (default: 400)." />
+        <param type="float" name="rt_window" value="2.00" label="Retention time window" help="Retention time window (default: 2.00)." />
+        <param type="integer" name="min_ion_intensity_percent" value="7" label="Minimum ion intensity percentage" help="Minimum ion intensity percentage (default: 7)." />
+        <param type="integer" name="min_ion_num" value="2" label="Minimum number of ions" help="Minimum number of ions (default: 2)." />
+        <param type="integer" name="prefer_mz_threshold" value="60" label="Preferred m/z threshold" help="Preferred m/z threshold (default: 60)." />
+        <param type="float" name="similarity_threshold" value="0.85" label="Similarity threshold" help="Similarity threshold (default: 0.85)." />
+        <param type="float" name="fr_factor" value="2.0" label="FR factor" help="FR factor (default: 2.0)." />
+        <param type="float" name="retention_time_max" value="68.80" label="Maximum retention time" help="Maximum retention time (default: 68.80)." />
+    </inputs>
+    <outputs>
+        <collection name="output_dir" type="list" label="All output files">
+            <data name="filtered_ions" from_work_dir="filtered_ions.msp" format="msp" />
+            <data name="input_data_error_info" from_work_dir="input_data_error_info.csv" format="csv" />
+            <!-- Add more <data> elements for each expected file -->
+        </collection>
+    </outputs>
+    <tests>
+        <test>
+            <param name="input_file" value="esi_spectra.msp" />
+            <param name="mz_min" value="35" />
+            <param name="mz_max" value="400" />
+            <param name="rt_window" value="2.00" />
+            <param name="min_ion_intensity_percent" value="7" />
+            <param name="min_ion_num" value="2" />
+            <param name="prefer_mz_threshold" value="60" />
+            <param name="similarity_threshold" value="0.85" />
+            <param name="fr_factor" value="2.0" />
+            <param name="retention_time_max" value="68.80" />
+            <output_collection name="output_dir">
+                <element name="filtered_ions" file="filtered_ions.msp" compare="sim_size"/>
+                <element name="input_data_error_info" file="input_data_error_info.csv" compare="sim_size"/>
+                <!-- Add more elements as needed -->
+            </output_collection>
+        </test>
+    </tests>
+    <help><![CDATA[
+**WTV Galaxy Tool**
+
+This tool provides a Galaxy interface for the `wtv-cli` command-line utility, which is used for ion selection in mass spectrometry.
+
+---
+
+**Inputs**
+
+- **Input MSP file**: The MSP file to be processed.
+- **Minimum m/z value**: Lower bound for m/z values to consider (default: 35).
+- **Maximum m/z value**: Upper bound for m/z values to consider (default: 400).
+- **Retention time window**: The window for retention time matching (default: 2.00).
+- **Minimum ion intensity percentage**: Minimum percentage for ion intensity (default: 7).
+- **Minimum number of ions**: Minimum number of ions required (default: 2).
+- **Preferred m/z threshold**: Threshold for preferred m/z (default: 60).
+- **Similarity threshold**: Minimum similarity score for matches (default: 0.85).
+- **FR factor**: Factor for fragment ratio calculations (default: 2.0).
+- **Maximum retention time**: Maximum retention time allowed (default: 68.80).
+
+---
+
+**Outputs**
+- The tool produces processed output files as specified by the `wtv-cli` utility.
+
+---
+
+**Acknowledgements**
+This project is based on the original work by Honglun Yuan, Yiding Jiangfang, Zhenhua Liu, Rong Rong Su, Qiao Li, Chuanying Fang, Sishu Huang, Xianqing Liu, Alisdair Robert Fernie, and Jie Luo, as published in [WTV_2.0](https://github.com/yuanhonglun/WTV_2.0) and [their associated publication](https://doi.org/10.1016/j.molp.2024.04.012).
+
+]]></help>
+    <citations>
+        <citation type="doi">10.1016/j.molp.2024.04.012</citation>
+    </citations>
+</tool>
