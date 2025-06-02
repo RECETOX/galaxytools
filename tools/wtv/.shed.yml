@@ -1,7 +1,7 @@
 name: wtv
 owner: recetox
-remote_repository_url: "https://github.com/RECETOX/wtv"
-homepage_url: "https://recetox.github.io/wtv/"
+remote_repository_url: "https://github.com/RECETOX/galaxytools/tree/master/tools/wtv"
+homepage_url: "https://github.com/RECETOX/wtv"
 categories:
   - Metabolomics
 description: "A cli/python library for ion selection in mass spectrometry."
