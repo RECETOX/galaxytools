@@ -207,55 +207,72 @@
             </conditional>
             <output name="isotope_library" file="test7.msp"/>
         </test>
+        <!-- Test 9: Positive ionization mode with custom adducts -->
+        <test>
+            <param name="input_file" value="edge_case.tabular"/>
+            <conditional name="ionization">
+                <param name="ionization" value="positive"/>
+                <param name="adducts" value="M+H"/>
+            </conditional>
+            <conditional name="rel_to">
+                <param name="value" value="0"/>
+                <param name="threshold" value="10"/>
+            </conditional>
+            <output name="isotope_library" file="test8.msp"/>
+        </test>
     </tests>
     <help><![CDATA[
         This tool computes isotopic patterns for given compounds and adduct forms.
 
         The compound table input file should contain the following columns:
+
         - **name**: Compound name.
         - **formula**: Compound formula.
         - **rt** (optional): Retention time.
 
         The output is a spectral library in the MSP format.
 
-        ## Parameters:
+        Parameters:
 
-        ### **rel_to Modes**:
+        **rel_to Modes**:
+
         - **0**: Normalize to the most intense peak (threshold in percentage).
         - **1**: Normalize to the monoisotopic peak (threshold in percentage).
         - **2**: No normalization (threshold is an absolute probability).
         - **3**: Prune by percentage of most intense peak, output absolute intensities.
         - **4**: Prune by percentage of monoisotopic peak, output absolute intensities.
 
-        ### **Threshold Behavior**:
+        **Threshold Behavior**:
+
         The threshold's units and behavior change based on the selected **rel_to** mode. Use this to tailor output to your downstream needs.
 
-        #### **Threshold for Modes 0, 1, 3, 4 (Percentage of Peak Intensity)**:
+        **Threshold for Modes 0, 1, 3, 4 (Percentage of Peak Intensity)**:
+
         - The threshold is a **percentage** of the most intense or monoisotopic peak.
         - Example 1: To remove isotopes with a probability of less than 1% of the most intense peak, set the threshold to `1` and select **rel_to = 0**.
         - Example 2: To remove isotopes with a probability of less than 1% of the monoisotopic peak, set the threshold to `1` and select **rel_to = 1**.
         - Example 3: To remove isotopes with a probability of less than 1% of the most intense peak but output absolute intensities, set the threshold to `1` and select **rel_to = 3**.
         - Example 4: To remove isotopes with a probability of less than 1% of the monoisotopic peak but output absolute intensities, set the threshold to `1` and select **rel_to = 4**.
 
-        #### **Threshold for Mode 2 (Absolute Probability)**:
+        **Threshold for Mode 2 (Absolute Probability)**:
+
         - The threshold is an **absolute probability** (e.g., `0.01`, `0.0005`, etc.).
         - Example 1: To remove isotopes with a probability of less than `0.01`, set the threshold to `0.01` and select **rel_to = 2**.
         - **Important**: Be cautious with very small threshold values in **rel_to = 2**. If the threshold is too low (e.g., `0.0001`), it may prune almost all peaks, resulting in a sparse or empty output. Similarly, a threshold that is too high may result in no isotopes being removed.
         - Consider using threshold values like `0.01`, `0.1`, or `0.5` depending on your data.
 
-        ### **General Guidance**:
+        **General Guidance**:
+
         - **Threshold Selection**:
+
         - For **modes 0, 1, 3, and 4**: The threshold is **relative** to the most intense or monoisotopic peak, and a **percentage** threshold works well for most data sets.
         - For **mode 2**: The threshold is **absolute**, and users must be careful not to choose a value that’s too small or too large.
         
-        #### Example Scenarios:
+        Example Scenarios:
+
         1. **Scenario 1**: You have a dataset with peaks that vary significantly in intensity. You want to keep isotopes that are at least 1% of the most intense peak. Set the threshold to `1` and use **rel_to = 0** or **rel_to = 3**.
         2. **Scenario 2**: You want to remove isotopes with an absolute probability below `0.005` regardless of peak intensity. Set the threshold to `0.005` and use **rel_to = 2**.
 
-
-
-
-        @TOOL_VERSION@
     ]]></help>
     <citations>
         <citation type="doi">10.1021/acs.analchem.5b00941</citation>
