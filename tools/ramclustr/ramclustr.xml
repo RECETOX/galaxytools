@@ -211,9 +211,10 @@
                 <param name="mzdec" value="4"/>
             </section>
             <section name="normalisation">
-                <section name="normalisation_method">
+                <conditional name="normalisation_method">
+                    <param name="normalize" value="batch.qc"/>
                     <param name="batch_order_qc" value="test2_sample_metadata_xcms_2.csv" ftype="csv" />
-                </section>
+                </conditional>
             </section>
             <output name="mass_spectra_merged" file="test2_fill_xcms_2.msp" ftype="msp" compare="sim_size" delta="100"/>
             <output name="spec_abundance" file="test2_spec_abundance_xcms_2.tsv" ftype="tsv" compare="sim_size" delta="100"/>
