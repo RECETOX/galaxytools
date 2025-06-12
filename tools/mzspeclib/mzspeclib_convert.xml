@@ -24,8 +24,8 @@
 
     <tests>
         <test>
-            <param name="input" value="sample.msp"/>
-            <output name="output" file="sample.txt" compare="diff" lines_diff="5"/>
+            <param name="input" value="sample.msp" ftype="msp"/>
+            <output name="output" file="sample.txt" compare="diff" lines_diff="2"/>
         </test>
     </tests>
 
