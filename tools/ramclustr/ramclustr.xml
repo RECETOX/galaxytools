@@ -268,13 +268,13 @@
                 <param name="quality_control" value="TRUE"/>
             </section>
             <section name="filtering">
-                <section name="feature_filter_blanks">
+                <conditional name="feature_filter_blanks">
                     <param name="filter_blanks" value="TRUE"/>
                     <param name="blank_tag" value="Blanc"/>
-                </section>
-                <section name="feature_filter_cv">
+                </conditional>
+                <conditional name="feature_filter_cv">
                     <param name="filter_cv" value="TRUE"/>
-                </section>
+                </conditional>
             </section>
             <output name="mass_spectra_merged" file="test6_out.msp" ftype="msp"/>
             <output name="spec_abundance">
