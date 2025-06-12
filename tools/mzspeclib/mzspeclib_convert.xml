@@ -1,0 +1,67 @@
+<tool id="mzspeclib_convert" name="mzspeclib convert" version="@TOOL_VERSION@+galaxy0" profile="23.0">
+    <description>Convert mass spectra files to mzspeclib format using mzspeclib.</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>  
+    <xrefs>
+        <xref type="bio.tools">mzspeclib</xref>
+    </xrefs>
+    <requirements>
+        <requirement type="package" version="@TOOL_VERSION@">mzspeclib</requirement>
+    </requirements>
+    
+    <command detect_errors="exit_code"><![CDATA[
+    mzspeclib convert -i ${input.ext} -f text ${input} ${output}
+    ]]></command>
+
+    <inputs>
+        <param name="input" type="data" format="msp,json" label="Input file" help="Input mass spectral library file to be converted."/>
+    </inputs>
+
+    <outputs>
+        <data name="output" format="txt"/>
+    </outputs>
+
+    <tests>
+        <test>
+            <param name="input" value="sample.msp"/>
+            <output name="output" file="sample.txt"/>
+        </test>
+    </tests>
+
+    <help><![CDATA[
+.. _mzspeclib_convert:
+
+==========================
+mzspeclib Convert Tool
+==========================
+
+**Tool Description**
+
+This tool converts mass spectra files to the mzspeclib format using the mzspeclib library. It supports conversion from common formats such as MSP and JSON to the standardized mzspeclib text format, enabling interoperability and downstream analysis.
+
+Inputs
+------
+
+- **Input file**  
+  The mass spectra file to be converted. Supported formats: MSP, JSON.
+
+Outputs
+-------
+
+- **Output file**  
+  The converted file in mzspeclib text format.
+
+Example
+-------
+
+Suppose you have a file `example.msp` containing mass spectra. Upload this file as input and run the tool. The output will be a text file in mzspeclib format, ready for use in compatible tools and workflows.
+
+Notes
+-----
+
+- Ensure your input file is in a supported format (MSP or JSON).
+- The output file can be used for downstream processing with mzspeclib and other compatible tools.
+    ]]></help>
+    <expand macro="citations"/>
+</tool>
