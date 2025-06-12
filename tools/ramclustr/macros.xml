@@ -60,7 +60,7 @@
 
     <xml name="parameters_xcms">
         <section name="xcms" title="Input MS Data as XCMS" expanded="true">
-            <param name="input_xcms" label="Input XCMS" type="data" format="rdata.xcms.fillpeaks"
+            <param name="input_xcms" label="Input XCMS" type="data" format="rdata.xcms.fillpeaks,rdata.xcms.group"
                    help="Grouped feature data for clustering." />
         </section>
     </xml>

@@ -1,4 +1,4 @@
-<tool id="ramclustr" name="RAMClustR" version="@TOOL_VERSION@+galaxy7" profile="21.09">
+<tool id="ramclustr" name="RAMClustR" version="@TOOL_VERSION@+galaxy8" profile="23.0">
     <description>A feature clustering algorithm for non-targeted mass spectrometric metabolomics data.</description>
     <macros>
         <import>macros.xml</import>
