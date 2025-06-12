@@ -1,0 +1,5 @@
+Describing "/tmp/tmpbn1zlfdc/files/5/6/5/dataset_565353a0-7107-4ec2-9929-7de4b5d02ef6.dat"
+Format: text
+Spectrum Count: 6
+MS:1003186|library format version=1.0
+MS:1003188|library name=dataset_2e9eca67-4747-4691-9f5b-a0c24951b418.dat
