@@ -205,7 +205,7 @@
             <section name="filetype">
                 <param name="type_choice" value="xcms"/>
                 <section name="xcms">
-                    <param name="input_xcms" value="test2_xcmsObj_2.rdata.xcms.fillpeaks" ftype="rdata.xcms.fillpeaks"/>
+                    <param name="input_xcms" value="test2_xcmsObj_2.rdata.xcms.fillpeaks" ftype="rdata.xcms.group"/>
                 </section>
                 <section name="required">
                     <param name="maxt" value="78.4"/>
