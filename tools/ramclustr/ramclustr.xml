@@ -15,8 +15,8 @@
 
     <requirements>
         <requirement type="package" version="@TOOL_VERSION@">r-ramclustr</requirement>
-        <requirement type="package" version="3.20.0">bioconductor-xcms</requirement>
-        <requirement type="package" version="9.0.0">r-arrow</requirement>
+        <requirement type="package" version="3.22.0">bioconductor-xcms</requirement>
+        <requirement type="package" version="19.0.1">r-arrow</requirement>
     </requirements>
 
     <command detect_errors="exit_code"><![CDATA[
