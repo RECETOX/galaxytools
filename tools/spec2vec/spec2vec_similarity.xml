@@ -1,4 +1,4 @@
-<tool id="spec2vec_similarity" name="spec2vec similarity" version="@TOOL_VERSION@+galaxy3" profile="21.09">
+<tool id="spec2vec_similarity" name="spec2vec similarity" version="@TOOL_VERSION@+galaxy4" profile="21.09">
     <macros>
         <import>macros.xml</import>
     </macros>
@@ -40,7 +40,7 @@ layer = similarity.sparse_array(
 
 scores._scores.add_sparse_data(scores._scores.row, scores._scores.col, layer, name)
 
-scores.filter_by_range(inplace=True, name=name, low=0)
+scores.filter_by_range(name=name, low=0)
 scores.to_json("$similarity_scores")
 </configfile>
 </configfiles>
