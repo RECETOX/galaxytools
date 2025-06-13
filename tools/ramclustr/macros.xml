@@ -1,5 +1,5 @@
 <macros>
-    <token name="@TOOL_VERSION@">1.3.0</token>
+    <token name="@TOOL_VERSION@">1.3.1</token>
 
     <xml name="creator">
         <creator>
@@ -59,10 +59,8 @@
     </xml>
 
     <xml name="parameters_xcms">
-        <section name="xcms" title="Input MS Data as XCMS" expanded="true">
-            <param name="input_xcms" label="Input XCMS" type="data" format="rdata.xcms.fillpeaks"
-                   help="Grouped feature data for clustering." />
-        </section>
+        <param name="input_xcms" label="Input XCMS" type="data" format="rdata.xcms.fillpeaks,rdata.xcms.group"
+            help="Grouped feature data for clustering." />
     </xml>
 
     <xml name="parameters_recetox_aplcms">

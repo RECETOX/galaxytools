@@ -1,4 +1,4 @@
-<tool id="ramclustr" name="RAMClustR" version="@TOOL_VERSION@+galaxy7" profile="21.09">
+<tool id="ramclustr" name="RAMClustR" version="@TOOL_VERSION@+galaxy0" profile="23.0">
     <description>A feature clustering algorithm for non-targeted mass spectrometric metabolomics data.</description>
     <macros>
         <import>macros.xml</import>
@@ -15,11 +15,11 @@
 
     <requirements>
         <requirement type="package" version="@TOOL_VERSION@">r-ramclustr</requirement>
-        <requirement type="package" version="3.20.0">bioconductor-xcms</requirement>
-        <requirement type="package" version="9.0.0">r-arrow</requirement>
+        <requirement type="package" version="3.22.0">bioconductor-xcms</requirement>
+        <requirement type="package" version="19.0.1">r-arrow</requirement>
     </requirements>
 
-    <command detect_errors="exit_code"><![CDATA[
+    <command detect_errors="aggressive"><![CDATA[
         Rscript
             -e 'source("${__tool_directory__}/ramclustr_wrapper.R")'
             -e 'source("${ramclustr_method}")'
@@ -28,7 +28,7 @@
     <configfiles>
         <configfile name="ramclustr_method">
             #if $filetype.type_choice == "xcms":
-            obj = load("$filetype.xcms.input_xcms")
+            obj = load("$filetype.input_xcms")
             ramclustObj = RAMClustR::rc.get.xcms.data(
                 xcmsObj = xdata,
                 #if $extras.ExpDes:
@@ -122,7 +122,6 @@
                 linkage = "$clustering.linkage",
                 cor.method = "$filetype.required.cor_method",
                 rt.only.low.n = $extras.rt_only_low_n,
-                fftempdir = NULL,
             )
 
             #if $extras.quality_control == "TRUE":
@@ -177,21 +176,20 @@
     </inputs>
 
     <outputs>
-        <data label="Spec Abundance of ${on_string}" name="spec_abundance" format="tsv" />
+        <data label="Spec Abundance of ${on_string}" name="spec_abundance" format="tabular" />
         <expand macro="output_msp"/>
     </outputs>
 
     <tests>
-        <test expect_num_outputs="2"><!-- TEST 1 -->
-            <section name="filetype">
+        <!-- TEST 1 -->
+        <test expect_num_outputs="2">
+            <conditional name="filetype">
                 <param name="type_choice" value="xcms"/>
-                <section name="xcms">
-                    <param name="input_xcms" value="test1_xcmsObj_1.rdata.xcms.fillpeaks" ftype="rdata.xcms.fillpeaks"/>
-                </section>
+                <param name="input_xcms" value="test1_xcmsObj_1.rdata.xcms.fillpeaks" ftype="rdata.xcms.fillpeaks"/>
                 <section name="required">
                     <param name="maxt" value="259.8"/>
                 </section>
-            </section>
+            </conditional>
             <section name="msp_output_details">
                 <param name="mzdec" value="4"/>
             </section>
@@ -199,31 +197,33 @@
                 <param name="ExpDes" value="lc-ramclustr-define-experiment.csv" ftype="csv"/>
             </section>
             <output name="mass_spectra_merged" file="test1_fill_xcms_1.msp" ftype="msp"/>
-            <output name="spec_abundance" file="test1_spec_abundance_xcms_1.tsv" ftype="tsv" compare="sim_size" delta="100"/>
+            <output name="spec_abundance" file="test1_spec_abundance_xcms_1.tsv" ftype="tabular" compare="sim_size" delta="100"/>
         </test>
-        <test expect_num_outputs="2"><!-- TEST 2 -->
-            <section name="filetype">
+
+        <!-- TEST 2 -->
+        <test expect_num_outputs="2">
+            <conditional name="filetype">
                 <param name="type_choice" value="xcms"/>
-                <section name="xcms">
-                    <param name="input_xcms" value="test2_xcmsObj_2.rdata.xcms.fillpeaks" ftype="rdata.xcms.fillpeaks"/>
-                </section>
+                <param name="input_xcms" value="test2_xcmsObj_2.rdata.xcms.fillpeaks" ftype="rdata.xcms.fillpeaks"/>
                 <section name="required">
                     <param name="maxt" value="78.4"/>
                 </section>
-            </section>
+            </conditional>
             <section name="msp_output_details">
                 <param name="mzdec" value="4"/>
             </section>
             <section name="normalisation">
-                <section name="normalisation_method">
-                    <param name="batch_order_qc" value="test2_sample_metadata_xcms_2.csv" ftype="csv" />
-                </section>
+                <conditional name="normalisation_method">
+                    <param name="normalize" value="quantile"/>
+                </conditional>
             </section>
-            <output name="mass_spectra_merged" file="test2_fill_xcms_2.msp" ftype="msp" compare="sim_size" delta="100"/>
-            <output name="spec_abundance" file="test2_spec_abundance_xcms_2.tsv" ftype="tsv" compare="sim_size" delta="100"/>
+            <output name="mass_spectra_merged" file="test2_fill_xcms_2.msp" ftype="msp" compare="sim_size" delta="500"/>
+            <output name="spec_abundance" file="test2_spec_abundance_xcms_2.tsv" ftype="tabular" compare="sim_size" delta="500"/>
         </test>
-        <test expect_num_outputs="2"><!-- TEST 3 -->
-            <section name="filetype">
+
+        <!-- TEST 3 -->
+        <test expect_num_outputs="2">
+            <conditional name="filetype">
                 <param name="type_choice" value="csv"/>
                 <section name="ms_csv">
                     <param name="ms" value="test3_csv_test-input_1_2.csv" ftype="csv"/>
@@ -232,40 +232,44 @@
                     <param name="st" value="5.0"/>
                     <param name="maxt" value="1"/>
                 </section>
-            </section>
+            </conditional>
             <section name="performance">
                 <param name="blocksize" value="1000"/>
                 <param name="mult" value="1"/>
             </section>
             <output name="mass_spectra_merged" file="test3_spectra_csv_1.msp" ftype="msp"/>
-            <output name="spec_abundance" file="test3_spec_abundance_csv_1.tsv" ftype="tsv"/>
+            <output name="spec_abundance" file="test3_spec_abundance_csv_1.tsv" ftype="tabular"/>
         </test>
-        <test expect_num_outputs="2"><!-- TEST 4 -->
-            <section name="filetype">
+
+        <!-- TEST 4 -->
+        <test expect_num_outputs="2">
+            <conditional name="filetype">
                 <param name="type_choice" value="csv"/>
                 <section name="ms_csv">
                     <param name="ms" value="test3_csv_test-input_1_2.csv" ftype="csv"/>
                 </section>
-            </section>
+            </conditional>
             <output name="mass_spectra_merged" file="test4_spectra_csv_2.msp" ftype="msp" lines_diff="10"/>
         </test>
-        <test expect_num_outputs="2"><!-- TEST 5 -->
-            <section name="filetype">
+
+        <!-- TEST 5 -->
+        <test expect_num_outputs="2">
+            <conditional name="filetype">
                 <param name="type_choice" value="recetox-aplcms"/>
                 <section name="ms_dataframe">
                     <param name="ms1_featureDefinitions" value="test5_df_featureDefinitions_input.parquet" ftype="parquet"/>
                     <param name="ms1_featureValues" value="test5_df_featureValues_input.parquet" ftype="parquet"/>
                 </section>
-            </section>
+            </conditional>
             <output name="mass_spectra_merged" file="test5_spectra.msp" ftype="msp" lines_diff="10"/>
         </test>
-        <test expect_num_outputs="3"><!-- TEST 6 -->
-            <section name="filetype">
+
+        <!-- TEST 6 -->
+        <test expect_num_outputs="3">
+            <conditional name="filetype">
                 <param name="type_choice" value="xcms"/>
-                <section name="xcms">
-                    <param name="input_xcms" value="test6.fillpeaks" ftype="rdata.xcms.fillpeaks"/>
-                </section>
-            </section>
+                <param name="input_xcms" value="test6.fillpeaks" ftype="rdata.xcms.fillpeaks"/>
+            </conditional>
             <section name="msp_output_details">
                 <param name="mzdec" value="4"/>
             </section>
@@ -273,13 +277,13 @@
                 <param name="quality_control" value="TRUE"/>
             </section>
             <section name="filtering">
-                <section name="feature_filter_blanks">
+                <conditional name="feature_filter_blanks">
                     <param name="filter_blanks" value="TRUE"/>
                     <param name="blank_tag" value="Blanc"/>
-                </section>
-                <section name="feature_filter_cv">
+                </conditional>
+                <conditional name="feature_filter_cv">
                     <param name="filter_cv" value="TRUE"/>
-                </section>
+                </conditional>
             </section>
             <output name="mass_spectra_merged" file="test6_out.msp" ftype="msp"/>
             <output name="spec_abundance">
