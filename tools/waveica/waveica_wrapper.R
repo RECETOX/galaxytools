@@ -346,29 +346,29 @@ tranpose_data <- function(data, column_names) {
 final_data_processing <- function(
     data, non_feature_columns,
     transpose, original_first_colname) {
-    # Reverses the transposition of the data frame
+    # Remove all columns that are in non_
+    # feature_columns, except the first column
     cols_to_keep <- !(colnames(data) %in% non_feature_columns)
     cols_to_keep[1] <- TRUE # Always keep the first column
     data <- data[, cols_to_keep, drop = FALSE]
 
-    # Convert to character to avoid factors
-    data[] <- lapply(data, as.character)
-    # The first column becomes the new column names
-    new_colnames <- as.character(data[[1]])
-    # Remove the first column
-    t_data <- data[, -1, drop = FALSE]
-    # Transpose the rest
+
     if (transpose) {
-        t_data <- t(t_data)
+        # The first column becomes the new column names
+        new_colnames <- as.character(data[[1]])
+        # Remove the first column
+        data <- data[, -1, drop = FALSE]
+        # Transpose the rest
+        data <- t(data)
+        # Convert to data frame
+        data <- as.data.frame(data, stringsAsFactors = FALSE)
+        # The first row becomes the first column
+        first_col <- rownames(data)
+        data <- cbind(first_col, data)
+        # Set column names
+        colnames(data) <- c(colnames(data)[1], new_colnames)
+        rownames(data) <- NULL
     }
-    # Convert to data frame
-    transposed <- as.data.frame(t_data, stringsAsFactors = FALSE)
-    # The first row becomes the first column
-    first_col <- rownames(transposed)
-    transposed <- cbind(first_col, transposed)
-    # Set column names
-    colnames(transposed) <- c(colnames(data)[1], new_colnames)
-    rownames(transposed) <- NULL
-    colnames(transposed)[1] <- original_first_colname
-    transposed
+    colnames(data)[1] <- original_first_colname
+    data
 }
