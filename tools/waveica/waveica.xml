@@ -48,8 +48,8 @@
     ]]></command>
 
     <inputs>
-        <param name="data_matrix" type="data" label="Feature table" format="csv,tsv,tabular,parquet" help=""/>
-        <param name="sample_metadata" label="Input sample metadata" type="data" format="csv,tsv,tabular,parquet" help="" />
+        <param name="data_matrix" type="data" label="Feature table" format="csv,tsv,tabular,parquet" help="Table of measured features for each sample."/>
+        <param name="sample_metadata" label="Input sample metadata" type="data" format="csv,tsv,tabular,parquet" help="Table with sample information (e.g., sample name, class, batch, injection order) for each sample." />
          <param name = "transpose_feature_table" label="Transpose feature table" type="boolean" checked="false" 
                 truevalue="TRUE" falsevalue="FALSE" help="Swap sample names with feature names as column headers (to fit recetox-aplcms outputs)." />
         <param type="integer" value="20" name="k" label="Number of components to decompose" help="maximal component that ICA decomposes"/>
