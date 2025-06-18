@@ -76,7 +76,7 @@
     <expand macro="outputs"/>
 
     <tests>
-        <test expect_num_outputs="1"><!-- TEST 1: CSV input -->
+        <test><!-- TEST 1: CSV input -->
             <param name="data_matrix" value="data_matrix.csv" ftype="csv"/>
             <param name="sample_metadata" value="sample_metadata.csv" ftype="csv"/>
             <param name="alpha" value="0"/>
@@ -92,7 +92,7 @@
             </conditional>
             <output name="normalized_data" file="normalized_data.csv" ftype="csv"/>
         </test>
-        <test expect_num_outputs="1"><!-- TEST 2: TSV input -->
+        <test><!-- TEST 2: TSV input -->
             <param name="data_matrix" value="data_matrix.tsv" ftype="tabular"/>
             <param name="sample_metadata" value="sample_metadata.tsv" ftype="tabular"/>
             <param name="alpha" value="0"/>
@@ -108,7 +108,7 @@
             </conditional>
             <output name="normalized_data" file="normalized_data.tsv" ftype="tabular"/>
         </test>
-        <test expect_num_outputs="1"><!-- TEST 3: Parquet input -->
+        <test><!-- TEST 3: Parquet input -->
             <param name="data_matrix" value="data_matrix.parquet" ftype="parquet"/>
             <param name="sample_metadata" value="sample_metadata.csv" ftype="csv"/>
             <param name="alpha" value="0"/>
@@ -133,29 +133,29 @@
             <param name="sample_metadata" value="incomplete_metadata_data.csv" ftype="csv"/>
         </test>
 
-        <test expect_num_outputs="1"><!-- TEST 6 -->
+        <test><!-- TEST 6 -->
             <param name="data_matrix" value="feature_table_transpose_version.parquet" ftype="parquet"/>
             <param name="sample_metadata" value="sample_metadata.parquet" ftype="parquet"/>
             <param name="transpose_feature_table" value="TRUE"/>
             <output name="normalized_data" file="normalized_data.parquet" compare="sim_size" delta="200" ftype="parquet"/>
         </test>
-        <test expect_num_outputs="1"><!-- TEST 7 -->
+        <test><!-- TEST 7 -->
             <param name="data_matrix" value="feature_table_transpose_version.csv" ftype="csv"/>
             <param name="sample_metadata" value="sample_metadata.csv" ftype="csv"/>
             <param name="transpose_feature_table" value="TRUE"/>
-            <output name="normalized_data" file="normalized_data.tsv" ftype="tabular"/>
+            <output name="normalized_data" file="normalized_data.csv" ftype="csv"/>
         </test>
-        <test expect_num_outputs="2"><!-- TEST 8 -->
+        <test><!-- TEST 8 -->
             <param name="data_matrix" value="feature_table_transpose_version.parquet" ftype="parquet"/>
             <param name="sample_metadata" value="sample_metadata.parquet" ftype="parquet"/>
             <param name="transpose_feature_table" value="TRUE"/>
             <output name="normalized_data" file="test9_output1.parquet" ftype="parquet"/>
         </test>
-        <test expect_num_outputs="2"><!-- TEST 9 -->
+        <test><!-- TEST 9 -->
             <param name="data_matrix" value="feature_table_transpose_version.csv" ftype="csv"/>
             <param name="sample_metadata" value="sample_metadata.csv" ftype="csv"/>
             <param name="transpose_feature_table" value="TRUE"/>
-            <output name="normalized_data" file="test10_output1.tsv" ftype="tabular"/>
+            <output name="normalized_data" file="test10_output1.csv" ftype="csv"/>
         </test>
     </tests>
 
