@@ -1,0 +1,111 @@
+<tool id="bioconductor_mzr_convert" name="bioconductor-mzR convert" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="23.0" license="MIT">
+    <description>mass spectrometry data conversion</description>
+    <macros>
+        <token name="@TOOL_VERSION@">2.40.0</token>
+        <token name="@VERSION_SUFFIX@">0</token>
+    </macros>
+
+    <xrefs>
+        <xref type="bio.tools">mzr</xref>
+        <xref type="bioconductor">mzR</xref>
+    </xrefs>
+    <requirements>
+        <requirement type="package" version="@TOOL_VERSION@">bioconductor-mzr</requirement>
+    </requirements>
+    <command detect_errors="exit_code"><![CDATA[
+        Rscript '${bioconductor_mzr_convert}'
+    ]]></command>
+
+    <configfiles>
+        <configfile name="bioconductor_mzr_convert"><![CDATA[
+            #if $input_file.ext == $output_format:
+            stop('Conversion from/to identical formats is not supported. Please select a different output format.')
+            #end if
+
+            #if $input_file.ext == "netcdf":
+            backend <- "netCDF"
+            #else
+            backend <- "pwiz"
+            #end if
+            x <- mzR::openMSfile('$input_file', backend=backend)
+
+            peaks <- mzR::peaks(x)
+            header <- mzR::header(x)
+
+            mzR::writeMSData(
+                peaks,
+                '$output_file',
+                header=header,
+                backend='pwiz',
+                outformat = '$output_format',
+                rtime_seconds = $rtime_seconds
+            )
+        ]]></configfile>
+    </configfiles>
+    <inputs>
+        <param type="data" name="input_file" label="Input file" format="mzml,mzxml,netcdf" help="The input file to convert."/>
+        <param type="select" name="output_format" label="Output format" display="radio" help="The format to convert the input file to.">
+            <option value="mzml" selected="true">mzML</option>
+            <option value="mzxml">mzXML</option>
+        </param>
+        <param type="boolean" name="rtime_seconds" truevalue="TRUE" falsevalue="FALSE" checked="true" label="Use retention time in seconds" help="If checked, the retention time will be reported in seconds. If unchecked, it will be reported in minutes. Note that no active conversion is taking place."/>
+    </inputs>
+    <outputs>
+        <data format="mzml" name="output_file">
+            <change_format>
+                <when input="output_format" value="mzxml" format="mzxml" />
+            </change_format>
+        </data>
+    </outputs>
+    <tests>
+        <test>
+            <param name="input_file" location="https://zenodo.org/records/3757956/files/HU_neg_048.mzML" ftype="mzml"/>
+            <param name="output_format" value="mzxml"/>
+            <param name="rtime_seconds" value="FALSE"/>
+            <output name="output_file">
+                <assert_contents>
+                    <has_n_lines n="38604"/>
+                    <has_text text='msRun scanCount="2031" startTime="PT43.47S" endTime="PT68387.9S"'/>
+                </assert_contents>
+            </output>
+        </test>
+        <test>
+            <param name="input_file" location="https://ftp.ebi.ac.uk/pub/databases/metabolights/studies/public/MTBLS200/FILES/OMAIR_012811_01.CDF" ftype="netcdf"/>
+            <param name="output_format" value="mzml"/>
+            <param name="rtime_seconds" value="TRUE"/>
+            <output name="output_file">
+                <assert_contents>
+                    <has_n_lines n="162669"/>
+                    <has_text text='run id="Experiment_1" defaultInstrumentConfigurationRef="IC"'/>
+                    <has_text text='cvRef="MS" accession="MS:1000016" name="scan start time" value="0.154999997467" unitCvRef="UO" unitAccession="UO:0000010" unitName="second"'/>
+                </assert_contents>
+            </output>
+        </test>
+    </tests>
+    <help><![CDATA[
+===============================
+bioconductor-mzR Convert Tool
+===============================
+
+**Description**
+
+This tool converts mass spectrometry data files between supported formats (mzML, mzXML, netCDF) using the Bioconductor mzR package.
+Conversion between identical formats is not supported.
+
+Inputs
+------
+
+- **Input file**: Mass spectrometry data file in mzML, mzXML, or netCDF format.
+- **Output format**: Choose the desired output format (mzML or mzXML).
+- **Use retention time in seconds**: If enabled, retention times in the output will be reported in seconds (otherwise, in minutes).
+
+Outputs
+-------
+
+- **Converted file**: The input file converted to the selected output format.
+    ]]></help>
+    <citations>
+        <citation type="doi">10.18129/B9.bioc.mzR</citation>
+        <citation type="doi">10.1038/nbt.2377</citation>
+    </citations>
+</tool>
