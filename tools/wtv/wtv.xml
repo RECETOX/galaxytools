@@ -1,32 +1,12 @@
-<tool id="wtv" name="wtv" version="0.1.0+galaxy0" python_template_version="3.5" profile="21.09">
-    <description>WTV Galaxy Tool</description>
-    <edam_topics>
-        <edam_topic>topic_3172</edam_topic>    
-    </edam_topics>
-    <edam_operations>
-        <edam_operation>operation_3936</edam_operation>
-    </edam_operations>
-    <xrefs>
-        <xref type="bio.tools">wtv</xref>
-    </xrefs>
-    <creator>
-         <person
-            givenName="Frank"
-            familyName="Acquaye"
-            url="https://github.com/acquayefrank"
-            identifier="0000-0002-9465-4018" />
-        <person
-            givenName="Helge"
-            familyName="Hecht"
-            url="https://github.com/hechth"
-            identifier="0000-0001-6744-996X" />
-        <organization
-            url="https://www.recetox.muni.cz/"
-            email="GalaxyToolsDevelopmentandDeployment@space.muni.cz"
-            name="RECETOX MUNI" />
-    </creator>
+<tool id="wtv" name="wtv" version="0.0.2+galaxy0" profile="23.0">
+    <description>An implementation of ion selection based on RECETOX's wtv which is based on WTV2.0</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="annotation"/>
+    <expand macro="creator"/>
     <requirements>
-         <requirement type="package" version="0.0.2">wtv</requirement>
+         <requirement type="package" version="@TOOL_VERSION@">wtv</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
         wtv-cli --msp_path ${input_file} --outpath . --mz_min ${mz_min} --mz_max ${mz_max} --rt_window ${rt_window} --min_ion_intensity_percent ${min_ion_intensity_percent} --min_ion_num ${min_ion_num} --prefer_mz_threshold ${prefer_mz_threshold} --similarity_threshold ${similarity_threshold} --fr_factor ${fr_factor} --retention_time_max ${retention_time_max}  
@@ -35,13 +15,13 @@
         <param type="data" name="input_file" format="msp" label="Input MSP file" help="MSP file to be processed." />
         <param type="integer" name="mz_min" value="35" label="Minimum m/z value" help="Minimum m/z value (default: 35)." />
         <param type="integer" name="mz_max" value="400" label="Maximum m/z value" help="Maximum m/z value (default: 400)." />
-        <param type="float" name="rt_window" value="2.00" label="Retention time window" help="Retention time window (default: 2.00)." />
-        <param type="integer" name="min_ion_intensity_percent" value="7" label="Minimum ion intensity percentage" help="Minimum ion intensity percentage (default: 7)." />
+        <param type="float" name="rt_window" value="2.00" label="Retention time window" help="Retention time window (default: 2.00).The units for rt_window match your retention time (RT) data, typically minutes." />
+        <param type="float" name="min_ion_intensity_percent" value="7" label="Minimum ion intensity percentage" help="Minimum ion intensity percentage (default: 7)." />
         <param type="integer" name="min_ion_num" value="2" label="Minimum number of ions" help="Minimum number of ions (default: 2)." />
-        <param type="integer" name="prefer_mz_threshold" value="60" label="Preferred m/z threshold" help="Preferred m/z threshold (default: 60)." />
-        <param type="float" name="similarity_threshold" value="0.85" label="Similarity threshold" help="Similarity threshold (default: 0.85)." />
-        <param type="float" name="fr_factor" value="2.0" label="FR factor" help="FR factor (default: 2.0)." />
-        <param type="float" name="retention_time_max" value="68.80" label="Maximum retention time" help="Maximum retention time (default: 68.80)." />
+        <param type="integer" name="prefer_mz_threshold" value="60" label="Preferred m/z threshold" help="Preferred m/z threshold (default: 60). Ions with m/z below this threshold are either set to 1 or deprioritised during ion selection and scoring" />
+        <param type="float" name="similarity_threshold" value="0.85" label="Similarity threshold" help="Similarity threshold (default: 0.85). The similarity_threshold is used to determine whether two compounds are considered similar based on their calculated similarity score."  min="0" max="1"/>
+        <param type="float" name="fr_factor" value="2.0" label="FR factor" help="FR factor (default: 2.0). FR (Fragment Ratio) helps assess the similarity of two spectra by comparing the relative intensities of shared ions, improving spectral discrimination when enough ions are shared." />
+        <param type="float" name="retention_time_max" value="68.80" label="Maximum retention time" help="Maximum retention time (default: 68.80)."  optional="true"/>
     </inputs>
     <outputs>
         <data name="filtered_ions" from_work_dir="filtered_ions.msp" format="msp" label="Filtered ions MSP file" />
