@@ -6,7 +6,7 @@
     </macros>
 
     <xrefs>
-        <xref type="bio.tools">mzR</xref>
+        <xref type="bio.tools">mzr</xref>
         <xref type="bioconductor">mzR</xref>
     </xrefs>
     <requirements>
