@@ -65,14 +65,16 @@ settings.save_to_file("$output_file")
 
     <tests>
         <test expect_num_outputs="1">
-            <repeat name="layers">
-                <param name="dims" value="20" />
-            </repeat>
-            <repeat name="layers">
-                <param name="dims" value="20" />
-            </repeat>
-            <param name="embedding_dim" value="15" />
-            <param name="ionisation_mode" value="negative" />
+            <section name="model_structure">
+                <repeat name="layers">
+                    <param name="dims" value="20" />
+                </repeat>
+                <repeat name="layers">
+                    <param name="dims" value="20" />
+                </repeat>
+                <param name="embedding_dim" value="15" />
+                <param name="ionisation_mode" value="negative" />
+            </section>
             <section name="training_settings">
                 <param name="epochs" value="2" />
                 <param name="batch_size" value="2" />
