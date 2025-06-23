@@ -74,16 +74,20 @@ scores.to_json("$similarity_scores")
 
     <tests>
         <test expect_num_outputs="1">
-            <param name="use_scores" value="False"/>
-            <param name="references" value="inp_filtered_library.msp" ftype="msp"/>
-            <param name="queries" value="inp_filtered_spectra.msp" ftype="msp"/>
+            <conditional name="scores">
+                <param name="use_scores" value="False"/>
+                <param name="references" value="inp_filtered_library.msp" ftype="msp"/>
+                <param name="queries" value="inp_filtered_spectra.msp" ftype="msp"/>
+            </conditional>
             <param name="model" value="Trained_model.onnx" ftype="onnx"/>
             <param name="model_param" value="Model_Parameter_JSON.json" ftype="json"/>
             <output name="similarity_scores" value="msp_json_score_out.json" ftype="json" compare="sim_size" />
         </test>
         <test expect_num_outputs="1">
-            <param name="use_scores" value="True"/>
-            <param name="scores_in" value="ri_match_60.json" ftype="json"/>
+            <conditional name="scores">
+                <param name="use_scores" value="True"/>
+                <param name="scores_in" value="ri_match_60.json" ftype="json"/>
+            </conditional>
             <param name="model" value="Trained_model.onnx" ftype="onnx"/>
             <param name="model_param" value="Model_Parameter_JSON.json" ftype="json"/>
             <output name="similarity_scores" value="usescore_json_score_out.json" ftype="json" compare="sim_size" />
