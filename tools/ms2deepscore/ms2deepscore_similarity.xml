@@ -14,6 +14,9 @@
     <command detect_errors="exit_code"><![CDATA[
         python3 ${python_wrapper}
     ]]></command>
+
+    <expand macro="environment_variables"/>
+
 <configfiles>
 <configfile name="python_wrapper">
 @init_logger@
