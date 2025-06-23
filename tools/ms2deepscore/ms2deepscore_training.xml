@@ -1,4 +1,4 @@
-<tool id="ms2deepscore_training" name="MS2DeepScore Model Training" version="@TOOL_VERSION@+galaxy0">
+<tool id="ms2deepscore_training" name="MS2DeepScore Model Training" version="@TOOL_VERSION@+galaxy0" profile="23.0" license="MIT">
     <description>Compute similarity scores using a pre-trained MS2DeepScore model</description>
     <macros>
         <import>macros.xml</import>
