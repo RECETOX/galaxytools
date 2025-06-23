@@ -68,7 +68,7 @@
     <xml name="config_generator">
         <section name="model_structure" title="Model Structure" expanded="true">
             <repeat name="layers" title="Layer" min="1" default="1" >
-                <param name="dims" type="integer" label="Dimensions" min = "0" value="2000" help="Size of the in-between layer to add." />
+                <param name="dims" type="integer" label="Dimensions" min="1" value="2000" max="10000" help="Size of the in-between layer to add." />
             </repeat>
             <param name="embedding_dim" type="integer" label="Embedding Dimension" value="400" help="The dimension of the final embedding layer." />
             <param name="ionisation_mode" type="select" label="Ionisation Mode">
@@ -79,19 +79,28 @@
         </section>
         
         <section name="tensorization_settings" title="Tensorization Settings" expanded="true">
-            <param name="min_mz" type="integer" label="Min m/z" value="10" />
-            <param name="max_mz" type="integer" label="Max m/z" value="1000" />
-            <param name="mz_bin_width" type="float" label="m/z Bin Width" value="0.1" />
-            <param name="intensity_scaling" type="float" label="Intensity Scaling" value="0.5" />
-            <param name="fingerprint_type" type="text" value="daylight" label="Fingerprint Type" help="The fingerprint type that should be used for tanimoto score calculations." />
-            <param name="fingerprint_nbits" type="integer" label="Fingerprint Number of Bits" value="2048" help="The number of bits to use for the fingerprint." />
+            <param name="min_mz" type="integer" label="Min m/z" min="0" max="1000" value="10" 
+                help="Minimum m/z value to consider for tensorization." />
+            <param name="max_mz" type="integer" label="Max m/z" min="0" max="2000" value="1000" 
+                help="Maximum m/z value to consider for tensorization." />
+            <param name="mz_bin_width" type="float" label="m/z Bin Width" min="0" max="1" value="0.1" 
+                help="Width of each m/z bin for tensorization." />
+            <param name="intensity_scaling" type="float" label="Intensity Scaling" min="0" max="1" value="0.5" 
+                help="Scaling factor applied to intensities during tensorization." />
+            <param name="fingerprint_type" type="text" value="daylight" label="Fingerprint Type"
+                help="The fingerprint type that should be used for tanimoto score calculations." />
+            <param name="fingerprint_nbits" type="integer" label="Fingerprint Number of Bits" value="2048"
+                help="The number of bits to use for the fingerprint." />
         </section>
                 
 
         <section name="training_settings" title="Training Settings" expanded="false">
-            <param name="dropout_rate" type="float" label="Dropout Rate" value="0.0" />
-            <param name="learning_rate" type="float" label="Learning Rate" value="0.00025" />
-            <param name="epochs" type="integer" label="Epochs" value="250" />
+            <param name="dropout_rate" type="float" label="Dropout Rate" value="0.0" 
+                help="Dropout rate to use during training to prevent overfitting." />
+            <param name="learning_rate" type="float" label="Learning Rate" value="0.00025" 
+                help="Learning rate for the optimizer during training." />
+            <param name="epochs" type="integer" label="Epochs" value="250" 
+                help="Number of training epochs." />
             <param name="patience" type="integer" label="Patience" value="20" help="How long the model should keep training if validation does not improve" />
             <param name="loss_function" type="select" label="Loss Function">
                 <option value="mse" selected="true">Mean Squared Error (mse)</option>
@@ -100,7 +109,8 @@
                 <option value="risk_mae">Risk Aware MAE (risk_aware_mae)</option>
                 <option value="risk_mse">Risk Aware MSE (risk_aware_mse)</option>
             </param>
-            <param name="weighting_factor" type="integer" label="Weighting Factor" value="0" />
+            <param name="weighting_factor" type="integer" label="Weighting Factor" value="0" 
+                help="Weighting factor for the loss function." />
             <param name="batch_size" type="integer" value="32" label="Batch Size" help="Number of pairs per batch" />
             <!-- <param name="average_pairs_per_bin" type="integer" value="20" label="Average pairs per bin" help="The aimed average number of pairs of spectra per spectrum in each bin." /> -->
             <param name="random_seed" type="text" label="Random seed" value="None" help="Specify random seed for reproducible random number generation." />
@@ -113,6 +123,8 @@
                 help="The maximum number of inchikeys that should be sampled for each bin. This is used to create pairs of spectra." />
             <param name="max_pairs_per_bin" type="integer" label="Max Pairs per Bin" value="200"
                 help="The maximum number of pairs of spectra that should be created for each bin. This is used to create pairs of spectra." />
+            <param name="max_pair_resampling" type="integer" label="Max Pair Resampling" value="10000000"
+                help="The maximum number of times a pair of spectra can be resampled. This is used to create pairs of spectra." />
         </section>
     </xml>
 

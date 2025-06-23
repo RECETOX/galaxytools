@@ -66,14 +66,14 @@ torch.onnx.export(
     </inputs>
     
     <outputs>
-        <data label="Trained model" name="onnx_trained_model" format="onnx"/>
+        <data name="onnx_trained_model" format="onnx"/>
     </outputs>
 
     <tests>
         <test expect_num_outputs="1">
             <param name="spectra" value="clean_spectra.mgf" ftype="mgf"/>
             <param name="model_param" value="Model_Parameter_JSON.json" ftype="json" />
-            <param name="validation_split_fraction" value="5"/>
+            <param name="validation_split_fraction" value="20"/>
             <output name="onnx_trained_model" value="Trained_model.onnx" ftype="onnx" compare="sim_size"/>
         </test>
     </tests>

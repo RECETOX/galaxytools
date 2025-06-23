@@ -47,6 +47,7 @@ params = {
     "average_inchikey_sampling_count": $data_generator_settings.average_inchikey_sampling_count,
     "max_inchikey_sampling": $data_generator_settings.max_inchikey_sampling_count,
     "max_pairs_per_bin": $data_generator_settings.max_pairs_per_bin,
+    "max_pair_resampling": $data_generator_settings.max_pair_resampling,
 }
 
 settings = SettingsMS2Deepscore(**params)
@@ -59,13 +60,17 @@ settings.save_to_file("$output_file")
     </inputs>
     
     <outputs>
-        <data name="output_file" format="json" label="Model Parameter JSON" />
+        <data name="output_file" format="json" label="MS2DeepScore Model Configuration" />
     </outputs>
 
     <tests>
         <test expect_num_outputs="1">
-            <param name="layers_0|dims" value="20"/>
-            <param name="layers_1|dims" value="20"/>
+            <repeat name="layers">
+                <param name="dims" value="20" />
+            </repeat>
+            <repeat name="layers">
+                <param name="dims" value="20" />
+            </repeat>
             <param name="embedding_dim" value="15" />
             <param name="ionisation_mode" value="negative" />
             <param name="epochs" value="2" />
