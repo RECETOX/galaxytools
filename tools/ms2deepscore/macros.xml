@@ -1,9 +1,14 @@
 <macros>
-    <token name="@TOOL_VERSION@">2.0.0</token>
-    <token name="@ONNX_VERSION@">1.16.2</token>
+    <token name="@TOOL_VERSION@">2.5.2</token>
+    <token name="@ONNX_VERSION@">1.18.0</token>
 
     <xml name="creator">
         <creator>
+            <person
+                givenName="Helge"
+                familyName="Hecht"
+                url="https://github.com/hechth"
+                identifier="0000-0001-6744-996X" />
             <person
                 givenName="Zargham"
                 familyName="Ahmad"
@@ -14,6 +19,13 @@
                 email="GalaxyToolsDevelopmentandDeployment@space.muni.cz"
                 name="RECETOX MUNI" />
         </creator>
+    </xml>
+
+    <xml name="environment_variables">
+        <environment_variables>
+            <environment_variable name="NUMBA_CACHE_DIR">tmp</environment_variable>
+            <environment_variable name="MPLCONFIGDIR">tmp</environment_variable>
+        </environment_variables>
     </xml>
 
     <xml name="edam">
@@ -90,8 +102,17 @@
             </param>
             <param name="weighting_factor" type="integer" label="Weighting Factor" value="0" />
             <param name="batch_size" type="integer" value="32" label="Batch Size" help="Number of pairs per batch" />
-            <param name="average_pairs_per_bin" type="integer" value="20" label="Average pairs per bin" help="The aimed average number of pairs of spectra per spectrum in each bin." />
+            <!-- <param name="average_pairs_per_bin" type="integer" value="20" label="Average pairs per bin" help="The aimed average number of pairs of spectra per spectrum in each bin." /> -->
             <param name="random_seed" type="text" label="Random seed" value="None" help="Specify random seed for reproducible random number generation." />
+        </section>
+
+        <section name="data_generator_settings" title="Data Generator Settings" expanded="fasle">
+            <param name="average_inchikey_sampling_count" type="integer" label="Average InChIKey Sampling Count" value="100"
+                help="The average number of inchikeys that should be sampled for each bin. This is used to create pairs of spectra." />
+            <param name="max_inchikey_sampling_count" type="integer" label="Max InChIKey Sampling Count" value="110"
+                help="The maximum number of inchikeys that should be sampled for each bin. This is used to create pairs of spectra." />
+            <param name="max_pairs_per_bin" type="integer" label="Max Pairs per Bin" value="200"
+                help="The maximum number of pairs of spectra that should be created for each bin. This is used to create pairs of spectra." />
         </section>
     </xml>
 
