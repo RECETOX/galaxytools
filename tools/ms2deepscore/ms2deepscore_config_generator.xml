@@ -73,11 +73,17 @@ settings.save_to_file("$output_file")
             </repeat>
             <param name="embedding_dim" value="15" />
             <param name="ionisation_mode" value="negative" />
-            <param name="epochs" value="2" />
-            <param name="batch_size" value="2" />
-            <param name="random_seed" value="42"/>
+            <section name="training_settings">
+                <param name="epochs" value="2" />
+                <param name="batch_size" value="2" />
+                <param name="random_seed" value="42"/>
+                <param name="patience" value="2"/>
+            </section>
+            <section name="data_generator_settings">
+                <param name="average_inchikey_sampling_count" value="0"/>
+                <param name="max_pair_resampling" value="100"/>
+            </section>
             <output name="output_file" value="Model_Parameter_JSON.json" ftype="json" compare="diff" lines_diff="2"/>
-            <param name="average_inchikey_sampling_count" value="50"/>
         </test>
     </tests>
     
