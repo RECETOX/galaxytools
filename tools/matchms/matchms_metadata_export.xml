@@ -12,50 +12,73 @@
     </requirements>
 
     <command detect_errors='aggressive'><![CDATA[
-        python ${matchms_python_cli}
+        python3 '${matchms_python_cli}'
     ]]></command>
 
 <configfiles>
-<configfile name="matchms_python_cli">
+<configfile name="matchms_python_cli"><![CDATA[
 import matchms
-import pandas as pd
+
 from matchms.importing import load_from_msp, load_from_mgf
-from matchms.exporting.metadata_export import export_metadata_as_csv
+from matchms.exporting.metadata_export import export_metadata_as_csv, export_metadata_as_json
 
 
 if "$harmonize_metadata" == "False":
     matchms.Metadata.set_key_replacements({})
 
 spectra_list = list(load_from_${input_file.ext}("${input_file}", $harmonize_metadata))
+print(f"Loaded {len(spectra_list)} spectra from ${input_file}.")
 
-export_metadata_as_csv(spectra_list, "${output_file}")
-
-data = pd.read_csv("${output_file}")
-
-data.to_csv("${output_file}", sep='\t', index=False)
-</configfile>
+#if $out_format == 'tabular':
+export_metadata_as_csv(spectra_list, "${output_file}", delimiter="\t")
+#else if $out_format == 'csv':
+export_metadata_as_csv(spectra_list, "${output_file}", delimiter=",")
+#else if $out_format == 'json':
+export_metadata_as_json(spectra_list, "${output_file}")
+#else
+print(f"Unknown output format: $out_format")
+#end if
+]]></configfile>
 </configfiles>
 
     <inputs>
         <param label="Spectra file" name="input_file" type="data" format="msp,mgf" help="Mass spectral library file."/>
         <param label="Harmonize metadata" name="harmonize_metadata" type="boolean" truevalue="True" falsevalue="False"
                checked="false" help="Apply harmonization process on the metadata keys (e.g. parse numeric values, derive precursor mass)."/>
+        <param name="out_format" type="select" label="Output format" display="radio" help="Output format for the metadata file">
+            <option value="json">json</option>
+            <option value="csv">csv</option>
+            <option value="tabular" selected="true">tabular/tsv</option>
+        </param>
     </inputs>
 
     <outputs>
-        <data label="matchms extract metadata on ${on_string}" name="output_file" format="tabular"/>
+        <data label="matchms extract metadata on ${on_string}" name="output_file" format="tabular">
+            <change_format>
+                <when input="out_format" value="json" format="json" />
+                <when input="out_format" value="csv" format="csv" />
+            </change_format>
+        </data>
     </outputs>
-
     <tests>
         <test>
             <param name="input_file" value="convert/mgf_out.mgf" ftype="mgf"/>
             <param name="harmonize_metadata" value="True"/>
             <output name="output_file" file="convert/metadata.tsv" ftype="tabular" compare="sim_size" delta="0"/>
         </test>
+
         <test>
             <param name="input_file" value="similarity/RECETOX_Exposome_pesticides_HR_MS_20220323.msp" ftype="msp"/>
             <param name="harmonize_metadata" value="True"/>
-            <output name="output_file" file="convert/metadata.tsv" ftype="tabular" compare="sim_size" delta="0"/>
+            <param name="out_format" value="csv"/>
+            <output name="output_file" file="convert/metadata.csv" ftype="csv" compare="sim_size" delta="0"/>
+        </test>
+
+        <test>
+            <param name="input_file" value="similarity/RECETOX_Exposome_pesticides_HR_MS_20220323.msp" ftype="msp"/>
+            <param name="harmonize_metadata" value="False"/>
+            <param name="out_format" value="json"/>
+            <output name="output_file" file="convert/metadata.json" ftype="json" compare="sim_size" delta="0"/>
         </test>
     </tests>
 
