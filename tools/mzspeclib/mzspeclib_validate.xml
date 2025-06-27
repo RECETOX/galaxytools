@@ -11,18 +11,18 @@
     </requirements>
 
     <command detect_errors="exit_code"><![CDATA[
-    mzspeclib validate -i mzspeclib.${input.ext} -p ${profile} ${input} > ${output}
+    mzspeclib validate -i mzspeclib.${input.ext} ${profile} ${input} > ${output}
     ]]></command>
 
     <inputs>
         <param name="input" type="data" format="txt,json" label="Input mzspeclib file" help="Input mzspeclib file (text or JSON) to be validated."/>
         <param name="profile" type="select" label="Validation profile" help="Choose the validation profile to use for checking the mzspeclib file.">
-            <option value="base" selected="true">base</option>
-            <option value="consensus">consensus</option>
-            <option value="single">single</option>
-            <option value="silver">silver</option>
-            <option value="peptide">peptide</option>
-            <option value="gold">gold</option>
+            <option value="" selected="true">base</option>
+            <option value="-p consensus">consensus</option>
+            <option value="-p single">single</option>
+            <option value="-p silver">silver</option>
+            <option value="-p peptide">peptide</option>
+            <option value="-p gold">gold</option>
         </param>
     </inputs>
 
@@ -33,7 +33,13 @@
     <tests>
         <test>
             <param name="input" value="sample.txt"/>
-            <output name="output" file="sample_validate_report.txt"/>
+            <output name="output" file="sample_validate_report_base.txt"/>
+        </test>
+
+        <test>
+            <param name="input" value="sample.txt"/>
+            <param name="profile" value="-p consensus"/>
+            <output name="output" file="sample_validate_report_consensus.txt"/>
         </test>
     </tests>
 
