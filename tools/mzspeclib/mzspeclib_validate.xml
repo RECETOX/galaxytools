@@ -76,12 +76,6 @@ Notes
 
 - Ensure your input file is in mzspeclib text or JSON format.
 - Use this tool to check your mzspeclib files before sharing or using them in downstream workflows.
-
-References
-----------
-
-- mzspeclib documentation: https://github.com/mwang87/mzSpecLib
-
     ]]></help>
     <expand macro="citations"/>
 </tool>
