@@ -24,7 +24,7 @@
 
     <tests>
         <test>
-            <param name="input" value="sample.txt"/>
+            <param name="input" value="sample.txt" ftype="txt"/>
             <output name="output" file="sample_describe_report.txt" compare="diff" lines_diff="2"/>
         </test>
     </tests>
