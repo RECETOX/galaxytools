@@ -25,7 +25,13 @@
     <tests>
         <test>
             <param name="input" value="sample.txt" ftype="txt"/>
-            <output name="output" file="sample_describe_report.txt" compare="diff" lines_diff="2"/>
+            <output name="output" file="sample_describe_report.txt" compare="diff" lines_diff="2">
+                <!-- <assert_contents>
+                    <has_line line="Format: text"/>
+                    <has_line line="Spectrum Count: 6"/>
+                    <has_line line="MS:1003186|library format version=1.0"/>
+                </assert_contents> -->
+            </output>
         </test>
     </tests>
 
