@@ -62,12 +62,6 @@ Notes
 
 - Ensure your input file is in mzspeclib text or JSON format.
 - Use this tool to quickly inspect the contents and structure of your mzspeclib files.
-
-References
-----------
-
-- mzspeclib documentation: https://github.com/mwang87/mzSpecLib
-
     ]]></help>
     <expand macro="citations"/>
 </tool>
