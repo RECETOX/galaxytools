@@ -1,0 +1,12 @@
+name: bioconductor_mzr
+owner: recetox
+type: unrestricted
+description: |
+  Galaxy wrapper for the Bioconductor mzR package, enabling conversion between common mass spectrometry data formats (mzML, mzXML, netCDF) within Galaxy workflows.
+long_description: |
+  This tool provides a Galaxy interface to the Bioconductor mzR package, allowing users to convert mass spectrometry data files between mzML, mzXML, and netCDF formats. It supports retention time unit selection and is suitable for integration into proteomics and metabolomics workflows.
+homepage_url: https://bioconductor.org/packages/mzR
+remote_repository_url: https://github.com/RECETOX/galaxytools/tree/main/tools/bioconductor-mzR
+categories:
+  - Proteomics
+  - Metabolomics
