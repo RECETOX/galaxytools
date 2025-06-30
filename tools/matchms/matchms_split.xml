@@ -14,6 +14,10 @@
         <requirement type="package" version="@TOOL_VERSION@">matchms</requirement>
     </requirements>
 
+    <required_files>
+        <include path="matchms_split.py" />
+    </required_files>
+
     <command detect_errors='exit_code'><![CDATA[
         python3  '$__tool_directory__/matchms_split.py'
         --filename '$msp_input'
