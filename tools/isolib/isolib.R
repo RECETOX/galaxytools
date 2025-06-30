@@ -36,7 +36,12 @@ parse_args <- function() {
 
     compound_table_full <- read_tsv(
         file = args[1],
-        col_types = "ccd"
+        col_types = cols(
+            name = col_character(),
+            formula = col_character(),
+            rt = col_double(),
+            .default = col_guess()
+        )
     )
 
     # Extract selected columns
