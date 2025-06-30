@@ -1,0 +1,81 @@
+<tool id="mzspeclib_validate" name="mzspeclib validate" version="@TOOL_VERSION@+galaxy0" profile="23.0">
+    <description>Validate mzspeclib files for format and content correctness using mzspeclib.</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <xrefs>
+        <xref type="bio.tools">mzspeclib</xref>
+    </xrefs>
+    <requirements>
+        <requirement type="package" version="@TOOL_VERSION@">mzspeclib</requirement>
+    </requirements>
+
+    <command detect_errors="exit_code"><![CDATA[
+    mzspeclib validate -i mzspeclib.${input.ext} ${profile} ${input} > ${output}
+    ]]></command>
+
+    <inputs>
+        <param name="input" type="data" format="txt,json" label="Input mzspeclib file" help="Input mzspeclib file (text or JSON) to be validated."/>
+        <param name="profile" type="select" label="Validation profile" help="Choose the validation profile to use for checking the mzspeclib file.">
+            <option value="" selected="true">base</option>
+            <option value="-p consensus">consensus</option>
+            <option value="-p single">single</option>
+            <option value="-p silver">silver</option>
+            <option value="-p peptide">peptide</option>
+            <option value="-p gold">gold</option>
+        </param>
+    </inputs>
+
+    <outputs>
+        <data name="output" format="txt"/>
+    </outputs>
+
+    <tests>
+        <test>
+            <param name="input" value="sample.txt"/>
+            <output name="output" file="sample_validate_report_base.txt"/>
+        </test>
+
+        <test>
+            <param name="input" value="sample.txt"/>
+            <param name="profile" value="-p consensus"/>
+            <output name="output" file="sample_validate_report_consensus.txt"/>
+        </test>
+    </tests>
+
+    <help><![CDATA[
+.. _mzspeclib_validate:
+
+==========================
+mzspeclib Validate Tool
+==========================
+
+**Tool Description**
+
+This tool validates mzspeclib files for format and content correctness using the mzspeclib library. It checks that the input file conforms to the mzspeclib specification and reports any errors or warnings found.
+
+Inputs
+------
+
+- **Input mzspeclib file**  
+  The mzspeclib file to be validated. Supported formats: text (txt), JSON.
+
+Outputs
+-------
+
+- **Validation report**  
+  A text file containing the results of the validation, including any errors or warnings.
+
+Example
+-------
+
+Suppose you have a file `sample.txt` in mzspeclib text format. Upload this file as input and run the tool. The output will be a validation report listing any issues found in the file.
+
+Notes
+-----
+
+- Ensure your input file is in mzspeclib text or JSON format.
+- Use this tool to check your mzspeclib files before sharing or using them in downstream workflows.
+    ]]></help>
+    <expand macro="citations"/>
+</tool>

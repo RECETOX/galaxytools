@@ -1,0 +1,19 @@
+name: mzspeclib
+owner: recetox
+description: |
+  mzspeclib is a library and set of tools for handling, converting, and validating mass spectral libraries in a standardized format. This suite provides Galaxy wrappers for mzspeclib's core functionalities, including conversion and validation of spectral libraries.
+long_description: |
+  mzspeclib is an open-source Python library for working with mass spectral libraries, supporting conversion between formats and validation of library files. The Galaxy tool suite enables users to easily convert and validate mass spectral libraries within the Galaxy platform, ensuring interoperability and data quality for downstream analysis.
+homepage_url: https://github.com/HUPO-PSI/mzspeclib-py
+remote_repository_url: https://github.com/RECETOX/galaxytools/tree/main/tools/mzspeclib
+auto_tool_repositories:
+  name_template: "{{ tool_id }}"
+  description_template: "{{ tool_name }} tool from the mzspeclib-py package"
+suite:
+  name: suite_mzspeclib
+  description: |
+    mzspeclib tools for converting and validating mass spectral libraries
+  type: repository_suite_definition
+categories:
+  - Proteomics
+  - Metabolomics

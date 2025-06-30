@@ -1,0 +1,73 @@
+<tool id="mzspeclib_describe" name="mzspeclib describe" version="@TOOL_VERSION@+galaxy0" profile="23.0">
+    <description>Summarize and describe mzspeclib files using mzspeclib.</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <xrefs>
+        <xref type="bio.tools">mzspeclib</xref>
+    </xrefs>
+    <requirements>
+        <requirement type="package" version="@TOOL_VERSION@">mzspeclib</requirement>
+    </requirements>
+
+    <command detect_errors="exit_code"><![CDATA[
+    mzspeclib describe -i mzspeclib.${input.ext} ${input} > ${output}
+    ]]></command>
+
+    <inputs>
+        <param name="input" type="data" format="txt,json" label="Input mzspeclib file" help="Input mzspeclib file (text or JSON) to be summarized."/>
+    </inputs>
+
+    <outputs>
+        <data name="output" format="txt"/>
+    </outputs>
+
+    <tests>
+        <test>
+            <param name="input" value="sample.txt" ftype="txt"/>
+            <output name="output" file="sample_describe_report.txt" compare="diff" lines_diff="2">
+                <!-- <assert_contents>
+                    <has_line line="Format: text"/>
+                    <has_line line="Spectrum Count: 6"/>
+                    <has_line line="MS:1003186|library format version=1.0"/>
+                </assert_contents> -->
+            </output>
+        </test>
+    </tests>
+
+    <help><![CDATA[
+.. _mzspeclib_describe:
+
+==========================
+mzspeclib Describe Tool
+==========================
+
+**Tool Description**
+
+This tool summarizes and describes mzspeclib files using the mzspeclib library. It provides an overview of the content, such as the number of spectra, library type, and other metadata.
+
+Inputs
+------
+
+- **Input mzspeclib file**  
+  The mzspeclib file to be summarized. Supported formats: text (txt), JSON.
+
+Outputs
+-------
+
+- **mzspeclib description**  
+  A text file containing a summary and description of the mzspeclib file.
+
+Example
+-------
+
+Suppose you have a file `sample.txt` in mzspeclib text format. Upload this file as input and run the tool. The output will be a summary report describing the contents of the file.
+
+Notes
+-----
+
+- Ensure your input file is in mzspeclib text or JSON format.
+- Use this tool to quickly inspect the contents and structure of your mzspeclib files.
+    ]]></help>
+    <expand macro="citations"/>
+</tool>
