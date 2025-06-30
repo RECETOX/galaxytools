@@ -1,4 +1,4 @@
-<tool id="matchms_remove_spectra" name="matchms remove spectra" version="@TOOL_VERSION@+galaxy0" profile="21.09">
+<tool id="matchms_remove_spectra" name="matchms remove spectra" version="@TOOL_VERSION@+galaxy0" profile="23.0" license="MIT">
     <description>Filters spectra based on metadata presence</description>
     
     <macros>
