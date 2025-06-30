@@ -1,5 +1,5 @@
-<tool id="wtv" name="wtv" version="0.0.2+galaxy0" profile="23.0">
-    <description>An implementation of ion selection based on RECETOX's wtv which is based on WTV2.0</description>
+<tool id="wtv" name="wtv" version="@TOOL_VERSION@+galaxy0" profile="23.0" license="MIT">
+    <description>ion selection based on intra-library specificity and retention properties</description>
     <macros>
         <import>macros.xml</import>
     </macros>
@@ -18,21 +18,26 @@
         <param type="float" name="rt_window" value="2.00" label="Retention time window" help="Retention time window (default: 2.00).The units for rt_window match your retention time (RT) data, typically minutes." />
         <param type="float" name="min_ion_intensity_percent" value="7" label="Minimum ion intensity percentage" help="Minimum ion intensity percentage (default: 7)." />
         <param type="integer" name="min_ion_num" value="2" label="Minimum number of ions" help="Minimum number of ions (default: 2)." />
-        <param type="integer" name="prefer_mz_threshold" value="60" label="Preferred m/z threshold" help="Preferred m/z threshold (default: 60). Ions with m/z below this threshold are either set to 1 or deprioritised during ion selection and scoring" />
+        <param type="integer" name="prefer_mz_threshold" min="0" value="60" label="Preferred m/z threshold" help="Preferred m/z threshold (default: 60). Ions with m/z below this threshold are either set to 1 or deprioritised during ion selection and scoring." />
         <param type="float" name="similarity_threshold" value="0.85" label="Similarity threshold" help="Similarity threshold (default: 0.85). The similarity_threshold is used to determine whether two compounds are considered similar based on their calculated similarity score."  min="0" max="1"/>
         <param type="float" name="fr_factor" value="2.0" label="FR factor" help="FR factor (default: 2.0). FR (Fragment Ratio) helps assess the similarity of two spectra by comparing the relative intensities of shared ions, improving spectral discrimination when enough ions are shared." />
         <param type="float" name="retention_time_max" value="68.80" label="Maximum retention time" help="Maximum retention time (default: 68.80)."  optional="true"/>
+        <section name="options" title="Options">
+            <param argument="log" type="boolean" truevalue="TRUE" falsevalue="FALSE" checked="false" label="Export log files" help="Export log files with potential errors." />
+        </section>
     </inputs>
     <outputs>
-        <data name="filtered_ions" from_work_dir="filtered_ions.msp" format="msp" label="Filtered ions MSP file" />
-        <data name="input_data_error_info" from_work_dir="input_data_error_info.csv" format="csv" label="Input data error info CSV" />
+        <data name="filtered_ions" from_work_dir="filtered_ions.msp" format="msp"/>
+        <data name="input_data_error_info" from_work_dir="input_data_error_info.csv" format="csv" label="Log file using wtv on ${on_string}">
+            <filter>options['log']</filter>
+        </data>
     </outputs>
     <tests>
-        <test>
+        <test expect_num_outputs="2">
             <param name="input_file" value="esi_spectra.msp" />
+            <param name="log" value="TRUE"/>
             <output name="filtered_ions" file="filtered_ions.msp" compare="sim_size"/>
-            <output name="input_data_error_info" file="input_data_error_info.csv" compare="sim_size"/>
-        </test>
+            <output name="input_data_error_info" file="input_data_error_info.csv" compare="sim_size"/>        </test>
     </tests>
     <help><![CDATA[
 **WTV Galaxy Tool**
