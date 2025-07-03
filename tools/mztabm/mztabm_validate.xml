@@ -16,13 +16,13 @@
         jmztab-m --level $level -c '$input_file' -o '$output_file' $checkSemantic
     ]]></command>
     <inputs>
-        <param name="input_file" type="data" format="mztab,txt" label="Input file" help="TODO" />
-        <param argument="--checkSemantic" type="boolean" truevalue="--checkSemantic" falsevalue="" checked="false" label="Check semantic validation" help="TODO" />
-        <param name="level" type="select" label="Level" help="TODO">
+        <param name="input_file" type="data" format="mztab,txt,json" label="Input file" help="The mzTab-M or plain text file to be validated. mzTab-M is a standard format for reporting metabolomics results." />
+        <param name="level" type="select" label="Level" help="Select the validation level: Info (all messages), Warn (warnings and errors), or Error (only errors).">
             <option value="Info" selected="true">Info</option>
             <option value="Warn">Warn</option>
             <option value="Error">Error</option>
         </param>
+        <param argument="--checkSemantic" type="boolean" truevalue="--checkSemantic" falsevalue="" checked="false" label="Check semantic validation" help="If enabled, performs additional semantic validation checks on the input file." />
     </inputs>
     <outputs>
         <data name="output_file" format="txt" label="${tool.name} on ${on_string}" />
@@ -37,30 +37,38 @@
         <output name="output_file">
             <assert_contents>
                 <has_text text="commit: '5fee003a3c97695b422bf556f4b5d9eb24080a3c'"/>
-                <has_line line="Validator set to default level 'Info'"/>
+                <has_line line="Validator set to level 'Info'"/>
                 <has_n_lines n="16"/>
             </assert_contents>
         </output>
     </test>
     </tests>
     <help><![CDATA[
-
 .. class:: infomark
 
 **What it does**
 
-TODO: Fill in help in reStructuredText format (https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html)
+This tool validates mzTab-M files using the jmztab-m validator. mzTab-M is a standardized tabular format for reporting metabolomics results, including identification and quantification data. The validator checks the file for format compliance and, optionally, for semantic correctness.
 
 Usage
 .....
 
+1. **Input**
+    - Provide an mzTab-M or plain text file to be validated.
+    - Optionally enable semantic validation for deeper checks.
+    - Choose the desired validation level:
+        - **Info**: Show all messages (informational, warnings, errors).
+        - **Warn**: Show only warnings and errors.
+        - **Error**: Show only errors.
 
-**Input**
+2. **Output**
+    - A plain text report summarizing the validation results, including any detected issues.
 
+**Parameters**
 
-**Output**
-
-
+- **Input file**: The mzTab-M or text file to validate.
+- **Check semantic validation**: Enable to perform additional semantic checks.
+- **Level**: Controls the strictness of the validation output.
     ]]></help>
     <citations>
         <citation type="doi">10.5281/zenodo.3662402</citation>
