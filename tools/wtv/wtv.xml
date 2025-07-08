@@ -35,7 +35,9 @@
     <tests>
         <test expect_num_outputs="2">
             <param name="input_file" value="esi_spectra.msp" />
-            <param name="log" value="TRUE"/>
+            <section name="options">
+                <param name="log" value="TRUE"/>
+            </section>
             <output name="filtered_ions" file="filtered_ions.msp" compare="sim_size"/>
             <output name="input_data_error_info" file="input_data_error_info.csv" compare="sim_size"/>        </test>
     </tests>
