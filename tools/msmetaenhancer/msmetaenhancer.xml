@@ -17,43 +17,37 @@
         <include path="msmetaenhancer_wrapper.py"/>
     </required_files>
 
-    <command detect_errors="exit_code"><![CDATA[
-        sh ${msmetaenhancer_python_cli}
+    <command detect_errors="aggressive"><![CDATA[
+        python3 '${__tool_directory__}/msmetaenhancer_wrapper.py'
+        --input_file '$input_file'
+        #if $input_file.ext == "tabular":
+        --file_format 'tsv'
+        #else
+        --file_format '$input_file.ext'
+        #end if
+        --output_file '$output_file'
+        #if $options.logging.output_log == "TRUE":
+        --log_file '$log_file'
+        --log_level '$options.logging.log_level'
+        #end if
+        #if len($ordered_jobs) != 0:
+            #set ordered_jobs = ",".join([str($job.ordered_jobs_select) for $job in $ordered_jobs]) + ","
+        #else:
+            #set ordered_jobs = ""
+        #end if
+        #if $jobs != 'None':
+            #set random_jobs = str($jobs)
+        #else:
+            #set random_jobs = ""
+        #end if
+        #set all_jobs = str($ordered_jobs) + str($random_jobs)
+        --jobs '$all_jobs'
     ]]> </command>
 
     <environment_variables>
         <environment_variable name="MPLCONFIGDIR">\$_GALAXY_JOB_TMP_DIR</environment_variable>
         <environment_variable name="XDG_CACHE_HOME">\$_GALAXY_JOB_TMP_DIR</environment_variable>
     </environment_variables>
-
-    <configfiles>
-        <configfile name="msmetaenhancer_python_cli">
-            python3 ${__tool_directory__}/msmetaenhancer_wrapper.py \
-            --input_file "$input_file" \
-            #if $input_file.ext == "tabular":
-            --file_format "tsv" \
-            #else
-            --file_format "$input_file.ext" \
-            #end if
-            --output_file "$output_file" \
-            #if $options.logging.output_log == "TRUE":
-            --log_file "$log_file" \
-            --log_level "$options.logging.log_level" \
-            #end if
-            #if len($ordered_jobs) != 0:
-                #set ordered_jobs = ",".join([str($job.ordered_jobs_select) for $job in $ordered_jobs]) + ","
-            #else:
-                #set ordered_jobs = ""
-            #end if
-            #if $jobs != 'None':
-                #set random_jobs = str($jobs)
-            #else:
-                #set random_jobs = ""
-            #end if
-            #set all_jobs = str($ordered_jobs) + str($random_jobs)
-            --jobs "$all_jobs"
-        </configfile>
-    </configfiles>
 
     <inputs>
         <param label="Input spectra dataset" name="input_file" type="data" format="msp,mgf,json,csv,tabular,xlsx" />
@@ -96,7 +90,7 @@
             </change_format>
         </data>    
         <data label="Log of MSMetaEnhancer on ${on_string}" name="log_file" format="txt">
-           <filter>options['logging']['output_log']</filter>
+           <filter>options['logging']['output_log'] == 'TRUE'</filter>
        </data>
     </outputs>
 
@@ -104,16 +98,36 @@
         <test expect_num_outputs="2">
             <param name="input_file" value="sample.msp" ftype="msp" />
             <param name="jobs" value="compound_name inchi PubChem,inchi canonical_smiles PubChem"/>
+            <section name="options">
+                <conditional name="logging">
+                    <param name="output_log" value="TRUE"/>
+                </conditional>
+            </section>
             <output name="output_file" file="sample_out.msp" ftype="msp"/>
+            <output name="log_file" ftype="txt">
+                <assert_contents>
+                    <has_text text=""/>
+                </assert_contents>
+            </output>
         </test>
-        <test expect_num_outputs="2">
+        <test expect_num_outputs="1">
             <param name="input_file" value="msme_sample.tsv" ftype="tsv" />
             <param name="jobs" value="compound_name inchi PubChem,inchi canonical_smiles PubChem"/>
+            <section name="options">
+                <conditional name="logging">
+                    <param name="output_log" value="FALSE"/>
+                </conditional>
+            </section>
             <output name="output_file" file="msme_sample_out.tabular" ftype="tabular"/>
         </test>
-        <test expect_num_outputs="2">
+        <test expect_num_outputs="1">
             <param name="input_file" value="msme_sample.tsv" ftype="tabular" />
             <param name="jobs" value="compound_name inchi PubChem,inchi canonical_smiles PubChem"/>
+            <section name="options">
+                <conditional name="logging">
+                    <param name="output_log" value="FALSE"/>
+                </conditional>
+            </section>
             <output name="output_file" file="msme_sample_out.tabular" ftype="tabular"/>
         </test>
     </tests>
