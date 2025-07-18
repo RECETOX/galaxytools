@@ -1,5 +1,5 @@
-<tool id="msmetaenhancer" name="MSMetaEnhancer" version="@TOOL_VERSION@+galaxy0"  profile="21.09">
-    <description>annotate MS data</description>
+<tool id="msmetaenhancer" name="MSMetaEnhancer" version="@TOOL_VERSION@+galaxy1" profile="21.09">
+    <description>collect and convert chemical identifiers in tables or MS libraries</description>
 
     <macros>
         <import>macros.xml</import>
@@ -12,6 +12,10 @@
     <requirements>
         <requirement type="package" version="@TOOL_VERSION@">msmetaenhancer</requirement>
     </requirements>
+
+    <required_files>
+        <include path="msmetaenhancer_wrapper.py"/>
+    </required_files>
 
     <command detect_errors="exit_code"><![CDATA[
         sh ${msmetaenhancer_python_cli}
