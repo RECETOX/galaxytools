@@ -29,6 +29,11 @@
         <requirement type="package" version="2.32.4">requests</requirement>
         <requirement type="package" version="3.1.5">openpyxl</requirement>
     </requirements>
+
+    <required_files>
+        <include path="freqSAP.py"/>
+    </required_files>
+
     <command detect_errors="exit_code"><![CDATA[
     python3 '${__tool_directory__}/freqSAP.py' -a '$accession' -p '$populations' -f '$output_format' -o '$output_file'
     ]]></command>
