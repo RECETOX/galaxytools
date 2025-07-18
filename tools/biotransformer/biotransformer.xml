@@ -7,11 +7,11 @@
     <xrefs>
         <xref type="bio.tools">biotransformer</xref>
     </xrefs>
-    
+
     <requirements>
         <requirement type="package" version="3.0_20230403">biotransformer</requirement>
         <requirement type="package" version="3.1.1">openbabel</requirement>
-        <requirement type="package" version="1.1.1">pandas</requirement>
+        <requirement type="package" version="2.3.1">pandas</requirement>
     </requirements>
 
     <required_files>
@@ -33,11 +33,16 @@
     </command>
     <inputs>
         <param name="k" type="select" value="pred"
-               label="The task to be permed [pred=prediction, cid=compound identification].">
+               label="The task to be performed [pred=prediction, cid=compound identification]."
+               help="Select the task to be performed. 
+                     For prediction, the tool will generate biotransformation products for the input molecules.
+                     For compound identification, it will identify compounds based on their chemical structure.">
             <option value="pred" selected="true">pred</option>
             <option value="cid">cid</option>
         </param>
-        <param name="b" type="select" value="ecbased" label="The type of description.">
+        <param name="b" type="select" value="ecbased" label="The type of description." help="Select the type of biotransformation description to use. 
+                     Options include EC-based, CYP450, Phase II, Human gut microbial, Super transformer 1 (superbio), 
+                     Super transformer 2 (allHuman), and Environmental microbial.">
             <option value="ecbased" selected="true">EC-based</option>
             <option value="cyp450">CYP450</option>
             <option value="phaseII">Phase II</option>
@@ -46,9 +51,9 @@
             <option value="allHuman">Human super transformer 2 (allHuman)</option>
             <option value="envimicro">Environmental microbial</option>
         </param>
-        <param name="steps" type="integer" value="1" label=" The number of steps for the prediction."/>
-        <param name="tolerance" type="float" value="0.01" label="Mass tolerance for metabolite identification."/>
-        <param name="input_file" type="data" format="csv" label="Input CSV file."/>
+        <param name="steps" type="integer" value="1" min="1" max="5" label=" The number of steps for the prediction." help="Number of transformation steps to predict."/>
+        <param name="tolerance" type="float" value="0.01" label="Mass tolerance for metabolite identification." help="Tolerance is used in Da for identification."/>
+        <param name="input_file" type="data" format="csv" label="Input CSV file." help="Input table with SMILES strings to predict the biotransformation products for."/>
     </inputs>
 
     <outputs>
