@@ -298,8 +298,10 @@ def main():
     subset = subset[subset["Population"].isin(populations)]
 
     if args.output_format == "xlsx":
-        subset.to_excel("results.xlsx", index=False, na_rep="NA", engine="openpyxl")
-        os.rename("results.xlsx", args.output_file)
+        outdir = os.path.dirname(args.output_file)
+        outpath = os.path.join(outdir, "results.xlsx")
+        subset.to_excel(outpath, index=False, na_rep="NA", engine="openpyxl")
+        os.rename(outpath, args.output_file)
     elif args.output_format == "csv":
         subset.to_csv(args.output_file, index=False, na_rep="NA")
     else:  # tabular/tsv
