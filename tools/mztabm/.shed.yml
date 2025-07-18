@@ -1,0 +1,18 @@
+name: mztabm
+owner: recetox
+description: |
+  Tools for handling mzTab-M files using various packages.
+long_description: |
+  Tools for handling mzTab-M files using various packages. mzTab-M is a format for reporting MS-based metabolomics data.
+homepage_url: https://github.com/lifs-tools/jmzTab-m
+remote_repository_url: https://github.com/RECETOX/galaxytools/tree/main/tools/mztabm
+auto_tool_repositories:
+  name_template: "{{ tool_id }}"
+  description_template: "{{ tool_name }} tool to handle mzTab-M files"
+suite:
+  name: suite_mztabm
+  description: |
+    Tools for handling mzTab-M files using various packages.
+  type: repository_suite_definition
+categories:
+  - Metabolomics
