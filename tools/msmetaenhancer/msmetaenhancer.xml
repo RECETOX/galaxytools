@@ -1,4 +1,4 @@
-<tool id="msmetaenhancer" name="MSMetaEnhancer" version="@TOOL_VERSION@+galaxy1" profile="21.09">
+<tool id="msmetaenhancer" name="MSMetaEnhancer" version="@TOOL_VERSION@+galaxy2" profile="23.0">
     <description>collect and convert chemical identifiers in tables or MS libraries</description>
 
     <macros>
@@ -113,21 +113,21 @@
         <test expect_num_outputs="1">
             <param name="input_file" value="msme_sample.tsv" ftype="tsv" />
             <param name="jobs" value="compound_name inchi PubChem,inchi canonical_smiles PubChem"/>
-            <section name="options">
+            <!-- <section name="options">
                 <conditional name="logging">
                     <param name="output_log" value="FALSE"/>
                 </conditional>
-            </section>
+            </section> -->
             <output name="output_file" file="msme_sample_out.tabular" ftype="tabular"/>
         </test>
         <test expect_num_outputs="1">
             <param name="input_file" value="msme_sample.tsv" ftype="tabular" />
             <param name="jobs" value="compound_name inchi PubChem,inchi canonical_smiles PubChem"/>
-            <section name="options">
+            <!-- <section name="options">
                 <conditional name="logging">
                     <param name="output_log" value="FALSE"/>
                 </conditional>
-            </section>
+            </section> -->
             <output name="output_file" file="msme_sample_out.tabular" ftype="tabular"/>
         </test>
     </tests>
