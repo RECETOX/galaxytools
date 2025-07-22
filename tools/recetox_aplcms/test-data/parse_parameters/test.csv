@@ -1,0 +1,2 @@
+min_run,sigma_lower,sigma_higher,min_sd,max_sd,mz_tol,weighting,min_pres,group_threshold
+3.1,0.5,1.5,0.1,0.9,0.01,true,0.8,0.7
