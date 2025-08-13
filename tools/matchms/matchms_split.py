@@ -2,12 +2,11 @@ import argparse
 import itertools
 import os
 
-import matchms
+from matchms import Metadata
 from matchms.exporting import save_as_msp
 from matchms.importing import load_from_msp
 
-
-matchms.Metadata.set_key_replacements({})
+Metadata.set_key_replacements({})
 
 
 def make_outdir(outdir: str):
