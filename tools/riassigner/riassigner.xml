@@ -55,7 +55,7 @@
     </inputs>
 
     <outputs>
-        <data label="RI using $method of ${query_section.query.element_identifier}" name="output" format="tsv"
+        <data label="${query_section.query.element_identifier} with RI" name="output" format="tsv"
               metadata_source="query">
             <change_format>
                 <when input="query_section.query.ext" value="msp" format="msp" />
