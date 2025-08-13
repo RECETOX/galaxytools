@@ -217,8 +217,9 @@
             <param name="infolist" value="infolist.csv"/>
             <param name="mode" value="pH"/>
             <param name="param_in" value="1_3_Trifluoromethylphenyl_piperazin_2819_pos.mzML"/>
-            <param name="ppmFine" value="5"/>
-
+            <section name="raw_settings">
+                <param name="ppmFine" value="5"/>
+            </section>
             <output name="outputINI" value="mysettings_galaxy.ini" ftype="txt" lines_diff="2"/>
             <output name="csvfile" value="failedPeaks.csv" ftype="csv" lines_diff="1"/>
             <output name="pdfplot" value="plot.pdf" compare="sim_size" delta_frac="0.1"/>
