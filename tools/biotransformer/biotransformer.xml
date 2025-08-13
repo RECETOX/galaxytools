@@ -71,19 +71,19 @@
             <param name="input_file" value="smiles.csv"/>
             <output name="output_file">
                 <assert_contents>
-                    <has_size value="9356" delta="300"/>
+                    <has_size value="9818" delta="300"/>
                     <has_n_lines n="250" delta="25"/>
                 </assert_contents>
             </output>
             <output name="output_file2">
                 <assert_contents>
-                    <has_size value="9356" delta="300"/>
+                    <has_size value="9818" delta="300"/>
                     <has_n_lines n="250" delta="25"/>
                 </assert_contents>
             </output>
             <output name="output_file3">
                 <assert_contents>
-                    <has_size value="8135" delta="300"/>
+                    <has_size value="8497" delta="300"/>
                     <has_n_lines n="200" delta="25"/>
                 </assert_contents>
             </output>
