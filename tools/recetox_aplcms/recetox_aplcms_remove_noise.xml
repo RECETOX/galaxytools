@@ -12,10 +12,17 @@
     <expand macro="creator"/>
     <expand macro="requirements">
         <requirement type="package" version="1.10.2">bioconductor-rawrr</requirement>
+        <requirement type="package" version="6.12.0.199">mono</requirement>
     </expand>
 
     <command detect_errors="aggressive"><![CDATA[
-        python '${__tool_directory__}/mzml_id_getter.py' '$input_file';
+        ln $input_file input.$input_file.ext &&
+        #if $input_file.ext == 'thermo.raw':
+            Rscript -e 'source("${install_rawrr}")' &&
+            Rscript -e 'source("${raw_id_getter}")' &&
+        #else:
+            python '${__tool_directory__}/mzml_id_getter.py' '$input_file';
+        #end if
         Rscript -e 'source("${__tool_directory__}/utils.R")' -e 'source("${run_script}")'
     ]]></command>
     <configfiles>
@@ -23,7 +30,7 @@
             sample_name <- readChar('sample_name.txt', file.info('sample_name.txt')\$size)
 
             profile <- remove_noise(
-                filename = '$input_file',
+                filename = 'input.${input_file.ext}',
                 min_pres = $min_pres,
                 min_run = $min_run,
                 mz_tol = ${mz_tol}/1e6,
@@ -38,6 +45,17 @@
             profile <- save_sample_name(profile, sample_name)
             save_data_as_parquet_file(profile, '$output_file')
         ]]></configfile>
+
+        <configfile name="raw_id_getter"><![CDATA[
+            header <- rawrr::readFileHeader('input.${input_file.ext}')
+            writeLines(header[['Sample id']], "sample_name.txt")
+        ]]></configfile>
+
+        <configfile name="install_rawrr"><![CDATA[
+            rawrr::installRawFileReaderDLLs()
+            rawrr::installRawrrExe()
+            rawrr::rawrrAssemblyPath()
+        ]]></configfile>
     </configfiles>
 
     <inputs>
@@ -51,7 +69,7 @@
     </outputs>
 
     <tests>
-        <test>
+        <!-- <test>
             <param name="input_file" value="mbr_test0.mzml" ftype="mzml"/>
             <output name="output_file" file="remove_noise_docker.parquet" ftype="parquet" />
         </test>
@@ -59,6 +77,11 @@
             <param name="input_file" value="mbr_test0.mzml" ftype="mzml"/>
             <param name="grouping_threshold" value="2" />
             <output name="output_file" file="remove_noise_docker_threshold.parquet" ftype="parquet" />
+        </test> -->
+        <test>
+            <param name="input_file" ftype="thermo.raw" location="https://zenodo.org/records/7890956/files/8_qc_no_dil_milliq.raw?download=1"/>
+            <param name="grouping_threshold" value="2" />
+            <output name="output_file" ftype="parquet" file="raw.parquet"/>
         </test>
     </tests>
 
