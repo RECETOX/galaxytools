@@ -42,7 +42,7 @@ listarg = argparse.ArgumentParser()
 listarg.add_argument('--filename', type=str)
 listarg.add_argument('--method', type=str)
 listarg.add_argument('--outdir', type=str)
-listarg.add_argument('--parameter', type=int)
+listarg.add_argument('--parameter', type=int, required=False)
 args = listarg.parse_args()
 outdir = args.outdir
 filename = args.filename
