@@ -1,4 +1,4 @@
-<tool id="riassigner" name="RIAssigner" version="@TOOL_VERSION@+galaxy0" profile="21.09">
+<tool id="riassigner" name="RIAssigner" version="@TOOL_VERSION@+galaxy1" profile="21.09">
     <description>compute retention indices</description>
     <macros>
         <import>macros.xml</import>
@@ -65,10 +65,14 @@
 
     <tests>
         <test>
-            <param name="query" value="aplcms_aligned_peaks.csv" ftype="csv"/>
-            <param name="query_rt_units" value="seconds"/>
-            <param name="reference" value="Alkanes_20210325.csv" ftype="csv"/>
-            <param name="reference_rt_units" value="seconds"/>
+            <section name="query_section">
+                <param name="query" value="aplcms_aligned_peaks.csv" ftype="csv"/>
+                <param name="query_rt_units" value="seconds"/>
+            </section>
+            <section name="reference_section">
+                <param name="reference" value="Alkanes_20210325.csv" ftype="csv"/>
+                <param name="reference_rt_units" value="seconds"/>
+            </section>
             <param name="method" value="kovats"/>
             <output name="output" file="results.tsv" ftype="tsv"/>
         </test>
