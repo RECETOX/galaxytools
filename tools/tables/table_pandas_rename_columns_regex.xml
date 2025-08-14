@@ -2,7 +2,7 @@
     <description>rename columns in a table using regex</description>
     <macros>
         <import>macros.xml</import>
-        <token name="@VERSION_SUFFIX@">0</token>
+        <token name="@VERSION_SUFFIX@">1</token>
     </macros>
 
     <requirements>
@@ -31,7 +31,7 @@
         <param name="regex_check" type="text" label="Regex to Check For" help="The regular expression pattern to search for in the column names. This pattern will be used to identify parts of the column names to be replaced.">
             <expand macro="regex_sanitizer"/>
         </param>
-        <param name="regex_replace" type="text" label="Regex to Replace With" optional="true" help="The regular expression pattern to replace the matched parts of the column names with. This pattern will be used to rename the columns.">
+        <param name="regex_replace" type="text" label="Regex to Replace With" value="" help="The regular expression pattern to replace the matched parts of the column names with. This pattern will be used to rename the columns.">
             <expand macro="regex_sanitizer"/>
         </param>
     </inputs>
@@ -49,7 +49,6 @@
             <param name="input_dataset" value="rename/reference_both_renamed.tabular" ftype="tabular"/>
             <param name="columns" value="1,2"/>
             <param name="regex_check" value="retention_"/>
-            <param name="regex_replace" value=""/>
             <output name="output_dataset" ftype="tabular">
                 <assert_contents>
 					<has_text text="retention" negate="true"/>
