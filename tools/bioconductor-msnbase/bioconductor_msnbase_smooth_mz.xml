@@ -70,8 +70,10 @@
         </test>
         <test>
             <param name="input_file" value="29_qc_no_dil_milliq_subset.mzML"/>
-            <param name="method" value="MovingAverage"/>
-            <param name="weighted" value="TRUE"/>
+            <conditional name="smoothing">
+                <param name="method" value="MovingAverage"/>
+                <param name="weighted" value="TRUE"/>
+            </conditional>
             <output name="output_file">
                 <assert_contents>
                     <expand macro="assertions_smoothing"/>
