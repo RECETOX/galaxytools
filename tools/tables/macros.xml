@@ -39,7 +39,6 @@
                 <add value="]"/>
             </valid>
         </sanitizer>
-        <validator type="empty_field" />
         <validator type="regex" message="Pattern must not end with backslash.">.*[^\\]$</validator>
     </xml>
 </macros>
