@@ -20,10 +20,11 @@
         #if $input_file.ext == 'thermo.raw':
             Rscript -e 'source("${install_rawrr}")' &&
             Rscript -e 'source("${raw_id_getter}")' &&
+            Rscript -e "future::plan(future::multicore, workers = \${GALAXY_SLOTS:-1})" &&
         #else:
             python '${__tool_directory__}/mzml_id_getter.py' '$input_file';
         #end if
-        Rscript -e 'source("${__tool_directory__}/utils.R")' -e 'source("${run_script}")'
+        Rscript -e 'source("${__tool_directory__}/utils.R")' -e 'source("${run_script}")' -e 'future::plan(future::sequential)'
     ]]></command>
     <configfiles>
         <configfile name="run_script"><![CDATA[
@@ -69,7 +70,7 @@
     </outputs>
 
     <tests>
-        <!-- <test>
+        <test>
             <param name="input_file" value="mbr_test0.mzml" ftype="mzml"/>
             <output name="output_file" file="remove_noise_docker.parquet" ftype="parquet" />
         </test>
@@ -77,11 +78,11 @@
             <param name="input_file" value="mbr_test0.mzml" ftype="mzml"/>
             <param name="grouping_threshold" value="2" />
             <output name="output_file" file="remove_noise_docker_threshold.parquet" ftype="parquet" />
-        </test> -->
+        </test>
         <test>
             <param name="input_file" ftype="thermo.raw" location="https://zenodo.org/records/7890956/files/8_qc_no_dil_milliq.raw?download=1"/>
             <param name="grouping_threshold" value="2" />
-            <output name="output_file" ftype="parquet" file="raw.parquet"/>
+            <output name="output_file" ftype="parquet" md5="a43a29b2e79c59d40bfb8c24c674f899"/>
         </test>
     </tests>
 
