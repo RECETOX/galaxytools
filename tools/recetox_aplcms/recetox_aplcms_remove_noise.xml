@@ -12,16 +12,17 @@
     <expand macro="creator"/>
     <expand macro="requirements">
         <requirement type="package" version="1.10.2">bioconductor-rawrr</requirement>
-        <requirement type="package" version="6.12.0.199">mono</requirement>
+        <!-- <requirement type="package" version="6.12.0.199">mono</requirement> -->
     </expand>
 
     <command detect_errors="aggressive"><![CDATA[
-        ln $input_file input.$input_file.ext &&
         #if $input_file.ext == 'thermo.raw':
+            cp $input_file input.$input_file.ext &&
             Rscript -e 'source("${install_rawrr}")' &&
             Rscript -e 'source("${raw_id_getter}")' &&
             Rscript -e "future::plan(future::multicore, workers = \${GALAXY_SLOTS:-1})" &&
         #else:
+            ln -s $input_file input.$input_file.ext &&
             python '${__tool_directory__}/mzml_id_getter.py' '$input_file';
         #end if
         Rscript -e 'source("${__tool_directory__}/utils.R")' -e 'source("${run_script}")' -e 'future::plan(future::sequential)'
