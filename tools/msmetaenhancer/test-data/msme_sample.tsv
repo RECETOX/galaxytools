@@ -1,4 +1,4 @@
-comment	name	id	num_peaks	casno	formula	mw
+comment	compound_name	id	num_peaks	casno	formula	mw
 NIST MS# 245692, Seq# M1	Hydrogen	1	2	1333740	H2	2
 NIST MS# 61316, Seq# M2	Deuterium	2	2	7782390	D2	4
 Any=100 ; NIST MS# 61313, Seq# M64	Methane	3	6	74828	CH4	16

@@ -2,12 +2,11 @@ import argparse
 import itertools
 import os
 
-import matchms
+from matchms import Metadata
 from matchms.exporting import save_as_msp
 from matchms.importing import load_from_msp
 
-
-matchms.Metadata.set_key_replacements({})
+Metadata.set_key_replacements({})
 
 
 def make_outdir(outdir: str):
@@ -43,7 +42,7 @@ listarg = argparse.ArgumentParser()
 listarg.add_argument('--filename', type=str)
 listarg.add_argument('--method', type=str)
 listarg.add_argument('--outdir', type=str)
-listarg.add_argument('--parameter', type=int)
+listarg.add_argument('--parameter', type=int, required=False)
 args = listarg.parse_args()
 outdir = args.outdir
 filename = args.filename

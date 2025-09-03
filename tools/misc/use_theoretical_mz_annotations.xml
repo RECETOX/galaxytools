@@ -1,9 +1,13 @@
-<tool id="use_theoretical_mz_annotations" name="use theoretical m/z values" version="@TOOL_VERSION@+galaxy1" profile="21.09">
+<tool id="use_theoretical_mz_annotations" name="use theoretical m/z values" version="@TOOL_VERSION@+galaxy2" profile="23.0">
     <description>Overwrite experimentally measured mz values for peaks with theoretical values from peak comments.</description>
     <macros>
         <import>macros.xml</import>
     </macros>
     <expand macro="creator"/>
+
+    <requirements>
+        <requirement type="package" version="3.11">python</requirement>
+    </requirements>
 
     <command detect_errors="exit_code"><![CDATA[
     python3 '${__tool_directory__}/use_theoretical_mz_annotations.py'

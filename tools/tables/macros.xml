@@ -28,27 +28,17 @@
 
     <xml name="regex_sanitizer">
         <sanitizer>
-            <valid initial="string.ascii_letters,string.digits">
+            <valid initial="default">
                 <add value="^"/>
                 <add value="$"/>
-                <add value="("/>
-                <add value=")"/>
                 <add value="|"/>
-                <add value="?"/>
-                <add value="*"/>
-                <add value="+"/>
                 <add value="{"/>
                 <add value="}"/>
                 <add value="\"/>
                 <add value="["/>
                 <add value="]"/>
-                <add value="."/>
-                <add value=","/>
-                <add value="_"/>
-                <add value="-"/>
             </valid>
         </sanitizer>
-        <validator type="empty_field" />
         <validator type="regex" message="Pattern must not end with backslash.">.*[^\\]$</validator>
     </xml>
 </macros>

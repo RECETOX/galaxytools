@@ -2,7 +2,7 @@
     <description>rename columns in a table using regex</description>
     <macros>
         <import>macros.xml</import>
-        <token name="@VERSION_SUFFIX@">0</token>
+        <token name="@VERSION_SUFFIX@">1</token>
     </macros>
 
     <requirements>
@@ -48,11 +48,11 @@
         <test expect_num_outputs="1">
             <param name="input_dataset" value="rename/reference_both_renamed.tabular" ftype="tabular"/>
             <param name="columns" value="1,2"/>
-            <param name="regex_check" value="retention_"/>
-            <param name="regex_replace" value=""/>
+            <param name="regex_check" value="(retention_){1}"/>
             <output name="output_dataset" ftype="tabular">
                 <assert_contents>
 					<has_text text="retention" negate="true"/>
+                    <has_line line="index&#9;time"/>
                 </assert_contents>
             </output>
         </test>
