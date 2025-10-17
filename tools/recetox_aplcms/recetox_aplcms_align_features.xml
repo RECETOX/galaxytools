@@ -56,7 +56,18 @@
     </outputs>
 
     <tests>
-        <test expect_failure="true" />
+        <test expect_num_outputs="3">
+            <param name="files" ftype="parquet">
+                <collection type="list">
+                    <element name="RCX_06_shortened_extracted_clusters.parquet" location="https://gitlab.ics.muni.cz/umsa/umsa-files/-/raw/master/testdata/recetox-aplcms/clusters/RCX_06_shortened_extracted_clusters.parquet?ref_type=heads&amp;inline=false"/>
+                    <element name="RCX_07_shortened_extracted_clusters.parquet" location="https://gitlab.ics.muni.cz/umsa/umsa-files/-/raw/master/testdata/recetox-aplcms/clusters/RCX_07_shortened_extracted_clusters.parquet?ref_type=heads&amp;inline=false"/>
+                    <element name="RCX_08_shortened_extracted_clusters.parquet" location="https://gitlab.ics.muni.cz/umsa/umsa-files/-/raw/master/testdata/recetox-aplcms/clusters/RCX_08_shortened_extracted_clusters.parquet?ref_type=heads&amp;inline=false"/>
+                </collection>
+            </param>
+            <output name="metadata_file" ftype="parquet" location="https://gitlab.ics.muni.cz/umsa/umsa-files/-/raw/master/testdata/recetox-aplcms/aligned/metadata_table.parquet?ref_type=heads&amp;inline=false"/>
+            <output name="rt_file" ftype="parquet" location="https://gitlab.ics.muni.cz/umsa/umsa-files/-/raw/master/testdata/recetox-aplcms/aligned/rt_table.parquet?ref_type=heads&amp;inline=false"/>
+            <output name="intensity_file" ftype="parquet" location="https://gitlab.ics.muni.cz/umsa/umsa-files/-/raw/master/testdata/recetox-aplcms/aligned/intensity_table.parquet?ref_type=heads&amp;inline=false"/>
+        </test>
     </tests>
 
     <help>
