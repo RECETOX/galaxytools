@@ -1,4 +1,4 @@
-<tool id="spec2vec_similarity" name="spec2vec similarity" version="@TOOL_VERSION@+galaxy4" profile="21.09">
+<tool id="spec2vec_similarity" name="spec2vec similarity" version="@TOOL_VERSION@+galaxy0" profile="21.09">
     <description>Compute spectral similarity scores between mass spectra using the Spec2Vec algorithm and a trained model.</description>
     <macros>
         <import>macros.xml</import>
