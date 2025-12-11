@@ -1,6 +1,6 @@
 <macros>
-    <token name="@TOOL_VERSION@">2.5.2</token>
-    <token name="@ONNX_VERSION@">1.18.0</token>
+    <token name="@TOOL_VERSION@">2.6.0</token>
+    <token name="@ONNX_VERSION@">1.19.1</token>
 
     <xml name="creator">
         <creator>
