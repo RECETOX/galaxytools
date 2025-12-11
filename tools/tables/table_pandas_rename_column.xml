@@ -5,7 +5,7 @@
     </xrefs> -->
     <macros>
         <import>macros.xml</import>
-        <token name="@VERSION_SUFFIX@">0</token>
+        <token name="@VERSION_SUFFIX@">1</token>
     </macros>
     <!-- TODO: please annotate this tool with topics and operations from http://edamontology.org -->
     <!-- TODO: for more information see: https://galaxy-iuc-standards.readthedocs.io/en/latest/best_practices/tool_xml.html#edam-topics-and-operations -->
@@ -54,8 +54,10 @@
     <tests>
         <test>
             <param name="input_dataset" value="reference.txt" ftype="tabular"/>
-            <param name="column" value="2"/>
-            <param name="new_name" value="retention_time"/>
+            <repeat name="columns_selection">
+                <param name="column" value="2"/>
+                <param name="new_name" value="retention_time"/>
+            </repeat>
             <output name="output_dataset" file="rename/reference_rt_renamed.tabular" ftype="tabular"/>
         </test>
         <test>

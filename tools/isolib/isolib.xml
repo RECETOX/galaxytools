@@ -1,4 +1,4 @@
-<tool id="isolib" name="isolib" version="2.6+galaxy2" profile="21.09">
+<tool id="isolib" name="isolib" version="2.6+galaxy3" profile="23.0" license="MIT">
     <description>create an isotopic pattern library for given compounds and adducts based on enviPat</description>
     <creator>
         <person
@@ -219,6 +219,22 @@
                 <param name="threshold" value="10"/>
             </conditional>
             <output name="isotope_library" file="test8.msp"/>
+        </test>
+        <!-- Test 10: Positive ionization mode with custom adducts, tabular output -->
+        <test>
+            <param name="input_file" value="edge_case.tabular"/>
+            <conditional name="ionization">
+                <param name="ionization" value="positive"/>
+                <param name="adducts" value="M+H"/>
+            </conditional>
+            <conditional name="formatting">
+                <param name="out_format" value="tabular"/>
+            </conditional>
+            <conditional name="rel_to">
+                <param name="value" value="0"/>
+                <param name="threshold" value="10"/>
+            </conditional>
+            <output name="isotope_library" file="test9.tsv" ftype="tabular"/>
         </test>
     </tests>
     <help><![CDATA[

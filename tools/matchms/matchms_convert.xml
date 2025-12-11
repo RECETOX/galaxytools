@@ -1,4 +1,4 @@
-<tool id="matchms_convert" name="matchms convert" version="@TOOL_VERSION@+galaxy1" profile="21.05">
+<tool id="matchms_convert" name="matchms convert" version="@TOOL_VERSION@+galaxy2" profile="23.0" license="MIT">
     <description>convert between mass spectral library formats (.mgf/.msp/.json) using matchms</description>
     
     <macros>
@@ -47,12 +47,11 @@ save_as_${output_file.output_format}(spectra, "${converted_library}")
 <configfile name="ms_lima_output">
 sed -E "s,[[:space:]]+, ,g" ${converted_library} > ${converted_library}.tmp
 
-grep -rl 'IONMODE' . | xargs sed '/IONMODE/d' ${converted_library}.tmp > ${converted_library}.tmp1
-grep -rl 'CHARGE' . | xargs sed '/CHARGE/d' ${converted_library}.tmp1 > ${converted_library}.tmp2
-grep -rl 'COMPOUND_NAME' . | xargs sed 's/COMPOUND_NAME/NAME/g' ${converted_library}.tmp2 > ${converted_library}.tmp3
+grep -rl 'CHARGE' . | xargs sed '/CHARGE/d' ${converted_library}.tmp > ${converted_library}.tmp1
+grep -rl 'COMPOUND_NAME' . | xargs sed 's/COMPOUND_NAME/NAME/g' ${converted_library}.tmp1 > ${converted_library}.tmp2
 
-mv ${converted_library}.tmp3 ${converted_library}
-rm -f ${converted_library}.tmp1 ${converted_library}.tmp2 ${converted_library}.tmp3 ${converted_library}.tmp
+mv ${converted_library}.tmp2 ${converted_library}
+rm -f ${converted_library}.tmp1 ${converted_library}.tmp2 ${converted_library}.tmp
 </configfile>
 </configfiles>
 
@@ -177,7 +176,7 @@ rm -f ${converted_library}.tmp1 ${converted_library}.tmp2 ${converted_library}.t
             Some of the metadata keywords might change during the conversion process, as they are harmonized internally with matchms.
 
             .. rubric:: **Footnotes**
-            .. [1] Export styles - see this `table <https://github.com/matchms/matchms/blob/master/matchms/data/export_key_conversions.csv>`_ for supported key conversions and detailed description of the export styles.
+            .. [1] Export styles - see the 'export\_key\_conversions' file in the matchms GitHub repository for supported key conversions and detailed description of the export styles.
 
             @HELP_matchms@
     ]]></help>

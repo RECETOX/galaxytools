@@ -3,8 +3,7 @@
         Documentation
             The Python library matchms provides functions to convert, filter and compare mass spectrometry data.
             For an overview of the different galaxy modules, see the figure below.
-            For detailed documentation on the tool, see https://github.com/matchms/matchms/blob/master/README.rst
-            and https://matchms.readthedocs.io/en/latest/ for the Python API.
+            For detailed documentation on the tool, see https://matchms.readthedocs.io/en/latest/ for the Python API.
 
         Overview
             .. image:: https://github.com/RECETOX/galaxytools/raw/29e54e69dab6ab1263f56d35ea19f5d7f284d728/tools/matchms/images/matchms_galaxytools.png
@@ -16,8 +15,7 @@
     <token name="@HELP_matchms_networking@">
         <![CDATA[
         Documentation
-        For documentation on the tool see https://github.com/matchms/matchms/blob/master/README.rst
-        and https://matchms.readthedocs.io/en/latest/.
+        For documentation on the tool see https://matchms.readthedocs.io/en/latest/.
         
         **Upstream Tools**
 

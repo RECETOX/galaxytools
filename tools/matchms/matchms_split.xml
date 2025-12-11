@@ -1,4 +1,4 @@
-<tool id="matchms_split" name="matchms split library" version="@TOOL_VERSION@+galaxy1" profile="21.09">
+<tool id="matchms_split" name="matchms split library" version="@TOOL_VERSION@+galaxy1" profile="23.0" license="MIT">
     <description>split a large library into subsets</description>
     <macros>
         <import>macros.xml</import>
@@ -14,11 +14,15 @@
         <requirement type="package" version="@TOOL_VERSION@">matchms</requirement>
     </requirements>
 
+    <required_files>
+        <include path="matchms_split.py" />
+    </required_files>
+
     <command detect_errors='exit_code'><![CDATA[
         python3  '$__tool_directory__/matchms_split.py'
         --filename '$msp_input'
         --method '${method.split_type}'
-        --outdir   'output'
+        --outdir 'output'
         #if $method.split_type == "chunk-size"
         --parameter ${method.chunk_size}
         #else if $method.split_type == "num-chunks"
@@ -56,16 +60,16 @@
             <param name="msp_input" value="split/sample_input.msp"  />
             
             <output_collection name="sample" type="list">
-                <element name="0"         file="split/one-per-file/0.msp"         ftype="msp" compare="diff"/>
-                <element name="1"     file="split/one-per-file/1.msp"     ftype="msp" compare="diff"/>
-                <element name="2"   file="split/one-per-file/2.msp"   ftype="msp" compare="diff"/>
-                <element name="3"   file="split/one-per-file/3.msp"   ftype="msp" compare="diff"/>
-                <element name="4"     file="split/one-per-file/4.msp"     ftype="msp" compare="diff"/>
-                <element name="5"      file="split/one-per-file/5.msp"      ftype="msp" compare="diff"/>
-                <element name="6"     file="split/one-per-file/6.msp"     ftype="msp" compare="diff"/>
-                <element name="7"     file="split/one-per-file/7.msp"     ftype="msp" compare="diff"/>
-                <element name="8"     file="split/one-per-file/8.msp"     ftype="msp" compare="diff"/>
-                <element name="9"     file="split/one-per-file/9.msp"     ftype="msp" compare="diff"/>
+                <element name="0" file="split/one-per-file/0.msp" ftype="msp" compare="diff"/>
+                <element name="1" file="split/one-per-file/1.msp" ftype="msp" compare="diff"/>
+                <element name="2" file="split/one-per-file/2.msp" ftype="msp" compare="diff"/>
+                <element name="3" file="split/one-per-file/3.msp" ftype="msp" compare="diff"/>
+                <element name="4" file="split/one-per-file/4.msp" ftype="msp" compare="diff"/>
+                <element name="5" file="split/one-per-file/5.msp" ftype="msp" compare="diff"/>
+                <element name="6" file="split/one-per-file/6.msp" ftype="msp" compare="diff"/>
+                <element name="7" file="split/one-per-file/7.msp" ftype="msp" compare="diff"/>
+                <element name="8" file="split/one-per-file/8.msp" ftype="msp" compare="diff"/>
+                <element name="9" file="split/one-per-file/9.msp" ftype="msp" compare="diff"/>
             </output_collection>
         </test>
         <test>
