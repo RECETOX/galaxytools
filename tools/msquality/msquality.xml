@@ -75,11 +75,20 @@ ${file}
 **What it does**
 
 This tool calculates quality metrics for mass spectrometry data using the MsQuality package from Bioconductor.
-The tool can process single mzML files or collections of files and outputs a table with quality metrics.
+The MsQuality package provides functionality to calculate quality metrics for mass spectrometry-derived, 
+spectral data at the per-sample level, following the mzQC framework defined by HUPO-PSI.
+
+The tool can process single mzML files or collections of files and outputs a table with quality metrics
+that can be used to:
+- Assess data quality before downstream analysis
+- Compare quality across multiple samples
+- Identify potential issues in data acquisition
+- Monitor instrument performance over time
 
 **Input**
 
 - **Input mzML file(s)**: Mass spectrometry data in mzML format. Can be a single file or a collection of files.
+  When using a collection, all files will be processed and results will be combined into a single table.
 
 **Parameters**
 
@@ -96,16 +105,61 @@ A tabular file containing quality metrics. The table has:
 
 **Available Metrics**
 
-The default metrics include (but are not limited to):
-- Chromatography metrics (retention time, peak widths, TIC)
-- MS1 metrics (number of MS1 spectra, m/z range)
-- Signal quality metrics (intensity distributions, signal-to-noise)
-- Data completeness metrics
+The default metrics calculated by this tool include:
+
+*Chromatography Quality:*
+- **chromatographyDuration**: Total duration of the chromatography run
+- **rtDuration**: Retention time duration
+- **rtIqr**: Interquartile range of retention times
+- **rtIwq**: Interquartile width of retention times
+- **rtOverMsQuarters**: Distribution of retention times across MS acquisition
+
+*Signal Quality:*
+- **areaUnderTIC**: Total area under the Total Ion Chromatogram
+- **areaUnderTicRtQuantiles**: Area under TIC for retention time quantiles
+- **ticQuartiles**: Quartile values of the Total Ion Chromatogram
+- **medianTicRtIwQuartiles**: Median TIC values for RT quartiles
+- **msSignal10xChange**: Frequency of 10-fold signal changes
+
+*MS1 Spectra:*
+- **numberSpectra**: Total number of MS1 spectra
+- **medianPrecursorMz**: Median m/z value of precursor ions
+- **extentIdentifiedPrecursorIntensity**: Extent of identified precursor intensities
+
+*MS2 Metrics (when enabled):*
+- **numberMS2Spectra**: Total number of MS2 spectra
+- **medianPrecursorIntensity**: Median intensity of precursor ions
+- **medianNumberFragments**: Median number of fragment ions per spectrum
+
+**Example Output**
+
+The output is a tab-separated table where:
+- The first column contains metric names
+- Subsequent columns contain metric values for each input file
+- Each row represents a different quality metric
+
+Example for two samples::
+
+    Metric                          sample1.mzML    sample2.mzML
+    areaUnderTIC                   1.23e+09        1.45e+09
+    chromatographyDuration         600.5           598.2
+    numberSpectra                  1250            1180
+    medianPrecursorMz              524.3           526.1
+    ...
+
+**Visualization**
+
+The output table can be visualized using Galaxy's visualization tools such as:
+- Scatterplot to compare metrics across samples
+- Heatmap to visualize metric patterns
+- Boxplot to show metric distributions
 
 **References**
 
 For more information about the MsQuality package and available metrics, see:
-https://bioconductor.org/packages/release/bioc/html/MsQuality.html
+- MsQuality package: https://bioconductor.org/packages/release/bioc/html/MsQuality.html
+- Tutorial: https://bioconductor.org/packages/release/bioc/vignettes/MsQuality/inst/doc/MsQuality.html
+- mzQC framework: https://github.com/HUPO-PSI/mzQC
     ]]></help>
     
     <expand macro="citations"/>
