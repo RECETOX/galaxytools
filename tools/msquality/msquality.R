@@ -1,9 +1,11 @@
 #!/usr/bin/env Rscript
 
-# Load required libraries
-library(MsQuality)
-library(Spectra)
-library(MzR)
+# Suppress package startup messages
+suppressPackageStartupMessages({
+    library(MsQuality)
+    library(Spectra)
+    library(MzR)
+})
 
 # Function to read input file paths
 read_input_files <- function(file_path) {
@@ -16,21 +18,22 @@ read_input_files <- function(file_path) {
 # Function to get metrics that don't require parameters
 get_default_metrics <- function() {
     # List of metrics that don't require additional parameters
-    # Based on MsQuality documentation
+    # Based on MsQuality Bioconductor documentation
+    # These are the most common quality metrics for MS data
     metrics <- c(
+        "areaUnderTIC",
+        "areaUnderTicRtQuantiles",
         "chromatographyDuration",
+        "extentIdentifiedPrecursorIntensity",
+        "medianPrecursorMz",
+        "medianTicRtIwQuartiles",
         "msSignal10xChange",
         "numberSpectra",
-        "medianPrecursorMz",
         "rtDuration",
-        "rtOverMsQuarters",
-        "ticQuartiles",
-        "areaUnderTIC",
-        "areaUnderTICRtQuantiles",
-        "extentIdentifiedPrecursorIntensity",
-        "medianTicRtIwQuartiles",
+        "rtIqr",
         "rtIwq",
-        "rtIqr"
+        "rtOverMsQuarters",
+        "ticQuartiles"
     )
     return(metrics)
 }
@@ -84,7 +87,8 @@ main <- function() {
         
         tryCatch({
             # Read the mzML file using Spectra
-            sps <- Spectra::Spectra(file_path, backend = MsBackendMzR::MsBackendMzR())
+            # The Spectra function automatically detects mzML files and uses the appropriate backend
+            sps <- Spectra(file_path)
             
             # Get metrics to calculate
             metrics_to_calculate <- character(0)
