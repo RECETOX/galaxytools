@@ -55,12 +55,16 @@ main <- function() {
     
     # Parse arguments
     inputs_file <- NULL
+    default_metrics_flag <- TRUE
     ms2_metrics_flag <- FALSE
     
     i <- 1
     while (i <= length(args)) {
         if (args[i] == "--inputs") {
             inputs_file <- args[i + 1]
+            i <- i + 2
+        } else if (args[i] == "--default_metrics") {
+            default_metrics_flag <- (args[i + 1] == "TRUE")
             i <- i + 2
         } else if (args[i] == "--ms2_metrics") {
             ms2_metrics_flag <- (args[i + 1] == "TRUE")
@@ -93,9 +97,11 @@ main <- function() {
             # Get metrics to calculate
             metrics_to_calculate <- character(0)
             
-            # Add default metrics
-            default_metrics <- get_default_metrics()
-            metrics_to_calculate <- c(metrics_to_calculate, default_metrics)
+            # Add default metrics if requested
+            if (default_metrics_flag) {
+                default_metrics <- get_default_metrics()
+                metrics_to_calculate <- c(metrics_to_calculate, default_metrics)
+            }
             
             # Add MS2 metrics if requested
             if (ms2_metrics_flag) {

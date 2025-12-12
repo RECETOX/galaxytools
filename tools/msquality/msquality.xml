@@ -10,6 +10,7 @@
     <command detect_errors="exit_code"><![CDATA[
         Rscript '${__tool_directory__}/msquality.R' 
             --inputs '${inputs_file}'
+            --default_metrics '${metrics.default_metrics}'
             --ms2_metrics '${metrics.ms2_metrics}'
     ]]></command>
     
