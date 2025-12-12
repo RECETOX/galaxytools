@@ -1,4 +1,4 @@
-<tool id="isolib" name="isolib" version="2.6+galaxy3" profile="23.0" license="MIT">
+<tool id="isolib" name="isolib" version="2.6+galaxy4" profile="23.0" license="MIT">
     <description>create an isotopic pattern library for given compounds and adducts based on enviPat</description>
     <creator>
         <person
@@ -49,6 +49,11 @@
             <when value="positive">
                 <param name="adducts" type="select" label="Adducts" multiple="true" help="Adducts to use">
                     <option value="M+H" selected="true">M+H</option>
+                    <option value="M+">M+</option>
+                    <option value="M2+">M2+</option>
+                    <option value="M-H+">M-H+</option>
+                    <option value="M+Na">M+Na</option>
+                    <option value="M+NH4">M+NH4</option>
                 </param>
             </when>
             <when value="negative">
@@ -235,6 +240,58 @@
                 <param name="threshold" value="10"/>
             </conditional>
             <output name="isotope_library" file="test9.tsv" ftype="tabular"/>
+        </test>
+        <!-- Test 11: Positive ionization with M+Na adduct -->
+        <test>
+            <param name="input_file" value="test_adducts.tsv"/>
+            <conditional name="ionization">
+                <param name="ionization" value="positive"/>
+                <param name="adducts" value="M+Na"/>
+            </conditional>
+            <conditional name="rel_to">
+                <param name="value" value="0"/>
+                <param name="threshold" value="1.0"/>
+            </conditional>
+            <output name="isotope_library" file="test10_mna.msp"/>
+        </test>
+        <!-- Test 12: Positive ionization with M+NH4 adduct -->
+        <test>
+            <param name="input_file" value="test_adducts.tsv"/>
+            <conditional name="ionization">
+                <param name="ionization" value="positive"/>
+                <param name="adducts" value="M+NH4"/>
+            </conditional>
+            <conditional name="rel_to">
+                <param name="value" value="0"/>
+                <param name="threshold" value="1.0"/>
+            </conditional>
+            <output name="isotope_library" file="test11_mnh4.msp"/>
+        </test>
+        <!-- Test 13: Positive ionization with M2+ adduct (doubly charged) -->
+        <test>
+            <param name="input_file" value="test_adducts.tsv"/>
+            <conditional name="ionization">
+                <param name="ionization" value="positive"/>
+                <param name="adducts" value="M2+"/>
+            </conditional>
+            <conditional name="rel_to">
+                <param name="value" value="0"/>
+                <param name="threshold" value="1.0"/>
+            </conditional>
+            <output name="isotope_library" file="test12_m2plus.msp"/>
+        </test>
+        <!-- Test 14: Positive ionization with multiple new adducts -->
+        <test>
+            <param name="input_file" value="test_adducts.tsv"/>
+            <conditional name="ionization">
+                <param name="ionization" value="positive"/>
+                <param name="adducts" value="M+Na,M+NH4"/>
+            </conditional>
+            <conditional name="rel_to">
+                <param name="value" value="0"/>
+                <param name="threshold" value="1.0"/>
+            </conditional>
+            <output name="isotope_library" file="test13_multiple.msp"/>
         </test>
     </tests>
     <help><![CDATA[
