@@ -1,4 +1,4 @@
-<tool id="retip_descriptors" name="Retip chemical descriptors" version="@TOOL_VERSION@+galaxy5">
+<tool id="retip_descriptors" name="Retip chemical descriptors" version="@TOOL_VERSION@+galaxy6">
     <description>for retention time prediction</description>
     <macros>
         <import>macros.xml</import>
