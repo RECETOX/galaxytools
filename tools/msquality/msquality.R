@@ -109,6 +109,12 @@ main <- function() {
                 metrics_to_calculate <- c(metrics_to_calculate, ms2_metrics)
             }
             
+            # Validate that at least one metric type is selected
+            if (length(metrics_to_calculate) == 0) {
+                cat("Warning: No metrics selected for file", file_name, ". Skipping.\n")
+                next
+            }
+            
             # Calculate quality metrics
             qc_result <- MsQuality::calculateMetrics(
                 sps,
@@ -125,12 +131,17 @@ main <- function() {
     
     # Combine results into a table
     if (length(all_results) > 0) {
+        # Collect all unique metric names across all results
+        all_metric_names <- unique(unlist(lapply(all_results, names)))
+        
         # Convert to data frame
-        result_df <- data.frame(Metric = names(all_results[[1]]))
+        result_df <- data.frame(Metric = all_metric_names)
         
         # Add columns for each sample
         for (sample_name in names(all_results)) {
-            result_df[[sample_name]] <- all_results[[sample_name]]
+            # Match metrics to the full list, filling missing values with NA
+            sample_values <- all_results[[sample_name]][all_metric_names]
+            result_df[[sample_name]] <- sample_values
         }
         
         # Write output table
