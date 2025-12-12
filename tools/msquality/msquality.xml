@@ -58,14 +58,36 @@ ${file}
     </outputs>
     
     <tests>
-        <test>
+        <test expect_num_outputs="1">
             <param name="input_type" value="single"/>
             <param name="input_file" value="test_sample.mzML"/>
             <param name="default_metrics" value="TRUE"/>
+            <param name="ms2_metrics" value="FALSE"/>
             <output name="output_table">
                 <assert_contents>
                     <has_n_columns n="2"/>
                     <has_line_matching expression="^Metric\t.*"/>
+                    <has_line_matching expression="^areaUnderTIC\t.*"/>
+                    <has_line_matching expression="^numberSpectra\t.*"/>
+                </assert_contents>
+            </output>
+        </test>
+        <test expect_num_outputs="1">
+            <param name="input_type" value="collection"/>
+            <param name="input_collection">
+                <collection type="list">
+                    <element name="sample1" value="test_sample.mzML"/>
+                    <element name="sample2" value="test_sample2.mzML"/>
+                </collection>
+            </param>
+            <param name="default_metrics" value="TRUE"/>
+            <param name="ms2_metrics" value="TRUE"/>
+            <output name="output_table">
+                <assert_contents>
+                    <has_n_columns n="3"/>
+                    <has_line_matching expression="^Metric\t.*"/>
+                    <has_line_matching expression="^areaUnderTIC\t.*"/>
+                    <has_line_matching expression="^numberMS2Spectra\t.*"/>
                 </assert_contents>
             </output>
         </test>
