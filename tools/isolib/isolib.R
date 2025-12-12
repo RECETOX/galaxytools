@@ -119,16 +119,22 @@ generate_isotope_spectra <- function(compound_table,
         adduct <- adducts[adducts$Name == current, ]
         multiplied_chemforms <- enviPat::multiform(chemforms, adduct$Mult)
 
-        if (adduct$Ion_mode == "negative") {
+        # Handle formula modifications based on adduct type
+        # Check if we need to deduce (subtract) formula elements
+        if (adduct$Formula_ded != "FALSE") {
             merged_chemforms <- enviPat::subform(
                 multiplied_chemforms,
                 adduct$Formula_ded
             )
-        } else {
+        } else if (adduct$Formula_add != "FALSE") {
+            # Add formula elements
             merged_chemforms <- enviPat::mergeform(
                 multiplied_chemforms,
                 adduct$Formula_add
             )
+        } else {
+            # No formula modification needed (e.g., M+, M2+)
+            merged_chemforms <- multiplied_chemforms
         }
 
         charge_string <- paste0(

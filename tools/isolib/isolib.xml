@@ -280,6 +280,32 @@
             </conditional>
             <output name="isotope_library" file="test12_multiple.msp"/>
         </test>
+        <!-- Test 14: Positive ionization with M2+ adduct (doubly charged) -->
+        <test>
+            <param name="input_file" value="test_adducts.tsv"/>
+            <conditional name="ionization">
+                <param name="ionization" value="positive"/>
+                <param name="adducts" value="M2+"/>
+            </conditional>
+            <conditional name="rel_to">
+                <param name="value" value="0"/>
+                <param name="threshold" value="1.0"/>
+            </conditional>
+            <output name="isotope_library" file="test13_m2plus.msp"/>
+        </test>
+        <!-- Test 15: Positive ionization with M-H+ adduct -->
+        <test>
+            <param name="input_file" value="test_adducts.tsv"/>
+            <conditional name="ionization">
+                <param name="ionization" value="positive"/>
+                <param name="adducts" value="M-H+"/>
+            </conditional>
+            <conditional name="rel_to">
+                <param name="value" value="0"/>
+                <param name="threshold" value="1.0"/>
+            </conditional>
+            <output name="isotope_library" file="test14_mhplus.msp"/>
+        </test>
     </tests>
     <help><![CDATA[
         This tool computes isotopic patterns for given compounds and adduct forms.
