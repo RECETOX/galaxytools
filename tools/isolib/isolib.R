@@ -87,18 +87,20 @@ generate_isotope_spectra <- function(compound_table,
     data(isotopes)
     data(adducts)
 
-    # Add custom adducts for positive ion mode
-    # Based on enviPat adduct table format: Name, Mult, Formula_add, Formula_ded, Charge, Ion_mode, Mass
-    # Mass field represents the mass adjustment after formula modification
-    # For most adducts, this is 0 as the formula modification handles the mass change
+    # Add custom adducts for positive ion mode that don't already exist in enviPat
+    # Based on enviPat adduct table format with all 9 columns:
+    # Name, calc, Charge, Mult, Mass, Ion_mode, Formula_add, Formula_ded, Multi
+    # Note: M+, M+Na, M+NH4 already exist in enviPat, so we only add M2+ and M-H+
     custom_adducts <- data.frame(
-        Name = c("M+", "M2+", "M-H+", "M+Na", "M+NH4"),
-        Mult = c(1, 1, 1, 1, 1),
-        Formula_add = c("", "", "", "Na1", "N1H4"),
-        Formula_ded = c("", "", "H1", "", ""),
-        Charge = c(1, 2, 1, 1, 1),
-        Ion_mode = c("positive", "positive", "positive", "positive", "positive"),
-        Mass = c(0, 0, 0, 0, 0),
+        Name = c("M2+", "M-H+"),
+        calc = c("M/2-0.00054858", "M-1.007825"),
+        Charge = c(2, 1),
+        Mult = c(1, 1),
+        Mass = c(-0.00054858, -1.007825),
+        Ion_mode = c("positive", "positive"),
+        Formula_add = c("FALSE", "FALSE"),
+        Formula_ded = c("FALSE", "H1"),
+        Multi = c(1, 1),
         stringsAsFactors = FALSE
     )
     

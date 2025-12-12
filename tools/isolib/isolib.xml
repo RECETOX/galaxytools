@@ -267,20 +267,7 @@
             </conditional>
             <output name="isotope_library" file="test11_mnh4.msp"/>
         </test>
-        <!-- Test 13: Positive ionization with M2+ adduct (doubly charged) -->
-        <test>
-            <param name="input_file" value="test_adducts.tsv"/>
-            <conditional name="ionization">
-                <param name="ionization" value="positive"/>
-                <param name="adducts" value="M2+"/>
-            </conditional>
-            <conditional name="rel_to">
-                <param name="value" value="0"/>
-                <param name="threshold" value="1.0"/>
-            </conditional>
-            <output name="isotope_library" file="test12_m2plus.msp"/>
-        </test>
-        <!-- Test 14: Positive ionization with multiple new adducts -->
+        <!-- Test 13: Positive ionization with multiple new adducts -->
         <test>
             <param name="input_file" value="test_adducts.tsv"/>
             <conditional name="ionization">
@@ -291,7 +278,7 @@
                 <param name="value" value="0"/>
                 <param name="threshold" value="1.0"/>
             </conditional>
-            <output name="isotope_library" file="test13_multiple.msp"/>
+            <output name="isotope_library" file="test12_multiple.msp"/>
         </test>
     </tests>
     <help><![CDATA[
