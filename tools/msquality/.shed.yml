@@ -1,0 +1,16 @@
+name: msquality
+owner: recetox
+remote_repository_url: "https://github.com/RECETOX/galaxytools/tree/master/tools/msquality"
+homepage_url: "https://bioconductor.org/packages/release/bioc/html/MsQuality.html"
+categories:
+  - Metabolomics
+  - Proteomics
+description: "Calculate quality metrics for mass spectrometry data using the MsQuality Bioconductor package."
+long_description: |
+  MsQuality provides functionality to calculate quality metrics for mass spectrometry-derived,
+  spectral data at the per-sample level. MsQuality relies on the mzQC framework of quality metrics
+  defined by the HUPO-PSI. These metrics quantify the quality of spectral raw files at the
+  MS1 and MS2 level.
+auto_tool_repositories:
+  name_template: "{{ tool_id }}"
+  description_template: "{{ tool_name }} - Calculate quality metrics for mass spectrometry data"

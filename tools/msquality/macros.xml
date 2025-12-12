@@ -1,0 +1,39 @@
+<macros>
+    <xml name="creator">
+        <creator>
+            <person
+                givenName="Helge"
+                familyName="Hecht"
+                url="https://github.com/hechth"
+                identifier="0000-0001-6744-996X" />
+            <organization
+                url="https://www.recetox.muni.cz/"
+                email="GalaxyToolsDevelopmentandDeployment@space.muni.cz"
+                name="RECETOX MUNI" />
+        </creator>
+    </xml>
+
+    <xml name="xrefs">
+        <xrefs>
+            <xref type="bio.tools">msquality</xref>
+            <xref type="bioconductor">msquality</xref>
+        </xrefs>
+    </xml>
+
+    <token name="@TOOL_VERSION@">1.6.0</token>
+    <token name="@VERSION_SUFFIX@">0</token>
+    
+    <xml name="requirements">
+        <requirements>
+            <requirement type="package" version="@TOOL_VERSION@">bioconductor-msquality</requirement>
+            <requirement type="package" version="1.16.0">bioconductor-spectra</requirement>
+            <requirement type="package" version="2.42.0">bioconductor-mzr</requirement>
+        </requirements>
+    </xml>
+    
+    <xml name="citations">
+        <citations>
+            <citation type="doi">10.18129/B9.bioc.MsQuality</citation>
+        </citations>
+    </xml>
+</macros>
