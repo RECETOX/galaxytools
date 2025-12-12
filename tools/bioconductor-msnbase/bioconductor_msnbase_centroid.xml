@@ -85,8 +85,10 @@
         </test>
         <test>
             <param name="input_file" value="29_qc_no_dil_milliq_subset.mzML"/>
-            <param name="method" value="kNeighbors"/>
-            <param name="k" value="3"/>
+            <conditional name="refinement">
+                <param name="method" value="kNeighbors"/>
+                <param name="k" value="3"/>
+            </conditional>
             <output name="output_file">
                 <assert_contents>
                     <expand macro="assertions_centroiding"/>
@@ -95,8 +97,10 @@
         </test>
         <test>
             <param name="input_file" value="29_qc_no_dil_milliq_subset.mzML"/>
-            <param name="method" value="descendPeak"/>
-            <param name="signal_percentage" value="10"/>
+            <conditional name="refinement">
+                <param name="method" value="descendPeak"/>
+                <param name="signal_percentage" value="10"/>
+            </conditional>
             <output name="output_file">
                 <assert_contents>
                     <expand macro="assertions_centroiding"/>

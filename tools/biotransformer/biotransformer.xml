@@ -1,4 +1,5 @@
-<tool id="biotransformer" name="BioTransformer" version="@TOOL_VERSION@+galaxy4" profile="21.09">
+<tool id="biotransformer" name="BioTransformer" version="@TOOL_VERSION@+galaxy5" profile="23.0">
+    <description>Generate biotransformation products for molecules.</description>
     <macros>
         <import>macros.xml</import>
     </macros>
@@ -6,11 +7,17 @@
     <xrefs>
         <xref type="bio.tools">biotransformer</xref>
     </xrefs>
+
     <requirements>
         <requirement type="package" version="3.0_20230403">biotransformer</requirement>
         <requirement type="package" version="3.1.1">openbabel</requirement>
-        <requirement type="package" version="1.1.1">pandas</requirement>
+        <requirement type="package" version="2.3.1">pandas</requirement>
     </requirements>
+
+    <required_files>
+        <include path="wrapper_biotransformer.py"/>
+    </required_files>
+
     <command detect_errors="aggressive"><![CDATA[
         python3 '${__tool_directory__}/wrapper_biotransformer.py'
          -k $k
@@ -26,11 +33,16 @@
     </command>
     <inputs>
         <param name="k" type="select" value="pred"
-               label="The task to be permed [pred=prediction, cid=compound identification].">
+               label="The task to be performed [pred=prediction, cid=compound identification]."
+               help="Select the task to be performed. 
+                     For prediction, the tool will generate biotransformation products for the input molecules.
+                     For compound identification, it will identify compounds based on their chemical structure.">
             <option value="pred" selected="true">pred</option>
             <option value="cid">cid</option>
         </param>
-        <param name="b" type="select" value="ecbased" label="The type of description.">
+        <param name="b" type="select" value="ecbased" label="The type of description." help="Select the type of biotransformation description to use. 
+                     Options include EC-based, CYP450, Phase II, Human gut microbial, Super transformer 1 (superbio), 
+                     Super transformer 2 (allHuman), and Environmental microbial.">
             <option value="ecbased" selected="true">EC-based</option>
             <option value="cyp450">CYP450</option>
             <option value="phaseII">Phase II</option>
@@ -39,9 +51,9 @@
             <option value="allHuman">Human super transformer 2 (allHuman)</option>
             <option value="envimicro">Environmental microbial</option>
         </param>
-        <param name="steps" type="integer" value="1" label=" The number of steps for the prediction."/>
-        <param name="tolerance" type="float" value="0.01" label="Mass tolerance for metabolite identification."/>
-        <param name="input_file" type="data" format="csv" label="Input CSV file."/>
+        <param name="steps" type="integer" value="1" min="1" max="5" label=" The number of steps for the prediction." help="Number of transformation steps to predict."/>
+        <param name="tolerance" type="float" value="0.01" label="Mass tolerance for metabolite identification." help="Tolerance is used in Da for identification."/>
+        <param name="input_file" type="data" format="csv" label="Input CSV file." help="Input table with SMILES strings to predict the biotransformation products for."/>
     </inputs>
 
     <outputs>
@@ -59,19 +71,19 @@
             <param name="input_file" value="smiles.csv"/>
             <output name="output_file">
                 <assert_contents>
-                    <has_size value="9356" delta="300"/>
+                    <has_size value="9818" delta="300"/>
                     <has_n_lines n="250" delta="25"/>
                 </assert_contents>
             </output>
             <output name="output_file2">
                 <assert_contents>
-                    <has_size value="9356" delta="300"/>
+                    <has_size value="9818" delta="300"/>
                     <has_n_lines n="250" delta="25"/>
                 </assert_contents>
             </output>
             <output name="output_file3">
                 <assert_contents>
-                    <has_size value="8135" delta="300"/>
+                    <has_size value="8497" delta="300"/>
                     <has_n_lines n="200" delta="25"/>
                 </assert_contents>
             </output>
