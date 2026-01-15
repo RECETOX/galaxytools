@@ -1,5 +1,5 @@
 <tool id="aoptk_chemical_identifier" name="aoptk chemical identifier" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="25.01" license="MIT">
-    <description>Tool to filter for publications with toxicologically relevant chemicals.</description>
+    <description>Detect chemicals in scientific literature and filter based on a screening list.</description>
     <macros>
         <token name="@TOOL_VERSION@">0.1.0</token>
         <token name="@VERSION_SUFFIX@">0</token>
