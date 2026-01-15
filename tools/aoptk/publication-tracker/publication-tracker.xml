@@ -1,0 +1,200 @@
+<tool id="galaxy_publication_tracker" name="Publication Tracker" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="20.01" license="MIT">
+    <description>Tool to track publications.</description>
+    <macros>
+        <token name="@TOOL_VERSION@">0.1.0</token>
+        <token name="@VERSION_SUFFIX@">0</token>
+    </macros>
+
+    <requirements>
+        <requirement type="package" version="0.1.1.">aoptk</requirement>
+    </requirements>
+
+    <required_files>
+    </required_files>
+ 
+    <command detect_errors="exit_code"><![CDATA[
+        ln -s '$read' 'read.${read.ext}' &&
+        ln -s '$master' 'master.${master.ext}' &&
+        publication-tracker
+        --code "$code"
+        --email "$email"
+        --query '$query'
+        --literature_database "$literature_database"
+        --read 'read.${read.ext}'
+        --master 'master.${master.ext}'
+    ]]></command>
+
+    <inputs>
+        <param argument="--query" type="text" value="" label="Your search term" help="Type your search term as you would in PubMed/Europe PMC.">
+            <sanitizer invalid_char="">
+                <valid initial="string.letters,string.digits">
+                    <add value="_" />
+                    <add value=" " />
+                    <add value="&apos;" />
+                    <add value="&quot;" />
+                    <add value="(" />
+                    <add value=")" />
+                    <add value="*" />
+                    <add value="[" />
+                    <add value="]" />
+                    <add value="-" />
+                    <add value=":" />
+                    <!-- Lowercase Greek letters -->
+                    <add value="α" />
+                    <add value="β" />
+                    <add value="γ" />
+                    <add value="δ" />
+                    <add value="ε" />
+                    <add value="ζ" />
+                    <add value="η" />
+                    <add value="θ" />
+                    <add value="ι" />
+                    <add value="κ" />
+                    <add value="λ" />
+                    <add value="μ" />
+                    <add value="ν" />
+                    <add value="ξ" />
+                    <add value="ο" />
+                    <add value="π" />
+                    <add value="ρ" />
+                    <add value="σ" />
+                    <add value="τ" />
+                    <add value="υ" />
+                    <add value="φ" />
+                    <add value="χ" />
+                    <add value="ψ" />
+                    <add value="ω" />
+                    <!-- Uppercase Greek letters -->
+                    <add value="Α" />
+                    <add value="Β" />
+                    <add value="Γ" />
+                    <add value="Δ" />
+                    <add value="Ε" />
+                    <add value="Ζ" />
+                    <add value="Η" />
+                    <add value="Θ" />
+                    <add value="Ι" />
+                    <add value="Κ" />
+                    <add value="Λ" />
+                    <add value="Μ" />
+                    <add value="Ν" />
+                    <add value="Ξ" />
+                    <add value="Ο" />
+                    <add value="Π" />
+                    <add value="Ρ" />
+                    <add value="Σ" />
+                    <add value="Τ" />
+                    <add value="Υ" />
+                    <add value="Φ" />
+                    <add value="Χ" />
+                    <add value="Ψ" />
+                    <add value="Ω" />
+                </valid>
+            </sanitizer>
+            <validator type="regex">[0-9a-zA-Z_ ()*'"[\]\[\]\-:.\[\]α-ωΑ-Ω]+</validator>
+        </param>
+        <param argument="--email" type="text" value="" label="E-mail" help="E-mail is required to follow NCBI guidelines.">
+            <sanitizer invalid_char="">
+                <valid initial="default">
+                    <add value="_" />
+                    <add value="@" />
+                    <add value='"' />
+                </valid>
+            </sanitizer>
+            <validator type="regex">[0-9a-zA-Z_]*</validator>
+        </param>
+        <param name="literature_database" type="select" label="Select which database to search." help="PubMed only accepts searches with up to 10 000 results. No limit for Europe PMC.">
+            <option value="pubmed" selected="true">PubMed</option>
+            <option value="europepmc">EuropePMC</option>
+        </param>
+        <param argument="--code" type="text" value="" label="Your search code" help="Type your search code. E.g., 1.1. or 1.2.1.">
+            <sanitizer invalid_char="">
+                <valid initial="string.digits">
+                    <add value="." />
+                 </valid>
+            </sanitizer>
+            <validator type="regex">^\d+(\.\d+)*\.?$</validator>
+        </param>
+        <param argument="--read" type="data" format="xlsx" label="Your database of read publications" help="Your database of read publications. Column id must be present." />
+        <param argument="--master" type="data" format="xlsx" label="Your master table" help="Your master table. Columns ID and Search code must be present." />
+
+    </inputs>
+
+    <outputs>
+        <data name="updated_master_table" format="xlsx" from_work_dir="updated_master_table.xlsx" label="updated_master_table" />
+        <data name="to_read" format="xlsx" from_work_dir="read.xlsx" label="to_read" />
+    </outputs>
+
+    <tests>
+        <!-- Hint: You can use [ctrl+alt+t] after defining the inputs/outputs to auto-scaffold some basic test cases. -->
+        <test>
+           <param name="email" value=""/>
+           <param name="query" value="hepg2 thioacetamide"/>
+           <param name="code" value="1.1.1."/>
+           <param name="literature_database" value="pubmed"/>
+           <param name="read" value="tools/aoptk/publication-tracker/test-data/read_test.xlsx"/>
+           <param name="master" value="tools/aoptk/publication-tracker/test-data/master_test.xlsx"/>
+           <output name="to_read" file="read.xlsx" compare="sim_size" delta="100"/>
+        </test>
+        <test>
+           <param name="email" value=""/>
+           <param name="query" value="hepg2 heparg thioacetamide spheroid"/>
+           <param name="code" value="1.2.1."/>
+           <param name="literature_database" value="europepmc"/>
+           <param name="read" value="tools/aoptk/publication-tracker/test-data/read_test.xlsx"/>
+           <param name="master" value="tools/aoptk/publication-tracker/test-data/master_test.xlsx"/>
+           <output name="to_read" file="read.xlsx" compare="sim_size" delta="100"/>
+        </test>
+        <test>
+           <param name="email" value=""/>
+           <param name="query" value="lx-2 col1a1"/>
+           <param name="code" value="3.1."/>
+           <param name="literature_database" value="pubmed"/>
+           <param name="read" value="tools/aoptk/publication-tracker/test-data/read_test.xlsx"/>
+           <param name="master" value="tools/aoptk/publication-tracker/test-data/master_test.xlsx"/>
+           <output name="updated_master_table" file="updated_master_table.xlsx" compare="sim_size" delta="100"/>
+        </test>
+    </tests>
+    <help><![CDATA[
+
+Publication-Tracker
+=================
+Publication-Tracker allows you to filter for publications which you have read already and automatically update search codes in your Master table.
+
+How It Works
+------------
+- Enter a search term — exactly as you would in PubMed or Europe PMC.
+- Provide your email address — required by NCBI/PubMed.
+- Choose a database — PubMed or Europe PMC.
+- Assign a search code — a unique identifier for your search, e.g., 1.1. or 1.2.1. Maintain rationale behind this search code in Search-code table.
+- Upload database of read publications — an Excel file with a column named `id` containing publications you have already read.
+- Upload Master table — an Excel file with columns `ID` and `Search code`. This is where you will map your publications to their corresponding search codes.
+- Master table with updated search codes will be generated.
+- File with yet not read publications will be generated.
+
+Output Files
+------------
+
+- **Publications to read:** List of publications that match your search term and have not been read yet.
+- **Updated Master table:** Master table with updated search codes.
+
+Notes on Creating Database of Read Publications and Master Table
+---------------------------------------------------
+
+- **Database of Read Publications:** Must be an Excel file with a column named `id` containing the PubMed IDs (or other identifier if not available) of the publications you have read.
+- **Master Table:** Must be an Excel file with columns `ID` (PubMed ID or other identifier) and `Search code`. This table will be updated with new search codes.
+
+How to cite
+===================
+
+If you use Publication-Tracker in your research, please cite [DOI TBA]. 
+Publication-Tracker was originally developed for the purposes of this publication.
+
+
+    ]]></help>
+    <citations>
+        <citation type="doi">qAOP PUBLICATION DOI TBA</citation>
+        <citation type="doi">10.5281/zenodo.4471245</citation>
+        <citation type="doi">10.1093/bioinformatics/btp163</citation>
+    </citations>
+</tool>
