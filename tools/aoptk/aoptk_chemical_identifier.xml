@@ -8,9 +8,6 @@
     <requirements>
         <requirement type="package" version="@TOOL_VERSION@">aoptk</requirement>
     </requirements>
-
-    <required_files>
-    </required_files>
  
     <command detect_errors="exit_code"><![CDATA[
         chemical-identifier
@@ -108,8 +105,8 @@
     </inputs>
 
     <outputs>
-        <data name="Chemicals_per_publication" format="xlsx" from_work_dir="chemicals_per_publication.xlsx" label="Chemicals_per_publication" />
-        <data name="Publications_per_chemical" format="xlsx" from_work_dir="publications_per_chemical.xlsx" label="Publications_per_chemical" />
+        <data name="Chemicals_per_publication" format="xlsx" from_work_dir="chemicals_per_publication.xlsx" label="Chemicals per publication" />
+        <data name="Publications_per_chemical" format="xlsx" from_work_dir="publications_per_chemical.xlsx" label="Publications per chemical" />
     </outputs>
 
     <tests>
@@ -118,14 +115,14 @@
            <param name="email" value=""/>
            <param name="query" value="hepg2 thioacetamide"/>
            <param name="literature_database" value="pubmed"/>
-           <param name="chemical_database" link="https://zenodo.org/records/16532456"/>
+           <param name="chemical_database" link="https://zenodo.org/records/16532456/files/tg_gates.xlsx?download=1"/>
            <output name="Chemicals_per_publication" file="chemicals_per_publication_test.xlsx" compare="sim_size" delta="100"/>
         </test>
         <test>
             <param name="email" value=""/>
             <param name="query" value="hepg2 thioacetamide spheroid"/>
             <param name="literature_database" value="europepmc"/>
-            <param name="chemical_database" link="https://zenodo.org/records/16532456"/>
+            <param name="chemical_database" link="https://zenodo.org/records/16532456/files/tg_gates.xlsx?download=1"/>
             <output name="Publications_per_chemical" file="publications_per_chemical.xlsx" compare="sim_size" delta="100"/>
         </test>
     </tests>
@@ -176,13 +173,7 @@ For the purposes of this publication, Chemical-Identifier was originally develop
 
     ]]></help>
     <citations>
-        <citation type="doi">10.5281/zenodo.4471245</citation>
         <citation type="doi">10.18653/v1/w19-5034</citation>
         <citation type="doi">10.1093/bioinformatics/btp163</citation>
-        <citation type="doi">10.5281/zenodo.16532960</citation>
-        <citation type="doi">10.5281/zenodo.16532455</citation>
-        <citation type="doi">10.5281/zenodo.16533100</citation>
-        <citation type="doi">10.5281/zenodo.16533282</citation>
-        <citation type="doi">10.5281/zenodo.16533439</citation>
     </citations>
 </tool>

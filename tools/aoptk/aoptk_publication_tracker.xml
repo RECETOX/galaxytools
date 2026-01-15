@@ -121,8 +121,8 @@
     </inputs>
 
     <outputs>
-        <data name="updated_master_table" format="xlsx" from_work_dir="updated_master_table.xlsx" label="updated_master_table" />
-        <data name="to_read" format="xlsx" from_work_dir="read.xlsx" label="to_read" />
+        <data name="updated_master_table" format="xlsx" from_work_dir="updated_master_table.xlsx" label="Updated master table" />
+        <data name="to_read" format="xlsx" from_work_dir="read.xlsx" label="To read" />
     </outputs>
 
     <tests>
@@ -132,8 +132,8 @@
            <param name="query" value="hepg2 thioacetamide"/>
            <param name="code" value="1.1.1."/>
            <param name="literature_database" value="pubmed"/>
-           <param name="read" value="tools/aoptk/test-data/read_test.xlsx"/>
-           <param name="master" value="tools/aoptk/test-data/master_test.xlsx"/>
+           <param name="read" value="read_test.xlsx"/>
+           <param name="master" value="master_test.xlsx"/>
            <output name="to_read" file="read.xlsx" compare="sim_size" delta="100"/>
         </test>
         <test>
@@ -141,8 +141,8 @@
            <param name="query" value="hepg2 heparg thioacetamide spheroid"/>
            <param name="code" value="1.2.1."/>
            <param name="literature_database" value="europepmc"/>
-           <param name="read" value="tools/aoptk/test-data/read_test.xlsx"/>
-           <param name="master" value="tools/aoptk/test-data/master_test.xlsx"/>
+           <param name="read" value="read_test.xlsx"/>
+           <param name="master" value="master_test.xlsx"/>
            <output name="to_read" file="read.xlsx" compare="sim_size" delta="100"/>
         </test>
         <test>
@@ -150,8 +150,8 @@
            <param name="query" value="lx-2 col1a1"/>
            <param name="code" value="3.1."/>
            <param name="literature_database" value="pubmed"/>
-           <param name="read" value="tools/aoptk/test-data/read_test.xlsx"/>
-           <param name="master" value="tools/aoptk/test-data/master_test.xlsx"/>
+           <param name="read" value="read_test.xlsx"/>
+           <param name="master" value="master_test.xlsx"/>
            <output name="updated_master_table" file="updated_master_table.xlsx" compare="sim_size" delta="100"/>
         </test>
     </tests>
@@ -193,7 +193,6 @@ Publication-Tracker was originally developed for the purposes of this publicatio
 
     ]]></help>
     <citations>
-        <citation type="doi">qAOP PUBLICATION DOI TBA</citation>
         <citation type="doi">10.5281/zenodo.4471245</citation>
         <citation type="doi">10.1093/bioinformatics/btp163</citation>
     </citations>
