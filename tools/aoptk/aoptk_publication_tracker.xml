@@ -1,4 +1,4 @@
-<tool id="galaxy_publication_tracker" name="Publication Tracker" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="20.01" license="MIT">
+<tool id="aoptk_publication_tracker" name="aoptk publication tracker" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="25.01" license="MIT">
     <description>Tool to track publications.</description>
     <macros>
         <token name="@TOOL_VERSION@">0.1.0</token>
@@ -6,12 +6,9 @@
     </macros>
 
     <requirements>
-        <requirement type="package" version="0.1.1.">aoptk</requirement>
+        <requirement type="package" version="@TOOL_VERSION@">aoptk</requirement>
     </requirements>
 
-    <required_files>
-    </required_files>
- 
     <command detect_errors="exit_code"><![CDATA[
         ln -s '$read' 'read.${read.ext}' &&
         ln -s '$master' 'master.${master.ext}' &&
