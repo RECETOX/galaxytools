@@ -1,12 +1,11 @@
 <tool id="aoptk_publication_tracker" name="aoptk publication tracker" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="25.01" license="MIT">
     <description>Tool to track publications.</description>
     <macros>
-        <token name="@TOOL_VERSION@">0.1.0</token>
-        <token name="@VERSION_SUFFIX@">0</token>
+        <import>macros.xml</import>
     </macros>
 
     <requirements>
-        <requirement type="package" version="@TOOL_VERSION@">aoptk</requirement>
+        <expand macro="requirements"/>
     </requirements>
 
     <command detect_errors="exit_code"><![CDATA[
@@ -22,88 +21,7 @@
     ]]></command>
 
     <inputs>
-        <param argument="--query" type="text" value="" label="Your search term" help="Type your search term as you would in PubMed/Europe PMC.">
-            <sanitizer invalid_char="">
-                <valid initial="string.letters,string.digits">
-                    <add value="_" />
-                    <add value=" " />
-                    <add value="&apos;" />
-                    <add value="&quot;" />
-                    <add value="(" />
-                    <add value=")" />
-                    <add value="*" />
-                    <add value="[" />
-                    <add value="]" />
-                    <add value="-" />
-                    <add value=":" />
-                    <!-- Lowercase Greek letters -->
-                    <add value="α" />
-                    <add value="β" />
-                    <add value="γ" />
-                    <add value="δ" />
-                    <add value="ε" />
-                    <add value="ζ" />
-                    <add value="η" />
-                    <add value="θ" />
-                    <add value="ι" />
-                    <add value="κ" />
-                    <add value="λ" />
-                    <add value="μ" />
-                    <add value="ν" />
-                    <add value="ξ" />
-                    <add value="ο" />
-                    <add value="π" />
-                    <add value="ρ" />
-                    <add value="σ" />
-                    <add value="τ" />
-                    <add value="υ" />
-                    <add value="φ" />
-                    <add value="χ" />
-                    <add value="ψ" />
-                    <add value="ω" />
-                    <!-- Uppercase Greek letters -->
-                    <add value="Α" />
-                    <add value="Β" />
-                    <add value="Γ" />
-                    <add value="Δ" />
-                    <add value="Ε" />
-                    <add value="Ζ" />
-                    <add value="Η" />
-                    <add value="Θ" />
-                    <add value="Ι" />
-                    <add value="Κ" />
-                    <add value="Λ" />
-                    <add value="Μ" />
-                    <add value="Ν" />
-                    <add value="Ξ" />
-                    <add value="Ο" />
-                    <add value="Π" />
-                    <add value="Ρ" />
-                    <add value="Σ" />
-                    <add value="Τ" />
-                    <add value="Υ" />
-                    <add value="Φ" />
-                    <add value="Χ" />
-                    <add value="Ψ" />
-                    <add value="Ω" />
-                </valid>
-            </sanitizer>
-            <validator type="regex">[0-9a-zA-Z_ ()*'"[\]\[\]\-:.\[\]α-ωΑ-Ω]+</validator>
-        </param>
-        <param argument="--email" type="text" value="" label="E-mail" help="E-mail is required to follow NCBI guidelines.">
-            <sanitizer invalid_char="">
-                <valid initial="default">
-                    <add value="_" />
-                    <add value="@" />
-                    <add value='"' />
-                </valid>
-            </sanitizer>
-            <validator type="regex">[0-9a-zA-Z_]*</validator>
-        </param>
-        <param name="literature_database" type="select" label="Select which database to search." help="PubMed only accepts searches with up to 10 000 results. No limit for Europe PMC.">
-            <option value="pubmed" selected="true">PubMed</option>
-            <option value="europepmc">EuropePMC</option>
-        </param>
+        <expand macro="inputs"/>
         <param argument="--code" type="text" value="" label="Your search code" help="Type your search code. E.g., 1.1. or 1.2.1.">
             <sanitizer invalid_char="">
                 <valid initial="string.digits">
@@ -119,7 +37,7 @@
 
     <outputs>
         <data name="updated_master_table" format="xlsx" from_work_dir="updated_master_table.xlsx" label="Updated master table" />
-        <data name="to_read" format="xlsx" from_work_dir="read.xlsx" label="To read" />
+        <data name="to_read_{code}" format="xlsx" from_work_dir="read.xlsx" label="To read" />
     </outputs>
 
     <tests>
@@ -131,7 +49,7 @@
            <param name="literature_database" value="pubmed"/>
            <param name="read" value="read_test.xlsx"/>
            <param name="master" value="master_test.xlsx"/>
-           <output name="to_read" file="read.xlsx" compare="sim_size" delta="100"/>
+           <output name="to_read_{code}" file="read.xlsx" compare="sim_size" delta="100"/>
         </test>
         <test>
            <param name="email" value=""/>
@@ -140,7 +58,7 @@
            <param name="literature_database" value="europepmc"/>
            <param name="read" value="read_test.xlsx"/>
            <param name="master" value="master_test.xlsx"/>
-           <output name="to_read" file="read.xlsx" compare="sim_size" delta="100"/>
+           <output name="to_read_{code}" file="read.xlsx" compare="sim_size" delta="100"/>
         </test>
         <test>
            <param name="email" value=""/>
