@@ -132,8 +132,8 @@
            <param name="query" value="hepg2 thioacetamide"/>
            <param name="code" value="1.1.1."/>
            <param name="literature_database" value="pubmed"/>
-           <param name="read" value="tools/aoptk/publication-tracker/test-data/read_test.xlsx"/>
-           <param name="master" value="tools/aoptk/publication-tracker/test-data/master_test.xlsx"/>
+           <param name="read" value="tools/aoptk/test-data/read_test.xlsx"/>
+           <param name="master" value="tools/aoptk/test-data/master_test.xlsx"/>
            <output name="to_read" file="read.xlsx" compare="sim_size" delta="100"/>
         </test>
         <test>
@@ -141,8 +141,8 @@
            <param name="query" value="hepg2 heparg thioacetamide spheroid"/>
            <param name="code" value="1.2.1."/>
            <param name="literature_database" value="europepmc"/>
-           <param name="read" value="tools/aoptk/publication-tracker/test-data/read_test.xlsx"/>
-           <param name="master" value="tools/aoptk/publication-tracker/test-data/master_test.xlsx"/>
+           <param name="read" value="tools/aoptk/test-data/read_test.xlsx"/>
+           <param name="master" value="tools/aoptk/test-data/master_test.xlsx"/>
            <output name="to_read" file="read.xlsx" compare="sim_size" delta="100"/>
         </test>
         <test>
@@ -150,8 +150,8 @@
            <param name="query" value="lx-2 col1a1"/>
            <param name="code" value="3.1."/>
            <param name="literature_database" value="pubmed"/>
-           <param name="read" value="tools/aoptk/publication-tracker/test-data/read_test.xlsx"/>
-           <param name="master" value="tools/aoptk/publication-tracker/test-data/master_test.xlsx"/>
+           <param name="read" value="tools/aoptk/test-data/read_test.xlsx"/>
+           <param name="master" value="tools/aoptk/test-data/master_test.xlsx"/>
            <output name="updated_master_table" file="updated_master_table.xlsx" compare="sim_size" delta="100"/>
         </test>
     </tests>
