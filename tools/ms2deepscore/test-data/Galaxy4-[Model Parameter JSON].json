@@ -1,49 +1,44 @@
 {
     "base_dims": [
-        20,
-        20
+        2000
     ],
-    "embedding_dim": 15,
-    "ionisation_mode": "negative",
-    "activation_function": "relu",
+    "embedding_dim": 400,
+    "ionisation_mode": "both",
     "train_binning_layer": false,
     "train_binning_layer_group_size": 20,
     "train_binning_layer_output_per_group": 2,
-    "dropout_rate": 0.0,
+    "dropout_rate": 0.01,
     "learning_rate": 0.00025,
-    "epochs": 1,
-    "patience": 2,
+    "epochs": 10,
+    "patience": 5,
     "loss_function": "mse",
     "weighting_factor": 0,
     "model_file_name": "ms2deepscore_model.pt",
     "history_plot_file_name": "history.svg",
-    "time_stamp": "2025_06_23_11_16_54",
+    "time_stamp": "2025_06_12_17_53_28",
     "min_mz": 10,
     "max_mz": 1000,
     "mz_bin_width": 0.1,
     "intensity_scaling": 0.5,
     "additional_metadata": [],
-    "batch_size": 2,
+    "batch_size": 64,
     "num_turns": 1,
     "shuffle": true,
     "use_fixed_set": false,
-    "average_inchikey_sampling_count": 1,
-    "max_inchikey_sampling": 110,
-    "max_pairs_per_bin": 200,
+    "average_pairs_per_bin": 20,
+    "max_pairs_per_bin": 100,
     "same_prob_bins": [
         [
-            -0.01,
-            0.5
+            0.0,
+            0.2
         ],
         [
-            0.5,
+            0.2,
             1.0
         ]
     ],
     "include_diagonal": true,
-    "val_spectra_per_inchikey": 1,
-    "random_seed": 42,
-    "max_pair_resampling": 100,
+    "random_seed": null,
     "fingerprint_type": "daylight",
     "fingerprint_nbits": 2048,
     "augment_removal_max": 0.2,
