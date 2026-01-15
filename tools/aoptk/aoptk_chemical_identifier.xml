@@ -6,7 +6,7 @@
     </macros>
 
     <requirements>
-        <requirement type="package" version="0.1.1.">aoptk</requirement>
+        <requirement type="package" version="@TOOL_VERSION@">aoptk</requirement>
     </requirements>
 
     <required_files>
