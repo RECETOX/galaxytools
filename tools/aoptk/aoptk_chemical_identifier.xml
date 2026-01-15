@@ -1,4 +1,4 @@
-<tool id="galaxy_chemical_identifier" name="Chemical Identifier" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="20.01" license="MIT">
+<tool id="aoptk_chemical_identifier" name="aoptk chemical identifier" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="25.01" license="MIT">
     <description>Tool to filter for publications with toxicologically relevant chemicals.</description>
     <macros>
         <token name="@TOOL_VERSION@">0.1.0</token>
