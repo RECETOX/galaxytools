@@ -4,6 +4,20 @@
 
     <xml name="requirements">
         <requirement type="package" version="@TOOL_VERSION@">aoptk</requirement>
+        <credentials name="email" 
+                     label="Your e-mail address" 
+                     description="E-mail is required to follow NCBI/PubMed guidelines.">
+            <variable name="email"  inject_as_env="email" optional="true" value="">
+                <sanitizer invalid_char="">
+                    <valid initial="default">
+                        <add value="_" />
+                        <add value="@" />
+                        <add value='"' />
+                    </valid>
+                </sanitizer>
+                <validator type="regex">[0-9a-zA-Z_]*</validator>
+            </variable>
+        </credentials>
     </xml>
 
     <xml name="inputs">
@@ -74,16 +88,6 @@
                 </valid>
             </sanitizer>
             <validator type="regex">[0-9a-zA-Z_ ()*'"[\]\[\]\-:.\[\]α-ωΑ-Ω]+</validator>
-        </param>
-        <param argument="--email" type="text" value="" label="E-mail" help="E-mail is required to follow NCBI guidelines.">
-            <sanitizer invalid_char="">
-                <valid initial="default">
-                    <add value="_" />
-                    <add value="@" />
-                    <add value='"' />
-                </valid>
-            </sanitizer>
-            <validator type="regex">[0-9a-zA-Z_]*</validator>
         </param>
         <param name="literature_database" type="select" label="Select which database to search." help="PubMed only accepts searches with up to 10 000 results. No limit for Europe PMC.">
             <option value="pubmed" selected="true">PubMed</option>
