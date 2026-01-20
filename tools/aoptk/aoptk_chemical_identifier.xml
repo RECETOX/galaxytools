@@ -12,7 +12,7 @@
         chemical-identifier
         --query '$query'
         --literature_database "$literature_database"
-        --email $EMAIL
+        --email \$EMAIL
         --chemical_database "$chemical_database"
         --outdir .
     ]]></command>
