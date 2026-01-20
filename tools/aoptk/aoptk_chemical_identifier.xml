@@ -1,4 +1,4 @@
-<tool id="aoptk_chemical_identifier" name="aoptk chemical identifier" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="25.01" license="MIT">
+<tool id="aoptk_chemical_identifier" name="aoptk chemical identifier" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="25.1" license="MIT">
     <description>Detect chemicals in scientific literature and filter based on a screening list.</description>
     <macros>
         <import>macros.xml</import>
