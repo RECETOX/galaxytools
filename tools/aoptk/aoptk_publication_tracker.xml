@@ -37,31 +37,28 @@
 
     <outputs>
         <data name="updated_master_table" format="xlsx" from_work_dir="updated_master_table.xlsx" label="Updated master table" />
-        <data name="to_read_{code}" format="xlsx" from_work_dir="read.xlsx" label="To read" />
+        <data name="to_read" format="xlsx" from_work_dir="read.xlsx" label="To read" />
     </outputs>
 
     <tests>
         <!-- Hint: You can use [ctrl+alt+t] after defining the inputs/outputs to auto-scaffold some basic test cases. -->
         <test>
-           <param name="email" value=""/>
            <param name="query" value="hepg2 thioacetamide"/>
            <param name="code" value="1.1.1."/>
            <param name="literature_database" value="pubmed"/>
            <param name="read" value="read_test.xlsx"/>
            <param name="master" value="master_test.xlsx"/>
-           <output name="to_read_{code}" file="read.xlsx" compare="sim_size" delta="100"/>
+           <output name="to_read" file="read.xlsx" compare="sim_size" delta="100"/>
         </test>
         <test>
-           <param name="email" value=""/>
            <param name="query" value="hepg2 heparg thioacetamide spheroid"/>
            <param name="code" value="1.2.1."/>
            <param name="literature_database" value="europepmc"/>
            <param name="read" value="read_test.xlsx"/>
            <param name="master" value="master_test.xlsx"/>
-           <output name="to_read_{code}" file="read.xlsx" compare="sim_size" delta="100"/>
+           <output name="to_read" file="read.xlsx" compare="sim_size" delta="100"/>
         </test>
         <test>
-           <param name="email" value=""/>
            <param name="query" value="lx-2 col1a1"/>
            <param name="code" value="3.1."/>
            <param name="literature_database" value="pubmed"/>
@@ -73,7 +70,7 @@
     <help><![CDATA[
 
 Publication-Tracker
-=================
+===================
 Publication-Tracker allows you to filter for publications which you have read already and automatically update search codes in your Master table.
 
 How It Works
@@ -94,13 +91,13 @@ Output Files
 - **Updated Master table:** Master table with updated search codes.
 
 Notes on Creating Database of Read Publications and Master Table
----------------------------------------------------
+----------------------------------------------------------------
 
 - **Database of Read Publications:** Must be an Excel file with a column named `id` containing the PubMed IDs (or other identifier if not available) of the publications you have read.
 - **Master Table:** Must be an Excel file with columns `ID` (PubMed ID or other identifier) and `Search code`. This table will be updated with new search codes.
 
 How to cite
-===================
+===========
 
 If you use Publication-Tracker in your research, please cite [DOI TBA]. 
 Publication-Tracker was originally developed for the purposes of this publication.

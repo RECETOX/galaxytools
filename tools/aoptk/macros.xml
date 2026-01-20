@@ -4,20 +4,12 @@
 
     <xml name="requirements">
         <requirement type="package" version="@TOOL_VERSION@">aoptk</requirement>
-        <credentials name="email" 
+        <credentials name="email_credentials" 
                      label="Your e-mail address" 
+                     version="1.0"
                      description="E-mail is required to follow NCBI/PubMed guidelines.">
-            <variable name="email"  inject_as_env="email" optional="true" value="">
-                <sanitizer invalid_char="">
-                    <valid initial="default">
-                        <add value="_" />
-                        <add value="@" />
-                        <add value='"' />
-                    </valid>
-                </sanitizer>
-                <validator type="regex">[0-9a-zA-Z_]*</validator>
-            </variable>
-        </credentials>
+            <variable name="email" inject_as_env="EMAIL" optional="true"/>
+          </credentials>
     </xml>
 
     <xml name="inputs">
