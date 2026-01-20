@@ -33,14 +33,14 @@
            <param name="email" value=""/>
            <param name="query" value="hepg2 thioacetamide"/>
            <param name="literature_database" value="pubmed"/>
-           <param name="chemical_database" link="https://zenodo.org/records/16532456/files/tg_gates.xlsx?download=1"/>
+           <param name="chemical_database" location="https://zenodo.org/records/16532456/files/tg_gates.xlsx?download=1"/>
            <output name="Chemicals_per_publication" file="chemicals_per_publication_test.xlsx" compare="sim_size" delta="100"/>
         </test>
         <test>
             <param name="email" value=""/>
             <param name="query" value="hepg2 thioacetamide spheroid"/>
             <param name="literature_database" value="europepmc"/>
-            <param name="chemical_database" link="https://zenodo.org/records/16532456/files/tg_gates.xlsx?download=1"/>
+            <param name="chemical_database" location="https://zenodo.org/records/16532456/files/tg_gates.xlsx?download=1"/>
             <output name="Publications_per_chemical" file="publications_per_chemical.xlsx" compare="sim_size" delta="100"/>
         </test>
     </tests>
