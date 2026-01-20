@@ -13,11 +13,12 @@
         ln -s '$master' 'master.${master.ext}' &&
         publication-tracker
         --code "$code"
-        --email "$email"
+        --email \$EMAIL
         --query '$query'
-        --literature_database "$literature_database"
+        --database "$literature_database"
         --read 'read.${read.ext}'
         --master 'master.${master.ext}'
+        --outdir .
     ]]></command>
 
     <inputs>
