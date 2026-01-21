@@ -1,4 +1,4 @@
-<tool id="freqsap" name="freqSAP" version="1.0.0+galaxy0" profile="23.0" license="MIT">
+<tool id="freqsap" name="freqSAP" version="0.1.0+galaxy0" profile="23.0" license="MIT">
     <description>Get frequencies of single amino-acid polymorphisms based on nucleid-acid polymorphism for different populations from UniProt and DbSNP</description>
 
     <creator>
@@ -25,17 +25,12 @@
     </edam_operations>
 
     <requirements>
-        <requirement type="package" version="2.3.0">pandas</requirement>
-        <requirement type="package" version="2.32.4">requests</requirement>
-        <requirement type="package" version="3.1.5">openpyxl</requirement>
+        <requirement type="package" version="0.1.0">freqsap</requirement>
     </requirements>
 
-    <required_files>
-        <include path="freqSAP.py"/>
-    </required_files>
 
     <command detect_errors="exit_code"><![CDATA[
-    python3 '${__tool_directory__}/freqSAP.py' -a '$accession' -p '$populations' -f '$output_format' -o '$output_file'
+    python3 -m freqsap '$accession' '$output_file' --delimier '${output_format}'
     ]]></command>
     <inputs>
         <param argument="--accession" type="text" label="Protein Accession in UniProt" help="UniProt accession of the protein to fetch variation data for.">
@@ -46,7 +41,7 @@
             </sanitizer>
             <validator type="regex">[OPQ][0-9][A-Z0-9]{3}[0-9]|[A-NR-Z][0-9]([A-Z][A-Z0-9]{2}[0-9]){1,2}</validator>
         </param>
-        <param argument="--populations" type="select" multiple="true" optional="false" label="Regions from which to choose the populations" help="The regions are broken down into sub-populations based on available entries in DbSNP.">
+        <!-- <param name="populations" type="select" multiple="true" optional="false" label="Regions from which to choose the populations" help="The regions are broken down into sub-populations based on available entries in DbSNP.">
             <option value="Africa">Africa</option>
             <option value="North America">North America</option>
             <option value="Asia">Asia</option>
@@ -55,17 +50,15 @@
             <option value="Middle East">Middle East</option>
             <option value="Other">Other</option>
             <option value="Global" selected="true">Global</option>
-        </param>
+        </param> -->
         <param argument="--output_format" type="select" label="Output Format" help="Format in which to store the output file.">
-            <option value="tabular" selected="true">Tab Separated Value (tabular)</option>
-            <option value="csv">Comma Separated Value (csv)</option>
-            <option value="xlsx">Excel (xlsx)</option>
+            <option value="\t" selected="true">Tab Separated Value (tabular)</option>
+            <option value=",">Comma Separated Value (csv)</option>
        </param>
     </inputs>
     <outputs>
         <data name="output_file" format="tabular" label="${tool.name} of ${accession}">
             <change_format>
-                <when input="output_format" value="xlsx" format="xlsx"/>
                 <when input="output_format" value="csv" format="csv"/>
             </change_format>
         </data>
@@ -74,7 +67,6 @@
     <tests>
         <test>
             <param name="accession" value="P0DJI9"/>
-            <param name="populations" value="Europe,Asia"/>
             <output name="output_file" ftype="tabular">
                 <assert_contents>
                     <has_n_columns n="21"/>
@@ -83,16 +75,15 @@
                 </assert_contents>
             </output>
         </test>
-        <test>
+        <!-- <test>
             <param name="accession" value="P05067"/>
-            <param name="populations" value="Global"/>
             <param name="output_format" value="xlsx"/>
             <output name="output_file" ftype="xlsx">
                 <assert_contents>
                     <has_size size="161" delta="10"/>
                 </assert_contents>
             </output>
-        </test>
+        </test> -->
     </tests>
 
     <help><![CDATA[
