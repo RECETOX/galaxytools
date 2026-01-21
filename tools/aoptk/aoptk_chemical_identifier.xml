@@ -66,7 +66,7 @@ How It Works
 - Enter a search term — exactly as you would in PubMed or Europe PMC.
 - Provide your email address — required by NCBI.
 - Choose a database — PubMed or Europe PMC.
-- Select a chemical list — use built-in Tox21/TG-GATEs lists or upload an Excel file with a ``chemical_name`` column (examples of such lists can be found in Citations).
+- Select a chemical list — upload an Excel file with a ``chemical_name`` column (examples of such lists can be found below).
 
 Output Files
 ------------
@@ -79,6 +79,14 @@ Practical Tips
 
 - PubMed: Keep the raw search below 10,000 results.
 - Europe PMC: Searches the full text by default. Prepend ``TITLE_ABS:`` to limit to title + abstract, e.g. ``TITLE_ABS:(hepg2 spheroid)``.
+
+Chemical Lists Examples
+--------------
+- List of chemicals from EPA Substance Registry Service: https://zenodo.org/records/16533101
+- List of chemicals from Tox21: https://zenodo.org/records/16532961
+- List of chemicals from ECHA REACH: https://zenodo.org/records/16533440
+- List of chemicals from TG-GATEs: https://zenodo.org/records/16532456
+- List of approved drugs from ChEMBL: https://zenodo.org/records/16533283
 
 
 How to cite
