@@ -12,13 +12,13 @@
         ln -s '$read' 'read.${read.ext}' &&
         ln -s '$master' 'master.${master.ext}' &&
         publication-tracker
-        --code "$code"
-        --email \$EMAIL
-        --query '$query'
-        --database "$literature_database"
-        --read 'read.${read.ext}'
-        --master 'master.${master.ext}'
-        --outdir .
+            --read 'read.${read.ext}'
+            --master 'master.${master.ext}'
+            --code '$code'
+            --query '$query'
+            --database '$literature_database'
+            --outdir .
+            \${EMAIL:+--email \$EMAIL}
     ]]></command>
 
     <inputs>
@@ -49,7 +49,7 @@
            <param name="literature_database" value="pubmed"/>
            <param name="read" value="read_test.xlsx"/>
            <param name="master" value="master_test.xlsx"/>
-           <output name="to_read" file="read.xlsx" compare="sim_size" delta="100"/>
+           <output name="to_read" file="read1.xlsx" compare="sim_size" delta="100"/>
         </test>
         <test>
            <param name="query" value="hepg2 heparg thioacetamide spheroid"/>
@@ -57,7 +57,7 @@
            <param name="literature_database" value="europepmc"/>
            <param name="read" value="read_test.xlsx"/>
            <param name="master" value="master_test.xlsx"/>
-           <output name="to_read" file="read.xlsx" compare="sim_size" delta="100"/>
+           <output name="to_read" file="read2.xlsx" compare="sim_size" delta="100"/>
         </test>
         <test>
            <param name="query" value="lx-2 col1a1"/>
@@ -66,6 +66,7 @@
            <param name="read" value="read_test.xlsx"/>
            <param name="master" value="master_test.xlsx"/>
            <output name="updated_master_table" file="updated_master_table.xlsx" compare="sim_size" delta="100"/>
+           <output name="to_read" file="read3.xlsx" compare="sim_size" delta="100"/>
         </test>
     </tests>
     <help><![CDATA[

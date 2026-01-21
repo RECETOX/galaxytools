@@ -10,11 +10,11 @@
  
     <command detect_errors="exit_code"><![CDATA[
         chemical-identifier
-        --query '$query'
-        --literature_database "$literature_database"
-        --email \$EMAIL
-        --chemical_database "$chemical_database"
-        --outdir .
+            --query '$query'
+            --literature_database "$literature_database"
+            --chemical_database "$chemical_database"
+            --outdir .
+            \${EMAIL:+--email \$EMAIL}
     ]]></command>
 
     <inputs>
