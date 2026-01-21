@@ -72,16 +72,16 @@
 
 Publication-Tracker
 ===================
-Publication-Tracker allows you to filter for publications which you have read already and automatically update search codes in your Master table.
+Publication-Tracker allows you to filter for publications which you have read already and automatically update search codes in your master table.
 
 How It Works
 ------------
+- Provide your email address — required by NCBI.
 - Enter a search term — exactly as you would in PubMed or Europe PMC.
-- Provide your email address — required by NCBI/PubMed.
 - Choose a database — PubMed or Europe PMC.
 - Assign a search code — a unique identifier for your search, e.g., 1.1. or 1.2.1. Maintain rationale behind this search code in Search-code table.
 - Upload database of read publications — an Excel file with a column named `id` containing publications you have already read.
-- Upload Master table — an Excel file with columns `ID` and `Search code`. This is where you will map your publications to their corresponding search codes.
+- Upload master table — an Excel file with columns `ID` and `Search code`. This is where you will map your publications to their corresponding search codes.
 - Master table with updated search codes will be generated.
 - File with yet not read publications will be generated.
 
@@ -89,13 +89,13 @@ Output Files
 ------------
 
 - **Publications to read:** List of publications that match your search term and have not been read yet.
-- **Updated Master table:** Master table with updated search codes.
+- **Updated master table:** Master table with updated search codes.
 
 Notes on Creating Database of Read Publications and Master Table
 ----------------------------------------------------------------
 
-- **Database of Read Publications:** Must be an Excel file with a column named `id` containing the PubMed IDs (or other identifier if not available) of the publications you have read.
-- **Master Table:** Must be an Excel file with columns `ID` (PubMed ID or other identifier) and `Search code`. This table will be updated with new search codes.
+- **Database of read publications:** Must be an Excel file with a column named `id` containing the PubMed IDs (or other identifier if not available) of the publications you have read.
+- **Master table:** Must be an Excel file with columns `ID` (PubMed ID or other identifier) and `Search code`. This table will be updated with new search codes.
 
 How to cite
 ===========
@@ -106,7 +106,6 @@ Publication-Tracker was originally developed for the purposes of this publicatio
 
     ]]></help>
     <citations>
-        <citation type="doi">10.5281/zenodo.4471245</citation>
         <citation type="doi">10.1093/bioinformatics/btp163</citation>
     </citations>
 </tool>
