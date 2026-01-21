@@ -27,6 +27,7 @@
                     <add value="]" />
                     <add value="-" />
                     <add value=":" />
+                    <add value="/" />
                     <!-- Lowercase Greek letters -->
                     <add value="α" />
                     <add value="β" />
