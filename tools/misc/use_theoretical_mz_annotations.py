@@ -1,23 +1,17 @@
 import argparse
-from typing import Iterator, Tuple
+from typing import Tuple
 
 
 def get_peak_values(peak: str) -> Tuple[float, float, str]:
     """ Get the m/z and intensity value from the line containing the peak information. """
     splitted_line = peak.split(maxsplit=2)
+    
     mz = float(splitted_line[0].strip())
     intensity = float(splitted_line[1].strip())
     comment = ''
     if (len(splitted_line) == 3):
         comment = splitted_line[2].strip()
     return mz, intensity, comment
-
-
-def get_peak_tuples(rline: str) -> Iterator[str]:
-    """ Splits line at ';' and performs additional string cleaning. """
-    tokens = filter(None, rline.split(";"))
-    peak_pairs = map(lambda x: x.lstrip().rstrip(), tokens)
-    return peak_pairs
 
 
 def overwrite_peaks(file: str, output: str, only_contains_annotation: bool = False) -> None:
@@ -48,20 +42,18 @@ def overwrite_peaks(file: str, output: str, only_contains_annotation: bool = Fal
                 num_peaks = int(line.split(':')[1].strip())
                 peaks = []
                 for i in range(num_peaks):
-                    line = file.readline()
-                    peak_pairs = get_peak_tuples(line)
+                    peak = file.readline()
+                    
+                    mz, intensity, comment = get_peak_values(peak)
+                    if comment != '':
+                        tokens = comment.split()
+                        mz = float(tokens[2].strip().rstrip(','))
+                        peak_text = '%s\t%s\t%s\n' % (str(mz), str(intensity), str(comment))
+                        peaks.append(peak_text)
 
-                    for peak in peak_pairs:
-                        mz, intensity, comment = get_peak_values(peak)
-                        if comment != '':
-                            tokens = comment.split()
-                            mz = float(tokens[2].strip().rstrip(','))
-                            peak_text = '%s\t%s\t%s\n' % (str(mz), str(intensity), str(comment))
-                            peaks.append(peak_text)
-
-                        if only_contains_annotation is False and comment == '':
-                            peak_text = '%s\t%s\n' % (str(mz), str(intensity))
-                            peaks.append(peak_text)
+                    if only_contains_annotation is False and comment == '':
+                        peak_text = '%s\t%s\n' % (str(mz), str(intensity))
+                        peaks.append(peak_text)
 
                 annotated_msp.append("Num Peaks: %d\n" % len(peaks))
                 for item in peaks:
