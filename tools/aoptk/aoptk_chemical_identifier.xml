@@ -43,9 +43,6 @@
         </test>
     </tests>
     <help><![CDATA[
-
-
-
 Chemical-Identifier
 ===================
 
@@ -90,7 +87,7 @@ Chemical Databases Examples
 
 
 How to cite
-===================
+===========
 
 If you use Chemical-Identifier in your research, please cite [DOI TBA]. 
 For the purposes of this publication, Chemical-Identifier was originally developed and used with chemical lists obtained from Tox21 and TG-GATEs.
