@@ -78,7 +78,7 @@ Practical Tips
 - Europe PMC: Searches the full text by default. Prepend ``TITLE_ABS:`` to limit to title + abstract, e.g. ``TITLE_ABS:(hepg2 spheroid)``.
 
 Chemical Databases Examples
---------------
+---------------------------
 - EPA Substance Registry Service: https://zenodo.org/records/16533101
 - Tox21: https://zenodo.org/records/16532961
 - ECHA REACH: https://zenodo.org/records/16533440
