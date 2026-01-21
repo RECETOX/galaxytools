@@ -52,7 +52,7 @@ Chemical-Identifier
 Overview
 --------
 
-Chemical-Identifier uses named-entity recognition (NER) to extract suspected chemical names from scientific publication abstracts. These entities are then matched against a user-defined database of relevant chemicals to help toxicologists identify publications of interest. It:
+Chemical-Identifier uses named-entity recognition (NER) to extract chemical names from scientific publication abstracts. These entities are then matched against a user-defined database of relevant chemicals to help toxicologists identify publications of interest. It:
 
 - **Extracts chemical entities** using ScispaCy's NER.
 - **Normalizes synonyms** by mapping entities to Medical Subject Headings (MeSH) terms.
@@ -66,7 +66,7 @@ How It Works
 - Provide your email address — required by NCBI.
 - Enter a search term — exactly as you would in PubMed or Europe PMC.
 - Choose a literature database — PubMed or Europe PMC.
-- Select a database of chemicals — upload an Excel file with a ``chemical_name`` column (examples of such lists can be found below).
+- Select a database of chemicals — upload an Excel file with a ``chemical_name`` column (examples can be found below).
 
 Output Files
 ------------
