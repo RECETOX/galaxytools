@@ -1,0 +1,100 @@
+<tool id="aoptk_chemical_identifier" name="aoptk chemical identifier" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="25.1" license="MIT">
+    <description>Detect chemicals in scientific literature and filter based on a screening list.</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+
+    <requirements>
+        <expand macro="requirements"/>
+    </requirements>
+ 
+    <command detect_errors="exit_code"><![CDATA[
+        chemical-identifier
+            --query '$query'
+            --literature_database "$literature_database"
+            --chemical_database "$chemical_database"
+            --outdir .
+            \${EMAIL:+--email \$EMAIL}
+    ]]></command>
+
+    <inputs>
+        <expand macro="inputs"/>
+        <param argument="--chemical_database" type="data" format="xlsx" label="Chemical database" help="Custom chemical database with toxicologically relevant chemicals. Excel file with single column: chemical_name. Examples can be found in Citations." />
+    </inputs>
+
+    <outputs>
+        <data name="Chemicals_per_publication" format="xlsx" from_work_dir="chemicals_per_publication.xlsx" label="Chemicals per publication" />
+        <data name="Publications_per_chemical" format="xlsx" from_work_dir="publications_per_chemical.xlsx" label="Publications per chemical" />
+    </outputs>
+
+    <tests>
+        <!-- Hint: You can use [ctrl+alt+t] after defining the inputs/outputs to auto-scaffold some basic test cases. -->
+        <test>
+           <param name="query" value="hepg2 thioacetamide"/>
+           <param name="literature_database" value="pubmed"/>
+           <param name="chemical_database" location="https://zenodo.org/records/16532456/files/tg_gates.xlsx?download=1"/>
+           <output name="Chemicals_per_publication" file="chemicals_per_publication_test.xlsx" compare="sim_size" delta="100"/>
+        </test>
+        <test>
+            <param name="query" value="hepg2 thioacetamide spheroid"/>
+            <param name="literature_database" value="europepmc"/>
+            <param name="chemical_database" location="https://zenodo.org/records/16532456/files/tg_gates.xlsx?download=1"/>
+            <output name="Publications_per_chemical" file="publications_per_chemical.xlsx" compare="sim_size" delta="100"/>
+        </test>
+    </tests>
+    <help><![CDATA[
+Chemical-Identifier
+===================
+
+Overview
+--------
+
+Chemical-Identifier uses named-entity recognition (NER) to extract chemical names from scientific publication abstracts. These entities are then matched against a user-defined database of relevant chemicals to help toxicologists identify publications of interest. It:
+
+- **Extracts chemical entities** using ScispaCy's NER.
+- **Normalizes synonyms** by mapping entities to Medical Subject Headings (MeSH) terms.
+- **Identifies relevant publications** by cross-referencing with the user-defined chemical list (e.g., Tox21 chemicals). Alternatively, it can be used to explore which chemicals co-occur with a given search term.
+
+Due to character and Boolean operator limits on platforms like PubMed and Europe PMC, it is impossible to include large chemical name lists directly in search queries. Chemical-Identifier addresses this limitation.
+
+How It Works
+------------
+
+- Provide your email address — required by NCBI.
+- Enter a search term — exactly as you would in PubMed or Europe PMC.
+- Choose a literature database — PubMed or Europe PMC.
+- Select a database of chemicals — upload an Excel file with a ``chemical_name`` column (examples can be found below).
+
+Output Files
+------------
+
+- **Chemicals per publication:** Publications whose abstracts mention a relevant chemical from your list.
+- **Publications per chemical:** Table showing which chemicals are associated with your search term.
+
+Practical Tips
+--------------
+
+- PubMed: Keep the raw search below 10,000 results.
+- Europe PMC: Searches the full text by default. Prepend ``TITLE_ABS:`` to limit to title + abstract, e.g. ``TITLE_ABS:(hepg2 spheroid)``.
+
+Chemical Databases Examples
+---------------------------
+- EPA Substance Registry Service: https://zenodo.org/records/16533101
+- Tox21: https://zenodo.org/records/16532961
+- ECHA REACH: https://zenodo.org/records/16533440
+- TG-GATEs: https://zenodo.org/records/16532456
+- ChEMBL approved drugs: https://zenodo.org/records/16533283
+
+
+How to cite
+===========
+
+If you use Chemical-Identifier in your research, please cite [DOI TBA]. 
+For the purposes of this publication, Chemical-Identifier was originally developed and used with chemical lists obtained from Tox21 and TG-GATEs.
+
+    ]]></help>
+    <citations>
+        <citation type="doi">10.18653/v1/w19-5034</citation>
+        <citation type="doi">10.1093/bioinformatics/btp163</citation>
+    </citations>
+</tool>
