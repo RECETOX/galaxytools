@@ -38,7 +38,7 @@
 
     <outputs>
         <data name="updated_master_table" format="xlsx" from_work_dir="updated_master_table.xlsx" label="Updated master table" />
-        <data name="to_read" format="xlsx" from_work_dir="read.xlsx" label="To read" />
+        <data name="to_read" format="xlsx" from_work_dir="to_read.xlsx" label="To read" />
     </outputs>
 
     <tests>
