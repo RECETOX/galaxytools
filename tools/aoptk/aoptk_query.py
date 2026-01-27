@@ -11,7 +11,7 @@ def generate_database_with_ids(
 
     Args:
         query (str): Search term for PubMed or Europe PMC.
-        literature_database (str): Database to search: PubMed or Europe PMC.
+        database (str): Database to search: PubMed or Europe PMC.
         email (str): Email address to follow PubMed - NCBI guidelines.
     """
     if database == "pubmed":
@@ -36,7 +36,7 @@ def parse_args() -> argparse.Namespace:
         "--query", required=True, help="Search term as used in PubMed/Europe PMC"
     )
     parser.add_argument(
-        "--literature_database",
+        "--database",
         required=True,
         choices=["pubmed", "europepmc"],
         help="Database to query",
@@ -49,11 +49,6 @@ def parse_args() -> argparse.Namespace:
 
 if __name__ == "__main__":
     args = parse_args()
-    db_obj = generate_database_with_ids(
-        args.query, args.literature_database, args.email
+    database_with_ids = generate_database_with_ids(
+        args.query, args.database, args.email
     )
-    if db_obj is None:
-        raise SystemExit(
-            "Unsupported literature_database; choose 'pubmed' or 'europepmc'."
-        )
-    print(db_obj.id_list)
