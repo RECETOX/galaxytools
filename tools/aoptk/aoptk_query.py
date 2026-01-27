@@ -46,9 +46,20 @@ def parse_args() -> argparse.Namespace:
     )
     return parser.parse_args()
 
+def save_file(database_with_ids, filename: str):
+    """Save the IDs to a text file.
+
+    Args:
+        database_with_ids (EuropePMC | PubMed): Object containing the IDs.
+        filename (str): Name of the output file.
+    """
+    with open(filename, "w") as f:
+        for id_ in database_with_ids.id_list:
+            f.write(f"{id_}\n")
 
 if __name__ == "__main__":
     args = parse_args()
     database_with_ids = generate_database_with_ids(
         args.query, args.database, args.email
     )
+    save_file(database_with_ids, "ids.txt")
