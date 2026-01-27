@@ -27,7 +27,6 @@ def generate_database_with_ids(
         return europepmc
     return None
 
-
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description="Fetch PubMed or Europe PMC IDs using aoptk"
@@ -46,7 +45,7 @@ def parse_args() -> argparse.Namespace:
     )
     return parser.parse_args()
 
-def save_file(database_with_ids, filename: str):
+def save_file(database_with_ids: EuropePMC | PubMed, filename: str) -> None:
     """Save the IDs to a text file.
 
     Args:
