@@ -20,7 +20,9 @@ def parse_args() -> argparse.Namespace:
         description="Generate MeSH terms dataframe from XML"
     )
     parser.add_argument("--xml_path", required=True, help="Path to the MeSH XML file")
-    parser.add_argument("--outdir", required=True, help="Output directory for saving results")
+    parser.add_argument(
+        "--outdir", required=True, help="Output directory for saving results"
+    )
     return parser.parse_args()
 
 
