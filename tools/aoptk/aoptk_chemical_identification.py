@@ -22,13 +22,13 @@ def save_file(input_file: str, output_file: str) -> None:
         output_file (str): Path to output TSV file.
     """
     with open(input_file, "r") as f_in, open(output_file, "w") as f_out:
-        f_out.write("id\tchemicals\n")
+        f_out.write("id\ttext\tchemicals\n")
         for row in csv.DictReader(f_in, delimiter="\t"):
             chemicals = find_chemicals(row["text"])
             chemicals_str = (
                 "|".join(set([chem.name for chem in chemicals])) if chemicals else ""
             )
-            f_out.write(f"{row['id']}\t{chemicals_str}\n")
+            f_out.write(f"{row['id']}\t{row['text']}\t{chemicals_str}\n")
 
 
 def parse_args() -> argparse.Namespace:
