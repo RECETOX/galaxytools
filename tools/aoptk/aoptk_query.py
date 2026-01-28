@@ -27,6 +27,19 @@ def generate_database_with_ids(
         return europepmc
     return None
 
+
+def save_file(database_with_ids: EuropePMC | PubMed, filename: str) -> None:
+    """Save the IDs to a text file.
+
+    Args:
+        database_with_ids (EuropePMC | PubMed): Object containing the IDs.
+        filename (str): Name of the output file.
+    """
+    with open(filename, "w") as f:
+        for id_ in database_with_ids.id_list:
+            f.write(f"{id_}\n")
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description="Fetch PubMed or Europe PMC IDs using aoptk"
@@ -43,22 +56,15 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--email", required=True, help="Email to comply with NCBI guidelines"
     )
+    parser.add_argument(
+        "--outdir", required=True, help="Output directory for saving files"
+    )
     return parser.parse_args()
 
-def save_file(database_with_ids: EuropePMC | PubMed, filename: str) -> None:
-    """Save the IDs to a text file.
-
-    Args:
-        database_with_ids (EuropePMC | PubMed): Object containing the IDs.
-        filename (str): Name of the output file.
-    """
-    with open(filename, "w") as f:
-        for id_ in database_with_ids.id_list:
-            f.write(f"{id_}\n")
 
 if __name__ == "__main__":
     args = parse_args()
     database_with_ids = generate_database_with_ids(
         args.query, args.database, args.email
     )
-    save_file(database_with_ids, "ids.txt")
+    save_file(database_with_ids, f"{args.outdir}/ids.txt")
