@@ -29,7 +29,7 @@ def save_file(publications: list[Publication], output_file: str) -> None:
     """
     with open(output_file, "w", newline="") as f_out:
         writer = csv.writer(f_out, delimiter="\t")
-        writer.writerow(["publication_id", "full_text", "figure_descriptions"])
+        writer.writerow(["id", "text", "figure_descriptions"])
         for publication in publications:
             full_text = publication.full_text.replace("\t", " ").replace("\n", " ")
             figure_descriptions = "|".join(publication.figure_descriptions)
