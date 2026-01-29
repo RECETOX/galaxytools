@@ -22,7 +22,7 @@ def download_abstracts(
         pubmed.id_list = ids
         return pubmed.get_abstracts()
     if database == "europepmc":
-        europepmc = EuropePMC.__new__(EuropePMC)
+        europepmc = EuropePMC("")
         europepmc.id_list = ids
         return europepmc.get_abstracts()
     return None
