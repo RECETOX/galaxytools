@@ -1,0 +1,30 @@
+{
+  "title": "Galaxy tools for Untargeted Mass Spectrometry Analysis",
+  "description": "Galaxy tools for Untargeted Mass Spectrometry Analysis. Developed and maintained in RECETOX in collaboration with CERIT-SC.",
+  "creators": [
+    {
+      "name": "Hecht, Helge",
+      "affiliation": "RECETOX, Masaryk University"
+    }
+  ],
+  "keywords": [
+    "galaxy",
+    "mass-spectrometry",
+    "metabolomics",
+    "untargeted-analysis",
+    "bioinformatics"
+  ],
+  "license": "mit",
+  "upload_type": "software",
+  "version": "0.6.3",
+  "access_right": "open",
+  "language": "eng",
+  "grants": [
+      {"id": "10.3030/857560"}
+  ],
+  "communities": [
+      {"identifier": "eu"},
+      {"identifier": "rcx-balri"},
+      {"identifier": "rcx-specdatri"},    
+  ]
+}
