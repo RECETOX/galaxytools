@@ -14,14 +14,17 @@
     "untargeted-analysis",
     "bioinformatics"
   ],
-  "license": {
-    "id": "MIT"
-  },
+  "license": "mit",
   "upload_type": "software",
-  "related_identifiers": [
-    {
-      "relation": "isSupplementTo",
-      "identifier": "https://github.com/RECETOX/galaxytools"
-    }
+  "version": "0.6.3",
+  "access_right": "open",
+  "language": "eng",
+  "grants": [
+      {"id": "10.3030/857560"}
+  ],
+  "communities": [
+      {"identifier": "eu"},
+      {"identifier": "rcx-balri"},
+      {"identifier": "rcx-specdatri"},    
   ]
 }
