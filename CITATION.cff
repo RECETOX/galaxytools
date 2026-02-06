@@ -1,0 +1,24 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+title: "Galaxy tools for Untargeted Mass Spectrometry Analysis"
+version: 1.0.0
+date-released: 2020-01-01
+url: "https://github.com/RECETOX/galaxytools"
+repository-code: "https://github.com/RECETOX/galaxytools"
+license: MIT
+authors:
+  - family-names: Hecht
+    given-names: Helge
+    email: helge.hecht@recetox.muni.cz
+    affiliation: "RECETOX, Masaryk University"
+keywords:
+  - galaxy
+  - mass-spectrometry
+  - metabolomics
+  - untargeted-analysis
+  - bioinformatics
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.6035335
+    description: "Zenodo DOI for this project"
+abstract: "Galaxy tools for Untargeted Mass Spectrometry Analysis. Developed and maintained in RECETOX in collaboration with CERIT-SC."
