@@ -1,7 +1,6 @@
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.6035335.svg)](https://doi.org/10.5281/zenodo.6035335)
-[![Matrix](https://img.shields.io/matrix/galaxyproject_mass-spectrometry:matrix.org)](https://matrix.to/#/#galaxyproject_mass-spectrometry:matrix.org)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.14072635.svg)](https://doi.org/10.5281/zenodo.14072635)
 [![Weekly global Tool Linting and Tests](https://github.com/RECETOX/galaxytools/actions/workflows/ci.yaml/badge.svg)](https://github.com/RECETOX/galaxytools/actions/workflows/ci.yaml)
-
+[!![Static Badge](https://img.shields.io/badge/:badgeContent)](galaxy-umsa.grid.cesnet.cz)
 # Galaxy tools for Untargeted Mass Spectrometry Analysis
 
 Developed and maintained in [RECETOX](https://www.recetox.muni.cz/en) in collaboration with [CERIT-SC](https://www.cerit-sc.cz/).
