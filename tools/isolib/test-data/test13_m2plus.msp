@@ -1,0 +1,38 @@
+NAME: Glucose (M2+)
+msLevel: MS1
+PRECURSORTYPE: [M2+]+2
+FORMULA: C6H12O6
+charge: 2
+ionization_mode: positive
+precursor_mz: 180.062839524
+retention_time: 100
+Num Peaks: 3
+90.0311454720908 100
+90.5328228920908 6.48943697563934
+91.0332683620908 1.23299618071915
+
+NAME: Aspirin (M2+)
+msLevel: MS1
+PRECURSORTYPE: [M2+]+2
+FORMULA: C9H8O4
+charge: 2
+ionization_mode: positive
+precursor_mz: 180.041710156
+retention_time: 200
+Num Peaks: 2
+90.0205807880908 100
+90.5222582080908 9.73415546345901
+
+NAME: Caffeine (M2+)
+msLevel: MS1
+PRECURSORTYPE: [M2+]+2
+FORMULA: C8H10N4O2
+charge: 2
+ionization_mode: positive
+precursor_mz: 194.07982698
+retention_time: 300
+Num Peaks: 3
+97.0396392200908 100
+97.5381567000908 1.4613192018949
+97.5413166400908 8.65258263418579
+

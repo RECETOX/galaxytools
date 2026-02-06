@@ -1,0 +1,38 @@
+NAME: Glucose (M+NH4)
+msLevel: MS1
+PRECURSORTYPE: [M+NH4]+
+FORMULA: C6H12O6
+charge: 1
+ionization_mode: positive
+precursor_mz: 198.097211104
+retention_time: 100
+Num Peaks: 3
+198.097213662091 100
+199.100568502091 6.48943697563934
+200.101459442091 1.23299618071915
+
+NAME: Aspirin (M+NH4)
+msLevel: MS1
+PRECURSORTYPE: [M+NH4]+
+FORMULA: C9H8O4
+charge: 1
+ionization_mode: positive
+precursor_mz: 198.076081736
+retention_time: 200
+Num Peaks: 2
+198.076084294091 100
+199.079439134091 9.73415546345901
+
+NAME: Caffeine (M+NH4)
+msLevel: MS1
+PRECURSORTYPE: [M+NH4]+
+FORMULA: C8H10N4O2
+charge: 1
+ionization_mode: positive
+precursor_mz: 212.11419856
+retention_time: 300
+Num Peaks: 3
+212.114201158091 100
+213.111236118091 1.82664900236862
+213.117555998091 8.65258263418579
+

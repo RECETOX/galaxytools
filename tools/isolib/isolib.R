@@ -87,6 +87,26 @@ generate_isotope_spectra <- function(compound_table,
     data(isotopes)
     data(adducts)
 
+    # Add custom adducts for positive ion mode that don't already exist in enviPat
+    # Based on enviPat adduct table format with all 9 columns:
+    # Name, calc, Charge, Mult, Mass, Ion_mode, Formula_add, Formula_ded, Multi
+    # Note: M+, M+Na, M+NH4 already exist in enviPat, so we only add M2+ and M-H+
+    custom_adducts <- data.frame(
+        Name = c("M2+", "M-H+"),
+        calc = c("M/2-0.00054858", "M-1.007825"),
+        Charge = c(2, 1),
+        Mult = c(1, 1),
+        Mass = c(-0.00054858, -1.007825),
+        Ion_mode = c("positive", "positive"),
+        Formula_add = c("FALSE", "FALSE"),
+        Formula_ded = c("FALSE", "H1"),
+        Multi = c(1, 1),
+        stringsAsFactors = FALSE
+    )
+    
+    # Merge custom adducts with the enviPat adducts
+    adducts <- rbind(adducts, custom_adducts)
+
     monoisotopic <- isotopes |>
         dplyr::group_by(element) |>
         dplyr::slice_max(abundance, n = 1) |>
@@ -99,16 +119,22 @@ generate_isotope_spectra <- function(compound_table,
         adduct <- adducts[adducts$Name == current, ]
         multiplied_chemforms <- enviPat::multiform(chemforms, adduct$Mult)
 
-        if (adduct$Ion_mode == "negative") {
+        # Handle formula modifications based on adduct type
+        # Check if we need to deduce (subtract) formula elements
+        if (adduct$Formula_ded != "FALSE") {
             merged_chemforms <- enviPat::subform(
                 multiplied_chemforms,
                 adduct$Formula_ded
             )
-        } else {
+        } else if (adduct$Formula_add != "FALSE") {
+            # Add formula elements
             merged_chemforms <- enviPat::mergeform(
                 multiplied_chemforms,
                 adduct$Formula_add
             )
+        } else {
+            # No formula modification needed (e.g., M+, M2+)
+            merged_chemforms <- multiplied_chemforms
         }
 
         charge_string <- paste0(
