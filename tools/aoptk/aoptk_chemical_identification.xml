@@ -1,0 +1,58 @@
+<tool id="aoptk_chemical_identifier" name="aoptk chemical identification" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="25.1" license="MIT">
+    <description>Detect chemicals in scientific literature and filter based on a screening list.</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+
+    <requirements>
+        <expand macro="requirements"/>
+    </requirements>
+ 
+    <command detect_errors="exit_code"><![CDATA[
+        python3 '${chemical_identification}'
+    ]]></command>
+
+    <configfiles>
+        <configfile name="chemical_identification">
+        from aoptk.chemical import Chemical
+        from aoptk.spacy_processor import Spacy
+        import csv
+        import os
+
+        with open($input_file, "r") as f_in, open($output_file, "w") as f_out:
+                f_out.write("id\ttext\tchemicals\n")
+                for row in csv.DictReader(f_in, delimiter="\t"):
+                    chemicals = Spacy().find_chemical(row["text"])
+                    chemicals_str = (
+                        "|".join(set([chem.name for chem in chemicals])) if chemicals else ""
+                    )
+                    f_out.write(f"{row['id']}\t{row['text']}\t{chemicals_str}\n")
+
+        </configfile>
+    </configfiles>
+
+    <inputs>
+        <expand macro="inputs"/>
+        <param argument="--input_file" type="data" format="tsv" label="Chemical database" help="Input TSV file with text column." />
+    </inputs>
+
+    <outputs>
+        <data name="chemicals" format="tsv" from_work_dir="chemicals.tsv" label="Chemicals identified in text." />
+    </outputs>
+
+    <tests>
+        <test>
+           <param name="input_file" value="aoptk/test-data/text.tsv"/>
+           <output name="chemicals" file="chemicals.tsv" compare="sim_size" delta="100"/>
+        </test>
+    </tests>
+
+    <help><![CDATA[
+Chemical Identification
+===================
+
+Tool to identify chemical entities in a given text.
+
+    ]]></help>
+
+</tool>
