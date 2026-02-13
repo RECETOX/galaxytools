@@ -12,6 +12,9 @@
 
     <command detect_errors="exit_code"><![CDATA[
         python3 '${__tool_directory__}/target_screen.py' --peaks '$peaks' '$peaks.ext' --markers '$markers' '$markers.ext' --output '$hits' --ppm $ppm --rt_tol $rt
+        #if $allow_rt_na
+        --allow_rt_na
+        #end if
     ]]></command>
 
     <inputs>
@@ -19,6 +22,7 @@
         <param name="markers" type="data" format="parquet,tabular,tsv,csv" label="Target Markers Table" help="Input table containing target markers in tabular format. Each row should represent a marker with columns for m/z and retention time." />
         <param name="ppm" type="integer" min="0" max="1000" value="10" label="Mass Tolerance (ppm)" help="Tolerance for filtering peaks based on mass-to-charge ratio (m/z) in parts per million (ppm). The tolerance is applied symmetrically (±), so a value of 10 will match peaks within ±10 ppm of the target m/z." />
         <param name="rt" type="integer" min="0" max="100" value="10" label="Retention Time Tolerance" help="Tolerance for filtering peaks based on retention time in the same units as the input data. The tolerance is applied symmetrically (±), so a value of 10 will match peaks within ±10 units of the target retention time." />
+        <param name="allow_rt_na" type="boolean" truevalue="True" falsevalue="False" value="False" label="Allow RT NaN matching" help="Allow matching based on m/z only when marker retention time is NaN. By default, markers with NaN RT values are excluded from matching. Enable this for suspect screening of peaks without RT information." />
     </inputs>
 
     <outputs>
@@ -30,6 +34,12 @@
             <param name="peaks" value="target_screen/peaks.parquet"/>
             <param name="markers" value="target_screen/markers.tsv"/>
             <output name="hits" value="target_screen/out.tsv"/>
+        </test>
+        <test>
+            <param name="peaks" value="target_screen/peaks.parquet"/>
+            <param name="markers" value="target_screen/markers_with_na_rt.tsv"/>
+            <param name="allow_rt_na" value="True"/>
+            <output name="hits" value="target_screen/out_with_na_rt.tsv"/>
         </test>
     </tests>
     <help><![CDATA[
@@ -89,6 +99,9 @@ This tool extracts peaks from a table of detected peaks based on a list of targe
 
 - **Retention Time Tolerance**:
   The tolerance for matching peaks to markers based on their retention time. The value is specified in the same units as the input data. The tolerance is applied symmetrically (±), so a value of 10 will match peaks within ±10 units of the target retention time.
+
+- **Allow RT NaN matching**:
+  When enabled, allows matching based on m/z only for markers that have NaN (missing) retention time values. This is useful for suspect screening of peaks without RT information. By default, markers with NaN RT values are excluded from matching. When this option is enabled, such markers will match peaks based solely on m/z tolerance, and the rt_diff column will show NaN for these matches.
 
 **Outputs**
 
