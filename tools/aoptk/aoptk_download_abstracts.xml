@@ -1,0 +1,77 @@
+<tool id="aoptk_download_abstracts" name="aoptk download abstracts" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="25.1" license="MIT">
+    <description>Download abstracts for a list of publication IDs.</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+
+    <requirements>
+        <expand macro="requirements"/>
+    </requirements>
+ 
+    <command detect_errors="exit_code"><![CDATA[
+        cat ${find_chemicals} &&
+        python3 '${find_chemicals}'
+    ]]></command>
+
+    <configfiles>
+        <configfile name="find_chemicals">
+from aoptk.literature.databases.pubmed import PubMed
+from aoptk.literature.databases.europepmc import EuropePMC
+from aoptk.literature.abstract import Abstract
+from Bio import Entrez
+import os
+
+with open("$input_file", "r") as f:
+    ids = [line.strip() for line in f.readlines()]
+email = os.environ.get("EMAIL")
+
+
+if "${literature_database}" == "pubmed":
+    Entrez.email = email    
+    pubmed = PubMed.__new__(PubMed)
+    pubmed.id_list = ids
+    abstracts = pubmed.get_abstracts()
+elif "${literature_database}" == "europepmc":
+    europepmc = EuropePMC("")
+    europepmc.id_list = ids
+    abstracts = europepmc.get_abstracts()
+else:
+    raise ValueError("Select valid database.")
+
+for abstract in abstracts:
+    with open(f"{abstract.publication_id}.txt", "w") as f:
+        f.write(abstract.text)
+
+    </configfile>
+    </configfiles>
+
+    <inputs>
+        <param name="literature_database" type="select" label="Select which database to search." help="PubMed only accepts searches with up to 10 000 results. No limit for Europe PMC.">
+            <option value="pubmed" selected="true">PubMed</option>
+            <option value="europepmc">EuropePMC</option>
+        </param>
+        <param name="input_file" type="data" format="txt,pdf" label="Abstract/Full text to analyze" help="Input text file or PDF." />
+    </inputs>
+
+    <outputs>
+    <collection name="abstracts" type="list" label="Downloaded abstracts">
+        <discover_datasets pattern="(?P&lt;designation&gt;\d+)\.txt$" format="txt" visible="false" />
+    </collection>
+    </outputs>
+
+    <tests>
+        <test>
+           <param name="input_file" value="test-data/ids.txt"/>
+           <output name="abstracts" file="abstracts.txt" compare="sim_size" delta="100"/>
+        </test>
+    </tests>
+
+    <help><![CDATA[
+Chemical Identification
+===================
+
+Tool to identify chemical entities in a given text.
+
+    ]]></help>
+
+</tool>
