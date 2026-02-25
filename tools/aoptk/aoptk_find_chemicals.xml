@@ -21,7 +21,7 @@ from aoptk.literature.pymupdf_parser import PymupdfParser
 import os
 
 publication_id = os.path.splitext("$input_file.element_identifier")[0]
-with open("chemicals.txt", "w") as f_out:
+with open("chemicals.tsv", "w") as f_out:
     f_out.write("id\tchemicals\n")
 
     if "${input_file.ext}" == "pdf":
@@ -54,7 +54,7 @@ with open("chemicals.txt", "w") as f_out:
 
     <tests>
         <test>
-           <param name="input_file" value="test-data/text.txt"/>
+           <param name="input_file" value="test-data/text.tsv"/>
            <output name="chemicals" file="chemicals.tsv" compare="sim_size" delta="100"/>
         </test>
     </tests>
