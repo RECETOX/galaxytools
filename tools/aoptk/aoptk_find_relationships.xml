@@ -1,0 +1,84 @@
+<tool id="aoptk_find_relationships" name="aoptk find relationships" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="25.1" license="MIT">
+    <description>Detect relationships between chemicals and effects in text.</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+
+    <requirements>
+        <expand macro="requirements"/>
+    </requirements>
+ 
+    <command detect_errors="exit_code"><![CDATA[
+        cat ${find_relationships} &&
+        python3 '${find_relationships}'
+    ]]></command>
+
+<configfiles>
+<configfile name="find_relationships">
+from aoptk.spacy_text_processor import SpacyText
+from aoptk.relationships.zero_shot_classification_single import ZeroShotClassificationSingle
+from aoptk.literature.pdf import PDF
+from aoptk.literature.pymupdf_parser import PymupdfParser
+import os
+import sys
+
+os.environ.setdefault("TORCHINDUCTOR_CACHE_DIR", os.path.join(os.getcwd(), ".torchinductor_cache"))
+os.makedirs(os.environ["TORCHINDUCTOR_CACHE_DIR"], exist_ok=True)
+
+publication_id = os.path.splitext("$input_file.element_identifier")[0]
+effects = ["${effect}"]
+email = os.environ.get("EMAIL")
+
+with open("relationships.tsv", "w") as f_out:
+    f_out.write("id\tchemical\teffect\trelationship\n")
+
+    if "${input_file.ext}" == "pdf":
+        text = PymupdfParser([PDF("$input_file")]).get_publications()[0].full_text
+        chemicals = SpacyText().find_chemical(text)
+        relationships = ZeroShotClassificationSingle().find_relationships(
+        text=text, chemicals=chemicals, effects=effects
+    )
+        for relationship in relationships:
+            f_out.write(f"{publication_id}\t{relationship.chemical}\t{relationship.effect}\t{relationship.relationship_type}\n")
+
+    elif "${input_file.ext}" == "txt":
+        with open("$input_file", "r") as f_in:
+            text = f_in.read()
+            chemicals = SpacyText().find_chemical(text)
+            relationships = ZeroShotClassificationSingle().find_relationships(
+            text=text, chemicals=chemicals, effects=effects
+        )
+            for relationship in relationships:
+                f_out.write(f"{publication_id}\t{relationship.chemical}\t{relationship.effect}\t{relationship.relationship_type}\n")
+    else:
+        raise ValueError(f"Unsupported input file format: ${input_file.ext}")
+</configfile>
+</configfiles>
+
+    <inputs>
+        <param name="input_file" type="data" format="txt,pdf" label="Abstract/Full text to analyze" help="Input text file or PDF." />
+        <param argument="effect" type="text" value="" label="Effect to search" help="Specify the effect you want to search for.">
+            <validator type="regex">[0-9a-zA-Z]+</validator>
+        </param>
+    </inputs>
+
+    <outputs>
+        <data name="relationships" format="tabular" from_work_dir="relationships.tsv" label="Relationships identified in text." />
+    </outputs>
+
+    <tests>
+        <test>
+           <param name="input_file" value="test-data/text.tsv"/>
+           <output name="relationships" file="relationships.tsv" compare="sim_size" delta="100"/>
+        </test>
+    </tests>
+
+    <help><![CDATA[
+Relationship Identification
+===================
+
+Tool to identify relationships between chemicals and effects in a given text.
+
+    ]]></help>
+
+</tool>
