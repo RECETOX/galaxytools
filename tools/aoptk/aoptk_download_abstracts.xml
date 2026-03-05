@@ -9,12 +9,12 @@
     </requirements>
  
     <command detect_errors="exit_code"><![CDATA[
-        cat ${find_chemicals} &&
-        python3 '${find_chemicals}'
+        cat ${download_abstracts} &&
+        python3 '${download_abstracts}'
     ]]></command>
 
     <configfiles>
-        <configfile name="find_chemicals">
+        <configfile name="download_abstracts">
 from aoptk.literature.databases.pubmed import PubMed
 from aoptk.literature.databases.europepmc import EuropePMC
 from aoptk.literature.abstract import Abstract
