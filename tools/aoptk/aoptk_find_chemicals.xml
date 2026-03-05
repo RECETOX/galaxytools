@@ -21,26 +21,22 @@ from aoptk.literature.pymupdf_parser import PymupdfParser
 import os
 
 publication_id = os.path.splitext("$input_file.element_identifier")[0]
-with open("chemicals.tsv", "w") as f_out:
-    f_out.write("id\tchemicals\n")
 
-    if "${input_file.ext}" == "pdf":
-        text = PymupdfParser([PDF("$input_file")]).get_publications()[0].full_text
+if "${input_file.ext}" == "pdf":
+    text = PymupdfParser([PDF("$input_file")]).get_publications()[0].full_text
+    chemicals = SpacyText().find_chemical(text)
+
+elif "${input_file.ext}" == "txt":
+    with open("$input_file", "r") as f_in:
+        text = f_in.read()
         chemicals = SpacyText().find_chemical(text)
-        chemicals_str = (
-            "|".join(set([chem.name for chem in chemicals])) if chemicals else ""
-        )
-        f_out.write(f"{publication_id}\t{chemicals_str}\n")
-    elif "${input_file.ext}" == "txt":
-        with open("$input_file", "r") as f_in:
-            text = f_in.read()
-            chemicals = SpacyText().find_chemical(text)
-            chemicals_str = (
-                "|".join(set([chem.name for chem in chemicals])) if chemicals else ""
-            )
-            f_out.write(f"{publication_id}\t{chemicals_str}\n")
-    else:
-        raise ValueError(f"Unsupported input file format: {input_ext}")
+else:
+    raise ValueError(f"Unsupported input file format: {input_ext}")
+
+with open("chemicals.tsv", "w") as f_out:
+    f_out.write("id\tchemical\n")
+    for chemical in chemicals:
+        f_out.write(f"{publication_id}\t{chemical.name}\n")
 </configfile>
 </configfiles>
 
