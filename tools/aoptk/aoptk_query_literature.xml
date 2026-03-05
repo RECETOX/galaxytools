@@ -1,0 +1,66 @@
+<tool id="aoptk_query_literature" name="aoptk query literature" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="25.1" license="MIT">
+    <description>Query literature for a list of publication IDs.</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+
+    <requirements>
+        <expand macro="requirements"/>
+    </requirements>
+ 
+    <command detect_errors="exit_code"><![CDATA[
+        cat ${query_literature} &&
+        python3 '${query_literature}'
+    ]]></command>
+
+    <configfiles>
+        <configfile name="query_literature">
+from aoptk.literature.databases.pubmed import PubMed
+from aoptk.literature.databases.europepmc import EuropePMC
+from Bio import Entrez
+import os
+
+email = os.environ.get("EMAIL")
+
+
+if "${literature_database}" == "pubmed":
+    Entrez.email = email    
+    ids = PubMed("${query}").get_id()
+elif "${literature_database}" == "europepmc":
+    ids = EuropePMC("${query}").get_id()
+
+else:
+    raise ValueError("Select valid database.")
+
+with open(f"ids.txt", "w") as f:
+    for id in ids:
+        f.write(f"{id}\n")
+
+    </configfile>
+    </configfiles>
+
+    <inputs>
+        <expand macro="inputs"/>
+    </inputs>
+
+    <outputs>
+        <data name="ids" format="txt" from_work_dir="ids.txt" label="List of IDs." />
+    </outputs>
+
+    <tests>
+        <test>
+           <param name="query" value="hepg2 thioacetamide"/>
+           <param name="literature_database" value="pubmed"/>
+           <output name="ids" file="ids.txt" compare="sim_size" delta="100"/>
+        </test>
+    </tests>
+
+    <help><![CDATA[
+Download IDs
+===================
+
+Tool to download publication IDs.
+
+    ]]></help>
+
+</tool>
