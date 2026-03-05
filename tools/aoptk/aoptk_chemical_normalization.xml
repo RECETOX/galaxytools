@@ -1,0 +1,56 @@
+<tool id="aoptk_normalize_chemicals" name="aoptk normalize chemicals" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="25.1" license="MIT">
+    <description>Normalize chemical entities.</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+
+    <requirements>
+        <expand macro="requirements"/>
+    </requirements>
+ 
+    <command detect_errors="exit_code"><![CDATA[
+        cat ${normalize_chemicals} &&
+        python3 '${normalize_chemicals}'
+    ]]></command>
+
+<configfiles>
+<configfile name="normalize_chemicals">
+from aoptk.normalization.pubchem_api import PubChemAPI
+from aoptk.chemical import Chemical
+import os
+import pandas as pd
+
+chemicals_df = pd.read_csv("$input_file", sep="\t")
+chemicals_df["chemical"] = chemicals_df["chemical"].apply(
+    lambda x: PubChemAPI().normalize_chemical(Chemical(x))
+    )
+chemicals_df["heading"] = chemicals_df["chemical"].apply(lambda chem: chem.heading)
+chemicals_df.to_csv("normalized_chemicals.tsv", sep="\t", index=False)
+
+</configfile>
+</configfiles>
+
+    <inputs>
+        <param name="input_file" type="data" format="tabular" label="TSV with chemical column." help="Input tsv file with chemical column." />
+    </inputs>
+
+    <outputs>
+        <data name="normalized_chemicals" format="tabular" from_work_dir="normalized_chemicals.tsv" label="Chemicals with heading generated." />
+    </outputs>
+
+    <tests>
+        <test>
+           <param name="input_file" value="test-data/chemicals.tsv"/>
+           <output name="normalized_chemicals" file="normalized_chemicals.tsv" compare="sim_size" delta="100"/>
+        </test>
+    </tests>
+
+    <help><![CDATA[
+Chemical Normalization
+===================
+
+Tool to normalize chemical entities.
+
+    ]]></help>
+
+</tool>
