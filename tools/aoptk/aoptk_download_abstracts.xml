@@ -46,16 +46,16 @@ for abstract in abstracts:
     </configfiles>
 
     <inputs>
-        <param name="literature_database" type="select" label="Select which database to search." help="PubMed only accepts searches with up to 10 000 results. No limit for Europe PMC.">
+        <param name="literature_database" type="select" label="Select which database to search." help="Literature database to search.">
             <option value="pubmed" selected="true">PubMed</option>
             <option value="europepmc">EuropePMC</option>
         </param>
-        <param name="input_file" type="data" format="txt,pdf" label="Abstract/Full text to analyze" help="Input text file or PDF." />
+        <param name="input_file" type="data" format="txt" label="List of IDs to search for." help="Input text file with IDs to search for." />
     </inputs>
 
     <outputs>
     <collection name="abstracts" type="list" label="Downloaded abstracts">
-        <discover_datasets pattern="(?P&lt;designation&gt;\d+)\.txt$" format="txt" visible="false" />
+        <discover_datasets pattern="(?P&lt;designation&gt;.*)$" format="txt" visible="false" />
     </collection>
     </outputs>
 
@@ -67,7 +67,7 @@ for abstract in abstracts:
     </tests>
 
     <help><![CDATA[
-Chemical Identification
+Download Abstracts
 ===================
 
 Tool to download publication abstracts.
