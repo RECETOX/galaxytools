@@ -28,8 +28,6 @@ if "${literature_database}" == "europepmc":
     europepmc = EuropePMC("", storage = "./")
     europepmc.id_list = ids
     pdfs = europepmc.pdfs()
-    print(pdfs)
-    print([pdf.path for pdf in pdfs])
 else:
     raise ValueError("Select valid database.")
 
