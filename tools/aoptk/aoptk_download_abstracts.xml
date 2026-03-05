@@ -70,7 +70,7 @@ for abstract in abstracts:
 Chemical Identification
 ===================
 
-Tool to identify chemical entities in a given text.
+Tool to download publication abstracts.
 
     ]]></help>
 
