@@ -1,0 +1,58 @@
+<tool id="aoptk_download_pdfs" name="aoptk download PDFs" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="25.1" license="MIT">
+    <description>Download PDFs for a list of publication IDs.</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+
+    <requirements>
+        <expand macro="requirements"/>
+    </requirements>
+ 
+    <command detect_errors="exit_code"><![CDATA[
+        python3 '${download_pdfs}'
+    ]]></command>
+
+    <configfiles>
+        <configfile name="download_pdfs">
+from aoptk.literature.databases.pubmed import PubMed
+from aoptk.literature.databases.europepmc import EuropePMC
+from aoptk.literature.abstract import Abstract
+from Bio import Entrez
+import os
+
+with open("$input_file", "r") as f:
+    ids = [line.strip() for line in f.readlines()]
+
+europepmc = EuropePMC("", storage = "./")
+europepmc.id_list = ids
+pdfs = europepmc.pdfs()
+
+    </configfile>
+    </configfiles>
+
+    <inputs>
+        <param name="input_file" type="data" format="txt" label="List of IDs to search for." help="Input text file with IDs to search for." />
+    </inputs>
+
+    <outputs>
+    <collection name="pdfs" type="list" label="Downloaded PDFs">
+        <discover_datasets pattern="(?P&lt;designation&gt;.*)$" format="pdf" visible="false" />
+    </collection>
+    </outputs>
+
+    <tests>
+        <test>
+           <param name="input_file" value="test-data/ids.txt"/>
+           <output name="pdfs" file="pdfs.txt" compare="sim_size" delta="100"/>
+        </test>
+    </tests>
+
+    <help><![CDATA[
+Download PDFs
+===================
+
+Tool to download PDFs for a list of publication IDs.
+
+    ]]></help>
+
+</tool>

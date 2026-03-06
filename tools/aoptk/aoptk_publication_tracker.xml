@@ -6,6 +6,7 @@
 
     <requirements>
         <expand macro="requirements"/>
+        <expand macro="email_credentials"/>
     </requirements>
 
     <command detect_errors="exit_code"><![CDATA[
@@ -22,7 +23,8 @@
     ]]></command>
 
     <inputs>
-        <expand macro="inputs"/>
+        <expand macro="query"/>
+        <expand macro="requirements"/>
         <param argument="--code" type="text" value="" label="Your search code" help="Type your search code. E.g., 1.1. or 1.2.1.">
             <sanitizer invalid_char="">
                 <valid initial="string.digits">
