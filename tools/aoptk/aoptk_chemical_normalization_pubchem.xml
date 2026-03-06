@@ -1,5 +1,5 @@
-<tool id="aoptk_normalize_chemicals" name="aoptk normalize chemicals" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="25.1" license="MIT">
-    <description>Normalize chemical entities.</description>
+<tool id="aoptk_normalize_chemicals_pubchem" name="aoptk normalize chemicals pubchem" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="25.1" license="MIT">
+    <description>Normalize chemical entities using PubChem API.</description>
     <macros>
         <import>macros.xml</import>
     </macros>
@@ -9,11 +9,11 @@
     </requirements>
  
     <command detect_errors="exit_code"><![CDATA[
-        python3 '${normalize_chemicals}'
+        python3 '${normalize_chemicals_pubchem}'
     ]]></command>
 
 <configfiles>
-<configfile name="normalize_chemicals">
+<configfile name="normalize_chemicals_pubchem">
 from aoptk.normalization.pubchem_api import PubChemAPI
 from aoptk.chemical import Chemical
 import os
@@ -45,10 +45,10 @@ chemicals_df.to_csv("normalized_chemicals.tsv", sep="\t", index=False)
     </tests>
 
     <help><![CDATA[
-Chemical Normalization
+Chemical Normalization PubChem
 ===================
 
-Tool to normalize chemical entities.
+Tool to normalize chemical entities using PubChem API.
 
     ]]></help>
 
