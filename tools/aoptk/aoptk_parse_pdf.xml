@@ -1,5 +1,5 @@
 <tool id="aoptk_parse_pdf" name="aoptk parse PDF" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="25.1" license="MIT">
-    <description>Detect chemicals in text.</description>
+    <description>Parse PDF files.</description>
     <macros>
         <import>macros.xml</import>
     </macros>

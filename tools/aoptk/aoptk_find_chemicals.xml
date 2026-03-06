@@ -9,7 +9,6 @@
     </requirements>
  
     <command detect_errors="exit_code"><![CDATA[
-        cat ${find_chemicals} &&
         python3 '${find_chemicals}'
     ]]></command>
 

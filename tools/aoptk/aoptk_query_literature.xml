@@ -6,10 +6,10 @@
 
     <requirements>
         <expand macro="requirements"/>
+        <expand macro="email_credentials"/>
     </requirements>
  
     <command detect_errors="exit_code"><![CDATA[
-        cat ${query_literature} &&
         python3 '${query_literature}'
     ]]></command>
 
@@ -40,7 +40,8 @@ with open(f"ids.txt", "w") as f:
     </configfiles>
 
     <inputs>
-        <expand macro="inputs"/>
+        <expand macro="query"/>
+        <expand macro="requirements"/>
     </inputs>
 
     <outputs>

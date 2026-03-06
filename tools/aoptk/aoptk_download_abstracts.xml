@@ -6,10 +6,10 @@
 
     <requirements>
         <expand macro="requirements"/>
+        <expand macro="email_credentials"/>
     </requirements>
  
     <command detect_errors="exit_code"><![CDATA[
-        cat ${download_abstracts} &&
         python3 '${download_abstracts}'
     ]]></command>
 
@@ -46,10 +46,7 @@ for abstract in abstracts:
     </configfiles>
 
     <inputs>
-        <param name="literature_database" type="select" label="Select which database to search." help="Literature database to search.">
-            <option value="pubmed" selected="true">PubMed</option>
-            <option value="europepmc">EuropePMC</option>
-        </param>
+        <expand macro="literature_database"/>
         <param name="input_file" type="data" format="txt" label="List of IDs to search for." help="Input text file with IDs to search for." />
     </inputs>
 
