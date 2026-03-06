@@ -9,21 +9,21 @@
     </requirements>
  
     <command detect_errors="exit_code"><![CDATA[
-        cat ${find_relationships} &&
         python3 '${find_relationships}'
     ]]></command>
 
 <configfiles>
 <configfile name="find_relationships">
-from aoptk.spacy_text_processor import SpacyText
-from aoptk.relationships.zero_shot_classification_single import ZeroShotClassificationSingle
-from aoptk.literature.pdf import PDF
-from aoptk.literature.pymupdf_parser import PymupdfParser
 import os
 import sys
 
 os.environ.setdefault("TORCHINDUCTOR_CACHE_DIR", os.path.join(os.getcwd(), ".torchinductor_cache"))
 os.makedirs(os.environ["TORCHINDUCTOR_CACHE_DIR"], exist_ok=True)
+
+from aoptk.spacy_text_processor import SpacyText
+from aoptk.relationships.zero_shot_classification_single import ZeroShotClassificationSingle
+from aoptk.literature.pdf import PDF
+from aoptk.literature.pymupdf_parser import PymupdfParser
 
 publication_id = os.path.splitext("$input_file.element_identifier")[0]
 effects = ["${effect}"]
