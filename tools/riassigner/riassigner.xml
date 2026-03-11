@@ -1,4 +1,4 @@
-<tool id="riassigner" name="RIAssigner" version="@TOOL_VERSION@+galaxy1" profile="21.09">
+<tool id="riassigner" name="RIAssigner" version="@TOOL_VERSION@+galaxy0" profile="21.09">
     <description>compute retention indices</description>
     <macros>
         <import>macros.xml</import>
@@ -14,7 +14,7 @@
     </requirements>
 
     <command detect_errors="exit_code"><![CDATA[
-        python -m RIAssigner --reference "$reference_section.reference" "$reference_section.reference.ext" "$reference_section.reference_rt_units" --query "$query_section.query" "$query_section.query.ext" "$query_section.query_rt_units" --method "$method" --output "output.${output.ext}" &&
+        riassigner compute --reference "$reference_section.reference" "$reference_section.reference.ext" "$reference_section.reference_rt_units" --query "$query_section.query" "$query_section.query.ext" "$query_section.query_rt_units" --method "$method" --output "output.${output.ext}" &&
         cp -r 'output.${output.ext}' '${output}'
         ]]>
     </command>
