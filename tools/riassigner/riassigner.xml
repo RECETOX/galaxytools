@@ -21,7 +21,7 @@
 
     <inputs>
         <section name="query_section" title="Query dataset" expanded="true">
-            <param name="query" type="data" format="csv,tsv,msp">
+            <param name="query" type="data" format="csv,tsv,msp,tabular,parquet">
                 <label>Query compound list</label>
                 <help><![CDATA[
             A list of compounds with retention times for which to compute the retention index.
@@ -34,7 +34,7 @@
             </param>
         </section>
         <section name="reference_section" title="Reference dataset" expanded="true">
-            <param name="reference" type="data" format="csv,tsv,msp">
+            <param name="reference" type="data" format="csv,tsv,msp,tabular,parquet">
                 <label>Reference compound list</label>
                 <help><![CDATA[
                 A list of retention time and retention index pairs.
@@ -59,6 +59,7 @@
               metadata_source="query">
             <change_format>
                 <when input="query_section.query.ext" value="msp" format="msp" />
+                <when input="query_section.query.ext" value="parquet" format="parquet" />
             </change_format>
         </data>
     </outputs>
@@ -75,6 +76,18 @@
             </section>
             <param name="method" value="kovats"/>
             <output name="output" file="results.tsv" ftype="tsv"/>
+        </test>
+        <test>
+            <section name="query_section">
+                <param name="query" value="aplcms_aligned_peaks.parquet" ftype="parquet"/>
+                <param name="query_rt_units" value="seconds"/>
+            </section>
+            <section name="reference_section">
+                <param name="reference" value="Alkanes_20210325.csv" ftype="csv"/>
+                <param name="reference_rt_units" value="seconds"/>
+            </section>
+            <param name="method" value="kovats"/>
+            <output name="output" file="results.parquet" ftype="parquet"/>
         </test>
     </tests>
 
