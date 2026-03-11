@@ -5,16 +5,9 @@ categories:
   - Metabolomics
 repositories:
   rcx_tk:
-    description: "Tools to process sequence or alkane files."
-    long_description: "rcx-tk package provides tools to process the sequence or alkane files. On the input, the user is expected to supply a path to the sequence/alkane file in tsv/csv/xls/xlsx file. The file is then converted to a dataframe which is further processed. The main steps are columns rearrangement, validation of the file names and derivation of new metadata: sampleName, sequenceIdentifier, sampleIdentifier and localOrder. Finally, the processed dataframe is saved into user-defined location."
+    description: "Tools to process sequence or alkane files and to correct MSDial alignment results by grouping duplicate alignments."
+    long_description: "rcx-tk package provides tools to process the sequence or alkane files. On the input, the user is expected to supply a path to the sequence/alkane file in tsv/csv/xls/xlsx file. The file is then converted to a dataframe which is further processed. The main steps are columns rearrangement, validation of the file names and derivation of new metadata: sampleName, sequenceIdentifier, sampleIdentifier and localOrder. Duplicate rows sharing identical non-zero abundance values in any sample column are clustered and aggregated: metadata is concatenated and abundances are reduced using the maximum value."
     include:
       - rcx-tk.xml
-      - macros.xml
-      - test-data
-  rcx_tk_msdial:
-    description: "Tool to correct MSDial alignment results by grouping duplicate alignments."
-    long_description: "rcx-tk msdial correction tool processes MSDial alignment result files to identify and merge duplicate alignments. Duplicate rows sharing identical non-zero abundance values in any sample column are clustered and aggregated: metadata is concatenated and abundances are reduced using the maximum value."
-    include:
-      - rcx-tk-msdial.xml
       - macros.xml
       - test-data

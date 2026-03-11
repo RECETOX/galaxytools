@@ -1,5 +1,5 @@
 <tool id="rcx-tk" name="rcx-tk" version="@TOOL_VERSION@+galaxy0" profile="23.05">
-    <description>Processes and standardizes sequence or alkane files by rearranging columns, validating file names, and deriving new columns for downstream analysis.</description>
+    <description>Processes and standardizes sequence, alkane or MSDial output files for downstream analysis.</description>
     <macros>
         <import>macros.xml</import>
     </macros>
@@ -30,10 +30,11 @@
         <param name="method" type="select" label="Processing method" help="Select whether to process a sequence file or an alkane file. This determines the column arrangement and validation steps.">
             <option value="sequence" selected="true">Sequence file</option>
             <option value="alkanes">Alkane file</option>
+            <option value="msdial">MS-DIAL file</option>
         </param>
     </inputs>
     <outputs>
-        <data name="output_file" format="tabular" from_work_dir = "output.tsv" label="Processed ${method} (dataset ${input_file.id})"/>
+        <data name="output_file" format="tabular" from_work_dir = "output.tsv" label="Processed as ${method} on dataset ${input_file.id}"/>
     </outputs>
     <tests>
         <test>
