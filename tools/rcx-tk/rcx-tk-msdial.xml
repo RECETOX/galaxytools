@@ -1,0 +1,85 @@
+<tool id="rcx-tk-msdial" name="rcx-tk correct MSDial alignments" version="@TOOL_VERSION@+galaxy0" profile="23.05">
+    <description>Groups duplicate alignments in MSDial output files by aggregating metadata and abundances.</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <edam_topics>
+        <edam_topic>topic_3172</edam_topic>
+        <edam_topic>topic_0091</edam_topic>
+        <edam_topic>topic_3520</edam_topic>
+    </edam_topics>
+    <edam_operations>
+        <edam_operation>operation_3695</edam_operation>
+    </edam_operations>
+    <requirements>
+        <requirement type="package" version="@TOOL_VERSION@">rcx-tk</requirement>
+    </requirements>
+    <expand macro="creator"/>
+    <command detect_errors="aggressive"><![CDATA[
+    #if $input_file.ext == "tabular"
+        #set $input_file_new = 'input.tsv'
+    #else
+        #set $input_file_new = 'input.' + str($input_file.ext)
+    #end if
+       cp ${input_file} ${input_file_new} &&
+       python3 -m rcx_tk --method msdial ${input_file_new} 'output.tsv'
+    ]]></command>
+    <inputs>
+        <param name="input_file" type="data" format="csv,tabular,tsv,xls,xlsx" label="MSDial alignment result file" help="Upload your MSDial alignment result file."/>
+    </inputs>
+    <outputs>
+        <data name="output_file" format="tabular" from_work_dir="output.tsv" label="Corrected MSDial alignments (dataset ${input_file.id})"/>
+    </outputs>
+    <tests>
+        <test>
+            <param name="input_file" value="input_msdial.xlsx" ftype="xlsx"/>
+            <output name="output_file">
+                <assert_contents>
+                    <has_n_lines n="3" delta="2"/>
+                    <has_text text="3,4"/>
+                </assert_contents>
+            </output>
+        </test>
+    </tests>
+    <help><![CDATA[
+
+.. _rcx_tk_msdial:
+
+===============================
+rcx-tk: MSDial Alignment Corrector
+===============================
+
+**Tool Description**
+
+This tool processes MSDial alignment result files to identify and group duplicate alignments.
+Duplicate alignments (rows sharing identical abundance values in any sample column) are
+merged into single representative entries. Metadata columns are concatenated and abundance
+values are aggregated using the maximum value across the duplicates.
+
+How it works
+------------
+
+- **Duplicate detection**: Identifies alignment rows that share the same non-zero abundance value in any sample column.
+- **Cluster merging**: Transitively merges overlapping duplicate groups into clusters.
+- **Aggregation**: For each cluster, averages the first three metadata columns, concatenates the remaining metadata, and takes the maximum abundance across samples.
+
+Inputs
+------
+
+- **MSDial alignment result file**: The alignment result table exported from MSDial software. Supported formats: CSV, TSV, tabular, XLS, XLSX.
+
+Outputs
+-------
+
+- **Corrected alignments**: A TSV file with duplicate alignments merged and non-duplicate alignments unchanged.
+
+Notes
+-----
+
+- The input file is expected to follow the standard MSDial alignment result format with 3 header rows followed by the column header row.
+- The first 28 columns after the Alignment ID are treated as metadata; all subsequent columns are treated as sample abundance values.
+    ]]></help>
+    <citations>
+        <citation type="doi">10.5281/zenodo.4471245</citation>
+    </citations>
+</tool>
