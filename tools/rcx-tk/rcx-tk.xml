@@ -1,7 +1,7 @@
-<tool id="rcx-tk" name="rcx-tk" version="@TOOL_VERSION@+galaxy1" profile="23.05">
-    <description>Processes and standardizes metadata or alkane files by rearranging columns, validating file names, and deriving new columns for downstream analysis.</description>
+<tool id="rcx-tk" name="rcx-tk" version="@TOOL_VERSION@+galaxy0" profile="23.05">
+    <description>Processes and standardizes sequence or alkane files by rearranging columns, validating file names, and deriving new columns for downstream analysis.</description>
     <macros>
-    <token name="@TOOL_VERSION@">0.1.0</token>
+        <import>macros.xml</import>
     </macros>
     <edam_topics>
         <edam_topic>topic_3172</edam_topic>
@@ -15,27 +15,7 @@
     <requirements>
         <requirement type="package" version="@TOOL_VERSION@">rcx-tk</requirement>
     </requirements>
-    <creator>
-        <person
-                givenName="Zargham"
-                familyName="Ahmad"
-                url="https://github.com/zargham-ahmad"
-                identifier="0000-0000-0000-0000"/>
-        <person
-                givenName="Kristina"
-                familyName="Gomoryova"
-                url="https://github.com/KristinaGomoryova"
-                identifier="0000-0003-4407-3917" />
-        <person
-                givenName="Helge"
-                familyName="Hecht"
-                url="https://github.com/hechth"
-                identifier="0000-0001-6744-996X" />
-        <organization 
-                url="https://www.recetox.muni.cz/"
-                email="GalaxyToolsDevelopmentandDeployment@space.muni.cz"
-                name="RECETOX MUNI" />  
-    </creator>
+    <expand macro="creator"/>
     <command detect_errors="aggressive"><![CDATA[
     #if $input_file.ext == "tabular"
         #set $input_file_new = 'input.tsv'
@@ -46,9 +26,9 @@
        python3 -m rcx_tk --method ${method} ${input_file_new} 'output.tsv' 
     ]]></command>
     <inputs>
-        <param name="input_file" type="data" format="csv,tabular,tsv,xls,xlsx,txt" label="Input data file" help="Upload your sample metadata (sequence) or alkane file."/>
-        <param name="method" type="select" label="Processing method" help="Select whether to process a metadata file or an alkane file. This determines the column arrangement and validation steps.">
-            <option value="metadata" selected="true">Metadata file</option>
+        <param name="input_file" type="data" format="csv,tabular,tsv,xls,xlsx,txt" label="Input data file" help="Upload your sample sequence or alkane file."/>
+        <param name="method" type="select" label="Processing method" help="Select whether to process a sequence file or an alkane file. This determines the column arrangement and validation steps.">
+            <option value="sequence" selected="true">Sequence file</option>
             <option value="alkanes">Alkane file</option>
         </param>
     </inputs>
@@ -58,7 +38,7 @@
     <tests>
         <test>
             <param name="input_file" value="input_metadata.tabular"/>
-            <param name="method" value="metadata"/>
+            <param name="method" value="sequence"/>
             <output name="output_file" file="output_metadata.tsv"/>
         </test>
          <test>
@@ -72,12 +52,12 @@
 .. _rcx_tk:
 
 ======================================
-rcx-tk: Metadata/Alkane File Processor
+rcx-tk: Sequence/Alkane File Processor
 ======================================
 
 **Tool Description**
 
-rcx-tk is a tool for processing sample metadata (sequence) and alkane files. It standardizes your input by rearranging columns, validating file names, and deriving new columns such as `sampleName`, `sequenceIdentifier`, `sampleIdentifier`, and `localOrder`. This ensures your data is ready for downstream analysis and compatible with standardized workflows.
+rcx-tk is a tool for processing sample sequence and alkane files. It standardizes your input by rearranging columns, validating file names, and deriving new columns such as `sampleName`, `sequenceIdentifier`, `sampleIdentifier`, and `localOrder`. This ensures your data is ready for downstream analysis and compatible with standardized workflows.
 
 How it works
 ------------
@@ -90,10 +70,10 @@ Inputs
 ------
 
 1. **Input data file**  
-   Upload your sample metadata (sequence) or alkane file. Supported formats: CSV, TSV, tabular, XLS, XLSX, or TXT.
+   Upload your sample sequence or alkane file. Supported formats: CSV, TSV, tabular, XLS, XLSX, or TXT.
 
 2. **Processing method**  
-   Select whether to process a metadata file or an alkane file. This determines the column arrangement and validation steps.
+   Select whether to process a sequence file or an alkane file. This determines the column arrangement and validation steps.
 
 Outputs
 -------
@@ -104,7 +84,7 @@ Outputs
 Example
 -------
 
-Suppose you have a metadata file in CSV or tabular format. Select "Metadata file" as the processing method and upload your file. The tool will output a processed TSV file with standardized columns and additional identifiers.
+Suppose you have a sequence file in CSV or tabular format. Select "Sequence file" as the processing method and upload your file. The tool will output a processed TSV file with standardized columns and additional identifiers.
 
 Notes
 -----
