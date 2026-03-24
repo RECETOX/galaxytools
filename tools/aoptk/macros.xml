@@ -1,0 +1,108 @@
+<macros>
+    <token name="@TOOL_VERSION@">0.1.6</token>
+    <token name="@VERSION_SUFFIX@">0</token>
+
+    <xml name="requirements">
+        <requirement type="package" version="@TOOL_VERSION@">aoptk</requirement>
+        <credentials name="email_credentials" 
+                     label="Your e-mail address" 
+                     version="1.0"
+                     description="E-mail is required to follow NCBI/PubMed guidelines.">
+            <variable name="email" inject_as_env="EMAIL" optional="true"/>
+          </credentials>
+    </xml>
+
+    <xml name="inputs">
+        <param argument="--query" type="text" value="" label="Your search term" help="Type your search term as you would in PubMed/Europe PMC.">
+            <sanitizer invalid_char="">
+                <valid initial="string.letters,string.digits">
+                    <add value="_" />
+                    <add value=" " />
+                    <add value="&apos;" />
+                    <add value="&quot;" />
+                    <add value="(" />
+                    <add value=")" />
+                    <add value="*" />
+                    <add value="[" />
+                    <add value="]" />
+                    <add value="-" />
+                    <add value=":" />
+                    <add value="/" />
+                    <!-- Lowercase Greek letters -->
+                    <add value="α" />
+                    <add value="β" />
+                    <add value="γ" />
+                    <add value="δ" />
+                    <add value="ε" />
+                    <add value="ζ" />
+                    <add value="η" />
+                    <add value="θ" />
+                    <add value="ι" />
+                    <add value="κ" />
+                    <add value="λ" />
+                    <add value="μ" />
+                    <add value="ν" />
+                    <add value="ξ" />
+                    <add value="ο" />
+                    <add value="π" />
+                    <add value="ρ" />
+                    <add value="σ" />
+                    <add value="τ" />
+                    <add value="υ" />
+                    <add value="φ" />
+                    <add value="χ" />
+                    <add value="ψ" />
+                    <add value="ω" />
+                    <!-- Uppercase Greek letters -->
+                    <add value="Α" />
+                    <add value="Β" />
+                    <add value="Γ" />
+                    <add value="Δ" />
+                    <add value="Ε" />
+                    <add value="Ζ" />
+                    <add value="Η" />
+                    <add value="Θ" />
+                    <add value="Ι" />
+                    <add value="Κ" />
+                    <add value="Λ" />
+                    <add value="Μ" />
+                    <add value="Ν" />
+                    <add value="Ξ" />
+                    <add value="Ο" />
+                    <add value="Π" />
+                    <add value="Ρ" />
+                    <add value="Σ" />
+                    <add value="Τ" />
+                    <add value="Υ" />
+                    <add value="Φ" />
+                    <add value="Χ" />
+                    <add value="Ψ" />
+                    <add value="Ω" />
+                </valid>
+            </sanitizer>
+            <validator type="regex">[0-9a-zA-Z_ ()*'"[\]\[\]\-:.\[\]α-ωΑ-Ω]+</validator>
+        </param>
+        <param name="literature_database" type="select" label="Select which database to search." help="PubMed only accepts searches with up to 10 000 results. No limit for Europe PMC.">
+            <option value="pubmed" selected="true">PubMed</option>
+            <option value="europepmc">EuropePMC</option>
+        </param>
+    </xml>
+
+
+<token name="@init_scores@">
+from matchms.importing import load_from_msp, scores_from_json
+from matchms import Scores
+#if $scores.use_scores == "True"
+scores = scores_from_json("$scores_in")
+join_type = "$scores.join_type"
+#else
+scores = Scores(references=list(load_from_msp("$references")), queries=list(load_from_msp("$queries")), is_symmetric=False)
+join_type = "left"
+#end if
+</token>
+
+<token name="@init_logger@">
+from matchms import set_matchms_logger_level
+set_matchms_logger_level("WARNING")
+</token>   
+</macros>
