@@ -14,10 +14,6 @@
 
 <configfiles>
 <configfile name="match_chemicals">
-from aoptk.spacy_text_processor import SpacyText
-from aoptk.literature.pdf import PDF
-from aoptk.literature.pymupdf_parser import PymupdfParser
-from aoptk.chemical import Chemical
 import os
 import pandas as pd
 
