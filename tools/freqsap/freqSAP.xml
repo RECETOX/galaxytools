@@ -23,7 +23,7 @@
 
 
     <command detect_errors="exit_code"><![CDATA[
-    freqsap -a '$accession' -r '${populations}' -d '${delimiter}' -o '$output_file' $timeout
+    freqsap -a '$accession' -r '${populations}' -d '${delimiter}' -o '$output_file' -t $timeout
     ]]></command>
     <inputs>
         <param argument="--accession" type="text" label="Protein Accession in UniProt" help="UniProt accession of the protein to fetch variation data for.">
