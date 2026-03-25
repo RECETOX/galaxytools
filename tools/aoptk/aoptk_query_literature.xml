@@ -17,6 +17,7 @@
         <configfile name="query_literature">
 from aoptk.literature.databases.pubmed import PubMed
 from aoptk.literature.databases.europepmc import EuropePMC
+from aoptk.literature.databases.pmc import PMC
 from Bio import Entrez
 import os
 
@@ -28,6 +29,8 @@ if "${literature_database}" == "pubmed":
     ids = PubMed("${query}").get_id()
 elif "${literature_database}" == "europepmc":
     ids = EuropePMC("${query}").get_id()
+elif "${literature_database}" == "pmc":
+    ids = PMC("${query}").get_id()
 
 else:
     raise ValueError("Select valid database.")
@@ -41,7 +44,7 @@ with open(f"ids.txt", "w") as f:
 
     <inputs>
         <expand macro="query"/>
-        <expand macro="requirements"/>
+        <expand macro="literature_database_with_pmc"/>
     </inputs>
 
     <outputs>
