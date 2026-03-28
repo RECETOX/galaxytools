@@ -11,7 +11,7 @@
     "train_binning_layer_output_per_group": 2,
     "dropout_rate": 0.0,
     "learning_rate": 0.00025,
-    "epochs": 2,
+    "epochs": 1,
     "patience": 2,
     "loss_function": "mse",
     "weighting_factor": 0,
@@ -27,49 +27,17 @@
     "num_turns": 1,
     "shuffle": true,
     "use_fixed_set": false,
-    "average_inchikey_sampling_count": 0,
+    "average_inchikey_sampling_count": 1,
     "max_inchikey_sampling": 110,
     "max_pairs_per_bin": 200,
     "same_prob_bins": [
         [
-            0.8,
-            0.9
-        ],
-        [
-            0.7,
-            0.8
-        ],
-        [
-            0.9,
-            1.0
-        ],
-        [
-            0.6,
-            0.7
-        ],
-        [
-            0.5,
-            0.6
-        ],
-        [
-            0.4,
+            -0.01,
             0.5
         ],
         [
-            0.3,
-            0.4
-        ],
-        [
-            0.2,
-            0.3
-        ],
-        [
-            0.1,
-            0.2
-        ],
-        [
-            -0.01,
-            0.1
+            0.5,
+            1.0
         ]
     ],
     "include_diagonal": true,
