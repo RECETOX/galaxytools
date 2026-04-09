@@ -22,7 +22,7 @@ with open("$input_file", "r") as f:
 
 pmc = PMC("", storage = "./")
 pmc.id_list = ids
-pdfs = pmc.pdfs()
+pdfs = pmc.get_pdfs()
 
     </configfile>
     </configfiles>
