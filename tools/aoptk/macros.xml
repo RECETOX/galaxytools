@@ -15,8 +15,8 @@
         </credentials>
     </xml>
 
-    <xml name="openai_key_credentials">
-        <credentials name="openai_key_credentials" 
+    <xml name="openai_api_key_credentials">
+        <credentials name="openai_api_key_credentials" 
                      label="Your OpenAI API key" 
                      version="1.0"
                      description="OpenAI API key is required to use the OpenAI API.">
