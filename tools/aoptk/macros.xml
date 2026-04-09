@@ -15,6 +15,15 @@
         </credentials>
     </xml>
 
+    <xml name="openai_key_credentials">
+        <credentials name="openai_key_credentials" 
+                     label="Your OpenAI API key" 
+                     version="1.0"
+                     description="OpenAI API key is required to use the OpenAI API.">
+            <variable name="openai_key" inject_as_env="OPENAI_KEY" optional="true"/>
+        </credentials>
+    </xml>
+
     <xml name="query">
         <param argument="--query" type="text" value="" label="Your search term" help="Type your search term as you would in PubMed/Europe PMC.">
             <sanitizer invalid_char="">
