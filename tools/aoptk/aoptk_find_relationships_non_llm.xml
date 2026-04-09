@@ -1,4 +1,4 @@
-<tool id="aoptk_find_relationships" name="aoptk find relationships" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="25.1" license="MIT">
+<tool id="aoptk_find_relationships_non_llm" name="aoptk find relationships non llm" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="25.1" license="MIT">
     <description>Detect relationships between chemicals and effects in text.</description>
     <macros>
         <import>macros.xml</import>
@@ -9,11 +9,11 @@
     </requirements>
  
     <command detect_errors="exit_code"><![CDATA[
-        python3 '${find_relationships}'
+        python3 '${aoptk_find_relationships_non_llm}'
     ]]></command>
 
 <configfiles>
-<configfile name="find_relationships">
+<configfile name="find_relationships_non_llm">
 import os
 import sys
 
