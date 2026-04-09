@@ -26,12 +26,12 @@ with open("$input_file", "r") as f:
 email = os.environ.get("EMAIL")
 
 
-if "${literature_database}" == "pubmed":
+if "${literature_database_pubmed_europepmc}" == "pubmed":
     Entrez.email = email    
     pubmed = PubMed.__new__(PubMed)
     pubmed.id_list = ids
     abstracts = pubmed.get_abstracts()
-elif "${literature_database}" == "europepmc":
+elif "${literature_database_pubmed_europepmc}" == "europepmc":
     europepmc = EuropePMC("")
     europepmc.id_list = ids
     abstracts = europepmc.get_abstracts()
@@ -46,7 +46,7 @@ for abstract in abstracts:
     </configfiles>
 
     <inputs>
-        <expand macro="literature_database"/>
+        <expand macro="literature_database_pubmed_europepmc"/>
         <param name="input_file" type="data" format="txt" label="List of IDs to search for." help="Input text file with IDs to search for." />
     </inputs>
 

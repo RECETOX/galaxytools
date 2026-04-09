@@ -17,7 +17,7 @@
             --master 'master.${master.ext}'
             --code '$code'
             --query '$query'
-            --database '$literature_database'
+            --database '$literature_database_pubmed_europepmc'
             --outdir .
             \${EMAIL:+--email \$EMAIL}
     ]]></command>
@@ -48,7 +48,7 @@
         <test>
            <param name="query" value="hepg2 thioacetamide"/>
            <param name="code" value="1.1.1."/>
-           <param name="literature_database" value="pubmed"/>
+           <param name="literature_database_pubmed_europepmc" value="pubmed"/>
            <param name="read" value="read_test.xlsx"/>
            <param name="master" value="master_test.xlsx"/>
            <output name="to_read" file="read1.xlsx" compare="sim_size" delta="100"/>
@@ -56,7 +56,7 @@
         <test>
            <param name="query" value="hepg2 heparg thioacetamide spheroid"/>
            <param name="code" value="1.2.1."/>
-           <param name="literature_database" value="europepmc"/>
+           <param name="literature_database_pubmed_europepmc" value="europepmc"/>
            <param name="read" value="read_test.xlsx"/>
            <param name="master" value="master_test.xlsx"/>
            <output name="to_read" file="read2.xlsx" compare="sim_size" delta="100"/>
@@ -64,7 +64,7 @@
         <test>
            <param name="query" value="lx-2 col1a1"/>
            <param name="code" value="3.1."/>
-           <param name="literature_database" value="pubmed"/>
+           <param name="literature_database_pubmed_europepmc" value="pubmed"/>
            <param name="read" value="read_test.xlsx"/>
            <param name="master" value="master_test.xlsx"/>
            <output name="updated_master_table" file="updated_master_table.xlsx" compare="sim_size" delta="100"/>

@@ -24,12 +24,13 @@ import os
 email = os.environ.get("EMAIL")
 
 
-if "${literature_database}" == "pubmed":
+if "${literature_database_pubmed_europepmc_pmc}" == "pubmed":
     Entrez.email = email    
     ids = PubMed("${query}").get_id()
-elif "${literature_database}" == "europepmc":
+elif "${literature_database_pubmed_europepmc_pmc}" == "europepmc":
     ids = EuropePMC("${query}").get_id()
-elif "${literature_database}" == "pmc":
+elif "${literature_database_pubmed_europepmc_pmc}" == "pmc":
+    Entrez.email = email
     ids = PMC("${query}").get_id()
 
 else:
@@ -44,7 +45,7 @@ with open(f"ids.txt", "w") as f:
 
     <inputs>
         <expand macro="query"/>
-        <expand macro="literature_database_with_pmc"/>
+        <expand macro="literature_database_pubmed_europepmc_pmc"/>
     </inputs>
 
     <outputs>
@@ -54,7 +55,7 @@ with open(f"ids.txt", "w") as f:
     <tests>
         <test>
            <param name="query" value="hepg2 thioacetamide"/>
-           <param name="literature_database" value="pubmed"/>
+           <param name="literature_database_pubmed_europepmc_pmc" value="pubmed"/>
            <output name="ids" file="ids.txt" compare="sim_size" delta="100"/>
         </test>
     </tests>
