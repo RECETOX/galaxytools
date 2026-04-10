@@ -6,6 +6,7 @@
 
     <requirements>
         <expand macro="requirements"/>
+        <expand macro="openai_api_key_credentials"/>
     </requirements>
  
     <command detect_errors="exit_code"><![CDATA[
@@ -20,8 +21,11 @@ import os
 
 publication_id = os.path.splitext("$input_file.element_identifier")[0]
 if "${input_file.ext}" == "pdf":
+    parser = PymupdfParser([PDF("$input_file")])
+    if "$openai_api_key_credentials":
+        parser = parser.inject_text_generation(TextGenerationAPI(model="redhatai-scout"))
 
-    pdf = PymupdfParser([PDF("$input_file")]).get_publications()
+    pdf = parser.get_publications()
     text = pdf[0].full_text
     with open(f"{publication_id}.txt", "w") as f:
         f.write(text)
