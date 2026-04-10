@@ -54,7 +54,7 @@ else:
 Parse PDF
 ===================
 
-Tool to parse PDF files.
+Tool to parse PDF files. API key for LLMs is optional and only needed for PDFs that are scanned images.
 
     ]]></help>
 
