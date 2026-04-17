@@ -1,0 +1,22 @@
+<macros>
+    <token name="@TOOL_VERSION@">0.1.0</token>
+    <token name="@GALAXY_VERSION@">0</token>
+
+    <xml name="creator">
+        <creator>
+            <organization
+                url="https://www.recetox.muni.cz/"
+                email="GalaxyToolsDevelopmentandDeployment@space.muni.cz"
+                name="RECETOX MUNI" />
+        </creator>
+    </xml>
+
+    <token name="@HELP@"><![CDATA[
+        .. class:: infomark
+
+        **What this tool does**
+
+        Queries the ZOOMA API (https://www.ebi.ac.uk/spot/zooma/docs/api) with values from a selected column of
+        an input tabular file and returns a tabular annotation output.
+    ]]></token>
+</macros>
