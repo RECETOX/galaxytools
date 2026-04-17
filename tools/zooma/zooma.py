@@ -20,7 +20,7 @@ def parse_args():
     return parser.parse_args()
 
 
-def get_path(item, *path):
+def get_nested_field(item, *path):
     current = item
     for key in path:
         if not isinstance(current, dict):
@@ -50,13 +50,13 @@ def normalize_annotations(query_value, annotations):
     for annotation in annotations:
         rows.append({
             "query": query_value,
-            "property_value": get_path(annotation, "annotatedProperty", "propertyValue"),
-            "property_type": get_path(annotation, "annotatedProperty", "propertyType"),
-            "semantic_tags": get_path(annotation, "semanticTags"),
-            "confidence": get_path(annotation, "confidence"),
-            "source_name": get_path(annotation, "derivedFrom", "provenance", "source", "name"),
-            "source_type": get_path(annotation, "derivedFrom", "provenance", "source", "type"),
-            "study_type": get_path(annotation, "derivedFrom", "provenance", "source", "semanticTag"),
+            "property_value": get_nested_field(annotation, "annotatedProperty", "propertyValue"),
+            "property_type": get_nested_field(annotation, "annotatedProperty", "propertyType"),
+            "semantic_tags": get_nested_field(annotation, "semanticTags"),
+            "confidence": get_nested_field(annotation, "confidence"),
+            "source_name": get_nested_field(annotation, "derivedFrom", "provenance", "source", "name"),
+            "source_type": get_nested_field(annotation, "derivedFrom", "provenance", "source", "type"),
+            "study_type": get_nested_field(annotation, "derivedFrom", "provenance", "source", "semanticTag"),
         })
     return rows
 
@@ -109,10 +109,10 @@ def run():
 
         first_row = True
         for row in reader:
-            if first_row and args.has_header:
+            if first_row:
                 first_row = False
-                continue
-            first_row = False
+                if args.has_header:
+                    continue
 
             if column_index >= len(row):
                 continue
