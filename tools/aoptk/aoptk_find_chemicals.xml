@@ -1,4 +1,4 @@
-<tool id="aoptk_find_chemicals_non_llm" name="aoptk find chemicals" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="25.1" license="MIT">
+<tool id="aoptk_find_chemicals" name="aoptk find chemicals" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="25.1" license="MIT">
     <description>Detect chemicals in text.</description>
     <macros>
         <import>macros.xml</import>
@@ -6,29 +6,32 @@
 
     <requirements>
         <expand macro="requirements"/>
+        <expand macro="openai_api_key_credentials"/>
     </requirements>
  
     <command detect_errors="exit_code"><![CDATA[
-        python3 '${aoptk_find_chemicals_non_llm}'
+        python3 '${aoptk_find_chemicals}'
     ]]></command>
 
 <configfiles>
-<configfile name="aoptk_find_chemicals_non_llm">
-from aoptk.spacy_text_processor import SpacyText
+<configfile name="find_chemicals">
+import os
+from aoptk.text_generation_api import TextGenerationAPI
 from aoptk.literature.pdf import PDF
 from aoptk.literature.pymupdf_parser import PymupdfParser
-import os
 
 publication_id = os.path.splitext("$input_file.element_identifier")[0]
+openai_key = os.environ.get("OPENAI_KEY")
+text_generation_api = TextGenerationAPI(model="$llm_model", api_key=openai_key)
 
 if "${input_file.ext}" == "pdf":
     text = PymupdfParser([PDF("$input_file")]).get_publications()[0].full_text
-    chemicals = SpacyText().find_chemical(text)
+    chemicals = text_generation_api.find_chemicals(text)
 
 elif "${input_file.ext}" == "txt":
     with open("$input_file", "r") as f_in:
         text = f_in.read()
-        chemicals = SpacyText().find_chemical(text)
+        chemicals = text_generation_api.find_chemicals(text)
 else:
     raise ValueError(f"Unsupported input file format: {input_ext}")
 
@@ -40,7 +43,12 @@ with open("chemicals.tsv", "w") as f_out:
 </configfiles>
 
     <inputs>
+        <expand macro="llm_models"/>
+        <expand macro="prompt_specification"/>
         <param name="input_file" type="data" format="txt,pdf" label="Text to analyze" help="Input text file or PDF." />
+        <param argument="effect" type="text" value="" label="Effect to search" help="Specify the effect you want to search for.">
+            <validator type="regex">[0-9a-zA-Z]+</validator>
+        </param>
     </inputs>
 
     <outputs>
