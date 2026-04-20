@@ -40,7 +40,7 @@ with open("chemicals.tsv", "w") as f_out:
 </configfiles>
 
     <inputs>
-        <param name="input_file" type="data" format="txt,pdf" label="Abstract/Full text to analyze" help="Input text file or PDF." />
+        <param name="input_file" type="data" format="txt,pdf" label="Text to analyze" help="Input text file or PDF." />
     </inputs>
 
     <outputs>

@@ -59,7 +59,7 @@ with open("relationships.tsv", "w") as f_out:
     <inputs>
         <expand macro="llm_models"/>
         <expand macro="prompt_specification"/>
-        <param name="input_file" type="data" format="txt,pdf" label="Abstract/Full text to analyze" help="Input text file or PDF." />
+        <param name="input_file" type="data" format="txt,pdf" label="Text to analyze" help="Input text file or PDF." />
         <param argument="effect" type="text" value="" label="Effect to search" help="Specify the effect you want to search for.">
             <validator type="regex">[0-9a-zA-Z]+</validator>
         </param>
