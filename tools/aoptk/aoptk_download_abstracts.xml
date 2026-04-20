@@ -58,8 +58,8 @@ for abstract in abstracts:
 
     <tests>
         <test>
-           <param name="input_file" value="test-data/ids.txt"/>
-           <output name="abstracts" file="abstracts.txt" compare="sim_size" delta="100"/>
+            <param name="input_file" value="test-data/ids.txt"/>
+            <output_collection name="abstracts" type="list" count="2"/>
         </test>
     </tests>
 

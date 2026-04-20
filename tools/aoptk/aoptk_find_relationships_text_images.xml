@@ -26,51 +26,49 @@ from aoptk.effect import Effect
 publication_id = os.path.splitext("$input_file.element_identifier")[0]
 effects = ["${effect}"]
 openai_key = os.environ.get("OPENAI_KEY")
+text_generation_api = TextGenerationAPI(model="$llm_model", api_key=openai_key)
+text_generation_api.specification_relationship_text_prompt="$prompt_specification"
 
-text_generation_api = TextGenerationAPI(model="$llm_model", api_key=openai_key, url="$llm_url")
+if "${input_file.ext}" == "pdf":
+    text = ""
+    publication = PymupdfParser([PDF("$input_file")]).inject_text_generation(TextGenerationAPI(model="$llm_models_images")).get_publications()[0]
+    text += publication.full_text
 
-with open("relationships.tsv", "w") as f_out:
-    f_out.write("id\tchemical\teffect\trelationship\n")
+    for image in publication.images:
+        text_image = TextGenerationAPI(model="$llm_models_images").convert_image(
+            image_path=image.path,
+            text=publication.full_text,
+        )
+        text += f"\n\n{image.name}:\n{text_image}"
 
-    if "${input_file.ext}" == "pdf":
+    chemicals = text_generation_api.find_chemicals(text)
+    relationships = text_generation_api.find_relationships_in_text(
+    text=text, chemicals=chemicals, effects=effects
+)
+
+elif "${input_file.ext}" == "txt":
+    with open("$input_file", "r") as f_in:
         text = ""
-        publication = PymupdfParser([PDF("$input_file")]).inject_text_generation(TextGenerationAPI(model="$llm_models_images")).get_publications()[0]
-        text += publication.full_text
-
-        for image in publication.images:
+        text += f_in.read()
+        text += "\n\n\n\nALSO ANALYZE THESE FIGURES CONVERTED TO TEXT:"
+        for image in publication_images_folder.iterdir():
             text_image = TextGenerationAPI(model="$llm_models_images").convert_image(
-                image_path=image.path,
-                text=publication.full_text,
+                image_path=image,
+                text=matching_pub_data["publication.full_text"],
             )
-            text += f"\n\n{image.name}:\n{text_image}"
+        text += f"\n\n{image.name}:\n{text_image}"
 
         chemicals = text_generation_api.find_chemicals(text)
         relationships = text_generation_api.find_relationships_in_text(
         text=text, chemicals=chemicals, effects=effects
     )
-        for relationship in relationships:
-            f_out.write(f"{publication_id}\t{relationship.chemical}\t{relationship.effect}\t{relationship.relationship_type}\n")
+else:
+    raise ValueError(f"Unsupported input file format: ${input_file.ext}")
 
-    elif "${input_file.ext}" == "txt":
-        with open("$input_file", "r") as f_in:
-            text = ""
-            text += f_in.read()
-            text += "\n\n\n\nALSO ANALYZE THESE FIGURES CONVERTED TO TEXT:"
-            for image in publication_images_folder.iterdir():
-                text_image = TextGenerationAPI(model="$llm_models_images").convert_image(
-                    image_path=image,
-                    text=matching_pub_data["publication.full_text"],
-                )
-            text += f"\n\n{image.name}:\n{text_image}"
-
-            chemicals = text_generation_api.find_chemicals(text)
-            relationships = text_generation_api.find_relationships_in_text(
-            text=text, chemicals=chemicals, effects=effects
-        )
-            for relationship in relationships:
-                f_out.write(f"{publication_id}\t{relationship.chemical}\t{relationship.effect}\t{relationship.relationship_type}\n")
-    else:
-        raise ValueError(f"Unsupported input file format: ${input_file.ext}")
+with open("relationships.tsv", "w") as f_out:
+    f_out.write("id\tchemical\teffect\trelationship\n")
+    for relationship in relationships:
+        f_out.write(f"{publication_id}\t{relationship.chemical}\t{relationship.effect}\t{relationship.relationship_type}\n")
 </configfile>
 </configfiles>
      <inputs>
@@ -91,6 +89,7 @@ with open("relationships.tsv", "w") as f_out:
     <tests>
         <test>
            <param name="input_file" value="test-data/text.tsv"/>
+            <param name="effect" value="liver fibrosis"/>
            <output name="relationships" file="relationships.tsv" compare="sim_size" delta="100"/>
         </test>
     </tests>

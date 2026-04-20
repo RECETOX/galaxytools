@@ -60,8 +60,8 @@ for publication in publications:
 
     <tests>
         <test>
-           <param name="input_file" value="test-data/ids.txt"/>
-           <output name="full_texts" file="full_texts.txt" compare="sim_size" delta="100"/>
+            <param name="input_file" value="test-data/ids.txt"/>
+            <output_collection name="full_texts" type="list" count="2"/>
         </test>
     </tests>
 

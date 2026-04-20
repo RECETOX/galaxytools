@@ -29,29 +29,28 @@ publication_id = os.path.splitext("$input_file.element_identifier")[0]
 effects = ["${effect}"]
 email = os.environ.get("EMAIL")
 
-with open("relationships.tsv", "w") as f_out:
-    f_out.write("id\tchemical\teffect\trelationship\n")
+if "${input_file.ext}" == "pdf":
+    text = PymupdfParser([PDF("$input_file")]).get_publications()[0].full_text
+    chemicals = SpacyText().find_chemical(text)
+    relationships = ZeroShotClassificationSingle().find_relationships(
+    text=text, chemicals=chemicals, effects=effects
+)
 
-    if "${input_file.ext}" == "pdf":
-        text = PymupdfParser([PDF("$input_file")]).get_publications()[0].full_text
+elif "${input_file.ext}" == "txt":
+    with open("$input_file", "r") as f_in:
+        text = f_in.read()
         chemicals = SpacyText().find_chemical(text)
         relationships = ZeroShotClassificationSingle().find_relationships(
         text=text, chemicals=chemicals, effects=effects
     )
-        for relationship in relationships:
-            f_out.write(f"{publication_id}\t{relationship.chemical}\t{relationship.effect}\t{relationship.relationship_type}\n")
 
-    elif "${input_file.ext}" == "txt":
-        with open("$input_file", "r") as f_in:
-            text = f_in.read()
-            chemicals = SpacyText().find_chemical(text)
-            relationships = ZeroShotClassificationSingle().find_relationships(
-            text=text, chemicals=chemicals, effects=effects
-        )
-            for relationship in relationships:
-                f_out.write(f"{publication_id}\t{relationship.chemical}\t{relationship.effect}\t{relationship.relationship_type}\n")
-    else:
-        raise ValueError(f"Unsupported input file format: ${input_file.ext}")
+else:
+    raise ValueError(f"Unsupported input file format: ${input_file.ext}")
+
+with open("relationships.tsv", "w") as f_out:
+    f_out.write("id\tchemical\teffect\trelationship\n")
+    for relationship in relationships:
+        f_out.write(f"{publication_id}\t{relationship.chemical}\t{relationship.effect}\t{relationship.relationship_type}\n")
 </configfile>
 </configfiles>
 
@@ -69,6 +68,7 @@ with open("relationships.tsv", "w") as f_out:
     <tests>
         <test>
            <param name="input_file" value="test-data/text.tsv"/>
+           <param name="effect" value="liver fibrosis"/>
            <output name="relationships" file="relationships.tsv" compare="sim_size" delta="100"/>
         </test>
     </tests>
