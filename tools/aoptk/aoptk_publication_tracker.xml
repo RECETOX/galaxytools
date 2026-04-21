@@ -24,6 +24,7 @@
 
     <inputs>
         <expand macro="query"/>
+        <expand macro="literature_database_pubmed_europepmc"/>
         <param argument="--code" type="text" value="" label="Your search code" help="Type your search code. E.g., 1.1. or 1.2.1.">
             <sanitizer invalid_char="">
                 <valid initial="string.digits">
@@ -34,7 +35,6 @@
         </param>
         <param argument="--read" type="data" format="xlsx" label="Your database of read publications" help="Your database of read publications. Column id must be present." />
         <param argument="--master" type="data" format="xlsx" label="Your master table" help="Your master table. Columns ID and Search code must be present." />
-
     </inputs>
 
     <outputs>
