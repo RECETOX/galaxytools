@@ -40,7 +40,7 @@ chemicals.to_csv("normalized_chemicals.tsv", sep="\t", index=False)
     <tests>
         <test>
            <param name="input_file" value="test-data/chemicals.tsv"/>
-           <output name="normalized_chemicals"/>
+           <output name="normalized_chemicals" file="test-data/normalized.tsv" compare="sim_size" delta="100"/>
         </test>
     </tests>
 
