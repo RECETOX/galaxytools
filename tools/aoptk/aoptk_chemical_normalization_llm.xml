@@ -25,7 +25,7 @@ text_generation_api = TextGenerationAPI(model="$llm_model", api_key=openai_key)
 chemical_list = pd.read_csv("$chemical_list", sep="\t")["chemical"].tolist()
 chemicals = pd.read_csv("$chemicals", sep="\t")
 chemicals["chemical"] = chemicals["chemical"].apply(
-    lambda x: TextGenerationAPI(model="$llm_model", api_key=openai_key).normalize_chemical(chemical=Chemical(x), chemical_list=chemical_list)
+    lambda x: TextGenerationAPI(model="$llm_model", api_key=openai_key).normalize_chemical(chemical=Chemical(x), chemical_list=[Chemical(chem) for chem in chemical_list])
     )
 chemicals["heading"] = chemicals["chemical"].apply(lambda chem: chem.heading)
 chemicals.to_csv("normalized_chemicals.tsv", sep="\t", index=False)
