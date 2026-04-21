@@ -17,13 +17,14 @@
 <configfile name="parse_pdf">
 from aoptk.literature.pdf import PDF
 from aoptk.literature.pymupdf_parser import PymupdfParser
+from aoptk.text_generation_api import TextGenerationAPI
 import os
 
 publication_id = os.path.splitext("$input_file.element_identifier")[0]
 if "${input_file.ext}" == "pdf":
     parser = PymupdfParser([PDF("$input_file")])
-    if "$openai_api_key_credentials":
-        parser = parser.inject_text_generation(TextGenerationAPI(model="redhatai-scout"))
+    if os.environ.get("OPENAI_KEY"):
+        parser = parser.inject_text_generation(TextGenerationAPI(model="$llm_models_images", api_key=os.environ.get("OPENAI_KEY")))
 
     pdf = parser.get_publications()
     text = pdf[0].full_text
@@ -37,6 +38,7 @@ else:
 
     <inputs>
         <param name="input_file" type="data" format="pdf" label="PDF to parse" help="Input PDF." />
+        <expand macro="llm_models_images"/>
     </inputs>
 
     <outputs>
@@ -45,8 +47,8 @@ else:
 
     <tests>
         <test>
-           <param name="input_file" value="test-data/sample.pdf"/>
-           <output name="text"/>
+           <param name="input_file" value="test-data/text.pdf"/>
+           <output name="text" file="text.txt" compare="sim_size" delta="100"/>
         </test>
     </tests>
 
