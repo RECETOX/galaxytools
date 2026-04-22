@@ -16,12 +16,15 @@
 <configfile name="normalize_chemicals_mesh">
 from aoptk.chemical import Chemical
 from aoptk.normalization.mesh_terms import MeshTerms
+from aoptk.normalization.provide_mesh_term_dataframe_from_xml import ProvideMeshTermDataframeFromXML
 import os
 import pandas as pd
 
-chemicals = pd.read_csv("$input_file", sep="\t")
+chemicals = pd.read_csv("$input_file", sep="\t")\
+mesh_terms_xml = pd.read_csv("$input_xml", sep="\t")
+mesh_terms_df = ProvideMeshTermDataframeFromXML(mesh_terms_xml)
 chemicals["chemical"] = chemicals["chemical"].apply(
-    lambda x: MeshTerms().normalize_chemical(Chemical(x))
+    lambda x: MeshTerms(mesh_terms=mesh_terms_df).normalize_chemical(Chemical(x))
     )
 chemicals["heading"] = chemicals["chemical"].apply(lambda chem: chem.heading)
 chemicals.to_csv("normalized_chemicals.tsv", sep="\t", index=False)
@@ -31,6 +34,7 @@ chemicals.to_csv("normalized_chemicals.tsv", sep="\t", index=False)
 
     <inputs>
         <param name="input_file" type="data" format="tabular" label="TSV with chemical column." help="Input tsv file with chemical column." />
+        <param name="input_xml" type="data" format="xml" label="XML database with MeSH terms." help="Input xml file with MeSH terms." />
     </inputs>
 
     <outputs>
@@ -40,6 +44,7 @@ chemicals.to_csv("normalized_chemicals.tsv", sep="\t", index=False)
     <tests>
         <test>
            <param name="input_file" value="test-data/chemicals.tsv"/>
+           <param name="input_xml" value="test-data/mesh_terms_database.xml"/>
            <output name="normalized_chemicals" file="test-data/normalized.tsv" compare="sim_size" delta="100"/>
         </test>
     </tests>
@@ -49,7 +54,7 @@ Chemical Normalization MeSH Terms
 ===================
 
 Tool to normalize chemical entities using MeSH Terms.
-
+You need to provide the XML MeSH terms database: https://www.nlm.nih.gov/databases/download/mesh.html
     ]]></help>
 
 </tool>
