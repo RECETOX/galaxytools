@@ -1,0 +1,69 @@
+<tool id="aoptk_final_modification" name="aoptk final modification" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="25.1" license="MIT">
+    <description>Modify the final output.</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+
+    <requirements>
+        <expand macro="requirements"/>
+    </requirements>
+ 
+    <command detect_errors="exit_code"><![CDATA[
+        python3 '${final_modification}'
+    ]]></command>
+
+<configfiles>
+<configfile name="final_modification">
+import pandas as pd
+
+def join_unique(series):
+    values = series.dropna().astype(str).str.strip()
+    return ";".join(pd.unique(values))
+
+output = pd.read_csv("$input_file", sep="\t")\
+
+file_name = output["effect"].unique()[0].strip().lower().replace(" ", "_")
+
+output["relationship"] = output["relationship"].astype(str).str.strip().str.lower()
+relationships = sorted(output["relationship"].unique())
+final_output = output[["heading"]].drop_duplicates()
+
+for relationship in relationships:
+    subset = output[output["relationship"] == relationship]
+    result = subset.groupby("heading", as_index=False, dropna=False).agg(
+        hits=("id", "size"),
+        ids=("id", join_unique),
+    )
+    result.rename(columns={"hits": f"{relationship}", "ids": f"{relationship} IDs"}, inplace=True)
+    final_output = final_output.merge(result, on="heading", how="left")
+
+final_output.to_excel(f"./{file_name}.xlsx", index=False)
+
+
+</configfile>
+</configfiles>
+
+    <inputs>
+        <param name="input_file" type="data" format="tabular" label="TSV with chemical column." help="Input tsv file with chemical column." />
+    </inputs>
+
+    <outputs>
+        <data name="final_output" format="tabular" from_work_dir="final_output.xlsx" label="Final output." />
+    </outputs>
+
+    <tests>
+        <test>
+           <param name="input_file" value="test-data/chemicals.tsv"/>
+           <output name="final_output" file="test-data/final_output.xlsx" compare="sim_size" delta="100"/>
+        </test>
+    </tests>
+
+    <help><![CDATA[
+Final Modification
+===================
+
+Tool to remove duplicates and modify the final output.
+
+    ]]></help>
+
+</tool>

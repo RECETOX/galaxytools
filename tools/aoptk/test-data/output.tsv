@@ -1,0 +1,5 @@
+id	chemical	effect	relationship	heading
+11	acetaminophen	liver fibrosis	positive	acetaminophen
+11	thioacetamide	liver fibrosis	positive	thioacetamide
+12	paracetamol	liver fibrosis	negative	acetaminophen
+26	acetaminophen	liver fibrosis	negative	acetaminophen
