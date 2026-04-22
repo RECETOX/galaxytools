@@ -1,5 +1,5 @@
 <tool id="aoptk_final_modification" name="aoptk final modification" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="25.1" license="MIT">
-    <description>Modify the final output.</description>
+    <description>Finalize the output of relationship identification.</description>
     <macros>
         <import>macros.xml</import>
     </macros>
@@ -62,7 +62,7 @@ final_output.to_excel(f"./{file_name}.xlsx", index=False)
 Final Modification
 ===================
 
-Tool to remove duplicates and modify the final output.
+Tool to remove duplicates and finalize the output of relationship identification.
 
     ]]></help>
 

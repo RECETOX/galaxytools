@@ -1,5 +1,5 @@
 <tool id="aoptk_find_relationships_text" name="aoptk find relationships text" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="25.1" license="MIT">
-    <description>Detect relationships between chemicals and effects in text.</description>
+    <description>Detect relationships between chemicals and effects in text using LLMs.</description>
     <macros>
         <import>macros.xml</import>
     </macros>
@@ -79,7 +79,7 @@ with open("relationships.tsv", "w") as f_out:
 Relationship Identification in Text
 ===================
 
-Tool to identify relationships between chemicals and effects in a given text.
+Tool to identify relationships between chemicals and effects in a given text using LLMs.
 
     ]]></help>
 

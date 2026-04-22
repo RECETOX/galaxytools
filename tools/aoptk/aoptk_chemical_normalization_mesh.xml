@@ -1,5 +1,5 @@
 <tool id="aoptk_normalize_chemicals_mesh" name="aoptk normalize chemicals mesh" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="25.1" license="MIT">
-    <description>Normalize chemical entities using MeshTerms.</description>
+    <description>Normalize chemical entities using MeSH Terms.</description>
     <macros>
         <import>macros.xml</import>
     </macros>

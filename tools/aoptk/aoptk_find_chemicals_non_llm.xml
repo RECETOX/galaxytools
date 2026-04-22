@@ -1,5 +1,5 @@
 <tool id="aoptk_find_chemicals_non_llm" name="aoptk find chemicals non llm" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="25.1" license="MIT">
-    <description>Detect chemicals in text.</description>
+    <description>Detect chemicals in text using LLMs.</description>
     <macros>
         <import>macros.xml</import>
     </macros>
@@ -58,7 +58,7 @@ with open("chemicals.tsv", "w") as f_out:
 Chemical Identification
 ===================
 
-Tool to identify chemical entities in a given text.
+Tool to identify chemical entities in a given text using LLMs.
 
     ]]></help>
 
