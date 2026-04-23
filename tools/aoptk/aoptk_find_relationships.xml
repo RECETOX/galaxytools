@@ -94,17 +94,17 @@ with open(f"relationships_{publication_id}.tsv", "w") as f_out:
         <when value="llm_text">
             <expand macro="llm_models"/>
             <expand macro="prompt_specification"/>
+            <expand macro="effect"/>
             <param name="input_file" type="data" format="txt,pdf" label="Text to analyze" help="Input text file or PDF." />
             <param name="chemicals" type="data" format="tabular" label="Chemicals" help="Input TSV with chemicals." />
-            <expand macro="effect"/>
         </when>
         <when value="llm_text_images">
             <expand macro="llm_models"/>
             <expand macro="prompt_specification"/>
             <expand macro="llm_models_images"/>
+            <expand macro="effect"/>
             <param name="input_file" type="data" format="txt,pdf" label="Text to analyze" help="Input text file or PDF." />
             <param name="input_images" type="data_collection" collection_type="list" format="png,jpg,jpeg,gif,tif,tiff,bmp,webp" label="Images to analyze" help="Input collection (folder) of image files." />
-            <expand macro="effect"/>
         </when>
         <when value="zero_shot_classification">
             <param name="input_file" type="data" format="txt,pdf" label="Text to analyze" help="Input text file or PDF." />
