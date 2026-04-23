@@ -50,12 +50,12 @@ from aoptk.spacy_text_processor import SpacyText
 chemicals = SpacyText().find_chemical(text)
 #end if
 
-with open("chemicals.tsv", "w") as f_out:
-    f_out.write("id\tchemical\n")
+with open(f"chemicals_{publication_id}.tsv", "w") as f_out:
+    f_out.write("chemical\n")
     for chemical in chemicals:
-        f_out.write(f"{publication_id}\t{chemical.name}\n")
+        f_out.write(f"{chemical.name}\n")
 
-</configfile>
+</configfile>s
 </configfiles>
 
     <inputs>
