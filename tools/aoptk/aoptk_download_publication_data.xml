@@ -81,7 +81,7 @@ pdfs = pmc.get_pdfs()
             <param name="method" type="select" label="Data type">
                 <option value="publications">Full text publications and figures</option>
                 <option value="abstracts">Abstracts</option>
-                <option value="pdfs">PDF</option>
+                <option value="pdfs">PDFs</option>
             </param>
         <when value="publications">
             <expand macro="literature_database_europepmc_pmc"/>
