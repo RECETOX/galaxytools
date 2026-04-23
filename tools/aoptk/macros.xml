@@ -196,7 +196,11 @@
             <validator type="regex">[0-9a-zA-Z_ ()*'"[\]\[\]\-:.\[\]α-ωΑ-Ω]+</validator>
         </param>
     </xml>
-
+    <xml name="effect">
+        <param argument="effect" type="text" value="" label="Effect to search" help="Specify the effect you want to search for.">
+            <validator type="regex">[0-9a-zA-Z]+</validator>
+        </param>
+    </xml>  
 
 
 <token name="@init_scores@">
