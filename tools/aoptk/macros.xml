@@ -92,7 +92,7 @@
                     <add value="Ω" />
                 </valid>
             </sanitizer>
-            <validator type="regex">[0-9a-zA-Z_ ()*'"[\]\[\]\-:.\[\]α-ωΑ-Ω]+</validator>
+            <validator type="regex">[0-9a-zA-Z_ ()*'"[\]\[\]\-:.\[\]α-ωΑ-Ω]*</validator>
         </param>
     </xml>
 
@@ -134,7 +134,7 @@
     </xml>
 
     <xml name="prompt_specification">
-        <param argument="--prompt_specification" type="text" value="" label="Analysis specification" help="Prompt the LLM and specify what data to analyze (e.g., Only include data from HepG2 spheroids).">
+        <param argument="--prompt_specification" type="text" value="" optional="true" label="Analysis specification" help="Prompt the LLM and specify what data to analyze (e.g., Only include data from HepG2 spheroids).">
             <sanitizer invalid_char="">
                 <valid initial="string.letters,string.digits">
                     <add value="_" />
@@ -197,7 +197,7 @@
                     <add value="Ω" />
                 </valid>
             </sanitizer>
-            <validator type="regex">[0-9a-zA-Z_ ()*'"[\]\[\]\-:.\[\]α-ωΑ-Ω]+</validator>
+            <validator type="regex">[0-9a-zA-Z_ ()*'"[\]\[\]\-:.\[\]α-ωΑ-Ω]*</validator>
         </param>
     </xml>
 
