@@ -14,6 +14,8 @@
 
 <configfiles>
 <configfile name="find_relationships">
+from aoptk.relationship_type import Causative
+from aoptk.relationship_type import Inhibitive
 
 if "${input_file.ext}" == "pdf":
     text = PymupdfParser([PDF("$input_file")]).inject_text_generation(TextGenerationAPI(model="redhatai-scout")).get_publications()[0].full_text
@@ -29,6 +31,13 @@ chemicals = pd.read_csv("$chemicals", sep="\t")["chemical"].tolist()
 publication_id = os.path.splitext("$input_file.element_identifier")[0]
 effects = ["${effect}"]
 
+if "$relationship_type" == "causative":
+    relationship_type = Causative
+elif "$relationship_type" == "inhibitive":
+    relationship_type = Inhibitive
+else:
+    raise ValueError(f"Unsupported relationship type: ${relationship_type}")
+
 #if $identification_method.type_choice == "llm_text" or if $identification_method.type_choice == "llm_text_images":
 from aoptk.text_generation_api import TextGenerationAPI
 
@@ -41,7 +50,7 @@ litellm_api_key = source.get("LITELLM_API_KEY")
 #end if
 
     #if $identification_method.type_choice == "llm_text"
-    relationships = TextGenerationAPI(model="$llm_model", api_key=litellm_api_key).find_relationships_in_text(text=text, chemicals=chemicals, effects=effects)
+    relationships = TextGenerationAPI(model="$llm_model", api_key=litellm_api_key).find_relationships_in_text(text=text, chemicals=chemicals, effects=effects, relationship_type=relationship_type)
     #end if
 
 
@@ -55,7 +64,7 @@ litellm_api_key = source.get("LITELLM_API_KEY")
         )
         text_with_images += f"\n\n{figure.name}:\n{text_image}"
 
-    relationships = TextGenerationAPI(model="$llm_model", api_key=litellm_api_key).find_relationships_in_text(text=text_with_images, chemicals=chemicals, effects=effects)
+    relationships = TextGenerationAPI(model="$llm_model", api_key=litellm_api_key).find_relationships_in_text(text=text_with_images, chemicals=chemicals, effects=effects, relationship_type=relationship_type)
     #end if
 
 #if $identification_method.type_choice == "zero_shot_classification":
@@ -72,7 +81,7 @@ from aoptk.relationships.zero_shot_classification_single import ZeroShotClassifi
 from aoptk.literature.pdf import PDF
 from aoptk.literature.pymupdf_parser import PymupdfParser
 
-relationships = ZeroShotClassificationSingle().find_relationships(text=text, chemicals=chemicals, effects=effects)
+relationships = ZeroShotClassificationSingle().find_relationships(text=text, chemicals=chemicals, effects=effects, relationship_type=relationship_type))
 #end if
 
 with open(f"relationships_{publication_id}.tsv", "w") as f_out:
@@ -93,22 +102,25 @@ with open(f"relationships_{publication_id}.tsv", "w") as f_out:
         
         <when value="llm_text">
             <expand macro="llm_models"/>
-            <expand macro="prompt_specification"/>
             <expand macro="effect"/>
+            <expand macro="relationship_type"/>
+            <expand macro="prompt_specification"/>
             <param name="input_file" type="data" format="txt,pdf" label="Text to analyze" help="Input text file or PDF." />
             <param name="chemicals" type="data" format="tabular" label="Chemicals" help="Input TSV with chemicals." />
         </when>
         <when value="llm_text_images">
             <expand macro="llm_models"/>
-            <expand macro="prompt_specification"/>
             <expand macro="llm_models_images"/>
             <expand macro="effect"/>
+            <expand macro="relationship_type"/>
+            <expand macro="prompt_specification"/>
             <param name="input_file" type="data" format="txt,pdf" label="Text to analyze" help="Input text file or PDF." />
             <param name="input_images" type="data_collection" collection_type="list" format="png,jpg,jpeg,gif,tif,tiff,bmp,webp" label="Images to analyze" help="Input collection (folder) of image files." />
         </when>
         <when value="zero_shot_classification">
             <param name="input_file" type="data" format="txt,pdf" label="Text to analyze" help="Input text file or PDF." />
             <expand macro="effect"/>
+            <expand macro="relationship_type"/>
         </when>
         </conditional>
     </inputs>

@@ -15,15 +15,6 @@
         </credentials>
     </xml>
 
-    <xml name="openai_api_key_credentials">
-        <credentials name="openai_api_key_credentials" 
-                     label="Your OpenAI API key" 
-                     version="1.0"
-                     description="OpenAI API key is required to use the OpenAI API.">
-            <variable name="openai_key" inject_as_env="OPENAI_KEY" optional="true"/>
-        </credentials>
-    </xml>
-
     <xml name="query">
         <param argument="--query" type="text" value="" label="Your search term" help="Type your search term as you would in PubMed/Europe PMC.">
             <sanitizer invalid_char="">
@@ -40,7 +31,6 @@
                     <add value="-" />
                     <add value=":" />
                     <add value="/" />
-                    <!-- Lowercase Greek letters -->
                     <add value="α" />
                     <add value="β" />
                     <add value="γ" />
@@ -65,7 +55,6 @@
                     <add value="χ" />
                     <add value="ψ" />
                     <add value="ω" />
-                    <!-- Uppercase Greek letters -->
                     <add value="Α" />
                     <add value="Β" />
                     <add value="Γ" />
@@ -102,6 +91,7 @@
             <option value="europepmc">EuropePMC</option>
         </param>
     </xml>
+
     <xml name="literature_database_pubmed_europepmc_pmc">
         <param name="literature_database_pubmed_europepmc_pmc" type="select" label="Select which database to search." help="PubMed only accepts searches with up to 10 000 results. No limit for Europe PMC and PMC.">
             <option value="pubmed" selected="true">PubMed</option>
@@ -109,30 +99,35 @@
             <option value="pmc">PMC</option>
         </param>
     </xml>
+
     <xml name="literature_database_europepmc_pmc">
         <param name="literature_database_europepmc_pmc" type="select" label="Select which database to search." help="PubMed only accepts searches with up to 10 000 results. No limit for Europe PMC and PMC.">
             <option value="europepmc">EuropePMC</option>
             <option value="pmc">PMC</option>
         </param>
     </xml>
+
     <xml name="llm_models">
-        <param name="llm_models" type="select" label="Select LLM model." help="Choose the LLM to use for relationship detection.">
+        <param name="llm_models" type="select" label="Select LLM model." help="Select LLM model to analyze text.">
             <option value="gpt-oss-120b">GPT OSS 120B</option>
+            <option value="qwen3.5">Qwen 3.5</option>
+            <option value="deepseek-v3.2-thinking">DeepSeek v3.2</option>
         </param>
     </xml>
+
     <xml name="llm_models_images">
-        <param name="llm_models_images" type="select" label="Select LLM model to handle image data." help="Choose the LLM to use for image data processing.">
+        <param name="llm_models_images" type="select" label="Select LLM model to analyze image data." help="Choose the LLM to use for image data processing.">
+            <option value="qwen3.5">Qwen 3.5</option>
             <option value="redhatai-scout">RedHatAI Scout</option>
         </param>
     </xml>
+
     <xml name="prompt_specification">
-        <param argument="--prompt_specification" type="text" value="" label="Prompt specification" help="Modify the prompt.">
+        <param argument="--prompt_specification" type="text" value="" label="Analysis specification" help="Prompt the LLM and specify what data to analyze (e.g., Only include data from HepG2 spheroids).">
             <sanitizer invalid_char="">
                 <valid initial="string.letters,string.digits">
                     <add value="_" />
                     <add value=" " />
-                    <add value="&apos;" />
-                    <add value="&quot;" />
                     <add value="(" />
                     <add value=")" />
                     <add value="*" />
@@ -141,7 +136,6 @@
                     <add value="-" />
                     <add value=":" />
                     <add value="/" />
-                    <!-- Lowercase Greek letters -->
                     <add value="α" />
                     <add value="β" />
                     <add value="γ" />
@@ -166,7 +160,6 @@
                     <add value="χ" />
                     <add value="ψ" />
                     <add value="ω" />
-                    <!-- Uppercase Greek letters -->
                     <add value="Α" />
                     <add value="Β" />
                     <add value="Γ" />
@@ -196,11 +189,19 @@
             <validator type="regex">[0-9a-zA-Z_ ()*'"[\]\[\]\-:.\[\]α-ωΑ-Ω]+</validator>
         </param>
     </xml>
+
     <xml name="effect">
-        <param argument="effect" type="text" value="" label="Effect to search" help="Specify the effect you want to search for.">
+        <param argument="effect" type="text" value="" label="Effect to search" help="Specify the effect you want to search for (e.g., liver fibrosis, gap junction intracellular communication).">
             <validator type="regex">[0-9a-zA-Z]+</validator>
         </param>
-    </xml>  
+    </xml>
+    
+    <xml name="relationship_type">
+        <param name="relationship_type" type="select" label="Select relationship type" help="Choose the type of relationship to identify.">
+            <option value="causative">Causative</option>
+            <option value="inhibitive">Inhibitive</option>
+        </param>
+    </xml>
 
 
 <token name="@init_scores@">
