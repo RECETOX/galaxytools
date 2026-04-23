@@ -1,5 +1,5 @@
 <tool id="aoptk_find_chemicals" name="aoptk find chemicals" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="25.1" license="MIT">
-    <description>Find chemical entities using LLMs.</description>
+    <description>Identify chemicals in text.</description>
     <macros>
         <import>macros.xml</import>
     </macros>
