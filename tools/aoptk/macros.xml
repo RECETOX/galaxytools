@@ -10,8 +10,19 @@
         <credentials name="email_credentials" 
                      label="Your e-mail address" 
                      version="1.0"
+                     optional="true"
                      description="E-mail is required to follow NCBI/PubMed guidelines.">
             <variable name="email" inject_as_env="EMAIL" optional="true"/>
+        </credentials>
+    </xml>
+
+    <xml name="ncbi_api_key">
+        <credentials name="ncbi_api_key" 
+                     label="Your NCBI API key" 
+                     version="1.0"
+                     optional="true"
+                     description="Provide your NCBI API key for faster download of publications. https://support.nlm.nih.gov/kbArticle/?pn=KA-05317">
+            <secret name="api_key" inject_as_env="NCBI_API_KEY" optional="true"/>
         </credentials>
     </xml>
 
@@ -195,7 +206,7 @@
             <validator type="regex">[0-9a-zA-Z]+</validator>
         </param>
     </xml>
-    
+
     <xml name="relationship_type">
         <param name="relationship_type" type="select" label="Select relationship type" help="Choose the type of relationship to identify.">
             <option value="causative">Causative</option>

@@ -7,6 +7,7 @@
     <requirements>
         <expand macro="requirements"/>
         <expand macro="email_credentials"/>
+        <expand macro="ncbi_api_key"/>
     </requirements>
  
     <command detect_errors="exit_code"><![CDATA[
@@ -22,15 +23,17 @@ from Bio import Entrez
 import os
 
 email = os.environ.get("EMAIL")
-
+api_key = os.environ.get("NCBI_API_KEY")
 
 if "${literature_database_pubmed_europepmc_pmc}" == "pubmed":
-    Entrez.email = email    
+    Entrez.email = email
+    Entrez.api_key = api_key
     ids = PubMed("${query}").get_id()
 elif "${literature_database_pubmed_europepmc_pmc}" == "europepmc":
     ids = EuropePMC("${query}").get_id()
 elif "${literature_database_pubmed_europepmc_pmc}" == "pmc":
     Entrez.email = email
+    Entrez.api_key = api_key
     ids = PMC("${query}").get_id()
 
 else:
