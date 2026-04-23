@@ -79,7 +79,7 @@ pdfs = pmc.get_pdfs()
     <inputs>
         <conditional name="data_type">
             <param name="method" type="select" label="Data type">
-                <option value="publications">Publications</option>
+                <option value="publications">Full text publications and figures</option>
                 <option value="abstracts">Abstracts</option>
                 <option value="pdfs">PDF</option>
             </param>
@@ -142,7 +142,7 @@ pdfs = pmc.get_pdfs()
 Download Publication Data
 ===================
 
-Tools to download publication data - full text publications and figures, abstracts, or PDFs.
+Tools to download publication data - full text publications (including abstracts) and figures, abstracts, or PDFs.
 
     ]]></help>
 
