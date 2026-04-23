@@ -1,12 +1,11 @@
 <tool id="aoptk_find_chemicals" name="aoptk find chemicals" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="25.1" license="MIT">
-    <description>Detect chemicals in text.</description>
+    <description>Find chemical entities using LLMs.</description>
     <macros>
         <import>macros.xml</import>
     </macros>
 
     <requirements>
         <expand macro="requirements"/>
-        <expand macro="openai_api_key_credentials"/>
     </requirements>
  
     <command detect_errors="exit_code"><![CDATA[
@@ -16,36 +15,67 @@
 <configfiles>
 <configfile name="find_chemicals">
 import os
-from aoptk.text_generation_api import TextGenerationAPI
+import pandas as pd
 from aoptk.literature.pdf import PDF
 from aoptk.literature.pymupdf_parser import PymupdfParser
 
 publication_id = os.path.splitext("$input_file.element_identifier")[0]
-openai_key = os.environ.get("OPENAI_KEY")
-text_generation_api = TextGenerationAPI(model="$llm_model", api_key=openai_key)
 
 if "${input_file.ext}" == "pdf":
     text = PymupdfParser([PDF("$input_file")]).get_publications()[0].full_text
-    chemicals = text_generation_api.find_chemicals(text)
-
 elif "${input_file.ext}" == "txt":
     with open("$input_file", "r") as f_in:
         text = f_in.read()
-        chemicals = text_generation_api.find_chemicals(text)
 else:
     raise ValueError(f"Unsupported input file format: {input_ext}")
+
+
+#if $identification_method.type_choice == "llm":
+from aoptk.text_generation_api import TextGenerationAPI
+
+litellm_config_file = os.environ.get("LITELLM_CONFIG_FILE")
+if not litellm_config_file:
+    sys.exit("LITELLM_CONFIG_FILE environment variable is not set.")
+with open(litellm_config_file, "r") as f:
+    config = yaml.safe_load(f)
+litellm_api_key = source.get("LITELLM_API_KEY")
+
+chemicals = TextGenerationAPI(model="$llm_model", api_key=litellm_api_key).find_chemicals(text)
+#end if
+
+
+#else if $identification_method.type_choice == "scispacy":
+from aoptk.spacy_text_processor import SpacyText
+
+chemicals = SpacyText().find_chemical(text)
+#end if
 
 with open("chemicals.tsv", "w") as f_out:
     f_out.write("id\tchemical\n")
     for chemical in chemicals:
         f_out.write(f"{publication_id}\t{chemical.name}\n")
+
 </configfile>
 </configfiles>
 
     <inputs>
-        <expand macro="llm_models"/>
-        <param name="input_file" type="data" format="txt,pdf" label="Text to analyze" help="Input text file or PDF." />
-        </param>
+        <conditional name="identification_method">
+            <param name="method" type="select" label="Identification Method">
+                <option value="llm">Large Language Models</option>
+                <option value="scispacy">Scispacy</option>
+            </param>
+        
+        <when value="llm">
+            <expand macro="llm_models"/>
+            <param name="input_file" type="data" format="txt,pdf" label="Text to analyze" help="Input text file or PDF." />
+        </when>
+
+        <when value="scispacy">
+            <param name="input_file" type="data" format="txt,pdf" label="Text to analyze" help="Input text file or PDF." />
+        </when>
+
+
+        </conditional>
     </inputs>
 
     <outputs>
@@ -54,8 +84,18 @@ with open("chemicals.tsv", "w") as f_out:
 
     <tests>
         <test>
-           <param name="input_file" value="test-data/text.tsv"/>
-           <output name="chemicals" file="chemicals.tsv" compare="sim_size" delta="100"/>
+            <conditional name="identification_method">
+                <param name="type_choice" value="llm"/>
+                <param name="input_file" value="test-data/text.tsv"/>
+                <output name="chemicals" file="chemicals.tsv" compare="sim_size" delta="100"/>
+            </conditional>
+        </test>
+        <test>
+            <conditional name="identification_method">
+                <param name="type_choice" value="scispacy"/>
+                <param name="input_file" value="test-data/text.tsv"/>
+                <output name="chemicals" file="chemicals.tsv" compare="sim_size" delta="100"/>
+            </conditional>
         </test>
     </tests>
 
@@ -63,7 +103,7 @@ with open("chemicals.tsv", "w") as f_out:
 Chemical Identification
 ===================
 
-Tool to identify chemical entities in a given text.
+Tools to identify chemical entities in a given text.
 
     ]]></help>
 
