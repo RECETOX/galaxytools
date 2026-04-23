@@ -82,7 +82,7 @@ pdfs = pmc.get_pdfs()
 
     <inputs>
         <conditional name="data_type">
-            <param name="method" type="select" label="Data type">
+            <param name="type_choice" type="select" label="Data type">
                 <option value="publications">Full text publications and figures</option>
                 <option value="abstracts">Abstracts</option>
                 <option value="pdfs">PDFs</option>
@@ -102,24 +102,18 @@ pdfs = pmc.get_pdfs()
     </inputs>
 
     <outputs>
-        <when value="publications">
-            <collection name="text" type="list" label="Downloaded publication text">
-                <discover_datasets pattern="(?P&lt;designation&gt;.*)$" format="txt" visible="false" />
-            </collection>
-            <collection name="figures" type="list" label="Downloaded figures">
-                <discover_datasets directory="figures" pattern="(?P&lt;designation&gt;.*)$" format="data" visible="false" />
-            </collection>
-        </when>
-        <when value="abstracts">
-            <collection name="text" type="list" label="Downloaded abstracts">
-                <discover_datasets pattern="(?P&lt;designation&gt;.*)$" format="txt" visible="false" />
-            </collection>
-        </when>
-        <when value="pdfs">
-            <collection name="pdfs" type="list" label="Downloaded PDFs">
-                <discover_datasets pattern="(?P&lt;designation&gt;.*)$" format="pdf" visible="false" />
-            </collection>
-        </when>
+        <collection name="text" type="list" label="Downloaded publication text">
+            <filter>data_type['type_choice'] == 'publications' or data_type['type_choice'] == 'abstracts'</filter>
+            <discover_datasets pattern="(?P&lt;designation&gt;.*)\.txt$" format="txt" />
+        </collection>
+        <collection name="figures" type="list" label="Downloaded figures">
+            <filter>data_type['type_choice'] == 'publications'</filter>
+            <discover_datasets directory="figures" pattern="(?P&lt;designation&gt;.*)$" format="data" />
+        </collection>
+        <collection name="pdfs" type="list" label="Downloaded PDFs">
+            <filter>data_type['type_choice'] == 'pdfs'</filter>
+            <discover_datasets pattern="(?P&lt;designation&gt;.*)\.pdf$" format="pdf" />
+        </collection>
     </outputs>
 
     <tests>
@@ -127,17 +121,17 @@ pdfs = pmc.get_pdfs()
             <conditional name="data_type">
                 <param name="type_choice" value="publications"/>
                 <param name="input_file" value="test-data/ids.txt"/>
-                <output_collection name="full_texts" type="list" count="2"/>
+                <output_collection name="text" type="list" count="2"/>
             </conditional>
             <conditional name="data_type">
                 <param name="type_choice" value="abstracts"/>
                 <param name="input_file" value="test-data/ids.txt"/>
-                <output_collection name="full_texts" type="list" count="2"/>
+                <output_collection name="text" type="list" count="2"/>
             </conditional>
             <conditional name="data_type">
                 <param name="type_choice" value="pdfs"/>
                 <param name="input_file" value="test-data/ids.txt"/>
-                <output_collection name="full_texts" type="list" count="2"/>
+                <output_collection name="pdfs" type="list" count="2"/>
             </conditional>
         </test>
     </tests>
