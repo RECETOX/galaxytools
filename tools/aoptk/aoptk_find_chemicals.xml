@@ -22,7 +22,7 @@ from aoptk.literature.pymupdf_parser import PymupdfParser
 publication_id = os.path.splitext("$input_file.element_identifier")[0]
 
 if "${input_file.ext}" == "pdf":
-    text = PymupdfParser([PDF("$input_file")]).get_publications()[0].full_text
+    text = PymupdfParser([PDF("$input_file")]).inject_text_generation(TextGenerationAPI(model="qwen3.5")).get_publications()[0].full_text
 elif "${input_file.ext}" == "txt":
     with open("$input_file", "r") as f_in:
         text = f_in.read()

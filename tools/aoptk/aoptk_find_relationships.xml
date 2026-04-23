@@ -18,7 +18,7 @@ from aoptk.relationship_type import Causative
 from aoptk.relationship_type import Inhibitive
 
 if "${input_file.ext}" == "pdf":
-    text = PymupdfParser([PDF("$input_file")]).inject_text_generation(TextGenerationAPI(model="redhatai-scout")).get_publications()[0].full_text
+    text = PymupdfParser([PDF("$input_file")]).inject_text_generation(TextGenerationAPI(model="qwen3.5")).get_publications()[0].full_text
 
 elif "${input_file.ext}" == "txt":
     with open("$input_file", "r") as f_in:

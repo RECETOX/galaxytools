@@ -20,14 +20,16 @@ from aoptk.literature.pymupdf_parser import PymupdfParser
 from aoptk.text_generation_api import TextGenerationAPI
 import os
 
+litellm_config_file = os.environ.get("LITELLM_CONFIG_FILE")
+if not litellm_config_file:
+    sys.exit("LITELLM_CONFIG_FILE environment variable is not set.")
+with open(litellm_config_file, "r") as f:
+    config = yaml.safe_load(f)
+litellm_api_key = source.get("LITELLM_API_KEY")
+
 publication_id = os.path.splitext("$input_file.element_identifier")[0]
 if "${input_file.ext}" == "pdf":
-    parser = PymupdfParser([PDF("$input_file")])
-    if os.environ.get("OPENAI_KEY"):
-        parser = parser.inject_text_generation(TextGenerationAPI(model="$llm_models_images", api_key=os.environ.get("OPENAI_KEY")))
-
-    pdf = parser.get_publications()
-    text = pdf[0].full_text
+    text = PymupdfParser([PDF("$input_file")]).inject_text_generation(TextGenerationAPI(model="qwen3.5")).get_publications()[0].full_text
     with open(f"{publication_id}.txt", "w") as f:
         f.write(text)
 
