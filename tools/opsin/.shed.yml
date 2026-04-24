@@ -1,0 +1,13 @@
+name: opsin
+owner: recetox
+description: OPSIN - Open Parser for Systematic IUPAC Nomenclature. Converts IUPAC names to SMILES.
+long_description: |
+    OPSIN converts IUPAC names of chemical compounds to SMILES representations.
+    Input can be a plain text file with one IUPAC name per line, or a tabular file
+    with a column containing IUPAC names.
+categories:
+  - Metabolomics
+  - Cheminformatics
+remote_repository_url: "https://github.com/RECETOX/galaxytools/tree/master/tools/opsin"
+homepage_url: "https://github.com/dan2097/opsin"
+type: unrestricted

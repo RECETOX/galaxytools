@@ -1,0 +1,35 @@
+<macros>
+    <token name="@TOOL_VERSION@">2.8.0</token>
+
+    <xml name="creator">
+        <creator>
+            <organization
+                url="https://www.recetox.muni.cz/"
+                email="GalaxyToolsDevelopmentandDeployment@space.muni.cz"
+                name="RECETOX MUNI" />
+        </creator>
+    </xml>
+
+    <token name="@HELP@"><![CDATA[
+        **OPSIN: Open Parser for Systematic IUPAC Nomenclature**
+
+        OPSIN converts IUPAC names of chemical compounds to SMILES representations.
+
+        **Inputs**
+
+        - A plain text file with one IUPAC name per line, **or**
+        - A tabular file with a column containing IUPAC names (select the column using the column selector).
+
+        **Outputs**
+
+        - If the input is a plain text file, the output is an SMI file with one SMILES per line.
+        - If the input is a tabular file, the output is the same tabular file with a new ``SMILES`` column appended.
+
+        Names that cannot be parsed will result in an empty SMILES string for that entry.
+
+        **References**
+
+        - Lowe, D. M., Corbett, P. T., Murray-Rust, P., & Glen, R. C. (2011). Chemical Name to Structure: OPSIN, an Open Source Solution. *Journal of Chemical Information and Modeling*, 51(3), 739-753. https://doi.org/10.1021/ci100384d
+    ]]>
+    </token>
+</macros>

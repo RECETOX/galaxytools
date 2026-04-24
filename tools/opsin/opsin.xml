@@ -1,0 +1,85 @@
+<tool id="opsin" name="OPSIN" version="@TOOL_VERSION@+galaxy0" profile="21.09">
+    <description>convert IUPAC names to SMILES</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="creator"/>
+    <requirements>
+        <requirement type="package" version="@TOOL_VERSION@">opsin</requirement>
+        <requirement type="package" version="2.2.3">pandas</requirement>
+    </requirements>
+    <required_files>
+        <include path="opsin_wrapper.py"/>
+    </required_files>
+    <command detect_errors="exit_code"><![CDATA[
+        python3 '$__tool_directory__/opsin_wrapper.py'
+            --input '$input_opts.input'
+            --input_format '$input_opts.input_type'
+            --output '$output'
+            #if $input_opts.input_type == 'tabular':
+                --column '$input_opts.column'
+            #end if
+    ]]></command>
+    <inputs>
+        <conditional name="input_opts">
+            <param name="input_type" type="select" label="Input type">
+                <option value="txt" selected="true">Text file (one IUPAC name per line)</option>
+                <option value="tabular">Tabular file</option>
+            </param>
+            <when value="txt">
+                <param name="input" type="data" format="txt" label="Input file"
+                       help="Plain text file with one IUPAC name per line."/>
+            </when>
+            <when value="tabular">
+                <param name="input" type="data" format="tabular" label="Input file"
+                       help="Tabular file containing a column with IUPAC names."/>
+                <param name="column" type="data_column" data_ref="input" use_header_names="true"
+                       label="Column with IUPAC names"
+                       help="Select the column that contains the IUPAC chemical names."/>
+            </when>
+        </conditional>
+    </inputs>
+    <outputs>
+        <data name="output" format="smi" label="OPSIN on ${on_string}">
+            <change_format>
+                <when input="input_opts.input_type" value="tabular" format="tabular"/>
+            </change_format>
+        </data>
+    </outputs>
+    <tests>
+        <test>
+            <conditional name="input_opts">
+                <param name="input_type" value="txt"/>
+                <param name="input" value="iupac_names.txt" ftype="txt"/>
+            </conditional>
+            <output name="output" ftype="smi">
+                <assert_contents>
+                    <has_text text="CO"/>
+                    <has_text text="CCO"/>
+                </assert_contents>
+            </output>
+        </test>
+        <test>
+            <conditional name="input_opts">
+                <param name="input_type" value="tabular"/>
+                <param name="input" value="compounds.tabular" ftype="tabular"/>
+                <param name="column" value="1"/>
+            </conditional>
+            <output name="output" ftype="tabular">
+                <assert_contents>
+                    <has_text text="SMILES"/>
+                    <has_text text="CCO"/>
+                    <has_text text="CCCO"/>
+                </assert_contents>
+            </output>
+        </test>
+    </tests>
+    <help>
+        <![CDATA[
+            @HELP@
+        ]]>
+    </help>
+    <citations>
+        <citation type="doi">10.1021/ci100384d</citation>
+    </citations>
+</tool>
