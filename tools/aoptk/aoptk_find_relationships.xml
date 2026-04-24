@@ -130,10 +130,10 @@ with open("relationships.tsv", "w") as f_out:
             <param name="input_images" type="data_collection" collection_type="list" format="png,jpg,jpeg,gif,tif,tiff,bmp,webp" label="Images to analyze" help="Input collection (folder) of image files." />
         </when>
         <when value="zero_shot_classification">
-            <param name="input_file" type="data" format="txt,pdf" label="Text to analyze" help="Input text file or PDF." />
-            <param name="chemicals" type="data" format="tabular" label="Chemicals" help="Input TSV with chemicals." />
             <expand macro="effect"/>
             <expand macro="relationship_type"/>
+            <param name="input_file" type="data" format="txt,pdf" label="Text to analyze" help="Input text file or PDF." />
+            <param name="chemicals" type="data" format="tabular" label="Chemicals" help="Input TSV with chemicals." />
         </when>
         </conditional>
     </inputs>
