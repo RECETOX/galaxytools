@@ -40,15 +40,11 @@ chemical_list = pd.read_csv("$chemical_list", sep="\t")["chemical"].tolist()
 chemicals["chemical"] = chemicals["chemical"].apply(
     lambda x: TextGenerationAPI(model="$llm_models", api_key=litellm_api_key).normalize_chemical(chemical=Chemical(x), chemical_list=[Chemical(chem) for chem in chemical_list])
     )
-#end if
-
-#elif $normalization_method.method == "pubchem":
+#elif $normalization_method.method == "pubchem"
 chemicals["chemical"] = chemicals["chemical"].apply(
     lambda x: PubChemAPI().normalize_chemical(Chemical(x))
     )
-#end if
-
-#elif $normalization_method.method == "mesh":
+#elif $normalization_method.method == "mesh"
 mesh_terms_xml = pd.read_xml("$input_xml")
 mesh_terms_df = ProvideMeshTermDataframeFromXML(mesh_terms_xml)
 chemicals["chemical"] = chemicals["chemical"].apply(

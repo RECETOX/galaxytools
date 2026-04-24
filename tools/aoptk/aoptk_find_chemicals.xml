@@ -45,10 +45,7 @@ with open(litellm_config_file, "r") as f:
 litellm_api_key = os.environ.get("LITELLM_API_KEY")
 
 chemicals = TextGenerationAPI(model="$llm_models", api_key=litellm_api_key).find_chemicals(text)
-#end if
-
-
-#elif $identification_method.method == "scispacy":
+#elif $identification_method.method == "scispacy"
 chemicals = SpacyText().find_chemical(text)
 #end if
 
