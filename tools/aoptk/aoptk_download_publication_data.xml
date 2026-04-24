@@ -47,6 +47,7 @@ for publication in publications:
 
 
 #if $data_type.type_choice == "abstracts":
+from aoptk.literature.databases.pubmed import PubMed
 from aoptk.literature.databases.europepmc import EuropePMC
 from Bio import Entrez
 

@@ -20,7 +20,7 @@ def join_unique(series):
     values = series.dropna().astype(str).str.strip()
     return ";".join(pd.unique(values))
 
-output = pd.read_csv("$input_file", sep="\t")\
+output = pd.read_csv("$input_file", sep="\t")
 
 file_name = output["effect"].unique()[0].strip().lower().replace(" ", "_")
 
@@ -37,7 +37,7 @@ for relationship in relationships:
     result.rename(columns={"hits": f"{relationship}", "ids": f"{relationship} IDs"}, inplace=True)
     final_output = final_output.merge(result, on="heading", how="left")
 
-final_output.to_excel(f"./{file_name}.xlsx", index=False)
+final_output.to_excel("./final_output.xlsx", index=False)
 
 
 </configfile>

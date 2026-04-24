@@ -15,12 +15,15 @@
 <configfiles>
 <configfile name="normalize_chemicals">
 import os
+import sys
+
 import pandas as pd
+import yaml
 from aoptk.chemical import Chemical
 
 chemicals = pd.read_csv("$input_file", sep="\t")
 
-#if $normalization_method.type_choice == "llm":
+#if $normalization_method.method == "llm":
 from aoptk.text_generation_api import TextGenerationAPI
 
 litellm_config_file = os.environ.get("LITELLM_CONFIG_FILE")
@@ -28,7 +31,7 @@ if not litellm_config_file:
     sys.exit("LITELLM_CONFIG_FILE environment variable is not set.")
 with open(litellm_config_file, "r") as f:
     config = yaml.safe_load(f)
-litellm_api_key = source.get("LITELLM_API_KEY")
+litellm_api_key = os.environ.get("LITELLM_API_KEY")
 
 
 chemical_list = pd.read_csv("$chemical_list", sep="\t")["chemical"].tolist()
@@ -37,7 +40,7 @@ chemicals["chemical"] = chemicals["chemical"].apply(
     )
 #end if
 
-#else if $normalization_method.type_choice == "pubchem":
+#else if $normalization_method.method == "pubchem":
 from aoptk.normalization.pubchem_api import PubChemAPI
 
 chemicals["chemical"] = chemicals["chemical"].apply(
@@ -45,11 +48,11 @@ chemicals["chemical"] = chemicals["chemical"].apply(
     )
 #end if
 
-#else if $normalization_method.type_choice == "mesh":
+#else if $normalization_method.method == "mesh":
 from aoptk.normalization.mesh_terms import MeshTerms
 from aoptk.normalization.provide_mesh_term_dataframe_from_xml import ProvideMeshTermDataframeFromXML
 
-mesh_terms_xml = pd.read_csv("$input_xml", sep="\t")
+mesh_terms_xml = pd.read_xml("$input_xml")
 mesh_terms_df = ProvideMeshTermDataframeFromXML(mesh_terms_xml)
 chemicals["chemical"] = chemicals["chemical"].apply(
     lambda x: MeshTerms(mesh_terms=mesh_terms_df).normalize_chemical(Chemical(x))
@@ -95,7 +98,7 @@ chemicals.to_csv("normalized_chemicals.tsv", sep="\t", index=False)
     <tests>
         <test>
             <conditional name="normalization_method">
-                <param name="type_choice" value="llm"/>
+                <param name="method" value="llm"/>
                 <param name="chemicals" value="test-data/chemicals.tsv"/>
                 <param name="chemical_list" value="test-data/chemicals.tsv"/>
                 <output name="normalized_chemicals" file="test-data/normalized.tsv" compare="sim_size" delta="100"/>
@@ -103,14 +106,14 @@ chemicals.to_csv("normalized_chemicals.tsv", sep="\t", index=False)
         </test>
         <test>
             <conditional name="normalization_method">
-                <param name="type_choice" value="pubchem"/>
+                <param name="method" value="pubchem"/>
                 <param name="input_file" value="test-data/chemicals.tsv"/>
                 <output name="normalized_chemicals" file="test-data/normalized.tsv" compare="sim_size" delta="100"/>
             </conditional>
         </test>
         <test>
             <conditional name="normalization_method">
-                <param name="type_choice" value="mesh"/>
+                <param name="method" value="mesh"/>
                 <param name="input_file" value="test-data/chemicals.tsv"/>
                 <param name="input_xml" value="test-data/mesh_terms_database.xml"/>
                 <output name="normalized_chemicals" file="test-data/normalized.tsv" compare="sim_size" delta="100"/>

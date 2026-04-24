@@ -15,9 +15,13 @@
 <configfiles>
 <configfile name="find_chemicals">
 import os
+import sys
+
 import pandas as pd
+import yaml
 from aoptk.literature.pdf import PDF
 from aoptk.literature.pymupdf_parser import PymupdfParser
+from aoptk.text_generation_api import TextGenerationAPI
 
 publication_id = os.path.splitext("$input_file.element_identifier")[0]
 
@@ -27,35 +31,34 @@ elif "${input_file.ext}" == "txt":
     with open("$input_file", "r") as f_in:
         text = f_in.read()
 else:
-    raise ValueError(f"Unsupported input file format: {input_ext}")
+    raise ValueError(f"Unsupported input file format: ${input_file.ext}")
 
 
-#if $identification_method.type_choice == "llm":
-from aoptk.text_generation_api import TextGenerationAPI
+#if $identification_method.method == "llm":
 
 litellm_config_file = os.environ.get("LITELLM_CONFIG_FILE")
 if not litellm_config_file:
     sys.exit("LITELLM_CONFIG_FILE environment variable is not set.")
 with open(litellm_config_file, "r") as f:
     config = yaml.safe_load(f)
-litellm_api_key = source.get("LITELLM_API_KEY")
+litellm_api_key = os.environ.get("LITELLM_API_KEY")
 
 chemicals = TextGenerationAPI(model="$llm_model", api_key=litellm_api_key).find_chemicals(text)
 #end if
 
 
-#else if $identification_method.type_choice == "scispacy":
+#else if $identification_method.method == "scispacy":
 from aoptk.spacy_text_processor import SpacyText
 
 chemicals = SpacyText().find_chemical(text)
 #end if
 
-with open(f"chemicals_{publication_id}.tsv", "w") as f_out:
+with open("chemicals.tsv", "w") as f_out:
     f_out.write("chemical\n")
     for chemical in chemicals:
         f_out.write(f"{chemical.name}\n")
 
-</configfile>s
+</configfile>
 </configfiles>
 
     <inputs>
@@ -85,15 +88,15 @@ with open(f"chemicals_{publication_id}.tsv", "w") as f_out:
     <tests>
         <test>
             <conditional name="identification_method">
-                <param name="type_choice" value="llm"/>
-                <param name="input_file" value="test-data/text.tsv"/>
+                <param name="method" value="llm"/>
+                <param name="input_file" value="test-data/text.txt"/>
                 <output name="chemicals" file="chemicals.tsv" compare="sim_size" delta="100"/>
             </conditional>
         </test>
         <test>
             <conditional name="identification_method">
-                <param name="type_choice" value="scispacy"/>
-                <param name="input_file" value="test-data/text.tsv"/>
+                <param name="method" value="scispacy"/>
+                <param name="input_file" value="test-data/text.txt"/>
                 <output name="chemicals" file="chemicals.tsv" compare="sim_size" delta="100"/>
             </conditional>
         </test>

@@ -6,7 +6,6 @@
 
     <requirements>
         <expand macro="requirements"/>
-        <expand macro="openai_api_key_credentials"/>
     </requirements>
  
     <command detect_errors="exit_code"><![CDATA[
@@ -15,17 +14,20 @@
 
 <configfiles>
 <configfile name="parse_pdf">
+import os
+import sys
+
+import yaml
 from aoptk.literature.pdf import PDF
 from aoptk.literature.pymupdf_parser import PymupdfParser
 from aoptk.text_generation_api import TextGenerationAPI
-import os
 
 litellm_config_file = os.environ.get("LITELLM_CONFIG_FILE")
 if not litellm_config_file:
     sys.exit("LITELLM_CONFIG_FILE environment variable is not set.")
 with open(litellm_config_file, "r") as f:
     config = yaml.safe_load(f)
-litellm_api_key = source.get("LITELLM_API_KEY")
+litellm_api_key = os.environ.get("LITELLM_API_KEY")
 
 publication_id = os.path.splitext("$input_file.element_identifier")[0]
 if "${input_file.ext}" == "pdf":
@@ -40,7 +42,6 @@ else:
 
     <inputs>
         <param name="input_file" type="data" format="pdf" label="PDF to parse" help="Input PDF." />
-        <expand macro="llm_models_images"/>
     </inputs>
 
     <outputs>

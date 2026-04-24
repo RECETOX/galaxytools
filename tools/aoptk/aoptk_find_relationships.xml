@@ -14,6 +14,16 @@
 
 <configfiles>
 <configfile name="find_relationships">
+import os
+import sys
+from pathlib import Path
+
+import pandas as pd
+import yaml
+
+from aoptk.literature.pdf import PDF
+from aoptk.literature.pymupdf_parser import PymupdfParser
+from aoptk.text_generation_api import TextGenerationAPI
 from aoptk.relationship_type import Causative
 from aoptk.relationship_type import Inhibitive
 
@@ -27,7 +37,6 @@ elif "${input_file.ext}" == "txt":
 else:
     raise ValueError(f"Unsupported input file format: ${input_file.ext}")
 
-chemicals = pd.read_csv("$chemicals", sep="\t")["chemical"].tolist()
 publication_id = os.path.splitext("$input_file.element_identifier")[0]
 effects = ["${effect}"]
 
@@ -38,37 +47,42 @@ elif "$relationship_type" == "inhibitive":
 else:
     raise ValueError(f"Unsupported relationship type: ${relationship_type}")
 
-#if $identification_method.type_choice == "llm_text" or if $identification_method.type_choice == "llm_text_images":
-from aoptk.text_generation_api import TextGenerationAPI
+#if $identification_method.method == "llm_text" or $identification_method.method == "llm_text_images"
+chemicals = pd.read_csv("$chemicals", sep="\t")["chemical"].tolist()
 
 litellm_config_file = os.environ.get("LITELLM_CONFIG_FILE")
 if not litellm_config_file:
     sys.exit("LITELLM_CONFIG_FILE environment variable is not set.")
 with open(litellm_config_file, "r") as f:
     config = yaml.safe_load(f)
-litellm_api_key = source.get("LITELLM_API_KEY")
+litellm_api_key = os.environ.get("LITELLM_API_KEY")
+if not litellm_api_key and isinstance(config, dict):
+    env_vars = config.get("environment_variables", {})
+    litellm_api_key = env_vars.get("LITELLM_API_KEY")
+if not litellm_api_key:
+    sys.exit("LITELLM_API_KEY is not set. Configure it in Galaxy secrets/environment.")
 #end if
 
-    #if $identification_method.type_choice == "llm_text"
-    relationships = TextGenerationAPI(model="$llm_model", api_key=litellm_api_key).find_relationships_in_text(text=text, chemicals=chemicals, effects=effects, relationship_type=relationship_type)
-    #end if
+#if $identification_method.method == "llm_text"
+relationships = TextGenerationAPI(model="$llm_models", api_key=litellm_api_key).find_relationships_in_text(text=text, chemicals=chemicals, effects=effects, relationship_type=relationship_type)
+#end if
 
 
-    #if $identification_method.type_choice == "llm_text_images":
-    text_with_images = text
-    text_with_images += "\n\n\n\nALSO ANALYZE THESE FIGURES CONVERTED TO TEXT:"
-    for figure in "$input_images".iterdir():
-        text_image = TextGenerationAPI(model="$llm_models_images").convert_image(
-            image_path=figure,
-            text=text,
-        )
-        text_with_images += f"\n\n{figure.name}:\n{text_image}"
+#if $identification_method.method == "llm_text_images"
+text_with_images = text
+text_with_images += "\n\n\n\nALSO ANALYZE THESE FIGURES CONVERTED TO TEXT:"
+for figure in Path("$input_images").iterdir():
+    text_image = TextGenerationAPI(model="$llm_models_images", api_key=litellm_api_key).convert_image(
+        image_path=figure,
+        text=text,
+    )
+    text_with_images += f"\n\n{figure.name}:\n{text_image}"
 
-    relationships = TextGenerationAPI(model="$llm_model", api_key=litellm_api_key).find_relationships_in_text(text=text_with_images, chemicals=chemicals, effects=effects, relationship_type=relationship_type)
-    #end if
+relationships = TextGenerationAPI(model="$llm_models", api_key=litellm_api_key).find_relationships_in_text(text=text_with_images, chemicals=chemicals, effects=effects, relationship_type=relationship_type)
+#end if
 
-#if $identification_method.type_choice == "zero_shot_classification":
-import sys
+#if $identification_method.method == "zero_shot_classification"
+chemicals = pd.read_csv("$chemicals", sep="\t")["chemical"].tolist()
 
 if len(text) > 3000:
     raise ValueError("Input text is very long. Consider using the LLM-based method for better performance.")
@@ -78,13 +92,11 @@ os.makedirs(os.environ["TORCHINDUCTOR_CACHE_DIR"], exist_ok=True)
 
 from aoptk.spacy_text_processor import SpacyText
 from aoptk.relationships.zero_shot_classification_single import ZeroShotClassificationSingle
-from aoptk.literature.pdf import PDF
-from aoptk.literature.pymupdf_parser import PymupdfParser
 
-relationships = ZeroShotClassificationSingle().find_relationships(text=text, chemicals=chemicals, effects=effects, relationship_type=relationship_type))
+relationships = ZeroShotClassificationSingle().find_relationships(text=text, chemicals=chemicals, effects=effects, relationship_type=relationship_type)
 #end if
 
-with open(f"relationships_{publication_id}.tsv", "w") as f_out:
+with open("relationships.tsv", "w") as f_out:
     f_out.write("id\tchemical\teffect\trelationship\n")
     for relationship in relationships:
         f_out.write(f"{publication_id}\t{relationship.chemical}\t{relationship.effect}\t{relationship.relationship_type}\n")
@@ -115,10 +127,12 @@ with open(f"relationships_{publication_id}.tsv", "w") as f_out:
             <expand macro="relationship_type"/>
             <expand macro="prompt_specification"/>
             <param name="input_file" type="data" format="txt,pdf" label="Text to analyze" help="Input text file or PDF." />
+            <param name="chemicals" type="data" format="tabular" label="Chemicals" help="Input TSV with chemicals." />
             <param name="input_images" type="data_collection" collection_type="list" format="png,jpg,jpeg,gif,tif,tiff,bmp,webp" label="Images to analyze" help="Input collection (folder) of image files." />
         </when>
         <when value="zero_shot_classification">
             <param name="input_file" type="data" format="txt,pdf" label="Text to analyze" help="Input text file or PDF." />
+            <param name="chemicals" type="data" format="tabular" label="Chemicals" help="Input TSV with chemicals." />
             <expand macro="effect"/>
             <expand macro="relationship_type"/>
         </when>
@@ -132,24 +146,27 @@ with open(f"relationships_{publication_id}.tsv", "w") as f_out:
     <tests>
         <test>
             <conditional name="identification_method">
-                <param name="type_choice" value="llm_text"/>
-                <param name="input_file" value="test-data/text.tsv"/>
+                <param name="method" value="llm_text"/>
+                <param name="input_file" value="test-data/text.txt"/>
+                <param name="chemicals" value="test-data/chemicals.tsv"/>
                 <param name="effect" value="liver fibrosis"/>
                 <output name="relationships" file="relationships.tsv" compare="sim_size" delta="100"/>
             </conditional>
         </test>
         <test>
             <conditional name="identification_method">
-                <param name="type_choice" value="llm_text_images"/>
-                <param name="input_file" value="test-data/text.tsv"/>
+                <param name="method" value="llm_text_images"/>
+                <param name="input_file" value="test-data/text.txt"/>
+                <param name="chemicals" value="test-data/chemicals.tsv"/>
                 <param name="effect" value="liver fibrosis"/>
                 <output name="relationships" file="relationships.tsv" compare="sim_size" delta="100"/>
             </conditional>
         </test>
         <test>
             <conditional name="identification_method">
-                <param name="type_choice" value="zero_shot_classification"/>
-                <param name="input_file" value="test-data/text.tsv"/>
+                <param name="method" value="zero_shot_classification"/>
+                <param name="input_file" value="test-data/text.txt"/>
+                <param name="chemicals" value="test-data/chemicals.tsv"/>
                 <param name="effect" value="liver fibrosis"/>
                 <output name="relationships" file="relationships.tsv" compare="sim_size" delta="100"/>
             </conditional>
