@@ -20,12 +20,14 @@ import sys
 import pandas as pd
 import yaml
 from aoptk.chemical import Chemical
+from aoptk.text_generation_api import TextGenerationAPI
+from aoptk.normalization.pubchem_api import PubChemAPI
+from aoptk.normalization.mesh_terms import MeshTerms
+from aoptk.normalization.provide_mesh_term_dataframe_from_xml import ProvideMeshTermDataframeFromXML
 
 chemicals = pd.read_csv("$input_file", sep="\t")
 
 #if $normalization_method.method == "llm":
-from aoptk.text_generation_api import TextGenerationAPI
-
 litellm_config_file = os.environ.get("LITELLM_CONFIG_FILE")
 if not litellm_config_file:
     sys.exit("LITELLM_CONFIG_FILE environment variable is not set.")
@@ -36,22 +38,17 @@ litellm_api_key = os.environ.get("LITELLM_API_KEY")
 
 chemical_list = pd.read_csv("$chemical_list", sep="\t")["chemical"].tolist()
 chemicals["chemical"] = chemicals["chemical"].apply(
-    lambda x: TextGenerationAPI(model="$llm_model", api_key=litellm_api_key).normalize_chemical(chemical=Chemical(x), chemical_list=[Chemical(chem) for chem in chemical_list])
+    lambda x: TextGenerationAPI(model="$llm_models", api_key=litellm_api_key).normalize_chemical(chemical=Chemical(x), chemical_list=[Chemical(chem) for chem in chemical_list])
     )
 #end if
 
-#else if $normalization_method.method == "pubchem":
-from aoptk.normalization.pubchem_api import PubChemAPI
-
+#elif $normalization_method.method == "pubchem":
 chemicals["chemical"] = chemicals["chemical"].apply(
     lambda x: PubChemAPI().normalize_chemical(Chemical(x))
     )
 #end if
 
-#else if $normalization_method.method == "mesh":
-from aoptk.normalization.mesh_terms import MeshTerms
-from aoptk.normalization.provide_mesh_term_dataframe_from_xml import ProvideMeshTermDataframeFromXML
-
+#elif $normalization_method.method == "mesh":
 mesh_terms_xml = pd.read_xml("$input_xml")
 mesh_terms_df = ProvideMeshTermDataframeFromXML(mesh_terms_xml)
 chemicals["chemical"] = chemicals["chemical"].apply(

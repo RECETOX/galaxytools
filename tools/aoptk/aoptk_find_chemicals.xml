@@ -22,6 +22,7 @@ import yaml
 from aoptk.literature.pdf import PDF
 from aoptk.literature.pymupdf_parser import PymupdfParser
 from aoptk.text_generation_api import TextGenerationAPI
+from aoptk.spacy_text_processor import SpacyText
 
 publication_id = os.path.splitext("$input_file.element_identifier")[0]
 
@@ -43,13 +44,11 @@ with open(litellm_config_file, "r") as f:
     config = yaml.safe_load(f)
 litellm_api_key = os.environ.get("LITELLM_API_KEY")
 
-chemicals = TextGenerationAPI(model="$llm_model", api_key=litellm_api_key).find_chemicals(text)
+chemicals = TextGenerationAPI(model="$llm_models", api_key=litellm_api_key).find_chemicals(text)
 #end if
 
 
-#else if $identification_method.method == "scispacy":
-from aoptk.spacy_text_processor import SpacyText
-
+#elif $identification_method.method == "scispacy":
 chemicals = SpacyText().find_chemical(text)
 #end if
 
@@ -104,7 +103,7 @@ with open("chemicals.tsv", "w") as f_out:
 
     <help><![CDATA[
 Chemical Identification
-===================
+=======================
 
 Tools to identify chemical entities in a given text.
 

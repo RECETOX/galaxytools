@@ -26,6 +26,8 @@ from aoptk.literature.pymupdf_parser import PymupdfParser
 from aoptk.text_generation_api import TextGenerationAPI
 from aoptk.relationship_type import Causative
 from aoptk.relationship_type import Inhibitive
+from aoptk.spacy_text_processor import SpacyText
+from aoptk.relationships.zero_shot_classification_single import ZeroShotClassificationSingle
 
 if "${input_file.ext}" == "pdf":
     text = PymupdfParser([PDF("$input_file")]).inject_text_generation(TextGenerationAPI(model="qwen3.5")).get_publications()[0].full_text
@@ -89,9 +91,6 @@ if len(text) > 3000:
 
 os.environ.setdefault("TORCHINDUCTOR_CACHE_DIR", os.path.join(os.getcwd(), ".torchinductor_cache"))
 os.makedirs(os.environ["TORCHINDUCTOR_CACHE_DIR"], exist_ok=True)
-
-from aoptk.spacy_text_processor import SpacyText
-from aoptk.relationships.zero_shot_classification_single import ZeroShotClassificationSingle
 
 relationships = ZeroShotClassificationSingle().find_relationships(text=text, chemicals=chemicals, effects=effects, relationship_type=relationship_type)
 #end if
