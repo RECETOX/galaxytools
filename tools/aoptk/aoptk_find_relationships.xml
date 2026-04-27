@@ -29,8 +29,15 @@ from aoptk.relationship_type import Inhibitive
 from aoptk.spacy_text_processor import SpacyText
 from aoptk.relationships.zero_shot_classification_single import ZeroShotClassificationSingle
 
+litellm_config_file = os.environ.get("LITELLM_CONFIG_FILE")
+if not litellm_config_file:
+    sys.exit("LITELLM_CONFIG_FILE environment variable is not set.")
+with open(litellm_config_file, "r") as f:
+    config = yaml.safe_load(f)
+litellm_api_key = os.environ.get("LITELLM_API_KEY")
+
 if "${input_file.ext}" == "pdf":
-    text = PymupdfParser([PDF("$input_file")]).inject_text_generation(TextGenerationAPI(model="qwen3.5")).get_publications()[0].full_text
+    text = PymupdfParser([PDF("$input_file")], text_generation=TextGenerationAPI(model="qwen3.5")).get_publications()[0].full_text
 
 elif "${input_file.ext}" == "txt":
     with open("$input_file", "r") as f_in:
@@ -52,17 +59,6 @@ else:
 #if $identification_method.method == "llm_text" or $identification_method.method == "llm_text_images"
 chemicals = pd.read_csv("$chemicals", sep="\t")["chemical"].tolist()
 
-litellm_config_file = os.environ.get("LITELLM_CONFIG_FILE")
-if not litellm_config_file:
-    sys.exit("LITELLM_CONFIG_FILE environment variable is not set.")
-with open(litellm_config_file, "r") as f:
-    config = yaml.safe_load(f)
-litellm_api_key = os.environ.get("LITELLM_API_KEY")
-if not litellm_api_key and isinstance(config, dict):
-    env_vars = config.get("environment_variables", {})
-    litellm_api_key = env_vars.get("LITELLM_API_KEY")
-if not litellm_api_key:
-    sys.exit("LITELLM_API_KEY is not set. Configure it in Galaxy secrets/environment.")
 #end if
 
 #if $identification_method.method == "llm_text"

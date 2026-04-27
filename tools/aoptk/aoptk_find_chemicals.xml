@@ -26,8 +26,15 @@ from aoptk.spacy_text_processor import SpacyText
 
 publication_id = os.path.splitext("$input_file.element_identifier")[0]
 
+litellm_config_file = os.environ.get("LITELLM_CONFIG_FILE")
+if not litellm_config_file:
+    sys.exit("LITELLM_CONFIG_FILE environment variable is not set.")
+with open(litellm_config_file, "r") as f:
+    config = yaml.safe_load(f)
+litellm_api_key = os.environ.get("LITELLM_API_KEY")
+
 if "${input_file.ext}" == "pdf":
-    text = PymupdfParser([PDF("$input_file")]).inject_text_generation(TextGenerationAPI(model="qwen3.5")).get_publications()[0].full_text
+    text = PymupdfParser([PDF("$input_file")], text_generation=TextGenerationAPI(model="qwen3.5")).get_publications()[0].full_text
 elif "${input_file.ext}" == "txt":
     with open("$input_file", "r") as f_in:
         text = f_in.read()
@@ -36,13 +43,6 @@ else:
 
 
 #if $identification_method.method == "llm":
-
-litellm_config_file = os.environ.get("LITELLM_CONFIG_FILE")
-if not litellm_config_file:
-    sys.exit("LITELLM_CONFIG_FILE environment variable is not set.")
-with open(litellm_config_file, "r") as f:
-    config = yaml.safe_load(f)
-litellm_api_key = os.environ.get("LITELLM_API_KEY")
 
 chemicals = TextGenerationAPI(model="$llm_models", api_key=litellm_api_key).find_chemicals(text)
 #elif $identification_method.method == "scispacy"
