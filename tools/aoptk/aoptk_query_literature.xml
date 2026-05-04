@@ -16,9 +16,6 @@
 
     <configfiles>
         <configfile name="query_literature">
-from aoptk.literature.databases.pubmed import PubMed
-from aoptk.literature.databases.europepmc import EuropePMC
-from aoptk.literature.databases.pmc import PMC
 from Bio import Entrez
 import os
 
@@ -26,12 +23,15 @@ email = os.environ.get("EMAIL")
 api_key = os.environ.get("NCBI_API_KEY")
 
 if "${literature_database_pubmed_europepmc_pmc}" == "pubmed":
+    from aoptk.literature.databases.pubmed import PubMed
     Entrez.email = email
     Entrez.api_key = api_key
     ids = PubMed("${query}").get_id()
 elif "${literature_database_pubmed_europepmc_pmc}" == "europepmc":
+    from aoptk.literature.databases.europepmc import EuropePMC
     ids = EuropePMC("${query}").get_id()
 elif "${literature_database_pubmed_europepmc_pmc}" == "pmc":
+    from aoptk.literature.databases.pmc import PMC
     Entrez.email = email
     Entrez.api_key = api_key
     ids = PMC("${query}").get_id()
@@ -52,7 +52,7 @@ with open(f"ids.txt", "w") as f:
     </inputs>
 
     <outputs>
-        <data name="ids" format="txt" from_work_dir="ids.txt" label="List of IDs." />
+        <data name="ids" format="txt" from_work_dir="ids.txt" label="Query ${query} on ${literature_database_pubmed_europepmc_pmc}" />
     </outputs>
 
     <tests>
