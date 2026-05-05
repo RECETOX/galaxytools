@@ -61,19 +61,19 @@ chemicals.to_csv("normalized_chemicals.tsv", sep="\t", index=False)
     <inputs>
         <conditional name="normalization_method">
             <param name="method" type="select" label="Normalization Method">
-                <option value="llm">Large Language Models</option>
                 <option value="pubchem">PubChem Synonyms</option>
+                <option value="llm">Large Language Models</option>
                 <option value="mesh">MeSH Terms</option>
             </param>
+
+        <when value="pubchem">
+            <param name="input_file" type="data" format="tabular" label="TSV with chemical column." help="Input tsv file with chemical column." />
+        </when>
         
         <when value="llm">
             <expand macro="llm_models"/>
             <param name="chemicals" type="data" format="tabular" label="TSV with chemical column." help="Input tsv file with chemical column." />
             <param name="chemical_list" type="data" format="tabular" label="TSV with chemical list." help="Input tsv file with chemical list." />
-        </when>
-
-        <when value="pubchem">
-            <param name="input_file" type="data" format="tabular" label="TSV with chemical column." help="Input tsv file with chemical column." />
         </when>
 
         <when value="mesh">
