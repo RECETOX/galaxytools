@@ -6,6 +6,7 @@
 
     <requirements>
         <expand macro="requirements"/>
+        <requirement type="package">pyyaml</requirement>
     </requirements>
  
     <command detect_errors="exit_code"><![CDATA[
