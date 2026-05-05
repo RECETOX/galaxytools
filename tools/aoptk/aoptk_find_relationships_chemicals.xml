@@ -7,13 +7,13 @@
     <requirements>
         <expand macro="requirements"/>
     </requirements>
- 
+
     <command detect_errors="exit_code"><![CDATA[
         python3 '${find_relationships_chemicals}'
     ]]></command>
 
-<configfiles>
-<configfile name="find_relationships_chemicals">
+    <configfiles>
+        <configfile name="find_relationships_chemicals">
 import os
 import sys
 from pathlib import Path
@@ -23,11 +23,10 @@ import yaml
 
 from aoptk.literature.pdf import PDF
 from aoptk.literature.pymupdf_parser import PymupdfParser
-from aoptk.text_generation_api import TextGenerationAPI
+from aoptk.effect import Effect
 from aoptk.relationship_type import Causative
 from aoptk.relationship_type import Inhibitive
-from aoptk.spacy_text_processor import SpacyText
-from aoptk.relationships.zero_shot_classification_single import ZeroShotClassificationSingle
+from aoptk.text_generation_api import TextGenerationAPI
 
 litellm_config_file = os.environ.get("LITELLM_CONFIG_FILE")
 if not litellm_config_file:
@@ -37,7 +36,7 @@ with open(litellm_config_file, "r") as f:
 litellm_api_key = os.environ.get("LITELLM_API_KEY")
 
 if "${input_file.ext}" == "pdf":
-    text = PymupdfParser([PDF("$input_file")], text_generation=TextGenerationAPI(model="qwen3.5")).get_publications()[0].full_text
+    text = PymupdfParser([PDF("$input_file")], text_generation=TextGenerationAPI(model="qwen3.5", api_key=litellm_api_key)).get_publications()[0].full_text
 elif "${input_file.ext}" == "txt":
     with open("$input_file", "r") as f_in:
         text = f_in.read()
@@ -45,8 +44,50 @@ else:
     raise ValueError(f"Unsupported input file format: ${input_file.ext}")
 
 publication_id = os.path.splitext("$input_file.element_identifier")[0]
-effects = ["${effect}"]
 
+def write_relationships(relationships):
+    with open("relationships.tsv", "w") as f_out:
+        f_out.write("id\tchemical\teffect\trelationship\n")
+        for relationship in relationships:
+            f_out.write(f"{publication_id}\t{relationship.chemical}\t{relationship.effect}\t{relationship.relationship_type}\n")
+
+
+def write_chemicals(chemicals):
+    with open("chemicals.tsv", "w") as f_out:
+        f_out.write("chemical\n")
+        for chemical in chemicals:
+            chemical_name = chemical.name if hasattr(chemical, "name") else chemical
+            f_out.write(f"{chemical_name}\n")
+
+
+#if $analysis_purpose.method == "relationships_chemicals"
+effects = [Effect("${effect}")]
+if "$relationship_type" == "causative":
+    relationship_type = Causative()
+elif "$relationship_type" == "inhibitive":
+    relationship_type = Inhibitive()
+else:
+    raise ValueError(f"Unsupported relationship type: ${relationship_type}")
+
+chemicals = TextGenerationAPI(model="$llm_models", api_key=litellm_api_key).find_chemicals(text)
+#if $identification_method.method == "llm_text"
+relationships = TextGenerationAPI(model="$llm_models", api_key=litellm_api_key).find_relationships_in_text(text=text, chemicals=chemicals, effects=effects, relationship_type=relationship_type)
+#elif $identification_method.method == "llm_text_images"
+text_with_images = text
+text_with_images += "\n\n\n\nALSO ANALYZE THESE FIGURES CONVERTED TO TEXT:"
+for figure in Path("$input_images").iterdir():
+    text_image = TextGenerationAPI(model="$llm_models_images", api_key=litellm_api_key).convert_image(
+        image_path=figure,
+        text=text,
+    )
+    text_with_images += f"\n\n{figure.name}:\n{text_image}"
+relationships = TextGenerationAPI(model="$llm_models", api_key=litellm_api_key).find_relationships_in_text(text=text_with_images, chemicals=chemicals, effects=effects, relationship_type=relationship_type)
+#end if
+write_relationships(relationships)
+write_chemicals(chemicals)
+
+#elif $analysis_purpose.method == "relationships"
+effects = ["${effect}"]
 if "$relationship_type" == "causative":
     relationship_type = Causative
 elif "$relationship_type" == "inhibitive":
@@ -54,163 +95,148 @@ elif "$relationship_type" == "inhibitive":
 else:
     raise ValueError(f"Unsupported relationship type: ${relationship_type}")
 
-#if $analysis_purpose.method == "relationships_chemicals"
-chemicals = TextGenerationAPI(model="$llm_models", api_key=litellm_api_key).find_chemicals(text)
-    #if $identification_method.method == "llm_text"
-    relationships = TextGenerationAPI(model="$llm_models", api_key=litellm_api_key).find_relationships_in_text(text=text, chemicals=chemicals, effects=effects, relationship_type=relationship_type)
-    #elif $identification_method.method == "llm_text_images"
-    text_with_images = text
-    text_with_images += "\n\n\n\nALSO ANALYZE THESE FIGURES CONVERTED TO TEXT:"
-    for figure in Path("$input_images").iterdir():
-        text_image = TextGenerationAPI(model="$llm_models_images", api_key=litellm_api_key).convert_image(
-            image_path=figure,
-            text=text,
-        )
-    text_with_images += f"\n\n{figure.name}:\n{text_image}"
-    relationships = TextGenerationAPI(model="$llm_models", api_key=litellm_api_key).find_relationships_in_text(text=text_with_images, chemicals=chemicals, effects=effects, relationship_type=relationship_type)
-    #end if
-with open("relationships.tsv", "w") as f_out:
-f_out.write("id\tchemical\teffect\trelationship\n")
-for relationship in relationships:
-    f_out.write(f"{publication_id}\t{relationship.chemical}\t{relationship.effect}\t{relationship.relationship_type}\n")
-with open("chemicals.tsv", "w") as f_out:
-    f_out.write("chemical\n")
-    for chemical in chemicals:
-        f_out.write(f"{chemical.name}\n")
-
-#elif $analysis_purpose.method == "relationships"
 chemicals = pd.read_csv("$chemicals", sep="\t")["chemical"].tolist()
-    #if $identification_method.method == "llm_text"
-    relationships = TextGenerationAPI(model="$llm_models", api_key=litellm_api_key).find_relationships_in_text(text=text, chemicals=chemicals, effects=effects, relationship_type=relationship_type)
-    #elif $identification_method.method == "llm_text_images"
-    text_with_images = text
-    text_with_images += "\n\n\n\nALSO ANALYZE THESE FIGURES CONVERTED TO TEXT:"
-    for figure in Path("$input_images").iterdir():
-        text_image = TextGenerationAPI(model="$llm_models_images", api_key=litellm_api_key).convert_image(
-            image_path=figure,
-            text=text,
-        )
+#if $identification_method.method == "llm_text"
+relationships = TextGenerationAPI(model="$llm_models", api_key=litellm_api_key).find_relationships_in_text(text=text, chemicals=chemicals, effects=effects, relationship_type=relationship_type)
+#elif $identification_method.method == "llm_text_images"
+text_with_images = text
+text_with_images += "\n\n\n\nALSO ANALYZE THESE FIGURES CONVERTED TO TEXT:"
+for figure in Path("$input_images").iterdir():
+    text_image = TextGenerationAPI(model="$llm_models_images", api_key=litellm_api_key).convert_image(
+        image_path=figure,
+        text=text,
+    )
     text_with_images += f"\n\n{figure.name}:\n{text_image}"
-    relationships = TextGenerationAPI(model="$llm_models", api_key=litellm_api_key).find_relationships_in_text(text=text_with_images, chemicals=chemicals, effects=effects, relationship_type=relationship_type)
-    #end if
-with open("relationships.tsv", "w") as f_out:
-    f_out.write("id\tchemical\teffect\trelationship\n")
-    for relationship in relationships:
-        f_out.write(f"{publication_id}\t{relationship.chemical}\t{relationship.effect}\t{relationship.relationship_type}\n")
+relationships = TextGenerationAPI(model="$llm_models", api_key=litellm_api_key).find_relationships_in_text(text=text_with_images, chemicals=chemicals, effects=effects, relationship_type=relationship_type)
+#end if
+write_relationships(relationships)
 
 #elif $analysis_purpose.method == "chemicals"
 chemicals = TextGenerationAPI(model="$llm_models", api_key=litellm_api_key).find_chemicals(text)
-with open("chemicals.tsv", "w") as f_out:
-    f_out.write("chemical\n")
-    for chemical in chemicals:
-        f_out.write(f"{chemical.name}\n")
+write_chemicals(chemicals)
 #end if
 
-
-
-
-with open("relationships.tsv", "w") as f_out:
-    f_out.write("id\tchemical\teffect\trelationship\n")
-    for relationship in relationships:
-        f_out.write(f"{publication_id}\t{relationship.chemical}\t{relationship.effect}\t{relationship.relationship_type}\n")
-
-</configfile>
-</configfiles>
+        </configfile>
+    </configfiles>
 
     <inputs>
         <conditional name="analysis_purpose">
-            <param name="method" type="select" label="Purpsoe of the analysis.">
-                <option value="relationships_chemicals">Indentify chemicals and relationships</option>
+            <param name="method" type="select" label="Purpose of the analysis.">
+                <option value="relationships_chemicals">Identify chemicals and relationships</option>
                 <option value="relationships">Identify relationships, provide your own chemicals</option>
                 <option value="chemicals">Identify chemicals</option>
             </param>
-        
-        <when value="relationships_chemicals">
-            <conditional name="text_figures">
-                <param name="method" type="select" label="Purpsoe of the analysis.">
-                    <option value="text">Large Language Models: Text</option>
-                    <option value="text_figures">Large Language Models: Text and Images</option>
-                </param>
-            <expand macro="llm_models"/>
-            <expand macro="prompt_specification"/>
-            <when value="llm_text_images">
-                <expand macro="llm_models_images"/>
+
+            <when value="relationships_chemicals">
+                <conditional name="identification_method">
+                    <param name="method" type="select" label="Analysis mode.">
+                        <option value="llm_text">Large Language Models: Text</option>
+                        <option value="llm_text_images">Large Language Models: Text and Images</option>
+                    </param>
+                    <when value="llm_text">
+                        <expand macro="llm_models"/>
+                        <expand macro="prompt_specification"/>
+                        <expand macro="effect"/>
+                        <expand macro="relationship_type"/>
+                        <param name="input_file" type="data" format="txt,pdf" label="Text to analyze" help="Input text file or PDF." />
+                    </when>
+                    <when value="llm_text_images">
+                        <expand macro="llm_models"/>
+                        <expand macro="llm_models_images"/>
+                        <expand macro="prompt_specification"/>
+                        <expand macro="effect"/>
+                        <expand macro="relationship_type"/>
+                        <param name="input_file" type="data" format="txt,pdf" label="Text to analyze" help="Input text file or PDF." />
+                        <param name="input_images" type="data_collection" collection_type="list" label="Figure images" help="Collection of figure images to analyze together with the text." />
+                    </when>
+                </conditional>
             </when>
-            <expand macro="effect"/>
-            <expand macro="relationship_type"/>
-            <param name="input_file" type="data" format="txt,pdf" label="Text to analyze" help="Input text file or PDF." />
-        </when>
-        <when value="relationships">
-            <param name="chemicals" type="data" format="tabular" label="Chemicals" help="Input TSV with chemicals." />
-            <conditional name="text_figures">
-                <param name="method" type="select" label="Purpsoe of the analysis.">
-                    <option value="text">Large Language Models: Text</option>
-                    <option value="text_figures">Large Language Models: Text and Images</option>
-                </param>
-            <expand macro="llm_models"/>
-            <expand macro="prompt_specification"/>
-            <when value="llm_text_images">
-                <expand macro="llm_models_images"/>
+
+            <when value="relationships">
+                <param name="chemicals" type="data" format="tabular" label="Chemicals" help="Input TSV with chemicals." />
+                <conditional name="identification_method">
+                    <param name="method" type="select" label="Analysis mode.">
+                        <option value="llm_text">Large Language Models: Text</option>
+                        <option value="llm_text_images">Large Language Models: Text and Images</option>
+                    </param>
+                    <when value="llm_text">
+                        <expand macro="llm_models"/>
+                        <expand macro="prompt_specification"/>
+                        <expand macro="effect"/>
+                        <expand macro="relationship_type"/>
+                        <param name="input_file" type="data" format="txt,pdf" label="Text to analyze" help="Input text file or PDF." />
+                    </when>
+                    <when value="llm_text_images">
+                        <expand macro="llm_models"/>
+                        <expand macro="llm_models_images"/>
+                        <expand macro="prompt_specification"/>
+                        <expand macro="effect"/>
+                        <expand macro="relationship_type"/>
+                        <param name="input_file" type="data" format="txt,pdf" label="Text to analyze" help="Input text file or PDF." />
+                        <param name="input_images" type="data_collection" collection_type="list" label="Figure images" help="Collection of figure images to analyze together with the text." />
+                    </when>
+                </conditional>
             </when>
-            <expand macro="effect"/>
-            <expand macro="relationship_type"/>
-            <param name="input_file" type="data" format="txt,pdf" label="Text to analyze" help="Input text file or PDF." />
-        </when>
-        <when value="chemicals">
-            <expand macro="llm_models"/>
-            <param name="input_file" type="data" format="txt,pdf" label="Text to analyze" help="Input text file or PDF." />
-        </when>
+
+            <when value="chemicals">
+                <expand macro="llm_models"/>
+                <param name="input_file" type="data" format="txt,pdf" label="Text to analyze" help="Input text file or PDF." />
+            </when>
         </conditional>
     </inputs>
 
     <outputs>
-        <when value="relationships_chemicals">
-            <data name="relationships" format="tabular" from_work_dir="relationships.tsv" label="Relationships identified in text." />
-            <data name="chemicals" format="tabular" from_work_dir="chemicals.tsv" label="Chemicals identified in text." />
-        </when>
-        <when value="relationships">
-            <data name="relationships" format="tabular" from_work_dir="relationships.tsv" label="Relationships identified in text." />
-        </when>
-        <when value="chemicals">
-            <data name="chemicals" format="tabular" from_work_dir="chemicals.tsv" label="Chemicals identified in text." />
-        </when>
+        <data name="relationships" format="tabular" from_work_dir="relationships.tsv" label="Relationships identified in text.">
+            <filter>analysis_purpose['method'] != 'chemicals'</filter>
+        </data>
+        <data name="chemicals" format="tabular" from_work_dir="chemicals.tsv" label="Chemicals identified in text.">
+            <filter>analysis_purpose['method'] != 'relationships'</filter>
+        </data>
     </outputs>
 
     <tests>
-        <test>
-            <conditional name="identification_method">
-                <param name="method" value="llm_text"/>
-                <param name="input_file" value="test-data/text.txt"/>
-                <param name="chemicals" value="test-data/chemicals.tsv"/>
-                <param name="effect" value="liver fibrosis"/>
-                <output name="relationships" file="relationships.tsv" compare="sim_size" delta="100"/>
+        <test expect_num_outputs="2">
+            <conditional name="analysis_purpose">
+                <param name="method" value="relationships_chemicals"/>
+                <conditional name="identification_method">
+                    <param name="method" value="llm_text"/>
+                    <param name="llm_models" value="qwen3.5"/>
+                    <param name="input_file" value="test-data/text.txt"/>
+                    <param name="effect" value="liver fibrosis"/>
+                    <param name="relationship_type" value="causative"/>
+                </conditional>
             </conditional>
+            <output name="relationships" file="relationships.tsv" compare="sim_size" delta="100"/>
+            <output name="chemicals" file="chemicals.tsv" compare="sim_size" delta="100"/>
         </test>
-        <test>
-            <conditional name="identification_method">
-                <param name="method" value="llm_text_images"/>
-                <param name="input_file" value="test-data/text.txt"/>
+        <test expect_num_outputs="1">
+            <conditional name="analysis_purpose">
+                <param name="method" value="relationships"/>
                 <param name="chemicals" value="test-data/chemicals.tsv"/>
-                <param name="effect" value="liver fibrosis"/>
-                <output name="relationships" file="relationships.tsv" compare="sim_size" delta="100"/>
+                <conditional name="identification_method">
+                    <param name="method" value="llm_text"/>
+                    <param name="llm_models" value="qwen3.5"/>
+                    <param name="input_file" value="test-data/text.txt"/>
+                    <param name="effect" value="liver fibrosis"/>
+                    <param name="relationship_type" value="causative"/>
+                </conditional>
             </conditional>
+            <output name="relationships" file="relationships.tsv" compare="sim_size" delta="100"/>
         </test>
-        <test>
-            <conditional name="identification_method">
-                <param name="method" value="zero_shot_classification"/>
+        <test expect_num_outputs="1">
+            <conditional name="analysis_purpose">
+                <param name="method" value="chemicals"/>
+                <param name="llm_models" value="qwen3.5"/>
                 <param name="input_file" value="test-data/text.txt"/>
-                <param name="chemicals" value="test-data/chemicals.tsv"/>
-                <param name="effect" value="liver fibrosis"/>
-                <output name="relationships" file="relationships.tsv" compare="sim_size" delta="100"/>
             </conditional>
+            <output name="chemicals" file="chemicals.tsv" compare="sim_size" delta="100"/>
         </test>
     </tests>
 
     <help><![CDATA[
-Find Relationships Between Chemicals and Biological Effects
-===================
+Identify relationships between chemicals and biological effects.
 
-Tools to identify relationships between chemicals and biological effects in a given text or images.
+This tool can infer chemicals from text first, or use a provided chemical list to score relationships in text.
 
     ]]></help>
 
