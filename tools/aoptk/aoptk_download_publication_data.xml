@@ -15,119 +15,121 @@
 <configfiles>
 <configfile name="download_publication_data">
 import os
-from aoptk.literature.databases.pmc import PMC
-from aoptk.literature.databases.europepmc import EuropePMC
-from aoptk.literature.databases.pubmed import PubMed
 from Bio import Entrez
 
 with open("$input_file", "r") as f:
     ids = [line.strip() for line in f.readlines()]
-email = os.environ.get("EMAIL")
-api_key = os.environ.get("NCBI_API_KEY")
+    email = os.environ.get("EMAIL")
+    api_key = os.environ.get("NCBI_API_KEY")
 
 
-#if $data_type.type_choice == "publications":
-if "${literature_database_europepmc_pmc}" == "pmc":
-    Entrez.email = email
-    Entrez.api_key = api_key
-    pmc = PMC("", storage = "./", figure_storage="./figures")
-    pmc.id_list = ids
-    publications = pmc.get_publications()
-elif "${literature_database_europepmc_pmc}" == "europepmc":
-    europepmc = EuropePMC("", storage = "./", figure_storage="./figures")
-    europepmc.id_list = ids
-    publications = europepmc.get_publications()
-else:
-    raise ValueError("Select valid database.")
+#if $literature.database == "pmc":
+from aoptk.literature.databases.pmc import PMC
+Entrez.email = email
+Entrez.api_key = api_key
+database = PMC("", storage = "./", figure_storage="./figures")
+database.id_list = ids
 
+#elif $literature.database == "europepmc":
+from aoptk.literature.databases.europepmc import EuropePMC
+database = EuropePMC("", storage = "./", figure_storage="./figures")
+database.id_list = ids
+
+#elif $literature.database == "pubmed":
+from aoptk.literature.databases.pubmed import PubMed
+Entrez.email = email
+Entrez.api_key = api_key 
+database = PubMed.__new__(PubMed)
+database.id_list = ids
+
+#else:
+raise ValueError("Select valid database.")
+#end if
+
+
+#if $literature.type_choice == "publications":
+publications = database.get_publications()
 for publication in publications:
-    with open(f"{publication.publication_id}.txt", "w") as f:
+    print(publication.figures)
+    with open(f"{publication.id}.txt", "w") as f:
         f.write(publication.full_text)
-#end if
 
-
-#if $data_type.type_choice == "abstracts":
-if "${literature_database_pubmed_europepmc}" == "pubmed":
-    Entrez.email = email
-    Entrez.api_key = api_key 
-    pubmed = PubMed.__new__(PubMed)
-    pubmed.id_list = ids
-    abstracts = pubmed.get_abstracts()
-elif "${literature_database_pubmed_europepmc}" == "europepmc":
-    europepmc = EuropePMC("")
-    europepmc.id_list = ids
-    abstracts = europepmc.get_abstracts()
-else:
-    raise ValueError("Select valid database.")
-
+#elif $literature.type_choice == "abstracts":
+abstracts = database.get_abstracts()
 for abstract in abstracts:
-    with open(f"{abstract.publication_id}.txt", "w") as f:
+    with open(f"{abstract.id}.txt", "w") as f:
         f.write(abstract.text)
+
+#elif $literature.type_choice == "pdfs":
+pdfs = database.get_pdfs()
+
+#else:
+raise ValueError("Select valid data type.")
 #end if
 
-
-#if $data_type.type_choice == "pdfs":
-pmc = PMC("", storage = "./")
-pmc.id_list = ids
-pdfs = pmc.get_pdfs()
-#end if
 
 </configfile>
 </configfiles>
 
     <inputs>
-        <conditional name="data_type">
-            <param name="type_choice" type="select" label="Data type">
-                <option value="publications">Full text publications and figures</option>
-                <option value="abstracts">Abstracts</option>
-                <option value="pdfs">PDFs</option>
+        <param name="input_file" type="data" format="txt" label="List of IDs to search for." help="Input text file with IDs to search for." />
+        <conditional name="literature">
+            <param name="database" type="select" label="Select which database to search." help="PubMed only accepts searches with up to 10 000 results. No limit for Europe PMC and PMC.">
+                <option value="pmc" selected="true">PMC</option>
+                <option value="pubmed">PubMed</option>
+                <option value="europepmc">EuropePMC</option>
             </param>
-        <when value="publications">
-            <expand macro="literature_database_europepmc_pmc"/>
-            <param name="input_file" type="data" format="txt" label="List of IDs to search for." help="Input text file with IDs to search for." />
-        </when>
-        <when value="abstracts">
-            <expand macro="literature_database_pubmed_europepmc"/>
-            <param name="input_file" type="data" format="txt" label="List of IDs to search for." help="Input text file with IDs to search for." />
-        </when>
-        <when value="pdfs">
-            <param name="input_file" type="data" format="txt" label="List of IDs to search for." help="Input text file with IDs to search for." />
-        </when>
+            <when value="pubmed">
+                <param name="type_choice" type="select" label="Data type">
+                    <option value="abstracts">Abstracts</option>
+                </param>
+            </when>
+            <when value="europepmc">
+                <param name="type_choice" type="select" label="Data type">
+                    <option value="publications">Full text publications and figures</option>
+                    <option value="abstracts">Abstracts</option>
+                </param>
+            </when>
+            <when value="pmc">
+                <param name="type_choice" type="select" label="Data type">
+                    <option value="publications">Full text publications and figures</option>
+                    <option value="abstracts">Abstracts</option>
+                    <option value="pdfs">PDFs</option>
+                </param>
+            </when>
         </conditional>
     </inputs>
 
     <outputs>
-        <collection name="text" type="list" label="Downloaded publication text">
-            <filter>data_type['type_choice'] == 'publications' or data_type['type_choice'] == 'abstracts'</filter>
-            <discover_datasets pattern="(?P&lt;designation&gt;.*)\.txt$" format="txt" />
+        <collection name="text" type="list" label="Downloaded publication text" format="txt">
+            <filter>literature['type_choice'] == 'publications' or literature['type_choice'] == 'abstracts'</filter>
+            <discover_datasets pattern="(?P&lt;designation&gt;.*)\.txt$" ext="txt" />
         </collection>
-        <collection name="figures" type="list" label="Downloaded figures">
-            <filter>data_type['type_choice'] == 'publications'</filter>
-            <discover_datasets directory="figures" pattern="(?P&lt;designation&gt;.*)$" format="data" />
+        <collection name="figures" type="list:list" label="Downloaded figures" format="auto">
+            <filter>literature['type_choice'] == 'publications'</filter>
+            <discover_datasets directory="figures" pattern="(?P&lt;identifier_0&gt;[^/]+)/(?P&lt;identifier_1&gt;.+)$" recurse="true"/>
         </collection>
-        <collection name="pdfs" type="list" label="Downloaded PDFs">
-            <filter>data_type['type_choice'] == 'pdfs'</filter>
-            <discover_datasets pattern="(?P&lt;designation&gt;.*)\.pdf$" format="pdf" />
+        <collection name="pdfs" type="list" label="Downloaded PDFs" format="pdf">
+            <filter>literature['type_choice'] == 'pdfs'</filter>
+            <discover_datasets pattern="(?P&lt;designation&gt;.*)\.pdf$" ext="pdf" />
         </collection>
     </outputs>
 
     <tests>
         <test>
-            <conditional name="data_type">
-                <param name="type_choice" value="publications"/>
-                <param name="input_file" value="test-data/ids.txt"/>
-                <output_collection name="text" type="list" count="2"/>
-            </conditional>
-            <conditional name="data_type">
-                <param name="type_choice" value="abstracts"/>
-                <param name="input_file" value="test-data/ids.txt"/>
-                <output_collection name="text" type="list" count="2"/>
-            </conditional>
-            <conditional name="data_type">
-                <param name="type_choice" value="pdfs"/>
-                <param name="input_file" value="test-data/ids.txt"/>
-                <output_collection name="pdfs" type="list" count="2"/>
-            </conditional>
+            <param name="type_choice" value="publications"/>
+            <param name="input_file" value="test-data/ids.txt"/>
+            <output_collection name="text" type="list" count="2"/>
+        </test>
+        <test>
+            <param name="type_choice" value="abstracts"/>
+            <param name="input_file" value="test-data/ids.txt"/>
+            <output_collection name="text" type="list" count="2"/>
+        </test>
+        <test>
+            <param name="type_choice" value="pdfs"/>
+            <param name="input_file" value="test-data/ids.txt"/>
+            <output_collection name="pdfs" type="list" count="2"/>
         </test>
     </tests>
 
