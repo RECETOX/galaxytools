@@ -102,11 +102,11 @@ raise ValueError("Select valid data type.")
     </inputs>
 
     <outputs>
-        <collection name="text" type="list" label="Downloaded publication text" format="txt">
+        <collection name="text" type="list" label="Downloaded ${database} ${type_choice}" format="txt">
             <filter>literature['type_choice'] == 'publications' or literature['type_choice'] == 'abstracts'</filter>
             <discover_datasets pattern="(?P&lt;designation&gt;.*)\.txt$" ext="txt" />
         </collection>
-        <collection name="pdfs" type="list" label="Downloaded PDFs" format="pdf">
+        <collection name="pdfs" type="list" label="Downloaded ${database} ${type_choice}" format="pdf">
             <filter>literature['type_choice'] == 'pdfs'</filter>
             <discover_datasets pattern="(?P&lt;designation&gt;.*)\.pdf$" ext="pdf" />
         </collection>
