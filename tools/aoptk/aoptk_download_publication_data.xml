@@ -27,7 +27,9 @@ with open("$input_file", "r") as f:
 from aoptk.literature.databases.pmc import PMC
 Entrez.email = email
 Entrez.api_key = api_key
-database = PMC("", storage = "./", figure_storage="./figures")
+database = PMC.__new__(PMC)
+database.storage = "./"
+database.figure_storage = "./figures"
 database.id_list = ids
 
 #elif $literature.database == "europepmc":
