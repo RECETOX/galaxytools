@@ -99,29 +99,29 @@ chemicals.to_csv("normalized_chemicals.tsv", sep="\t", index=False)
                 <param name="method" value="llm"/>
                 <param name="chemicals" value="test-data/chemicals.tsv"/>
                 <param name="chemical_list" value="test-data/chemicals.tsv"/>
-                <output name="normalized_chemicals" file="test-data/normalized.tsv" compare="sim_size" delta="100"/>
             </conditional>
+            <output name="normalized_chemicals" file="test-data/normalized.tsv" compare="sim_size" delta="100"/>
         </test>
         <test>
             <conditional name="normalization_method">
                 <param name="method" value="pubchem"/>
                 <param name="input_file" value="test-data/chemicals.tsv"/>
-                <output name="normalized_chemicals" file="test-data/normalized.tsv" compare="sim_size" delta="100"/>
             </conditional>
+            <output name="normalized_chemicals" file="test-data/normalized.tsv" compare="sim_size" delta="100"/>
         </test>
         <test>
             <conditional name="normalization_method">
                 <param name="method" value="mesh"/>
                 <param name="input_file" value="test-data/chemicals.tsv"/>
                 <param name="input_xml" value="test-data/mesh_terms_database.xml"/>
-                <output name="normalized_chemicals" file="test-data/normalized.tsv" compare="sim_size" delta="100"/>
             </conditional>
+            <output name="normalized_chemicals" file="test-data/normalized.tsv" compare="sim_size" delta="100"/>
         </test>
     </tests>
 
     <help><![CDATA[
 Chemical Normalization
-===================
+======================
 
 Set of tools to normalize chemical entities using different methods: LLMs, PubChem synonyms, or MeSH terms.
 
@@ -129,5 +129,9 @@ Set of tools to normalize chemical entities using different methods: LLMs, PubCh
 For normalization via MeSH Terms, the XML database of terms can be obtained here: https://www.nlm.nih.gov/databases/download/mesh.html
 
     ]]></help>
+
+    <citations>
+        <citation type="doi">10.5281/zenodo.20036704</citation>
+    </citations>
 
 </tool>

@@ -174,4 +174,8 @@ This tool can infer chemicals from text first, or use a provided chemical list t
 
     ]]></help>
 
+    <citations>
+        <citation type="doi">10.5281/zenodo.20036704</citation>
+    </citations>
+
 </tool>

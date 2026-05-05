@@ -106,25 +106,28 @@ raise ValueError("Select valid data type.")
             <filter>literature['type_choice'] == 'publications' or literature['type_choice'] == 'abstracts'</filter>
             <discover_datasets pattern="(?P&lt;designation&gt;.*)\.txt$" ext="txt" />
         </collection>
-        <collection name="pdfs" type="list" label="Downloaded ${database} ${type_choice}" format="pdf">
+        <collection name="pdfs" type="list" label="Downloaded ${database} PDFs" format="pdf">
             <filter>literature['type_choice'] == 'pdfs'</filter>
             <discover_datasets pattern="(?P&lt;designation&gt;.*)\.pdf$" ext="pdf" />
         </collection>
     </outputs>
 
     <tests>
-        <test>
-            <param name="type_choice" value="publications"/>
+        <test expect_num_outputs="1">
+            <param name="literature|database" value="pmc"/>
+            <param name="literature|type_choice" value="publications"/>
             <param name="input_file" value="test-data/ids.txt"/>
             <output_collection name="text" type="list" count="2"/>
         </test>
-        <test>
-            <param name="type_choice" value="abstracts"/>
+        <test expect_num_outputs="1">
+            <param name="literature|database" value="europepmc"/>
+            <param name="literature|type_choice" value="abstracts"/>
             <param name="input_file" value="test-data/ids.txt"/>
             <output_collection name="text" type="list" count="2"/>
         </test>
-        <test>
-            <param name="type_choice" value="pdfs"/>
+        <test expect_num_outputs="1">
+            <param name="literature|database" value="pmc"/>
+            <param name="literature|type_choice" value="pdfs"/>
             <param name="input_file" value="test-data/ids.txt"/>
             <output_collection name="pdfs" type="list" count="2"/>
         </test>
@@ -132,10 +135,14 @@ raise ValueError("Select valid data type.")
 
     <help><![CDATA[
 Download Publication Data
-===================
+=========================
 
 Tools to download publication data - full text publications (including abstracts) and figures, abstracts, or PDFs.
 
     ]]></help>
+
+    <citations>
+        <citation type="doi">10.5281/zenodo.20036704</citation>
+    </citations>
 
 </tool>

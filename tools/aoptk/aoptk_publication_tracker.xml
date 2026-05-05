@@ -112,5 +112,6 @@ Publication-Tracker was originally developed for the purposes of this publicatio
     ]]></help>
     <citations>
         <citation type="doi">10.1093/bioinformatics/btp163</citation>
+        <citation type="doi">10.5281/zenodo.20036704</citation>
     </citations>
 </tool>

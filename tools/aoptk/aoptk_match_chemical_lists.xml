@@ -55,4 +55,8 @@ Tool to match chemical entities.
 
     ]]></help>
 
+    <citations>
+        <citation type="doi">10.5281/zenodo.20036704</citation>
+    </citations>
+
 </tool>

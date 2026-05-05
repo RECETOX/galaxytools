@@ -67,4 +67,8 @@ Tool to remove duplicates and finalize the output of relationship identification
 
     ]]></help>
 
+    <citations>
+        <citation type="doi">10.5281/zenodo.20036704</citation>
+    </citations>
+
 </tool>
