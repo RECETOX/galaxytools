@@ -31,7 +31,7 @@ litellm_api_key = os.environ.get("LITELLM_API_KEY")
 
 publication_id = os.path.splitext("$input_file.element_identifier")[0]
 if "${input_file.ext}" == "pdf":
-    text = PymupdfParser([PDF("$input_file")], text_generation=TextGenerationAPI(model="qwen3.5")).get_publications()[0].full_text
+    text = PymupdfParser([PDF("$input_file")], text_generation=TextGenerationAPI(model="qwen3.5", api_key=litellm_api_key)).get_publications()[0].full_text
     with open(f"{publication_id}.txt", "w") as f:
         f.write(text)
 
