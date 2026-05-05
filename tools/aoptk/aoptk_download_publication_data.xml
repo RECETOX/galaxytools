@@ -79,7 +79,7 @@ raise ValueError("Select valid data type.")
             <param name="database" type="select" label="Select which database to search." help="PubMed only accepts searches with up to 10 000 results. No limit for Europe PMC and PMC.">
                 <option value="pmc" selected="true">PMC</option>
                 <option value="pubmed">PubMed</option>
-                <option value="europepmc">EuropePMC</option>
+                <option value="europepmc">Europe PMC</option>
             </param>
             <when value="pubmed">
                 <param name="type_choice" type="select" label="Data type">
@@ -88,14 +88,13 @@ raise ValueError("Select valid data type.")
             </when>
             <when value="europepmc">
                 <param name="type_choice" type="select" label="Data type">
-                    <option value="publications">Full text publications and figures</option>
+                    <option value="publications">Full text publications</option>
                     <option value="abstracts">Abstracts</option>
                 </param>
             </when>
             <when value="pmc">
                 <param name="type_choice" type="select" label="Data type">
-                    <option value="publications">Full text publications and figures</option>
-                    <option value="abstracts">Abstracts</option>
+                    <option value="publications">Full text publications</option>
                     <option value="pdfs">PDFs</option>
                 </param>
             </when>
@@ -106,10 +105,6 @@ raise ValueError("Select valid data type.")
         <collection name="text" type="list" label="Downloaded publication text" format="txt">
             <filter>literature['type_choice'] == 'publications' or literature['type_choice'] == 'abstracts'</filter>
             <discover_datasets pattern="(?P&lt;designation&gt;.*)\.txt$" ext="txt" />
-        </collection>
-        <collection name="figures" type="list:list" label="Downloaded figures" format="auto">
-            <filter>literature['type_choice'] == 'publications'</filter>
-            <discover_datasets directory="figures" pattern="(?P&lt;identifier_0&gt;[^/]+)/(?P&lt;identifier_1&gt;.+)$" recurse="true"/>
         </collection>
         <collection name="pdfs" type="list" label="Downloaded PDFs" format="pdf">
             <filter>literature['type_choice'] == 'pdfs'</filter>
