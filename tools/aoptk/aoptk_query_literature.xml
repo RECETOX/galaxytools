@@ -16,6 +16,7 @@
 
     <configfiles>
         <configfile name="query_literature">
+import asyncio
 from Bio import Entrez
 import os
 
@@ -34,7 +35,7 @@ elif "${database}" == "pmc":
     from aoptk.literature.databases.pmc import PMC
     Entrez.email = email
     Entrez.api_key = api_key
-    ids = PMC("${query}", storage = "./", figure_storage="./figures").get_ids()
+    ids = asyncio.run(PMC("${query}", storage = "./", figure_storage="./figures").get_ids())
 
 else:
     raise ValueError("Select valid database.")
