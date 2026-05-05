@@ -26,8 +26,6 @@ from aoptk.normalization.pubchem_api import PubChemAPI
 from aoptk.normalization.mesh_terms import MeshTerms
 from aoptk.normalization.provide_mesh_term_dataframe_from_xml import ProvideMeshTermDataframeFromXML
 
-chemicals = pd.read_csv("$input_file", sep="\t")
-
 #if $normalization_method.method == "llm":
 litellm_config_file = os.environ.get("LITELLM_CONFIG_FILE")
 if not litellm_config_file:
@@ -36,21 +34,27 @@ with open(litellm_config_file, "r") as f:
     config = yaml.safe_load(f)
 litellm_api_key = os.environ.get("LITELLM_API_KEY")
 
-
+chemicals = pd.read_csv("$chemicals", sep="\t")
 chemical_list = pd.read_csv("$chemical_list", sep="\t")["chemical"].tolist()
 chemicals["chemical"] = chemicals["chemical"].apply(
     lambda x: TextGenerationAPI(model="$llm_models", api_key=litellm_api_key).normalize_chemical(chemical=Chemical(x), chemical_list=[Chemical(chem) for chem in chemical_list])
     )
+
 #elif $normalization_method.method == "pubchem"
+chemicals = pd.read_csv("$input_file", sep="\t")
 chemicals["chemical"] = chemicals["chemical"].apply(
     lambda x: PubChemAPI().normalize_chemical(Chemical(x))
     )
+
 #elif $normalization_method.method == "mesh"
-mesh_terms_xml = pd.read_xml("$input_xml")
-mesh_terms_df = ProvideMeshTermDataframeFromXML(mesh_terms_xml)
+chemicals = pd.read_csv("$input_file", sep="\t")
+mesh_terms_df = ProvideMeshTermDataframeFromXML(database_path="$input_xml").provide_normalization_dataframe()
 chemicals["chemical"] = chemicals["chemical"].apply(
     lambda x: MeshTerms(mesh_terms=mesh_terms_df).normalize_chemical(Chemical(x))
     )
+
+#else
+raise ValueError("Select a valid normalization method.")
 #end if
 
 chemicals["heading"] = chemicals["chemical"].apply(lambda chem: chem.heading)
