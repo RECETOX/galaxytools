@@ -23,6 +23,7 @@ import yaml
 from aoptk.literature.pdf import PDF
 from aoptk.literature.pymupdf_parser import PymupdfParser
 from aoptk.effect import Effect
+from aoptk.chemical import Chemical
 from aoptk.relationship_type import Causative
 from aoptk.relationship_type import Inhibitive
 from aoptk.text_generation_api import TextGenerationAPI
@@ -72,15 +73,15 @@ write_relationships(relationships)
 write_chemicals(chemicals)
 
 #elif $analysis_purpose.method == "relationships"
-effects = ["${effect}"]
+effects = [Effect("${effect}")]
 if "$relationship_type" == "causative":
-    relationship_type = Causative
+    relationship_type = Causative()
 elif "$relationship_type" == "inhibitive":
-    relationship_type = Inhibitive
+    relationship_type = Inhibitive()
 else:
     raise ValueError(f"Unsupported relationship type: ${relationship_type}")
 
-chemicals = pd.read_csv("$chemicals", sep="\t")["chemical"].tolist()
+chemicals = [Chemical(chem) for chem in pd.read_csv("$chemicals", sep="\t")["chemical"].tolist()]
 relationships = TextGenerationAPI(model="$llm_models", api_key=litellm_api_key).find_relationships_in_text(text=text, chemicals=chemicals, effects=effects, relationship_type=relationship_type)
 write_relationships(relationships)
 
