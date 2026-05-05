@@ -6,6 +6,7 @@
 
     <requirements>
         <expand macro="requirements"/>
+        <requirement type="package">openpyxl</requirement>
     </requirements>
  
     <command detect_errors="exit_code"><![CDATA[
@@ -44,11 +45,11 @@ final_output.to_excel("./final_output.xlsx", index=False)
 </configfiles>
 
     <inputs>
-        <param name="input_file" type="data" format="tabular" label="TSV with chemical column." help="Input tsv file with chemical column." />
+        <param name="input_file" type="data" format="tabular" label="TSV with heading column." help="Input tsv file with chemical column." />
     </inputs>
 
     <outputs>
-        <data name="final_output" format="tabular" from_work_dir="final_output.xlsx" label="Final output." />
+        <data name="final_output" format="xlsx" from_work_dir="final_output.xlsx" label="Final output." />
     </outputs>
 
     <tests>
