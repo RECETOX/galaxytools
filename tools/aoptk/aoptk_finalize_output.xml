@@ -6,7 +6,7 @@
 
     <requirements>
         <expand macro="requirements"/>
-        <requirement type="package">openpyxl</requirement>
+        <requirement type="package" version="3.1.5">openpyxl</requirement>
     </requirements>
  
     <command detect_errors="exit_code"><![CDATA[
