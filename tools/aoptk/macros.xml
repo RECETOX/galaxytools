@@ -98,7 +98,7 @@
     </xml>
 
     <xml name="llm_models">
-        <param name="llm_models" type="select" label="Select LLM model" help="Select LLM model to analyze text.">
+        <param name="llm_models" type="select" label="Select LLM" help="Select the LLMto analyze text.">
             <option value="gpt-oss-120b">GPT OSS 120B</option>
             <option value="qwen3.5">Qwen 3.5</option>
             <option value="deepseek-v3.2-thinking">DeepSeek v3.2</option>
@@ -106,7 +106,7 @@
     </xml>
 
     <xml name="llm_models_images">
-        <param name="llm_models_images" type="select" label="Select LLM model to analyze image data." help="Choose the LLM to use for image data processing.">
+        <param name="llm_models_images" type="select" label="Select the LLM to analyze image data." help="Choose the LLM to use for image data processing.">
             <option value="qwen3.5">Qwen 3.5</option>
             <option value="redhatai-scout">RedHatAI Scout</option>
         </param>
