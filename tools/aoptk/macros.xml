@@ -98,7 +98,7 @@
     </xml>
 
     <xml name="llm_models">
-        <param name="llm_models" type="select" label="Select LLM" help="Select the LLMto analyze text.">
+        <param name="llm_models" type="select" label="Select LLM" help="Select the LLM to analyze text.">
             <option value="gpt-oss-120b">GPT OSS 120B</option>
             <option value="qwen3.5">Qwen 3.5</option>
             <option value="deepseek-v3.2-thinking">DeepSeek v3.2</option>
