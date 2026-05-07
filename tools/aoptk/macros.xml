@@ -4,6 +4,7 @@
 
     <xml name="requirements">
         <requirement type="package" version="@TOOL_VERSION@">aoptk</requirement>
+        <requirement type="package" version="6.0.3">pyyaml</requirement>
     </xml>
 
     <xml name="email_credentials">

@@ -6,6 +6,8 @@
 
     <requirements>
         <expand macro="requirements"/>
+        <expand macro="email_credentials"/>
+        <expand macro="ncbi_api_key"/>
     </requirements>
  
     <command detect_errors="exit_code"><![CDATA[
@@ -19,14 +21,13 @@ from Bio import Entrez
 
 with open("$input_file", "r") as f:
     ids = [line.strip() for line in f.readlines()]
-    email = os.environ.get("EMAIL")
-    api_key = os.environ.get("NCBI_API_KEY")
+
+Entrez.email = os.environ.get("EMAIL") or None
+Entrez.api_key = os.environ.get("NCBI_API_KEY") or None
 
 
 #if $literature.database == "pmc":
 from aoptk.literature.databases.pmc import PMC
-Entrez.email = email
-Entrez.api_key = api_key
 database = PMC.__new__(PMC)
 database.storage = "./"
 database.figure_storage = "./figures"
@@ -39,9 +40,7 @@ database.id_list = ids
 
 #elif $literature.database == "pubmed":
 from aoptk.literature.databases.pubmed import PubMed
-Entrez.email = email
-Entrez.api_key = api_key 
-database = PubMed.__new__(PubMed)
+database = PubMed("")
 database.id_list = ids
 
 #else:
@@ -52,9 +51,10 @@ raise ValueError("Select valid database.")
 #if $literature.type_choice == "publications":
 publications = database.get_publications()
 for publication in publications:
-    print(publication.figures)
-    with open(f"{publication.id}.txt", "w") as f:
-        f.write(publication.full_text)
+    if publication is not None and publication.full_text is not None:
+        print(publication.figures)
+        with open(f"{publication.id}.txt", "w") as f:
+            f.write(publication.full_text)
 
 #elif $literature.type_choice == "abstracts":
 abstracts = database.get_abstracts()
