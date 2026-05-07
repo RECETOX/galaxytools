@@ -102,16 +102,16 @@ write_chemicals(chemicals)
 
             <when value="relationships_chemicals">
                 <expand macro="llm_models"/>
-                <expand macro="prompt_specification"/>
                 <expand macro="effect"/>
+                <expand macro="prompt_specification"/>
                 <expand macro="relationship_type"/>
                 <param name="input_file" type="data" format="txt,pdf" label="Text to analyze" help="Input text file or PDF." />
             </when>
 
             <when value="relationships">
                 <expand macro="llm_models"/>
-                <expand macro="prompt_specification"/>
                 <expand macro="effect"/>
+                <expand macro="prompt_specification"/>
                 <expand macro="relationship_type"/>
                 <param name="input_file" type="data" format="txt,pdf" label="Text to analyze" help="Input text file or PDF." />
                 <param name="chemicals" type="data" format="tabular" label="Chemicals" help="Input TSV with chemicals." />
