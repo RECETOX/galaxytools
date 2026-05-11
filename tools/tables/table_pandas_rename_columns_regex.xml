@@ -1,8 +1,8 @@
-<tool id="table_pandas_rename_columns_regex" name="table rename columns via regex" version="@PANDAS_VERSION@+galaxy@VERSION_SUFFIX@" profile="20.01" license="MIT">
+<tool id="table_pandas_rename_columns_regex" name="table rename columns via regex" version="@PANDAS_VERSION@+galaxy@VERSION_SUFFIX@" profile="@PROFILE_VERSION@" license="MIT">
     <description>rename columns in a table using regex</description>
     <macros>
         <import>macros.xml</import>
-        <token name="@VERSION_SUFFIX@">1</token>
+        <token name="@VERSION_SUFFIX@">0</token>
     </macros>
 
     <requirements>
