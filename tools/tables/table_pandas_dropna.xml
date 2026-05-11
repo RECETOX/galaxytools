@@ -1,0 +1,129 @@
+<tool id="table_pandas_dropna" name="table dropna" version="@PANDAS_VERSION@+galaxy@VERSION_SUFFIX@" profile="@PROFILE_VERSION@" license="MIT">
+    <description>drop rows or columns with NA values</description>
+    <macros>
+        <import>macros.xml</import>
+        <token name="@VERSION_SUFFIX@">0</token>
+    </macros>
+    <requirements>
+        <expand macro="requirement_pandas_pyarrow"/>
+    </requirements>
+    <required_files>
+        <include path="table_pandas_dropna.py" />
+        <include path="utils.py" />
+    </required_files>
+    <expand macro="creator" />
+    <command detect_errors="exit_code"><![CDATA[
+        python3 '$__tool_directory__/table_pandas_dropna.py' 
+            --input_dataset '$input_dataset' '$input_dataset.ext' 
+            --axis '$axis' 
+            --how '$how' 
+            #if $axis == 'index' and $style.subset
+            --subset '$style.subset' 
+            #end if
+            --output_dataset '$output_dataset' '$output_dataset.ext'
+    ]]></command>
+    <inputs>
+        <param name="input_dataset" type="data" format="csv,tsv,tabular,parquet" label="Input Dataset" help="The input dataset in CSV, TSV, tabular, or Parquet format."/>
+        <conditional name="style">
+            <param name="axis" type="select" label="Axis" help="Axis along which to drop NA values. 'Rows' to drop rows with NA values, 'Columns' to drop columns with NA values.">
+                <option value="index" selected="true">Rows</option>
+                <option value="columns">Columns</option>
+            </param>
+            <when value="index">
+                <param name="subset" type="data_column" data_ref="input_dataset" use_header_names="true" multiple="true" optional="true" label="Columns to Consider (rows only)" help="For row-wise dropping: which columns to consider for NA values. Leave empty to consider all columns. This parameter is only used when axis is set to 'Rows'."/>
+            </when>
+            <when value="columns"/>
+        </conditional>
+        <param name="how" type="select" label="Drop Strategy" help="Choose how to determine which rows or columns to drop.">
+            <option value="any" selected="true">Any NA value</option>
+            <option value="all">All NA values</option>
+        </param>
+    </inputs>
+    <outputs>
+        <data name="output_dataset" format_source="input_dataset" label="${tool.name} on ${on_string}">
+            <change_format>
+                <when input="input_dataset.ext" value="tsv" format="tabular" />
+            </change_format>
+        </data>
+    </outputs>
+    <tests>
+        <test expect_num_outputs="1">
+            <param name="input_dataset" value="dropna/descriptors.tabular" ftype="tabular"/>
+            <param name="axis" value="index"/>
+            <param name="how" value="any"/>
+            <output name="output_dataset" ftype="tabular">
+                <assert_contents>
+                    <has_n_lines n="1"/>
+                    <has_n_columns n="1613"/>
+                </assert_contents>
+            </output>
+        </test>
+        <test expect_num_outputs="1">
+            <param name="input_dataset" value="dropna/descriptors.tabular" ftype="tabular"/>
+            <param name="axis" value="columns"/>
+            <param name="how" value="any"/>
+            <output name="output_dataset" ftype="tabular">
+                <assert_contents>
+                    <has_n_lines n="45"/>
+                    <has_n_columns n="1275"/>
+                </assert_contents>
+            </output>
+        </test>
+        <test expect_num_outputs="1">
+            <param name="input_dataset" value="dropna/descriptors.tabular" ftype="tabular"/>
+            <param name="axis" value="index"/>
+            <param name="how" value="any"/>
+            <param name="style|subset" value="141"/>
+            <output name="output_dataset" ftype="tabular">
+                <assert_contents>
+                    <has_n_lines n="44"/>
+                    <has_n_columns n="1613"/>
+                </assert_contents>
+            </output>
+        </test>
+        <test expect_num_outputs="1">
+            <param name="input_dataset" value="dropna/descriptors.parquet" ftype="parquet"/>
+            <param name="axis" value="columns"/>
+            <param name="how" value="all"/>
+            <output name="output_dataset" file="dropna/dropna_all.parquet" ftype="parquet"/>
+        </test>
+        <test expect_num_outputs="1">
+            <param name="input_dataset" value="dropna/descriptors.tabular" ftype="tabular"/>
+            <param name="axis" value="columns"/>
+            <param name="how" value="all"/>
+            <output name="output_dataset" ftype="tabular">
+                <assert_contents>
+                    <has_n_lines n="45"/>
+                    <has_n_columns n="1485"/>
+                </assert_contents>
+            </output>
+        </test>
+    </tests>
+    <help><![CDATA[
+This tool drops rows or columns with missing (NA/NaN) values from a dataframe.
+
+Inputs
+------
+
+- **Input Dataset**: The input dataset in CSV, TSV, tabular, or Parquet format.
+- **Axis**: Whether to drop rows or columns.
+- **Drop Strategy**: Remove rows or columns when they contain any NA values or only when all values are NA.
+- **Columns to Consider**: When dropping rows, you can optionally restrict the NA check to selected columns. If left empty, all columns are considered.
+
+Outputs
+-------
+
+- **Output Dataset**: The input dataset with rows or columns removed according to the selected NA filtering strategy.
+
+Examples
+--------
+
+Selecting **Rows** with **Any NA value** removes every row that contains at least one missing value.
+
+Selecting **Columns** with **All NA values** removes only columns that are completely empty.
+    ]]></help>
+    <citations>
+        <citation type="doi">10.5281/zenodo.3509134</citation>
+        <citation type="doi">10.25080/Majora-92bf1922-00a</citation>
+    </citations>
+</tool>
