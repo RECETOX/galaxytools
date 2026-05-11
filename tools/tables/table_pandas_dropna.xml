@@ -49,7 +49,7 @@
     <tests>
         <test expect_num_outputs="1">
             <param name="input_dataset" value="dropna/descriptors.tabular" ftype="tabular"/>
-            <param name="axis" value="index"/>
+            <param name="style|axis" value="index"/>
             <param name="how" value="any"/>
             <output name="output_dataset" ftype="tabular">
                 <assert_contents>
@@ -60,7 +60,7 @@
         </test>
         <test expect_num_outputs="1">
             <param name="input_dataset" value="dropna/descriptors.tabular" ftype="tabular"/>
-            <param name="axis" value="columns"/>
+            <param name="style|axis" value="columns"/>
             <param name="how" value="any"/>
             <output name="output_dataset" ftype="tabular">
                 <assert_contents>
@@ -71,7 +71,7 @@
         </test>
         <test expect_num_outputs="1">
             <param name="input_dataset" value="dropna/descriptors.tabular" ftype="tabular"/>
-            <param name="axis" value="index"/>
+            <param name="style|axis" value="index"/>
             <param name="how" value="any"/>
             <param name="style|subset" value="141"/>
             <output name="output_dataset" ftype="tabular">
@@ -83,13 +83,13 @@
         </test>
         <test expect_num_outputs="1">
             <param name="input_dataset" value="dropna/descriptors.parquet" ftype="parquet"/>
-            <param name="axis" value="columns"/>
-            <param name="how" value="all"/>
-            <output name="output_dataset" file="dropna/dropna_all.parquet" ftype="parquet"/>
+            <param name="style|axis" value="columns"/>
+            <param name="how" value="any"/>
+            <output name="output_dataset" file="dropna/dropna_any.parquet" ftype="parquet"/>
         </test>
         <test expect_num_outputs="1">
             <param name="input_dataset" value="dropna/descriptors.tabular" ftype="tabular"/>
-            <param name="axis" value="columns"/>
+            <param name="style|axis" value="columns"/>
             <param name="how" value="all"/>
             <output name="output_dataset" ftype="tabular">
                 <assert_contents>

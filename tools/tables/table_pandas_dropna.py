@@ -39,7 +39,7 @@ def drop_na_values(
             "axis": 0 if axis == "index" else 1,
             "subset": subset_cols,
         }
-        
+
         kwargs["how"] = how if how else "any"
 
         df_result = df.dropna(**kwargs)
