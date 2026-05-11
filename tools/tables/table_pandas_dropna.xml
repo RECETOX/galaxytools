@@ -15,9 +15,9 @@
     <command detect_errors="exit_code"><![CDATA[
         python3 '$__tool_directory__/table_pandas_dropna.py' 
             --input_dataset '$input_dataset' '$input_dataset.ext' 
-            --axis '$axis' 
+            --axis '$style.axis' 
             --how '$how' 
-            #if $axis == 'index' and $style.subset
+            #if $style.axis == 'index' and $style.subset
             --subset '$style.subset' 
             #end if
             --output_dataset '$output_dataset' '$output_dataset.ext'
