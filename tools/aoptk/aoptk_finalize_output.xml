@@ -54,8 +54,8 @@ final_output.to_excel("./final_output.xlsx", index=False)
 
     <tests>
         <test>
-           <param name="input_file" value="test-data/chemicals.tsv"/>
-           <output name="final_output" file="test-data/final_output.xlsx" compare="sim_size" delta="100"/>
+           <param name="input_file" value="chemicals.tsv"/>
+           <output name="final_output" file="final_output.xlsx" compare="sim_size" delta="100"/>
         </test>
     </tests>
 

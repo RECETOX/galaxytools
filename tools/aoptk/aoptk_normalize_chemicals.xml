@@ -96,25 +96,25 @@ chemicals.to_csv("normalized_chemicals.tsv", sep="\t", index=False)
         <test>
             <conditional name="normalization_method">
                 <param name="method" value="llm"/>
-                <param name="chemicals" value="test-data/chemicals.tsv"/>
-                <param name="chemical_list" value="test-data/chemicals.tsv"/>
+                <param name="chemicals" value="chemicals.tsv"/>
+                <param name="chemical_list" value="chemicals.tsv"/>
             </conditional>
-            <output name="normalized_chemicals" file="test-data/normalized.tsv" compare="sim_size" delta="100"/>
+            <output name="normalized_chemicals" file="normalized.tsv" compare="sim_size" delta="100"/>
         </test>
         <test>
             <conditional name="normalization_method">
                 <param name="method" value="pubchem"/>
-                <param name="input_file" value="test-data/chemicals.tsv"/>
+                <param name="input_file" value="chemicals.tsv"/>
             </conditional>
-            <output name="normalized_chemicals" file="test-data/normalized.tsv" compare="sim_size" delta="100"/>
+            <output name="normalized_chemicals" file="normalized.tsv" compare="sim_size" delta="100"/>
         </test>
         <test>
             <conditional name="normalization_method">
                 <param name="method" value="mesh"/>
-                <param name="input_file" value="test-data/chemicals.tsv"/>
-                <param name="input_xml" value="test-data/mesh_terms_database.xml"/>
+                <param name="input_file" value="chemicals.tsv"/>
+                <param name="input_xml" value="mesh_terms_database.xml"/>
             </conditional>
-            <output name="normalized_chemicals" file="test-data/normalized.tsv" compare="sim_size" delta="100"/>
+            <output name="normalized_chemicals" file="normalized.tsv" compare="sim_size" delta="100"/>
         </test>
     </tests>
 

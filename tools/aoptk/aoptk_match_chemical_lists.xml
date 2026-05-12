@@ -41,9 +41,9 @@ merged_files.to_csv("merged_chemicals.tsv", sep="\t", index=False)
 
     <tests>
         <test>
-           <param name="input_file_1" value="test-data/normalized.tsv"/>
-           <param name="input_file_2" value="test-data/normalized.tsv"/>
-           <output name="merged_chemicals" file="test-data/normalized.tsv" compare="sim_size" delta="100"/>
+           <param name="input_file_1" value="normalized.tsv"/>
+           <param name="input_file_2" value="normalized.tsv"/>
+           <output name="merged_chemicals" file="normalized.tsv" compare="sim_size" delta="100"/>
         </test>
     </tests>
 

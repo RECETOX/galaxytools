@@ -52,7 +52,7 @@ else:
 
     <tests>
         <test>
-           <param name="input_file" value="test-data/text.pdf"/>
+           <param name="input_file" value="text.pdf"/>
            <output name="text" file="text.txt" compare="sim_size" delta="100"/>
         </test>
     </tests>

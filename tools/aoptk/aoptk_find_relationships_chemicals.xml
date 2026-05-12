@@ -138,7 +138,7 @@ write_chemicals(chemicals)
             <conditional name="analysis_purpose">
                 <param name="method" value="relationships_chemicals"/>
                 <param name="llm_models" value="qwen3.5"/>
-                <param name="input_file" value="test-data/text.txt"/>
+                <param name="input_file" value="text.txt"/>
                 <param name="effect" value="liver fibrosis"/>
                 <param name="relationship_type" value="causative"/>
             </conditional>
@@ -148,9 +148,9 @@ write_chemicals(chemicals)
         <test expect_num_outputs="1">
             <conditional name="analysis_purpose">
                 <param name="method" value="relationships"/>
-                <param name="chemicals" value="test-data/chemicals.tsv"/>
+                <param name="chemicals" value="chemicals.tsv"/>
                 <param name="llm_models" value="qwen3.5"/>
-                <param name="input_file" value="test-data/text.txt"/>
+                <param name="input_file" value="text.txt"/>
                 <param name="effect" value="liver fibrosis"/>
                 <param name="relationship_type" value="causative"/>
             </conditional>
@@ -160,7 +160,7 @@ write_chemicals(chemicals)
             <conditional name="analysis_purpose">
                 <param name="method" value="chemicals"/>
                 <param name="llm_models" value="qwen3.5"/>
-                <param name="input_file" value="test-data/text.txt"/>
+                <param name="input_file" value="text.txt"/>
             </conditional>
             <output name="chemicals" file="chemicals.tsv" compare="sim_size" delta="100"/>
         </test>

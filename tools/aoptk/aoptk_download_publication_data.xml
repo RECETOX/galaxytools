@@ -116,19 +116,19 @@ raise ValueError("Select valid data type.")
         <test expect_num_outputs="1">
             <param name="literature|database" value="pmc"/>
             <param name="literature|type_choice" value="publications"/>
-            <param name="input_file" value="test-data/ids.txt"/>
+            <param name="input_file" value="ids.txt"/>
             <output_collection name="text" type="list" count="2"/>
         </test>
         <test expect_num_outputs="1">
             <param name="literature|database" value="europepmc"/>
             <param name="literature|type_choice" value="abstracts"/>
-            <param name="input_file" value="test-data/ids.txt"/>
+            <param name="input_file" value="ids.txt"/>
             <output_collection name="text" type="list" count="2"/>
         </test>
         <test expect_num_outputs="1">
             <param name="literature|database" value="pmc"/>
             <param name="literature|type_choice" value="pdfs"/>
-            <param name="input_file" value="test-data/ids.txt"/>
+            <param name="input_file" value="ids.txt"/>
             <output_collection name="pdfs" type="list" count="2"/>
         </test>
     </tests>
