@@ -11,7 +11,7 @@
  
     <command detect_errors="exit_code"><![CDATA[
         chemical-identifier
-            --query '$query'
+            --query '$search_term'
             --literature_database "$literature_database"
             --chemical_database "$chemical_database"
             --outdir .
@@ -19,7 +19,7 @@
     ]]></command>
 
     <inputs>
-        <expand macro="query"/>
+        <expand macro="search_term"/>
         <param name="literature_database" type="select" label="Select which database to search." help="PubMed only accepts searches with up to 10 000 results. No limit for Europe PMC and PMC.">
             <option value="europepmc" selected="true">Europe PMC</option>
             <option value="pubmed">PubMed</option>
@@ -35,13 +35,13 @@
     <tests>
         <!-- Hint: You can use [ctrl+alt+t] after defining the inputs/outputs to auto-scaffold some basic test cases. -->
         <test>
-           <param name="query" value="hepg2 thioacetamide"/>
+           <param name="search_term" value="hepg2 thioacetamide"/>
            <param name="literature_database" value="pubmed"/>
            <param name="chemical_database" location="https://zenodo.org/records/16532456/files/tg_gates.xlsx?download=1"/>
            <output name="Chemicals_per_publication" file="chemicals_per_publication_test.xlsx" compare="sim_size" delta="100"/>
         </test>
         <test>
-            <param name="query" value="hepg2 thioacetamide spheroid"/>
+            <param name="search_term" value="hepg2 thioacetamide spheroid"/>
             <param name="literature_database" value="europepmc"/>
             <param name="chemical_database" location="https://zenodo.org/records/16532456/files/tg_gates.xlsx?download=1"/>
             <output name="Publications_per_chemical" file="publications_per_chemical.xlsx" compare="sim_size" delta="100"/>
