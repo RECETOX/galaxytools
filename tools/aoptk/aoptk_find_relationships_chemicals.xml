@@ -174,7 +174,7 @@ This tool extracts chemical entities from text or leverages a user-defined chemi
 
 Additional Information
 ----------------------
-- **Effect**: Simply specify the effect you want to analyze. For example, "liver fibrosis".
+- **Effect**: Simply specify the effect you want to analyze (e.g., liver fibrosis).
 - **Relationship Type**: Choose whether you want to identify causative (e.g., chemical causes / does not cause liver fibrosis) or inhibitive relationships (e.g., chemical inhibits / does not inhibit gap juction intracellular communication).
 - **Prompt specification**: The LLM is preconfigured to identify relationships between chemicals and biological effects. You can further refine the analysis by specifying additional constraints—such as limiting results to a particular measurement method or experimental setup. Simply describe your requirements in the prompt, and the model will try to tailor the output accordingly.
 
