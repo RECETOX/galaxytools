@@ -167,9 +167,16 @@ write_chemicals(chemicals)
     </tests>
 
     <help><![CDATA[
-Identify relationships between chemicals and biological effects.
+Identify Relationships Between Chemicals and Biological Effects
+===============================================================
 
-This tool can infer chemicals from text first, or use a provided chemical list to score relationships in text.
+This tool extracts chemical entities from text or leverages a user-defined chemical list, then maps relationships between those chemicals and a specified effect.
+
+Additional Information
+----------------------
+- **Effect**: Simply specify the effect you want to analyze. For example, "liver fibrosis".
+- **Relationship Type**: Choose whether you want to identify causative (e.g., chemical causes / does not cause liver fibrosis) or inhibitive relationships (e.g., chemical inhibits / does not inhibit gap juction intracellular communication).
+- **Prompt specification**: The LLM is preconfigured to identify relationships between chemicals and biological effects. You can further refine the analysis by specifying additional constraints—such as limiting results to a particular measurement method or experimental setup. Simply describe your requirements in the prompt, and the model will try to tailor the output accordingly.
 
     ]]></help>
 

@@ -51,7 +51,7 @@ merged_files.to_csv("merged_chemicals.tsv", sep="\t", index=False)
 Chemical Matching
 ===================
 
-Tool to match chemical entities.
+Tool to simply match two chemical lists based on heading column.
 
     ]]></help>
 
