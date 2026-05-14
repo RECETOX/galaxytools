@@ -27,8 +27,8 @@
         </credentials>
     </xml>
 
-    <xml name="query">
-        <param argument="--query" type="text" value="" label="Your search term" help="Type your search term as you would in PubMed/Europe PMC.">
+    <xml name="search_term">
+        <param argument="--search_term" type="text" value="" label="Your search term" help="Type your search term as you would in PMC, Europe PMC, or PubMed.">
             <sanitizer invalid_char="">
                 <valid initial="string.letters,string.digits">
                     <add value="_" />
@@ -190,6 +190,28 @@
         <param name="relationship_type" type="select" label="Select relationship type" help="Choose the type of relationship to identify.">
             <option value="causative">Causative</option>
             <option value="inhibitive">Inhibitive</option>
+        </param>
+    </xml>
+    
+    <xml name="preprint_mode">
+        <param name="preprint_mode" type="select" label="Preprint handling" help="Choose how preprints should be handled in the search results.">
+            <option value="all" selected="true">Include preprints and non-preprints</option>
+            <option value="exclude">Exclude preprints</option>
+            <option value="only">Only include preprints</option>
+        </param>
+    </xml>
+
+    <xml name="licensing">
+        <param name="licensing" type="select" label="Licensing" help="Limit your search results to publications with specific Creative Commons (CC) licenses.">
+            <option value="all" selected="true">No licensing specification</option>
+            <option value="open-access">Open Access</option>
+            <option value="CC0">CC0</option>
+            <option value="CC-BY">CC-BY</option>
+            <option value="CC-BY-SA">CC-BY-SA</option>
+            <option value="CC-BY-ND">CC-BY-ND</option>
+            <option value="CC-BY-NC">CC-BY-NC</option>
+            <option value="CC-BY-NC-ND">CC-BY-NC-ND</option>
+            <option value="CC-BY-NC-SA">CC-BY-NC-SA</option>
         </param>
     </xml>
 

@@ -19,26 +19,43 @@
 import asyncio
 from Bio import Entrez
 import os
+from aoptk.literature.databases.pubmed import PubMed
+from aoptk.literature.databases.europepmc import EuropePMC
+from aoptk.literature.databases.pmc import PMC
+from aoptk.literature.query import Query 
 
 email = os.environ.get("EMAIL") or None
 api_key = os.environ.get("NCBI_API_KEY") or None
 
-if "${database}" == "pubmed":
-    from aoptk.literature.databases.pubmed import PubMed    
-    Entrez.email = email
-    Entrez.api_key = api_key
-    ids = PubMed("${query}").get_ids()
-elif "${database}" == "europepmc":
-    from aoptk.literature.databases.europepmc import EuropePMC  
-    ids = EuropePMC("${query}", storage = "./", figure_storage="./figures").get_ids()
-elif "${database}" == "pmc":
-    from aoptk.literature.databases.pmc import PMC
-    Entrez.email = email
-    Entrez.api_key = api_key
-    ids = asyncio.run(PMC("${query}", storage = "./", figure_storage="./figures").get_ids())
+#if $literature.preprint_mode == "only":
+only_preprint = True
+#elif $literature.preprint_mode == "exclude":
+only_preprint = False
+#else:
+only_preprint = False
+#end if
 
-else:
-    raise ValueError("Select valid database.")
+#if $literature.licensing == "all":
+licensing = None
+#else:
+licensing = "$literature.licensing"
+#end if
+
+query = Query(search_term="$search_term", full_text_subset=$literature.full_text_subset, only_preprint=only_preprint, licensing=licensing)
+
+#if $literature.database == "pubmed":
+Entrez.email = email
+Entrez.api_key = api_key
+ids = PubMed(query).get_ids()
+#elif $literature.database == "europepmc":
+ids = EuropePMC(query, storage = "./", figure_storage="./figures").get_ids()
+#elif $literature.database == "pmc":
+Entrez.email = email
+Entrez.api_key = api_key
+ids = asyncio.run(PMC(query, storage = "./", figure_storage="./figures").get_ids())
+#else:
+raise ValueError("Select valid database.")
+#end if
 
 with open(f"ids.txt", "w") as f:
     for id in ids:
@@ -48,31 +65,65 @@ with open(f"ids.txt", "w") as f:
     </configfiles>
 
     <inputs>
-        <expand macro="query"/>
-        <param name="database" type="select" label="Select which database to search." help="PubMed only accepts searches with up to 10 000 results. No limit for Europe PMC and PMC.">
-            <option value="europepmc" selected="true">Europe PMC</option>
-            <option value="pmc">PMC</option>
-            <option value="pubmed">PubMed</option>
-        </param>
+        <expand macro="search_term"/>
+        <conditional name="literature">
+            <param name="database" type="select" label="Select which database to search" help="PubMed only accepts searches with up to 10 000 results. No limit for Europe PMC and PMC.">
+                <option value="europepmc" selected="true">Europe PMC</option>
+                <option value="pmc">PMC</option>
+                <option value="pubmed">PubMed</option>
+            </param>
+            <when value="europepmc">
+                <expand macro="preprint_mode"/>
+                <expand macro="licensing"/>
+            </when>
+            <when value="pmc">
+                <expand macro="preprint_mode"/>
+                <expand macro="licensing"/>
+            </when>
+            <when value="pubmed">
+                <expand macro="preprint_mode"/>
+            </when>
+        </conditional>
+        <param name="full_text_subset" type="boolean" checked="true" label="Full text subset" help="Select if you want to query only for publications with full text available." />
     </inputs>
 
     <outputs>
-        <data name="ids" format="txt" from_work_dir="ids.txt" label="Query ${query} on ${database}" />
+        <data name="ids" format="txt" from_work_dir="ids.txt" label="Query ${search_term} on ${database}" />
     </outputs>
 
     <tests>
-        <test>
-           <param name="query" value="hepg2 thioacetamide"/>
-           <param name="database" value="pubmed"/>
-           <output name="ids" file="ids.txt" compare="sim_size" delta="100"/>
-        </test>
+          <test>
+              <param name="search_term" value="hepg2 thioacetamide"/>
+              <param name="literature|database" value="pubmed"/>
+              <output name="ids" file="ids.txt" compare="sim_size" delta="100"/>
+          </test>
     </tests>
 
     <help><![CDATA[
-Download IDs
-===================
+Tool for Downloading Publication IDs
+====================================
 
-Tool to download publication IDs.
+This tool allows you to download publication IDs based on your query. 
+
+NCBI settings
+-------------
+To speed up downloads from NCBI databases (PMC and PubMed), you may provide your personal API key. This information is treated as sensitive and is securely stored within the Galaxy credentials system.
+
+- Instructions for obtaining an API key are available here: https://support.nlm.nih.gov/kbArticle/?pn=KA-05317
+
+- To comply with NCBI usage guidelines, you may also provide your email address.
+
+Search Term Modifications
+-------------------------
+You can further refine your search by applying additional filters beyond those available in the user interface. Simply specify your search terms as you would in the original database interface (for example, to filter by publication date). 
+Please note that query modifications may vary depending on the database. For detailed guidance, refer to the official documentation for each source:
+
+- PMC: https://pmc.ncbi.nlm.nih.gov/about/userguide/
+
+- Europe PMC: https://europepmc.org/searchSyntaxGuide
+
+- PubMed: https://pubmed.ncbi.nlm.nih.gov/help/
+
 
     ]]></help>
 

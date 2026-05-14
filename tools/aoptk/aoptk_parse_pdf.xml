@@ -33,7 +33,7 @@ else:
 
 publication_id = os.path.splitext("$input_file.element_identifier")[0]
 if "${input_file.ext}" == "pdf":
-    text = PymupdfParser([PDF("$input_file")], text_generation=text_generation).get_publications()[0].full_text
+    text = PymupdfParser([PDF("$input_file")], text_generation=text_generation).get_publications(download_figures_enabled=False)[0].full_text
     with open(f"{publication_id}.txt", "w") as f:
         f.write(text)
 
