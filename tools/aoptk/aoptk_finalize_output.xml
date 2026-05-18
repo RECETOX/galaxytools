@@ -25,18 +25,22 @@ output = pd.read_csv("$input_file", sep="\t")
 
 file_name = output["effect"].unique()[0].strip().lower().replace(" ", "_")
 
+group_column = "heading" if "heading" in output.columns else "chemical"
+if group_column not in output.columns:
+    raise ValueError("Input must contain either a heading or chemical column.")
+
 output["relationship"] = output["relationship"].astype(str).str.strip().str.lower()
 relationships = sorted(output["relationship"].unique())
-final_output = output[["heading"]].drop_duplicates()
+final_output = output[[group_column]].drop_duplicates()
 
 for relationship in relationships:
     subset = output[output["relationship"] == relationship]
-    result = subset.groupby("heading", as_index=False, dropna=False).agg(
+    result = subset.groupby(group_column, as_index=False, dropna=False).agg(
         hits=("id", "size"),
         ids=("id", join_unique),
     )
     result.rename(columns={"hits": f"{relationship}", "ids": f"{relationship} IDs"}, inplace=True)
-    final_output = final_output.merge(result, on="heading", how="left")
+    final_output = final_output.merge(result, on=group_column, how="left")
 
 final_output.to_excel("./final_output.xlsx", index=False)
 
@@ -45,7 +49,7 @@ final_output.to_excel("./final_output.xlsx", index=False)
 </configfiles>
 
     <inputs>
-        <param name="input_file" type="data" format="tabular" label="TSV with heading column." help="Input tsv file with chemical column." />
+        <param name="input_file" type="data" format="tabular" label="TSV with heading or chemical column." help="Input tsv file with heading column when available, otherwise chemical column." />
     </inputs>
 
     <outputs>
@@ -54,7 +58,11 @@ final_output.to_excel("./final_output.xlsx", index=False)
 
     <tests>
         <test>
-           <param name="input_file" value="chemicals.tsv"/>
+           <param name="input_file" value="output.tsv"/>
+           <output name="final_output" file="final_output.xlsx" compare="sim_size" delta="100"/>
+        </test>
+        <test>
+           <param name="input_file" value="output_no_heading.tsv"/>
            <output name="final_output" file="final_output.xlsx" compare="sim_size" delta="100"/>
         </test>
     </tests>
