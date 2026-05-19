@@ -2,6 +2,7 @@
     <token name="@TOOL_VERSION@">5.2.1</token>
     <xml name="requirements">
         <requirements>
+            <container type="singularity">oras://cerit.io/galaxy/qcxms-docker:@TOOL_VERSION@</container>
             <container type="docker">recetox/qcxms-docker:@TOOL_VERSION@</container>
         </requirements>
     </xml>

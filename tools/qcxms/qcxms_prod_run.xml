@@ -1,4 +1,4 @@
-<tool id="qcxms_production_run" name="QCxMS production run" version="@TOOL_VERSION@+galaxy4" profile="22.09">
+<tool id="qcxms_production_run" name="QCxMS production run" version="@TOOL_VERSION@+galaxy5" profile="22.09">
     <description>Production run to obtain a QCxMS simulated mass spectrum</description>
     
     <macros>

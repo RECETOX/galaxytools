@@ -2,6 +2,7 @@
     <token name="@TOOL_VERSION@">v3.5.2</token>
     <xml name="requirements">
         <requirements>
+            <container type="singularity">oras://cerit.io/galaxy/recetox-msfinder:v3.5.2-rcx2</container>
             <container type="docker">recetox/recetox-msfinder:v3.5.2-rcx2</container>
         </requirements>
     </xml>

@@ -1,0 +1,16 @@
+name: aoptk
+owner: recetox
+remote_repository_url: "https://github.com/rdurnik/aoptk"
+homepage_url: "https://github.com/rdurnik/aoptk"
+categories:
+  - Machine Learning
+description: "AOP-toolkit (aoptk) is a Python package designed to support the development of Adverse Outcome Pathways (AOPs) that require extensive data mining."
+long_description: |
+  "AOP-toolkit (aoptk) is a Python package developed to support the construction of Adverse Outcome Pathways (AOPs) that require extensive mining and integration of toxicological data from heterogeneous sources. It enables researchers to collect literature from databases such as PubMed and Europe PMC, extract relevant information from full-text publications, and analyze complex, unstructured data using large language models. The toolkit also provides functionality for normalizing chemical names across publications, helping ensure consistency and interoperability."
+auto_tool_repositories:
+  name_template: "{{ tool_id }}"
+  description_template: "{{ tool_name }} tool from the aoptk package"
+suite:
+  name: suite_aoptk
+  description: AOP-toolkit (aoptk) is a Python package developed to support the construction of Adverse Outcome Pathways (AOPs) that require extensive mining and integration of toxicological data from heterogeneous sources.
+  type: repository_suite_definition

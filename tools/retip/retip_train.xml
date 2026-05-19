@@ -1,4 +1,4 @@
-<tool id="retip_train" name="Retip training" version="@TOOL_VERSION@+galaxy5">
+<tool id="retip_train" name="Retip training" version="@TOOL_VERSION@+galaxy6">
     <description>the Keras model to predict retention times</description>
     <macros>
         <import>macros.xml</import>

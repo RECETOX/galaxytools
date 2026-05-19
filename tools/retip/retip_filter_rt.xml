@@ -1,4 +1,4 @@
-<tool id="retip_filter_rt" name="Retip filter" version="@TOOL_VERSION@+galaxy5">
+<tool id="retip_filter_rt" name="Retip filter" version="@TOOL_VERSION@+galaxy6">
     <description>for predicted RT's</description>
     <macros>
         <import>macros.xml</import>
