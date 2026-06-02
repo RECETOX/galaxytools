@@ -48,7 +48,7 @@ parse_args <- function() {
     compound_table <- compound_table_full[, intersect(c("name", "formula", "rt"), colnames(compound_table_full)), drop = FALSE]
     compound_table$formula <- stringr::str_remove(
         compound_table$formula,
-        "\\s*(?:[+-]\\d+|\\d+[+-]|[+-])$"
+        "\\s*[+-]\\d*$"
     )
 
     # Extract remaining columns
