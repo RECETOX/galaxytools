@@ -1,4 +1,4 @@
-<tool id="isolib" name="isolib" version="2.6+galaxy3" profile="23.0" license="MIT">
+<tool id="isolib" name="isolib" version="2.6+galaxy4" profile="23.0" license="MIT">
     <description>create an isotopic pattern library for given compounds and adducts based on enviPat</description>
     <creator>
         <person
