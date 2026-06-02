@@ -236,6 +236,15 @@
             </conditional>
             <output name="isotope_library" file="test9.tsv" ftype="tabular"/>
         </test>
+        <!-- Test 11: Formulas with polarity symbols -->
+        <test>
+            <param name="input_file" value="markers_no_rt_polarity.tsv"/>
+            <conditional name="rel_to">
+                <param name="value" value="1"/>
+                <param name="threshold" value="1.0"/>
+            </conditional>
+            <output name="isotope_library" file="test1.msp"/>
+        </test>
     </tests>
     <help><![CDATA[
         This tool computes isotopic patterns for given compounds and adduct forms.
