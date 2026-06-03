@@ -246,7 +246,7 @@
             </conditional>
             <output name="isotope_library">
                 <assert_contents>
-                    <has_n_columns n="4"/>
+                    <has_n_columns n="9"/>
                     <has_n_lines n="10" delta="2"/>
                 </assert_contents>
             </output>
