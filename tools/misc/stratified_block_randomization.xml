@@ -14,6 +14,12 @@
           url="https://www.recetox.muni.cz/"
           email="GalaxyToolsDevelopmentandDeployment@space.muni.cz"
           name="RECETOX MUNI" />
+      <organization
+          url="https://www.eu-parc.eu/"
+          name="PARC"/>
+      <organization
+          url="https://eirene.eu/"
+          name="EIRENE-CZ"/>
     </creator>
     <!-- TODO: please annotate this tool with topics and operations from http://edamontology.org -->
     <!-- TODO: for more information see: https://galaxy-iuc-standards.readthedocs.io/en/latest/best_practices/tool_xml.html#edam-topics-and-operations -->
