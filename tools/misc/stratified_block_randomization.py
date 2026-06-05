@@ -10,6 +10,7 @@ Balancing is done by levels:
 Integer quotas are computed with largest-remainder rounding while enforcing
 exact totals across both dimensions.
 """
+
 import argparse
 from dataclasses import dataclass
 import sys
@@ -117,9 +118,7 @@ def _index_token_to_name(columns: list[str], token: str, arg_name: str) -> str:
         t = t[1:]
 
     if not t.isdigit():
-        raise StudyDesignerError(
-            f"{arg_name}: invalid column index token '{token}'"
-        )
+        raise StudyDesignerError(f"{arg_name}: invalid column index token '{token}'")
 
     idx = int(t)
     if idx < 1 or idx > len(columns):
@@ -257,9 +256,7 @@ def _allocate_matrix(
                     best_cell = (i, j)
 
         if best_cell is None:
-            raise StudyDesignerError(
-                "internal allocation failed to resolve deficits"
-            )
+            raise StudyDesignerError("internal allocation failed to resolve deficits")
 
         i, j = best_cell
         alloc[i, j] += 1
@@ -411,7 +408,9 @@ def build_summary_tables(
     return counts, pivot, sizes, full_block_size, last_size
 
 
-def print_summary(df: pd.DataFrame, factors: list[str], summary_path: str | None = None) -> None:
+def print_summary(
+    df: pd.DataFrame, factors: list[str], summary_path: str | None = None
+) -> None:
     counts, pivot, sizes, full_block_size, last_size = build_summary_tables(df, factors)
 
     print("\n=== Block assignment counts ===")
