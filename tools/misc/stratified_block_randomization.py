@@ -340,7 +340,7 @@ def assign_factor_targets_to_blocks(
         for b in block_ids:
             take = block_plan[b]
             if take > 0:
-                chosen = indices[offset : offset + take]
+                chosen = indices[offset: offset + take]
                 work.loc[chosen, "block"] = b
                 offset += take
 
