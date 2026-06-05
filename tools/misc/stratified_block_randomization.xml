@@ -60,7 +60,7 @@
         </data>
     </outputs>
     <tests>
-        <test>
+        <test expect_num_outputs="2">
             <param name="input" value="samples.tsv"/>
             <param name="sample_col" value="1"/>
             <param name="factors" value="2,3"/>
@@ -73,6 +73,18 @@
             <output name="summary">
                 <assert_contents>
                     <has_n_lines n="117"/>
+                </assert_contents>
+            </output>
+        </test>
+        <test expect_num_outputs="1">
+            <param name="input" value="samples.tsv"/>
+            <param name="sample_col" value="1"/>
+            <param name="factors" value="2"/>
+            <param name="write_summary" value="FALSE" />
+            <output name="output">
+                <assert_contents>
+                    <has_n_lines n="510"/>
+                    <has_n_columns n="6"/>
                 </assert_contents>
             </output>
         </test>
