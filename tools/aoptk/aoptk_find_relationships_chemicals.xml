@@ -73,15 +73,16 @@ write_chemicals(chemicals)
 
 #elif $analysis_purpose.method == "relationships"
 effects = [Effect("${effect}")]
-if "$relationship_type" == "causative":
-    relationship_type = Causative()
-elif "$relationship_type" == "inhibitive":
-    relationship_type = Inhibitive()
+relationship_types = []
+if "$relationship_types" == "causative":
+    relationship_types.append(Causative())
+elif "$relationship_types" == "inhibitive":
+    relationship_types.append(Inhibitive())
 else:
     raise ValueError(f"Unsupported relationship type: ${relationship_type}")
 
 chemicals = [Chemical(chem) for chem in pd.read_csv("$chemicals", sep="\t")["chemical"].tolist()]
-relationships = TextGenerationAPI(model="$llm_models", api_key=litellm_api_key).find_relationships_in_text(text=text, chemicals=chemicals, effects=effects, relationship_type=relationship_type)
+relationships = TextGenerationAPI(model="$llm_models", api_key=litellm_api_key).find_relationships_in_text(text=text, chemicals=chemicals, effects=effects, relationship_types=relationship_types)
 write_relationships(relationships)
 
 #elif $analysis_purpose.method == "chemicals"
@@ -104,7 +105,7 @@ write_chemicals(chemicals)
                 <expand macro="llm_models"/>
                 <expand macro="effect"/>
                 <expand macro="prompt_specification"/>
-                <expand macro="relationship_type"/>
+                <expand macro="relationship_types"/>
                 <param name="input_file" type="data" format="txt,pdf" label="Text to analyze" help="Input text file or PDF." />
             </when>
 
@@ -112,7 +113,7 @@ write_chemicals(chemicals)
                 <expand macro="llm_models"/>
                 <expand macro="effect"/>
                 <expand macro="prompt_specification"/>
-                <expand macro="relationship_type"/>
+                <expand macro="relationship_types"/>
                 <param name="input_file" type="data" format="txt,pdf" label="Text to analyze" help="Input text file or PDF." />
                 <param name="chemicals" type="data" format="tabular" label="Chemicals" help="Input TSV with chemicals." />
             </when>

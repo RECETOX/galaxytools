@@ -186,8 +186,8 @@
         </param>
     </xml>
 
-    <xml name="relationship_type">
-        <param name="relationship_type" type="select" label="Select relationship type" help="Choose the type of relationship to identify.">
+    <xml name="relationship_types">
+        <param name="relationship_types" type="select" label="Select relationship type" help="Choose the type of relationship to identify." multiple="true">
             <option value="causative">Causative</option>
             <option value="inhibitive">Inhibitive</option>
         </param>
