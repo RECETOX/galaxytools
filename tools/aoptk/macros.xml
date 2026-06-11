@@ -180,10 +180,12 @@
         </param>
     </xml>
 
-    <xml name="effect">
-        <param argument="effect" type="text" value="" label="Effect to search" help="Specify the effect you want to search for (e.g., liver fibrosis, gap junction intracellular communication).">
-            <validator type="regex">[0-9a-zA-Z]+</validator>
-        </param>
+    <xml name="effects">
+        <repeat name="effects" title="Effect" min="1">
+            <param argument="effect" type="text" value="" label="Effect to search" help="Specify the effect you want to search for (e.g., liver fibrosis, gap junction intracellular communication).">
+                <validator type="regex">[0-9a-zA-Z]+</validator>
+            </param>
+        </repeat>
     </xml>
 
     <xml name="relationship_types">

@@ -58,11 +58,11 @@ else:
 publication_id = os.path.splitext("$input_file.element_identifier")[0]
 
 #if $analysis_purpose.method == "relationships_chemicals"
-effects = [Effect("${effect}")]
-if "$relationship_type" == "causative":
-    relationship_type = Causative()
-elif "$relationship_type" == "inhibitive":
-    relationship_type = Inhibitive()
+effects = [Effect(effect) for effect in $effects]
+if "$relationship_types" == "causative":
+    relationship_types.append(Causative())
+elif "$relationship_types" == "inhibitive":
+    relationship_types.append(Inhibitive())
 else:
     raise ValueError(f"Unsupported relationship type: ${relationship_type}")
 
@@ -103,7 +103,7 @@ write_chemicals(chemicals)
 
             <when value="relationships_chemicals">
                 <expand macro="llm_models"/>
-                <expand macro="effect"/>
+                <expand macro="effects"/>
                 <expand macro="prompt_specification"/>
                 <expand macro="relationship_types"/>
                 <param name="input_file" type="data" format="txt,pdf" label="Text to analyze" help="Input text file or PDF." />
@@ -111,7 +111,7 @@ write_chemicals(chemicals)
 
             <when value="relationships">
                 <expand macro="llm_models"/>
-                <expand macro="effect"/>
+                <expand macro="effects"/>
                 <expand macro="prompt_specification"/>
                 <expand macro="relationship_types"/>
                 <param name="input_file" type="data" format="txt,pdf" label="Text to analyze" help="Input text file or PDF." />
