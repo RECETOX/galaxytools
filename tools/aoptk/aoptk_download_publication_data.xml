@@ -79,11 +79,13 @@ raise ValueError("Select valid data type.")
                 <param name="type_choice" type="select" label="Data type">
                     <option value="publications">Full text publications</option>
                     <option value="abstracts">Abstracts</option>
+                    <option value="pdfs">PDFs</option>
                 </param>
             </when>
             <when value="pmc">
                 <param name="type_choice" type="select" label="Data type">
                     <option value="publications">Full text publications</option>
+                    <option value="abstracts">Abstracts</option>
                     <option value="pdfs">PDFs</option>
                 </param>
             </when>
