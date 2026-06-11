@@ -38,7 +38,7 @@ database = PMC(storage = "./", figure_storage="./figures")
 database = EuropePMC(storage = "./", figure_storage="./figures")
 
 #elif $literature.database == "pubmed":
-database = PubMed()
+database = PubMed(storage = "./")
 
 #else:
 raise ValueError("Select valid database.")
@@ -47,17 +47,9 @@ raise ValueError("Select valid database.")
 
 #if $literature.type_choice == "publications":
 publications = database.get_publications(ids=ids, download_figures_enabled=False)
-for publication in publications:
-    if publication is not None and publication.full_text is not None:
-        print(publication.figures)
-        with open(f"{publication.id}.txt", "w") as f:
-            f.write(publication.full_text)
 
 #elif $literature.type_choice == "abstracts":
 abstracts = database.get_abstracts(ids=ids)
-for abstract in abstracts:
-    with open(f"{abstract.id}.txt", "w") as f:
-        f.write(abstract.text)
 
 #elif $literature.type_choice == "pdfs":
 pdfs = database.get_pdfs(ids=ids)
