@@ -47,7 +47,6 @@ def write_chemicals(chemicals):
             chemical_name = chemical.name if hasattr(chemical, "name") else chemical
             f_out.write(f"{chemical_name}\n")
 
-#if $analysis_purpose.method == "relationships_chemicals"
 input_file_ext = "$input_file.ext"
 if input_file_ext == "pdf":
     text = PymupdfParser([PDF("$input_file")], text_generation=TextGenerationAPI(model="qwen3.5", api_key=litellm_api_key)).get_publications()[0].full_text
@@ -56,9 +55,9 @@ elif input_file_ext == "txt":
         text = f_in.read()
 else:
     raise ValueError(f"Unsupported input file format: {input_file_ext}")
-
 publication_id = os.path.splitext("$input_file.element_identifier")[0]
 
+#if $analysis_purpose.method == "relationships_chemicals"
 effects = []
 #for $effect in $effects
 effects.append(Effect("$effect.effect"))
@@ -78,18 +77,11 @@ write_relationships(relationships)
 write_chemicals(chemicals)
 
 #elif $analysis_purpose.method == "relationships"
-input_file_ext = "$input_file.ext"
-if input_file_ext == "pdf":
-    text = PymupdfParser([PDF("$input_file")], text_generation=TextGenerationAPI(model="qwen3.5", api_key=litellm_api_key)).get_publications()[0].full_text
-elif input_file_ext == "txt":
-    with open("$input_file", "r") as f_in:
-        text = f_in.read()
-else:
-    raise ValueError(f"Unsupported input file format: {input_file_ext}")
+effects = []
+#for $effect in $effects
+effects.append(Effect("$effect.effect"))
+#end for
 
-publication_id = os.path.splitext("$input_file.element_identifier")[0]
-
-effects = [Effect("${effect}")]
 relationship_types = []
 if "$relationship_types" == "causative":
     relationship_types.append(Causative())
@@ -103,17 +95,6 @@ relationships = TextGenerationAPI(model="$llm_models", api_key=litellm_api_key).
 write_relationships(relationships)
 
 #elif $analysis_purpose.method == "chemicals"
-input_file_ext = "$input_file.ext"
-if input_file_ext == "pdf":
-    text = PymupdfParser([PDF("$input_file")], text_generation=TextGenerationAPI(model="qwen3.5", api_key=litellm_api_key)).get_publications()[0].full_text
-elif input_file_ext == "txt":
-    with open("$input_file", "r") as f_in:
-        text = f_in.read()
-else:
-    raise ValueError(f"Unsupported input file format: {input_file_ext}")
-
-publication_id = os.path.splitext("$input_file.element_identifier")[0]
-
 chemicals = TextGenerationAPI(model="$llm_models", api_key=litellm_api_key).find_chemicals(text)
 write_chemicals(chemicals)
 #end if

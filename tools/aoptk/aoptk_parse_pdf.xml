@@ -32,13 +32,14 @@ else:
     text_generation = None
 
 publication_id = os.path.splitext("$input_file.element_identifier")[0]
-if "${input_file.ext}" == "pdf":
+input_file_ext = "$input_file.ext"
+if input_file_ext == "pdf":
     text = PymupdfParser([PDF("$input_file")], text_generation=text_generation).get_publications(download_figures_enabled=False)[0].full_text
     with open(f"{publication_id}.txt", "w") as f:
         f.write(text)
 
 else:
-    raise ValueError(f"Unsupported input file format: ${input_file.ext}")
+    raise ValueError(f"Unsupported input file format: {input_file_ext}")
 </configfile>
 </configfiles>
 
