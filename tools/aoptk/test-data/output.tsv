@@ -6,3 +6,4 @@ id	chemical	effect	relationship	heading
 35	methotrexate	cell death	causes	methotrexate
 98	acetaminophen	cell death	does not cause	acetaminophen
 26	acetaminophen	liver fibrosis	does not cause	acetaminophen
+23	paracetamol	liver fibrosis	does not inhibit	acetaminophen
