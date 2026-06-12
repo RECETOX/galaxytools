@@ -163,8 +163,10 @@ write_chemicals(chemicals)
                 <param name="chemicals" value="chemicals.tsv"/>
                 <param name="llm_models" value="qwen3.5"/>
                 <param name="input_file" value="text.txt"/>
-                <param name="effect" value="liver fibrosis"/>
-                <param name="relationship_type" value="causative"/>
+                <repeat name="effects">
+                    <param name="effect" value="liver fibrosis"/>
+                </repeat>
+                <param name="relationship_types" value="causative"/>
             </conditional>
             <output name="relationships" file="relationships.tsv" compare="sim_size" delta="100"/>
         </test>

@@ -54,19 +54,19 @@ for effect in output["effect"].unique():
     </inputs>
 
     <outputs>
-        <collection name="final_outputs" type="list" label="Final outputs" detect_format="xlsx">
-            <discover_datasets pattern="(?P&lt;name&gt;.+)\.xlsx$" directory="." format="xlsx" />
+        <collection name="final_outputs" type="list" label="Final outputs" format="xlsx">
+            <discover_datasets pattern="(?P&lt;designation&gt;.*)\.xlsx$" ext="xlsx" directory="." />
         </collection>
     </outputs>
 
     <tests>
         <test>
            <param name="input_file" value="output.tsv"/>
-           <output_collection name="final_outputs" compare="sim_size" delta="100"/>
+           <output_collection name="final_outputs" type="list" count="1"/>
         </test>
         <test>
            <param name="input_file" value="output_no_heading.tsv"/>
-           <output_collection name="final_outputs" compare="sim_size" delta="100"/>
+           <output_collection name="final_outputs" type="list" count="1"/>
         </test>
     </tests>
 
