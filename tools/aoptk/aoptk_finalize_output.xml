@@ -14,7 +14,7 @@
     ]]></command>
 
 <configfiles>
-<configfile name="final_modification">
+    <configfile name="final_modification"><![CDATA[
 import pandas as pd
 
 def join_unique(series):
@@ -23,29 +23,30 @@ def join_unique(series):
 
 output = pd.read_csv("$input_file", sep="\t")
 
-file_name = output["effect"].unique()[0].strip().lower().replace(" ", "_")
+for effect in output["effect"].unique():
+    file_name = effect.strip().lower().replace(" ", "_")
 
-group_column = "heading" if "heading" in output.columns else "chemical"
-if group_column not in output.columns:
-    raise ValueError("Input must contain either a heading or chemical column.")
+    output_filtered = output[output["effect"] == effect].copy()
 
-output["relationship"] = output["relationship"].astype(str).str.strip().str.lower()
-relationships = sorted(output["relationship"].unique())
-final_output = output[[group_column]].drop_duplicates()
+    group_column = "heading" if "heading" in output_filtered.columns else "chemical"
+    if group_column not in output_filtered.columns:
+        raise ValueError("Input must contain either a heading or chemical column.")
 
-for relationship in relationships:
-    subset = output[output["relationship"] == relationship]
-    result = subset.groupby(group_column, as_index=False, dropna=False).agg(
-        hits=("id", "size"),
-        ids=("id", join_unique),
-    )
-    result.rename(columns={"hits": f"{relationship}", "ids": f"{relationship} IDs"}, inplace=True)
-    final_output = final_output.merge(result, on=group_column, how="left")
+    output_filtered["relationship"] = output_filtered["relationship"].astype(str).str.strip().str.lower()
+    relationships = sorted(output_filtered["relationship"].unique())
+    final_output = output_filtered[[group_column]].drop_duplicates()
 
-final_output.to_excel("./final_output.xlsx", index=False)
+    for relationship in relationships:
+        subset = output_filtered[output_filtered["relationship"] == relationship]
+        result = subset.groupby(group_column, as_index=False, dropna=False).agg(
+            hits=("id", "size"),
+            ids=("id", join_unique),
+        )
+        result.rename(columns={"hits": f"{relationship}", "ids": f"{relationship} IDs"}, inplace=True)
+        final_output = final_output.merge(result, on=group_column, how="left")
 
-
-</configfile>
+    final_output.to_excel(f"./{file_name}.xlsx", index=False)
+]]></configfile>
 </configfiles>
 
     <inputs>
@@ -53,17 +54,19 @@ final_output.to_excel("./final_output.xlsx", index=False)
     </inputs>
 
     <outputs>
-        <data name="final_output" format="xlsx" from_work_dir="final_output.xlsx" label="Final output." />
+        <collection name="final_outputs" type="list" label="Final outputs" detect_format="xlsx">
+            <discover_datasets pattern="(?P&lt;name&gt;.+)\.xlsx$" directory="." format="xlsx" />
+        </collection>
     </outputs>
 
     <tests>
         <test>
            <param name="input_file" value="output.tsv"/>
-           <output name="final_output" file="final_output.xlsx" compare="sim_size" delta="100"/>
+           <output_collection name="final_outputs" compare="sim_size" delta="100"/>
         </test>
         <test>
            <param name="input_file" value="output_no_heading.tsv"/>
-           <output name="final_output" file="final_output.xlsx" compare="sim_size" delta="100"/>
+           <output_collection name="final_outputs" compare="sim_size" delta="100"/>
         </test>
     </tests>
 
