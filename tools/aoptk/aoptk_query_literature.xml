@@ -143,13 +143,7 @@ To speed up downloads from NCBI databases (PMC and PubMed), you may provide your
 Search Term Modifications
 -------------------------
 You can further refine your search by applying additional filters beyond those available in the user interface. Simply specify your search terms as you would in the original database interface (for example, to filter by publication date). 
-Please note that query modifications may vary depending on the database. For detailed guidance, refer to the official documentation for each source:
-
-- PMC: https://pmc.ncbi.nlm.nih.gov/about/userguide/
-
-- Europe PMC: https://europepmc.org/searchSyntaxGuide
-
-- PubMed: https://pubmed.ncbi.nlm.nih.gov/help/
+Please note that query modifications may vary depending on the database. For detailed guidance, refer to the official documentation.
 
 
     ]]></help>
