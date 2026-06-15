@@ -108,7 +108,21 @@ with open(f"ids.txt", "w") as f:
           <test>
               <param name="search_term" value="hepg2 thioacetamide"/>
               <param name="literature|database" value="pubmed"/>
-              <output name="ids" file="ids.txt" compare="sim_size" delta="100"/>
+              <param name="literature|preprint_mode" value="exclude"/>
+              <output name="ids" file="ids_pubmed.txt" compare="sim_size" delta="100"/>
+          </test>
+          <test>
+              <param name="search_term" value="liver fibrosis thioacetamide methotrexate"/>
+              <param name="literature|database" value="pubmed"/>
+              <param name="literature|licensing" value="CC-BY-NC-SA"/>
+              <output name="ids" file="ids_europepmc.txt" compare="sim_size" delta="100"/>
+          </test>
+          <test>
+              <param name="search_term" value="hepg2 methotrexate spheroid heparg"/>
+              <param name="literature|database" value="pubmed"/>
+              <param name="literature|preprint_mode" value="exclude"/>
+              <param name="literature|licensing" value="open-access"/>
+              <output name="ids" file="ids_pmc.txt" compare="sim_size" delta="100"/>
           </test>
     </tests>
 

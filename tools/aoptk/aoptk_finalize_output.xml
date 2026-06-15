@@ -62,7 +62,7 @@ for effect in output["effect"].unique():
     <tests>
         <test>
            <param name="input_file" value="output.tsv"/>
-           <output_collection name="final_outputs" type="list" count="1"/>
+           <output_collection name="final_outputs" type="list" count="2"/>
         </test>
         <test>
            <param name="input_file" value="output_no_heading.tsv"/>
