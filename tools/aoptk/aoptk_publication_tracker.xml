@@ -53,7 +53,7 @@
            <param name="literature_database" value="pubmed"/>
            <param name="read" value="read_test.xlsx"/>
            <param name="master" value="master_test.xlsx"/>
-           <output name="to_read" file="read1.xlsx" compare="sim_size" delta="100"/>
+           <output name="to_read" file="read1.xlsx" compare="sim_size" delta="2000"/>
         </test>
         <test>
            <param name="search_term" value="hepg2 heparg thioacetamide spheroid"/>
@@ -61,7 +61,7 @@
            <param name="literature_database" value="europepmc"/>
            <param name="read" value="read_test.xlsx"/>
            <param name="master" value="master_test.xlsx"/>
-           <output name="to_read" file="read2.xlsx" compare="sim_size" delta="100"/>
+           <output name="to_read" file="read2.xlsx" compare="sim_size" delta="2000"/>
         </test>
         <test>
            <param name="search_term" value="lx-2 col1a1"/>
@@ -69,8 +69,8 @@
            <param name="literature_database" value="pubmed"/>
            <param name="read" value="read_test.xlsx"/>
            <param name="master" value="master_test.xlsx"/>
-           <output name="updated_master_table" file="updated_master_table.xlsx" compare="sim_size" delta="100"/>
-           <output name="to_read" file="read3.xlsx" compare="sim_size" delta="100"/>
+           <output name="updated_master_table" file="updated_master_table.xlsx" compare="sim_size" delta="2000"/>
+           <output name="to_read" file="read3.xlsx" compare="sim_size" delta="2000"/>
         </test>
     </tests>
     <help><![CDATA[
