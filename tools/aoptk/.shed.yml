@@ -1,6 +1,6 @@
 name: aoptk
 owner: recetox
-remote_repository_url: "https://github.com/rdurnik/aoptk"
+remote_repository_url: "https://github.com/RECETOX/galaxytools/tree/master/tools/aoptk"
 homepage_url: "https://github.com/rdurnik/aoptk"
 categories:
   - Machine Learning
