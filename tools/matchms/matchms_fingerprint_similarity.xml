@@ -100,7 +100,6 @@ scores.to_json("$scores_out")
                Fingerprints are derived from SMILES or InChI structure notations present in the spectrum metadata.
         
         .. _W3School: https://www.w3schools.com/sql/sql_join.asp
-        .. _daylight fingerprint: https://www.daylight.com/dayhtml/doc/theory/theory.finger.html
         
         @HELP_matchms@
     </help>
