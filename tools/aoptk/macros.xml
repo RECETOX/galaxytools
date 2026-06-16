@@ -34,7 +34,7 @@
                      optional="true"
                      description="Provide OpenAI API key and URL for accessing the large language models.">
             <secret name="api_key" inject_as_env="OPENAI_API_KEY" optional="true"/>
-            <variable name="api_endpoint_url" inject_as_env="OPENAI_ENDPOINT_URL" optional="true"/>
+            <secret name="api_endpoint_url" inject_as_env="OPENAI_ENDPOINT_URL" optional="true"/>
         </credentials>
     </xml>
 
