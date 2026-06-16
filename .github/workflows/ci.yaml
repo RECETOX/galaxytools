@@ -106,7 +106,7 @@ jobs:
         fail-level: error
         tool-list: ${{ needs.setup.outputs.tool-list }}
         additional-planemo-options: --biocontainers -s tests,output,inputs,help,general,command,citations,tool_xsd,version_bumped
-    - uses: actions/actions/upload-artifact@v7
+    - uses: actions/upload-artifact@v7
       if: ${{ failure() }}
       with:
         name: 'Container report output'
@@ -143,7 +143,7 @@ jobs:
         fail-level: warn
         tool-list: ${{ needs.setup.outputs.tool-list }}
         additional-planemo-options: -s version_bumped
-    - uses: actions/actions/upload-artifact@v7
+    - uses: actions/upload-artifact@v7
       if: ${{ failure() }}
       with:
         name: 'Tool linting output'
@@ -203,7 +203,7 @@ jobs:
         galaxy-slots: ${{ steps.cpu-cores.outputs.count }}
         # Limit each test to 15 minutes
         test_timeout: 900
-    - uses: actions/actions/upload-artifact@v7
+    - uses: actions/upload-artifact@v7
       with:
         name: 'Tool test output ${{ matrix.chunk }}'
         path: upload
@@ -241,7 +241,7 @@ jobs:
         mode: combine
         html-report: true
         markdown-report: true
-    - uses: actions/actions/upload-artifact@v7
+    - uses: actions/upload-artifact@v7
       with:
         name: 'All tool test results'
         path: upload
