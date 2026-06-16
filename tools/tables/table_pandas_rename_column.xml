@@ -5,7 +5,7 @@
     </xrefs> -->
     <macros>
         <import>macros.xml</import>
-        <token name="@VERSION_SUFFIX@">0</token>
+        <token name="@VERSION_SUFFIX@">1</token>
     </macros>
     <!-- TODO: please annotate this tool with topics and operations from http://edamontology.org -->
     <!-- TODO: for more information see: https://galaxy-iuc-standards.readthedocs.io/en/latest/best_practices/tool_xml.html#edam-topics-and-operations -->
@@ -31,18 +31,41 @@
             --output_dataset '$output_dataset' '$output_dataset.ext' 
     ]]></command>
     <inputs>
-        <param name="input_dataset" type="data" format="csv,tsv,tabular,parquet" label="Input Dataset"/>
-        <repeat name="columns_selection" title="Rename column" min="1">
-            <param name="column" type="data_column" data_ref="input_dataset" use_header_names="true" label="Column" help="Column from the dataset to rename."/>
-            <param argument="new_name" type="text" value="" label="New column name" help="New name for the column">
-                <sanitizer invalid_char="">
-                    <valid initial="string.letters,string.digits">
-                        <add value="_" />
-                    </valid>
-                </sanitizer>
-                <validator type="regex">[0-9a-zA-Z_]+</validator>
+        <conditional name="type">
+            <param name="type" type="select" label="Input type" help="TODO">
+                <option value="text">Text (csv/tsv/tabular)</option>
+                <option value="binary">Binary (parquet)</option>
             </param>
-        </repeat>
+            <when value="text">
+                <param name="input_dataset" type="data" format="csv,tsv,tabular,parquet" label="Input Dataset"/>
+                <repeat name="columns_selection" title="Rename column" min="1">
+                    <param name="column" type="data_column" data_ref="input_dataset" use_header_names="true" label="Column" help="Column from the dataset to rename."/>
+                    <param argument="new_name" type="text" label="New column name" help="New name for the column" optional="false">
+                        <sanitizer invalid_char="">
+                            <valid initial="string.letters,string.digits">
+                                <add value="_" />
+                            </valid>
+                        </sanitizer>
+                        <validator type="regex">[0-9a-zA-Z_]+</validator>
+                    </param>
+                </repeat>
+            </when>
+            <when value="binary">
+                <param name="input_dataset" type="data" format="parquet" label="Input Dataset"/>
+                <repeat name="columns_selection" title="Rename column" min="1">
+                    <param name="column" type="integer" label="Column" min="1" help="Column index from the dataset to rename."/>
+                    <param argument="new_name" type="text" label="New column name" help="New name for the column" optional="false">
+                        <sanitizer invalid_char="">
+                            <valid initial="string.letters,string.digits">
+                                <add value="_" />
+                            </valid>
+                        </sanitizer>
+                        <validator type="regex">[0-9a-zA-Z_]+</validator>
+                    </param>
+                </repeat>
+            </when>
+        </conditional>
+
     </inputs>
     <outputs>
         <data name="output_dataset" format_source="input_dataset" label="${tool.name} on ${on_string}">
@@ -59,6 +82,14 @@
                 <param name="new_name" value="retention_time"/>
             </repeat>
             <output name="output_dataset" file="rename/reference_rt_renamed.tabular" ftype="tabular"/>
+        </test>
+        <test>
+            <param name="input_dataset" value="query.parquet" ftype="parquet"/>
+            <repeat name="columns_selection">
+                <param name="column" value="3"/>
+                <param name="new_name" value="ri"/>
+            </repeat>
+            <output name="output_dataset" file="rename/query_retention_index_renamed.parquet" ftype="parquet"/>
         </test>
         <test>
             <param name="input_dataset" value="reference.txt" ftype="tabular"/>
