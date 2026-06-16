@@ -1,4 +1,4 @@
-<tool id="isolib" name="isolib" version="2.6+galaxy3" profile="23.0" license="MIT">
+<tool id="isolib" name="isolib" version="2.6+galaxy4" profile="23.0" license="MIT">
     <description>create an isotopic pattern library for given compounds and adducts based on enviPat</description>
     <creator>
         <person
@@ -235,6 +235,21 @@
                 <param name="threshold" value="10"/>
             </conditional>
             <output name="isotope_library" file="test9.tsv" ftype="tabular"/>
+        </test>
+        <!-- Test 11: Formulas with polarity symbols -->
+        <test>
+            <param name="input_file" value="markers_no_rt_polarity.tsv"/>
+            <param name="formatting|out_format" value="tabular"/>
+            <conditional name="rel_to">
+                <param name="value" value="1"/>
+                <param name="threshold" value="1.0"/>
+            </conditional>
+            <output name="isotope_library">
+                <assert_contents>
+                    <has_n_columns n="9"/>
+                    <has_n_lines n="20" delta="2"/>
+                </assert_contents>
+            </output>
         </test>
     </tests>
     <help><![CDATA[
