@@ -82,7 +82,7 @@ chemicals.to_csv("normalized_chemicals.tsv", sep="\t", index=False)
 
         <when value="mesh">
             <param name="input_file" type="data" format="tabular" label="TSV with chemical column." help="Input tsv file with chemical column." />
-            <param name="input_xml" type="data" format="xml" label="XML database with MeSH terms." help="Input xml file with MeSH terms." />
+            <param name="input_xml" type="data" format="xml" label="XML database with MeSH terms." help="Input xml file with MeSH terms." multiple="false"/>
         </when>
 
         </conditional>

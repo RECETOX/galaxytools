@@ -32,23 +32,21 @@ else:
     text_generation = None
 
 publication_id = os.path.splitext("$input_file.element_identifier")[0]
-input_file_ext = "$input_file.ext"
-if input_file_ext == "pdf":
-    text = PymupdfParser([PDF("$input_file")], text_generation=text_generation).get_publications(download_figures_enabled=False)[0].full_text
-    with open(f"{publication_id}.txt", "w") as f:
-        f.write(text)
 
-else:
-    raise ValueError(f"Unsupported input file format: {input_file_ext}")
+text = PymupdfParser([PDF("$input_file")], text_generation=$use_llms).get_publications(download_figures_enabled=False)[0].full_text
+with open(f"{publication_id}.txt", "w") as f:
+    f.write(text)
+
 </configfile>
 </configfiles>
 
     <inputs>
         <param name="input_file" type="data" format="pdf" label="PDF to parse" help="Input PDF." />
+        <param name="use_llms" type="boolean" truevalue="text_generation" falsevalue="None" checked="true" label="Use LLMs to parse scanned PDFs" help="Check if you want to use LLMs to parse old PDFs which contain scans of text as images and not text encoded through OCR." />
     </inputs>
 
     <outputs>
-    <data name="text" format="txt" from_work_dir="*.txt" label="Parsed text." />
+        <data name="text" format="txt" from_work_dir="*.txt" label="Parsed text." />
     </outputs>
 
     <tests>

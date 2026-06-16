@@ -27,8 +27,19 @@
         </credentials>
     </xml>
 
+    <xml name="openai_config">
+        <credentials name="ncbi_api_key" 
+                     label="Your NCBI API key" 
+                     version="1.0"
+                     optional="true"
+                     description="Provide your NCBI API key for faster download of publications. https://support.nlm.nih.gov/kbArticle/?pn=KA-05317">
+            <secret name="api_key" inject_as_env="OPENAI_API_KEY" optional="true"/>
+            <variable name="url" inject_as_env="OPENAI_ENDPOINT_URL" optional="true"/>
+        </credentials>
+    </xml>
+
     <xml name="search_term">
-        <param argument="--search_term" type="text" value="" label="Your search term" help="Type your search term as you would in PMC, Europe PMC, or PubMed.">
+        <param name="search_term" type="text" label="Your search term" help="Type your search term as you would in PMC, Europe PMC, or PubMed." optional="false">
             <sanitizer invalid_char="">
                 <valid initial="string.letters,string.digits">
                     <add value="_" />
@@ -99,7 +110,7 @@
 
     <xml name="llm_models">
         <param name="llm_models" type="select" label="Select LLM" help="Select the LLM to analyze text.">
-            <option value="gpt-oss-120b">GPT OSS 120B</option>
+            <option value="gpt-oss-120b" selected="true">GPT OSS 120B</option>
             <option value="qwen3.5">Qwen 3.5</option>
             <option value="deepseek-v3.2-thinking">DeepSeek v3.2</option>
         </param>
@@ -189,7 +200,7 @@
     </xml>
 
     <xml name="relationship_types">
-        <param name="relationship_types" type="select" label="Select relationship type" help="Choose the type of relationship to identify." multiple="true">
+        <param name="relationship_types" type="select" label="Select relationship type" help="Choose the type of relationship to identify." multiple="true" optional="false">
             <option value="causative">Causative</option>
             <option value="inhibitive">Inhibitive</option>
         </param>
@@ -216,22 +227,4 @@
             <option value="CC-BY-NC-SA">CC-BY-NC-SA</option>
         </param>
     </xml>
-
-
-<token name="@init_scores@">
-from matchms.importing import load_from_msp, scores_from_json
-from matchms import Scores
-#if $scores.use_scores == "True"
-scores = scores_from_json("$scores_in")
-join_type = "$scores.join_type"
-#else
-scores = Scores(references=list(load_from_msp("$references")), queries=list(load_from_msp("$queries")), is_symmetric=False)
-join_type = "left"
-#end if
-</token>
-
-<token name="@init_logger@">
-from matchms import set_matchms_logger_level
-set_matchms_logger_level("WARNING")
-</token>   
 </macros>

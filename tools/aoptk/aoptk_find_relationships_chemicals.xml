@@ -6,6 +6,7 @@
 
     <requirements>
         <expand macro="requirements"/>
+        <expand macro="openai_config"/>
     </requirements>
 
     <command detect_errors="exit_code"><![CDATA[
@@ -27,11 +28,6 @@ from aoptk.relationships.relationship_type import Causative
 from aoptk.relationships.relationship_type import Inhibitive
 from aoptk.text_generation_api import TextGenerationAPI
 
-litellm_config_file = os.environ.get("LITELLM_CONFIG_FILE")
-if not litellm_config_file:
-    sys.exit("LITELLM_CONFIG_FILE environment variable is not set.")
-with open(litellm_config_file, "r") as f:
-    config = yaml.safe_load(f)
 litellm_api_key = os.environ.get("LITELLM_API_KEY")
 
 def write_relationships(relationships):
@@ -47,14 +43,10 @@ def write_chemicals(chemicals):
             chemical_name = chemical.name if hasattr(chemical, "name") else chemical
             f_out.write(f"{chemical_name}\n")
 
-input_file_ext = "$input_file.ext"
-if input_file_ext == "pdf":
-    text = PymupdfParser([PDF("$input_file")], text_generation=TextGenerationAPI(model="qwen3.5", api_key=litellm_api_key)).get_publications()[0].full_text
-elif input_file_ext == "txt":
-    with open("$input_file", "r") as f_in:
-        text = f_in.read()
-else:
-    raise ValueError(f"Unsupported input file format: {input_file_ext}")
+
+with open("$input_file", "r") as f_in:
+    text = f_in.read()
+
 publication_id = os.path.splitext("$input_file.element_identifier")[0]
 
 #if $analysis_purpose.method == "relationships_chemicals"
@@ -107,6 +99,8 @@ write_chemicals(chemicals)
     </configfiles>
 
     <inputs>
+        <param name="input_file" type="data" format="txt" label="Text to analyze" help="Input text file (abstract/publication/parsed pdf)." />
+        <expand macro="llm_models"/>
         <conditional name="analysis_purpose">
             <param name="method" type="select" label="Purpose of the analysis.">
                 <option value="relationships_chemicals">Identify chemicals and relationships</option>
@@ -115,26 +109,19 @@ write_chemicals(chemicals)
             </param>
 
             <when value="relationships_chemicals">
-                <expand macro="llm_models"/>
                 <expand macro="effects"/>
                 <expand macro="prompt_specification"/>
                 <expand macro="relationship_types"/>
-                <param name="input_file" type="data" format="txt,pdf" label="Text to analyze" help="Input text file or PDF." />
             </when>
 
             <when value="relationships">
-                <expand macro="llm_models"/>
                 <expand macro="effects"/>
                 <expand macro="prompt_specification"/>
                 <expand macro="relationship_types"/>
-                <param name="input_file" type="data" format="txt,pdf" label="Text to analyze" help="Input text file or PDF." />
                 <param name="chemicals" type="data" format="tabular" label="Chemicals" help="Input TSV with chemicals." />
             </when>
 
-            <when value="chemicals">
-                <expand macro="llm_models"/>
-                <param name="input_file" type="data" format="txt,pdf" label="Text to analyze" help="Input text file or PDF." />
-            </when>
+            <when value="chemicals"/>
         </conditional>
     </inputs>
 
@@ -149,10 +136,10 @@ write_chemicals(chemicals)
 
     <tests>
         <test expect_num_outputs="2">
+            <param name="llm_models" value="qwen3.5"/>
+            <param name="input_file" value="text.txt"/>
             <conditional name="analysis_purpose">
                 <param name="method" value="relationships_chemicals"/>
-                <param name="llm_models" value="qwen3.5"/>
-                <param name="input_file" value="text.txt"/>
                 <repeat name="effects">
                     <param name="effect" value="liver fibrosis"/>
                 </repeat>
@@ -162,11 +149,11 @@ write_chemicals(chemicals)
             <output name="chemicals" file="chemicals.tsv" compare="sim_size" delta="100"/>
         </test>
         <test expect_num_outputs="1">
+            <param name="llm_models" value="qwen3.5"/>
+            <param name="input_file" value="text.txt"/>
             <conditional name="analysis_purpose">
-                <param name="method" value="relationships"/>
-                <param name="chemicals" value="chemicals.tsv"/>
-                <param name="llm_models" value="qwen3.5"/>
-                <param name="input_file" value="text.txt"/>
+                    <param name="method" value="relationships"/>
+                    <param name="chemicals" value="chemicals.tsv"/>
                 <repeat name="effects">
                     <param name="effect" value="liver fibrosis"/>
                 </repeat>
@@ -175,10 +162,10 @@ write_chemicals(chemicals)
             <output name="relationships" file="relationships.tsv" compare="sim_size" delta="100"/>
         </test>
         <test expect_num_outputs="1">
-            <conditional name="analysis_purpose">
+            <param name="llm_models" value="qwen3.5"/>
+            <param name="input_file" value="text.txt"/>
+                <conditional name="analysis_purpose">
                 <param name="method" value="chemicals"/>
-                <param name="llm_models" value="qwen3.5"/>
-                <param name="input_file" value="text.txt"/>
             </conditional>
             <output name="chemicals" file="chemicals.tsv" compare="sim_size" delta="100"/>
         </test>
