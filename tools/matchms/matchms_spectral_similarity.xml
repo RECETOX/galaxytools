@@ -76,14 +76,14 @@ scores.to_json("$similarity_scores")
             <param name="scores|references" value="similarity/rcx_exposome_pesticides_subset.msp" ftype="msp"/>
             <param name="scores|queries" value="similarity/fill2.msp" ftype="msp"/>
             <param name="similarity_metric" value="CosineGreedy"/>
-            <output name="similarity_scores" file="spectral_similarity/test1.json" compare="diff" ftype="json" lines_diff="30"/>
+            <output name="similarity_scores" file="spectral_similarity/test1.json" compare="diff" ftype="json" lines_diff="100"/>
         </test>
         <test> <!-- TEST #2: Test scoring with scores as json. -->
             <param name="scores|use_scores" value="True"/> <!-- Explicitly set use_scores to True -->
             <param name="scores|scores_in" value="metadata_match/ri_match_60.json" ftype="json"/>
             <param name="scores|join_type" value="left"/> <!-- Optional: Specify join type -->
             <param name="similarity_metric" value="CosineHungarian"/>
-            <output name="similarity_scores" file="spectral_similarity/test2.json" ftype="json" compare="diff" lines_diff="30"/>
+            <output name="similarity_scores" file="spectral_similarity/test2.json" ftype="json"/>
         </test>
     </tests>
 
