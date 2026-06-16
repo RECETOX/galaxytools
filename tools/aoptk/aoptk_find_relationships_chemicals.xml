@@ -38,10 +38,10 @@ def write_relationships(relationships):
 
 def write_chemicals(chemicals):
     with open("chemicals.tsv", "w") as f_out:
-        f_out.write("chemical\n")
+        f_out.write("id\tchemical\n")
         for chemical in chemicals:
             chemical_name = chemical.name if hasattr(chemical, "name") else chemical
-            f_out.write(f"{chemical_name}\n")
+            f_out.write(f"{publication_id}\t{chemical_name}\n")
 
 
 with open("$input_file", "r") as f_in:
