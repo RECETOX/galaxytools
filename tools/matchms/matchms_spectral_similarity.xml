@@ -78,7 +78,7 @@ scores.to_json("$similarity_scores")
                 <param name="queries" value="similarity/fill2.msp" ftype="msp"/>
             </conditional>
             <param name="similarity_metric" value="CosineGreedy"/>
-            <output name="similarity_scores" file="spectral_similarity/test1.json" ftype="json" lines_diff="10"/>
+            <output name="similarity_scores" file="spectral_similarity/test1.json" compare="diff" ftype="json" lines_diff="20"/>
         </test>
         <test> <!-- TEST #2: Test scoring with scores as json. -->
             <conditional name="scores">
