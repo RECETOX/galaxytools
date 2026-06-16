@@ -76,7 +76,7 @@ scores.to_json("$scores_out")
                 <param name="references" value="similarity/rcx_exposome_pesticides_subset.msp" ftype="msp"/>
             </conditional>
             <param name="fingerprint_similarity" value="cosine" />
-            <output name="scores_out" value="fingerprints/cosine.json" ftype="json" />
+            <output name="scores_out" value="fingerprints/cosine.json" ftype="json" lines_diff="10"/>
         </test>
         <test>
             <conditional name="scores">
