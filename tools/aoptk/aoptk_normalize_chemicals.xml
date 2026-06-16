@@ -6,6 +6,7 @@
 
     <requirements>
         <expand macro="requirements"/>
+        <expand macro="openai_config"/>
     </requirements>
  
     <command detect_errors="exit_code"><![CDATA[
@@ -25,18 +26,16 @@ from aoptk.normalization.pubchem_api import PubChemAPI
 from aoptk.normalization.mesh_terms import MeshTerms
 from aoptk.normalization.provide_mesh_term_dataframe_from_xml import ProvideMeshTermDataframeFromXML
 
-#if $normalization_method.method == "llm":
-litellm_config_file = os.environ.get("LITELLM_CONFIG_FILE")
-if not litellm_config_file:
-    sys.exit("LITELLM_CONFIG_FILE environment variable is not set.")
-with open(litellm_config_file, "r") as f:
-    config = yaml.safe_load(f)
-litellm_api_key = os.environ.get("LITELLM_API_KEY")
+
+#if $normalization_method.method == "llm"
+litellm_api_key = os.environ.get("OPENAI_API_KEY")
+openai_endpoint_url = os.environ.get("OPENAI_ENDPOINT_URL") or "https://llm.ai.e-infra.cz/v1"
 
 chemicals = pd.read_csv("$chemicals", sep="\t")
 chemical_list = pd.read_csv("$chemical_list", sep="\t")["chemical"].tolist()
+
 chemicals["chemical"] = chemicals["chemical"].apply(
-    lambda x: TextGenerationAPI(model="$llm_models", api_key=litellm_api_key).normalize_chemical(chemical=Chemical(x), chemical_list=[Chemical(chem) for chem in chemical_list])
+    lambda x: TextGenerationAPI(model="$llm_models", api_key=litellm_api_key, url=openai_endpoint_url).normalize_chemical(chemical=Chemical(x), chemical_list=[Chemical(chem) for chem in chemical_list])
     )
 
 #elif $normalization_method.method == "pubchem"

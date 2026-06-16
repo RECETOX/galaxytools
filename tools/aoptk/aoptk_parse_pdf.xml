@@ -6,6 +6,7 @@
 
     <requirements>
         <expand macro="requirements"/>
+        <expand macro="openai_config"/>
     </requirements>
  
     <command detect_errors="exit_code"><![CDATA[
@@ -22,18 +23,18 @@ from aoptk.literature.pdf import PDF
 from aoptk.literature.pymupdf_parser import PymupdfParser
 from aoptk.text_generation_api import TextGenerationAPI
 
-litellm_config_file = os.environ.get("LITELLM_CONFIG_FILE")
-if litellm_config_file:
-    with open(litellm_config_file, "r") as f:
-        config = yaml.safe_load(f)
-    litellm_api_key = os.environ.get("LITELLM_API_KEY")
-    text_generation=TextGenerationAPI(model="qwen3.5", api_key=litellm_api_key)
-else:
-    text_generation = None
-
 publication_id = os.path.splitext("$input_file.element_identifier")[0]
 
-text = PymupdfParser([PDF("$input_file")], text_generation=$use_llms).get_publications(download_figures_enabled=False)[0].full_text
+#if str($use_llms) == "true"
+litellm_api_key = os.environ.get("OPENAI_API_KEY")
+openai_endpoint_url = os.environ.get("OPENAI_ENDPOINT_URL") or "https://llm.ai.e-infra.cz/v1"
+text_generation=TextGenerationAPI(model="qwen3.5", api_key=litellm_api_key, url=openai_endpoint_url)
+
+#else
+text_generation = None
+#end if
+
+text = PymupdfParser([PDF("$input_file")], text_generation=text_generation).get_publications(download_figures_enabled=False)[0].full_text
 with open(f"{publication_id}.txt", "w") as f:
     f.write(text)
 
@@ -42,7 +43,7 @@ with open(f"{publication_id}.txt", "w") as f:
 
     <inputs>
         <param name="input_file" type="data" format="pdf" label="PDF to parse" help="Input PDF." />
-        <param name="use_llms" type="boolean" truevalue="text_generation" falsevalue="None" checked="true" label="Use LLMs to parse scanned PDFs" help="Check if you want to use LLMs to parse old PDFs which contain scans of text as images and not text encoded through OCR." />
+        <param name="use_llms" type="boolean" checked="false" label="Use LLMs to parse scanned PDFs" help="Check if you want to use LLMs to parse old PDFs which contain scans of text as images and not text encoded through OCR." />
     </inputs>
 
     <outputs>

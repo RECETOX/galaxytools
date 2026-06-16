@@ -28,13 +28,13 @@
     </xml>
 
     <xml name="openai_config">
-        <credentials name="ncbi_api_key" 
-                     label="Your NCBI API key" 
+        <credentials name="openai_config" 
+                     label="Your OpenAI API key" 
                      version="1.0"
                      optional="true"
-                     description="Provide your NCBI API key for faster download of publications. https://support.nlm.nih.gov/kbArticle/?pn=KA-05317">
+                     description="Provide OpenAI API key and URL for accessing the large language models.">
             <secret name="api_key" inject_as_env="OPENAI_API_KEY" optional="true"/>
-            <variable name="url" inject_as_env="OPENAI_ENDPOINT_URL" optional="true"/>
+            <variable name="api_endpoint_url" inject_as_env="OPENAI_ENDPOINT_URL" optional="true"/>
         </credentials>
     </xml>
 

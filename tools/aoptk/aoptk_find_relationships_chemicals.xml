@@ -28,7 +28,8 @@ from aoptk.relationships.relationship_type import Causative
 from aoptk.relationships.relationship_type import Inhibitive
 from aoptk.text_generation_api import TextGenerationAPI
 
-litellm_api_key = os.environ.get("LITELLM_API_KEY")
+litellm_api_key = os.environ.get("OPENAI_API_KEY")
+openai_endpoint_url = os.environ.get("OPENAI_ENDPOINT_URL") or "https://llm.ai.e-infra.cz/v1"
 
 def write_relationships(relationships):
     with open("relationships.tsv", "w") as f_out:
@@ -65,8 +66,8 @@ for type in types:
     else:
         raise ValueError(f"Unsupported relationship type: {type}")
 
-chemicals = TextGenerationAPI(model="$llm_models", api_key=litellm_api_key).find_chemicals(text)
-relationships = TextGenerationAPI(model="$llm_models", api_key=litellm_api_key).find_relationships_in_text(text=text, chemicals=chemicals, effects=effects, relationship_types=relationship_types)
+chemicals = TextGenerationAPI(model="$llm_models", api_key=litellm_api_key, url=openai_endpoint_url).find_chemicals(text)
+relationships = TextGenerationAPI(model="$llm_models", api_key=litellm_api_key, url=openai_endpoint_url).find_relationships_in_text(text=text, chemicals=chemicals, effects=effects, relationship_types=relationship_types)
 write_relationships(relationships)
 write_chemicals(chemicals)
 
@@ -87,11 +88,11 @@ for type in types:
         raise ValueError(f"Unsupported relationship type: {type}")
 
 chemicals = [Chemical(chem) for chem in pd.read_csv("$chemicals", sep="\t")["chemical"].tolist()]
-relationships = TextGenerationAPI(model="$llm_models", api_key=litellm_api_key).find_relationships_in_text(text=text, chemicals=chemicals, effects=effects, relationship_types=relationship_types)
+relationships = TextGenerationAPI(model="$llm_models", api_key=litellm_api_key, url=openai_endpoint_url).find_relationships_in_text(text=text, chemicals=chemicals, effects=effects, relationship_types=relationship_types)
 write_relationships(relationships)
 
 #elif $analysis_purpose.method == "chemicals"
-chemicals = TextGenerationAPI(model="$llm_models", api_key=litellm_api_key).find_chemicals(text)
+chemicals = TextGenerationAPI(model="$llm_models", api_key=litellm_api_key, url=openai_endpoint_url).find_chemicals(text)
 write_chemicals(chemicals)
 #end if
 
