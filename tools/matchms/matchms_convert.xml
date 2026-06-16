@@ -25,6 +25,12 @@
         sh ${ms_lima_output}
         #end if
         #end if
+
+        #if $output_file.output_format == "json":
+        &&
+        python3 -m json.tool ${converted_library} temp.json && mv temp.json ${converted_library}
+        #end if
+
     ]]></command>
 
 <configfiles>
