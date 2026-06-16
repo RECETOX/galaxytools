@@ -31,13 +31,13 @@
             --output_dataset '$output_dataset' '$output_dataset.ext' 
     ]]></command>
     <inputs>
-        <conditional name="type">
+        <conditional name="input_type">
             <param name="type" type="select" label="Input type" help="TODO">
                 <option value="text">Text (csv/tsv/tabular)</option>
                 <option value="binary">Binary (parquet)</option>
             </param>
             <when value="text">
-                <param name="input_dataset" type="data" format="csv,tsv,tabular,parquet" label="Input Dataset"/>
+                <param name="input_dataset" type="data" format="csv,tsv,tabular" label="Input Dataset"/>
                 <repeat name="columns_selection" title="Rename column" min="1">
                     <param name="column" type="data_column" data_ref="input_dataset" use_header_names="true" label="Column" help="Column from the dataset to rename."/>
                     <param argument="new_name" type="text" label="New column name" help="New name for the column" optional="false">
@@ -76,31 +76,23 @@
     </outputs>
     <tests>
         <test>
-            <param name="input_dataset" value="reference.txt" ftype="tabular"/>
-            <repeat name="columns_selection">
-                <param name="column" value="2"/>
-                <param name="new_name" value="retention_time"/>
-            </repeat>
+            <param name="input_type|input_dataset" value="reference.txt" ftype="tabular"/>
+            <param name="input_type|columns_selection_0|column" value="2"/>
+            <param name="input_type|columns_selection_0|new_name" value="retention_time"/>
             <output name="output_dataset" file="rename/reference_rt_renamed.tabular" ftype="tabular"/>
         </test>
         <test>
-            <param name="input_dataset" value="query.parquet" ftype="parquet"/>
-            <repeat name="columns_selection">
-                <param name="column" value="3"/>
-                <param name="new_name" value="ri"/>
-            </repeat>
+            <param name="input_type|input_dataset" value="query.parquet" ftype="parquet"/>
+            <param name="input_type|columns_selection_0|column" value="3"/>
+            <param name="input_type|columns_selection_0|new_name" value="ri"/>
             <output name="output_dataset" file="rename/query_retention_index_renamed.parquet" ftype="parquet"/>
         </test>
         <test>
-            <param name="input_dataset" value="reference.txt" ftype="tabular"/>
-            <repeat name="columns_selection">
-                <param name="column" value="2"/>
-                <param name="new_name" value="retention_time"/>
-            </repeat>
-            <repeat name="columns_selection">
-                <param name="column" value="1"/>
-                <param name="new_name" value="retention_index"/>
-            </repeat>
+            <param name="input_type|input_dataset" value="reference.txt" ftype="tabular"/>
+            <param name="input_type|columns_selection_0|column" value="2"/>
+            <param name="input_type|columns_selection_0|new_name" value="retention_time"/>
+            <param name="input_type|columns_selection_1|column" value="1"/>
+            <param name="input_type|columns_selection_1|new_name" value="retention_index"/>
             <output name="output_dataset" file="rename/reference_both_renamed.tabular" ftype="tabular"/>
         </test>
     </tests>
