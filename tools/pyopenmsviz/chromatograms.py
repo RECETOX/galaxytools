@@ -7,11 +7,11 @@ import plotly.express as px
 
 import plotly.graph_objects as go
 
-markers = pd.read_csv(os.path.join("transition_list.tabular"), sep='\t')
+marker_filename = os.path.join("transition_list.tabular")
 filenames = ["5_PCB mix.parquet", "5_PCB mix.parquet", "5_PCB mix.parquet"]
-
 mz_tol_ppm = 5
 rt_tol_s = 60
+
 
 # color assignment for a large number of variables:
 def get_colors(var, colorscale):
@@ -20,7 +20,7 @@ def get_colors(var, colorscale):
     colordict = {f:colors[i] for i, f in enumerate(var.unique())}
     return colordict
 
-def load_file(filename: str):
+def load_file(filename: str, markers: pd.DataFrame):
     eics = pd.read_parquet(filename)
     eics['Annotation'] = 'Unknown'
     eics.sort_values(['rt'], inplace=True)
@@ -37,8 +37,10 @@ def load_file(filename: str):
         eics.loc[mask, 'Annotation'] = marker['Compound Name']
     return eics.drop(eics.loc[eics['Annotation'] == 'Unknown'].index)
 
-colordict = get_colors(markers['Compound Name'], 'phase')
 
+markers = pd.read_csv(marker_filename, sep='\t')
+
+colordict = get_colors(markers['Compound Name'], 'phase')
 
 
 with ProcessPoolExecutor(max_workers=4) as executor:

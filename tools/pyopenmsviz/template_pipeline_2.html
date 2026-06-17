@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #f5f5f5;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+        header h1 { font-size: 24px; }
+        header p { font-size: 13px; opacity: 0.9; margin-top: 6px; }
+
+        #main-container {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        #sidebar {
+            width: 320px;
+            min-width: 320px;
+            background: white;
+            border-right: 2px solid #2c3e50;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+        #sidebar-header {
+            background: #2c3e50;
+            color: white;
+            padding: 12px 16px;
+            font-size: 14px;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+        #sidebar-search {
+            padding: 8px;
+            border-bottom: 1px solid #ddd;
+            flex-shrink: 0;
+        }
+        #sidebar-search input {
+            width: 100%;
+            padding: 6px 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 13px;
+        }
+        #compound-list {
+            overflow-y: auto;
+            flex: 1;
+            padding: 4px 0;
+        }
+
+        .compound-group { border-bottom: 1px solid #f0f0f0; }
+        .compound-item {
+            display: flex;
+            align-items: center;
+            padding: 8px 12px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            transition: background 0.15s;
+        }
+        .compound-item:hover { background: #f0f4f8; }
+        .compound-item.selected { background: #eaf4ff; }
+
+        .ion-item {
+            display: flex;
+            align-items: center;
+            padding: 6px 12px 6px 34px;
+            cursor: pointer;
+            font-size: 12px;
+            background: #fafafa;
+            border-top: 1px dashed #eee;
+            transition: background 0.15s;
+        }
+        .ion-item:hover { background: #f0f4f8; }
+        .ion-item.selected { background: #eaf4ff; }
+
+        .compound-color-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+            flex-shrink: 0;
+            border: 1px solid #ccc;
+            background: #ddd;
+        }
+        .compound-name { flex: 1; word-wrap: anywhere; padding-right: 5px; }
+        .compound-id   { font-size: 11px; color: #888; flex-shrink: 0; }
+
+        #sidebar-footer {
+            padding: 8px;
+            border-top: 1px solid #ddd;
+            flex-shrink: 0;
+        }
+        #reset-btn {
+            width: 100%;
+            padding: 8px;
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: bold;
+        }
+        #reset-btn:hover { background: #c0392b; }
+
+        #plots-area {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+        }
+        .chunk-section {
+            background: white;
+            margin-bottom: 40px;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .chunk-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #3498db;
+        }
+
+        .eic-wrapper {
+            margin-bottom: 8px;
+            border: 1px solid #d0dce8;
+            border-radius: 6px;
+            background: #fafcff;
+            overflow: hidden;
+            display: none;
+        }
+        .eic-wrapper.visible { display: block; }
+
+        .eic-header {
+            background: #34495e;
+            color: #ecf0f1;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 5px 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .eic-header .eic-label { flex: 1; }
+        .eic-header .eic-badge {
+            background: rgba(255,255,255,0.15);
+            border-radius: 10px;
+            padding: 1px 8px;
+            font-size: 11px;
+            max-width: 60%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .eic-plot-grid {
+            display: grid;
+            gap: 0;
+        }
+        .eic-subplot-cell {
+            border-right: 1px solid #e8eef5;
+            border-bottom: 1px solid #e8eef5;
+        }
+        .eic-subplot-cell:last-child { border-right: none; }
+
+        .plot-container { width: 100%; }
+        .plot-container .plotly-graph-div {
+            width: 100% !important;
+            min-width: 0 !important;
+        }
+
+        footer {
+            text-align: center;
+            padding: 16px;
+            color: #666;
+            font-size: 12px;
+            border-top: 1px solid #ddd;
+            flex-shrink: 0;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>{{ title }}</h1>
+    </header>
+
+    <div id="main-container">
+        <div id="sidebar">
+            <div id="sidebar-header">Annotated Compounds</div>
+            <div id="sidebar-search">
+                <input type="text" id="compound-search" placeholder="Search compounds..." />
+            </div>
+            <div id="compound-list"></div>
+            <div id="sidebar-footer">
+                <button id="reset-btn">Reset All</button>
+            </div>
+        </div>
+
+        <div id="plots-area">
+            {% for i in range(total_chunks) %}
+            <div class="chunk-section">
+
+                <div class="eic-wrapper" id="eic-wrapper-{{ i }}">
+                    <div class="eic-header">
+                        <span class="eic-label">Extracted Ion Chromatograms</span>
+                        <span class="eic-badge" id="eic-badge-{{ i }}"></span>
+                    </div>
+                    <div class="eic-plot-grid" id="eic-grid-{{ i }}"></div>
+                </div>
+
+                <div class="plot-container" id="chunk-{{ i }}"></div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <script>
+        const figureData      = {{ figure_data     | tojson }};
+        const traceMapData    = {{ trace_maps_data  | tojson }};
+        const annotationData  = {{ annotation_data  | tojson }};
+        const compoundColors  = {{ compound_colors   | tojson }};
+        const ionColors       = {{ ion_colors        | tojson }};
+        const ionColorsByPos  = {{ ion_colors_by_pos | tojson }};
+        const eicData         = {{ eic_data          | tojson }};
+
+        console.log('Loaded', Object.keys(figureData).length, 'figures');
+        console.log('Loaded', annotationData.length, 'compound records');
+        console.log('EIC data for', Object.keys(eicData).length, 'samples');
+
+        const plots     = {};
+        const eicPlots  = {};
+        const plotCount = Object.keys(figureData).length;
+        const chunkMeta = {};
+
+        let isUpdatingZoom    = false;
+        let isUpdatingEicZoom = false;
+
+        const selectedIons         = {};
+        const highlightTraceIndices= {};
+
+        // ── Parse subplot grid dimensions from Plotly layout ──────────
+        function parseChunkMeta(plotData) {
+            const layout = plotData.layout || {};
+            const anns   = (layout.annotations || []).filter(function(a) { return a.showarrow === false; });
+            const titles = anns.map(function(a) { return (a.text || '').trim(); });
+
+            const xLefts = new Set();
+            for (const key of Object.keys(layout)) {
+                if (/^xaxis\d*$/.test(key)) {
+                    const dom = layout[key].domain || [0, 1];
+                    xLefts.add(Math.round(dom[0] * 1000));
+                }
+            }
+            const ncols = xLefts.size || 1;
+            const nrows = Math.ceil(titles.length / ncols);
+            return { ncols: ncols, nrows: nrows, subplotSamples: titles };
+        }
+
+        // ── Build empty EIC grid cells ────────────────────────────────
+        function buildEicGrid(chunkIdx, meta) {
+            const grid = document.getElementById('eic-grid-' + chunkIdx);
+            grid.innerHTML = '';
+            grid.style.gridTemplateColumns = 'repeat(' + meta.ncols + ', 1fr)';
+
+            eicPlots[chunkIdx] = {};
+
+            meta.subplotSamples.forEach(function(sampleName, si) {
+                const cell = document.createElement('div');
+                cell.className = 'eic-subplot-cell';
+
+                const plotDiv = document.createElement('div');
+                plotDiv.id = 'eic-plot-' + chunkIdx + '-' + si;
+                plotDiv.style.width  = '100%';
+                plotDiv.style.height = '140px';
+                cell.appendChild(plotDiv);
+                grid.appendChild(cell);
+
+                eicPlots[chunkIdx][si] = {
+                    el:          plotDiv,
+                    sampleName:  sampleName,
+                    initialised: false,
+                };
+            });
+        }
+
+        // ── Render peak maps and attach zoom listeners ─────────────────
+        function renderAllPlots() {
+            for (let i = 0; i < plotCount; i++) {
+                const container = document.getElementById('chunk-' + i);
+                const plotData  = figureData[String(i)];
+                if (!plotData) { console.error('No plot data for chunk', i); continue; }
+
+                const meta = parseChunkMeta(plotData);
+                chunkMeta[i] = meta;
+                buildEicGrid(i, meta);
+
+                Plotly.newPlot(container, plotData.data, plotData.layout,
+                    { responsive: true, displayModeBar: true });
+                plots[i] = container;
+
+                // Pre-add one empty highlight trace per subplot so applyHighlighting
+                // can restyle them synchronously — eliminates all async race conditions.
+                var traceMap = traceMapData[String(i)] || {};
+                var subplotCount = Object.keys(traceMap).length;
+                var emptyTraces = [];
+                var baseIdx = container.data.length;
+
+                for (var s = 0; s < subplotCount; s++) {
+                    var xaxis = s === 0 ? 'x' : ('x' + (s + 1));
+                    var yaxis = s === 0 ? 'y' : ('y' + (s + 1));
+                    emptyTraces.push({
+                        type: 'scattergl', mode: 'markers',
+                        x: [], y: [], customdata: [],
+                        xaxis: xaxis, yaxis: yaxis,
+                        marker: { color: [], size: 8, opacity: 1.0,
+                                  line: { color: 'black', width: 1 } },
+                        showlegend: false, hoverinfo: 'skip',
+                    });
+                }
+
+                if (emptyTraces.length > 0) {
+                    Plotly.addTraces(container, emptyTraces);
+                }
+                // store indices: one entry per subplot
+                highlightTraceIndices[i] = Array.from(
+                    { length: subplotCount }, function(_, k) { return baseIdx + k; }
+                );
+
+                (function(ci) {
+                    container.on('plotly_relayout', function(data) {
+                        handlePeakmapZoom(ci, data);
+                    });
+                })(i);
+            }
+        }
+
+        // ── Peakmap zoom: sync to all other peakmaps + EIC x-axes ─────
+        function handlePeakmapZoom(srcChunkIdx, data) {
+            if (isUpdatingZoom) return;
+
+            var x0, x1, autoX = false, y0, y1, autoY = false;
+
+            for (var key in data) {
+                if (/^xaxis\d*\.range\[0\]$/.test(key)) x0 = data[key];
+                if (/^xaxis\d*\.range\[1\]$/.test(key)) x1 = data[key];
+                if (/^yaxis\d*\.range\[0\]$/.test(key)) y0 = data[key];
+                if (/^yaxis\d*\.range\[1\]$/.test(key)) y1 = data[key];
+                if (/^xaxis\d*\.autorange$/.test(key))  autoX = true;
+                if (/^yaxis\d*\.autorange$/.test(key))  autoY = true;
+            }
+
+            var pmUpdate = {};
+            if (x0 !== undefined && x1 !== undefined) {
+                pmUpdate['xaxis.range[0]'] = x0;
+                pmUpdate['xaxis.range[1]'] = x1;
+            } else if (autoX) { pmUpdate['xaxis.autorange'] = true; }
+            if (y0 !== undefined && y1 !== undefined) {
+                pmUpdate['yaxis.range[0]'] = y0;
+                pmUpdate['yaxis.range[1]'] = y1;
+            } else if (autoY) { pmUpdate['yaxis.autorange'] = true; }
+
+            var hasX = (x0 !== undefined && x1 !== undefined) || autoX;
+
+            isUpdatingZoom = true;
+            var promises = [];
+
+            for (var j = 0; j < plotCount; j++) {
+                if (j !== srcChunkIdx && Object.keys(pmUpdate).length > 0)
+                    promises.push(Plotly.relayout(plots[j], pmUpdate));
+            }
+
+            if (hasX) {
+                var eicUpdate = autoX
+                    ? { 'xaxis.autorange': true }
+                    : { 'xaxis.range[0]': x0, 'xaxis.range[1]': x1 };
+
+                for (var j = 0; j < plotCount; j++) {
+                    var subplots = eicPlots[j] || {};
+                    Object.values(subplots).forEach(function(sp) {
+                        if (sp.initialised) promises.push(Plotly.relayout(sp.el, eicUpdate));
+                    });
+                }
+            }
+
+            Promise.all(promises)
+                .then(function()  { isUpdatingZoom = false; })
+                .catch(function(e){ console.error('Zoom sync error:', e); isUpdatingZoom = false; });
+        }
+
+        // ── EIC zoom: sync back to peakmaps + sibling EICs ───────────
+        function handleEicZoom(srcChunkIdx, srcSubplotIdx, data) {
+            if (isUpdatingEicZoom || isUpdatingZoom) return;
+
+            var x0, x1, autoX = false;
+            for (var key in data) {
+                if (key === 'xaxis.range[0]') x0 = data[key];
+                if (key === 'xaxis.range[1]') x1 = data[key];
+                if (key === 'xaxis.autorange') autoX = true;
+            }
+            if (x0 === undefined && x1 === undefined && !autoX) return;
+
+            isUpdatingEicZoom = true;
+            var update = autoX ? { 'xaxis.autorange': true }
+                                : { 'xaxis.range[0]': x0, 'xaxis.range[1]': x1 };
+            var promises = [];
+
+            for (var j = 0; j < plotCount; j++) {
+                promises.push(Plotly.relayout(plots[j], update));
+            }
+            for (var j = 0; j < plotCount; j++) {
+                var subplots = eicPlots[j] || {};
+                Object.entries(subplots).forEach(function(entry) {
+                    var si = parseInt(entry[0]);
+                    var sp = entry[1];
+                    if (!sp.initialised) return;
+                    if (j === srcChunkIdx && si === srcSubplotIdx) return;
+                    promises.push(Plotly.relayout(sp.el, update));
+                });
+            }
+
+            Promise.all(promises)
+                .then(function()  { isUpdatingEicZoom = false; })
+                .catch(function(e){ console.error('EIC zoom sync error:', e); isUpdatingEicZoom = false; });
+        }
+
+        // ── Read current x-range from a peakmap ──────────────────────
+        function getPeakmapXRange(chunkIdx) {
+            var container = plots[chunkIdx];
+            if (!container || !container.layout) return null;
+            var layout = container.layout;
+            for (var key of Object.keys(layout)) {
+                if (/^xaxis\d*$/.test(key)) {
+                    var ax = layout[key];
+                    if (ax.range && ax.range.length === 2) return ax.range.slice();
+                }
+            }
+            return null;
+        }
+
+        // ── Build / update all EIC subplots ───────────────────────────
+        function renderAllEics() {
+            var hasSelection = Object.keys(selectedIons).length > 0;
+
+            // Map: compoundName -> [{ ionId, color }]
+            var selectedByCompound = {};
+            annotationData.forEach(function(compData) {
+                var name = compData['Compound Name'];
+                var ions = compData['ions'] || [];
+                ions.forEach(function(ion) {
+                    if (ion.id in selectedIons) {
+                        if (!selectedByCompound[name]) selectedByCompound[name] = [];
+                        selectedByCompound[name].push({ ionId: ion.id, color: selectedIons[ion.id] });
+                    }
+                });
+            });
+
+            var selectedCompoundNames = Object.keys(selectedByCompound);
+
+            for (var chunkIdx = 0; chunkIdx < plotCount; chunkIdx++) {
+                var wrapper  = document.getElementById('eic-wrapper-' + chunkIdx);
+                var badge    = document.getElementById('eic-badge-'   + chunkIdx);
+                var subplots = eicPlots[chunkIdx] || {};
+
+                if (!hasSelection) {
+                    wrapper.classList.remove('visible');
+                    Object.values(subplots).forEach(function(sp) {
+                        if (sp.initialised) { Plotly.purge(sp.el); sp.initialised = false; }
+                    });
+                    continue;
+                }
+
+                wrapper.classList.add('visible');
+                badge.textContent = selectedCompoundNames.join(' · ');
+
+                var xRange = getPeakmapXRange(chunkIdx);
+
+                Object.entries(subplots).forEach(function(entry) {
+                    var si         = parseInt(entry[0]);
+                    var sp         = entry[1];
+                    var sampleName = sp.sampleName;
+                    var sampleEic  = eicData[sampleName] || {};
+                    var traces     = [];
+
+                selectedCompoundNames.forEach(function(compoundName) {
+
+                    var compEic    = sampleEic[compoundName] || {};
+                    var ionEntries = selectedByCompound[compoundName] || [];
+
+                    // Set of selected ion ids for quick lookup
+                    var selectedIonIds = {};
+                    ionEntries.forEach(function(e) { selectedIonIds[e.ionId] = true; });
+
+                    // mz-sorted annotation ions for this compound — same order
+                    // as build_color_maps, so ionPos maps to the right colour
+                    var compAnnotation = annotationData.find(function(c) {
+                        return c['Compound Name'] === compoundName;
+                    });
+                    var allIons = compAnnotation
+                        ? compAnnotation['ions'].slice().sort(function(a, b) { return a.mz - b.mz; })
+                        : [];
+
+                    // mz-sorted eic traces — same order as single_sample_eic
+                    var sortedIons = Object.values(compEic).sort(function(a, b) {
+                        return a.mz - b.mz;
+                    });
+
+                    sortedIons.forEach(function(ionTrace, ionPos) {
+
+                            if (!ionTrace || !ionTrace.rt || ionTrace.rt.length === 0)
+                                return;
+
+                            // Match this eic position to its annotation ion by mz rank
+                            var annotIon = allIons[ionPos];
+                            if (!annotIon) return;
+
+                            // Skip if this specific ion is not selected
+                            if (!selectedIonIds[annotIon.id]) return;
+
+                            var eicColor =
+                                ((ionColorsByPos[compoundName] || {})[String(ionPos)])
+                                || compoundColors[compoundName]
+                                || '#00EBFF';
+
+                            traces.push({
+                                type: 'scatter',
+                                mode: 'lines',
+                                x: ionTrace.rt,
+                                y: ionTrace.intensity,
+                                name: compoundName + ' m/z ' + ionTrace.mz.toFixed(4),
+                                line: { color: eicColor, width: 1.5 },
+                                hovertemplate:
+                                    '<b>' + compoundName + '</b><br>' +
+                                    'm/z: ' + ionTrace.mz.toFixed(4) + '<br>' +
+                                    'rt: %{x:.1f} s<br>' +
+                                    'intensity: %{y:.0f}' +
+                                    '<extra></extra>',
+                        });
+                    });
+                });
+
+                    var xAxisCfg = {
+                        title: { text: 'rt (s)', font: { size: 10 }, standoff: 2 },
+                        tickfont: { size: 9 },
+                        color: '#444',
+                        gridcolor: '#e8eef5',
+                    };
+                    if (xRange) {
+                        xAxisCfg['range'] = xRange;
+                    }
+
+                    var layout = {
+                        margin:       { t: 22, b: 30, l: 52, r: 8 },
+                        height:       140,
+                        paper_bgcolor:'rgba(0,0,0,0)',
+                        plot_bgcolor: 'rgba(0,0,0,0)',
+                        showlegend:   false,
+                        xaxis: xAxisCfg,
+                        yaxis: {
+                            title: { text: 'Intensity', font: { size: 10 }, standoff: 2 },
+                            tickfont:      { size: 9 },
+                            color:         '#444',
+                            gridcolor:     '#e8eef5',
+                            rangemode:     'tozero',
+                            exponentformat:'e',
+                        },
+                        annotations: [{
+                            x: 0.5, y: 1, xref: 'paper', yref: 'paper',
+                            xanchor: 'center', yanchor: 'bottom',
+                            text: sampleName || '(empty)',
+                            showarrow: false,
+                            font: { size: 10, color: '#34495e' },
+                            bgcolor: 'rgba(255,255,255,0.7)',
+                            borderpad: 2,
+                        }],
+                    };
+
+                    if (!sp.initialised) {
+                        Plotly.newPlot(sp.el, traces, layout,
+                            { responsive: true, displayModeBar: false });
+                        sp.initialised = true;
+
+                        (function(ci, siLocal) {
+                            sp.el.on('plotly_relayout', function(data) {
+                                handleEicZoom(ci, siLocal, data);
+                            });
+                        })(chunkIdx, si);
+
+                    } else {
+                        Plotly.react(sp.el, traces, layout);
+                    }
+                });
+            }
+        }
+
+        // ── Sidebar ───────────────────────────────────────────────────
+        function buildSidebar(filter) {
+            filter = filter || '';
+            var list = document.getElementById('compound-list');
+            list.innerHTML = '';
+            var filterLower = filter.toLowerCase();
+
+            annotationData.forEach(function(compData) {
+                var name = compData['Compound Name'] || 'Unknown';
+                var ions = compData['ions'] || [];
+
+                if (filter && !name.toLowerCase().includes(filterLower)) return;
+
+                var selectedCount       = ions.filter(function(ion) { return ion.id in selectedIons; }).length;
+                var isAllSelected       = selectedCount > 0 && selectedCount === ions.length;
+                var isPartiallySelected = selectedCount > 0 && selectedCount < ions.length;
+
+                var baseColor      = compoundColors[name] || '#00EBFF';
+                var parentDotStyle = 'background: #ddd;';
+                if (isAllSelected) {
+                    parentDotStyle = 'background: ' + baseColor + '; border-color: transparent;';
+                } else if (isPartiallySelected) {
+                    parentDotStyle = 'background: linear-gradient(135deg, ' + baseColor + ' 50%, #ddd 50%); border-color: transparent;';
+                }
+
+                var groupDiv = document.createElement('div');
+                groupDiv.className = 'compound-group';
+
+                var parentDiv = document.createElement('div');
+                parentDiv.className = 'compound-item' + (isAllSelected || isPartiallySelected ? ' selected' : '');
+                parentDiv.innerHTML =
+                    '<div class="compound-color-dot" style="' + parentDotStyle + '"></div>' +
+                    '<span class="compound-name">' + name + ' (' + ions.length + ')</span>';
+                parentDiv.addEventListener('click', function() { toggleCompound(name, ions); });
+                groupDiv.appendChild(parentDiv);
+
+                ions.forEach(function(ion) {
+                    var isIonSelected = ion.id in selectedIons;
+                    var ionColor      = isIonSelected
+                        ? selectedIons[String(ion.id)]
+                        : ((ionColors[name] || {})[String(ion.id)] || '#ddd');
+
+                    var childDiv = document.createElement('div');
+                    childDiv.className = 'ion-item' + (isIonSelected ? ' selected' : '');
+                    childDiv.innerHTML =
+                        '<div class="compound-color-dot" style="background:' + ionColor +
+                            (isIonSelected ? '; border-color: transparent;' : '') + '"></div>' +
+                        '<span class="compound-name">m/z: ' + ion.mz.toFixed(4) + '</span>' +
+                        '<span class="compound-id">#' + ion.id + '</span>';
+                    childDiv.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        toggleIon(name, ion.id);
+                    });
+                    groupDiv.appendChild(childDiv);
+                });
+
+                list.appendChild(groupDiv);
+            });
+        }
+
+        // ── Toggle ────────────────────────────────────────────────────
+        function toggleCompound(name, ions) {
+            var color = compoundColors[name] || '#00EBFF';
+            var selectedCount = ions.filter(function(ion) { return ion.id in selectedIons; }).length;
+
+            if (selectedCount === ions.length) {
+                ions.forEach(function(ion) {
+                    delete selectedIons[String(ion.id)];
+                });
+            } else {
+                ions.forEach(function(ion) {
+                    selectedIons[String(ion.id)] =
+                        (ionColors[name] || {})[String(ion.id)]
+                        || color;
+                });
+            }
+
+            buildSidebar(document.getElementById('compound-search').value);
+            applyHighlighting();
+            renderAllEics();
+        }
+
+        function toggleIon(name, ionId) {
+
+            var ionColor =
+                (ionColors[name] || {})[String(ionId)]
+                || compoundColors[name]
+                || '#00EBFF';
+
+            if (String(ionId) in selectedIons) {
+                delete selectedIons[String(ionId)];
+            } else {
+                selectedIons[String(ionId)] = ionColor;
+            }
+
+            buildSidebar(document.getElementById('compound-search').value);
+            applyHighlighting();
+            renderAllEics();
+        }
+
+        // ── Highlight peak map points ─────────────────────────────────
+        // Uses pre-existing empty traces (one per subplot, added at init).
+        // Restyle is synchronous — no promises, no race conditions.
+        function applyHighlighting() {
+            var hasSelection = Object.keys(selectedIons).length > 0;
+
+            for (var chunkIdx = 0; chunkIdx < plotCount; chunkIdx++) {
+                var container = plots[chunkIdx];
+                var traceMap  = traceMapData[String(chunkIdx)];
+                if (!container || !traceMap) continue;
+
+                var hlIndices = highlightTraceIndices[chunkIdx] || [];
+                var fadeIndices = [];
+                Object.values(traceMap).forEach(function(ti) {
+                    fadeIndices.push(ti.above, ti.below);
+                });
+
+                if (!hasSelection) {
+                    // Clear all highlight traces and restore opacity
+                    if (hlIndices.length > 0) {
+                        var empties = hlIndices.map(function() { return []; });
+                        Plotly.restyle(container, { x: empties, y: empties,
+                            customdata: empties, 'marker.color': empties,
+                            hovertemplate: hlIndices.map(function() { return ''; }),
+                        }, hlIndices);
+                    }
+                    Plotly.restyle(container, { opacity: 1.0 }, fadeIndices);
+                    continue;
+                }
+
+                // Fade base traces
+                Plotly.restyle(container, { opacity: 0.2 }, fadeIndices);
+
+                // Build per-subplot update arrays — one slot per highlight trace
+                var xArr        = hlIndices.map(function() { return []; });
+                var yArr        = hlIndices.map(function() { return []; });
+                var cdArr       = hlIndices.map(function() { return []; });
+                var colorArr    = hlIndices.map(function() { return []; });
+                var htArr       = hlIndices.map(function() { return ''; });
+
+                var plotData = container.data;
+
+                Object.entries(traceMap).forEach(function(tmEntry) {
+                    var si           = parseInt(tmEntry[0]);
+                    var traceIndices = tmEntry[1];
+                    var hlSlot       = hlIndices.indexOf(hlIndices[si]); // slot == si
+                    var aboveTrace   = plotData[traceIndices.above];
+                    if (!aboveTrace || !aboveTrace.customdata) return;
+
+                    var matchX = [], matchY = [], matchCustom = [], matchColor = [];
+
+                    Object.entries(selectedIons).forEach(function(siEntry) {
+                        var id    = parseInt(siEntry[0]);
+                        var color = siEntry[1];
+                        for (var p = 0; p < aboveTrace.customdata.length; p++) {
+                            if (aboveTrace.customdata[p][0] === id) {
+                                matchX.push(aboveTrace.x[p]);
+                                matchY.push(aboveTrace.y[p]);
+                                matchCustom.push(aboveTrace.customdata[p]);
+                                matchColor.push(color);
+                            }
+                        }
+                    });
+
+                    xArr[si]     = matchX;
+                    yArr[si]     = matchY;
+                    cdArr[si]    = matchCustom;
+                    colorArr[si] = matchColor;
+                    htArr[si]    = 'rt: %{x:.2f}<br>mz: %{y:.4f}<br>id: %{customdata[0]}<br>%{customdata[1]}<br>intensity: %{customdata[2]:.0f}<extra></extra>';
+                });
+
+                if (hlIndices.length > 0) {
+                    Plotly.restyle(container, {
+                        x: xArr, y: yArr, customdata: cdArr,
+                        'marker.color': colorArr,
+                        hovertemplate: htArr,
+                    }, hlIndices);
+                }
+            }
+        }
+
+        // ── Reset ─────────────────────────────────────────────────────
+        function resetAll() {
+            Object.keys(selectedIons).forEach(function(k) { delete selectedIons[k]; });
+            // applyHighlighting with empty selectedIons clears highlight traces
+            // and restores opacity — no deleteTraces needed
+            applyHighlighting();
+            buildSidebar(document.getElementById('compound-search').value);
+            renderAllEics();
+        }
+
+        // ── Event listeners & init ────────────────────────────────────
+        document.getElementById('compound-search').addEventListener('input', function(e) {
+            buildSidebar(e.target.value);
+        });
+        document.getElementById('reset-btn').addEventListener('click', resetAll);
+
+        window.addEventListener('load', function() {
+            renderAllPlots();
+            buildSidebar();
+        });
+        if (document.readyState === 'complete') {
+            renderAllPlots();
+            buildSidebar();
+        }
+    </script>
+</body>
+</html>
