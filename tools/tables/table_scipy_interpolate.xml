@@ -1,4 +1,4 @@
-<tool id="table_scipy_interpolate" name="table scipy interpolate" version="@SCIPY_VERSION@+galaxy@VERSION_SUFFIX@" profile="20.01" license="MIT">
+<tool id="table_scipy_interpolate" name="table scipy interpolate" version="@SCIPY_VERSION@+galaxy@VERSION_SUFFIX@" profile="@PROFILE_VERSION@" license="MIT">
     <description>interpolate data using the scipy.interpolate library</description>
     <!-- <xrefs>
         <xref type="bio.tools"></xref>

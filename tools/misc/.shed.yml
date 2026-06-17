@@ -21,3 +21,13 @@ repositories:
       - target_screen.xml
       - target_screen.py
       - test-data
+  stratified_block_randomization:
+    description: "Assigns samples into study blocks of a fixed size while hierarchically balancing selected metadata factors."
+    long_description: |
+      "This tool divides samples into user-defined blocks and balances their distribution across one or more metadata factors in a hierarchical manner.
+      It ensures that the first factor is balanced across all blocks, with subsequent factors balanced within nested levels using proportional allocation and integer rounding.
+      The output includes the original data augmented with block assignments, positions within blocks, and optional summary statistics for verification."
+    include:
+      - stratified_block_randomization.xml
+      - stratified_block_randomization.py
+      - test-data

@@ -344,8 +344,9 @@ tranpose_data <- function(data, column_names) {
 
 
 final_data_processing <- function(
-    data, non_feature_columns,
-    transpose, original_first_colname) {
+  data, non_feature_columns,
+  transpose, original_first_colname
+) {
     # Remove all columns that are in non_
     # feature_columns, except the first column
     cols_to_keep <- !(colnames(data) %in% non_feature_columns)

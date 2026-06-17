@@ -17,11 +17,7 @@
     </requirements>
     <expand macro="creator"/>
     <command detect_errors="aggressive"><![CDATA[
-    #if $input_file.ext == "tabular"
-        #set $input_file_new = 'input.tsv'
-    #else
-        #set $input_file_new = 'input.' + str($input_file.ext)
-    #end if
+       #set $input_file_new = 'input.' + str($input_file.ext)
        cp ${input_file} ${input_file_new} &&
        python3 -m rcx_tk --method ${method} ${input_file_new} 'output.tsv' 
     ]]></command>
@@ -46,6 +42,11 @@
             <param name="input_file" value="input_alkanes.txt"/>
             <param name="method" value="alkanes"/>
             <output name="output_file" file="output_alkanes.tsv"/>
+        </test>
+        <test>
+            <param name="input_file" location="https://raw.githubusercontent.com/RECETOX/rcx-tk/refs/tags/v0.2.2/tests/test_data/msdial_katka.tsv"/>
+            <param name="method" value="msdial"/>
+            <output name="output_file" location="https://raw.githubusercontent.com/RECETOX/rcx-tk/refs/tags/v0.2.2/tests/test_data/msdial_katka_corrected.tsv"/>
         </test>
     </tests>
     <help><![CDATA[
