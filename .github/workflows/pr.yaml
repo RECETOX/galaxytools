@@ -21,6 +21,8 @@ env:
   GALAXY_BRANCH: release_25.1
   MAX_CHUNKS: 4
   MAX_FILE_SIZE: 1M
+  OPENAI_API_KEY: ${{secrets.OPENAI_API_KEY }}
+  OPENAI_ENDPOINT_URL: https://llm.ai.e-infra.cz/v1
 concurrency:
   # Group runs by PR, but keep runs on the default branch separate
   # because we do not want to cancel ToolShed uploads
