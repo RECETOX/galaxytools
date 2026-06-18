@@ -28,8 +28,7 @@ from aoptk.relationships.relationship_type import Causative
 from aoptk.relationships.relationship_type import Inhibitive
 from aoptk.text_generation_api import TextGenerationAPI
 
-litellm_api_key = os.environ.get("OPENAI_API_KEY")
-openai_endpoint_url = os.environ.get("OPENAI_ENDPOINT_URL") or "https://llm.ai.e-infra.cz/v1"
+@MODEL_SETUP@
 
 def write_relationships(relationships):
     with open("relationships.tsv", "w") as f_out:
@@ -66,8 +65,8 @@ for type in types:
     else:
         raise ValueError(f"Unsupported relationship type: {type}")
 
-chemicals = TextGenerationAPI(model="$llm_models", api_key=litellm_api_key, url=openai_endpoint_url).find_chemicals(text)
-relationships = TextGenerationAPI(model="$llm_models", api_key=litellm_api_key, url=openai_endpoint_url).find_relationships_in_text(text=text, chemicals=chemicals, effects=effects, relationship_types=relationship_types)
+chemicals = TextGenerationAPI(model="$model", api_key=litellm_api_key, url=litellm_base_url).find_chemicals(text)
+relationships = TextGenerationAPI(model="$model", api_key=litellm_api_key, url=litellm_base_url).find_relationships_in_text(text=text, chemicals=chemicals, effects=effects, relationship_types=relationship_types)
 write_relationships(relationships)
 write_chemicals(chemicals)
 
@@ -88,11 +87,11 @@ for type in types:
         raise ValueError(f"Unsupported relationship type: {type}")
 
 chemicals = [Chemical(chem) for chem in pd.read_csv("$chemicals", sep="\t")["chemical"].tolist()]
-relationships = TextGenerationAPI(model="$llm_models", api_key=litellm_api_key, url=openai_endpoint_url).find_relationships_in_text(text=text, chemicals=chemicals, effects=effects, relationship_types=relationship_types)
+relationships = TextGenerationAPI(model="$model", api_key=litellm_api_key, url=litellm_base_url).find_relationships_in_text(text=text, chemicals=chemicals, effects=effects, relationship_types=relationship_types)
 write_relationships(relationships)
 
 #elif $analysis_purpose.method == "chemicals"
-chemicals = TextGenerationAPI(model="$llm_models", api_key=litellm_api_key, url=openai_endpoint_url).find_chemicals(text)
+chemicals = TextGenerationAPI(model="$model", api_key=litellm_api_key, url=litellm_base_url).find_chemicals(text)
 write_chemicals(chemicals)
 #end if
 
@@ -101,7 +100,7 @@ write_chemicals(chemicals)
 
     <inputs>
         <param name="input_file" type="data" format="txt" label="Text to analyze" help="Input text file (abstract/publication/parsed pdf)." />
-        <expand macro="llm_models"/>
+        <expand macro="model_selector" modality="text"/>
         <conditional name="analysis_purpose">
             <param name="method" type="select" label="Purpose of the analysis.">
                 <option value="relationships_chemicals">Identify chemicals and relationships</option>
@@ -137,7 +136,7 @@ write_chemicals(chemicals)
 
     <tests>
         <test expect_num_outputs="2" expect_test_failure="true">
-            <param name="llm_models" value="qwen3.5"/>
+            <param name="model_selector|model" value="qwen3.5"/>
             <param name="input_file" value="text.txt"/>
             <conditional name="analysis_purpose">
                 <param name="method" value="relationships_chemicals"/>
@@ -150,7 +149,7 @@ write_chemicals(chemicals)
             <output name="chemicals" file="chemicals.tsv" compare="sim_size" delta="100"/>
         </test>
         <test expect_num_outputs="1" expect_test_failure="true">
-            <param name="llm_models" value="qwen3.5"/>
+            <param name="model_selector|model" value="qwen3.5"/>
             <param name="input_file" value="text.txt"/>
             <conditional name="analysis_purpose">
                     <param name="method" value="relationships"/>
@@ -163,7 +162,7 @@ write_chemicals(chemicals)
             <output name="relationships" file="relationships.tsv" compare="sim_size" delta="100"/>
         </test>
         <test expect_num_outputs="1" expect_test_failure="true">
-            <param name="llm_models" value="qwen3.5"/>
+            <param name="model_selector|model" value="qwen3.5"/>
             <param name="input_file" value="text.txt"/>
                 <conditional name="analysis_purpose">
                 <param name="method" value="chemicals"/>

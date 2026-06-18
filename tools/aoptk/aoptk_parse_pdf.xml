@@ -23,12 +23,13 @@ from aoptk.literature.pdf import PDF
 from aoptk.literature.pymupdf_parser import PymupdfParser
 from aoptk.text_generation_api import TextGenerationAPI
 
+
+
 publication_id = os.path.splitext("$input_file.element_identifier")[0]
 
 #if $use_llms == "true"
-litellm_api_key = os.environ.get("OPENAI_API_KEY")
-openai_endpoint_url = os.environ.get("OPENAI_ENDPOINT_URL") or "https://llm.ai.e-infra.cz/v1"
-text_generation=TextGenerationAPI(model="qwen3.5", api_key=litellm_api_key, url=openai_endpoint_url)
+@MODEL_SETUP@
+text_generation=TextGenerationAPI(model=model, api_key=litellm_api_key, url=litellm_base_url)
 
 #else
 text_generation = None
@@ -43,7 +44,16 @@ with open(f"{publication_id}.txt", "w") as f:
 
     <inputs>
         <param name="input_file" type="data" format="pdf" label="PDF to parse" help="Input PDF." />
-        <param name="use_llms" type="boolean" checked="false" truevalue="true" falsevalue="false" label="Use LLMs to parse scanned PDFs" help="Check if you want to use LLMs to parse old PDFs which contain scans of text as images and not text encoded through OCR." />
+        <conditional name="llms">
+            <param name="use_llms" type="select" display="radio" checked="false" truevalue="true" falsevalue="false" label="Use LLMs to parse scanned PDFs" help="Check if you want to use LLMs to parse old PDFs which contain scans of text as images and not text encoded through OCR.">
+                <option value="true">Yes</option>
+                <option value="false" selected="true">No</option>
+            </param>
+            <when value="true">
+                <expand macro="model_selector" modality="multimodal"/>
+            </when>
+            <when value="false"/>
+        </conditional>
     </inputs>
 
     <outputs>

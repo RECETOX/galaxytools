@@ -28,14 +28,13 @@ from aoptk.normalization.provide_mesh_term_dataframe_from_xml import ProvideMesh
 
 
 #if $normalization_method.method == "llm"
-litellm_api_key = os.environ.get("OPENAI_API_KEY")
-openai_endpoint_url = os.environ.get("OPENAI_ENDPOINT_URL") or "https://llm.ai.e-infra.cz/v1"
+@MODEL_SETUP@
 
 chemicals = pd.read_csv("$chemicals", sep="\t")
 chemical_list = pd.read_csv("$chemical_list", sep="\t")["chemical"].tolist()
 
 chemicals["chemical"] = chemicals["chemical"].apply(
-    lambda x: TextGenerationAPI(model="$llm_models", api_key=litellm_api_key, url=openai_endpoint_url).normalize_chemical(chemical=Chemical(x), chemical_list=[Chemical(chem) for chem in chemical_list])
+    lambda x: TextGenerationAPI(model=model, api_key=litellm_api_key, url=litellm_base_url).normalize_chemical(chemical=Chemical(x), chemical_list=[Chemical(chem) for chem in chemical_list])
     )
 
 #elif $normalization_method.method == "pubchem"
@@ -70,17 +69,17 @@ chemicals.to_csv("normalized_chemicals.tsv", sep="\t", index=False)
             </param>
 
         <when value="pubchem">
-            <param name="input_file" type="data" format="tabular" label="TSV with chemical column." help="Input tsv file with chemical column." />
+            <param name="input_file" type="data" format="tabular,tsv" label="TSV with chemical column." help="Input tsv file with chemical column." />
         </when>
         
         <when value="llm">
-            <expand macro="llm_models"/>
-            <param name="chemicals" type="data" format="tabular" label="TSV with chemical column." help="Input tsv file with chemical column." />
-            <param name="chemical_list" type="data" format="tabular" label="TSV with chemical list." help="Input tsv file with chemical list." />
+            <expand macro="model_selector" modality="text"/>
+            <param name="chemicals" type="data" format="tabular,tsv" label="TSV with chemical column." help="Input tsv file with chemical column." />
+            <param name="chemical_list" type="data" format="tabular,tsv" label="TSV with chemical list." help="Input tsv file with chemical list." />
         </when>
 
         <when value="mesh">
-            <param name="input_file" type="data" format="tabular" label="TSV with chemical column." help="Input tsv file with chemical column." />
+            <param name="input_file" type="data" format="tabular,tsv" label="TSV with chemical column." help="Input tsv file with chemical column." />
             <param name="input_xml" type="data" format="xml" label="XML database with MeSH terms." help="Input xml file with MeSH terms." multiple="false"/>
         </when>
 
