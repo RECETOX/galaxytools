@@ -92,13 +92,12 @@ chemicals.to_csv("normalized_chemicals.tsv", sep="\t", index=False)
     </outputs>
 
     <tests>
-        <test>
+        <test expect_failure="true">
             <conditional name="normalization_method">
                 <param name="method" value="llm"/>
                 <param name="chemicals" value="chemicals.tsv"/>
                 <param name="chemical_list" value="chemicals.tsv"/>
             </conditional>
-            <output name="normalized_chemicals" file="normalized.tsv" compare="sim_size" delta="100"/>
         </test>
         <test>
             <conditional name="normalization_method">

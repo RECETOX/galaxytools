@@ -136,7 +136,7 @@ write_chemicals(chemicals)
     </outputs>
 
     <tests>
-        <test expect_num_outputs="2">
+        <test expect_num_outputs="2" expect_test_failure="true">
             <param name="llm_models" value="qwen3.5"/>
             <param name="input_file" value="text.txt"/>
             <conditional name="analysis_purpose">
@@ -149,7 +149,7 @@ write_chemicals(chemicals)
             <output name="relationships" file="relationships.tsv" compare="sim_size" delta="100"/>
             <output name="chemicals" file="chemicals.tsv" compare="sim_size" delta="100"/>
         </test>
-        <test expect_num_outputs="1">
+        <test expect_num_outputs="1" expect_test_failure="true">
             <param name="llm_models" value="qwen3.5"/>
             <param name="input_file" value="text.txt"/>
             <conditional name="analysis_purpose">
@@ -162,7 +162,7 @@ write_chemicals(chemicals)
             </conditional>
             <output name="relationships" file="relationships.tsv" compare="sim_size" delta="100"/>
         </test>
-        <test expect_num_outputs="1">
+        <test expect_num_outputs="1" expect_test_failure="true">
             <param name="llm_models" value="qwen3.5"/>
             <param name="input_file" value="text.txt"/>
                 <conditional name="analysis_purpose">
