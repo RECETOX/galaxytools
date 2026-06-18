@@ -1,0 +1,9 @@
+id	chemical	effect	relationship	heading
+11	acetaminophen	liver fibrosis	inhibits	acetaminophen
+11	thioacetamide	liver fibrosis	inhibits	thioacetamide
+12	paracetamol	liver fibrosis	does not inhibit	acetaminophen
+26	acetaminophen	liver fibrosis	does not inhibit	acetaminophen
+35	methotrexate	cell death	causes	methotrexate
+98	acetaminophen	cell death	does not cause	acetaminophen
+26	acetaminophen	liver fibrosis	does not cause	acetaminophen
+23	paracetamol	liver fibrosis	does not inhibit	acetaminophen
