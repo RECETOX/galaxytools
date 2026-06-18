@@ -1,0 +1,153 @@
+<tool id="aoptk_download_publication_data" name="aoptk download publication data" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="25.1" license="MIT">
+    <description>Download publication data - full text publications and figures, abstracts, or PDFs.</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+
+    <requirements>
+        <expand macro="requirements"/>
+        <expand macro="email_credentials"/>
+        <expand macro="ncbi_api_key"/>
+    </requirements>
+ 
+    <command detect_errors="exit_code"><![CDATA[
+        python3 '${download_publication_data}'
+    ]]></command>
+
+<configfiles>
+<configfile name="download_publication_data">
+import os
+from Bio import Entrez
+from aoptk.literature.databases.pmc import PMC
+from aoptk.literature.databases.europepmc import EuropePMC
+from aoptk.literature.databases.pubmed import PubMed
+from aoptk.literature.id import ID
+
+with open("$input_file", "r") as f:
+    raw_ids = [line.strip() for line in f.readlines()]
+    ids = [ID(id) for id in raw_ids]
+
+Entrez.email = os.environ.get("EMAIL") or None
+Entrez.api_key = os.environ.get("NCBI_API_KEY") or None
+
+
+#if $literature.database == "pmc":
+database = PMC(storage = "./", figure_storage="./figures")
+
+#elif $literature.database == "europepmc":
+database = EuropePMC(storage = "./", figure_storage="./figures")
+
+#elif $literature.database == "pubmed":
+database = PubMed(storage = "./")
+
+#else:
+raise ValueError("Select valid database.")
+#end if
+
+
+#if $literature.type_choice == "publications":
+publications = database.get_publications(ids=ids, download_figures_enabled=False)
+
+#elif $literature.type_choice == "abstracts":
+abstracts = database.get_abstracts(ids=ids)
+
+#elif $literature.type_choice == "pdfs":
+pdfs = database.get_pdfs(ids=ids)
+
+#else:
+raise ValueError("Select valid data type.")
+#end if
+
+
+</configfile>
+</configfiles>
+
+    <inputs>
+        <param name="input_file" type="data" format="txt" label="List of IDs to search for." help="Input text file with IDs to search for." />
+        <conditional name="literature">
+            <param name="database" type="select" label="Select which database to search." help="PubMed only accepts searches with up to 10 000 results. No limit for Europe PMC and PMC.">
+                <option value="pmc" selected="true">PMC</option>
+                <option value="pubmed">PubMed</option>
+                <option value="europepmc">Europe PMC</option>
+            </param>
+            <when value="pubmed">
+                <param name="type_choice" type="select" label="Data type">
+                    <option value="abstracts">Abstracts</option>
+                </param>
+            </when>
+            <when value="europepmc">
+                <param name="type_choice" type="select" label="Data type">
+                    <option value="publications">Full text publications</option>
+                    <option value="abstracts">Abstracts</option>
+                    <option value="pdfs">PDFs</option>
+                </param>
+            </when>
+            <when value="pmc">
+                <param name="type_choice" type="select" label="Data type">
+                    <option value="publications">Full text publications</option>
+                    <option value="abstracts">Abstracts</option>
+                    <option value="pdfs">PDFs</option>
+                </param>
+            </when>
+        </conditional>
+    </inputs>
+
+    <outputs>
+        <collection name="text" type="list" label="Downloaded ${database} ${type_choice}" format="txt">
+            <filter>literature['type_choice'] == 'publications' or literature['type_choice'] == 'abstracts'</filter>
+            <discover_datasets pattern="(?P&lt;designation&gt;.*)\.txt$" ext="txt" />
+        </collection>
+        <collection name="pdfs" type="list" label="Downloaded ${database} PDFs" format="pdf">
+            <filter>literature['type_choice'] == 'pdfs'</filter>
+            <discover_datasets pattern="(?P&lt;designation&gt;.*)\.pdf$" ext="pdf" />
+        </collection>
+    </outputs>
+
+    <tests>
+        <test expect_num_outputs="1">
+            <param name="literature|database" value="pmc"/>
+            <param name="literature|type_choice" value="publications"/>
+            <param name="input_file" value="ids.txt"/>
+            <output_collection name="text" type="list" count="1"/>
+        </test>
+        <test expect_num_outputs="1">
+            <param name="literature|database" value="europepmc"/>
+            <param name="literature|type_choice" value="abstracts"/>
+            <param name="input_file" value="ids.txt"/>
+            <output_collection name="text" type="list" count="2"/>
+        </test>
+        <test expect_num_outputs="1">
+            <param name="literature|database" value="pmc"/>
+            <param name="literature|type_choice" value="pdfs"/>
+            <param name="input_file" value="ids.txt"/>
+            <output_collection name="pdfs" type="list" count="1"/>
+        </test>
+        <test expect_num_outputs="1">
+            <param name="literature|database" value="pubmed"/>
+            <param name="literature|type_choice" value="abstracts"/>
+            <param name="input_file" value="ids.txt"/>
+            <output_collection name="text" type="list" count="2"/>
+        </test>
+    </tests>
+
+    <help><![CDATA[
+Download Publication Data
+=========================
+
+Tools to download publication data - full text publications (including abstracts), abstracts, or PDFs.
+
+NCBI settings
+-------------
+To speed up downloads from NCBI databases (PMC and PubMed), you may provide your personal API key. This information is treated as sensitive and is securely stored within the Galaxy credentials system.
+
+- Instructions for obtaining an API key are available here: https://support.nlm.nih.gov/kbArticle/?pn=KA-05317
+
+- To comply with NCBI usage guidelines, you may also provide your email address.
+
+    ]]></help>
+
+    <citations>
+        <citation type="doi">10.5281/zenodo.20036704</citation>
+    </citations>
+
+</tool>
