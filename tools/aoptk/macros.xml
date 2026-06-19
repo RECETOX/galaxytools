@@ -1,6 +1,6 @@
 <macros>
     <token name="@TOOL_VERSION@">0.5.0</token>
-    <token name="@VERSION_SUFFIX@">0</token>
+    <token name="@VERSION_SUFFIX@">1</token>
 
     <xml name="requirements">
         <requirement type="package" version="@TOOL_VERSION@">aoptk</requirement>
@@ -185,7 +185,6 @@ servers = config.get("servers", {})
 if servers and provider not in servers:
     sys.exit(f"Provider '{provider}' not found in configuration.")
 
-# Select the source: specific provider config if servers exist, otherwise global config (backward compatibility)
 source = servers[provider] if servers else config
 
 litellm_api_key = source.get("LITELLM_API_KEY")
