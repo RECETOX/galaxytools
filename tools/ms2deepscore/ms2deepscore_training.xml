@@ -1,4 +1,4 @@
-<tool id="ms2deepscore_training" name="MS2DeepScore Model Training" version="@TOOL_VERSION@+galaxy0">
+<tool id="ms2deepscore_training" name="MS2DeepScore Model Training" version="@TOOL_VERSION@+galaxy0" profile="23.0" license="MIT">
     <description>Compute similarity scores using a pre-trained MS2DeepScore model</description>
     <macros>
         <import>macros.xml</import>
@@ -16,6 +16,9 @@
         cp $spectra processing/input."$spectra.ext";
         python3 ${python_wrapper}
     ]]></command>
+
+    <expand macro="environment_variables"/>
+
 <configfiles>
 <configfile name="python_wrapper">
 import onnx
@@ -63,15 +66,15 @@ torch.onnx.export(
     </inputs>
     
     <outputs>
-        <data label="Trained model" name="onnx_trained_model" format="onnx"/>
+        <data name="onnx_trained_model" format="onnx"/>
     </outputs>
 
     <tests>
         <test expect_num_outputs="1">
-            <param name="spectra" value="clean_spectra.mgf" ftype="mgf"/>
-            <param name="model_param" value="Model_Parameter_JSON.json" ftype="json" />
-            <param name="validation_split_fraction" value="5"/>
-            <output name="onnx_trained_model" value="Trained_model.onnx" ftype="onnx" compare="sim_size"/>
+            <param name="spectra" ftype="msp" location='https://galaxy-umsa.grid.cesnet.cz/api/datasets/fa57798f4c6835f5/display?to_ext=msp'/>
+            <param name="model_param" value="Model_Parameter_JSON_test.json" ftype="json" />
+            <param name="validation_split_fraction" value="20"/>
+            <output name="onnx_trained_model" location='https://galaxy-umsa.grid.cesnet.cz/api/datasets/feaa5809758067ab/display?to_ext=onnx' ftype="onnx" compare="sim_size"/>
         </test>
     </tests>
 
