@@ -20,32 +20,54 @@ from pyteomics import mzml
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
-def mzml_to_df(file_path):
-    """Convert mzML spectra to a long DataFrame with rt/mz/intensity columns."""
+def mzml_to_df_filtered(file_path: str, markers: pd.DataFrame, mz_tol_ppm: float) -> pd.DataFrame:
+    """
+    Loads the mzml file while filtering for markers with defined mz from the markers list +- tolerance. Outputs filtered dataframe.
+    """
+    import numpy as np
+    
+    mz_col = markers["mz"].to_numpy(dtype=np.float64)
+    factor = mz_tol_ppm * 1e-6
+    windows = np.column_stack([mz_col * (1 - factor), mz_col * (1 + factor)])
+
     records = []
     with mzml.MzML(file_path) as reader:
         for spectrum in reader:
-            scan = spectrum["scanList"]["scan"][0]
-            rt = scan.get("scan start time")
-            mz_array = spectrum.get("m/z array", [])
-            intensity_array = spectrum.get("intensity array", [])
-            for mz_value, intensity_value in zip(mz_array, intensity_array):
-                records.append(
-                    {
-                        "id": spectrum["id"],
-                        "ms_level": spectrum["ms level"],
-                        "rt": rt,
-                        "mz": mz_value,
-                        "intensity": intensity_value,
-                    }
-                )
-    return pd.DataFrame(records)
+            mz_array = spectrum.get("m/z array")
+            intensity_array = spectrum.get("intensity array")
+            if mz_array is None or len(mz_array) == 0:
+                continue
 
+            scan = spectrum["scanList"]["scan"][0]
+            rt_raw = scan.get("scan start time")
+            rt = rt_raw * 60.0 if rt_raw is not None else None
+
+            mz_arr = np.asarray(mz_array, dtype=np.float64)
+            in_any_window = np.any(
+                (mz_arr[None, :] >= windows[:, 0:1]) &
+                (mz_arr[None, :] <= windows[:, 1:2]),
+                axis=0,
+            )  
+
+            if not in_any_window.any():
+                continue
+
+            kept_mz  = mz_arr[in_any_window]
+            kept_int = np.asarray(intensity_array, dtype=np.float64)[in_any_window]
+
+            for mz_val, int_val in zip(kept_mz, kept_int):
+                records.append({
+                    "ms_level": spectrum["ms level"],
+                    "rt": rt,
+                    "mz": mz_val,
+                    "intensity": int_val,
+                })
+
+    return pd.DataFrame(records)
 
 loaders = {
     ".parquet": pd.read_parquet,
     ".csv": pd.read_csv,
-    ".mzml": mzml_to_df,
     ".tsv": lambda x: pd.read_csv(x, sep="\t"),
     ".tabular": lambda x: pd.read_csv(x, sep="\t"),
 }
@@ -405,15 +427,18 @@ def load_markers(markers_path):
         raise ValueError(f"Unsupported marker format: {ext}")
     return loader(markers_path)
 
-
 def load_file(filename: str, markers, mz_tol_ppm: float, rt_tol_s: float):
     """Load one raw file and annotate matching rows to marker compounds."""
     ext = os.path.splitext(filename)[1].lower()
-    loader = loaders.get(ext)
-    if loader is None:
-        raise ValueError(f"Unsupported format: {ext}")
-
-    eics = loader(filename)
+    
+    if ext == ".mzml":
+        eics = mzml_to_df_filtered(filename, markers, mz_tol_ppm)
+    else:
+        loader = loaders.get(ext)
+        if loader is None:
+            raise ValueError(f"Unsupported format: {ext}")
+        eics = loader(filename)
+    
     eics["Annotation"] = "Unknown"
     eics.sort_values(["rt"], inplace=True)
 
