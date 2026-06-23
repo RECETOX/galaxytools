@@ -1,6 +1,6 @@
 <macros>
     <token name="@TOOL_VERSION@">0.5.0</token>
-    <token name="@VERSION_SUFFIX@">1</token>
+    <token name="@VERSION_SUFFIX@">2</token>
 
     <xml name="requirements">
         <requirement type="package" version="@TOOL_VERSION@">aoptk</requirement>
@@ -171,9 +171,8 @@ litellm_api_key = os.environ.get("OPENAI_API_KEY")
 litellm_base_url = "$server_url"
 model = "$model"
 #elif $model_selector.model_source == "builtin"
-model = $model.fields.model_id
-model_type = $model_type
-provider = $model.fields.provider
+model = "$model.fields.model_id"
+provider = "$model.fields.provider"
 
 litellm_config_file = os.environ.get("LITELLM_CONFIG_FILE")
 if not litellm_config_file:
