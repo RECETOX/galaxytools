@@ -8,8 +8,8 @@
 
     <requirements>
         <requirement type="package" version="@TOOL_VERSION@">r-recetox-waveica</requirement>
-        <requirement type="package" version="8.0.0">r-arrow</requirement>
-        <requirement type="package" version="1.0.10">r-dplyr</requirement>
+        <requirement type="package" version="24.0.0">r-arrow</requirement>
+        <requirement type="package" version="1.2.1">r-dplyr</requirement>
     </requirements>
     <command detect_errors="aggressive"><![CDATA[
         Rscript -e "source('${__tool_directory__}/waveica_wrapper.R');
