@@ -4,7 +4,6 @@ from urllib.parse import urlsplit, urlunsplit
 
 import requests
 
-
 DEFAULT_API_URL = "https://www.ebi.ac.uk/spot/zooma/v2/api/services/annotate"
 DEFAULT_HEALTH_URL = "https://www.ebi.ac.uk/spot/zooma/v3/api/health"
 
@@ -14,14 +13,31 @@ class ZoomaServiceError(RuntimeError):
 
 
 def parse_args():
-    parser = argparse.ArgumentParser(description="Query ZOOMA API for values from a selected tabular column.")
+    parser = argparse.ArgumentParser(
+        description="Query ZOOMA API for values from a selected tabular column."
+    )
     parser.add_argument("--input", required=True, help="Input tabular file path")
     parser.add_argument("--output", required=True, help="Output tabular file path")
-    parser.add_argument("--column", required=True, type=int, help="1-based input column index used for query terms")
-    parser.add_argument("--mode", choices=["annotate", "map"], default="annotate", help="ZOOMA API mode")
-    parser.add_argument("--api-url", default=DEFAULT_API_URL, help="ZOOMA annotation endpoint URL")
-    parser.add_argument("--health-url", default=DEFAULT_HEALTH_URL, help="ZOOMA health-check endpoint URL")
-    parser.add_argument("--timeout", type=int, default=30, help="HTTP request timeout in seconds")
+    parser.add_argument(
+        "--column",
+        required=True,
+        type=int,
+        help="1-based input column index used for query terms",
+    )
+    parser.add_argument(
+        "--mode", choices=["annotate", "map"], default="annotate", help="ZOOMA API mode"
+    )
+    parser.add_argument(
+        "--api-url", default=DEFAULT_API_URL, help="ZOOMA annotation endpoint URL"
+    )
+    parser.add_argument(
+        "--health-url",
+        default=DEFAULT_HEALTH_URL,
+        help="ZOOMA health-check endpoint URL",
+    )
+    parser.add_argument(
+        "--timeout", type=int, default=30, help="HTTP request timeout in seconds"
+    )
     return parser.parse_args()
 
 
@@ -67,29 +83,43 @@ def get_nested_field(item, *path):
 
 def normalize_annotations(query_value, annotations):
     if not annotations:
-        return [{
-            "query": query_value,
-            "property_value": "",
-            "property_type": "",
-            "semantic_tags": "",
-            "confidence": "",
-            "source_name": "",
-            "source_type": "",
-            "study_type": "",
-        }]
+        return [
+            {
+                "query": query_value,
+                "property_value": "",
+                "property_type": "",
+                "semantic_tags": "",
+                "confidence": "",
+                "source_name": "",
+                "source_type": "",
+                "study_type": "",
+            }
+        ]
 
     rows = []
     for annotation in annotations:
-        rows.append({
-            "query": query_value,
-            "property_value": get_nested_field(annotation, "annotatedProperty", "propertyValue"),
-            "property_type": get_nested_field(annotation, "annotatedProperty", "propertyType"),
-            "semantic_tags": get_nested_field(annotation, "semanticTags"),
-            "confidence": get_nested_field(annotation, "confidence"),
-            "source_name": get_nested_field(annotation, "derivedFrom", "provenance", "source", "name"),
-            "source_type": get_nested_field(annotation, "derivedFrom", "provenance", "source", "type"),
-            "study_type": get_nested_field(annotation, "derivedFrom", "provenance", "source", "semanticTag"),
-        })
+        rows.append(
+            {
+                "query": query_value,
+                "property_value": get_nested_field(
+                    annotation, "annotatedProperty", "propertyValue"
+                ),
+                "property_type": get_nested_field(
+                    annotation, "annotatedProperty", "propertyType"
+                ),
+                "semantic_tags": get_nested_field(annotation, "semanticTags"),
+                "confidence": get_nested_field(annotation, "confidence"),
+                "source_name": get_nested_field(
+                    annotation, "derivedFrom", "provenance", "source", "name"
+                ),
+                "source_type": get_nested_field(
+                    annotation, "derivedFrom", "provenance", "source", "type"
+                ),
+                "study_type": get_nested_field(
+                    annotation, "derivedFrom", "provenance", "source", "semanticTag"
+                ),
+            }
+        )
     return rows
 
 
@@ -102,18 +132,22 @@ def normalize_map_results(query_value, mappings):
 
         if mapping_error:
             continue
-        
+
         for candidate in candidates:
-            rows.append({
-                "query": query_value,
-                "property_value": candidate.get("label", ""),
-                "property_type": effective_property_type or "",
-                "semantic_tags": candidate.get("termId", ""),
-                "confidence": "" if candidate.get("confidence") is None else str(candidate.get("confidence")),
-                "source_name": candidate.get("datasource", ""),
-                "source_type": candidate.get("ontology", ""),
-                "study_type": candidate.get("uri", ""),
-            })
+            rows.append(
+                {
+                    "query": query_value,
+                    "property_value": candidate.get("label", ""),
+                    "property_type": effective_property_type or "",
+                    "semantic_tags": candidate.get("termId", ""),
+                    "confidence": ""
+                    if candidate.get("confidence") is None
+                    else str(candidate.get("confidence")),
+                    "source_name": candidate.get("datasource", ""),
+                    "source_type": candidate.get("ontology", ""),
+                    "study_type": candidate.get("uri", ""),
+                }
+            )
     return rows
 
 
@@ -184,11 +218,14 @@ def run():
     health_url = args.health_url or derive_health_url(args.api_url)
     check_service_health(health_url, args.timeout)
 
-    with open(args.input, "r", encoding="utf-8", newline="") as infile, open(
-        args.output, "w", encoding="utf-8", newline=""
-    ) as outfile:
+    with (
+        open(args.input, "r", encoding="utf-8", newline="") as infile,
+        open(args.output, "w", encoding="utf-8", newline="") as outfile,
+    ):
         reader = csv.reader(infile, delimiter="\t")
-        writer = csv.DictWriter(outfile, fieldnames=output_columns, delimiter="\t", lineterminator="\n")
+        writer = csv.DictWriter(
+            outfile, fieldnames=output_columns, delimiter="\t", lineterminator="\n"
+        )
         writer.writeheader()
 
         first_row = True
@@ -208,7 +245,9 @@ def run():
                 mappings = query_zooma_map(query_value, args.api_url, args.timeout)
                 output_rows = normalize_map_results(query_value, mappings)
             else:
-                annotations = query_zooma_annotate(query_value, args.api_url, args.timeout)
+                annotations = query_zooma_annotate(
+                    query_value, args.api_url, args.timeout
+                )
                 output_rows = normalize_annotations(query_value, annotations)
 
             for output_row in output_rows:
