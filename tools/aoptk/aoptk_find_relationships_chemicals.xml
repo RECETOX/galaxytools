@@ -65,8 +65,8 @@ for type in types:
     else:
         raise ValueError(f"Unsupported relationship type: {type}")
 
-chemicals = TextGenerationAPI(model="$model", api_key=litellm_api_key, url=litellm_base_url).find_chemicals(text)
-relationships = TextGenerationAPI(model="$model", api_key=litellm_api_key, url=litellm_base_url).find_relationships_in_text(text=text, chemicals=chemicals, effects=effects, relationship_types=relationship_types)
+chemicals = TextGenerationAPI(model=model, api_key=litellm_api_key, url=litellm_base_url).find_chemicals(text)
+relationships = TextGenerationAPI(model=model, api_key=litellm_api_key, url=litellm_base_url).find_relationships_in_text(text=text, chemicals=chemicals, effects=effects, relationship_types=relationship_types)
 write_relationships(relationships)
 write_chemicals(chemicals)
 
@@ -87,11 +87,11 @@ for type in types:
         raise ValueError(f"Unsupported relationship type: {type}")
 
 chemicals = [Chemical(chem) for chem in pd.read_csv("$chemicals", sep="\t")["chemical"].tolist()]
-relationships = TextGenerationAPI(model="$model", api_key=litellm_api_key, url=litellm_base_url).find_relationships_in_text(text=text, chemicals=chemicals, effects=effects, relationship_types=relationship_types)
+relationships = TextGenerationAPI(model=model, api_key=litellm_api_key, url=litellm_base_url).find_relationships_in_text(text=text, chemicals=chemicals, effects=effects, relationship_types=relationship_types)
 write_relationships(relationships)
 
 #elif $analysis_purpose.method == "chemicals"
-chemicals = TextGenerationAPI(model="$model", api_key=litellm_api_key, url=litellm_base_url).find_chemicals(text)
+chemicals = TextGenerationAPI(model=model, api_key=litellm_api_key, url=litellm_base_url).find_chemicals(text)
 write_chemicals(chemicals)
 #end if
 
