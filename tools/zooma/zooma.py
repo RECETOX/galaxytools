@@ -1,11 +1,16 @@
 import argparse
 import csv
-import json
+from urllib.parse import urlsplit, urlunsplit
 
 import requests
 
 
 DEFAULT_API_URL = "https://www.ebi.ac.uk/spot/zooma/v2/api/services/annotate"
+DEFAULT_HEALTH_URL = "https://www.ebi.ac.uk/spot/zooma/v3/api/health"
+
+
+class ZoomaServiceError(RuntimeError):
+    pass
 
 
 def parse_args():
@@ -13,11 +18,38 @@ def parse_args():
     parser.add_argument("--input", required=True, help="Input tabular file path")
     parser.add_argument("--output", required=True, help="Output tabular file path")
     parser.add_argument("--column", required=True, type=int, help="1-based input column index used for query terms")
-    parser.add_argument("--has-header", action="store_true", help="Input tabular file contains a header row")
+    parser.add_argument("--mode", choices=["annotate", "map"], default="annotate", help="ZOOMA API mode")
     parser.add_argument("--api-url", default=DEFAULT_API_URL, help="ZOOMA annotation endpoint URL")
+    parser.add_argument("--health-url", default=DEFAULT_HEALTH_URL, help="ZOOMA health-check endpoint URL")
     parser.add_argument("--timeout", type=int, default=30, help="HTTP request timeout in seconds")
-    parser.add_argument("--mock-response", help="Optional JSON file with mocked responses keyed by query term")
     return parser.parse_args()
+
+
+def derive_health_url(api_url):
+    parsed = urlsplit(api_url)
+    path = parsed.path
+    marker = "/api/"
+    if marker in path:
+        path = path.split(marker, 1)[0] + "/api/health"
+    elif not path.endswith("/health"):
+        path = path.rstrip("/") + "/health"
+    return urlunsplit((parsed.scheme, parsed.netloc, path, "", ""))
+
+
+def check_service_health(health_url, timeout):
+    try:
+        response = requests.get(health_url, timeout=timeout)
+    except requests.RequestException as exc:
+        raise ZoomaServiceError(
+            f"ZOOMA health check failed for '{health_url}'. The service appears unavailable: {exc}"
+        ) from exc
+
+    if response.status_code >= 400:
+        body = response.text.strip()
+        details = f" Response: {body}" if body else ""
+        raise ZoomaServiceError(
+            f"ZOOMA health check returned HTTP {response.status_code} for '{health_url}'.{details}"
+        )
 
 
 def get_nested_field(item, *path):
@@ -61,20 +93,74 @@ def normalize_annotations(query_value, annotations):
     return rows
 
 
-def query_zooma(query_value, api_url, timeout):
-    response = requests.get(
-        api_url,
-        params={"propertyValue": query_value},
-        headers={"Accept": "application/json"},
-        timeout=timeout,
-    )
-    response.raise_for_status()
+def normalize_map_results(query_value, mappings):
+    rows = []
+    for mapping in mappings:
+        mapping_error = mapping.get("error")
+        candidates = mapping.get("candidates") or []
+        effective_property_type = mapping.get("propertyType") or ""
+
+        if mapping_error:
+            continue
+        
+        for candidate in candidates:
+            rows.append({
+                "query": query_value,
+                "property_value": candidate.get("label", ""),
+                "property_type": effective_property_type or "",
+                "semantic_tags": candidate.get("termId", ""),
+                "confidence": "" if candidate.get("confidence") is None else str(candidate.get("confidence")),
+                "source_name": candidate.get("datasource", ""),
+                "source_type": candidate.get("ontology", ""),
+                "study_type": candidate.get("uri", ""),
+            })
+    return rows
+
+
+def query_zooma_annotate(query_value, api_url, timeout):
+    try:
+        response = requests.get(
+            api_url,
+            params={"propertyValue": query_value},
+            headers={"Accept": "application/json"},
+            timeout=timeout,
+        )
+        response.raise_for_status()
+    except requests.RequestException as exc:
+        raise ZoomaServiceError(
+            f"ZOOMA annotate request failed for value '{query_value}' against '{api_url}': {exc}"
+        ) from exc
+
     payload = response.json()
     if isinstance(payload, list):
         return payload
     if isinstance(payload, dict):
         return [payload]
-    raise ValueError("Unexpected response payload type from ZOOMA API")
+    raise ValueError("Unexpected response payload type from ZOOMA annotate API")
+
+
+def query_zooma_map(query_value, api_url, timeout):
+    body = {"properties": [{"textToMap": query_value}]}
+
+    try:
+        response = requests.post(
+            api_url,
+            json=body,
+            headers={"Accept": "application/json", "Content-Type": "application/json"},
+            timeout=timeout,
+        )
+        response.raise_for_status()
+    except requests.RequestException as exc:
+        raise ZoomaServiceError(
+            f"ZOOMA map request failed for value '{query_value}' against '{api_url}': {exc}"
+        ) from exc
+
+    payload = response.json()
+    if isinstance(payload, dict):
+        mappings = payload.get("mappings")
+        if isinstance(mappings, list):
+            return mappings
+    raise ValueError("Unexpected response payload type from ZOOMA map API")
 
 
 def run():
@@ -83,11 +169,6 @@ def run():
     column_index = args.column - 1
     if column_index < 0:
         raise ValueError("Column index must be a positive integer.")
-
-    mock_response = None
-    if args.mock_response:
-        with open(args.mock_response, "r", encoding="utf-8") as handle:
-            mock_response = json.load(handle)
 
     output_columns = [
         "query",
@@ -100,6 +181,9 @@ def run():
         "study_type",
     ]
 
+    health_url = args.health_url or derive_health_url(args.api_url)
+    check_service_health(health_url, args.timeout)
+
     with open(args.input, "r", encoding="utf-8", newline="") as infile, open(
         args.output, "w", encoding="utf-8", newline=""
     ) as outfile:
@@ -111,8 +195,7 @@ def run():
         for row in reader:
             if first_row:
                 first_row = False
-                if args.has_header:
-                    continue
+                continue
 
             if column_index >= len(row):
                 continue
@@ -121,12 +204,14 @@ def run():
             if not query_value:
                 continue
 
-            if mock_response is not None:
-                annotations = mock_response.get(query_value, [])
+            if args.mode == "map":
+                mappings = query_zooma_map(query_value, args.api_url, args.timeout)
+                output_rows = normalize_map_results(query_value, mappings)
             else:
-                annotations = query_zooma(query_value, args.api_url, args.timeout)
+                annotations = query_zooma_annotate(query_value, args.api_url, args.timeout)
+                output_rows = normalize_annotations(query_value, annotations)
 
-            for output_row in normalize_annotations(query_value, annotations):
+            for output_row in output_rows:
                 writer.writerow(output_row)
 
 

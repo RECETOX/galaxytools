@@ -1,3 +1,0 @@
-query	property_value	property_type	semantic_tags	confidence	source_name	source_type	study_type
-asthma	asthma	disease	http://www.ebi.ac.uk/efo/EFO_0000270	HIGH	GWAS Catalog	DATABASE	http://purl.obolibrary.org/obo/OBI_0000070
-unknown							
