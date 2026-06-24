@@ -13,6 +13,12 @@
 
     <command detect_errors='aggressive'><![CDATA[
         python3 '${matchms_python_cli}'
+
+        #if $out_format == 'json':
+        &&
+        python3 -m json.tool '${output_file}' temp.json && mv temp.json '${output_file}'
+        #end if
+
     ]]></command>
 
 <configfiles>
