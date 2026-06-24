@@ -1,0 +1,142 @@
+<tool id="stratified_block_randomization" name="stratified block randomization" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="20.01" license="MIT">
+    <description>for hierarchical block-based balancing with proportional matching via largest-remainder rounding.</description>
+    <macros>
+        <token name="@TOOL_VERSION@">0.1.0</token>
+        <token name="@VERSION_SUFFIX@">0</token>
+    </macros>
+    <creator>
+      <person
+          givenName="Helge"
+          familyName="Hecht"
+          url="https://github.com/hechth"
+          identifier="0000-0001-6744-996X" />
+      <organization
+          url="https://www.recetox.muni.cz/"
+          email="GalaxyToolsDevelopmentandDeployment@space.muni.cz"
+          name="RECETOX MUNI" />
+      <organization
+          url="https://www.eu-parc.eu/"
+          name="PARC"/>
+      <organization
+          url="https://eirene.eu/"
+          name="EIRENE-CZ"/>
+    </creator>
+    <!-- TODO: please annotate this tool with topics and operations from http://edamontology.org -->
+    <!-- TODO: for more information see: https://galaxy-iuc-standards.readthedocs.io/en/latest/best_practices/tool_xml.html#edam-topics-and-operations -->
+    <edam_topics>
+        <edam_topic>topic_3678</edam_topic>
+        <edam_topic>topic_3391</edam_topic>
+    </edam_topics>
+    <edam_operations>
+        <edam_operation>operation_3802</edam_operation>
+        <edam_operation>operation_2430</edam_operation>
+    </edam_operations>
+    <requirements>
+        <requirement type="package" version="2.4.6">numpy</requirement>
+        <requirement type="package" version="3.0.3">pandas</requirement>
+    </requirements>
+    <required_files>
+        <include path="stratified_block_randomization.py"/>
+    </required_files>
+    <command detect_errors="exit_code"><![CDATA[
+        python3 '$__tool_directory__/stratified_block_randomization.py' 
+            --input '$input' 
+            --block_size '$block_size' 
+            --columns_mode indices 
+            --factors '$factors' 
+            --sample_col '$sample_col' 
+            --seed '$seed' 
+            --output '$output' 
+            #if $write_summary
+                --summary '$summary'
+            #end if
+    ]]></command>
+    <inputs>
+        <param name="input" type="data" format="tabular,tsv" label="Input sample table" help="Tabular file containing one row per sample and one column per sample attribute."/>
+        <param name="sample_col" type="data_column" data_ref="input" use_header_names="true" label="Sample identifier column" help="Column containing unique sample identifiers."/>
+        <param name="factors" type="data_column" data_ref="input" use_header_names="true" multiple="true" min="1" label="Balancing factor columns" help="Select one or more columns used for balancing. The order matters: the first selected factor has the highest priority, the second is balanced within the first, and so on."/>
+        <param name="block_size" type="integer" min="1" value="100" label="Block size" help="Target number of samples per block. The last block may contain fewer samples."/>
+        <param name="seed" type="integer" value="42" label="Random seed" help="Seed used for reproducible random assignment and within-block shuffling."/>
+        <param name="write_summary" type="boolean" checked="true" truevalue="TRUE" falsevalue="FALSE" label="Generate summary output" help="Create an additional summary table with counts per block and factor combination."/>
+    </inputs>
+    <outputs>
+        <data name="output" format="tabular"/>
+        <data name="summary" format="tabular" label="${tool.name} on ${on_string}: summary">
+            <filter>write_summary</filter>
+        </data>
+    </outputs>
+    <tests>
+        <test expect_num_outputs="2">
+            <param name="input" value="samples.tsv"/>
+            <param name="sample_col" value="1"/>
+            <param name="factors" value="2,3"/>
+            <output name="output">
+                <assert_contents>
+                    <has_n_lines n="510"/>
+                    <has_n_columns n="6"/>
+                </assert_contents>
+            </output>
+            <output name="summary">
+                <assert_contents>
+                    <has_n_lines n="117"/>
+                </assert_contents>
+            </output>
+        </test>
+        <test expect_num_outputs="1">
+            <param name="input" value="samples.tsv"/>
+            <param name="sample_col" value="1"/>
+            <param name="factors" value="2"/>
+            <param name="write_summary" value="FALSE" />
+            <output name="output">
+                <assert_contents>
+                    <has_n_lines n="510"/>
+                    <has_n_columns n="6"/>
+                </assert_contents>
+            </output>
+        </test>
+    </tests>
+    <help><![CDATA[
+
+.. class:: infomark
+
+**What it does**
+
+This tool assigns samples from a metadata table into balanced study blocks.
+
+Samples are split into blocks of a user-defined size. The distribution is balanced hierarchically according to the selected factor columns:
+
+- the first factor is balanced across all blocks,
+- the second factor is balanced within each level of the first factor,
+- additional factors are balanced in the same nested way.
+
+The tool uses proportional allocation with integer rounding, then randomly shuffles sample order within each block. The output table contains the original sample information together with the assigned block and the position of each sample inside that block.
+
+Usage
+.....
+
+Use this tool when you need to prepare balanced sample batches for downstream experimental processing, for example to distribute cases and controls evenly across analytical runs or laboratory batches.
+
+
+**Input**
+
+- **Input sample table**: Tabular file with one row per sample.
+- **Sample identifier column**: Column containing the sample names or IDs.
+- **Balancing factor columns**: One or more metadata columns used for hierarchical balancing.
+- **Block size**: Desired number of samples in each block.
+- **Random seed**: Optional seed for reproducible randomization.
+
+
+**Output**
+
+- **Assigned blocks table**: The input table with additional columns for `original_index`, `block`, and `block_position`.
+- **Summary table**: Optional table containing counts for each block and factor combination.
+
+
+    ]]></help>
+    <citations>
+        <citation type="doi">10.5281/zenodo.3509134</citation>
+        <citation type="doi">10.25080/Majora-92bf1922-00a</citation>
+        <citation type="doi">10.1007/978-1-4612-1192-1</citation>
+        <citation type="doi">10.1007/978-1-4419-9246-8</citation>
+    </citations>
+</tool>
