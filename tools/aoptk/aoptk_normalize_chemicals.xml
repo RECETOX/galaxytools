@@ -1,0 +1,133 @@
+<tool id="aoptk_normalize_chemicals" name="aoptk normalize chemicals" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="25.1" license="MIT">
+    <description>Normalize chemical entities using LLMs.</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+
+    <requirements>
+        <expand macro="requirements"/>
+        <expand macro="openai_config"/>
+    </requirements>
+ 
+    <command detect_errors="exit_code"><![CDATA[
+        python3 '${normalize_chemicals}'
+    ]]></command>
+
+<configfiles>
+<configfile name="normalize_chemicals">
+import os
+import sys
+
+import pandas as pd
+import yaml
+from aoptk.chemical import Chemical
+from aoptk.text_generation_api import TextGenerationAPI
+from aoptk.normalization.pubchem_api import PubChemAPI
+from aoptk.normalization.mesh_terms import MeshTerms
+from aoptk.normalization.provide_mesh_term_dataframe_from_xml import ProvideMeshTermDataframeFromXML
+
+
+#if $normalization_method.method == "llm"
+@MODEL_SETUP@
+
+chemicals = pd.read_csv("$chemicals", sep="\t")
+chemical_list = pd.read_csv("$chemical_list", sep="\t")["chemical"].tolist()
+
+chemicals["chemical"] = chemicals["chemical"].apply(
+    lambda x: TextGenerationAPI(model=model, api_key=litellm_api_key, url=litellm_base_url).normalize_chemical(chemical=Chemical(x), chemical_list=[Chemical(chem) for chem in chemical_list])
+    )
+
+#elif $normalization_method.method == "pubchem"
+chemicals = pd.read_csv("$input_file", sep="\t")
+chemicals["chemical"] = chemicals["chemical"].apply(
+    lambda x: PubChemAPI().normalize_chemical(Chemical(x))
+    )
+
+#elif $normalization_method.method == "mesh"
+chemicals = pd.read_csv("$input_file", sep="\t")
+mesh_terms_df = ProvideMeshTermDataframeFromXML(database_path="$input_xml").provide_normalization_dataframe()
+chemicals["chemical"] = chemicals["chemical"].apply(
+    lambda x: MeshTerms(mesh_terms=mesh_terms_df).normalize_chemical(Chemical(x))
+    )
+
+#else
+raise ValueError("Select a valid normalization method.")
+#end if
+
+chemicals["heading"] = chemicals["chemical"].apply(lambda chem: chem.heading)
+chemicals.to_csv("normalized_chemicals.tsv", sep="\t", index=False)
+
+</configfile>
+</configfiles>
+
+    <inputs>
+        <conditional name="normalization_method">
+            <param name="method" type="select" label="Normalization Method">
+                <option value="pubchem">PubChem Synonyms</option>
+                <option value="llm">Large Language Models</option>
+                <option value="mesh">MeSH Terms</option>
+            </param>
+
+        <when value="pubchem">
+            <param name="input_file" type="data" format="tabular,tsv" label="TSV with chemical column." help="Input tsv file with chemical column." />
+        </when>
+        
+        <when value="llm">
+            <expand macro="model_selector" modality="text"/>
+            <param name="chemicals" type="data" format="tabular,tsv" label="TSV with chemical column." help="Input tsv file with chemical column." />
+            <param name="chemical_list" type="data" format="tabular,tsv" label="TSV with chemical list." help="Input tsv file with chemical list." />
+        </when>
+
+        <when value="mesh">
+            <param name="input_file" type="data" format="tabular,tsv" label="TSV with chemical column." help="Input tsv file with chemical column." />
+            <param name="input_xml" type="data" format="xml" label="XML database with MeSH terms." help="Input xml file with MeSH terms." multiple="false"/>
+        </when>
+
+        </conditional>
+    </inputs>
+
+    <outputs>
+        <data name="normalized_chemicals" format="tabular" from_work_dir="normalized_chemicals.tsv" label="Chemicals with heading generated." />
+    </outputs>
+
+    <tests>
+        <test expect_failure="true">
+            <conditional name="normalization_method">
+                <param name="method" value="llm"/>
+                <param name="chemicals" value="chemicals.tsv"/>
+                <param name="chemical_list" value="chemicals.tsv"/>
+            </conditional>
+        </test>
+        <test>
+            <conditional name="normalization_method">
+                <param name="method" value="pubchem"/>
+                <param name="input_file" value="chemicals.tsv"/>
+            </conditional>
+            <output name="normalized_chemicals" file="normalized.tsv" compare="sim_size" delta="100"/>
+        </test>
+        <test>
+            <conditional name="normalization_method">
+                <param name="method" value="mesh"/>
+                <param name="input_file" value="chemicals.tsv"/>
+                <param name="input_xml" value="mesh_terms_database.xml"/>
+            </conditional>
+            <output name="normalized_chemicals" file="normalized.tsv" compare="sim_size" delta="100"/>
+        </test>
+    </tests>
+
+    <help><![CDATA[
+Chemical Normalization
+======================
+
+Set of tools to normalize chemical entities using different methods: LLMs, PubChem synonyms, or MeSH terms.
+
+
+For normalization via MeSH Terms, the XML database of terms can be obtained here: https://www.nlm.nih.gov/databases/download/mesh.html
+
+    ]]></help>
+
+    <citations>
+        <citation type="doi">10.5281/zenodo.20036704</citation>
+    </citations>
+
+</tool>

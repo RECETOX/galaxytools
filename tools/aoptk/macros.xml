@@ -1,0 +1,298 @@
+<macros>
+    <token name="@TOOL_VERSION@">0.5.0</token>
+    <token name="@VERSION_SUFFIX@">2</token>
+
+    <xml name="requirements">
+        <requirement type="package" version="@TOOL_VERSION@">aoptk</requirement>
+        <requirement type="package" version="6.0.3">pyyaml</requirement>
+    </xml>
+
+    <xml name="email_credentials">
+        <credentials name="email_credentials" 
+                     label="Your e-mail address" 
+                     version="1.0"
+                     optional="true"
+                     description="E-mail is required to follow NCBI/PubMed guidelines.">
+            <variable name="email" inject_as_env="EMAIL" optional="true"/>
+        </credentials>
+    </xml>
+
+    <xml name="ncbi_api_key">
+        <credentials name="ncbi_api_key" 
+                     label="Your NCBI API key" 
+                     version="1.0"
+                     optional="true"
+                     description="Provide your NCBI API key for faster download of publications. https://support.nlm.nih.gov/kbArticle/?pn=KA-05317">
+            <secret name="api_key" inject_as_env="NCBI_API_KEY" optional="true"/>
+        </credentials>
+    </xml>
+
+    <xml name="openai_config">
+        <credentials name="openai_config" 
+                     label="Your OpenAI API key" 
+                     version="1.0"
+                     optional="true"
+                     description="Provide OpenAI API key and URL for accessing the large language models.">
+            <secret name="api_key" inject_as_env="OPENAI_API_KEY" optional="true"/>
+        </credentials>
+    </xml>
+
+    <xml name="search_term">
+        <param name="search_term" type="text" label="Your search term" help="Type your search term as you would in PMC, Europe PMC, or PubMed." optional="false">
+            <sanitizer invalid_char="">
+                <valid initial="string.letters,string.digits">
+                    <add value="_" />
+                    <add value=" " />
+                    <add value="&apos;" />
+                    <add value="&quot;" />
+                    <add value="(" />
+                    <add value=")" />
+                    <add value="*" />
+                    <add value="[" />
+                    <add value="]" />
+                    <add value="-" />
+                    <add value=":" />
+                    <add value="/" />
+                    <add value="α" />
+                    <add value="β" />
+                    <add value="γ" />
+                    <add value="δ" />
+                    <add value="ε" />
+                    <add value="ζ" />
+                    <add value="η" />
+                    <add value="θ" />
+                    <add value="ι" />
+                    <add value="κ" />
+                    <add value="λ" />
+                    <add value="μ" />
+                    <add value="ν" />
+                    <add value="ξ" />
+                    <add value="ο" />
+                    <add value="π" />
+                    <add value="ρ" />
+                    <add value="σ" />
+                    <add value="τ" />
+                    <add value="υ" />
+                    <add value="φ" />
+                    <add value="χ" />
+                    <add value="ψ" />
+                    <add value="ω" />
+                    <add value="Α" />
+                    <add value="Β" />
+                    <add value="Γ" />
+                    <add value="Δ" />
+                    <add value="Ε" />
+                    <add value="Ζ" />
+                    <add value="Η" />
+                    <add value="Θ" />
+                    <add value="Ι" />
+                    <add value="Κ" />
+                    <add value="Λ" />
+                    <add value="Μ" />
+                    <add value="Ν" />
+                    <add value="Ξ" />
+                    <add value="Ο" />
+                    <add value="Π" />
+                    <add value="Ρ" />
+                    <add value="Σ" />
+                    <add value="Τ" />
+                    <add value="Υ" />
+                    <add value="Φ" />
+                    <add value="Χ" />
+                    <add value="Ψ" />
+                    <add value="Ω" />
+                </valid>
+            </sanitizer>
+            <validator type="regex">[0-9a-zA-Z_ ()*'"[\]\[\]\-:.\[\]α-ωΑ-Ω]*</validator>
+        </param>
+    </xml>
+
+    <xml name="llm_models">
+        <param name="llm_models" type="select" label="Select LLM" help="Select the LLM to analyze text.">
+            <option value="gpt-oss-120b" selected="true">GPT OSS 120B</option>
+            <option value="qwen3.5">Qwen 3.5</option>
+            <option value="deepseek-v3.2-thinking">DeepSeek v3.2</option>
+        </param>
+    </xml>
+
+    <xml name="llm_models_images">
+        <param name="llm_models_images" type="select" label="Select the LLM to analyze image data." help="Choose the LLM to use for image data processing.">
+            <option value="qwen3.5">Qwen 3.5</option>
+            <option value="redhatai-scout">RedHatAI Scout</option>
+        </param>
+    </xml>
+
+    <xml name="model_selector" tokens="modality">
+        <conditional name="model_selector">
+            <param name="model_source" type="select" label="Choose the model" help="Multimodal models are capable to have image and text as input.">
+                <option value="builtin" selected="true">Models provided through Galaxy</option>
+                <option value="custom">Bring Your Own LiteLLM</option>
+            </param>
+            <when value="builtin">
+                <param name="model" type="select" optional="false" label="Model" help="Select the model you want to use.">
+                    <options from_data_table="genai_models">
+                        <filter type="static_value" column="3" value="@MODALITY@"/>
+                    </options>
+                    <validator message="No model annotation is available for LLM Hub" type="no_options"/>
+                </param>
+            </when>
+            <when value="custom">
+                <param name="model" type="text" label="LLM Model identifier" help="Model identifier - can be specific for the server at hand.">
+                    <sanitizer invalid_char="">
+                        <valid initial="string.letters,string.digits">
+                            <add value="_" />
+                            <add value="-" />
+                            <add value="." />
+                            <add value=":" />
+                            <add value="/" />
+                        </valid>
+                    </sanitizer>
+                </param>
+                <param name="server_url" type="text" label="OpenAI API endpoint url" help="URL for the OpenAI API endpoint to use." >
+                    <sanitizer invalid_char="">
+                        <valid initial="string.letters,string.digits">
+                            <add value="_" />
+                            <add value="-" />
+                            <add value="." />
+                            <add value=":" />
+                            <add value="/" />
+                        </valid>
+                    </sanitizer>
+                </param>
+                <param name="credential_agreement" type="boolean" label="Do you provide your own API key in the credentials?" help="Double check to ensure you provided your own API key.">
+                    <validator type="expression" message="You need to have your own API key setup in the credentials.">True == value</validator>
+                </param>
+            </when>
+        </conditional>
+    </xml>
+    <token name="@MODEL_SETUP@"><![CDATA[
+#if $model_selector.model_source == "custom"
+litellm_api_key = os.environ.get("OPENAI_API_KEY")
+litellm_base_url = "$server_url"
+model = "$model"
+#elif $model_selector.model_source == "builtin"
+model = "$model.fields.model_id"
+provider = "$model.fields.provider"
+
+litellm_config_file = os.environ.get("LITELLM_CONFIG_FILE")
+if not litellm_config_file:
+    sys.exit("LITELLM_CONFIG_FILE environment variable is not set.")
+with open(litellm_config_file, "r") as f:
+    config = yaml.safe_load(f)
+
+servers = config.get("servers", {})
+if servers and provider not in servers:
+    sys.exit(f"Provider '{provider}' not found in configuration.")
+
+source = servers[provider] if servers else config
+
+litellm_api_key = source.get("LITELLM_API_KEY")
+litellm_base_url = source.get("LITELLM_BASE_URL")
+#end if
+    ]]></token>
+
+    <xml name="prompt_specification">
+        <param argument="--prompt_specification" type="text" value="" optional="true" label="Analysis specification" help="Prompt the LLM and specify what data to analyze (e.g., Only include data from HepG2 spheroids).">
+            <sanitizer invalid_char="">
+                <valid initial="string.letters,string.digits">
+                    <add value="_" />
+                    <add value=" " />
+                    <add value="(" />
+                    <add value=")" />
+                    <add value="*" />
+                    <add value="[" />
+                    <add value="]" />
+                    <add value="-" />
+                    <add value=":" />
+                    <add value="/" />
+                    <add value="α" />
+                    <add value="β" />
+                    <add value="γ" />
+                    <add value="δ" />
+                    <add value="ε" />
+                    <add value="ζ" />
+                    <add value="η" />
+                    <add value="θ" />
+                    <add value="ι" />
+                    <add value="κ" />
+                    <add value="λ" />
+                    <add value="μ" />
+                    <add value="ν" />
+                    <add value="ξ" />
+                    <add value="ο" />
+                    <add value="π" />
+                    <add value="ρ" />
+                    <add value="σ" />
+                    <add value="τ" />
+                    <add value="υ" />
+                    <add value="φ" />
+                    <add value="χ" />
+                    <add value="ψ" />
+                    <add value="ω" />
+                    <add value="Α" />
+                    <add value="Β" />
+                    <add value="Γ" />
+                    <add value="Δ" />
+                    <add value="Ε" />
+                    <add value="Ζ" />
+                    <add value="Η" />
+                    <add value="Θ" />
+                    <add value="Ι" />
+                    <add value="Κ" />
+                    <add value="Λ" />
+                    <add value="Μ" />
+                    <add value="Ν" />
+                    <add value="Ξ" />
+                    <add value="Ο" />
+                    <add value="Π" />
+                    <add value="Ρ" />
+                    <add value="Σ" />
+                    <add value="Τ" />
+                    <add value="Υ" />
+                    <add value="Φ" />
+                    <add value="Χ" />
+                    <add value="Ψ" />
+                    <add value="Ω" />
+                </valid>
+            </sanitizer>
+            <validator type="regex">[0-9a-zA-Z_ ()*'"[\]\[\]\-:.\[\]α-ωΑ-Ω]*</validator>
+        </param>
+    </xml>
+
+    <xml name="effects">
+        <repeat name="effects" title="Effect" min="1">
+            <param argument="effect" type="text" value="" label="Effect to search" help="Specify the effect you want to search for (e.g., liver fibrosis, gap junction intracellular communication).">
+                <validator type="regex">[0-9a-zA-Z]+</validator>
+            </param>
+        </repeat>
+    </xml>
+
+    <xml name="relationship_types">
+        <param name="relationship_types" type="select" label="Select relationship type" help="Choose the type of relationship to identify." multiple="true" optional="false">
+            <option value="causative">Causative</option>
+            <option value="inhibitive">Inhibitive</option>
+        </param>
+    </xml>
+    
+    <xml name="preprint_mode">
+        <param name="preprint_mode" type="select" label="Preprint handling" help="Choose how preprints should be handled in the search results.">
+            <option value="all" selected="true">Include preprints and non-preprints</option>
+            <option value="exclude">Exclude preprints</option>
+            <option value="only">Only include preprints</option>
+        </param>
+    </xml>
+
+    <xml name="licensing">
+        <param name="licensing" type="select" label="Licensing" help="Limit your search results to publications with specific Creative Commons (CC) licenses.">
+            <option value="all" selected="true">No licensing specification</option>
+            <option value="open-access">Open Access</option>
+            <option value="CC0">CC0</option>
+            <option value="CC-BY">CC-BY</option>
+            <option value="CC-BY-SA">CC-BY-SA</option>
+            <option value="CC-BY-ND">CC-BY-ND</option>
+            <option value="CC-BY-NC">CC-BY-NC</option>
+            <option value="CC-BY-NC-ND">CC-BY-NC-ND</option>
+            <option value="CC-BY-NC-SA">CC-BY-NC-SA</option>
+        </param>
+    </xml>
+</macros>

@@ -6,6 +6,9 @@ import sys
 
 from matchms import set_matchms_logger_level
 from MSMetaEnhancer import Application
+from MSMetaEnhancer.libs.converters.compute import RDKit
+from MSMetaEnhancer.libs.converters.web import BridgeDb, CIR, CTS, IDSM, PubChem
+from MSMetaEnhancer.libs.utils.ConverterBuilder import ConverterBuilder
 
 
 def handle_xlsx_file(app, filename):
@@ -39,8 +42,12 @@ def main(argv):
     # curate given metadata
     app.curate_metadata()
 
+    # register all available converters
+    converters = [PubChem, CTS, CIR, RDKit, IDSM, BridgeDb]
+    ConverterBuilder.register(converters)
+
     # specify requested services and jobs
-    services = ['PubChem', 'CTS', 'CIR', 'RDKit', 'IDSM', 'BridgeDb']
+    services = [c.__name__ for c in converters]
 
     if len(args.jobs) != 0:
         jobs = []

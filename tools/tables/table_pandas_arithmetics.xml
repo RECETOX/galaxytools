@@ -1,8 +1,8 @@
-<tool id="table_pandas_arithmetics" name="table arithmetics" version="@PANDAS_VERSION@+galaxy@VERSION_SUFFIX@" profile="20.01" license="MIT">
+<tool id="table_pandas_arithmetics" name="table arithmetics" version="@PANDAS_VERSION@+galaxy@VERSION_SUFFIX@" profile="@PROFILE_VERSION@" license="MIT">
     <description>perform arithmetic operations on a dataframe column</description>
     <macros>
         <import>macros.xml</import>
-        <token name="@VERSION_SUFFIX@">1</token>
+        <token name="@VERSION_SUFFIX@">0</token>
     </macros>
     <requirements>
         <expand macro="requirement_pandas_pyarrow"/>

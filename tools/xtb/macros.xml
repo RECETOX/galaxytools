@@ -1,5 +1,5 @@
 <macros>
-    <token name="@TOOL_VERSION@">6.6.1</token>
+    <token name="@TOOL_VERSION@">6.7.1</token>
     <xml name="edam">
         <edam_topics>
             <edam_topic>topic_3332</edam_topic>
