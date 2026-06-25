@@ -25,7 +25,7 @@
         #for $file in $infiles:
             ## We use the element_identifier (the name of the file in Galaxy history) 
             ## to give it a sensible name, ensuring it ends with .csv
-            cp '$file' '/app/tad/packages/tadweb-server/public/csv/${file.element_identifier}.csv' &&
+            ln -s '$file' '/app/tad/packages/tadweb-server/public/csv/${file.element_identifier}.csv' &&
         #end for
         
         cd /app/tad/packages/tadweb-server &&
