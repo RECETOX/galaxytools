@@ -1,8 +1,10 @@
 <tool id="interactive_tool_tadviewer" tool_type="interactive" name="Tadviewer" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="21.05">
     <description>View and manipulate tabular data</description>
+    <icon src="tad.png"/>
     <macros>
         <import>macros.xml</import>
     </macros>
+    <expand macro="creator"/>
 
     <requirements>
         <container type="docker">michaelabodova/tadviewer:latest</container>
