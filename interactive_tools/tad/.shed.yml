@@ -1,0 +1,13 @@
+name: tad
+owner: recetox
+type: unrestricted
+description: |
+  Interactive Tadviewer for viewing and manipulating tabular data in Galaxy.
+long_description: |
+  Tadviewer is a web-based adaptation of the Tad desktop application that enables
+  interactive exploration of tabular datasets from Galaxy, including SQL-like data
+  querying and filtering capabilities.
+homepage_url: https://github.com/RECETOX/tad
+remote_repository_url: https://github.com/RECETOX/galaxytools/tree/master/interactive_tools/tad
+categories:
+  - Visualizations
