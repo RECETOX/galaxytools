@@ -37,7 +37,7 @@ jobs:
         # find files that are changed compared to master
         # find dockerfiles that have changed and pick first or fail if more are changed
       - name: Get all changed Dockerfiles
-        id: changed-files
+        id: changed-dockerfiles
         uses: tj-actions/changed-files@v47 # v47.0.6
         with:
           # Avoid using single or double quotes for multiline patterns
@@ -51,13 +51,14 @@ jobs:
         uses: docker/setup-buildx-action@v2
   
 
+        # built docker image locally using the action from eu repo
       - name: Build docker image
         env:
-          CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
+          CHANGED_FILES: ${{ steps.changed-dockerfiles.outputs.all_changed_files }}
         uses: docker/build-push-action@v4
         with:
           push: false
           file: ${{ env.CHANGED_FILES }}
           tags: user/app:latest
-          # built docker image locally using the action from eu repo
+
     # use planemo to run the tests for interactivetool
