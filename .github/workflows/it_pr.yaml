@@ -50,7 +50,6 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
   
-
         # built docker image locally using the action from eu repo
       - name: Build docker image
         env:
