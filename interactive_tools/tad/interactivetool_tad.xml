@@ -1,5 +1,5 @@
-<tool id="interactive_tool_tadviewer" tool_type="interactive" name="Tadviewer" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="21.05">
-    <description>View and manipulate tabular data</description>
+<tool id="interactive_tool_tad" tool_type="interactive" name="Tad" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="21.05">
+    <description>tadweb-server application to view and manipulate tabular data</description>
     <icon src="tad.png"/>
     <macros>
         <import>macros.xml</import>
@@ -7,7 +7,7 @@
     <expand macro="creator"/>
 
     <requirements>
-        <container type="docker">michaelabodova/tadviewer:latest</container>
+        <container type="docker">recetox/tad:@TOOL_VERSION@</container>
     </requirements>
 
     <entry_points>
@@ -24,28 +24,26 @@
     </environment_variables>
 
     <command><![CDATA[
-    
         ## Symlink or copy the galaxy input files into the TAD server directory
+        JOB_DIR=\$PWD &&
         #for $file in $infiles:
             ## We use the element_identifier (the name of the file in Galaxy history) 
             ## to give it a sensible name, ensuring it ends with .csv
-            ln -s '$file' '/app/tad/packages/tadweb-server/public/csv/${file.element_identifier}.csv' &&
+            ln -s '$file' '${file.name}.${file.ext}' &&
         #end for
-        
         cd /app/tad/packages/tadweb-server &&
         
         ## Run the server
-        npm start > $file_output 2>&1
- 
+        npm start -- -d \$JOB_DIR > $logfile 2>&1
     ]]>
     </command>
 
     <inputs>
-        <param name="infiles" type="data" format="csv,tabular" multiple="true" label="Select one or more tabular datasets, or a dataset collection." help="Must be in CSV/tabular format."/>
+        <param name="infiles" type="data" format="csv,tabular,tsv,parquet" multiple="true" label="Select one or more tabular datasets, or a dataset collection." help="Must be in CSV/tabular format."/>
     </inputs>
 
     <outputs>
-        <data name="job_output" format="txt"/>
+        <data name="logfile" format="txt"/>
     </outputs>
 
     <tests>

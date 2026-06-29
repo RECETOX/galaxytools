@@ -43,21 +43,46 @@ jobs:
           # Avoid using single or double quotes for multiline patterns
           files: |
             interactive_tools/**/Dockerfile
+          dir_names: "true"
+          dir_names_max_depth: "2"
 
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
           
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
+
+      - name: Resolve changed tool metadata
+        id: tool-meta
+        shell: bash
+        run: |
+          mapfile -t dirs <<< "${{ steps.changed-dockerfiles.outputs.all_changed_files }}"
+
+          if [[ ${#dirs[@]} -eq 0 ]]; then
+            echo "No changed interactive tool directory found."
+            exit 1
+          fi
+
+          if [[ ${#dirs[@]} -gt 1 ]]; then
+            echo "More than one changed interactive tool directory found:"
+            printf '%s\n' "${dirs[@]}"
+            exit 1
+          fi
+
+          changed_dir="${dirs[0]}"
+          image_name="${changed_dir#interactive_tools/}"
+          image_name="${image_name,,}"
+
+          echo "changed_dir=${changed_dir}" >> "$GITHUB_OUTPUT"
+          echo "dockerfile=${changed_dir}/Dockerfile" >> "$GITHUB_OUTPUT"
+          echo "image_name=${image_name}" >> "$GITHUB_OUTPUT"
   
         # built docker image locally using the action from eu repo
       - name: Build docker image
-        env:
-          CHANGED_FILES: ${{ steps.changed-dockerfiles.outputs.all_changed_files }}
         uses: docker/build-push-action@v4
         with:
           push: false
-          file: ${{ env.CHANGED_FILES }}
-          tags: user/app:latest
+          file: ${{ steps.tool-meta.outputs.dockerfile }}
+          tags: recetox/${{ steps.tool-meta.outputs.image_name }}:latest
 
     # use planemo to run the tests for interactivetool
