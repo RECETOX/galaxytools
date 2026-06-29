@@ -33,7 +33,7 @@ jobs:
     runs-on: ubuntu-latest  # windows-latest || macos-latest
     name: Test changed-files
     steps: # check out rep
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
         # find files that are changed compared to master
         # find dockerfiles that have changed and pick first or fail if more are changed
@@ -46,7 +46,7 @@ jobs:
             interactive_tools/**/Dockerfile
     
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: '3.11'
 
