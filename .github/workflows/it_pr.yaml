@@ -21,6 +21,7 @@ env:
   GALAXY_BRANCH: release_25.1
   MAX_CHUNKS: 4
   MAX_FILE_SIZE: 1M
+  
 concurrency:
   # Group runs by PR, but keep runs on the default branch separate
   # because we do not want to cancel ToolShed uploads
@@ -47,13 +48,22 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
       
-      # Set up planemo
-      - name: Set up Planemo
-        uses: galaxyproject/planemo-ci-action@v1
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
-          mode: setup
           python-version: '3.11'
-          create-cache: true
+
+      - name: Install Planemo
+        shell: bash
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install planemo
+
+      - name: Validate Planemo installation
+        shell: bash
+        run: |
+          which planemo
+          planemo --version
 
       # Expand macros and extract image name using planemo
       - name: Expand macros and extract image name
