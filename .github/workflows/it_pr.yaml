@@ -46,7 +46,46 @@ jobs:
 
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
-          
+      
+      # Set up planemo
+      - name: Set up Planemo
+        uses: galaxyproject/planemo-ci-action@v1
+        with:
+          mode: setup
+          python-version: '3.11'
+          create-cache: true
+
+      # Expand macros and extract image name using planemo
+      - name: Expand macros and extract image name
+        id: expand-macros
+        shell: bash
+        run: |
+          # Get the directory containing the changed Dockerfile
+          changed_dockerfile="${{ steps.changed-dockerfiles.outputs.all_changed_files }}"
+          tool_dir=$(dirname "$changed_dockerfile")
+
+          # Find tool XML file
+          tool_xml=$(find "$tool_dir" -maxdepth 1 -name "*.xml" ! -name "macros.xml" | head -1 | xargs)
+
+          if [[ -z "$tool_xml" ]]; then
+            echo "No tool XML found in $tool_dir"
+            exit 1
+          fi
+
+           # Expand macros and capture output
+          expanded=$(planemo normalize --expand_macros "$tool_xml")
+
+          # Extract the container image name (only for type="docker")
+          image_name=$(echo "$expanded" | grep -oP '<container type="docker">\K[^<]+')
+    
+          if [[ -z "$image_name" ]]; then
+            echo "No container tag with type=\"docker\" found after macro expansion"
+            exit 1
+          fi
+    
+          echo "image_name=$image_name" >> "$GITHUB_OUTPUT"
+          echo "Extracted image: $image_name"
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
   
@@ -58,6 +97,6 @@ jobs:
         with:
           push: false
           file: ${{ env.CHANGED_FILES }}
-          tags: user/app:latest
+          tags: ${{ steps.expand-macros.outputs.image_name }}
 
     # use planemo to run the tests for interactivetool
