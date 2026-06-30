@@ -1,0 +1,250 @@
+<tool id="recetox_redundancy_filtering" name="recetox-xMSannotator: Redundancy Filtering" version="@TOOL_VERSION@+galaxy1">
+    <description>filter out low-scoring redundant annotations to produce final results</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="creator"/>
+    <expand macro="edam_topics"/>
+    <expand macro="edam_operations"/>
+    <expand macro="requirements"/>
+
+    <command detect_errors="aggressive"><![CDATA[
+        Rscript -e 'source("${__tool_directory__}/utils.R")' \
+               -e "source('${wrapper}')"
+    ]]></command>
+
+    <configfiles>
+        <configfile name="wrapper"><![CDATA[
+            # Load input tables
+            annotation <- load_table("$annotation", "$annotation.ext")
+            adduct_weights <- load_table("$adduct_weights", "$adduct_weights.ext")
+
+            # Perform redundancy filtering using multilevelannotationstep5
+            annotation <- recetox.xmsannotator::multilevelannotationstep5(
+                outloc = tempdir(),
+                adduct_weights = adduct_weights,
+                chemscoremat = annotation
+            )
+
+            # Save output
+            save_table(annotation, "$output_file", "$output_file.ext")
+        ]]></configfile>
+    </configfiles>
+
+    <inputs>
+        <param name="annotation" type="data" format="parquet,csv">
+            <label>Annotation table with scores and confidence</label>
+            <help>
+                Annotation table from Compute Confidence Levels or Pathway Matching tool.
+                Contains fully scored annotations ready for redundancy filtering.
+            </help>
+        </param>
+        <param name="adduct_weights" type="data" format="parquet,csv">
+            <label>Adduct weights table</label>
+            <help>
+                Table of adduct weights used to determine which annotations to retain
+                when filtering redundant matches.
+            </help>
+        </param>
+    </inputs>
+
+    <outputs>
+        <data name="output_file" format="parquet" label="${tool.name} - Final Annotations">
+            <change_format>
+                <when input="annotation.ext" value="csv" format="csv" />
+            </change_format>
+        </data>
+    </outputs>
+
+    <tests>
+        <!-- Test with parquet format -->
+        <test>
+            <param name="annotation" value="annotation_with_pathways.parquet" ftype="parquet"/>
+            <param name="adduct_weights" value="adduct_table.parquet" ftype="parquet"/>
+            <output name="output_file" file="final_annotations.parquet" ftype="parquet"/>
+        </test>
+        <!-- Test with CSV format -->
+        <test>
+            <param name="annotation" value="annotation_with_pathways.csv" ftype="csv"/>
+            <param name="adduct_weights" value="adduct_table.csv" ftype="csv"/>
+            <output name="output_file" file="final_annotations.csv" ftype="csv"/>
+        </test>
+        <!-- Test with confidence-level annotated data -->
+        <test>
+            <param name="annotation" value="annotation_with_confidence.parquet" ftype="parquet"/>
+            <param name="adduct_weights" value="adduct_table.parquet" ftype="parquet"/>
+            <output name="output_file" file="final_annotations_no_pathways.parquet" ftype="parquet"/>
+        </test>
+    </tests>
+
+    <help>
+        <![CDATA[
+**Redundancy Filtering**
+
+Remove low-scoring redundant annotations to produce a clean final annotation set.
+
+Description
+===========
+
+This tool implements the final redundancy filtering step (multilevelannotationstep5) of the xMSannotator pipeline. When multiple annotations compete for the same peak or when multiple peaks are ambiguously assigned to the same compound, this tool selects the best annotation based on computed scores.
+
+Why Redundancy Filtering?
+-------------------------
+
+During annotation, several types of redundancy can occur:
+
+1. **Multiple Adduct Matches**
+   - Same compound matched via different adduct forms
+   - Some may be false positives with lower scores
+
+2. **Competing Compound Assignments**
+   - Different compounds with similar masses
+   - Only one is likely correct
+
+3. **Ambiguous Isotope Assignments**
+   - Peaks that could be isotopes of multiple parents
+   - Need to resolve to single best assignment
+
+4. **Pathway-Related Duplicates**
+   - Related compounds in same pathway
+   - May have overlapping mass signatures
+
+Filtering Algorithm
+-------------------
+
+The multilevelannotationstep5 function:
+
+1. **Identifies Redundant Groups**
+   - Groups annotations competing for the same spectral features
+   - Identifies over-assigned compounds
+
+2. **Scores Within Groups**
+   - Compares chemscores within each redundant group
+   - Considers adduct reliability weights
+
+3. **Selects Best Annotations**
+   - Retains highest-scoring annotation per group
+   - Removes lower-confidence alternatives
+
+4. **Preserves Diversity**
+   - Ensures unique biological entities are retained
+   - Avoids over-filtering legitimate multi-ion detections
+
+Parameters
+----------
+
+**Adduct Weights**
+    Used to prioritize certain adduct types when scores are similar.
+    More common/reliable adducts receive preference.
+
+Inputs
+------
+
+**Annotation Table**
+    Output from Compute Confidence Levels or Pathway Matching.
+    Must contain chemscores and confidence information.
+
+**Adduct Weights Table**
+    Adduct weight information for prioritization.
+
+Outputs
+-------
+
+**Final Annotations**
+    Filtered annotation table with:
+    - Redundant low-scoring entries removed
+    - One best annotation per peak/compound relationship
+    - All original columns preserved
+
+Filtering Criteria
+------------------
+
+Annotations are removed when:
+
+1. A higher-scoring alternative exists for the same peak
+2. The annotation is inconsistent with adduct expectations
+3. Multiple compounds are assigned to the same feature
+4. Isotope assignments conflict with parent assignments
+
+Annotations are retained when:
+
+1. They represent unique peak-compound relationships
+2. They have the highest score among competitors
+3. They contribute unique biological information
+4. They pass all quality thresholds
+
+Usage Notes
+-----------
+
+**Optional Step:**
+Redundancy filtering is optional. Consider skipping it when:
+- You want to see all possible annotations for manual review
+- Working with highly complex samples where ambiguity is expected
+- Performing exploratory analysis
+
+Enable it when:
+- Producing final results for publication
+- Need clean, non-redundant annotation sets
+- Automated downstream processing requires unambiguous assignments
+
+**Before Filtering:**
+Ensure all scoring steps are complete:
+- Chemscores computed
+- Confidence levels assigned
+- (Optional) Pathway boosts applied
+
+**After Filtering:**
+The filtered annotation table is ready for:
+- Export to report formats
+- Downstream statistical analysis
+- Pathway enrichment analysis
+- Visualization
+
+Output Format
+-------------
+
+The output maintains the same format as the input but with fewer rows.
+All columns are preserved; no new columns are added by this step.
+
+Typical Row Reduction
+---------------------
+
+Expected reduction depends on sample complexity:
+- Simple samples: 5-15% reduction
+- Complex samples: 15-30% reduction
+- Very complex samples: Up to 40% reduction
+
+If reduction exceeds 50%, consider:
+- Relaxing earlier scoring parameters
+- Checking for systematic issues
+- Verifying adduct weight table appropriateness
+
+Complete Workflow Summary
+-------------------------
+
+1. Simple Annotation → Initial matching
+2. Compute Mass Defect → Add MD column
+3. Compute Peak Correlations → Peak relationships
+4. Compute Peak Modules → Correlation groups
+5. Compute RT Modules → RT-based clustering
+6. Compute Mass Defect (again) → Updated MD
+7. Compute Isotopes → Isotope assignments
+8. Reformat Annotation → Prepare for scoring
+9. Compute Chemscore → Confidence scores
+10. Compute Confidence Levels → MSI-style levels
+11. Pathway Matching (optional) → Biological context
+12. Redundancy Filtering → Final clean set
+
+References
+----------
+
+Novotný, J., et al. (2024). recetox-xMSannotator: Advanced metabolite annotation tool. Analytical Chemistry. DOI: 10.1021/acs.analchem.6b01214
+
+Kind, T., & Fiehn, O. (2010). Advances in structure elucidation of small molecules using mass spectrometry. Bioanalytical Reviews, 2(1), 23-60. DOI: 10.1007/s12566-010-0001-y
+        ]]>
+    </help>
+
+    <citations>
+        <expand macro="citations"/>
+    </citations>
+</tool>

@@ -1,144 +1,218 @@
 <macros>
-<token name="@TOOL_VERSION@">0.10.0</token>
+    <token name="@TOOL_VERSION@">0.10.0</token>
 
-<xml name="requirements">
-    <requirements>
-        <requirement type="package" version="@TOOL_VERSION@">r-recetox-xmsannotator</requirement>
-    </requirements>
-</xml>
+    <!-- Creator macro - shared across all tools -->
+    <xml name="creator">
+        <creator>
+            <person
+                givenName="Jiří"
+                familyName="Novotný"
+                url="https://github.com/xtracko"
+                identifier="0000-0001-5449-3523" />
+            <person
+                givenName="Martin"
+                familyName="Čech"
+                url="https://github.com/martenson"
+                identifier="0000-0002-9318-1781" />
+            <person
+                givenName="Matej"
+                familyName="Troják"
+                url="https://github.com/xtrojak"
+                identifier="0000-0003-0841-2707" />
+            <organization
+                url="https://www.recetox.muni.cz/"
+                email="GalaxyToolsDevelopmentandDeployment@space.muni.cz"
+                name="RECETOX MUNI" />
+        </creator>
+    </xml>
 
-<xml name="creator">
-    <creator>
-        <person
-            givenName="Jiří"
-            familyName="Novotný"
-            url="https://github.com/xtracko"
-            identifier="0000-0001-5449-3523" />
-        <person
-            givenName="Martin"
-            familyName="Čech"
-            url="https://github.com/martenson"
-            identifier="0000-0002-9318-1781" />
-        <person
-            givenName="Matej"
-            familyName="Troják"
-            url="https://github.com/xtrojak"
-            identifier="0000-0003-0841-2707" />
-        <organization
-            url="https://www.recetox.muni.cz/"
-            email="GalaxyToolsDevelopmentandDeployment@space.muni.cz"
-            name="RECETOX MUNI" />
-    </creator>
-</xml>
+    <!-- Requirements macro - shared across all tools -->
+    <xml name="requirements">
+        <requirements>
+            <requirement type="package" version="@TOOL_VERSION@">r-recetox-xmsannotator</requirement>
+        </requirements>
+    </xml>
 
-<xml name="inputs">
-    <param name="metadata_table" type="data" format="parquet,csv">
-        <label>Metadata table</label>
-        <help><![CDATA[
-            Peak metadata table*.
-        ]]></help>
-    </param>
-    <param name="intensity_table" type="data" format="parquet,csv">
-        <label>Intensity table</label>
-        <help><![CDATA[
-            Table with intensities** for features (rows) across samples (columns).
-        ]]></help>
-    </param>
-    <param name="compound_table" type="data" format="parquet,csv">
-        <label>Compound database</label>
-        <help><![CDATA[
-            Database of compounds according to which the annotation is performed.
-            The database is required to contain the fields <em>compound_id</em>, <em>monoisotopic_mass</em>, and <em>molecular_formula</em>.
-        ]]></help>
-    </param>
-    <param name="adduct_table" type="data" format="parquet,csv" optional="true">
-        <label>Adduct database</label>
-        <help><![CDATA[
-            Database of adduct which is combined with the database of compound to form a molecule-adduct pairs.
-            The database is required to contain <em>adduct</em>, <em>charge</em>, <em>mass</em>, and <em>n_molecules</em>.
-        ]]></help>
-    </param>
-    <param name="adduct_weights" type="data" format="parquet,csv" optional="true">
-        <label>Adduct weights</label>
-        <help>
-            A weight-by-adduct table.
-        </help>
-    </param>
-</xml>
+    <!-- Citations macro - shared across all tools -->
+    <xml name="citations">
+        <citation type="doi">10.1021/acs.analchem.6b01214</citation>
+    </xml>
 
-<xml name="outputs">
-    <data name="output_file" format="parquet">
-        <change_format>
-            <when input="metadata_table.ext" value="csv" format="csv" />
-        </change_format>
-    </data>
-</xml>
+    <!-- EDAM topics for metabolomics and mass spectrometry -->
+    <xml name="edam_topics">
+        <edam_topics>
+            <edam_topic>topic_3172</edam_topic>
+        </edam_topics>
+    </xml>
 
-<xml name="tolerance">
-    <param name="mass_tolerance_ppm" type="integer" min="0" value="5">
-        <label>Mass tolerance [ppm]</label>
-        <help>Mass tolerance in ppm for database matching.</help>
-    </param>
-    <yield/>
-</xml>
+    <!-- EDAM operations for mass spectrum analysis -->
+    <xml name="edam_operations">
+        <edam_operations>
+            <edam_operation>operation_3214</edam_operation>
+        </edam_operations>
+    </xml>
 
-<token name="@HELP@">
-Description
-===========
+    <!-- Mass tolerance parameter -->
+    <xml name="mass_tolerance_param">
+        <param name="mass_tolerance_ppm" type="integer" min="0" value="5">
+            <label>Mass tolerance [ppm]</label>
+            <help>Mass tolerance in ppm for database matching.</help>
+        </param>
+    </xml>
 
-Annotate the peak intensity table (e.g. from an apLCMS run) with compounds from the compounds database
-using advanced methods.
+    <!-- Time/RT tolerance parameter -->
+    <xml name="time_tolerance_param">
+        <param name="time_tolerance" type="float" value="10" min="0">
+            <label>Retention time tolerance [s]</label>
+            <help>Retention time tolerance in seconds for finding peaks derived from the same parent compound.</help>
+        </param>
+    </xml>
 
-The annotation process generates all possible compound-adduct pairs and matches those pairs to the measured
-peaks. A compound-adduct pair is pronounced as a match to a certain peak when the difference of their masses are
-withing some tolerance.
+    <!-- Correlation threshold parameter -->
+    <xml name="correlation_threshold_param">
+        <param name="correlation_threshold" type="float" value="0.7" min="0" max="1">
+            <label>Correlation threshold</label>
+            <help>Correlation threshold between peaks to qualify as adducts/isotopes of the same metabolite.</help>
+        </param>
+    </xml>
 
-Then, a score and a confidence level is assigned to each match based on peak correlation
-clustering, metabolite pathway associations, adducts expectations, and isotope conformations.
+    <!-- Cluster parameters -->
+    <xml name="cluster_params">
+        <param name="min_cluster_size" type="integer" value="10" min="1">
+            <label>Minimum cluster size</label>
+            <help>The minimum number of nodes to be considered as a cluster.</help>
+        </param>
+        <param name="deep_split" type="integer" value="2" min="0" max="4">
+            <label>Deep split</label>
+            <help>
+                Deep split provides a rough control over sensitivity to cluster splitting. The higher the value,
+                the more and smaller clusters will be produced (see WGCNA package documentation).
+            </help>
+        </param>
+        <param name="network_type" type="select" display="radio">
+            <label>Network type</label>
+            <help>
+                Network type parameter affects how the network's adjacency matrix is created from the correlation
+                matrix (see WGCNA package documentation).
+            </help>
+            <option value="signed">Signed</option>
+            <option value="unsigned" selected="true">Unsigned</option>
+        </param>
+    </xml>
 
-Input tables description
-------------------------
+    <!-- Adduct weights input -->
+    <xml name="adduct_weights_input">
+        <param name="adduct_weights" type="data" format="parquet,csv">
+            <label>Adduct weights table</label>
+            <help>A weight-by-adduct table used for scoring annotations.</help>
+        </param>
+    </xml>
 
-(*) Metadata table
-~~~~~~~~~~~~~~~~~~
+    <!-- Filter by adducts parameter -->
+    <xml name="filter_by_param">
+        <param name="filter_by" type="select" label="Adducts to filter by" multiple="true" optional="true">
+            <option value="M-H" selected="true">M-H</option>
+            <option value="M+H" selected="true">M+H</option>
+            <option value="2M-H">2M-H</option>
+            <option value="M-2H">M-2H</option>
+            <option value="M+NH4">M+NH4</option>
+            <option value="M+Na">M+Na</option>
+            <option value="M+K">M+K</option>
+        </param>
+    </xml>
 
-The output from recetox-aplcms tool. 
-The `npeaks` column denotes the number of peaks which have been grouped into this feature. 
-The columns with the sample names indicate whether this feature is present in the sample.
-Only id, mz, and rt columns are required to be present.
+    <!-- Mass defect precision parameter -->
+    <xml name="mass_defect_precision_param">
+        <param name="mass_defect_precision" type="float" value="0.01">
+            <label>Precision for computing mass defect</label>
+            <help>Number of decimal places to round mass defect values.</help>
+        </param>
+    </xml>
 
-+-------+--------------+--------------+---------------+----------------+---------------+---------------+-----------+------------------------+------------------------+------------------------+
-|  id   | mz           |  mzmin       |  mzmax        |  rt            |  rtmin        |  rtmax        |   npeaks  |  21_qc_no_dil_milliq   |  29_qc_no_dil_milliq   |  8_qc_no_dil_milliq    |
-+=======+==============+==============+===============+================+===============+===============+===========+========================+========================+========================+
-|  1    | 70.03707021  |  70.037066   |  70.0370750   |  294.1038014   |  294.0634942  |  294.149985   |   3       |  1                     |  1                     |  1                     |
-+-------+--------------+--------------+---------------+----------------+---------------+---------------+-----------+------------------------+------------------------+------------------------+
-|  2    | 70.06505677  |  70.065045   |  70.0650676   |  141.9560055   |  140.5762528  |  143.335758   |   2       |  1                     |  0                     |  1                     |
-+-------+--------------+--------------+---------------+----------------+---------------+---------------+-----------+------------------------+------------------------+------------------------+
-|  57   | 78.04643252  |  78.046429   |  78.0464325   |  294.0063397   |  293.9406777  |  294.072001   |   2       |  1                     |  1                     |  0                     |
-+-------+--------------+--------------+---------------+----------------+---------------+---------------+-----------+------------------------+------------------------+------------------------+
-|  ...  | ...          |   ...        |  ...          |  ...           |  ...          |  ...          |   ...     |  ...                   |  ...                   |  ...                   |
-+-------+--------------+--------------+---------------+----------------+---------------+---------------+-----------+------------------------+------------------------+------------------------+
+    <!-- Peak RT width parameter -->
+    <xml name="peak_rt_width_param">
+        <param name="peak_rt_width" type="float" value="1">
+            <label>Estimated chromatographic peak width</label>
+            <help>Expected chromatographic peak width in seconds for RT clustering.</help>
+        </param>
+    </xml>
 
-(**) Intensity table
-~~~~~~~~~~~~~~~~~~~~
+    <!-- Isotope parameters -->
+    <xml name="isotope_params">
+        <param name="intensity_deviation_tolerance" type="float" value="0.1">
+            <label>Tolerance of intensity deviation</label>
+            <help>A numeric threshold by which an intensity ratio of two isotopic peaks may differ from their actual abundance ratio.</help>
+        </param>
+        <param name="mass_defect_tolerance" type="float" value="0.1">
+            <label>Tolerance of mass defect</label>
+            <help>Maximum difference in mass defect between two peaks of the same compound.</help>
+        </param>
+        <param name="maximum_isotopes" type="integer" value="10">
+            <label>Maximum isotopes</label>
+            <help>Maximum number of isotopes to consider.</help>
+        </param>
+    </xml>
 
-The output from recetox-aplcms tool.
-This table contains the peak area for aligned features in all samples.
+    <!-- Confidence level parameters -->
+    <xml name="confidence_params">
+        <param name="min_ions_per_chemical" type="integer" value="2" min="1">
+            <label>Minimum ions per chemical</label>
+            <help>Minimum number of adducts/isotopes required for a high-confidence match.</help>
+        </param>
+    </xml>
 
-+-------+------------------------+------------------------+------------------------+
-|  id   |  21_qc_no_dil_milliq   |  29_qc_no_dil_milliq   |  8_qc_no_dil_milliq    |
-+=======+========================+========================+========================+
-|  1    |  13187487.20482895     |  7957395.699119729     |  11700594.397257797    |
-+-------+------------------------+------------------------+------------------------+
-|  2    |  2075168.6398983458    |  0                     |  2574362.159289044     |
-+-------+------------------------+------------------------+------------------------+
-|  57   |  2934524.4406785755    |  1333044.5065971944    |  0                     |
-+-------+------------------------+------------------------+------------------------+
-|  ...  |  ...                   |  ...                   |  ...                   |
-+-------+------------------------+------------------------+------------------------+
-</token>
+    <!-- Legacy inputs macro for backward compatibility with old tool -->
+    <xml name="inputs">
+        <param name="metadata_table" type="data" format="parquet,csv">
+            <label>Metadata table</label>
+            <help><![CDATA[
+                Peak metadata table*.
+            ]]></help>
+        </param>
+        <param name="intensity_table" type="data" format="parquet,csv">
+            <label>Intensity table</label>
+            <help><![CDATA[
+                Table with intensities** for features (rows) across samples (columns).
+            ]]></help>
+        </param>
+        <param name="compound_table" type="data" format="parquet,csv">
+            <label>Compound database</label>
+            <help><![CDATA[
+                Database of compounds according to which the annotation is performed.
+                The database is required to contain the fields <em>compound_id</em>, <em>monoisotopic_mass</em>, and <em>molecular_formula</em>.
+            ]]></help>
+        </param>
+        <param name="adduct_table" type="data" format="parquet,csv" optional="true">
+            <label>Adduct database</label>
+            <help><![CDATA[
+                Database of adduct which is combined with the database of compound to form a molecule-adduct pairs.
+                The database is required to contain <em>adduct</em>, <em>charge</em>, <em>mass</em>, and <em>n_molecules</em>.
+            ]]></help>
+        </param>
+        <param name="adduct_weights" type="data" format="parquet,csv" optional="true">
+            <label>Adduct weights</label>
+            <help>
+                A weight-by-adduct table.
+            </help>
+        </param>
+    </xml>
 
-<xml name="citations">
-    <citation type="doi">10.1021/acs.analchem.6b01214</citation>
-</xml>
+    <!-- Legacy outputs macro for backward compatibility -->
+    <xml name="outputs">
+        <data name="output_file" format="parquet">
+            <change_format>
+                <when input="metadata_table.ext" value="csv" format="csv" />
+            </change_format>
+        </data>
+    </xml>
+
+    <!-- Legacy tolerance macro for backward compatibility with old tool -->
+    <xml name="tolerance">
+        <param name="mass_tolerance_ppm" type="integer" min="0" value="5">
+            <label>Mass tolerance [ppm]</label>
+            <help>Mass tolerance in ppm for database matching.</help>
+        </param>
+        <yield/>
+    </xml>
+
 </macros>

@@ -1,0 +1,159 @@
+<tool id="recetox_compute_rt_modules" name="recetox-xMSannotator: Compute RT Modules" version="@TOOL_VERSION@+galaxy1">
+    <description>cluster peaks by retention time and integrate with peak modules</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="creator"/>
+    <expand macro="edam_topics"/>
+    <expand macro="edam_operations"/>
+    <expand macro="requirements"/>
+
+    <command detect_errors="aggressive"><![CDATA[
+        Rscript -e 'source("${__tool_directory__}/utils.R")' \
+               -e "source('${wrapper}')"
+    ]]></command>
+
+    <configfiles>
+        <configfile name="wrapper"><![CDATA[
+            # Load peak table (should already have module assignments from compute_peak_modules)
+            peak_table <- load_table("$peak_table", "$peak_table.ext")
+
+            # Compute RT-based clustering
+            peak_rt_clusters <- recetox.xmsannotator::compute_rt_modules(
+                peak_table = peak_table,
+                peak_width = $peak_rt_width
+            )
+
+            # Save output
+            save_table(peak_rt_clusters, "$output_file", "$output_file.ext")
+        ]]></configfile>
+    </configfiles>
+
+    <inputs>
+        <param name="peak_table" type="data" format="parquet,csv">
+            <label>Peak table with module assignments</label>
+            <help>
+                Peak table that should include:
+                - peak: Peak identifier
+                - rt: Retention time
+                - module: Module assignment from Compute Peak Modules tool
+                - Additional intensity columns as needed
+            </help>
+        </param>
+        <expand macro="peak_rt_width_param"/>
+    </inputs>
+
+    <outputs>
+        <data name="output_file" format="parquet" label="${tool.name} - RT Clusters">
+            <change_format>
+                <when input="peak_table.ext" value="csv" format="csv" />
+            </change_format>
+        </data>
+    </outputs>
+
+    <tests>
+        <!-- Test with parquet format -->
+        <test>
+            <param name="peak_table" value="intensity_table.parquet" ftype="parquet"/>
+            <param name="peak_rt_width" value="1.0"/>
+            <output name="output_file" file="rt_clusters.parquet" ftype="parquet"/>
+        </test>
+        <!-- Test with CSV format -->
+        <test>
+            <param name="peak_table" value="intensity_table.csv" ftype="csv"/>
+            <param name="peak_rt_width" value="1.0"/>
+            <output name="output_file" file="rt_clusters.csv" ftype="csv"/>
+        </test>
+        <!-- Test with wider peak window -->
+        <test>
+            <param name="peak_table" value="intensity_table.parquet" ftype="parquet"/>
+            <param name="peak_rt_width" value="2.0"/>
+            <output name="output_file" file="rt_clusters_wide.parquet" ftype="parquet"/>
+        </test>
+    </tests>
+
+    <help>
+        <![CDATA[
+**Compute RT Modules**
+
+Cluster peaks based on retention time proximity and integrate with correlation-based peak modules.
+
+Description
+===========
+
+This tool performs retention time (RT)-based clustering of peaks. Peaks derived from the same compound should elute at similar retention times. By combining RT clustering with correlation-based module assignments, we can more confidently group related peaks.
+
+The algorithm groups peaks that fall within a specified RT window and assigns them RT cluster identifiers. These RT clusters are then integrated with the correlation-based peak modules.
+
+Parameters
+----------
+
+**Peak RT Width**
+    Expected chromatographic peak width in seconds. This determines the RT window for clustering:
+    - Narrow peaks (LC-MS): 0.5-1.5 seconds
+    - Wider peaks (GC-MS or slow LC): 2-5 seconds
+    - Very wide peaks (comprehensive 2D LC): 5-10 seconds
+
+    Set this based on your chromatography conditions. A good rule of thumb is to use the average peak width from your chromatogram.
+
+Inputs
+------
+
+**Peak Table with Module Assignments**
+    A peak table that includes:
+    - `peak`: Peak identifier
+    - `rt`: Retention time in seconds
+    - `module`: Correlation-based module assignment (from Compute Peak Modules)
+    - Intensity columns for each sample
+
+Outputs
+-------
+
+**RT Cluster Table**
+    A table containing:
+    - `peak`: Peak identifier
+    - `rt_cluster`: RT-based cluster assignment
+    - `mean_intensity`: Average intensity in the RT cluster
+    - `module`: Original correlation-based module (preserved)
+    - Additional RT cluster statistics
+
+Integration with Downstream Tools
+---------------------------------
+
+After computing RT modules, the typical workflow is:
+
+1. Join RT clusters back to annotation table
+2. Re-compute mass defect on the enriched peak table
+3. Continue with isotope detection
+
+The RT cluster information helps:
+- Isotope detection: Isotopes must be in the same RT cluster
+- Adduct grouping: Adducts should co-elute
+- Confidence scoring: Multiple ions in same RT cluster increase confidence
+
+Usage Notes
+-----------
+
+**Combining with Annotation:**
+To integrate RT clusters with your annotation, perform an inner join on the peak column:
+
+```
+annotation ← JOIN annotation WITH rt_clusters ON peak
+```
+
+**Quality Control:**
+Check the distribution of RT cluster sizes:
+- Many singleton clusters may indicate too narrow peak width
+- Very large clusters (>100 peaks) may indicate too wide peak width
+
+References
+----------
+
+Tsugawa, H., et al. (2020). MS-DIAL 4: Accelerating lipidomics using coeluting, isotope, and in-source adduct ion annotations. Journal of Lipid Research, 61(5), 802-814. DOI: 10.1194/jlr.D11900043
+        ]]>
+    </help>
+
+    <citations>
+        <expand macro="citations"/>
+    </citations>
+</tool>

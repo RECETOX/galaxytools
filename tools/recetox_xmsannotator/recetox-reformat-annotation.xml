@@ -1,0 +1,186 @@
+<tool id="recetox_reformat_annotation" name="recetox-xMSannotator: Reformat Annotation" version="@TOOL_VERSION@+galaxy1">
+    <description>reformat annotation table and correlation matrix for chemscore computation</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="creator"/>
+    <expand macro="edam_topics"/>
+    <expand macro="edam_operations"/>
+    <expand macro="requirements"/>
+
+    <command detect_errors="aggressive"><![CDATA[
+        Rscript -e 'source("${__tool_directory__}/utils.R")' \
+               -e "source('${wrapper}')"
+    ]]></command>
+
+    <configfiles>
+        <configfile name="wrapper"><![CDATA[
+            # Load input tables
+            annotation <- load_table("$annotation", "$annotation.ext")
+            peak_table <- load_table("$peak_table", "$peak_table.ext")
+            peak_correlation_matrix <- load_table("$peak_correlation_matrix", "$peak_correlation_matrix.ext")
+
+            # Reformat annotation table for chemscore computation
+            annotation <- recetox.xmsannotator::reformat_annotation_table(annotation)
+
+            # Reformat correlation matrix to global correlation format
+            global_cor <- recetox.xmsannotator::reformat_correlation_matrix(
+                peak_table,
+                peak_correlation_matrix
+            )
+
+            # Save outputs
+            save_table(annotation, "$annotation_output", "$annotation_output.ext")
+            save_table(global_cor, "$global_cor_output", "$global_cor_output.ext")
+        ]]></configfile>
+    </configfiles>
+
+    <inputs>
+        <param name="annotation" type="data" format="parquet,csv">
+            <label>Annotation table</label>
+            <help>
+                Annotation table from Compute Isotopes tool.
+                Contains compound annotations with isotope information.
+            </help>
+        </param>
+        <param name="peak_table" type="data" format="parquet,csv">
+            <label>Peak table</label>
+            <help>
+                Peak table with intensities, modules, RT clusters, and mass defect.
+                Used to compute the global correlation output.
+            </help>
+        </param>
+        <param name="peak_correlation_matrix" type="data" format="parquet,csv">
+            <label>Peak correlation matrix</label>
+            <help>
+                Correlation matrix from Compute Peak Correlations tool.
+                Will be reformatted for downstream chemscore computation.
+            </help>
+        </param>
+    </inputs>
+
+    <outputs>
+        <data name="annotation_output" format="parquet" label="${tool.name} - Reformatted Annotation">
+            <change_format>
+                <when input="annotation.ext" value="csv" format="csv" />
+            </change_format>
+        </data>
+        <data name="global_cor_output" format="parquet" label="${tool.name} - Global Correlation">
+            <change_format>
+                <when input="peak_table.ext" value="csv" format="csv" />
+            </change_format>
+        </data>
+    </outputs>
+
+    <tests>
+        <!-- Test with parquet format -->
+        <test>
+            <param name="annotation" value="annotation_with_isotopes.parquet" ftype="parquet"/>
+            <param name="peak_table" value="intensity_table.parquet" ftype="parquet"/>
+            <param name="peak_correlation_matrix" value="peak_correlations_pearson.parquet" ftype="parquet"/>
+            <output name="annotation_output" file="reformatted_annotation.parquet" ftype="parquet"/>
+            <output name="global_cor_output" file="global_cor.parquet" ftype="parquet"/>
+        </test>
+        <!-- Test with CSV format -->
+        <test>
+            <param name="annotation" value="annotation_with_isotopes.csv" ftype="csv"/>
+            <param name="peak_table" value="intensity_table.csv" ftype="csv"/>
+            <param name="peak_correlation_matrix" value="peak_correlations_pearson.csv" ftype="csv"/>
+            <output name="annotation_output" file="reformatted_annotation.csv" ftype="csv"/>
+            <output name="global_cor_output" file="global_cor.csv" ftype="csv"/>
+        </test>
+    </tests>
+
+    <help>
+        <![CDATA[
+**Reformat Annotation**
+
+Prepare annotation table and correlation matrix for chemscore computation.
+
+Description
+===========
+
+This tool performs essential data reformatting required before computing chemical scores (chemscores). It transforms the annotation table and correlation matrix into formats compatible with the chemscore algorithm.
+
+What This Tool Does
+-------------------
+
+### 1. Reformat Annotation Table
+
+The `reformat_annotation_table` function:
+- Restructures annotation columns for chemscore input
+- Ensures proper data types for scoring calculations
+- Prepares isotope group information for scoring
+
+### 2. Reformat Correlation Matrix
+
+The `reformat_correlation_matrix` function:
+- Converts the full correlation matrix to a "global correlation" format
+- Computes summary statistics needed for scoring
+- Creates a lookup structure for efficient correlation queries during scoring
+
+Inputs
+------
+
+**Annotation Table**
+    Output from Compute Isotopes tool containing:
+    - Compound annotations
+    - Isotope assignments (ISgroup)
+    - Adduct information
+    - Mass and retention time data
+
+**Peak Table**
+    Full peak table with:
+    - Peak identifiers
+    - Intensities across samples
+    - Module assignments
+    - RT cluster assignments
+    - Mass defect values
+
+**Peak Correlation Matrix**
+    The correlation matrix computed earlier in the pipeline.
+
+Outputs
+-------
+
+**Reformatted Annotation**
+    Annotation table reformatted for chemscore computation. Column structure may differ from input to match chemscore expectations.
+
+**Global Correlation**
+    Reformatted correlation data optimized for fast lookups during chemscore calculation.
+
+Usage Notes
+-----------
+
+This is a bridge tool between isotope detection and chemscore computation. Both outputs are required by the Compute Chemscore tool.
+
+Typical Workflow Position
+-------------------------
+
+Compute Isotopes → Reformat Annotation → Compute Chemscore
+
+The reformatted annotation becomes the primary input for chemscore, while the global correlation provides context for how each peak relates to all others.
+
+Technical Details
+-----------------
+
+The reformatted annotation typically includes:
+- One row per unique chemical_ID
+- Aggregated isotope/adduct information
+- Pre-computed statistics for scoring
+
+The global correlation output enables the chemscore algorithm to efficiently query:
+- How well does this peak correlate with other peaks in its module?
+- What is the overall correlation structure of the dataset?
+
+References
+----------
+
+Novotný, J., et al. (2024). recetox-xMSannotator: Advanced metabolite annotation tool. Analytical Chemistry. DOI: 10.1021/acs.analchem.6b01214
+        ]]>
+    </help>
+
+    <citations>
+        <expand macro="citations"/>
+    </citations>
+</tool>

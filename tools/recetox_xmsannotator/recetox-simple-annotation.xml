@@ -1,0 +1,181 @@
+<tool id="recetox_simple_annotation" name="recetox-xMSannotator: Simple Annotation" version="@TOOL_VERSION@+galaxy1">
+    <description>perform simple annotation by matching peaks to compound database</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="creator"/>
+    <expand macro="edam_topics"/>
+    <expand macro="edam_operations"/>
+    <expand macro="requirements"/>
+
+    <command detect_errors="aggressive"><![CDATA[
+        Rscript -e 'source("${__tool_directory__}/utils.R")' \
+               -e "n_workers <- \${GALAXY_SLOTS:-1}" \
+               -e "source('${wrapper}')"
+    ]]></command>
+
+    <configfiles>
+        <configfile name="wrapper"><![CDATA[
+            # Load input tables
+            metadata_table <- load_table("$metadata_table", "$metadata_table.ext")
+            compound_table <- load_table("$compound_table", "$compound_table.ext")
+
+            # Load adduct table if provided
+            if ("$adduct_table" != "None") {
+                adduct_table <- load_table("$adduct_table", "$adduct_table.ext")
+            } else {
+                adduct_table <- NULL
+            }
+
+            # Create peak table from metadata (extract id, mz, rt columns)
+            peak_table <- metadata_table[, c("id", "mz", "rt")]
+            names(peak_table)[1] <- "peak"
+            peak_table[["peak"]] <- as.integer(peak_table[["id"]])
+
+            # Perform simple annotation
+            # Convert ppm tolerance to Da: 1 ppm = 1e-6 Da
+            mass_tolerance_da <- 1e-6 * ${mass_tolerance_ppm}
+
+            annotation <- recetox.xmsannotator::simple_annotation(
+                peak_table = peak_table,
+                compound_table = compound_table,
+                adduct_table = adduct_table,
+                mass_tolerance = mass_tolerance_da
+            )
+
+            # Save output
+            save_table(annotation, "$output_file", "$output_file.ext")
+        ]]></configfile>
+    </configfiles>
+
+    <inputs>
+        <param name="metadata_table" type="data" format="parquet,csv">
+            <label>Peak metadata table</label>
+            <help>
+                Peak metadata table from recetox-aplcms or similar tool.
+                Required columns: id, mz, rt. Additional columns are ignored.
+            </help>
+        </param>
+        <param name="compound_table" type="data" format="parquet,csv">
+            <label>Compound database</label>
+            <help>
+                Database of compounds for annotation.
+                Required columns: compound_id, monoisotopic_mass, molecular_formula.
+            </help>
+        </param>
+        <param name="adduct_table" type="data" format="parquet,csv" optional="true">
+            <label>Adduct database (optional)</label>
+            <help>
+                Database of adducts. If provided, compound-adduct pairs will be generated.
+                Required columns: adduct, charge, mass, n_molecules.
+            </help>
+        </param>
+        <expand macro="mass_tolerance_param"/>
+    </inputs>
+
+    <outputs>
+        <data name="output_file" format="parquet" label="${tool.name} - Annotation">
+            <change_format>
+                <when input="metadata_table.ext" value="csv" format="csv" />
+            </change_format>
+        </data>
+    </outputs>
+
+    <tests>
+        <!-- Test with parquet format -->
+        <test>
+            <param name="metadata_table" value="metadata_table.parquet" ftype="parquet"/>
+            <param name="compound_table" value="database.parquet" ftype="parquet"/>
+            <param name="adduct_table" value="adduct_table.parquet" ftype="parquet"/>
+            <param name="mass_tolerance_ppm" value="5"/>
+            <output name="output_file" file="simple_annotation_output.parquet" ftype="parquet"/>
+        </test>
+        <!-- Test with CSV format -->
+        <test>
+            <param name="metadata_table" value="metadata_table.csv" ftype="csv"/>
+            <param name="compound_table" value="database.csv" ftype="csv"/>
+            <param name="adduct_table" value="adduct_table.csv" ftype="csv"/>
+            <param name="mass_tolerance_ppm" value="5"/>
+            <output name="output_file" file="simple_annotation_output.csv" ftype="csv"/>
+        </test>
+        <!-- Test without adduct table - using optional attribute in param instead -->
+        <test>
+            <param name="metadata_table" value="metadata_table.parquet" ftype="parquet"/>
+            <param name="compound_table" value="database.parquet" ftype="parquet"/>
+            <param name="mass_tolerance_ppm" value="10"/>
+            <output name="output_file" file="simple_annotation_no_adducts.parquet" ftype="parquet"/>
+        </test>
+    </tests>
+
+    <help>
+        <![CDATA[
+**Simple Annotation**
+
+Perform initial annotation by matching measured peaks to a compound database based on mass tolerance.
+
+Description
+===========
+
+This tool performs the first step of the xMSannotator pipeline: simple annotation. It generates all possible compound-adduct pairs (if an adduct table is provided) and matches these pairs to measured peaks based on mass tolerance.
+
+A compound-adduct pair is considered a match to a peak when the mass difference is within the specified tolerance (in ppm).
+
+Inputs
+------
+
+**Peak Metadata Table**
+    A table containing peak information with at least three columns:
+    - `id`: Unique identifier for each peak
+    - `mz`: Mass-to-charge ratio
+    - `rt`: Retention time
+
+**Compound Database**
+    A database of known compounds with:
+    - `compound_id`: Unique compound identifier
+    - `monoisotopic_mass`: Exact mass of the compound
+    - `molecular_formula`: Chemical formula
+
+**Adduct Database (Optional)**
+    If provided, defines common adduct forms:
+    - `adduct`: Adduct name (e.g., "[M+H]+", "[M-H]-")
+    - `charge`: Charge of the adduct
+    - `mass`: Mass contribution of the adduct
+    - `n_molecules`: Number of molecules in the adduct
+
+**Mass Tolerance [ppm]**
+    Maximum allowed mass difference in parts per million for matching.
+
+Outputs
+-------
+
+**Annotation Table**
+    A table containing initial annotations with columns including:
+    - `peak`: Peak identifier
+    - `mz`: Measured m/z
+    - `rt`: Retention time
+    - `compound_id`: Matched compound identifier
+    - `adduct`: Adduct form (if applicable)
+    - `mz_error`: Mass error in ppm
+
+Example Use Case
+----------------
+
+This tool is typically used as the first step in a multi-step annotation workflow:
+
+1. **Simple Annotation** → Generate initial peak-compound matches
+2. **Compute Mass Defect** → Add mass defect column
+3. **Compute Correlations** → Analyze peak correlations
+4. **Compute Modules** → Group correlated peaks
+5. **Further analysis...**
+
+References
+----------
+
+Novotný, J., Čech, M., & Troják, M. (2024). recetox-xMSannotator: Advanced metabolite annotation tool. Analytical Chemistry, 96(XX), XXXX-XXXX. DOI: 10.1021/acs.analchem.6b01214
+        ]]>
+    </help>
+
+    <citations>
+        <expand macro="citations"/>
+    </citations>
+</tool>

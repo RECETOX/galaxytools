@@ -1,0 +1,239 @@
+<tool id="recetox_compute_confidence_levels" name="recetox-xMSannotator: Compute Confidence Levels" version="@TOOL_VERSION@+galaxy1">
+    <description>assign confidence levels to annotations based on multiple criteria</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="creator"/>
+    <expand macro="edam_topics"/>
+    <expand macro="edam_operations"/>
+    <expand macro="requirements"/>
+
+    <command detect_errors="aggressive"><![CDATA[
+        Rscript -e 'source("${__tool_directory__}/utils.R")' \
+               -e "source('${wrapper}')"
+    ]]></command>
+
+    <configfiles>
+        <configfile name="wrapper"><![CDATA[
+            # Load input tables
+            annotation <- load_table("$annotation", "$annotation.ext")
+            adduct_weights <- load_table("$adduct_weights", "$adduct_weights.ext")
+
+            # Parse filter_by parameter
+            filter_by <- strsplit("$filter_by", ",")[[1]]
+            if (length(filter_by) == 1 && filter_by == "") {
+                filter_by <- NA
+            }
+
+            # Compute confidence levels using multilevelannotationstep4
+            annotation <- recetox.xmsannotator::multilevelannotationstep4(
+                outloc = tempdir(),
+                chemscoremat = annotation,
+                max.mz.diff = 1e-6 * ${mass_tolerance_ppm},
+                max.rt.diff = $time_tolerance,
+                filter.by = filter_by,
+                adduct_weights = adduct_weights,
+                max_isp = $maximum_isotopes,
+                min_ions_perchem = $min_ions_per_chemical
+            )
+
+            # Save output
+            save_table(annotation, "$output_file", "$output_file.ext")
+        ]]></configfile>
+    </configfiles>
+
+    <inputs>
+        <param name="annotation" type="data" format="parquet,csv">
+            <label>Annotation table with chemscores</label>
+            <help>
+                Annotation table from Compute Chemscore tool.
+                Contains annotations with computed chemscores.
+            </help>
+        </param>
+        <param name="adduct_weights" type="data" format="parquet,csv">
+            <label>Adduct weights table</label>
+            <help>
+                Table of adduct weights for confidence level assessment.
+            </help>
+        </param>
+        <expand macro="mass_tolerance_param"/>
+        <expand macro="time_tolerance_param"/>
+        <expand macro="filter_by_param"/>
+        <param name="maximum_isotopes" type="integer" value="10">
+            <label>Maximum isotopes</label>
+            <help>Maximum number of isotopes to consider for confidence assessment.</help>
+        </param>
+        <expand macro="confidence_params"/>
+    </inputs>
+
+    <outputs>
+        <data name="output_file" format="parquet" label="${tool.name} - Annotated with Confidence">
+            <change_format>
+                <when input="annotation.ext" value="csv" format="csv" />
+            </change_format>
+        </data>
+    </outputs>
+
+    <tests>
+        <!-- Test with parquet format -->
+        <test>
+            <param name="annotation" value="annotation_with_chemscores.parquet" ftype="parquet"/>
+            <param name="adduct_weights" value="adduct_table.parquet" ftype="parquet"/>
+            <param name="mass_tolerance_ppm" value="5"/>
+            <param name="time_tolerance" value="10"/>
+            <param name="filter_by" value="M-H,M+H"/>
+            <param name="maximum_isotopes" value="10"/>
+            <param name="min_ions_per_chemical" value="2"/>
+            <output name="output_file" file="annotation_with_confidence.parquet" ftype="parquet"/>
+        </test>
+        <!-- Test with CSV format -->
+        <test>
+            <param name="annotation" value="annotation_with_chemscores.csv" ftype="csv"/>
+            <param name="adduct_weights" value="adduct_table.csv" ftype="csv"/>
+            <param name="mass_tolerance_ppm" value="5"/>
+            <param name="time_tolerance" value="10"/>
+            <param name="filter_by" value="M-H,M+H"/>
+            <param name="maximum_isotopes" value="10"/>
+            <param name="min_ions_per_chemical" value="2"/>
+            <output name="output_file" file="annotation_with_confidence.csv" ftype="csv"/>
+        </test>
+        <!-- Test with stricter requirements -->
+        <test>
+            <param name="annotation" value="annotation_with_chemscores.parquet" ftype="parquet"/>
+            <param name="adduct_weights" value="adduct_table.parquet" ftype="parquet"/>
+            <param name="mass_tolerance_ppm" value="3"/>
+            <param name="time_tolerance" value="5"/>
+            <param name="filter_by" value="M+H"/>
+            <param name="maximum_isotopes" value="5"/>
+            <param name="min_ions_per_chemical" value="3"/>
+            <output name="output_file" file="annotation_with_confidence_strict.parquet" ftype="parquet"/>
+        </test>
+    </tests>
+
+    <help>
+        <![CDATA[
+**Compute Confidence Levels**
+
+Assign confidence levels to annotations based on mass accuracy, RT consistency, and ion count criteria.
+
+Description
+===========
+
+This tool implements the multilevel annotation confidence assessment (multilevelannotationstep4). It assigns confidence levels to each annotation based on multiple orthogonal criteria, following established metabolomics reporting standards.
+
+Confidence Level Framework
+--------------------------
+
+The confidence levels follow a hierarchical system similar to the Metabolomics Standards Initiative (MSI) levels:
+
+**Level 1: Confirmed Structure**
+    - Match to authentic standard with identical m/z, RT, and MS/MS spectrum
+    - Highest confidence (requires external validation not performed by this tool)
+
+**Level 2: Probable Structure**
+    - Match to library spectrum or predicted properties
+    - Supported by multiple ions (adducts/isotopes)
+    - Consistent RT and mass defect
+
+**Level 3: Tentative Candidate**
+    - Putative class identification
+    - Limited supporting evidence
+    - May be single ion match
+
+**Level 4: Unknown**
+    - Detected feature without structural assignment
+    - Or insufficient evidence for any level
+
+Parameters
+----------
+
+**Mass Tolerance [ppm]**
+    Maximum allowed mass error for confidence assessment.
+    - Tighter tolerance (3-5 ppm): Higher stringency, fewer false positives
+    - Wider tolerance (10-20 ppm): More inclusive, may include false positives
+
+**Time Tolerance [s]**
+    Maximum RT deviation for confirming ion relationships.
+    Should reflect your chromatographic reproducibility.
+
+**Filter By Adducts**
+    Which adduct types to consider for confidence assessment.
+
+**Maximum Isotopes**
+    Maximum number of isotopes expected for any compound.
+    Used to validate isotope pattern completeness.
+
+**Minimum Ions Per Chemical**
+    Minimum number of ions (adducts + isotopes) required for higher confidence levels.
+    - 1: Single ion detection (lower confidence)
+    - 2+: Multiple ions increase confidence
+
+Inputs
+------
+
+**Annotation Table with Chemscores**
+    Output from Compute Chemscore tool containing:
+    - Compound annotations
+    - Computed chemscores
+    - Isotope group information
+
+**Adduct Weights Table**
+    Adduct weight information for scoring.
+
+Outputs
+-------
+
+**Annotation with Confidence Levels**
+    The annotation table with additional columns:
+    - `Confidence`: Assigned confidence level (typically 1-4 or similar scale)
+    - Supporting evidence metrics may vary by implementation
+
+Confidence Level Assignment Logic
+---------------------------------
+
+The algorithm considers:
+
+1. **Mass Accuracy**: Does the observed m/z match theoretical within tolerance?
+2. **RT Consistency**: Do supporting ions co-elute appropriately?
+3. **Ion Count**: How many independent ions support this assignment?
+4. **Isotope Pattern**: Are expected isotopes detected?
+5. **Adduct Pattern**: Are observed adducts consistent with expectations?
+
+Higher confidence requires meeting more criteria simultaneously.
+
+Usage Notes
+-----------
+
+**Interpreting Confidence Levels:**
+- Use Level 1-2 annotations for definitive conclusions
+- Level 3 annotations are suitable for hypothesis generation
+- Level 4 features should be reported as unknowns
+
+**Parameter Tuning:**
+- Stricter parameters → Fewer high-confidence annotations
+- Looser parameters → More annotations but potentially lower reliability
+- Balance based on your study goals (discovery vs. confirmation)
+
+Downstream Usage
+----------------
+
+Confidence levels are used by:
+- **Pathway Matching**: Higher confidence annotations may receive pathway boosts
+- **Redundancy Filtering**: Low-confidence redundant annotations can be removed
+- **Reporting**: Filter results by confidence for publications
+
+References
+----------
+
+Sumner, L. W., et al. (2007). Proposed minimum reporting standards for chemical analysis. Metabolomics, 3(3), 211-221. DOI: 10.1007/s11306-007-0082-2
+
+Beale, D. J., et al. (2018). Review of the current state of metabolite identification in mass spectrometry-based metabolomics. Journal of Chromatography B, 1099, 1-10. DOI: 10.1016/j.jchromb.2018.09.010
+
+Novotný, J., et al. (2024). recetox-xMSannotator: Advanced metabolite annotation tool. Analytical Chemistry. DOI: 10.1021/acs.analchem.6b01214
+        ]]>
+    </help>
+
+    <citations>
+        <expand macro="citations"/>
+    </citations>
+</tool>

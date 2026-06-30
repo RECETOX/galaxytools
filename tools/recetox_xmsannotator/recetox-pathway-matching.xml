@@ -1,0 +1,302 @@
+<tool id="recetox_pathway_matching" name="recetox-xMSannotator: Pathway Matching" version="@TOOL_VERSION@+galaxy1">
+    <description>match annotations to metabolic pathways and boost scores based on pathway context</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="creator"/>
+    <expand macro="edam_topics"/>
+    <expand macro="edam_operations"/>
+    <expand macro="requirements"/>
+
+    <command detect_errors="aggressive"><![CDATA[
+        Rscript -e 'source("${__tool_directory__}/utils.R")' \
+               -e "source('${wrapper}')"
+    ]]></command>
+
+    <configfiles>
+        <configfile name="wrapper"><![CDATA[
+            # Load input tables
+            annotation <- load_table("$annotation", "$annotation.ext")
+            adduct_weights <- load_table("$adduct_weights", "$adduct_weights.ext")
+            chemCompMZ <- load_table("$chemCompMz", "$chemCompMz.ext")
+
+            # Parse filter_by parameter
+            filter_by <- strsplit("$filter_by", ",")[[1]]
+            if (length(filter_by) == 1 && filter_by == "") {
+                filter_by <- NA
+            }
+
+            # Rename HMDBID column if present for compatibility
+            if ("HMDBID" %in% names(chemCompMZ)) {
+                chemCompMZ <- dplyr::rename(chemCompMZ, chemical_ID = HMDBID)
+            }
+
+            # Perform pathway matching using multilevelannotationstep3
+            annotation <- recetox.xmsannotator::multilevelannotationstep3(
+                chemCompMZ = chemCompMZ,
+                chemscoremat = annotation,
+                adduct_weights = adduct_weights,
+                db_name = "$db_name",
+                max_diff_rt = $max_diff_rt,
+                pathwaycheckmode = "$pathwaycheckmode"
+            )
+
+            # Save output
+            save_table(annotation, "$output_file", "$output_file.ext")
+        ]]></configfile>
+    </configfiles>
+
+    <inputs>
+        <param name="annotation" type="data" format="parquet,csv">
+            <label>Annotation table with chemscores</label>
+            <help>
+                Annotation table from Compute Chemscore or Compute Confidence Levels tool.
+                Contains annotations ready for pathway-based score boosting.
+            </help>
+        </param>
+        <param name="adduct_weights" type="data" format="parquet,csv">
+            <label>Adduct weights table</label>
+            <help>
+                Table of adduct weights used in pathway scoring calculations.
+            </help>
+        </param>
+        <param name="chemCompMz" type="data" format="parquet,csv">
+            <label>Compound-pathway database</label>
+            <help>
+                Database linking compounds to metabolic pathways. Should contain:
+                - chemical_ID: Compound identifier (matching annotation table)
+                - pathway information
+                - m/z values for compounds
+
+                Can be HMDB, KEGG, or custom pathway database.
+            </help>
+        </param>
+        <param name="db_name" type="select">
+            <label>Database name</label>
+            <help>Name of the pathway database being used.</help>
+            <option value="HMDB">HMDB (Human Metabolome Database)</option>
+            <option value="KEGG">KEGG (Kyoto Encyclopedia of Genes and Genomes)</option>
+            <option value="custom">Custom database</option>
+        </param>
+        <param name="max_diff_rt" type="float" value="10">
+            <label>Maximum RT difference [s]</label>
+            <help>
+                Maximum retention time difference for considering compounds as
+                part of the same pathway cluster.
+            </help>
+        </param>
+        <expand macro="filter_by_param"/>
+        <param name="pathwaycheckmode" type="select">
+            <label>Pathway check mode</label>
+            <help>
+                Mode for pathway analysis and score boosting.
+            </help>
+            <option value="pm" selected="true">Pathway mode (pm)</option>
+            <option value="cluster">Cluster mode</option>
+            <option value="both">Both modes</option>
+        </param>
+    </inputs>
+
+    <outputs>
+        <data name="output_file" format="parquet" label="${tool.name} - Annotated with Pathways">
+            <change_format>
+                <when input="annotation.ext" value="csv" format="csv" />
+            </change_format>
+        </data>
+    </outputs>
+
+    <tests>
+        <!-- Test with parquet format -->
+        <test>
+            <param name="annotation" value="annotation_with_confidence.parquet" ftype="parquet"/>
+            <param name="adduct_weights" value="adduct_table.parquet" ftype="parquet"/>
+            <param name="chemCompMz" value="database.parquet" ftype="parquet"/>
+            <param name="db_name" value="HMDB"/>
+            <param name="max_diff_rt" value="10"/>
+            <param name="filter_by" value="M-H,M+H"/>
+            <param name="pathwaycheckmode" value="pm"/>
+            <output name="output_file" file="annotation_with_pathways.parquet" ftype="parquet"/>
+        </test>
+        <!-- Test with CSV format -->
+        <test>
+            <param name="annotation" value="annotation_with_confidence.csv" ftype="csv"/>
+            <param name="adduct_weights" value="adduct_table.csv" ftype="csv"/>
+            <param name="chemCompMz" value="database.csv" ftype="csv"/>
+            <param name="db_name" value="HMDB"/>
+            <param name="max_diff_rt" value="10"/>
+            <param name="filter_by" value="M-H,M+H"/>
+            <param name="pathwaycheckmode" value="pm"/>
+            <output name="output_file" file="annotation_with_pathways.csv" ftype="csv"/>
+        </test>
+        <!-- Test with cluster mode -->
+        <test>
+            <param name="annotation" value="annotation_with_confidence.parquet" ftype="parquet"/>
+            <param name="adduct_weights" value="adduct_table.parquet" ftype="parquet"/>
+            <param name="chemCompMz" value="database.parquet" ftype="parquet"/>
+            <param name="db_name" value="KEGG"/>
+            <param name="max_diff_rt" value="15"/>
+            <param name="filter_by" value="M+H"/>
+            <param name="pathwaycheckmode" value="cluster"/>
+            <output name="output_file" file="annotation_with_pathways_cluster.parquet" ftype="parquet"/>
+        </test>
+    </tests>
+
+    <help>
+        <![CDATA[
+**Pathway Matching**
+
+Match annotated compounds to metabolic pathways and boost annotation scores based on pathway context.
+
+Description
+===========
+
+This tool implements pathway-aware annotation scoring (multilevelannotationstep3). It leverages the biological context provided by metabolic pathways to improve annotation confidence. Compounds that belong to the same pathway and show correlated behavior receive score boosts.
+
+How Pathway Matching Works
+--------------------------
+
+The algorithm performs several analyses:
+
+1. **Compound-Pathway Mapping**
+   - Links annotated compounds to known pathways using the provided database
+   - Uses compound identifiers (chemical_ID) for matching
+
+2. **Pathway Enrichment Analysis**
+   - Identifies over-represented pathways in your dataset
+   - Uses Fisher's exact test for statistical significance
+
+3. **Score Boosting**
+   - Annotations in enriched pathways receive score increases
+   - Additional boost if compounds are in the same correlation module
+   - Strict boosting mode requires both pathway AND module membership
+
+4. **Cluster-Based Analysis**
+   - Groups compounds by RT proximity within pathways
+   - Identifies co-eluting pathway members
+
+Parameters
+----------
+
+**Compound-Pathway Database**
+    A table containing compound-to-pathway mappings. Required columns:
+    - `chemical_ID`: Compound identifier (must match annotation table)
+    - Pathway identifiers or names
+    - Optionally: `mz` or `monoisotopic_mass` for additional validation
+
+    Common sources:
+    - HMDB (Human Metabolome Database)
+    - KEGG (Kyoto Encyclopedia of Genes and Genomes)
+    - Custom databases (e.g., organism-specific pathways)
+
+**Database Name**
+    Select the source of your pathway database:
+    - HMDB: Human metabolome focus
+    - KEGG: Broad metabolic pathway coverage
+    - Custom: User-provided database
+
+**Pathway Check Mode**
+    - **pm (Pathway Mode)**: Standard pathway enrichment and boosting
+    - **Cluster**: Focus on RT-coeluting pathway members
+    - **Both**: Combine both approaches
+
+**Max RT Difference**
+    Maximum RT window for considering compounds as pathway-related clusters.
+
+**Filter By Adducts**
+    Which adduct types to consider for pathway analysis.
+
+**Strict Boosting**
+    When enabled, requires both pathway membership AND correlation module membership for maximum score boost.
+
+Inputs
+------
+
+**Annotation Table**
+    Output from Compute Chemscore or Compute Confidence Levels.
+
+**Adduct Weights Table**
+    Adduct weight information for scoring.
+
+**Compound-Pathway Database**
+    Pathway mapping data as described above.
+
+Outputs
+-------
+
+**Annotation with Pathway Information**
+    The annotation table with additional columns:
+    - `Pathway`: Assigned pathway(s)
+    - `PathwayScore`: Pathway-based score contribution
+    - `Enriched`: Whether pathway is statistically enriched
+    - Other pathway-related metrics
+
+Score Boosting Logic
+--------------------
+
+The pathway score boost depends on:
+
+1. **Pathway Membership**: Is the compound in a known pathway?
+2. **Enrichment Significance**: Is the pathway over-represented?
+3. **Module Coherence**: Are pathway members in the same correlation module?
+4. **RT Consistency**: Do pathway members co-elute?
+
+Higher boosts are given when multiple criteria are satisfied.
+
+Database Considerations
+-----------------------
+
+**HMDB:**
+    - Comprehensive human metabolite coverage
+    - Includes pathway associations
+    - Best for human biofluid samples
+
+**KEGG:**
+    - Broad metabolic pathway coverage
+    - Cross-species applicability
+    - Well-curated pathway maps
+
+**Custom Databases:**
+    - Organism-specific pathways
+    - Specialized metabolism (e.g., plant secondary metabolites)
+    - Environmental contaminants
+
+Usage Notes
+-----------
+
+**Reference Datasets:**
+For best results, consider using Galaxy reference datasets for HMDB/KEGG if available. This ensures consistency across analyses.
+
+**Optional Step:**
+Pathway matching is optional. Run it when:
+- Biological interpretation is important
+- You have good pathway coverage for your sample type
+- You want to leverage biological context for scoring
+
+Skip it when:
+- Working with novel compounds lacking pathway annotations
+- Using non-standard metabolites
+- Pathway database coverage is poor
+
+Downstream Usage
+----------------
+
+After pathway matching:
+- **Confidence Levels**: May be recomputed with pathway-informed scores
+- **Redundancy Filtering**: Use pathway information to retain biologically relevant annotations
+- **Reporting**: Include pathway context in results
+
+References
+----------
+
+Wishart, D. S., et al. (2018). HMDB 4.0: the human metabolome database for 2018. Nucleic Acids Research, 46(D1), D608-D617. DOI: 10.1093/nar/gkx1089
+
+Kanehisa, M., & Goto, S. (2000). KEGG: kyoto encyclopedia of genes and genomes. Nucleic Acids Research, 28(1), 27-30. DOI: 10.1093/nar/28.1.27
+
+Novotný, J., et al. (2024). recetox-xMSannotator: Advanced metabolite annotation tool. Analytical Chemistry. DOI: 10.1021/acs.analchem.6b01214
+        ]]>
+    </help>
+
+    <citations>
+        <expand macro="citations"/>
+    </citations>
+</tool>

@@ -1,0 +1,174 @@
+<tool id="recetox_compute_peak_correlations" name="recetox-xMSannotator: Compute Peak Correlations" version="@TOOL_VERSION@+galaxy1">
+    <description>compute correlation matrix between peaks based on intensity profiles</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="creator"/>
+    <expand macro="edam_topics"/>
+    <expand macro="edam_operations"/>
+    <expand macro="requirements"/>
+
+    <command detect_errors="aggressive"><![CDATA[
+        Rscript -e 'source("${__tool_directory__}/utils.R")' \
+               -e "source('${wrapper}')"
+    ]]></command>
+
+    <configfiles>
+        <configfile name="wrapper"><![CDATA[
+            # Load peak table with intensities
+            peak_table <- load_table("$peak_table", "$peak_table.ext")
+
+            # Ensure we have a peak identifier column (use 'id' if 'peak' doesn't exist)
+            if (!"peak" %in% names(peak_table) && "id" %in% names(peak_table)) {
+                peak_table$peak <- peak_table$id
+            }
+
+            # Extract intensity columns (all columns except peak, mz, rt, id)
+            intensity_cols <- setdiff(names(peak_table), c("peak", "mz", "rt", "id"))
+
+            if (length(intensity_cols) == 0) {
+                stop("No intensity columns found in peak table. Expected sample columns.")
+            }
+
+            # Create intensity matrix with peak IDs as row names
+            # Note: compute_peak_correlations computes correlations between COLUMNS
+            # So we transpose to get peak-to-peak correlations
+            peak_intensity_matrix <- as.matrix(peak_table[, intensity_cols])
+            rownames(peak_intensity_matrix) <- as.character(peak_table$peak)
+
+            # Compute correlation matrix (transposed so peaks are columns)
+            peak_correlation_matrix <- recetox.xmsannotator::compute_peak_correlations(
+                t(peak_intensity_matrix),
+                correlation_method = "$correlation_method"
+            )
+
+            # Convert to data frame and preserve row names as a column
+            cor_df <- as.data.frame(peak_correlation_matrix)
+            cor_df$peak <- rownames(cor_df)
+            # Reorder to put peak column first
+            cor_df <- cor_df[, c("peak", setdiff(names(cor_df), "peak"))]
+
+            # Save output
+            save_table(cor_df, "$output_file", "$output_file.ext")
+        ]]></configfile>
+    </configfiles>
+
+    <inputs>
+        <param name="peak_table" type="data" format="parquet,csv">
+            <label>Peak table with intensities</label>
+            <help>
+                Table containing peak information and intensity values across samples.
+                Required columns: peak (or id), plus one or more sample intensity columns.
+                Typically output from recetox-aplcms or similar tool.
+            </help>
+        </param>
+        <param name="correlation_method" type="select">
+            <label>Correlation method</label>
+            <help>Method for computing correlations between peak intensity profiles.</help>
+            <option value="p" selected="true">Pearson correlation</option>
+            <option value="s">Spearman rank correlation</option>
+            <option value="k">Kendall rank correlation</option>
+        </param>
+    </inputs>
+
+    <outputs>
+        <data name="output_file" format="parquet" label="${tool.name} - Correlation Matrix">
+            <change_format>
+                <when input="peak_table.ext" value="csv" format="csv" />
+            </change_format>
+        </data>
+    </outputs>
+
+    <tests>
+        <!-- Test with parquet format using Pearson correlation -->
+        <test>
+            <param name="peak_table" value="intensity_table.parquet" ftype="parquet"/>
+            <param name="correlation_method" value="p"/>
+            <output name="output_file" file="peak_correlations_pearson.parquet" ftype="parquet"/>
+        </test>
+        <!-- Test with CSV format -->
+        <test>
+            <param name="peak_table" value="intensity_table.csv" ftype="csv"/>
+            <param name="correlation_method" value="p"/>
+            <output name="output_file" file="peak_correlations_pearson.csv" ftype="csv"/>
+        </test>
+        <!-- Test with Spearman correlation -->
+        <test>
+            <param name="peak_table" value="intensity_table.parquet" ftype="parquet"/>
+            <param name="correlation_method" value="s"/>
+            <output name="output_file" file="peak_correlations_spearman.parquet" ftype="parquet"/>
+        </test>
+    </tests>
+
+    <help>
+        <![CDATA[
+**Compute Peak Correlations**
+
+Calculate pairwise correlation coefficients between peaks based on their intensity profiles across samples.
+
+Description
+===========
+
+This tool computes a correlation matrix where each entry represents the correlation coefficient between two peaks' intensity profiles across all samples. Peaks derived from the same parent compound (e.g., different adducts or isotopes) typically show high correlation because they co-vary across samples.
+
+Correlation Methods
+-------------------
+
+**Pearson correlation (default)**
+    Measures linear correlation between intensity profiles. Best when relationships are approximately linear. Recommended for most use cases.
+
+**Spearman rank correlation**
+    Measures monotonic (not necessarily linear) relationships. More robust to outliers. Use when intensity distributions are non-normal.
+
+**Kendall rank correlation**
+    Another rank-based method, more computationally intensive but statistically efficient for smaller datasets.
+
+Inputs
+------
+
+**Peak Table with Intensities**
+    A table containing peak identifiers and intensity values across multiple samples. Sample columns should be named consistently (e.g., sample names from your experiment).
+
+**Correlation Method**
+    Choose the statistical method for computing correlations. See descriptions above.
+
+Outputs
+-------
+
+**Correlation Matrix**
+    A square matrix where entry [i,j] is the correlation coefficient between peak i and peak j. Values range from -1 (perfect negative correlation) to +1 (perfect positive correlation). Diagonal entries are always 1.0.
+
+Usage Notes
+-----------
+
+This tool is typically followed by:
+- **Compute Peak Modules**: Groups highly correlated peaks into modules
+- The correlation threshold parameter in Compute Peak Modules determines which correlations are considered significant
+
+Example Workflow
+----------------
+
+1. Simple Annotation → Initial compound matching
+2. Compute Peak Correlations → Calculate peak relationships
+3. Compute Peak Modules → Group correlated peaks
+4. Continue with RT modules, isotopes, etc.
+
+Performance Considerations
+--------------------------
+
+For large datasets (>10,000 peaks), correlation computation can be memory-intensive. Consider:
+- Filtering low-intensity peaks before running
+- Using Galaxy's job resource parameters to allocate sufficient memory
+- Spearman/Kendall methods are slower than Pearson for large datasets
+
+References
+----------
+
+Zhang, B., & Horvath, S. (2005). A General Framework for Weighted Gene Co-expression Network Analysis. Statistical Applications in Genetics and Molecular Biology, 4(1). DOI: 10.2202/1544-6115.1128
+        ]]>
+    </help>
+
+    <citations>
+        <expand macro="citations"/>
+    </citations>
+</tool>

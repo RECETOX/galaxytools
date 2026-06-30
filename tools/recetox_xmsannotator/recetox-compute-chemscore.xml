@@ -1,0 +1,253 @@
+<tool id="recetox_compute_chemscore" name="recetox-xMSannotator: Compute Chemscore" version="@TOOL_VERSION@+galaxy1">
+    <description>compute chemical scores for annotation confidence assessment</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="creator"/>
+    <expand macro="edam_topics"/>
+    <expand macro="edam_operations"/>
+    <expand macro="requirements"/>
+
+    <command detect_errors="aggressive"><![CDATA[
+        Rscript -e 'source("${__tool_directory__}/utils.R")' \
+               -e "n_workers <- \${GALAXY_SLOTS:-1}" \
+               -e "source('${wrapper}')"
+    ]]></command>
+
+    <configfiles>
+        <configfile name="wrapper"><![CDATA[
+            # Load input tables
+            annotation <- load_table("$annotation", "$annotation.ext")
+            global_cor <- load_table("$global_cor", "$global_cor.ext")
+            adduct_weights <- load_table("$adduct_weights", "$adduct_weights.ext")
+
+            # Parse filter_by parameter
+            filter_by <- strsplit("$filter_by", ",")[[1]]
+            if (length(filter_by) == 1 && filter_by == "") {
+                filter_by <- NA
+            }
+
+            # Compute chemscores using parallel processing
+            # The pmap_dfr pattern iterates over each row and computes scores
+            annotation <- purrr::pmap_dfr(
+                annotation,
+                function(.x, .y, .z, ...) {
+                    recetox.xmsannotator::get_chemscore(
+                        annotation = annotation,
+                        adduct_weights = adduct_weights,
+                        corthresh = $corthresh,
+                        global_cor = global_cor,
+                        max_diff_rt = $max_diff_rt,
+                        filter.by = filter_by,
+                        outlocorig = tempdir()
+                    )
+                }
+            )
+
+            # Save output
+            save_table(annotation, "$output_file", "$output_file.ext")
+        ]]></configfile>
+    </configfiles>
+
+    <inputs>
+        <param name="annotation" type="data" format="parquet,csv">
+            <label>Reformatted annotation table</label>
+            <help>
+                Reformatted annotation table from Reformat Annotation tool.
+                Ready for chemscore computation.
+            </help>
+        </param>
+        <param name="global_cor" type="data" format="parquet,csv">
+            <label>Global correlation matrix</label>
+            <help>
+                Global correlation data from Reformat Annotation tool.
+                Provides context for correlation-based scoring.
+            </help>
+        </param>
+        <param name="adduct_weights" type="data" format="parquet,csv">
+            <label>Adduct weights table</label>
+            <help>
+                Table of adduct weights for scoring different adduct types.
+            </help>
+        </param>
+        <param name="corthresh" type="float" value="0.7" min="0" max="1">
+            <label>Correlation threshold</label>
+            <help>
+                Minimum correlation required for peaks to be considered as supporting
+                the same chemical identity. Peaks above this threshold contribute
+                to the chemscore calculation.
+            </help>
+        </param>
+        <param name="max_diff_rt" type="float" value="10">
+            <label>Maximum RT difference [s]</label>
+            <help>
+                Maximum retention time difference allowed between peaks that are
+                considered as potential adducts/isotopes of the same compound.
+            </help>
+        </param>
+        <expand macro="filter_by_param"/>
+    </inputs>
+
+    <outputs>
+        <data name="output_file" format="parquet" label="${tool.name} - Annotated with Scores">
+            <change_format>
+                <when input="annotation.ext" value="csv" format="csv" />
+            </change_format>
+        </data>
+    </outputs>
+
+    <tests>
+        <!-- Test with parquet format -->
+        <test>
+            <param name="annotation" value="reformatted_annotation.parquet" ftype="parquet"/>
+            <param name="global_cor" value="global_cor.parquet" ftype="parquet"/>
+            <param name="adduct_weights" value="adduct_table.parquet" ftype="parquet"/>
+            <param name="corthresh" value="0.7"/>
+            <param name="max_diff_rt" value="10"/>
+            <param name="filter_by" value="M-H,M+H"/>
+            <output name="output_file" file="annotation_with_chemscores.parquet" ftype="parquet"/>
+        </test>
+        <!-- Test with CSV format -->
+        <test>
+            <param name="annotation" value="reformatted_annotation.csv" ftype="csv"/>
+            <param name="global_cor" value="global_cor.csv" ftype="csv"/>
+            <param name="adduct_weights" value="adduct_table.csv" ftype="csv"/>
+            <param name="corthresh" value="0.7"/>
+            <param name="max_diff_rt" value="10"/>
+            <param name="filter_by" value="M-H,M+H"/>
+            <output name="output_file" file="annotation_with_chemscores.csv" ftype="csv"/>
+        </test>
+        <!-- Test with stricter correlation threshold -->
+        <test>
+            <param name="annotation" value="reformatted_annotation.parquet" ftype="parquet"/>
+            <param name="global_cor" value="global_cor.parquet" ftype="parquet"/>
+            <param name="adduct_weights" value="adduct_table.parquet" ftype="parquet"/>
+            <param name="corthresh" value="0.85"/>
+            <param name="max_diff_rt" value="5"/>
+            <param name="filter_by" value="M+H"/>
+            <output name="output_file" file="annotation_with_chemscores_strict.parquet" ftype="parquet"/>
+        </test>
+    </tests>
+
+    <help>
+        <![CDATA[
+**Compute Chemscore**
+
+Calculate chemical scores (chemscores) that quantify the confidence of each annotation.
+
+Description
+===========
+
+The chemscore is a comprehensive confidence metric that combines multiple lines of evidence to assess how likely an annotation is correct. Higher scores indicate higher confidence in the annotation.
+
+Scoring Components
+------------------
+
+The chemscore algorithm considers:
+
+1. **Correlation Evidence**
+   - How well does this peak correlate with other peaks in its module?
+   - Do supporting peaks (potential adducts/isotopes) show high correlation?
+
+2. **Adduct Expectations**
+   - Are the observed adducts consistent with expected patterns?
+   - Weighted by adduct-specific probabilities from the adduct_weights table
+
+3. **Isotope Patterns**
+   - Are isotopes detected and do they match theoretical patterns?
+   - More isotopes = higher confidence
+
+4. **RT Consistency**
+   - Do all supporting peaks elute within the expected RT window?
+   - Co-elution supports common origin
+
+5. **Module Membership**
+   - Are supporting ions in the same correlation module?
+   - Module coherence increases confidence
+
+Parameters
+----------
+
+**Correlation Threshold (corthresh)**
+    Minimum correlation (0-1) for peaks to be considered as supporting the same compound.
+    - Lower (0.6-0.7): More inclusive, may include false positives
+    - Higher (0.8-0.9): Stricter, may miss true but weak correlations
+    - Default: 0.7
+
+**Maximum RT Difference**
+    Maximum allowed RT difference (seconds) between supporting peaks.
+    Should match your chromatographic peak width characteristics.
+
+**Filter By Adducts**
+    Which adduct types to consider for scoring. Selecting specific adducts can:
+    - Focus scoring on relevant ionization modes
+    - Reduce noise from rare/unexpected adducts
+
+**Parallel Processing**
+    This tool uses `purrr::pmap_dfr` for parallel row-wise processing.
+    Galaxy job slots (${GALAXY_SLOTS}) are automatically utilized.
+
+Inputs
+------
+
+**Reformatted Annotation**
+    Output from Reformat Annotation tool.
+
+**Global Correlation**
+    Global correlation data from Reformat Annotation tool.
+
+**Adduct Weights**
+    Adduct weight table for scoring different adduct types.
+
+Outputs
+-------
+
+**Annotation with Chemscores**
+    The annotation table with additional score columns:
+    - `score`: Overall chemscore value
+    - Supporting evidence breakdown (may vary by version)
+
+Score Interpretation
+--------------------
+
+Chemscores range from 0 to 100,000 (1e5) in the default implementation:
+- High scores (>10,000): Strong evidence, high confidence
+- Medium scores (1,000-10,000): Moderate evidence
+- Low scores (<1,000): Weak evidence, consider manual review
+
+Note: Exact score ranges depend on dataset characteristics and parameters.
+
+Downstream Usage
+----------------
+
+Chemscores are used by:
+- **Pathway Matching**: Higher-scoring annotations may get pathway boosts
+- **Confidence Levels**: Score thresholds determine confidence level assignment
+- **Redundancy Filtering**: Low-scoring redundant annotations can be removed
+
+Performance Notes
+-----------------
+
+For large datasets, chemscore computation can be time-consuming due to:
+- Row-wise iteration over all annotations
+- Correlation lookups for each annotation
+- Isotope/adduct pattern matching
+
+Recommendations:
+- Use appropriate Galaxy job resources (memory, CPU)
+- Filter to relevant adducts when possible
+- Consider correlation threshold trade-offs
+
+References
+----------
+
+Novotný, J., et al. (2024). recetox-xMSannotator: Advanced metabolite annotation tool. Analytical Chemistry. DOI: 10.1021/acs.analchem.6b01214
+
+Sumner, L. W., et al. (2007). Proposed minimum reporting standards for chemical analysis. Metabolomics, 3(3), 211-221. DOI: 10.1007/s11306-007-0082-2
+        ]]>
+    </help>
+
+    <citations>
+        <expand macro="citations"/>
+    </citations>
+</tool>

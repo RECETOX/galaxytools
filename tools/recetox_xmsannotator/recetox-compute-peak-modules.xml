@@ -1,0 +1,189 @@
+<tool id="recetox_compute_peak_modules" name="recetox-xMSannotator: Compute Peak Modules" version="@TOOL_VERSION@+galaxy1">
+    <description>group correlated peaks into modules using network clustering</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="creator"/>
+    <expand macro="edam_topics"/>
+    <expand macro="edam_operations"/>
+    <expand macro="requirements"/>
+
+    <command detect_errors="aggressive"><![CDATA[
+        Rscript -e 'source("${__tool_directory__}/utils.R")' \
+               -e "source('${wrapper}')"
+    ]]></command>
+
+    <configfiles>
+        <configfile name="wrapper"><![CDATA[
+            # Load input tables
+            peak_intensity_matrix <- load_table("$peak_intensity_matrix", "$peak_intensity_matrix.ext")
+            peak_correlation_matrix <- load_table("$peak_correlation_matrix", "$peak_correlation_matrix.ext")
+
+            # Convert to appropriate formats if needed
+            # The recetox.xmsannotator package expects specific formats
+
+            # Compute peak modules using WGCNA-based clustering
+            peak_modules <- recetox.xmsannotator::compute_peak_modules(
+                peak_intensity_matrix = peak_intensity_matrix,
+                peak_correlation_matrix = peak_correlation_matrix,
+                correlation_threshold = $correlation_threshold,
+                deep_split = as.integer($deep_split),
+                min_cluster_size = as.integer($min_cluster_size),
+                network_type = "$network_type"
+            )
+
+            # Save output
+            save_table(peak_modules, "$output_file", "$output_file.ext")
+        ]]></configfile>
+    </configfiles>
+
+    <inputs>
+        <param name="peak_intensity_matrix" type="data" format="parquet,csv">
+            <label>Peak intensity matrix</label>
+            <help>
+                Matrix of peak intensities across samples.
+                Rows should be peaks, columns should be samples.
+                Can be the original peak table or a pre-extracted intensity matrix.
+            </help>
+        </param>
+        <param name="peak_correlation_matrix" type="data" format="parquet,csv">
+            <label>Peak correlation matrix</label>
+            <help>
+                Correlation matrix computed by the Compute Peak Correlations tool.
+                Square matrix with peak correlations.
+            </help>
+        </param>
+        <expand macro="correlation_threshold_param"/>
+        <expand macro="cluster_params"/>
+    </inputs>
+
+    <outputs>
+        <data name="output_file" format="parquet" label="${tool.name} - Peak Modules">
+            <change_format>
+                <when input="peak_intensity_matrix.ext" value="csv" format="csv" />
+            </change_format>
+        </data>
+    </outputs>
+
+    <tests>
+        <!-- Test with parquet format -->
+        <test>
+            <param name="peak_intensity_matrix" value="intensity_table.parquet" ftype="parquet"/>
+            <param name="peak_correlation_matrix" value="peak_correlations_pearson.parquet" ftype="parquet"/>
+            <param name="correlation_threshold" value="0.7"/>
+            <param name="min_cluster_size" value="10"/>
+            <param name="deep_split" value="2"/>
+            <param name="network_type" value="unsigned"/>
+            <output name="output_file" file="peak_modules.parquet" ftype="parquet"/>
+        </test>
+        <!-- Test with CSV format -->
+        <test>
+            <param name="peak_intensity_matrix" value="intensity_table.csv" ftype="csv"/>
+            <param name="peak_correlation_matrix" value="peak_correlations_pearson.csv" ftype="csv"/>
+            <param name="correlation_threshold" value="0.7"/>
+            <param name="min_cluster_size" value="10"/>
+            <param name="deep_split" value="2"/>
+            <param name="network_type" value="unsigned"/>
+            <output name="output_file" file="peak_modules.csv" ftype="csv"/>
+        </test>
+        <!-- Test with signed network -->
+        <test>
+            <param name="peak_intensity_matrix" value="intensity_table.parquet" ftype="parquet"/>
+            <param name="peak_correlation_matrix" value="peak_correlations_pearson.parquet" ftype="parquet"/>
+            <param name="correlation_threshold" value="0.8"/>
+            <param name="min_cluster_size" value="5"/>
+            <param name="deep_split" value="1"/>
+            <param name="network_type" value="signed"/>
+            <output name="output_file" file="peak_modules_signed.parquet" ftype="parquet"/>
+        </test>
+    </tests>
+
+    <help>
+        <![CDATA[
+**Compute Peak Modules**
+
+Group correlated peaks into modules using weighted gene co-expression network analysis (WGCNA) principles.
+
+Description
+===========
+
+This tool identifies groups (modules) of peaks that are highly correlated with each other. Peaks within the same module likely originate from the same parent compound (different adducts, isotopes, or in-source fragments) or from compounds with coordinated biological behavior.
+
+The algorithm uses hierarchical clustering with dynamic tree cutting to identify modules based on the correlation matrix.
+
+Parameters
+----------
+
+**Correlation Threshold**
+    Minimum correlation required for two peaks to be considered connected. Higher values (e.g., 0.8) produce smaller, tighter modules. Lower values (e.g., 0.5) produce larger, more inclusive modules.
+
+**Minimum Cluster Size**
+    Minimum number of peaks required to form a module. Smaller groups are assigned to the "unassigned" module (typically labeled as 0 or -1).
+
+**Deep Split**
+    Controls the sensitivity of module splitting (0-4):
+    - 0: Minimal splitting, fewer larger modules
+    - 1-2: Moderate splitting (recommended default)
+    - 3-4: Aggressive splitting, more smaller modules
+
+    Higher values may reveal substructure but can also over-split biologically coherent modules.
+
+**Network Type**
+    - **Unsigned**: Treats positive and negative correlations equally. Useful when both types of relationships are meaningful.
+    - **Signed**: Only considers positive correlations as connections. Recommended for metabolomics where adducts/isotopes show positive correlation.
+
+Inputs
+------
+
+**Peak Intensity Matrix**
+    The intensity data used to compute correlations. Required for computing module eigengenes.
+
+**Peak Correlation Matrix**
+    Output from the Compute Peak Correlations tool.
+
+Outputs
+-------
+
+**Peak Modules Table**
+    A table containing:
+    - `peak`: Peak identifier
+    - `module`: Module assignment (integer, typically 1, 2, 3, ... for modules, 0 for unassigned)
+    - `mean_intensity`: Average intensity across samples
+    - Additional module-level statistics
+
+Usage Notes
+-----------
+
+Module assignments are used downstream for:
+- Isotope detection (isotopes should be in the same module)
+- Adduct grouping (adducts from the same compound should correlate strongly)
+- Scoring annotations (multiple ions from the same module increase confidence)
+
+Typical Parameter Settings
+--------------------------
+
+For most metabolomics datasets:
+- correlation_threshold: 0.7-0.8
+- min_cluster_size: 5-10
+- deep_split: 2
+- network_type: signed (for positive-only adduct correlations)
+
+For discovery/exploratory analysis:
+- correlation_threshold: 0.6-0.7
+- min_cluster_size: 3-5
+- deep_split: 3
+- network_type: unsigned
+
+References
+----------
+
+Langfelder, P., & Horvath, S. (2008). WGCNA: an R package for weighted correlation network analysis. BMC Bioinformatics, 9, 559. DOI: 10.1186/1471-2105-9-559
+
+Oldham, M. C., et al. (2008). Network methods for describing sample and gene relationships. In Applications of Graph Transformations with Industrial Applications (pp. 23-37). Springer.
+        ]]>
+    </help>
+
+    <citations>
+        <expand macro="citations"/>
+    </citations>
+</tool>

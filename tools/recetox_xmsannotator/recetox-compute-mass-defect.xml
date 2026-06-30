@@ -1,0 +1,133 @@
+<tool id="recetox_compute_mass_defect" name="recetox-xMSannotator: Compute Mass Defect" version="@TOOL_VERSION@+galaxy1">
+    <description>compute mass defect column for peak or annotation tables</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="creator"/>
+    <expand macro="edam_topics"/>
+    <expand macro="edam_operations"/>
+    <expand macro="requirements"/>
+
+    <command detect_errors="aggressive"><![CDATA[
+        Rscript -e 'source("${__tool_directory__}/utils.R")' \
+               -e "source('${wrapper}')"
+    ]]></command>
+
+    <configfiles>
+        <configfile name="wrapper"><![CDATA[
+            # Load input table (can be peak table or annotation table)
+            input_table <- load_table("$input_table", "$input_table.ext")
+
+            # Compute mass defect with specified precision
+            result <- recetox.xmsannotator::compute_mass_defect(
+                input_table,
+                precision = $mass_defect_precision
+            )
+
+            # Save output preserving input format
+            save_table(result, "$output_file", "$output_file.ext")
+        ]]></configfile>
+    </configfiles>
+
+    <inputs>
+        <param name="input_table" type="data" format="parquet,csv">
+            <label>Input table</label>
+            <help>
+                Input table containing peaks. Can be either:
+                - A peak table with columns: peak, mz, rt (and optionally other intensity columns)
+                - An annotation table from simple_annotation with mz column
+            </help>
+        </param>
+        <expand macro="mass_defect_precision_param"/>
+    </inputs>
+
+    <outputs>
+        <data name="output_file" format="parquet" label="${tool.name} - ${input_table.element_identifier}">
+            <change_format>
+                <when input="input_table.ext" value="csv" format="csv" />
+            </change_format>
+        </data>
+    </outputs>
+
+    <tests>
+        <!-- Test with annotation table -->
+        <test>
+            <param name="input_table" value="simple_annotation_output.parquet" ftype="parquet"/>
+            <param name="mass_defect_precision" value="0.01"/>
+            <output name="output_file" file="mass_defect_annotation.parquet" ftype="parquet"/>
+        </test>
+        <!-- Test with CSV format -->
+        <test>
+            <param name="input_table" value="simple_annotation_output.csv" ftype="csv"/>
+            <param name="mass_defect_precision" value="0.01"/>
+            <output name="output_file" file="mass_defect_annotation.csv" ftype="csv"/>
+        </test>
+        <!-- Test with peak table (higher precision) -->
+        <test>
+            <param name="input_table" value="metadata_table.parquet" ftype="parquet"/>
+            <param name="mass_defect_precision" value="0.001"/>
+            <output name="output_file" file="mass_defect_peaks.parquet" ftype="parquet"/>
+        </test>
+    </tests>
+
+    <help>
+        <![CDATA[
+**Compute Mass Defect**
+
+Add a mass defect column to a peak or annotation table.
+
+Description
+===========
+
+This tool computes the mass defect for each row in the input table. The mass defect is the difference between the nominal mass (integer mass number) and the exact monoisotopic mass of a compound or peak.
+
+Mass defect analysis is useful for:
+- Filtering compounds by class (different compound classes have characteristic mass defects)
+- Visualizing data in Kendrick mass defect plots
+- Grouping related compounds
+
+Inputs
+------
+
+**Input Table**
+    A table containing m/z values. Can be:
+    - Peak table from metadata with `mz` column
+    - Annotation table from simple_annotation with `mz` column
+
+**Mass Defect Precision**
+    Number of decimal places to round mass defect values. Lower values (e.g., 0.001) provide more precision but larger file sizes. Higher values (e.g., 0.1) are sufficient for visualization.
+
+Outputs
+-------
+
+**Output Table**
+    The input table with an additional `MD` (mass defect) column added.
+
+Usage Notes
+-----------
+
+This tool is typically used twice in the xMSannotator pipeline:
+
+1. **Early pass:** After simple annotation, add mass defect to the annotation table
+2. **Late pass:** After RT module clustering, compute mass defect on the peak table
+
+Example Use Case
+----------------
+
+Simple Annotation → Compute Mass Defect → Compute Correlations → ...
+
+Or for peak tables:
+
+Compute RT Modules → Compute Mass Defect → Compute Isotopes
+
+References
+----------
+
+Kendrick, E. (1963). A Mass Scale Based on CH2 = 14.0000 for High Resolution Mass Spectrometry of Organic Compounds. Analytical Chemistry, 35(13), 2146-2154. DOI: 10.1021/ac60205a023
+        ]]>
+    </help>
+
+    <citations>
+        <expand macro="citations"/>
+    </citations>
+</tool>

@@ -1,0 +1,203 @@
+<tool id="recetox_compute_isotopes" name="recetox-xMSannotator: Compute Isotopes" version="@TOOL_VERSION@+galaxy1">
+    <description>detect and assign isotopic peaks to annotated compounds</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="creator"/>
+    <expand macro="edam_topics"/>
+    <expand macro="edam_operations"/>
+    <expand macro="requirements"/>
+
+    <command detect_errors="aggressive"><![CDATA[
+        Rscript -e 'source("${__tool_directory__}/utils.R")' \
+               -e "source('${wrapper}')"
+    ]]></command>
+
+    <configfiles>
+        <configfile name="wrapper"><![CDATA[
+            # Load input tables
+            annotation <- load_table("$annotation", "$annotation.ext")
+            adduct_weights <- load_table("$adduct_weights", "$adduct_weights.ext")
+            peak_table <- load_table("$peak_table", "$peak_table.ext")
+
+            # Compute isotope assignments
+            annotation <- recetox.xmsannotator::compute_isotopes(
+                annotation = annotation,
+                adduct_weights = adduct_weights,
+                intensity_deviation_tolerance = $intensity_deviation_tolerance,
+                mass_defect_tolerance = $mass_defect_tolerance,
+                peak_table = peak_table,
+                rt_tolerance = $time_tolerance
+            )
+
+            # Save output
+            save_table(annotation, "$output_file", "$output_file.ext")
+        ]]></configfile>
+    </configfiles>
+
+    <inputs>
+        <param name="annotation" type="data" format="parquet,csv">
+            <label>Annotation table</label>
+            <help>
+                Annotation table from Simple Annotation tool (optionally with mass defect computed).
+                Should contain compound annotations with chemical_ID, mz, rt columns.
+            </help>
+        </param>
+        <param name="adduct_weights" type="data" format="parquet,csv">
+            <label>Adduct weights table</label>
+            <help>
+                Table of adduct weights used for scoring. Contains information about expected
+                adduct types and their relative abundances.
+            </help>
+        </param>
+        <param name="peak_table" type="data" format="parquet,csv">
+            <label>Peak table with RT clusters and mass defect</label>
+            <help>
+                Peak table containing:
+                - peak: Peak identifier
+                - mz: Mass-to-charge ratio
+                - rt: Retention time
+                - module: Module assignment from peak clustering
+                - rt_cluster: RT cluster assignment
+                - MD: Mass defect (if computed)
+            </help>
+        </param>
+        <param name="intensity_deviation_tolerance" type="float" value="0.1">
+            <label>Intensity deviation tolerance</label>
+            <help>
+                Maximum allowed deviation from theoretical isotope intensity ratios.
+                Default 0.1 means ±10% deviation is acceptable.
+            </help>
+        </param>
+        <param name="mass_defect_tolerance" type="float" value="0.1">
+            <label>Mass defect tolerance</label>
+            <help>
+                Maximum difference in mass defect between a peak and its theoretical isotope.
+                Helps filter false positive isotope assignments.
+            </help>
+        </param>
+        <expand macro="time_tolerance_param"/>
+    </inputs>
+
+    <outputs>
+        <data name="output_file" format="parquet" label="${tool.name} - Annotation with Isotopes">
+            <change_format>
+                <when input="annotation.ext" value="csv" format="csv" />
+            </change_format>
+        </data>
+    </outputs>
+
+    <tests>
+        <!-- Test with parquet format -->
+        <test>
+            <param name="annotation" value="simple_annotation_output.parquet" ftype="parquet"/>
+            <param name="adduct_weights" value="adduct_table.parquet" ftype="parquet"/>
+            <param name="peak_table" value="metadata_table.parquet" ftype="parquet"/>
+            <param name="intensity_deviation_tolerance" value="0.1"/>
+            <param name="mass_defect_tolerance" value="0.1"/>
+            <param name="time_tolerance" value="10"/>
+            <output name="output_file" file="annotation_with_isotopes.parquet" ftype="parquet"/>
+        </test>
+        <!-- Test with CSV format -->
+        <test>
+            <param name="annotation" value="simple_annotation_output.csv" ftype="csv"/>
+            <param name="adduct_weights" value="adduct_table.csv" ftype="csv"/>
+            <param name="peak_table" value="metadata_table.csv" ftype="csv"/>
+            <param name="intensity_deviation_tolerance" value="0.1"/>
+            <param name="mass_defect_tolerance" value="0.1"/>
+            <param name="time_tolerance" value="10"/>
+            <output name="output_file" file="annotation_with_isotopes.csv" ftype="csv"/>
+        </test>
+        <!-- Test with relaxed tolerances -->
+        <test>
+            <param name="annotation" value="simple_annotation_output.parquet" ftype="parquet"/>
+            <param name="adduct_weights" value="adduct_table.parquet" ftype="parquet"/>
+            <param name="peak_table" value="metadata_table.parquet" ftype="parquet"/>
+            <param name="intensity_deviation_tolerance" value="0.2"/>
+            <param name="mass_defect_tolerance" value="0.2"/>
+            <param name="time_tolerance" value="15"/>
+            <output name="output_file" file="annotation_with_isotopes_relaxed.parquet" ftype="parquet"/>
+        </test>
+    </tests>
+
+    <help>
+        <![CDATA[
+**Compute Isotopes**
+
+Detect and assign isotopic peaks (M+1, M+2, etc.) to annotated compounds.
+
+Description
+===========
+
+This tool identifies isotopic peaks that correspond to each annotated compound. Isotopic peaks arise from natural abundance heavy isotopes (¹³C, ²H, ¹⁵N, ¹⁸O, ³⁴S, etc.) and provide valuable confirmation of compound identity.
+
+Isotope Detection Criteria
+--------------------------
+
+A peak is assigned as an isotope of a compound when ALL of the following conditions are met:
+
+1. **Mass Accuracy**: The peak's m/z matches the theoretical isotope mass within tolerance
+2. **Retention Time**: The peak elutes within the specified RT window of the monoisotopic peak
+3. **Intensity Ratio**: The intensity ratio matches theoretical isotope patterns within tolerance
+4. **Mass Defect**: The mass defect is consistent with the expected isotope pattern
+5. **Module Membership**: The isotope peak is in the same correlation module as the parent
+
+Parameters
+----------
+
+**Intensity Deviation Tolerance**
+    Maximum allowed deviation from theoretical isotope intensity ratios (default: 0.1 = ±10%).
+
+    For example, if the theoretical M+1 intensity is 10% of M, and you set tolerance to 0.1,
+    then observed intensities between 9% and 11% would be accepted.
+
+**Mass Defect Tolerance**
+    Maximum allowed difference in mass defect between observed and theoretical isotope.
+    Helps filter false positives from co-eluting compounds.
+
+**Retention Time Tolerance**
+    Maximum RT difference (in seconds) between the monoisotopic peak and its isotopes.
+    Isotopes should co-elute with the parent compound.
+
+Inputs
+------
+
+**Annotation Table**
+    Output from Simple Annotation (optionally with mass defect computed).
+
+**Adduct Weights Table**
+    Contains information about expected adduct types for scoring.
+
+**Peak Table with RT Clusters**
+    Should include module assignments and RT cluster information from previous steps.
+
+Outputs
+-------
+
+**Annotation Table with Isotopes**
+    The annotation table with additional columns:
+    - `ISgroup`: Isotope group identifier
+    - `isotope_rank`: Rank of this peak within its isotope group (1 = monoisotopic)
+    - `n_isotopes`: Number of isotopes detected for this compound
+
+Downstream Usage
+----------------
+
+Isotope information is used by:
+- **Reformat Annotation**: Prepares data for chemscore computation
+- **Compute Chemscore**: More isotopes = higher confidence score
+- **Compute Confidence Levels**: Isotope count affects confidence level assignment
+
+References
+----------
+
+Silva, G. M., et al. (2018). Accurate prediction of isotopic patterns for metabolite identification in mass spectrometry. Bioinformatics, 34(17), i763-i771. DOI: 10.1093/bioinformatics/bty581
+
+Kind, T., & Fiehn, O. (2007). Seven Golden Rules for heuristic filtering of molecular formulas obtained by accurate mass spectrometry. BMC Bioinformatics, 8, 105. DOI: 10.1186/1471-2105-8-105
+        ]]>
+    </help>
+
+    <citations>
+        <expand macro="citations"/>
+    </citations>
+</tool>
