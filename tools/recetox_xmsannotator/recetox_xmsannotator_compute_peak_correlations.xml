@@ -54,14 +54,7 @@
     </configfiles>
 
     <inputs>
-        <param name="peak_table" type="data" format="parquet,csv">
-            <label>Peak table with intensities</label>
-            <help>
-                Table containing peak information and intensity values across samples.
-                Required columns: peak (or id), plus one or more sample intensity columns.
-                Typically output from recetox-aplcms or similar tool.
-            </help>
-        </param>
+        <expand macro="peak_table_input"/>
         <param name="correlation_method" type="select">
             <label>Correlation method</label>
             <help>Method for computing correlations between peak intensity profiles.</help>

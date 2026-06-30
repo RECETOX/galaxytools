@@ -50,41 +50,11 @@
     </configfiles>
 
     <inputs>
-        <param name="annotation" type="data" format="parquet,csv">
-            <label>Reformatted annotation table</label>
-            <help>
-                Reformatted annotation table from Reformat Annotation tool.
-                Ready for chemscore computation.
-            </help>
-        </param>
-        <param name="global_cor" type="data" format="parquet,csv">
-            <label>Global correlation matrix</label>
-            <help>
-                Global correlation data from Reformat Annotation tool.
-                Provides context for correlation-based scoring.
-            </help>
-        </param>
-        <param name="adduct_weights" type="data" format="parquet,csv">
-            <label>Adduct weights table</label>
-            <help>
-                Table of adduct weights for scoring different adduct types.
-            </help>
-        </param>
-        <param name="corthresh" type="float" value="0.7" min="0" max="1">
-            <label>Correlation threshold</label>
-            <help>
-                Minimum correlation required for peaks to be considered as supporting
-                the same chemical identity. Peaks above this threshold contribute
-                to the chemscore calculation.
-            </help>
-        </param>
-        <param name="max_diff_rt" type="float" value="10">
-            <label>Maximum RT difference [s]</label>
-            <help>
-                Maximum retention time difference allowed between peaks that are
-                considered as potential adducts/isotopes of the same compound.
-            </help>
-        </param>
+        <expand macro="annotation_input"/>
+        <expand macro="global_cor_input"/>
+        <expand macro="adduct_weights_input"/>
+        <expand macro="corthresh_param"/>
+        <expand macro="max_diff_rt_param"/>
         <expand macro="filter_by_param"/>
     </inputs>
 

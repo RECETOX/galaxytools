@@ -30,16 +30,7 @@
     </configfiles>
 
     <inputs>
-        <param name="peak_table" type="data" format="parquet,csv">
-            <label>Peak table with module assignments</label>
-            <help>
-                Peak table that should include:
-                - peak: Peak identifier
-                - rt: Retention time
-                - module: Module assignment from Compute Peak Modules tool
-                - Additional intensity columns as needed
-            </help>
-        </param>
+        <expand macro="peak_table_input"/>
         <expand macro="peak_rt_width_param"/>
     </inputs>
 

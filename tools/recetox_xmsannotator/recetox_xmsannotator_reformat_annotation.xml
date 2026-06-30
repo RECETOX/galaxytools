@@ -36,27 +36,9 @@
     </configfiles>
 
     <inputs>
-        <param name="annotation" type="data" format="parquet,csv">
-            <label>Annotation table</label>
-            <help>
-                Annotation table from Compute Isotopes tool.
-                Contains compound annotations with isotope information.
-            </help>
-        </param>
-        <param name="peak_table" type="data" format="parquet,csv">
-            <label>Peak table</label>
-            <help>
-                Peak table with intensities, modules, RT clusters, and mass defect.
-                Used to compute the global correlation output.
-            </help>
-        </param>
-        <param name="peak_correlation_matrix" type="data" format="parquet,csv">
-            <label>Peak correlation matrix</label>
-            <help>
-                Correlation matrix from Compute Peak Correlations tool.
-                Will be reformatted for downstream chemscore computation.
-            </help>
-        </param>
+        <expand macro="annotation_input"/>
+        <expand macro="peak_table_input"/>
+        <expand macro="correlation_matrix_input"/>
     </inputs>
 
     <outputs>

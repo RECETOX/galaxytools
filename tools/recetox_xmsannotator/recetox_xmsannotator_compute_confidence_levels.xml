@@ -43,26 +43,12 @@
     </configfiles>
 
     <inputs>
-        <param name="annotation" type="data" format="parquet,csv">
-            <label>Annotation table with chemscores</label>
-            <help>
-                Annotation table from Compute Chemscore tool.
-                Contains annotations with computed chemscores.
-            </help>
-        </param>
-        <param name="adduct_weights" type="data" format="parquet,csv">
-            <label>Adduct weights table</label>
-            <help>
-                Table of adduct weights for confidence level assessment.
-            </help>
-        </param>
+        <expand macro="annotation_input"/>
+        <expand macro="adduct_weights_input"/>
         <expand macro="mass_tolerance_param"/>
         <expand macro="time_tolerance_param"/>
         <expand macro="filter_by_param"/>
-        <param name="maximum_isotopes" type="integer" value="10">
-            <label>Maximum isotopes</label>
-            <help>Maximum number of isotopes to consider for confidence assessment.</help>
-        </param>
+        <expand macro="maximum_isotopes_param"/>
         <expand macro="confidence_params"/>
     </inputs>
 

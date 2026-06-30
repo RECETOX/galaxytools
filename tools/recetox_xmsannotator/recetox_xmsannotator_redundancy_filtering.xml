@@ -32,20 +32,8 @@
     </configfiles>
 
     <inputs>
-        <param name="annotation" type="data" format="parquet,csv">
-            <label>Annotation table with scores and confidence</label>
-            <help>
-                Annotation table from Compute Confidence Levels or Pathway Matching tool.
-                Contains fully scored annotations ready for redundancy filtering.
-            </help>
-        </param>
-        <param name="adduct_weights" type="data" format="parquet,csv">
-            <label>Adduct weights table</label>
-            <help>
-                Table of adduct weights used to determine which annotations to retain
-                when filtering redundant matches.
-            </help>
-        </param>
+        <expand macro="annotation_input"/>
+        <expand macro="adduct_weights_input"/>
     </inputs>
 
     <outputs>

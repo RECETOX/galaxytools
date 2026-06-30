@@ -38,21 +38,8 @@
     </configfiles>
 
     <inputs>
-        <param name="peak_intensity_matrix" type="data" format="parquet,csv">
-            <label>Peak intensity matrix</label>
-            <help>
-                Matrix of peak intensities across samples.
-                Rows should be peaks, columns should be samples.
-                Can be the original peak table or a pre-extracted intensity matrix.
-            </help>
-        </param>
-        <param name="peak_correlation_matrix" type="data" format="parquet,csv">
-            <label>Peak correlation matrix</label>
-            <help>
-                Correlation matrix computed by the Compute Peak Correlations tool.
-                Square matrix with peak correlations.
-            </help>
-        </param>
+        <expand macro="peak_table_input"/>
+        <expand macro="correlation_matrix_input"/>
         <expand macro="correlation_threshold_param"/>
         <expand macro="cluster_params"/>
     </inputs>

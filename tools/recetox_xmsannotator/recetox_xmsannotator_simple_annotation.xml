@@ -49,27 +49,9 @@
     </configfiles>
 
     <inputs>
-        <param name="metadata_table" type="data" format="parquet,csv">
-            <label>Peak metadata table</label>
-            <help>
-                Peak metadata table from recetox-aplcms or similar tool.
-                Required columns: id, mz, rt. Additional columns are ignored.
-            </help>
-        </param>
-        <param name="compound_table" type="data" format="parquet,csv">
-            <label>Compound database</label>
-            <help>
-                Database of compounds for annotation.
-                Required columns: compound_id, monoisotopic_mass, molecular_formula.
-            </help>
-        </param>
-        <param name="adduct_table" type="data" format="parquet,csv" optional="true">
-            <label>Adduct database (optional)</label>
-            <help>
-                Database of adducts. If provided, compound-adduct pairs will be generated.
-                Required columns: adduct, charge, mass, n_molecules.
-            </help>
-        </param>
+        <expand macro="metadata_table_input"/>
+        <expand macro="compound_table_input"/>
+        <expand macro="adduct_table_input"/>
         <expand macro="mass_tolerance_param"/>
     </inputs>
 

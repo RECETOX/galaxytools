@@ -36,46 +36,11 @@
     </configfiles>
 
     <inputs>
-        <param name="annotation" type="data" format="parquet,csv">
-            <label>Annotation table</label>
-            <help>
-                Annotation table from Simple Annotation tool (optionally with mass defect computed).
-                Should contain compound annotations with chemical_ID, mz, rt columns.
-            </help>
-        </param>
-        <param name="adduct_weights" type="data" format="parquet,csv">
-            <label>Adduct weights table</label>
-            <help>
-                Table of adduct weights used for scoring. Contains information about expected
-                adduct types and their relative abundances.
-            </help>
-        </param>
-        <param name="peak_table" type="data" format="parquet,csv">
-            <label>Peak table with RT clusters and mass defect</label>
-            <help>
-                Peak table containing:
-                - peak: Peak identifier
-                - mz: Mass-to-charge ratio
-                - rt: Retention time
-                - module: Module assignment from peak clustering
-                - rt_cluster: RT cluster assignment
-                - MD: Mass defect (if computed)
-            </help>
-        </param>
-        <param name="intensity_deviation_tolerance" type="float" value="0.1">
-            <label>Intensity deviation tolerance</label>
-            <help>
-                Maximum allowed deviation from theoretical isotope intensity ratios.
-                Default 0.1 means ±10% deviation is acceptable.
-            </help>
-        </param>
-        <param name="mass_defect_tolerance" type="float" value="0.1">
-            <label>Mass defect tolerance</label>
-            <help>
-                Maximum difference in mass defect between a peak and its theoretical isotope.
-                Helps filter false positive isotope assignments.
-            </help>
-        </param>
+        <expand macro="annotation_input"/>
+        <expand macro="adduct_weights_input"/>
+        <expand macro="peak_table_input"/>
+        <expand macro="intensity_deviation_tolerance_param"/>
+        <expand macro="mass_defect_tolerance_param"/>
         <expand macro="time_tolerance_param"/>
     </inputs>
 

@@ -30,14 +30,7 @@
     </configfiles>
 
     <inputs>
-        <param name="input_table" type="data" format="parquet,csv">
-            <label>Input table</label>
-            <help>
-                Input table containing peaks. Can be either:
-                - A peak table with columns: peak, mz, rt (and optionally other intensity columns)
-                - An annotation table from simple_annotation with mz column
-            </help>
-        </param>
+        <expand macro="input_table_param"/>
         <expand macro="mass_defect_precision_param"/>
     </inputs>
 

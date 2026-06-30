@@ -52,6 +52,15 @@
         </edam_operations>
     </xml>
 
+    <!-- Standard output macro with format change support -->
+    <xml name="output_parquet_csv">
+        <data name="output_file" format="parquet" label="${tool.name} - ${input_name_element_identifier}">
+            <change_format>
+                <when input="${input_name}.ext" value="csv" format="csv" />
+            </change_format>
+        </data>
+    </xml>
+
     <!-- Mass tolerance parameter -->
     <xml name="mass_tolerance_param">
         <param name="mass_tolerance_ppm" type="integer" min="0" value="5">
@@ -68,11 +77,34 @@
         </param>
     </xml>
 
+    <!-- Maximum RT difference parameter (used in chemscore, pathway matching) -->
+    <xml name="max_diff_rt_param">
+        <param name="max_diff_rt" type="float" value="10">
+            <label>Maximum RT difference [s]</label>
+            <help>
+                Maximum retention time difference allowed between peaks that are
+                considered as potential adducts/isotopes of the same compound.
+            </help>
+        </param>
+    </xml>
+
     <!-- Correlation threshold parameter -->
     <xml name="correlation_threshold_param">
         <param name="correlation_threshold" type="float" value="0.7" min="0" max="1">
             <label>Correlation threshold</label>
             <help>Correlation threshold between peaks to qualify as adducts/isotopes of the same metabolite.</help>
+        </param>
+    </xml>
+
+    <!-- Correlation threshold parameter for chemscore (named corthresh) -->
+    <xml name="corthresh_param">
+        <param name="corthresh" type="float" value="0.7" min="0" max="1">
+            <label>Correlation threshold</label>
+            <help>
+                Minimum correlation required for peaks to be considered as supporting
+                the same chemical identity. Peaks above this threshold contribute
+                to the chemscore calculation.
+            </help>
         </param>
     </xml>
 
@@ -100,11 +132,114 @@
         </param>
     </xml>
 
+    <!-- Annotation table input (used by many downstream tools) -->
+    <xml name="annotation_input">
+        <param name="annotation" type="data" format="parquet,csv">
+            <label>Annotation table</label>
+            <help>
+                Annotation table from upstream tool. Contains compound annotations with
+                chemical_ID, mz, rt, and other relevant columns.
+            </help>
+        </param>
+    </xml>
+
     <!-- Adduct weights input -->
     <xml name="adduct_weights_input">
         <param name="adduct_weights" type="data" format="parquet,csv">
             <label>Adduct weights table</label>
             <help>A weight-by-adduct table used for scoring annotations.</help>
+        </param>
+    </xml>
+
+    <!-- Compound database input -->
+    <xml name="compound_table_input">
+        <param name="compound_table" type="data" format="parquet,csv">
+            <label>Compound database</label>
+            <help>
+                Database of compounds for annotation. Required columns:
+                <em>compound_id</em>, <em>monoisotopic_mass</em>, and <em>molecular_formula</em>.
+            </help>
+        </param>
+    </xml>
+
+    <!-- Adduct database input -->
+    <xml name="adduct_table_input">
+        <param name="adduct_table" type="data" format="parquet,csv" optional="true">
+            <label>Adduct database (optional)</label>
+            <help>
+                Database of adducts. If provided, compound-adduct pairs will be generated.
+                Required columns: <em>adduct</em>, <em>charge</em>, <em>mass</em>, and <em>n_molecules</em>.
+            </help>
+        </param>
+    </xml>
+
+    <!-- Peak table input -->
+    <xml name="peak_table_input">
+        <param name="peak_table" type="data" format="parquet,csv">
+            <label>Peak table</label>
+            <help>
+                Peak table containing peak identifiers, m/z, retention time, and optionally
+                intensity values, module assignments, RT clusters, and mass defect.
+            </help>
+        </param>
+    </xml>
+
+    <!-- Peak correlation matrix input -->
+    <xml name="correlation_matrix_input">
+        <param name="peak_correlation_matrix" type="data" format="parquet,csv">
+            <label>Peak correlation matrix</label>
+            <help>
+                Correlation matrix computed by the Compute Peak Correlations tool.
+                Square matrix with peak-to-peak correlations.
+            </help>
+        </param>
+    </xml>
+
+    <!-- Global correlation input -->
+    <xml name="global_cor_input">
+        <param name="global_cor" type="data" format="parquet,csv">
+            <label>Global correlation matrix</label>
+            <help>
+                Global correlation data from Reformat Annotation tool.
+                Provides context for correlation-based scoring.
+            </help>
+        </param>
+    </xml>
+
+    <!-- Metadata table input -->
+    <xml name="metadata_table_input">
+        <param name="metadata_table" type="data" format="parquet,csv">
+            <label>Peak metadata table</label>
+            <help>
+                Peak metadata table from recetox-aplcms or similar tool.
+                Required columns: <em>id</em>, <em>mz</em>, <em>rt</em>.
+            </help>
+        </param>
+    </xml>
+
+    <!-- Input table (generic, for tools like compute_mass_defect) -->
+    <xml name="input_table_param">
+        <param name="input_table" type="data" format="parquet,csv">
+            <label>Input table</label>
+            <help>
+                Input table containing peaks. Can be either:
+                - A peak table with columns: peak, mz, rt (and optionally other intensity columns)
+                - An annotation table with mz column
+            </help>
+        </param>
+    </xml>
+
+    <!-- Pathway database input -->
+    <xml name="chemcompMZ_input">
+        <param name="chemCompMz" type="data" format="parquet,csv">
+            <label>Compound-pathway database</label>
+            <help>
+                Database linking compounds to metabolic pathways. Should contain:
+                - <em>chemical_ID</em>: Compound identifier (matching annotation table)
+                - Pathway information
+                - m/z values for compounds
+                Can be HMDB, KEGG, or custom pathway database.
+            </help>
         </param>
     </xml>
 
@@ -137,20 +272,42 @@
         </param>
     </xml>
 
-    <!-- Isotope parameters -->
-    <xml name="isotope_params">
+    <!-- Intensity deviation tolerance parameter (for isotope detection) -->
+    <xml name="intensity_deviation_tolerance_param">
         <param name="intensity_deviation_tolerance" type="float" value="0.1">
-            <label>Tolerance of intensity deviation</label>
-            <help>A numeric threshold by which an intensity ratio of two isotopic peaks may differ from their actual abundance ratio.</help>
+            <label>Intensity deviation tolerance</label>
+            <help>
+                Maximum allowed deviation from theoretical isotope intensity ratios (default: 0.1 = ±10%).
+                For example, if the theoretical M+1 intensity is 10% of M, observed intensities
+                between 9% and 11% would be accepted with default settings.
+            </help>
         </param>
+    </xml>
+
+    <!-- Mass defect tolerance parameter (for isotope detection) -->
+    <xml name="mass_defect_tolerance_param">
         <param name="mass_defect_tolerance" type="float" value="0.1">
-            <label>Tolerance of mass defect</label>
-            <help>Maximum difference in mass defect between two peaks of the same compound.</help>
+            <label>Mass defect tolerance</label>
+            <help>
+                Maximum allowed difference in mass defect between observed and theoretical isotope.
+                Helps filter false positives from co-eluting compounds.
+            </help>
         </param>
+    </xml>
+
+    <!-- Maximum isotopes parameter -->
+    <xml name="maximum_isotopes_param">
         <param name="maximum_isotopes" type="integer" value="10">
             <label>Maximum isotopes</label>
-            <help>Maximum number of isotopes to consider.</help>
+            <help>Maximum number of isotopes to consider for each compound.</help>
         </param>
+    </xml>
+
+    <!-- Combined isotope parameters macro -->
+    <xml name="isotope_params">
+        <expand macro="intensity_deviation_tolerance_param"/>
+        <expand macro="mass_defect_tolerance_param"/>
+        <expand macro="maximum_isotopes_param"/>
     </xml>
 
     <!-- Confidence level parameters -->
@@ -158,6 +315,28 @@
         <param name="min_ions_per_chemical" type="integer" value="2" min="1">
             <label>Minimum ions per chemical</label>
             <help>Minimum number of adducts/isotopes required for a high-confidence match.</help>
+        </param>
+    </xml>
+
+    <!-- Pathway mode selection -->
+    <xml name="pathwaycheckmode_param">
+        <param name="pathwaycheckmode" type="select">
+            <label>Pathway check mode</label>
+            <help>Mode for pathway analysis and score boosting.</help>
+            <option value="pm" selected="true">Pathway mode (pm)</option>
+            <option value="cluster">Cluster mode</option>
+            <option value="both">Both modes</option>
+        </param>
+    </xml>
+
+    <!-- Database name selection for pathway matching -->
+    <xml name="db_name_param">
+        <param name="db_name" type="select">
+            <label>Database name</label>
+            <help>Name of the pathway database being used.</help>
+            <option value="HMDB">HMDB (Human Metabolome Database)</option>
+            <option value="KEGG">KEGG (Kyoto Encyclopedia of Genes and Genomes)</option>
+            <option value="custom">Custom database</option>
         </param>
     </xml>
 
