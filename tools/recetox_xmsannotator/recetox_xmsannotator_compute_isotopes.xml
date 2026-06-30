@@ -15,12 +15,12 @@
 
     <configfiles>
         <configfile name="wrapper"><![CDATA[
-            # Load input tables
+            ## Load input tables
             annotation <- load_table("$annotation", "$annotation.ext")
             adduct_weights <- load_table("$adduct_weights", "$adduct_weights.ext")
             peak_table <- load_table("$peak_table", "$peak_table.ext")
 
-            # Compute isotope assignments
+            ## Compute isotope assignments
             annotation <- recetox.xmsannotator::compute_isotopes(
                 annotation = annotation,
                 adduct_weights = adduct_weights,
@@ -30,7 +30,7 @@
                 rt_tolerance = $time_tolerance
             )
 
-            # Save output
+            ## Save output
             save_table(annotation, "$output_file", "$output_file.ext")
         ]]></configfile>
     </configfiles>

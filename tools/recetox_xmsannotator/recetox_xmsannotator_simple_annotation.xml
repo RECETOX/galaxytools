@@ -16,24 +16,24 @@
 
     <configfiles>
         <configfile name="wrapper"><![CDATA[
-            # Load input tables
+            ## Load input tables
             metadata_table <- load_table("$metadata_table", "$metadata_table.ext")
             compound_table <- load_table("$compound_table", "$compound_table.ext")
 
-            # Load adduct table if provided
+            ## Load adduct table if provided
             if ("$adduct_table" != "None") {
                 adduct_table <- load_table("$adduct_table", "$adduct_table.ext")
             } else {
                 adduct_table <- NULL
             }
 
-            # Create peak table from metadata (extract id, mz, rt columns)
+            ## Create peak table from metadata (extract id, mz, rt columns)
             peak_table <- metadata_table[, c("id", "mz", "rt")]
             names(peak_table)[1] <- "peak"
             peak_table[["peak"]] <- as.integer(peak_table[["id"]])
 
-            # Perform simple annotation
-            # Convert ppm tolerance to Da: 1 ppm = 1e-6 Da
+            ## Perform simple annotation
+            ## Convert ppm tolerance to Da: 1 ppm = 1e-6 Da
             mass_tolerance_da <- 1e-6 * ${mass_tolerance_ppm}
 
             annotation <- recetox.xmsannotator::simple_annotation(
@@ -43,7 +43,7 @@
                 mass_tolerance = mass_tolerance_da
             )
 
-            # Save output
+            ## Save output
             save_table(annotation, "$output_file", "$output_file.ext")
         ]]></configfile>
     </configfiles>

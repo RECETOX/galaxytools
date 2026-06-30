@@ -15,14 +15,14 @@
 
     <configfiles>
         <configfile name="wrapper"><![CDATA[
-            # Load input tables
+            ## Load input tables
             peak_intensity_matrix <- load_table("$peak_intensity_matrix", "$peak_intensity_matrix.ext")
             peak_correlation_matrix <- load_table("$peak_correlation_matrix", "$peak_correlation_matrix.ext")
 
-            # Convert to appropriate formats if needed
-            # The recetox.xmsannotator package expects specific formats
+            ## Convert to appropriate formats if needed
+            ## The recetox.xmsannotator package expects specific formats
 
-            # Compute peak modules using WGCNA-based clustering
+            ## Compute peak modules using WGCNA-based clustering
             peak_modules <- recetox.xmsannotator::compute_peak_modules(
                 peak_intensity_matrix = peak_intensity_matrix,
                 peak_correlation_matrix = peak_correlation_matrix,
@@ -32,7 +32,7 @@
                 network_type = "$network_type"
             )
 
-            # Save output
+            ## Save output
             save_table(peak_modules, "$output_file", "$output_file.ext")
         ]]></configfile>
     </configfiles>

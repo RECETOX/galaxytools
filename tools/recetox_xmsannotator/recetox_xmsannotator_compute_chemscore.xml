@@ -16,19 +16,19 @@
 
     <configfiles>
         <configfile name="wrapper"><![CDATA[
-            # Load input tables
+            ## Load input tables
             annotation <- load_table("$annotation", "$annotation.ext")
             global_cor <- load_table("$global_cor", "$global_cor.ext")
             adduct_weights <- load_table("$adduct_weights", "$adduct_weights.ext")
 
-            # Parse filter_by parameter
+            ## Parse filter_by parameter
             filter_by <- strsplit("$filter_by", ",")[[1]]
             if (length(filter_by) == 1 && filter_by == "") {
                 filter_by <- NA
             }
 
-            # Compute chemscores using parallel processing
-            # The pmap_dfr pattern iterates over each row and computes scores
+            ## Compute chemscores using parallel processing
+            ## The pmap_dfr pattern iterates over each row and computes scores
             annotation <- purrr::pmap_dfr(
                 annotation,
                 function(.x, .y, .z, ...) {
@@ -44,7 +44,7 @@
                 }
             )
 
-            # Save output
+            ## Save output
             save_table(annotation, "$output_file", "$output_file.ext")
         ]]></configfile>
     </configfiles>

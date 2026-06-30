@@ -15,40 +15,40 @@
 
     <configfiles>
         <configfile name="wrapper"><![CDATA[
-            # Load peak table with intensities
+            ## Load peak table with intensities
             peak_table <- load_table("$peak_table", "$peak_table.ext")
 
-            # Ensure we have a peak identifier column (use 'id' if 'peak' doesn't exist)
+            ## Ensure we have a peak identifier column (use 'id' if 'peak' doesn't exist)
             if (!"peak" %in% names(peak_table) && "id" %in% names(peak_table)) {
                 peak_table$peak <- peak_table$id
             }
 
-            # Extract intensity columns (all columns except peak, mz, rt, id)
+            ## Extract intensity columns (all columns except peak, mz, rt, id)
             intensity_cols <- setdiff(names(peak_table), c("peak", "mz", "rt", "id"))
 
             if (length(intensity_cols) == 0) {
                 stop("No intensity columns found in peak table. Expected sample columns.")
             }
 
-            # Create intensity matrix with peak IDs as row names
-            # Note: compute_peak_correlations computes correlations between COLUMNS
-            # So we transpose to get peak-to-peak correlations
+            ## Create intensity matrix with peak IDs as row names
+            ## Note: compute_peak_correlations computes correlations between COLUMNS
+            ## So we transpose to get peak-to-peak correlations
             peak_intensity_matrix <- as.matrix(peak_table[, intensity_cols])
             rownames(peak_intensity_matrix) <- as.character(peak_table$peak)
 
-            # Compute correlation matrix (transposed so peaks are columns)
+            ## Compute correlation matrix (transposed so peaks are columns)
             peak_correlation_matrix <- recetox.xmsannotator::compute_peak_correlations(
                 t(peak_intensity_matrix),
                 correlation_method = "$correlation_method"
             )
 
-            # Convert to data frame and preserve row names as a column
+            ## Convert to data frame and preserve row names as a column
             cor_df <- as.data.frame(peak_correlation_matrix)
             cor_df$peak <- rownames(cor_df)
-            # Reorder to put peak column first
+            ## Reorder to put peak column first
             cor_df <- cor_df[, c("peak", setdiff(names(cor_df), "peak"))]
 
-            # Save output
+            ## Save output
             save_table(cor_df, "$output_file", "$output_file.ext")
         ]]></configfile>
     </configfiles>

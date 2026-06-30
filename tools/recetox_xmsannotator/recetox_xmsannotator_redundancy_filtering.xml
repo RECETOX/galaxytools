@@ -15,18 +15,18 @@
 
     <configfiles>
         <configfile name="wrapper"><![CDATA[
-            # Load input tables
+            ## Load input tables
             annotation <- load_table("$annotation", "$annotation.ext")
             adduct_weights <- load_table("$adduct_weights", "$adduct_weights.ext")
 
-            # Perform redundancy filtering using multilevelannotationstep5
+            ## Perform redundancy filtering using multilevelannotationstep5
             annotation <- recetox.xmsannotator::multilevelannotationstep5(
                 outloc = tempdir(),
                 adduct_weights = adduct_weights,
                 chemscoremat = annotation
             )
 
-            # Save output
+            ## Save output
             save_table(annotation, "$output_file", "$output_file.ext")
         ]]></configfile>
     </configfiles>

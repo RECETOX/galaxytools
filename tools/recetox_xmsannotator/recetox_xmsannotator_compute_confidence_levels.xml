@@ -15,17 +15,17 @@
 
     <configfiles>
         <configfile name="wrapper"><![CDATA[
-            # Load input tables
+            ## Load input tables
             annotation <- load_table("$annotation", "$annotation.ext")
             adduct_weights <- load_table("$adduct_weights", "$adduct_weights.ext")
 
-            # Parse filter_by parameter
+            ## Parse filter_by parameter
             filter_by <- strsplit("$filter_by", ",")[[1]]
             if (length(filter_by) == 1 && filter_by == "") {
                 filter_by <- NA
             }
 
-            # Compute confidence levels using multilevelannotationstep4
+            ## Compute confidence levels using multilevelannotationstep4
             annotation <- recetox.xmsannotator::multilevelannotationstep4(
                 outloc = tempdir(),
                 chemscoremat = annotation,
@@ -37,7 +37,7 @@
                 min_ions_perchem = $min_ions_per_chemical
             )
 
-            # Save output
+            ## Save output
             save_table(annotation, "$output_file", "$output_file.ext")
         ]]></configfile>
     </configfiles>

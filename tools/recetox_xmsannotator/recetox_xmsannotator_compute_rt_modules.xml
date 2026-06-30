@@ -15,16 +15,16 @@
 
     <configfiles>
         <configfile name="wrapper"><![CDATA[
-            # Load peak table (should already have module assignments from compute_peak_modules)
+            ## Load peak table (should already have module assignments from compute_peak_modules)
             peak_table <- load_table("$peak_table", "$peak_table.ext")
 
-            # Compute RT-based clustering
+            ## Compute RT-based clustering
             peak_rt_clusters <- recetox.xmsannotator::compute_rt_modules(
                 peak_table = peak_table,
                 peak_width = $peak_rt_width
             )
 
-            # Save output
+            ## Save output
             save_table(peak_rt_clusters, "$output_file", "$output_file.ext")
         ]]></configfile>
     </configfiles>

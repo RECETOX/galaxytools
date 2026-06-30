@@ -15,21 +15,21 @@
 
     <configfiles>
         <configfile name="wrapper"><![CDATA[
-            # Load input tables
+            ## Load input tables
             annotation <- load_table("$annotation", "$annotation.ext")
             peak_table <- load_table("$peak_table", "$peak_table.ext")
             peak_correlation_matrix <- load_table("$peak_correlation_matrix", "$peak_correlation_matrix.ext")
 
-            # Reformat annotation table for chemscore computation
+            ## Reformat annotation table for chemscore computation
             annotation <- recetox.xmsannotator::reformat_annotation_table(annotation)
 
-            # Reformat correlation matrix to global correlation format
+            ## Reformat correlation matrix to global correlation format
             global_cor <- recetox.xmsannotator::reformat_correlation_matrix(
                 peak_table,
                 peak_correlation_matrix
             )
 
-            # Save outputs
+            ## Save outputs
             save_table(annotation, "$annotation_output", "$annotation_output.ext")
             save_table(global_cor, "$global_cor_output", "$global_cor_output.ext")
         ]]></configfile>

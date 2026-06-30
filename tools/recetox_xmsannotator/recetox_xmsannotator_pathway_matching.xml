@@ -15,23 +15,23 @@
 
     <configfiles>
         <configfile name="wrapper"><![CDATA[
-            # Load input tables
+            ## Load input tables
             annotation <- load_table("$annotation", "$annotation.ext")
             adduct_weights <- load_table("$adduct_weights", "$adduct_weights.ext")
             chemCompMZ <- load_table("$chemCompMz", "$chemCompMz.ext")
 
-            # Parse filter_by parameter
+            ## Parse filter_by parameter
             filter_by <- strsplit("$filter_by", ",")[[1]]
             if (length(filter_by) == 1 && filter_by == "") {
                 filter_by <- NA
             }
 
-            # Rename HMDBID column if present for compatibility
+            ## Rename HMDBID column if present for compatibility
             if ("HMDBID" %in% names(chemCompMZ)) {
                 chemCompMZ <- dplyr::rename(chemCompMZ, chemical_ID = HMDBID)
             }
 
-            # Perform pathway matching using multilevelannotationstep3
+            ## Perform pathway matching using multilevelannotationstep3
             annotation <- recetox.xmsannotator::multilevelannotationstep3(
                 chemCompMZ = chemCompMZ,
                 chemscoremat = annotation,
@@ -41,7 +41,7 @@
                 pathwaycheckmode = "$pathwaycheckmode"
             )
 
-            # Save output
+            ## Save output
             save_table(annotation, "$output_file", "$output_file.ext")
         ]]></configfile>
     </configfiles>

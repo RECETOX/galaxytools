@@ -15,16 +15,16 @@
 
     <configfiles>
         <configfile name="wrapper"><![CDATA[
-            # Load input table (can be peak table or annotation table)
+            ## Load input table (can be peak table or annotation table)
             input_table <- load_table("$input_table", "$input_table.ext")
 
-            # Compute mass defect with specified precision
+            ## Compute mass defect with specified precision
             result <- recetox.xmsannotator::compute_mass_defect(
                 input_table,
                 precision = $mass_defect_precision
             )
 
-            # Save output preserving input format
+            ## Save output preserving input format
             save_table(result, "$output_file", "$output_file.ext")
         ]]></configfile>
     </configfiles>
