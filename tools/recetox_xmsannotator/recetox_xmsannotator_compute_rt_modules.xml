@@ -1,4 +1,4 @@
-<tool id="recetox_compute_rt_modules" name="recetox-xMSannotator: Compute RT Modules" version="@TOOL_VERSION@+galaxy1">
+<tool id="recetox_xmsannotator_compute_rt_modules" name="recetox-xMSannotator: Compute RT Modules" version="@TOOL_VERSION@+galaxy1">
     <description>cluster peaks by retention time and integrate with peak modules</description>
     <macros>
         <import>macros.xml</import>

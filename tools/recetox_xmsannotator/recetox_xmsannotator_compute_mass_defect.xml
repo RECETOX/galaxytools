@@ -1,4 +1,4 @@
-<tool id="recetox_compute_mass_defect" name="recetox-xMSannotator: Compute Mass Defect" version="@TOOL_VERSION@+galaxy1">
+<tool id="recetox_xmsannotator_compute_mass_defect" name="recetox-xMSannotator: Compute Mass Defect" version="@TOOL_VERSION@+galaxy1">
     <description>compute mass defect column for peak or annotation tables</description>
     <macros>
         <import>macros.xml</import>

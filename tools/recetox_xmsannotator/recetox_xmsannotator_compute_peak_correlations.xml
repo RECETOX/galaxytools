@@ -1,4 +1,4 @@
-<tool id="recetox_compute_peak_correlations" name="recetox-xMSannotator: Compute Peak Correlations" version="@TOOL_VERSION@+galaxy1">
+<tool id="recetox_xmsannotator_compute_peak_correlations" name="recetox-xMSannotator: Compute Peak Correlations" version="@TOOL_VERSION@+galaxy1">
     <description>compute correlation matrix between peaks based on intensity profiles</description>
     <macros>
         <import>macros.xml</import>

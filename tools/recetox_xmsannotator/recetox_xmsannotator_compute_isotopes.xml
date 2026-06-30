@@ -1,4 +1,4 @@
-<tool id="recetox_compute_isotopes" name="recetox-xMSannotator: Compute Isotopes" version="@TOOL_VERSION@+galaxy1">
+<tool id="recetox_xmsannotator_compute_isotopes" name="recetox-xMSannotator: Compute Isotopes" version="@TOOL_VERSION@+galaxy1">
     <description>detect and assign isotopic peaks to annotated compounds</description>
     <macros>
         <import>macros.xml</import>

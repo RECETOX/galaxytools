@@ -1,4 +1,4 @@
-<tool id="recetox_reformat_annotation" name="recetox-xMSannotator: Reformat Annotation" version="@TOOL_VERSION@+galaxy1">
+<tool id="recetox_xmsannotator_reformat_annotation" name="recetox-xMSannotator: Reformat Annotation" version="@TOOL_VERSION@+galaxy1">
     <description>reformat annotation table and correlation matrix for chemscore computation</description>
     <macros>
         <import>macros.xml</import>

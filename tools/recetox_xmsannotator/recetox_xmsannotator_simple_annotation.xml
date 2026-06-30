@@ -1,4 +1,4 @@
-<tool id="recetox_simple_annotation" name="recetox-xMSannotator: Simple Annotation" version="@TOOL_VERSION@+galaxy1">
+<tool id="recetox_xmsannotator_simple_annotation" name="recetox-xMSannotator: Simple Annotation" version="@TOOL_VERSION@+galaxy1">
     <description>perform simple annotation by matching peaks to compound database</description>
     <macros>
         <import>macros.xml</import>

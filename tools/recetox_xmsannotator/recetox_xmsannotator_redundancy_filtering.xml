@@ -1,4 +1,4 @@
-<tool id="recetox_redundancy_filtering" name="recetox-xMSannotator: Redundancy Filtering" version="@TOOL_VERSION@+galaxy1">
+<tool id="recetox_xmsannotator_redundancy_filtering" name="recetox-xMSannotator: Redundancy Filtering" version="@TOOL_VERSION@+galaxy1">
     <description>filter out low-scoring redundant annotations to produce final results</description>
     <macros>
         <import>macros.xml</import>

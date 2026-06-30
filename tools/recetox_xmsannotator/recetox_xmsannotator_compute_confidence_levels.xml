@@ -1,4 +1,4 @@
-<tool id="recetox_compute_confidence_levels" name="recetox-xMSannotator: Compute Confidence Levels" version="@TOOL_VERSION@+galaxy1">
+<tool id="recetox_xmsannotator_compute_confidence_levels" name="recetox-xMSannotator: Compute Confidence Levels" version="@TOOL_VERSION@+galaxy1">
     <description>assign confidence levels to annotations based on multiple criteria</description>
     <macros>
         <import>macros.xml</import>

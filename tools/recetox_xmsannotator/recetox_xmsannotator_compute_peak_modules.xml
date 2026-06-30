@@ -1,4 +1,4 @@
-<tool id="recetox_compute_peak_modules" name="recetox-xMSannotator: Compute Peak Modules" version="@TOOL_VERSION@+galaxy1">
+<tool id="recetox_xmsannotator_compute_peak_modules" name="recetox-xMSannotator: Compute Peak Modules" version="@TOOL_VERSION@+galaxy1">
     <description>group correlated peaks into modules using network clustering</description>
     <macros>
         <import>macros.xml</import>

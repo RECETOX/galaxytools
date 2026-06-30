@@ -6,7 +6,9 @@ load_table <- function(filename, filetype) {
         return(NULL)
     }
     if (filetype == "csv") {
-        return(as.data.frame(read.csv(filename)))
+        return(as.data.frame(read.csv(filename, header = TRUE)))
+    } else if (filetype %in% c("tsv", "tabular", "txt")) {
+        return(as.data.frame(read.table(filename, sep = "\t", header = TRUE, stringsAsFactors = FALSE)))
     } else {
         return(as.data.frame(arrow::read_parquet(filename)))
     }
@@ -15,6 +17,8 @@ load_table <- function(filename, filetype) {
 save_table <- function(table, filename, filetype) {
     if (filetype == "csv") {
         write.csv(table, filename, row.names = FALSE)
+    } else if (filetype %in% c("tsv", "tabular", "txt")) {
+        write.table(table, filename, sep = "\t", row.names = FALSE, quote = FALSE)
     } else {
         arrow::write_parquet(table, filename)
     }

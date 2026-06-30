@@ -1,4 +1,4 @@
-<tool id="recetox_pathway_matching" name="recetox-xMSannotator: Pathway Matching" version="@TOOL_VERSION@+galaxy1">
+<tool id="recetox_xmsannotator_pathway_matching" name="recetox-xMSannotator: Pathway Matching" version="@TOOL_VERSION@+galaxy1">
     <description>match annotations to metabolic pathways and boost scores based on pathway context</description>
     <macros>
         <import>macros.xml</import>

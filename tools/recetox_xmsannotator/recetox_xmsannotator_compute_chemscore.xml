@@ -1,4 +1,4 @@
-<tool id="recetox_compute_chemscore" name="recetox-xMSannotator: Compute Chemscore" version="@TOOL_VERSION@+galaxy1">
+<tool id="recetox_xmsannotator_compute_chemscore" name="recetox-xMSannotator: Compute Chemscore" version="@TOOL_VERSION@+galaxy1">
     <description>compute chemical scores for annotation confidence assessment</description>
     <macros>
         <import>macros.xml</import>

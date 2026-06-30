@@ -15,17 +15,17 @@ The original xMSannotator tool performed advanced metabolite annotation through 
 
 | Issue | Tool File | Description |
 |-------|-----------|-------------|
-| #612 | [recetox-simple-annotation.xml](recetox-simple-annotation.xml) | Initial peak-compound matching based on mass tolerance |
-| #613 | [recetox-compute-mass-defect.xml](recetox-compute-mass-defect.xml) | Compute mass defect column for peaks/annotations |
-| #614 | [recetox-compute-peak-correlations.xml](recetox-compute-peak-correlations.xml) | Calculate correlation matrix between peaks |
-| #615 | [recetox-compute-peak-modules.xml](recetox-compute-peak-modules.xml) | Group correlated peaks into modules |
-| #616 | [recetox-compute-rt-modules.xml](recetox-compute-rt-modules.xml) | Cluster peaks by retention time |
-| #617 | [recetox-compute-isotopes.xml](recetox-compute-isotopes.xml) | Detect and assign isotopic peaks |
-| #618 | [recetox-reformat-annotation.xml](recetox-reformat-annotation.xml) | Prepare data for chemscore computation |
-| #619 | [recetox-compute-chemscore.xml](recetox-compute-chemscore.xml) | Compute chemical confidence scores |
-| #620 | [recetox-pathway-matching.xml](recetox-pathway-matching.xml) | Match annotations to metabolic pathways |
-| #621 | [recetox-compute-confidence-levels.xml](recetox-compute-confidence-levels.xml) | Assign MSI-style confidence levels |
-| #622 | [recetox-redundancy-filtering.xml](recetox-redundancy-filtering.xml) | Filter redundant low-scoring annotations |
+| #612 | [recetox_xmsannotator_simple_annotation.xml](recetox_xmsannotator_simple_annotation.xml) | Initial peak-compound matching based on mass tolerance |
+| #613 | [recetox_xmsannotator_compute_mass_defect.xml](recetox_xmsannotator_compute_mass_defect.xml) | Compute mass defect column for peaks/annotations |
+| #614 | [recetox_xmsannotator_compute_peak_correlations.xml](recetox_xmsannotator_compute_peak_correlations.xml) | Calculate correlation matrix between peaks |
+| #615 | [recetox_xmsannotator_compute_peak_modules.xml](recetox_xmsannotator_compute_peak_modules.xml) | Group correlated peaks into modules |
+| #616 | [recetox_xmsannotator_compute_rt_modules.xml](recetox_xmsannotator_compute_rt_modules.xml) | Cluster peaks by retention time |
+| #617 | [recetox_xmsannotator_compute_isotopes.xml](recetox_xmsannotator_compute_isotopes.xml) | Detect and assign isotopic peaks |
+| #618 | [recetox_xmsannotator_reformat_annotation.xml](recetox_xmsannotator_reformat_annotation.xml) | Prepare data for chemscore computation |
+| #619 | [recetox_xmsannotator_compute_chemscore.xml](recetox_xmsannotator_compute_chemscore.xml) | Compute chemical confidence scores |
+| #620 | [recetox_xmsannotator_pathway_matching.xml](recetox_xmsannotator_pathway_matching.xml) | Match annotations to metabolic pathways |
+| #621 | [recetox_xmsannotator_compute_confidence_levels.xml](recetox_xmsannotator_compute_confidence_levels.xml) | Assign MSI-style confidence levels |
+| #622 | [recetox_xmsannotator_redundancy_filtering.xml](recetox_xmsannotator_redundancy_filtering.xml) | Filter redundant low-scoring annotations |
 
 ## Standard Pipeline Execution Order
 
