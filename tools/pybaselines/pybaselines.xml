@@ -1,0 +1,92 @@
+<tool id="pybaselines" name="pybaselines" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="20.01" license="MIT">
+    <description>subtract baseline intensities</description>
+    <macros>
+        <token name="@TOOL_VERSION@">1.2.1</token>
+        <token name="@VERSION_SUFFIX@">0</token>
+    </macros>
+    <requirements>
+        <requirement type="package" version="@TOOL_VERSION@">pybaselines</requirement>
+        <requirement type="package" version="24.0.0">pyarrow</requirement>
+        <requirement type="package" version="3.0.3">pyarrow</requirement>
+    </requirements>
+    <command detect_errors="exit_code"><![CDATA[
+        ln -s '$infile' '${infile.name}.${infile.ext}' &&
+        python3 '${wrapper}'
+    ]]></command>
+    <configfiles>
+        <configfile name="wrapper"><![CDATA[
+import pandas as pd
+from pybaselines import Baseline
+import numpy as np
+
+def correct_baseline(group):
+    """Apply baseline correction to a single group."""
+    group = group.sort_values(by="rt").reset_index(drop=True)
+
+    x = group.rt.values
+    y = group.intensity.values
+
+    func = base_fitter.$method
+
+    base_fitter = Baseline(x)
+    baseline, params = func(y, lam=$lam, max_iter=$max_iter, tol=0.1)
+
+    group["intensity"] = np.maximum(np.zeros_like(y), y - baseline)
+    return group
+
+## Read and group by group_number, then apply baseline correction to each group
+eics: pd.DataFrame = pd.read_parquet("$infile")
+corrected = eics.groupby("group_number", group_keys=False).apply(correct_baseline)
+
+## Reset index on final result
+corrected = corrected.reset_index(drop=True)
+corrected.to_parquet("$outfile")
+        ]]></configfile>
+    </configfiles>
+    <inputs>
+        <param argument="infile" type="data" format="parquet" label="Input EICs" help="Output from recetox-aplcms" />
+        <param name="method" type="select" label="Baseline Correction Method" help="Whittaker-smoothing-based baseline correction algorithms">
+            <option value="lsrpls" selected="true">lsrpls (Locally Symmetric Reweighted Penalized Least Squares)</option>
+            <option value="asls">asls (Asymmetric Least Squares)</option>
+            <option value="iasls">iasls (Improved Asymmetric Least Squares)</option>
+            <option value="airpls">airpls (Adaptive Iteratively Reweighted Penalized Least Squares)</option>
+            <option value="arpls">arpls (Asymmetrically Reweighted Penalized Least Squares)</option>
+            <option value="drpls">drpls (Doubly Reweighted Penalized Least Squares)</option>
+            <option value="iarpls">iarpls (Improved Asymmetrically Reweighted Penalized Least Squares)</option>
+            <option value="aspls">aspls (Adaptive Smoothness Penalized Least Squares)</option>
+            <option value="psalsa">psalsa (Peaked Signal's Asymmetric Least Squares Algorithm)</option>
+            <option value="derpsalsa">derpsalsa (Derivative Peak-Screening Asymmetric Least Squares Algorithm)</option>
+            <option value="brpls">brpls (Bayesian Reweighted Penalized Least Squares)</option>
+        </param>
+        <param argument="lam" type="integer" min="1" max="100000" value="1000" label="Smoothing factor" help="TODO" />
+        <param argument="max_iter" type="integer" min="1" max="100" value="50" label="Maximum number of iterations" help="TODO" />
+    </inputs>
+    <outputs>
+        <data name="outfile" format="parquet" label="${tool.name} on ${on_string}" />
+    </outputs>
+    <tests>
+        <!-- Hint: You can use [ctrl+alt+t] after defining the inputs/outputs to auto-scaffold some basic test cases. -->
+    </tests>
+    <help><![CDATA[
+
+.. class:: infomark
+
+**What it does**
+
+TODO: Fill in help in reStructuredText format (https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html)
+
+Usage
+.....
+
+
+**Input**
+
+
+**Output**
+
+
+    ]]></help>
+    <citations>
+        <citation type="doi"> </citation>
+    </citations>
+</tool>
