@@ -610,17 +610,17 @@ Create the following structure under `tools/recetox_xmsannotator/`:
 tools/recetox_xmsannotator/
 ├── macros.xml                    # Shared macros (expand existing)
 ├── utils.R                       # Shared utilities (keep existing)
-├── recetox-simple-annotation.xml        # Issue #612
-├── recetox-compute-mass-defect.xml      # Issue #613
-├── recetox-compute-peak-correlations.xml # Issue #614
-├── recetox-compute-peak-modules.xml     # Issue #615
-├── recetox-compute-rt-modules.xml       # Issue #616
-├── recetox-compute-isotopes.xml         # Issue #617
-├── recetox-reformat-annotation.xml      # Issue #618
-├── recetox-compute-chemscore.xml        # Issue #619
-├── recetox-pathway-matching.xml         # Issue #620
-├── recetox-compute-confidence-levels.xml # Issue #621
-├── recetox-redundancy-filtering.xml     # Issue #622
+├── recetox_simple_annotation.xml        # Issue #612
+├── recetox_compute_mass_defect.xml      # Issue #613
+├── recetox_compute_peak_correlations.xml # Issue #614
+├── recetox_compute_peak_modules.xml     # Issue #615
+├── recetox_compute_rt_modules.xml       # Issue #616
+├── recetox_compute_isotopes.xml         # Issue #617
+├── recetox_reformat_annotation.xml      # Issue #618
+├── recetox_compute_chemscore.xml        # Issue #619
+├── recetox_pathway_matching.xml         # Issue #620
+├── recetox_compute_confidence_levels.xml # Issue #621
+├── recetox_redundancy_filtering.xml     # Issue #622
 └── tests/
     └── data/                           # Test files
 ```
@@ -691,7 +691,7 @@ Each new tool should follow this pattern based on the existing `recetox_xmsannot
 
 ## Detailed Tool Specifications
 
-### Tool #612: recetox-simple-annotation.xml
+### Tool #612: recetox_simple_annotation.xml
 
 **R Function:** `simple_annotation()` from `simple_annotation.R`
 
@@ -729,7 +729,7 @@ save_table(annotation, "$output_file", "$output_file.ext")
 
 ---
 
-### Tool #613: recetox-compute-mass-defect.xml
+### Tool #613: recetox_compute_mass_defect.xml
 
 **R Function:** `compute_mass_defect()` from `advanced_annotation.R`
 
@@ -756,7 +756,7 @@ save_table(result, "$output_file", "$output_file.ext")
 
 ---
 
-### Tool #614: recetox-compute-peak-correlations.xml
+### Tool #614: recetox_compute_peak_correlations.xml
 
 **R Function:** `compute_peak_correlations()` + `get_peak_intensity_matrix()` from `compute_peak_modules.R`
 
@@ -791,7 +791,7 @@ save_table(peak_correlation_matrix, "$output_file", "$output_file.ext")
 
 ---
 
-### Tool #615: recetox-compute-peak-modules.xml
+### Tool #615: recetox_compute_peak_modules.xml
 
 **R Function:** `compute_peak_modules()` from `compute_peak_modules.R`
 
@@ -837,7 +837,7 @@ save_table(peak_modules, "$output_file", "$output_file.ext")
 
 ---
 
-### Tool #616: recetox-compute-rt-modules.xml
+### Tool #616: recetox_compute_rt_modules.xml
 
 **R Function:** `compute_rt_modules()` from `compute_rt_modules.R`
 
@@ -867,7 +867,7 @@ save_table(peak_rt_clusters, "$output_file", "$output_file.ext")
 
 ---
 
-### Tool #617: recetox-compute-isotopes.xml
+### Tool #617: recetox_compute_isotopes.xml
 
 **R Function:** `compute_isotopes()` from `compute_isotopes.R`
 
@@ -913,7 +913,7 @@ save_table(annotation, "$output_file", "$output_file.ext")
 
 ---
 
-### Tool #618: recetox-reformat-annotation.xml
+### Tool #618: recetox_reformat_annotation.xml
 
 **R Functions:** `reformat_annotation_table()`, `reformat_correlation_matrix()` from `integration_utils.R`
 
@@ -949,7 +949,7 @@ save_table(global_cor, "$global_cor_output", "$global_cor_output.ext")
 
 ---
 
-### Tool #619: recetox-compute-chemscore.xml
+### Tool #619: recetox_compute_chemscore.xml
 
 **R Functions:** `get_chemscore()` from `get_chemscore_october.R`
 
@@ -1003,7 +1003,7 @@ save_table(annotation, "$output_file", "$output_file.ext")
 
 ---
 
-### Tool #620: recetox-pathway-matching.xml
+### Tool #620: recetox_pathway_matching.xml
 
 **R Function:** `multilevelannotationstep3()` from `multilevelannotationstep3.R`
 
@@ -1052,7 +1052,7 @@ save_table(annotation, "$output_file", "$output_file.ext")
 
 ---
 
-### Tool #621: recetox-compute-confidence-levels.xml
+### Tool #621: recetox_compute_confidence_levels.xml
 
 **R Function:** `multilevelannotationstep4()` from `multilevelannotationstep4.R`
 
@@ -1105,7 +1105,7 @@ save_table(annotation, "$output_file", "$output_file.ext")
 
 ---
 
-### Tool #622: recetox-redundancy-filtering.xml
+### Tool #622: recetox_redundancy_filtering.xml
 
 **R Function:** `multilevelannotationstep5()` from `multilevelannotationstep5.R`
 
@@ -1178,7 +1178,7 @@ After implementing all tools:
 **Target R function:** [`simple_annotation`](https://github.com/RECETOX/recetox-xMSannotator/blob/main/R/simple_annotation.R)
 - [x] Read existing `recetox-xmsannotator` tool to understand current implementation
 - [x] Extract `simple_annotation` wrapper logic
-- [x] Create `recetox-simple-annotation.xml` tool definition
+- [x] Create `recetox_simple_annotation.xml` tool definition
 - [x] Implement ppm to Da conversion for mass_tolerance
 - [x] Add support for tabular, csv, parquet input formats
 - [x] Create unit tests with provided test data
@@ -1192,14 +1192,14 @@ After implementing all tools:
 
 ### Step 2.1: Implement Issue #613 - compute_mass_defect ✅ COMPLETED
 **Target R function:** [`compute_mass_defect`](https://github.com/RECETOX/recetox-xMSannotator/blob/main/R/advanced_annotation.R#L24-L27)
-- [x] Create `recetox-compute-mass-defect.xml`
+- [x] Create `recetox_compute_mass_defect.xml`
 - [x] Implement format preservation using `<change_format>` directive
 - [x] Add tests for both peak table and annotation table inputs
 - [x] Document precision parameter behavior
 
 ### Step 2.2: Implement Issue #614 - compute_peak_correlations ✅ COMPLETED
 **Target R function:** [`compute_peak_correlations`](https://github.com/RECETOX/recetox-xMSannotator/blob/main/R/compute_peak_modules.R)
-- [x] Create `recetox-compute-peak-correlations.xml`
+- [x] Create `recetox_compute_peak_correlations.xml`
 - [x] Implement correlation calculation
 - [x] **Critical:** Compare output with existing Galaxy correlation tool (usegalaxy.eu)
 - [x] Create test using param1.parquet data
@@ -1207,7 +1207,7 @@ After implementing all tools:
 
 ### Step 2.3: Implement Issue #615 - compute_peak_modules ✅ COMPLETED
 **Target R function:** [`compute_peak_modules`](https://github.com/RECETOX/recetox-xMSannotator/blob/main/R/compute_peak_modules.R)
-- [x] Create `recetox-compute-peak-modules.xml`
+- [x] Create `recetox_compute_peak_modules.xml`
 - [x] Implement network_type selection options (check package docs)
 - [x] Add all clustering parameters (threshold, deep_split, min_cluster_size)
 - [x] Test with various correlation matrices
@@ -1215,7 +1215,7 @@ After implementing all tools:
 
 ### Step 2.4: Implement Issue #616 - compute_rt_modules ✅ COMPLETED
 **Target R functions:** [`compute_rt_modules`](https://github.com/RECETOX/recetox-xMSannotator/blob/main/R/compute_rt_modules.R), [`remove_duplicates`](https://github.com/RECETOX/recetox-xMSannotator/blob/main/R/advanced_annotation.R#L30-L45)
-- [x] Create `recetox-compute-rt-modules.xml`
+- [x] Create `recetox_compute_rt_modules.xml`
 - [x] Replicate join operation from `advanced_annotation` wrapper
 - [x] Ensure compatibility with outputs from #612 and #615
 - [x] Test RT width parameter effects
@@ -1228,7 +1228,7 @@ After implementing all tools:
 
 ### Step 3.1: Implement Issue #617 - compute_isotopes ✅ COMPLETED
 **Target R function:** [`compute_isotopes`](https://github.com/RECETOX/recetox-xMSannotator/blob/main/R/compute_isotopes.R)
-- [x] Create `recetox-compute-isotopes.xml`
+- [x] Create `recetox_compute_isotopes.xml`
 - [x] Combine inputs from #612 (annotation), #613 (mass defect), #616 (RT modules)
 - [x] Implement all tolerance parameters
 - [x] Test isotope detection accuracy
@@ -1236,7 +1236,7 @@ After implementing all tools:
 
 ### Step 3.2: Implement Issue #618 - reformat_annotation ✅ COMPLETED
 **Target R code:** Reformatting logic from [`advanced_annotation.R`](https://github.com/RECETOX/recetox-xMSannotator/blob/main/R/advanced_annotation.R)
-- [x] Create `recetox-reformat-annotation.xml`
+- [x] Create `recetox_reformat_annotation.xml`
 - [x] Implement reformatting logic from advanced_annotation
 - [x] Generate both annotation and global_cor outputs
 - [x] Test format transformations
@@ -1244,7 +1244,7 @@ After implementing all tools:
 
 ### Step 3.3: Implement Issue #619 - compute_chemscore ✅ COMPLETED
 **Target R functions:** [`get_chemscore`](https://github.com/RECETOX/recetox-xMSannotator/blob/main/R/get_chemscore_october.R), [`compute_chemical_score`](https://github.com/RECETOX/recetox-xMSannotator/blob/main/R/get_chemscorev1.6.71.R)
-- [x] Create `recetox-compute-chemscore.xml`
+- [x] Create `recetox_compute_chemscore.xml`
 - [x] Implement chemscore calculation
 - [x] **Bonus:** Investigate and implement pmap_dfr parallelism
 - [x] Add filter.by parameter with dynamic options from adduct_weights table
@@ -1262,7 +1262,7 @@ After implementing all tools:
 
 ### Step 4.2: Implement Issue #621 - compute_confidence_levels ✅ COMPLETED
 **Target R function:** [`multilevelannotationstep4`](https://github.com/RECETOX/recetox-xMSannotator/blob/main/R/multilevelannotationstep4.R)
-- [x] Create `recetox-compute-confidence-levels.xml`
+- [x] Create `recetox_compute_confidence_levels.xml`
 - [x] Implement confidence level computation logic
 - [x] Add parameters for mass/RT tolerance, max isotopes, min ions per chemical
 - [x] Test confidence level assignment accuracy
