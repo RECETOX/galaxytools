@@ -3,9 +3,9 @@ categories:
 description: Query ZOOMA API with values from an input table column and return annotations as tabular output.
 homepage_url: https://www.ebi.ac.uk/spot/zooma/docs/api
 long_description: |
-  Wrapper around the ZOOMA API annotation endpoint. The tool reads an input tabular file,
-  queries ZOOMA for each non-empty value in a selected column, and writes returned annotations
-  to a tabular output.
+  Wrapper around the EBI ZOOMA API. The tool reads an input tabular file,
+  queries ZOOMA for each non-empty value in a selected column (annotate v2 or map v3 mode),
+  and writes returned results to a tabular output.
 name: zooma
 owner: recetox
 remote_repository_url: https://github.com/RECETOX/galaxytools/tree/master/tools/zooma
