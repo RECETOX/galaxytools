@@ -1,0 +1,59 @@
+<tool id="zooma" name="ZOOMA annotate/map" version="@TOOL_VERSION@+galaxy@GALAXY_VERSION@" profile="25.1">
+    <description>Map or annotate tabular values using ZOOMA</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="creator"/>
+
+    <requirements>
+        <requirement type="package" version="2.32.3">requests</requirement>
+    </requirements>
+
+    <command detect_errors="aggressive"><![CDATA[
+        python '$__tool_directory__/zooma.py'
+            --input '$input'
+            --output '$output'
+            --column '$query_column'
+            --mode '$mode'
+            #if str($mode) == 'map'
+            --api-url 'https://www.ebi.ac.uk/spot/zooma/v3/api/services/map'
+            #else
+            --api-url 'https://www.ebi.ac.uk/spot/zooma/v2/api/services/annotate'
+            #end if
+            --health-url 'https://www.ebi.ac.uk/spot/zooma/v3/api/health'
+            --timeout '60'
+    ]]></command>
+
+    <inputs>
+        <param name="input" type="data" format="tabular,tsv,txt" label="Input table" help="Tabular dataset with one query term per row. The first row is treated as header and skipped by the wrapper." />
+        <param name="query_column" type="data_column" data_ref="input" use_header_names="true" label="Column used for ZOOMA query" help="Choose the text column whose values should be sent to ZOOMA (for example compound names, phenotypes, or free-text labels). Empty cells are ignored." />
+        <param name="mode" type="select" label="ZOOMA operation mode" help="Select how ZOOMA should process each value: Annotate uses the legacy curated annotate API, while Map uses the newer v3 term mapping API with ontology candidates.">
+            <option value="annotate">Annotate (legacy endpoint)</option>
+            <option value="map" selected="true">Map (v3 endpoint)</option>
+        </param>
+    </inputs>
+
+    <outputs>
+        <data name="output" format="tabular" />
+    </outputs>
+
+    <tests>
+        <test>
+            <param name="input" value="input.tsv" ftype="tabular" />
+            <param name="query_column" value="1" />
+            <output name="output" ftype="tabular">
+                <assert_contents>
+                    <has_n_lines n="150" delta="50"/>
+                </assert_contents>
+            </output>
+        </test>
+    </tests>
+
+    <help><![CDATA[
+        @HELP@
+    ]]></help>
+
+    <citations>
+        <citation type="doi">10.5281/zenodo.6035335</citation>
+    </citations>
+</tool>
