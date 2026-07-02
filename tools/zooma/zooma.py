@@ -32,8 +32,8 @@ def parse_args():
     )
     parser.add_argument(
         "--health-url",
-        default=DEFAULT_HEALTH_URL,
-        help="ZOOMA health-check endpoint URL",
+        default=None,
+        help="ZOOMA health-check endpoint URL (defaults to a path derived from --api-url)",
     )
     parser.add_argument(
         "--timeout", type=int, default=30, help="HTTP request timeout in seconds"
