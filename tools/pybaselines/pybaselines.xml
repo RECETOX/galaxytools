@@ -1,5 +1,5 @@
 <tool id="pybaselines" name="pybaselines" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="20.01" license="MIT">
-    <description>subtract baseline intensities</description>
+    <description>subtract baseline intensities from extracted ion chromatograms (EICs)</description>
     <macros>
         <token name="@TOOL_VERSION@">1.2.1</token>
         <token name="@VERSION_SUFFIX@">0</token>
@@ -7,10 +7,9 @@
     <requirements>
         <requirement type="package" version="@TOOL_VERSION@">pybaselines</requirement>
         <requirement type="package" version="24.0.0">pyarrow</requirement>
-        <requirement type="package" version="3.0.3">pyarrow</requirement>
+        <requirement type="package" version="3.0.3">pandas</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
-        ln -s '$infile' '${infile.name}.${infile.ext}' &&
         python3 '${wrapper}'
     ]]></command>
     <configfiles>
@@ -26,16 +25,16 @@ def correct_baseline(group):
     x = group.rt.values
     y = group.intensity.values
 
+    base_fitter = Baseline(x)
     func = base_fitter.$method
 
-    base_fitter = Baseline(x)
-    baseline, params = func(y, lam=$lam, max_iter=$max_iter, tol=0.1)
+    baseline, params = func(y, lam=$lambda, max_iter=$max_iter, tol=0.1)
 
     group["intensity"] = np.maximum(np.zeros_like(y), y - baseline)
     return group
 
 ## Read and group by group_number, then apply baseline correction to each group
-eics: pd.DataFrame = pd.read_parquet("$infile")
+eics = pd.read_parquet("$infile")
 corrected = eics.groupby("group_number", group_keys=False).apply(correct_baseline)
 
 ## Reset index on final result
@@ -44,8 +43,8 @@ corrected.to_parquet("$outfile")
         ]]></configfile>
     </configfiles>
     <inputs>
-        <param argument="infile" type="data" format="parquet" label="Input EICs" help="Output from recetox-aplcms" />
-        <param name="method" type="select" label="Baseline Correction Method" help="Whittaker-smoothing-based baseline correction algorithms">
+        <param argument="infile" type="data" format="parquet" label="Input EIC table (parquet)" help="Parquet table of extracted ion chromatograms (EICs), typically from recetox-aplcms. Expected columns include rt, intensity, and group_number." />
+        <param name="method" type="select" label="Baseline correction algorithm" help="Choose the Whittaker-smoothing algorithm used to estimate the baseline for each EIC group.">
             <option value="lsrpls" selected="true">lsrpls (Locally Symmetric Reweighted Penalized Least Squares)</option>
             <option value="asls">asls (Asymmetric Least Squares)</option>
             <option value="iasls">iasls (Improved Asymmetric Least Squares)</option>
@@ -58,14 +57,21 @@ corrected.to_parquet("$outfile")
             <option value="derpsalsa">derpsalsa (Derivative Peak-Screening Asymmetric Least Squares Algorithm)</option>
             <option value="brpls">brpls (Bayesian Reweighted Penalized Least Squares)</option>
         </param>
-        <param argument="lam" type="integer" min="1" max="100000" value="1000" label="Smoothing factor" help="TODO" />
-        <param argument="max_iter" type="integer" min="1" max="100" value="50" label="Maximum number of iterations" help="TODO" />
+        <param argument="lambda" type="integer" min="1" max="100000" value="1000" label="Smoothing strength (lambda)" help="Controls baseline smoothness. Larger values produce a smoother baseline and usually stronger background removal; smaller values follow local intensity changes more closely." />
+        <param argument="max_iter" type="integer" min="1" max="100" value="50" label="Maximum optimization iterations" help="Upper limit for algorithm iterations per EIC group. Increase if baseline fitting does not converge; decrease for faster runtime on large datasets." />
     </inputs>
     <outputs>
         <data name="outfile" format="parquet" label="${tool.name} on ${on_string}" />
     </outputs>
     <tests>
-        <!-- Hint: You can use [ctrl+alt+t] after defining the inputs/outputs to auto-scaffold some basic test cases. -->
+        <test>
+            <param name="infile" value="input.parquet"/>
+            <param name="method" value="lsrpls"/>
+            <param name="lambda" value="600"/>
+            <param name="max_iter" value="50"/>
+            <output name="outfile" file="result.parquet"/>
+        </test>
+
     </tests>
     <help><![CDATA[
 
@@ -73,20 +79,68 @@ corrected.to_parquet("$outfile")
 
 **What it does**
 
-TODO: Fill in help in reStructuredText format (https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html)
+This tool performs baseline correction for extracted ion chromatograms (EICs)
+using methods from the `pybaselines` package.
+
+Rows are grouped by ``group_number``. For each group, the signal is sorted by
+retention time (``rt``), a baseline is estimated, and corrected intensity is
+computed as:
+
+.. math::
+
+        I_{corrected} = \max(0, I_{observed} - I_{baseline})
+
+The output preserves the input table structure and replaces the ``intensity``
+column with baseline-corrected values.
 
 Usage
 .....
 
+1. Provide a parquet table with EIC points.
+2. Choose a baseline correction algorithm.
+3. Tune smoothing and iteration settings if needed.
+4. Run the tool and use the corrected parquet table in downstream analysis.
 
 **Input**
+
+The input parquet file should contain at least these columns:
+
+- ``group_number``: identifier used to group points belonging to one EIC.
+- ``rt``: retention time values for each point.
+- ``intensity``: observed intensity values.
+
+Other columns are preserved.
+
+
+**Parameters**
+
+- **Baseline correction algorithm**: Selects the Whittaker-smoothing-based
+    baseline estimator (for example ``lsrpls``, ``asls``, ``airpls``, ``arpls``).
+    Different datasets may perform better with different algorithms.
+- **Smoothing strength (lambda)**: Controls how smooth the estimated baseline
+    is. Larger values generally yield a smoother baseline and can remove more
+    low-frequency background; smaller values track local variation more closely.
+- **Maximum optimization iterations**: Upper bound on solver iterations for
+    each group. Increase if fitting appears unstable or does not converge.
 
 
 **Output**
 
+- A parquet table with the same row-level structure as input.
+- The ``intensity`` column contains baseline-corrected values.
+- Negative corrected intensities are clipped to zero.
+
+
+**Notes**
+
+- Runtime scales with the number of groups and points per group.
+- If correction is too aggressive, try lowering ``lambda``.
+- If residual baseline remains, try increasing ``lambda`` or testing a
+    different algorithm.
 
     ]]></help>
     <citations>
-        <citation type="doi"> </citation>
+        <citation type="doi">10.5281/zenodo.5608581</citation>
+        <citation type="doi">10.1021/ac034173t</citation>
     </citations>
 </tool>
