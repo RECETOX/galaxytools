@@ -26,7 +26,7 @@
 
     <inputs>
         <param name="input" type="data" format="tabular,csv,tsv" label="Input table" help="Tabular dataset with one query term per row. The first row is treated as header and skipped by the wrapper." />
-        <param name="query_column" type="data_column" data_ref="input" numerical="false" use_header_names="true" label="Column used for ZOOMA query" help="Choose the text column whose values should be sent to ZOOMA (for example compound names, phenotypes, or free-text labels). Empty cells are ignored." />
+        <param name="query_column" type="data_column" data_ref="input" use_header_names="true" label="Column used for ZOOMA query" help="Choose the text column whose values should be sent to ZOOMA (for example compound names, phenotypes, or free-text labels). Empty cells are ignored." />
         <param name="mode" type="select" label="ZOOMA operation mode" help="Select how ZOOMA should process each value: Annotate uses the legacy curated annotate API, while Map uses the newer v3 term mapping API with ontology candidates.">
             <option value="annotate">Annotate (legacy endpoint)</option>
             <option value="map" selected="true">Map (v3 endpoint)</option>
