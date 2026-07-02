@@ -4,15 +4,15 @@ categories:
 description: Baseline correction of extracted ion chromatograms using pybaselines
 homepage_url: https://github.com/RECETOX/galaxytools/
 long_description: |
-	pybaselines subtracts baseline intensities from extracted ion chromatograms (EICs)
-	grouped by feature/group identifier.
+  pybaselines subtracts baseline intensities from extracted ion chromatograms (EICs)
+  grouped by feature/group identifier.
 
-	The tool applies Whittaker-smoothing-based baseline correction algorithms from the
-	pybaselines library (for example lsrpls, asls, airpls, arpls, and related variants)
-	and outputs a parquet table with corrected intensities.
+  The tool applies Whittaker-smoothing-based baseline correction algorithms from the
+  pybaselines library (for example lsrpls, asls, airpls, arpls, and related variants)
+  and outputs a parquet table with corrected intensities.
 
-	Typical use case: post-processing EIC intensity profiles (e.g. from recetox-aplcms)
-	before downstream feature-level metabolomics or exposomics analyses.
+  Typical use case: post-processing EIC intensity profiles (e.g. from recetox-aplcms)
+  before downstream feature-level metabolomics or exposomics analyses.
 name: pybaselines
 owner: recetox
 remote_repository_url: https://github.com/RECETOX/galaxytools/tree/master/tools/pybaselines
