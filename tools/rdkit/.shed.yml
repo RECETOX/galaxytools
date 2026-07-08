@@ -3,8 +3,7 @@ owner: recetox
 remote_repository_url: "https://github.com/RECETOX/galaxytools/tree/master/tools/rdkit"
 homepage_url: "https://www.rdkit.org"
 categories:
-  - Cheminformatics
-  - Similarity Search
+  - Computational chemistry
 description: Calculate structural similarity using RDKit fingerprints from SMILES/InChI/SDF files
 long_description: |
   This tool calculates structural similarity between compounds using RDKit molecular
