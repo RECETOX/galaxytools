@@ -1,0 +1,19 @@
+name: rdkit
+owner: recetox
+remote_repository_url: "https://github.com/RECETOX/galaxytools/tree/master/tools/rdkit"
+homepage_url: "https://www.rdkit.org"
+categories:
+  - Computational chemistry
+description: Calculate structural similarity using RDKit fingerprints from SMILES/InChI/SDF files
+long_description: |
+  This tool calculates structural similarity between compounds using RDKit molecular
+  fingerprints. It accepts SMILES (.smi), InChI (.inchi), or SDF (.sdf) files and
+  supports multiple fingerprint types (Morgan, RDKit, MACCS) and similarity metrics
+  (Tanimoto, Dice, Cosine, Soergel, Kulczynski, McConnaughey).
+auto_tool_repositories:
+  name_template: "{{ tool_id }}"
+  description_template: "{{ tool_name }} tool from the RDKit package"
+suite:
+  name: suite_rdkit
+  description: Calculate structural similarity using RDKit fingerprints from SMILES/InChI/SDF files
+  type: repository_suite_definition
