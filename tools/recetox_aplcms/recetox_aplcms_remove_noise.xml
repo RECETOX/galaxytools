@@ -1,4 +1,4 @@
-<tool id="recetox_aplcms_remove_noise" name="recetox-aplcms - remove noise" version="@TOOL_VERSION@+galaxy0" profile="21.09">
+<tool id="recetox_aplcms_remove_noise" name="recetox-aplcms - remove noise" version="@TOOL_VERSION@+galaxy0" profile="23.0">
     <description>filter noise and detect peaks in high resolution mass spectrometry (HRMS) profile data</description>
     <macros>
         <import>macros.xml</import>
@@ -10,18 +10,29 @@
     </edam_operations>
     <expand macro="refs"/>
     <expand macro="creator"/>
-    <expand macro="requirements"/>
+    <expand macro="requirements">
+        <requirement type="package" version="1.10.2">bioconductor-rawrr</requirement>
+        <!-- <requirement type="package" version="6.12.0.199">mono</requirement> -->
+    </expand>
 
     <command detect_errors="aggressive"><![CDATA[
-        python '${__tool_directory__}/mzml_id_getter.py' '$input_file';
-        Rscript -e 'source("${__tool_directory__}/utils.R")' -e 'source("${run_script}")'
+        #if $input_file.ext == 'thermo.raw':
+            cp $input_file input.$input_file.ext &&
+            Rscript -e 'source("${install_rawrr}")' &&
+            Rscript -e 'source("${raw_id_getter}")' &&
+            Rscript -e "future::plan(future::multicore, workers = \${GALAXY_SLOTS:-1})" &&
+        #else:
+            ln -s $input_file input.$input_file.ext &&
+            python '${__tool_directory__}/mzml_id_getter.py' '$input_file';
+        #end if
+        Rscript -e 'source("${__tool_directory__}/utils.R")' -e 'source("${run_script}")' -e 'future::plan(future::sequential)'
     ]]></command>
     <configfiles>
         <configfile name="run_script"><![CDATA[
             sample_name <- readChar('sample_name.txt', file.info('sample_name.txt')\$size)
 
             profile <- remove_noise(
-                filename = '$input_file',
+                filename = 'input.${input_file.ext}',
                 min_pres = $min_pres,
                 min_run = $min_run,
                 mz_tol = ${mz_tol}/1e6,
@@ -36,10 +47,21 @@
             profile <- save_sample_name(profile, sample_name)
             save_data_as_parquet_file(profile, '$output_file')
         ]]></configfile>
+
+        <configfile name="raw_id_getter"><![CDATA[
+            header <- rawrr::readFileHeader('input.${input_file.ext}')
+            writeLines(header[['Sample id']], "sample_name.txt")
+        ]]></configfile>
+
+        <configfile name="install_rawrr"><![CDATA[
+            rawrr::installRawFileReaderDLLs()
+            rawrr::installRawrrExe()
+            rawrr::rawrrAssemblyPath()
+        ]]></configfile>
     </configfiles>
 
     <inputs>
-        <param label="Input spectra data" name="input_file" type="data" format="mzml"
+        <param label="Input spectra data" name="input_file" type="data" format="mzml,thermo.raw"
                help="Sample data in .mzml format acquired in profile mode." />
         <expand macro="remove_noise_params"/>
     </inputs>
@@ -57,6 +79,11 @@
             <param name="input_file" value="mbr_test0.mzml" ftype="mzml"/>
             <param name="grouping_threshold" value="2" />
             <output name="output_file" file="remove_noise_docker_threshold.parquet" ftype="parquet" />
+        </test>
+        <test>
+            <param name="input_file" ftype="thermo.raw" location="https://zenodo.org/records/7890956/files/8_qc_no_dil_milliq.raw?download=1"/>
+            <param name="grouping_threshold" value="2" />
+            <output name="output_file" ftype="parquet" md5="a43a29b2e79c59d40bfb8c24c674f899"/>
         </test>
     </tests>
 
