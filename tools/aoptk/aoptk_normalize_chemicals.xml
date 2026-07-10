@@ -78,7 +78,7 @@ chemicals.to_csv("normalized_chemicals.tsv", sep="\t", index=False)
         </conditional>
     </inputs>
     <outputs>
-        <data name="normalized_chemicals" format="tabular" from_work_dir="normalized_chemicals.tsv" label="Chemicals with heading generated."/>
+        <data name="normalized_chemicals" format="tabular" from_work_dir="normalized_chemicals.tsv" label="Chemical normalization on $on_string"/>
     </outputs>
     <tests>
         <test expect_failure="true">
