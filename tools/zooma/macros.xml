@@ -1,0 +1,41 @@
+<macros>
+    <token name="@TOOL_VERSION@">0.1.0</token>
+    <token name="@GALAXY_VERSION@">0</token>
+
+    <xml name="creator">
+        <creator>
+            <organization
+                url="https://www.recetox.muni.cz/"
+                email="GalaxyToolsDevelopmentandDeployment@space.muni.cz"
+                name="RECETOX MUNI" />
+        </creator>
+    </xml>
+
+    <token name="@HELP@"><![CDATA[
+        .. class:: infomark
+
+        **What this tool does**
+
+        Sends values from a selected column of a tabular input file to the EBI ZOOMA service and returns
+        normalized tabular results.
+
+        **Supported API modes**
+
+        - **Annotate**: Uses the legacy endpoint ``/spot/zooma/v2/api/services/annotate`` and queries with
+          ``propertyValue``.
+        - **Map**: Uses the current v3 endpoint ``/spot/zooma/v3/api/services/map`` and submits values in a
+          JSON ``properties`` payload.
+
+        **Service availability check**
+
+        Before processing input rows, the tool calls ``/spot/zooma/v3/api/health``.
+        If the service is unavailable, the job fails early with a clear error message instead of producing
+        partial output.
+
+        **Output**
+
+        The output table contains one row per returned result candidate and includes:
+        ``query``, ``property_value``, ``property_type``, ``semantic_tags``, ``confidence``, ``source_name``,
+        ``source_type``, and ``study_type``.
+    ]]></token>
+</macros>
