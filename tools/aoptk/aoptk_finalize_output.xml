@@ -1,4 +1,4 @@
-<tool id="aoptk_final_modification" name="aoptk final modification" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="25.1" license="MIT">
+<tool id="aoptk_finalize_output" name="aoptk summarize results" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="25.1" license="MIT">
     <description>Finalize the output of relationship identification.</description>
     <macros>
         <import>macros.xml</import>
@@ -8,10 +8,10 @@
         <requirement type="package" version="3.1.5">openpyxl</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
-        python3 '${final_modification}'
+        python3 '${summarize_results}'
     ]]></command>
     <configfiles>
-        <configfile name="final_modification"><![CDATA[
+        <configfile name="summarize_results"><![CDATA[
 import pandas as pd
 
 def join_unique(series):
@@ -49,7 +49,7 @@ for effect in output["effect"].unique():
         <param name="input_file" type="data" format="tabular" label="TSV with heading or chemical column." help="Input tsv file with heading column when available, otherwise chemical column."/>
     </inputs>
     <outputs>
-        <collection name="final_outputs" type="list" label="Final outputs" format="xlsx">
+        <collection name="final_outputs" type="list" label="$input_file.element_identifier" format="xlsx">
             <discover_datasets pattern="(?P&lt;designation&gt;.*)\.xlsx$" ext="xlsx" directory="."/>
         </collection>
     </outputs>
@@ -64,10 +64,10 @@ for effect in output["effect"].unique():
         </test>
     </tests>
     <help><![CDATA[
-Final Modification
+Summarize Results
 ===================
 
-Tool to remove duplicates and finalize the output of relationship identification.
+Tool to remove duplicates and summarize the output of relationship identification.
 
     ]]></help>
     <citations>

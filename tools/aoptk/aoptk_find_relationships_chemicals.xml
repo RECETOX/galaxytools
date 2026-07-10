@@ -211,17 +211,17 @@ for input_path, element_identifier in text_inputs:
         </conditional>
     </inputs>
     <outputs>
-        <data name="relationships" format="tabular" from_work_dir="relationships.tsv" label="Relationships identified in text.">
+        <data name="relationships" format="tabular" from_work_dir="relationships.tsv" label="$input_file.element_identifier">
             <filter>input_source['input_mode'] == 'single' and input_source['analysis_purpose']['method'] != 'chemicals'</filter>
         </data>
-        <collection name="relationships_collection" type="list" label="Relationships identified in texts" format="tabular">
+        <collection name="relationships_collection" type="list" label="Relationships identified in $on_string" format="tabular">
             <filter>input_source['input_mode'] == 'collection' and input_source['analysis_purpose']['method'] != 'chemicals'</filter>
             <discover_datasets pattern="(?P&lt;designation&gt;.*)\.tsv$" directory="relationships" ext="tabular"/>
         </collection>
-        <data name="chemicals" format="tabular" from_work_dir="chemicals.tsv" label="Chemicals identified in text.">
+        <data name="chemicals" format="tabular" from_work_dir="chemicals.tsv" label="$input_file.element_identifier">
             <filter>input_source['input_mode'] == 'single' and input_source['analysis_purpose']['method'] != 'relationships'</filter>
         </data>
-        <collection name="chemicals_collection" type="list" label="Chemicals identified in texts" format="tabular">
+        <collection name="chemicals_collection" type="list" label="Chemicals identified in $on_string" format="tabular">
             <filter>input_source['input_mode'] == 'collection' and input_source['analysis_purpose']['method'] != 'relationships'</filter>
             <discover_datasets pattern="(?P&lt;designation&gt;.*)\.tsv$" directory="chemicals" ext="tabular"/>
         </collection>
