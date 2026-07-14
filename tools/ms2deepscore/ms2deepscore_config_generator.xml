@@ -1,4 +1,4 @@
-<tool id="ms2deepscore_config_generator" name="MS2DeepScore Configuration Generator" version="@TOOL_VERSION@+galaxy0">
+<tool id="ms2deepscore_config_generator" name="MS2DeepScore Configuration Generator" version="@TOOL_VERSION@+galaxy0" profile="23.0" license="MIT">
     <description>Generates model parameters for MS2DeepScore in JSON format</description>
     <macros>
         <import>macros.xml</import>
@@ -13,7 +13,10 @@
     <command detect_errors="exit_code"><![CDATA[
         python3 ${python_wrapper}
     ]]></command>
-    <configfiles>
+
+    <expand macro="environment_variables" />
+
+<configfiles>
     <configfile name="python_wrapper">
 import numpy as np
 from typing import Optional
@@ -38,11 +41,13 @@ params = {
     "mz_bin_width": $tensorization_settings.mz_bin_width,
     "intensity_scaling": $tensorization_settings.intensity_scaling,
     "batch_size": $training_settings.batch_size,
-    "average_pairs_per_bin": $training_settings.average_pairs_per_bin,
-    "same_prob_bins": np.array([(0, 0.2), (0.2, 1.0)]),
     "random_seed": random_seed,
     "fingerprint_type": "$tensorization_settings.fingerprint_type",
-    "fingerprint_nbits": $tensorization_settings.fingerprint_nbits
+    "fingerprint_nbits": $tensorization_settings.fingerprint_nbits,
+    "average_inchikey_sampling_count": $data_generator_settings.average_inchikey_sampling_count,
+    "max_inchikey_sampling": $data_generator_settings.max_inchikey_sampling_count,
+    "max_pairs_per_bin": $data_generator_settings.max_pairs_per_bin,
+    "max_pair_resampling": $data_generator_settings.max_pair_resampling,
 }
 
 settings = SettingsMS2Deepscore(**params)
@@ -55,19 +60,31 @@ settings.save_to_file("$output_file")
     </inputs>
     
     <outputs>
-        <data name="output_file" format="json" label="Model Parameter JSON" />
+        <data name="output_file" format="json" label="MS2DeepScore Model Configuration" />
     </outputs>
 
     <tests>
         <test expect_num_outputs="1">
-            <param name="layers_0|dims" value="20"/>
-            <param name="layers_1|dims" value="20"/>
-            <param name="embedding_dim" value="15" />
-            <param name="ionisation_mode" value="negative" />
-            <param name="epochs" value="2" />
-            <param name="batch_size" value="2" />
-            <param name="average_pairs_per_bin" value="2" />
-            <param name="random_seed" value="42"/>
+            <section name="model_structure">
+                <repeat name="layers">
+                    <param name="dims" value="20" />
+                </repeat>
+                <repeat name="layers">
+                    <param name="dims" value="20" />
+                </repeat>
+                <param name="embedding_dim" value="15" />
+                <param name="ionisation_mode" value="negative" />
+            </section>
+            <section name="training_settings">
+                <param name="epochs" value="2" />
+                <param name="batch_size" value="2" />
+                <param name="random_seed" value="42"/>
+                <param name="patience" value="2"/>
+            </section>
+            <section name="data_generator_settings">
+                <param name="average_inchikey_sampling_count" value="0"/>
+                <param name="max_pair_resampling" value="100"/>
+            </section>
             <output name="output_file" value="Model_Parameter_JSON.json" ftype="json" compare="diff" lines_diff="2"/>
         </test>
     </tests>
