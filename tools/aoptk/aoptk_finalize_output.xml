@@ -20,33 +20,32 @@ def join_unique(series):
 
 output = pd.read_csv("$input_file", sep="\t")
 
+col_name = output.columns[int("$column_name") - 1]
+
 for effect in output["effect"].unique():
     file_name = effect.strip().lower().replace(" ", "_")
 
     output_filtered = output[output["effect"] == effect].copy()
 
-    group_column = "heading" if "heading" in output_filtered.columns else "chemical"
-    if group_column not in output_filtered.columns:
-        raise ValueError("Input must contain either a heading or chemical column.")
-
     output_filtered["relationship"] = output_filtered["relationship"].astype(str).str.strip().str.lower()
     relationships = sorted(output_filtered["relationship"].unique())
-    final_output = output_filtered[[group_column]].drop_duplicates()
+    final_output = output_filtered[[col_name]].drop_duplicates()
 
     for relationship in relationships:
         subset = output_filtered[output_filtered["relationship"] == relationship]
-        result = subset.groupby(group_column, as_index=False, dropna=False).agg(
+        result = subset.groupby(col_name, as_index=False, dropna=False).agg(
             hits=("id", "size"),
             ids=("id", join_unique),
         )
         result.rename(columns={"hits": f"{relationship}", "ids": f"{relationship} IDs"}, inplace=True)
-        final_output = final_output.merge(result, on=group_column, how="left")
+        final_output = final_output.merge(result, on=col_name, how="left")
 
     final_output.to_excel(f"./{file_name}.xlsx", index=False)
 ]]></configfile>
     </configfiles>
     <inputs>
-        <param name="input_file" type="data" format="tabular" label="TSV with heading or chemical column." help="Input tsv file with heading column when available, otherwise chemical column."/>
+        <param name="input_file" type="data" format="tabular" label="TSV file." help="Input tsv file with at least a heading or chemical column."/>
+        <param name="column_name" type="data_column" data_ref="input_file" use_header_names="true" label="Column to group by." help="Select the column from the input table to group by."/>
     </inputs>
     <outputs>
         <collection name="final_outputs" type="list" label="$input_file.element_identifier" format="xlsx">
@@ -56,10 +55,12 @@ for effect in output["effect"].unique():
     <tests>
         <test>
             <param name="input_file" value="output.tsv"/>
+            <param name="column_name" value="heading"/>
             <output_collection name="final_outputs" type="list" count="2"/>
         </test>
         <test>
             <param name="input_file" value="output_no_heading.tsv"/>
+            <param name="column_name" value="chemical"/>
             <output_collection name="final_outputs" type="list" count="1"/>
         </test>
     </tests>
