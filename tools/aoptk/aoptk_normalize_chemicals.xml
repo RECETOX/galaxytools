@@ -90,7 +90,7 @@ chemicals.to_csv("normalized_chemicals.tsv", sep="\t", index=False)
         <data name="normalized_chemicals" format="tabular" from_work_dir="normalized_chemicals.tsv" label="Chemical normalization on $on_string"/>
     </outputs>
     <tests>
-        <test expect_failure="true">    
+    <test expect_failure="true">    
         <test>
             <conditional name="normalization_method">
                 <param name="method" value="llm"/>
