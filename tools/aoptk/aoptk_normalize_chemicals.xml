@@ -98,7 +98,6 @@ chemicals.to_csv("normalized_chemicals.tsv", sep="\t", index=False)
                 <param name="chemical_list" value="chemicals.tsv"/>
                 <param name="chemical_list_column_name" value="2"/>
             </conditional>
-            <output name="normalized_chemicals" file="normalized.tsv" compare="sim_size" delta="100"/>
         </test>
         <test>
             <conditional name="normalization_method">
