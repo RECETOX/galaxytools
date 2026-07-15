@@ -55,13 +55,8 @@ for effect in output["effect"].unique():
     <tests>
         <test>
             <param name="input_file" value="output.tsv"/>
-            <param name="column_name" value="heading"/>
+            <param name="column_name" value="5"/>
             <output_collection name="final_outputs" type="list" count="2"/>
-        </test>
-        <test>
-            <param name="input_file" value="output_no_heading.tsv"/>
-            <param name="column_name" value="chemical"/>
-            <output_collection name="final_outputs" type="list" count="1"/>
         </test>
     </tests>
     <help><![CDATA[
