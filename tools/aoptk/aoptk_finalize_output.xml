@@ -8,6 +8,7 @@
         <requirement type="package" version="3.1.5">openpyxl</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
+        cat ${summarize_results} &&
         python3 '${summarize_results}'
     ]]></command>
     <configfiles>
@@ -20,7 +21,7 @@ def join_unique(series):
 
 output = pd.read_csv("$input_file", sep="\t")
 
-col_name = output.columns[int("$column_name") - 1]
+col_name = output.columns[$column_name - 1]
 
 for effect in output["effect"].unique():
     file_name = effect.strip().lower().replace(" ", "_")
@@ -48,7 +49,7 @@ for effect in output["effect"].unique():
         <param name="column_name" type="data_column" data_ref="input_file" use_header_names="true" label="Column to group by." help="Select the column from the input table to group by."/>
     </inputs>
     <outputs>
-        <collection name="final_outputs" type="list" label="$input_file.element_identifier" format="xlsx">
+        <collection name="final_outputs" type="list" label="Summarized results of $input_file.element_identifier" format="xlsx">
             <discover_datasets pattern="(?P&lt;designation&gt;.*)\.xlsx$" ext="xlsx" directory="."/>
         </collection>
     </outputs>

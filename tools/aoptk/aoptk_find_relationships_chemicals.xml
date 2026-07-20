@@ -17,6 +17,10 @@ import sys
 from pathlib import Path
 import pandas as pd
 import yaml
+
+import logging
+import traceback
+
 from aoptk.literature.pdf import PDF
 from aoptk.literature.pymupdf_parser import PymupdfParser
 from aoptk.effect import Effect
@@ -97,15 +101,20 @@ for type in types:
         raise ValueError(f"Unsupported relationship type: {type}")
 
 for input_path, element_identifier in text_inputs:
-    with open(input_path, "r") as f_in:
-        text = f_in.read()
-    publication_id = os.path.splitext(element_identifier)[0]
-    init_relationships_output()
-    init_chemicals_output()
-    chemicals = text_generation.find_chemicals(text)
-    relationships = text_generation.find_relationships_in_text(text=text, chemicals=chemicals, effects=effects, relationship_types=relationship_types)
-    write_relationships(publication_id, relationships)
-    write_chemicals(publication_id, chemicals)
+    try:
+        with open(input_path, "r") as f_in:
+            text = f_in.read()
+        publication_id = os.path.splitext(element_identifier)[0]
+
+        chemicals = text_generation.find_chemicals(text)
+        relationships = text_generation.find_relationships_in_text(text=text, chemicals=chemicals, effects=effects, relationship_types=relationship_types)
+
+        init_relationships_output()
+        init_chemicals_output()
+        write_relationships(publication_id, relationships)
+        write_chemicals(publication_id, chemicals)
+    except Exception as e:
+        logging.error(traceback.format_exc())
 
 #elif $input_source.analysis_purpose.method == "relationships"
 effects = []
@@ -140,19 +149,27 @@ for (input_path, element_identifier), chemicals_path in zip(text_inputs, chemica
     with open(input_path, "r") as f_in:
         text = f_in.read()
     publication_id = os.path.splitext(element_identifier)[0]
-    init_relationships_output()
-    chemicals = [Chemical(chem) for chem in pd.read_csv(chemicals_path, sep="\t")["chemical"].tolist()]
-    relationships = text_generation.find_relationships_in_text(text=text, chemicals=chemicals, effects=effects, relationship_types=relationship_types)
-    write_relationships(publication_id, relationships)
+    try:
+        chemicals = [Chemical(chem) for chem in pd.read_csv(chemicals_path, sep="\t")["chemical"].tolist()]
+        relationships = text_generation.find_relationships_in_text(text=text, chemicals=chemicals, effects=effects, relationship_types=relationship_types)
+
+        init_relationships_output()
+        write_relationships(publication_id, relationships)
+    except Exception as e:
+        logging.error(traceback.format_exc())
 
 #elif $input_source.analysis_purpose.method == "chemicals"
 for input_path, element_identifier in text_inputs:
     with open(input_path, "r") as f_in:
         text = f_in.read()
     publication_id = os.path.splitext(element_identifier)[0]
-    init_chemicals_output()
-    chemicals = text_generation.find_chemicals(text)
-    write_chemicals(publication_id, chemicals)
+    try:
+        chemicals = text_generation.find_chemicals(text)
+
+        init_chemicals_output()
+        write_chemicals(publication_id, chemicals)
+    except Exception as e:
+        logging.error(traceback.format_exc())
 #end if
         ]]></configfile>
     </configfiles>

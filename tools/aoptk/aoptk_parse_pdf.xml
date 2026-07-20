@@ -11,7 +11,7 @@
         python3 '${parse_pdf}'
     ]]></command>
     <configfiles>
-        <configfile name="parse_pdf">
+        <configfile name="parse_pdf"><![CDATA[
 import os
 import sys
 
@@ -25,8 +25,8 @@ from aoptk.text_generation_api import TextGenerationAPI
 pdf_inputs = [("$input_source.input_file", "$input_source.input_file.element_identifier")]
 #else
 pdf_inputs = [
-#for $pdf in $input_source.input_collection
-    ("$pdf", "$pdf.element_identifier"),
+#for $pdf in $input_source.input_collection:
+    ("$pdf", "${pdf.element_identifier}"),
 #end for
 ]
 #end if
@@ -44,8 +44,7 @@ for input_path, element_identifier in pdf_inputs:
     text = PymupdfParser([PDF(input_path)], text_generation=text_generation).get_publications(download_figures_enabled=False)[0].full_text
     with open(f"{publication_id}.txt", "w") as f:
         f.write(text)
-
-</configfile>
+        ]]></configfile>
     </configfiles>
     <inputs>
         <conditional name="input_source">
@@ -57,7 +56,7 @@ for input_path, element_identifier in pdf_inputs:
                 <param name="input_file" type="data" format="pdf" label="PDF to parse" help="Input PDF."/>
             </when>
             <when value="collection">
-                <param name="input_collection" type="data_collection" format="pdf" label="PDF collection to parse" help="Input collection of PDFs."/>
+                <param name="input_collection" type="data_collection" collection_type="list" format="pdf" label="PDF collection to parse" help="Input collection of PDFs."/>
             </when>
         </conditional>
         <conditional name="llms">
