@@ -27,23 +27,28 @@ from aoptk.normalization.provide_mesh_term_dataframe_from_xml import ProvideMesh
 #if $normalization_method.method == "llm"
 @MODEL_SETUP@
 
-chemicals = pd.read_csv("$chemicals", sep="\t")
-chemical_list = pd.read_csv("$chemical_list", sep="\t")["chemical"].tolist()
+chemicals = pd.read_csv("$input_file", sep="\t")
+col_name = chemicals.columns[int("$column_name") - 1]
+chemical_list = pd.read_csv("$chemical_list", sep="\t")
+chemical_col_name = chemicals.columns[int("$chemical_list_column_name") - 1]
+chemical_list = chemical_list[chemical_col_name].tolist()
 
-chemicals["chemical"] = chemicals["chemical"].apply(
+chemicals[col_name] = chemicals[col_name].apply(
     lambda x: TextGenerationAPI(model=model, api_key=litellm_api_key, url=litellm_base_url).normalize_chemical(chemical=Chemical(x), chemical_list=[Chemical(chem) for chem in chemical_list])
     )
 
 #elif $normalization_method.method == "pubchem"
 chemicals = pd.read_csv("$input_file", sep="\t")
-chemicals["chemical"] = chemicals["chemical"].apply(
-    lambda x: PubChemAPI().normalize_chemical(Chemical(x))
+col_name = chemicals.columns[int("$column_name") - 1]
+chemicals[col_name] = chemicals[col_name].apply(
+    lambda x: PubChemAPI().normalize_chemical(Chemical(x)) if pd.notna(x) else x
     )
 
 #elif $normalization_method.method == "mesh"
 chemicals = pd.read_csv("$input_file", sep="\t")
+col_name = chemicals.columns[int("$column_name") - 1]
 mesh_terms_df = ProvideMeshTermDataframeFromXML(database_path="$input_xml").provide_normalization_dataframe()
-chemicals["chemical"] = chemicals["chemical"].apply(
+chemicals[col_name] = chemicals[col_name].apply(
     lambda x: MeshTerms(mesh_terms=mesh_terms_df).normalize_chemical(Chemical(x))
     )
 
@@ -51,7 +56,7 @@ chemicals["chemical"] = chemicals["chemical"].apply(
 raise ValueError("Select a valid normalization method.")
 #end if
 
-chemicals["heading"] = chemicals["chemical"].apply(lambda chem: chem.heading)
+chemicals["heading"] = chemicals[col_name].apply(lambda chem: chem.heading)
 chemicals.to_csv("normalized_chemicals.tsv", sep="\t", index=False)
 
 </configfile>
@@ -65,15 +70,19 @@ chemicals.to_csv("normalized_chemicals.tsv", sep="\t", index=False)
             </param>
             <when value="pubchem">
                 <param name="input_file" type="data" format="tabular,tsv" label="TSV with chemical column." help="Input tsv file with chemical column."/>
+                <param name="column_name" type="data_column" data_ref="input_file" use_header_names="true" label="Column to normalize." help="Select the column from the input table to normalize."/>
             </when>
             <when value="llm">
                 <expand macro="model_selector" modality="text"/>
-                <param name="chemicals" type="data" format="tabular,tsv" label="TSV with chemical column." help="Input tsv file with chemical column."/>
+                <param name="input_file" type="data" format="tabular,tsv" label="TSV with chemical column." help="Input tsv file with chemical column."/>
+                <param name="column_name" type="data_column" data_ref="input_file" use_header_names="true" label="Column to normalize." help="Select the column from the input table to normalize."/>
                 <param name="chemical_list" type="data" format="tabular,tsv" label="TSV with chemical list." help="Input tsv file with chemical list."/>
+                <param name="chemical_list_column_name" type="data_column" data_ref="chemical_list" use_header_names="true" label="Column with chemicals used for the normalization." help="Select the column from the chemical list table to use for normalization."/>
             </when>
             <when value="mesh">
                 <param name="input_file" type="data" format="tabular,tsv" label="TSV with chemical column." help="Input tsv file with chemical column."/>
                 <param name="input_xml" type="data" format="xml" label="XML database with MeSH terms." help="Input xml file with MeSH terms." multiple="false"/>
+                <param name="column_name" type="data_column" data_ref="input_file" use_header_names="true" label="Column to normalize." help="Select the column from the input table to normalize."/>
             </when>
         </conditional>
     </inputs>
@@ -84,14 +93,17 @@ chemicals.to_csv("normalized_chemicals.tsv", sep="\t", index=False)
         <test expect_failure="true">
             <conditional name="normalization_method">
                 <param name="method" value="llm"/>
-                <param name="chemicals" value="chemicals.tsv"/>
+                <param name="input_file" value="chemicals.tsv"/>
+                <param name="column_name" value="2"/>
                 <param name="chemical_list" value="chemicals.tsv"/>
+                <param name="chemical_list_column_name" value="2"/>
             </conditional>
         </test>
         <test>
             <conditional name="normalization_method">
                 <param name="method" value="pubchem"/>
                 <param name="input_file" value="chemicals.tsv"/>
+                <param name="column_name" value="2"/>
             </conditional>
             <output name="normalized_chemicals" file="normalized.tsv" compare="sim_size" delta="100"/>
         </test>
@@ -100,6 +112,7 @@ chemicals.to_csv("normalized_chemicals.tsv", sep="\t", index=False)
                 <param name="method" value="mesh"/>
                 <param name="input_file" value="chemicals.tsv"/>
                 <param name="input_xml" value="mesh_terms_database.xml"/>
+                <param name="column_name" value="2"/>
             </conditional>
             <output name="normalized_chemicals" file="normalized.tsv" compare="sim_size" delta="100"/>
         </test>

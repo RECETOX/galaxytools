@@ -1,6 +1,6 @@
 <macros>
     <token name="@TOOL_VERSION@">0.5.0</token>
-    <token name="@VERSION_SUFFIX@">4</token>
+    <token name="@VERSION_SUFFIX@">5</token>
     <xml name="requirements">
         <requirement type="package" version="@TOOL_VERSION@">aoptk</requirement>
         <requirement type="package" version="6.0.3">pyyaml</requirement>
