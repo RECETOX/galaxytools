@@ -3,23 +3,24 @@
     <macros>
         <import>macros.xml</import>
     </macros>
-
     <requirements>
         <expand macro="requirements"/>
         <expand macro="openai_config"/>
     </requirements>
-
     <command detect_errors="exit_code"><![CDATA[
         python3 '${find_relationships_chemicals}'
     ]]></command>
-
     <configfiles>
-        <configfile name="find_relationships_chemicals">
+        <configfile name="find_relationships_chemicals"><![CDATA[
 import os
 import sys
 from pathlib import Path
 import pandas as pd
 import yaml
+
+import logging
+import traceback
+
 from aoptk.literature.pdf import PDF
 from aoptk.literature.pymupdf_parser import PymupdfParser
 from aoptk.effect import Effect
@@ -28,120 +29,229 @@ from aoptk.relationships.relationship_type import Causative
 from aoptk.relationships.relationship_type import Inhibitive
 from aoptk.text_generation_api import TextGenerationAPI
 
-@MODEL_SETUP@
-
-def write_relationships(relationships):
-    with open("relationships.tsv", "w") as f_out:
+def init_relationships_output():
+    relationships_path = get_relationships_path(publication_id)
+    relationships_dir = os.path.dirname(relationships_path)
+    if relationships_dir:
+        os.makedirs(relationships_dir, exist_ok=True)
+    with open(relationships_path, "w") as f_out:
         f_out.write("id\tchemical\teffect\trelationship\n")
+
+def write_relationships(publication_id, relationships):
+    with open(get_relationships_path(publication_id), "a") as f_out:
         for relationship in relationships:
             f_out.write(f"{publication_id}\t{relationship.chemical}\t{relationship.effect}\t{relationship.relationship_type}\n")
 
-def write_chemicals(chemicals):
-    with open("chemicals.tsv", "w") as f_out:
+def init_chemicals_output():
+    chemicals_path = get_chemicals_path(publication_id)
+    chemicals_dir = os.path.dirname(chemicals_path)
+    if chemicals_dir:
+        os.makedirs(chemicals_dir, exist_ok=True)
+    with open(chemicals_path, "w") as f_out:
         f_out.write("id\tchemical\n")
+
+def write_chemicals(publication_id, chemicals):
+    with open(get_chemicals_path(publication_id), "a") as f_out:
         for chemical in chemicals:
             chemical_name = chemical.name if hasattr(chemical, "name") else chemical
             f_out.write(f"{publication_id}\t{chemical_name}\n")
 
-
-with open("$input_file", "r") as f_in:
-    text = f_in.read()
-
-publication_id = os.path.splitext("$input_file.element_identifier")[0]
-
-#if $analysis_purpose.method == "relationships_chemicals"
-effects = []
-#for $effect in $effects
-effects.append(Effect("$effect.effect"))
-#end for
-
-relationship_types = []
-types = [t.strip() for t in "$relationship_types".split(",")]
-for type in types:
-    if type == "causative":
-        relationship_types.append(Causative())
-    elif type == "inhibitive":
-        relationship_types.append(Inhibitive())
-    else:
-        raise ValueError(f"Unsupported relationship type: {type}")
-
-chemicals = TextGenerationAPI(model=model, api_key=litellm_api_key, url=litellm_base_url).find_chemicals(text)
-relationships = TextGenerationAPI(model=model, api_key=litellm_api_key, url=litellm_base_url).find_relationships_in_text(text=text, chemicals=chemicals, effects=effects, relationship_types=relationship_types)
-write_relationships(relationships)
-write_chemicals(chemicals)
-
-#elif $analysis_purpose.method == "relationships"
-effects = []
-#for $effect in $effects
-effects.append(Effect("$effect.effect"))
-#end for
-
-relationship_types = []
-types = [t.strip() for t in "$relationship_types".split(",")]
-for type in types:
-    if type == "causative":
-        relationship_types.append(Causative())
-    elif type == "inhibitive":
-        relationship_types.append(Inhibitive())
-    else:
-        raise ValueError(f"Unsupported relationship type: {type}")
-
-chemicals = [Chemical(chem) for chem in pd.read_csv("$chemicals", sep="\t")["chemical"].tolist()]
-relationships = TextGenerationAPI(model=model, api_key=litellm_api_key, url=litellm_base_url).find_relationships_in_text(text=text, chemicals=chemicals, effects=effects, relationship_types=relationship_types)
-write_relationships(relationships)
-
-#elif $analysis_purpose.method == "chemicals"
-chemicals = TextGenerationAPI(model=model, api_key=litellm_api_key, url=litellm_base_url).find_chemicals(text)
-write_chemicals(chemicals)
+def get_relationships_path(publication_id):
+#if $input_source.input_mode == "single"
+    return "relationships.tsv"
+#else
+    return f"relationships/{publication_id}.tsv"
 #end if
 
-        </configfile>
+def get_chemicals_path(publication_id):
+#if $input_source.input_mode == "single"
+    return "chemicals.tsv"
+#else
+    return f"chemicals/{publication_id}.tsv"
+#end if
+
+@MODEL_SETUP@
+
+text_generation = TextGenerationAPI(model=model, api_key=litellm_api_key, url=litellm_base_url)
+
+#if $input_source.input_mode == "single"
+text_inputs = [("$input_source.input_file", "$input_source.input_file.element_identifier")]
+#else
+text_inputs = [
+#for $text_file in $input_source.input_collection
+    ("$text_file", "$text_file.element_identifier"),
+#end for
+]
+#end if
+
+#if $input_source.analysis_purpose.method == "relationships_chemicals"
+effects = []
+#for $effect in $input_source.analysis_purpose.effects
+effects.append(Effect("$effect.effect"))
+#end for
+
+relationship_types = []
+types = [t.strip() for t in "$input_source.analysis_purpose.relationship_types".split(",")]
+for type in types:
+    if type == "causative":
+        relationship_types.append(Causative())
+    elif type == "inhibitive":
+        relationship_types.append(Inhibitive())
+    else:
+        raise ValueError(f"Unsupported relationship type: {type}")
+
+for input_path, element_identifier in text_inputs:
+    try:
+        with open(input_path, "r") as f_in:
+            text = f_in.read()
+        publication_id = os.path.splitext(element_identifier)[0]
+
+        chemicals = text_generation.find_chemicals(text)
+        relationships = text_generation.find_relationships_in_text(text=text, chemicals=chemicals, effects=effects, relationship_types=relationship_types)
+
+        init_relationships_output()
+        init_chemicals_output()
+        write_relationships(publication_id, relationships)
+        write_chemicals(publication_id, chemicals)
+    except Exception as e:
+        logging.error(traceback.format_exc())
+
+#elif $input_source.analysis_purpose.method == "relationships"
+effects = []
+#for $effect in $input_source.analysis_purpose.effects
+effects.append(Effect("$effect.effect"))
+#end for
+
+relationship_types = []
+types = [t.strip() for t in "$input_source.analysis_purpose.relationship_types".split(",")]
+for type in types:
+    if type == "causative":
+        relationship_types.append(Causative())
+    elif type == "inhibitive":
+        relationship_types.append(Inhibitive())
+    else:
+        raise ValueError(f"Unsupported relationship type: {type}")
+
+#if $input_source.input_mode == "single"
+chemical_inputs = ["$input_source.analysis_purpose.chemicals"]
+#else
+chemical_inputs = [
+#for $chemical_file in $input_source.analysis_purpose.chemicals
+    "$chemical_file",
+#end for
+]
+#end if
+
+if len(text_inputs) != len(chemical_inputs):
+    raise ValueError("Text and chemical collections must contain the same number of elements")
+
+for (input_path, element_identifier), chemicals_path in zip(text_inputs, chemical_inputs):
+    with open(input_path, "r") as f_in:
+        text = f_in.read()
+    publication_id = os.path.splitext(element_identifier)[0]
+    try:
+        chemicals = [Chemical(chem) for chem in pd.read_csv(chemicals_path, sep="\t")["chemical"].tolist()]
+        relationships = text_generation.find_relationships_in_text(text=text, chemicals=chemicals, effects=effects, relationship_types=relationship_types)
+
+        init_relationships_output()
+        write_relationships(publication_id, relationships)
+    except Exception as e:
+        logging.error(traceback.format_exc())
+
+#elif $input_source.analysis_purpose.method == "chemicals"
+for input_path, element_identifier in text_inputs:
+    with open(input_path, "r") as f_in:
+        text = f_in.read()
+    publication_id = os.path.splitext(element_identifier)[0]
+    try:
+        chemicals = text_generation.find_chemicals(text)
+
+        init_chemicals_output()
+        write_chemicals(publication_id, chemicals)
+    except Exception as e:
+        logging.error(traceback.format_exc())
+#end if
+        ]]></configfile>
     </configfiles>
-
     <inputs>
-        <param name="input_file" type="data" format="txt" label="Text to analyze" help="Input text file (abstract/publication/parsed pdf)." />
-        <expand macro="model_selector" modality="text"/>
-        <conditional name="analysis_purpose">
-            <param name="method" type="select" label="Purpose of the analysis.">
-                <option value="relationships_chemicals">Identify chemicals and relationships</option>
-                <option value="relationships">Identify relationships, provide your own chemicals</option>
-                <option value="chemicals">Identify chemicals</option>
+        <conditional name="input_source">
+            <param name="input_mode" type="select" label="Input type" help="Choose whether to analyze one text file or every text file in a collection.">
+                <option value="single" selected="true">Single text file</option>
+                <option value="collection">Text collection</option>
             </param>
-
-            <when value="relationships_chemicals">
-                <expand macro="effects"/>
-                <expand macro="prompt_specification"/>
-                <expand macro="relationship_types"/>
+            <when value="single">
+                <param name="input_file" type="data" format="txt" label="Text to analyze" help="Input text file (abstract/publication/parsed pdf)."/>
+                <expand macro="model_selector" modality="text"/>
+                <conditional name="analysis_purpose">
+                    <param name="method" type="select" label="Purpose of the analysis.">
+                        <option value="relationships_chemicals">Identify chemicals and relationships</option>
+                        <option value="relationships">Identify relationships, provide your own chemicals</option>
+                        <option value="chemicals">Identify chemicals</option>
+                    </param>
+                    <when value="relationships_chemicals">
+                        <expand macro="effects"/>
+                        <expand macro="prompt_specification"/>
+                        <expand macro="relationship_types"/>
+                    </when>
+                    <when value="relationships">
+                        <expand macro="effects"/>
+                        <expand macro="prompt_specification"/>
+                        <expand macro="relationship_types"/>
+                        <param name="chemicals" type="data" format="tabular" label="Chemicals" help="Input TSV with chemicals."/>
+                    </when>
+                    <when value="chemicals"/>
+                </conditional>
             </when>
-
-            <when value="relationships">
-                <expand macro="effects"/>
-                <expand macro="prompt_specification"/>
-                <expand macro="relationship_types"/>
-                <param name="chemicals" type="data" format="tabular" label="Chemicals" help="Input TSV with chemicals." />
+            <when value="collection">
+                <param name="input_collection" type="data_collection" collection_type="list" format="txt" label="Texts to analyze" help="Input collection of text files (abstracts/publications/parsed pdfs)."/>
+                <expand macro="model_selector" modality="text"/>
+                <conditional name="analysis_purpose">
+                    <param name="method" type="select" label="Purpose of the analysis.">
+                        <option value="relationships_chemicals">Identify chemicals and relationships</option>
+                        <option value="relationships">Identify relationships, provide your own chemicals</option>
+                        <option value="chemicals">Identify chemicals</option>
+                    </param>
+                    <when value="relationships_chemicals">
+                        <expand macro="effects"/>
+                        <expand macro="prompt_specification"/>
+                        <expand macro="relationship_types"/>
+                    </when>
+                    <when value="relationships">
+                        <expand macro="effects"/>
+                        <expand macro="prompt_specification"/>
+                        <expand macro="relationship_types"/>
+                        <param name="chemicals" type="data_collection" collection_type="list" format="tabular" label="Chemicals" help="Input collection of TSV files with chemicals."/>
+                    </when>
+                    <when value="chemicals"/>
+                </conditional>
             </when>
-
-            <when value="chemicals"/>
         </conditional>
     </inputs>
-
     <outputs>
-        <data name="relationships" format="tabular" from_work_dir="relationships.tsv" label="Relationships identified in text.">
-            <filter>analysis_purpose['method'] != 'chemicals'</filter>
+        <data name="relationships" format="tabular" from_work_dir="relationships.tsv" label="$input_file.element_identifier">
+            <filter>input_source['input_mode'] == 'single' and input_source['analysis_purpose']['method'] != 'chemicals'</filter>
         </data>
-        <data name="chemicals" format="tabular" from_work_dir="chemicals.tsv" label="Chemicals identified in text.">
-            <filter>analysis_purpose['method'] != 'relationships'</filter>
+        <collection name="relationships_collection" type="list" label="Relationships identified in $on_string" format="tabular">
+            <filter>input_source['input_mode'] == 'collection' and input_source['analysis_purpose']['method'] != 'chemicals'</filter>
+            <discover_datasets pattern="(?P&lt;designation&gt;.*)\.tsv$" directory="relationships" ext="tabular"/>
+        </collection>
+        <data name="chemicals" format="tabular" from_work_dir="chemicals.tsv" label="$input_file.name">
+            <filter>input_source['input_mode'] == 'single' and input_source['analysis_purpose']['method'] != 'relationships'</filter>
         </data>
+        <collection name="chemicals_collection" type="list" label="Chemicals identified in $on_string" format="tabular">
+            <filter>input_source['input_mode'] == 'collection' and input_source['analysis_purpose']['method'] != 'relationships'</filter>
+            <discover_datasets pattern="(?P&lt;designation&gt;.*)\.tsv$" directory="chemicals" ext="tabular"/>
+        </collection>
     </outputs>
-
     <tests>
         <test expect_num_outputs="2" expect_test_failure="true">
-            <param name="model_selector|model_source" value="custom"/>
-            <param name="model_selector|credential_agreement" value="True"/>
-            <param name="model_selector|server_url" value="dummy"/>
-            <param name="model_selector|model" value="qwen-3.5"/>
-            <param name="input_file" value="text.txt"/>
-            <conditional name="analysis_purpose">
+            <param name="input_source|input_mode" value="single"/>
+            <param name="input_source|input_file" value="text.txt"/>
+            <param name="input_source|model_selector|model_source" value="custom"/>
+            <param name="input_source|model_selector|credential_agreement" value="True"/>
+            <param name="input_source|model_selector|server_url" value="dummy"/>
+            <param name="input_source|model_selector|model" value="qwen-3.5"/>
+            <conditional name="input_source|analysis_purpose">
                 <param name="method" value="relationships_chemicals"/>
                 <repeat name="effects">
                     <param name="effect" value="liver fibrosis"/>
@@ -152,14 +262,15 @@ write_chemicals(chemicals)
             <output name="chemicals" file="chemicals.tsv" compare="sim_size" delta="100"/>
         </test>
         <test expect_num_outputs="1" expect_test_failure="true">
-            <param name="model_selector|model_source" value="custom"/>
-            <param name="model_selector|credential_agreement" value="True"/>
-            <param name="model_selector|server_url" value="dummy"/>
-            <param name="model_selector|model" value="qwen-3.5"/>
-            <param name="input_file" value="text.txt"/>
-            <conditional name="analysis_purpose">
-                    <param name="method" value="relationships"/>
-                    <param name="chemicals" value="chemicals.tsv"/>
+            <param name="input_source|input_mode" value="single"/>
+            <param name="input_source|input_file" value="text.txt"/>
+            <param name="input_source|model_selector|model_source" value="custom"/>
+            <param name="input_source|model_selector|credential_agreement" value="True"/>
+            <param name="input_source|model_selector|server_url" value="dummy"/>
+            <param name="input_source|model_selector|model" value="qwen-3.5"/>
+            <conditional name="input_source|analysis_purpose">
+                <param name="method" value="relationships"/>
+                <param name="chemicals" value="chemicals.tsv"/>
                 <repeat name="effects">
                     <param name="effect" value="liver fibrosis"/>
                 </repeat>
@@ -168,27 +279,72 @@ write_chemicals(chemicals)
             <output name="relationships" file="relationships.tsv" compare="sim_size" delta="100"/>
         </test>
         <test expect_num_outputs="1" expect_test_failure="true">
-            <param name="model_selector|model_source" value="custom"/>
-            <param name="model_selector|credential_agreement" value="True"/>
-            <param name="model_selector|server_url" value="dummy"/>
-            <param name="model_selector|model" value="qwen-3.5"/>
-            <param name="input_file" value="text.txt"/>
-                <conditional name="analysis_purpose">
+            <param name="input_source|input_mode" value="single"/>
+            <param name="input_source|input_file" value="text.txt"/>
+            <param name="input_source|model_selector|model_source" value="custom"/>
+            <param name="input_source|model_selector|credential_agreement" value="True"/>
+            <param name="input_source|model_selector|server_url" value="dummy"/>
+            <param name="input_source|model_selector|model" value="qwen-3.5"/>
+            <conditional name="input_source|analysis_purpose">
                 <param name="method" value="chemicals"/>
             </conditional>
             <output name="chemicals" file="chemicals.tsv" compare="sim_size" delta="100"/>
         </test>
         <test expect_num_outputs="1" expect_test_failure="true">
-            <param name="model_selector|model_source" value="builtin"/>
-            <param name="model_selector|model" value="gpt-oss-120b"/>
-            <param name="input_file" value="text.txt"/>
-            <conditional name="analysis_purpose">
+            <param name="input_source|input_mode" value="single"/>
+            <param name="input_source|input_file" value="text.txt"/>
+            <param name="input_source|model_selector|model_source" value="builtin"/>
+            <param name="input_source|model_selector|model" value="gpt-oss-120b"/>
+            <conditional name="input_source|analysis_purpose">
                 <param name="method" value="chemicals"/>
             </conditional>
-            <output name="chemicals" file="chemicals.tsv" compare="sim_size" delta="100"/>            
+            <output name="chemicals" file="chemicals.tsv" compare="sim_size" delta="100"/>
+        </test>
+        <test expect_num_outputs="1" expect_test_failure="true">
+            <param name="input_source|input_mode" value="collection"/>
+            <param name="input_source|input_collection">
+                <collection type="list">
+                    <element name="text_1" value="text.txt"/>
+                    <element name="text_2" value="text.txt"/>
+                </collection>
+            </param>
+            <param name="input_source|model_selector|model_source" value="custom"/>
+            <param name="input_source|model_selector|credential_agreement" value="True"/>
+            <param name="input_source|model_selector|server_url" value="dummy"/>
+            <param name="input_source|model_selector|model" value="qwen-3.5"/>
+            <conditional name="input_source|analysis_purpose">
+                <param name="method" value="chemicals"/>
+            </conditional>
+            <output_collection name="chemicals_collection" type="list" count="2"/>
+        </test>
+        <test expect_num_outputs="1" expect_test_failure="true">
+            <param name="input_source|input_mode" value="collection"/>
+            <param name="input_source|input_collection">
+                <collection type="list">
+                    <element name="text_1" value="text.txt"/>
+                    <element name="text_2" value="text.txt"/>
+                </collection>
+            </param>
+            <param name="input_source|model_selector|model_source" value="custom"/>
+            <param name="input_source|model_selector|credential_agreement" value="True"/>
+            <param name="input_source|model_selector|server_url" value="dummy"/>
+            <param name="input_source|model_selector|model" value="qwen-3.5"/>
+            <conditional name="input_source|analysis_purpose">
+                <param name="method" value="relationships"/>
+                <param name="chemicals">
+                    <collection type="list">
+                        <element name="chemicals_1" value="chemicals.tsv"/>
+                        <element name="chemicals_2" value="chemicals.tsv"/>
+                    </collection>
+                </param>
+                <repeat name="effects">
+                    <param name="effect" value="liver fibrosis"/>
+                </repeat>
+                <param name="relationship_types" value="causative"/>
+            </conditional>
+            <output_collection name="relationships_collection" type="list" count="2"/>
         </test>
     </tests>
-
     <help><![CDATA[
 Identify Relationships Between Chemicals and Biological Effects
 ===============================================================
@@ -202,9 +358,7 @@ Additional Information
 - **Prompt specification**: The LLM is preconfigured to identify relationships between chemicals and biological effects. You can further refine the analysis by specifying additional constraints—such as limiting results to a particular measurement method or experimental setup. Simply describe your requirements in the prompt, and the model will try to tailor the output accordingly.
 
     ]]></help>
-
     <citations>
         <citation type="doi">10.5281/zenodo.20036704</citation>
     </citations>
-
 </tool>
