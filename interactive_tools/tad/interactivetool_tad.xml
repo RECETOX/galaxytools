@@ -1,0 +1,58 @@
+<tool id="interactive_tool_tad" tool_type="interactive" name="Tad" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="21.05">
+    <description>tadweb-server application to view and manipulate tabular data</description>
+    <icon src="tad.png"/>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="creator"/>
+
+    <requirements>
+        <container type="docker">recetox/tad:@TOOL_VERSION@</container>
+    </requirements>
+
+    <entry_points>
+        <entry_point name="tad-gxit" requires_domain="True">
+            <port>8765</port>
+            <url>/tadweb-app/index.html</url>
+        </entry_point>
+    </entry_points>
+
+    <environment_variables>
+        <!-- These will be accessible as environment variables inside the Docker container -->
+        <environment_variable name="GALAXY_WEB_PORT">8080</environment_variable>
+        <environment_variable name="GALAXY_URL">$__galaxy_url__</environment_variable>
+    </environment_variables>
+
+    <command><![CDATA[
+        ## Symlink or copy the galaxy input files into the TAD server directory
+        JOB_DIR=\$PWD &&
+        #for $file in $infiles:
+            ## We use the element_identifier (the name of the file in Galaxy history) 
+            ## to give it a sensible name, ensuring it ends with .csv
+            ln -s '$file' '${file.name}.${file.ext}' &&
+        #end for
+        cd /app/tad/packages/tadweb-server &&
+        
+        ## Run the server
+        npm start -- -d \$JOB_DIR > $logfile 2>&1
+    ]]>
+    </command>
+
+    <inputs>
+        <param name="infiles" type="data" format="csv,tabular,tsv,parquet" multiple="true" label="Select one or more tabular datasets, or a dataset collection." help="Must be in CSV/tabular format."/>
+    </inputs>
+
+    <outputs>
+        <data name="logfile" format="txt"/>
+    </outputs>
+
+    <tests>
+    <!-- Currently does not have tests. -->
+    </tests>
+
+
+    <help>Tadviewer is a web-based adaptation of the Tad desktop application created by Antony Courtney: https://github.com/antonycourtney/tad
+          It enables viewing of tabular data from the Galaxy instance with built-in support of SQL features. 
+          This galaxy interactive tool is mainatained by RECETOX organization: https://github.com/RECETOX/tad </help>
+
+</tool>
