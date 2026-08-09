@@ -1,0 +1,185 @@
+<tool id="recetox_aplcms_parse_parameters" name="recetox-aplcms - parse parameters" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="20.01" license="MIT" tool_type="expression">
+    <description>tool to parse parameters from a csv row for parameter searches, to be used in workflows only.</description>
+
+    <macros>
+        <token name="@TOOL_VERSION@">0.1.0</token>
+        <token name="@VERSION_SUFFIX@">0</token>
+    </macros>
+
+    <edam_operations>
+        <edam_operation>operation_1812</edam_operation>
+    </edam_operations>
+
+    <edam_topics>
+        <edam_topic>topic_3316</edam_topic>
+        <edam_topic>topic_3071</edam_topic>
+    </edam_topics>
+
+    <expression type="ecma5.1"><![CDATA[{
+        // Expected column names
+        var expectedColumnNames = [
+            "min_run",
+            "sigma_lower",
+            "sigma_higher",
+            "min_sd",
+            "max_sd",
+            "mz_tol",
+            "weighting",
+            "min_pres",
+            "group_threshold"
+        ];
+
+        // Validate column names
+        var columnNames = $job.row.metadata.column_names;
+        if (columnNames.length !== expectedColumnNames.length) {
+            throw new Error("Column count does not match expected count.");
+        }
+        for (var i = 0; i < columnNames.length; i++) {
+            if (columnNames[i] !== expectedColumnNames[i]) {
+                throw new Error("Column names do not match expected names.");
+            }
+        }
+
+        // Read the input CSV file
+        var data = $job.row.contents;
+
+        // Split the data into lines
+        var lines = data.trim().split('\n');
+
+        // Get the header and the first data row
+        var header = lines[0].split(',');
+        var row = lines[1].split(',');
+
+        // Create a dictionary with column names as keys and row values as values
+        var result = {};
+        for (var i = 0; i < header.length; i++) {
+            result[header[i]] = row[i];
+        }
+
+        // Validate that the float parameters are valid float values
+        var floatParams = ["min_run", "sigma_lower", "sigma_higher", "min_sd", "max_sd", "mz_tol", "min_pres", "group_threshold"];
+        for (var i = 0; i < floatParams.length; i++) {
+            var param = floatParams[i];
+            if (isNaN(parseFloat(result[param]))) {
+                throw new Error("Parameter " + param + " does not contain a valid float value.");
+            }
+        }
+        
+        var weighting;
+        if (result['weighting'] == 'true') {
+            weighting = true;
+        } else {
+            weighting = false;
+        }
+
+        return {
+            'min_run': parseFloat(result['min_run']),
+            'sigma_lower': parseFloat(result['sigma_lower']),
+            'sigma_higher': parseFloat(result['sigma_higher']),
+            'min_sd': parseFloat(result['min_sd']),
+            'max_sd': parseFloat(result['max_sd']),
+            'mz_tol': parseFloat(result['mz_tol']),
+            'weighting': weighting,
+            'min_pres': parseFloat(result['min_pres']),
+            'group_threshold': parseFloat(result['group_threshold'])
+        };
+    }]]></expression>
+
+    <inputs>
+        <param argument="--row" type="data" format="csv" label="Row of a CSV with the parameters, with header." help="Header has to be: [min_run,sigma_lower,sigma_higher,min_sd,max_sd,mz_tol,weighting,min_pres,group_threshold
+]" load_contents="64000"/>
+    </inputs>
+    <outputs>
+        <output name="min_run" type="float" label="min_run of ${on_string}" from="min_run" />
+        <output name="sigma_lower" type="float" label="sigma_lower of ${on_string}" from="sigma_lower" />
+        <output name="sigma_higher" type="float" label="sigma_higher of ${on_string}" from="sigma_higher" />
+        <output name="min_sd" type="float" label="min_sd of ${on_string}" from="min_sd" />
+        <output name="max_sd" type="float" label="max_sd of ${on_string}" from="max_sd" />
+        <output name="mz_tol" type="float" label="mz_tol of ${on_string}" from="mz_tol" />
+        <output name="weighting" type="boolean" label="weighting of ${on_string}" from="weighting" />
+        <output name="min_pres" type="float" label="min_pres of ${on_string}" from="min_pres" />
+        <output name="group_threshold" type="float" label="group_threshold of ${on_string}" from="group_threshold" />
+    </outputs>
+    <tests>
+        <!-- Hint: You can use [ctrl+alt+t] after defining the inputs/outputs to auto-scaffold some basic test cases. -->
+         
+    <test>
+        <!--TODO: auto-generated test case. Please fill in the required values-->
+        <param name="row" value="parse_parameters/test.csv"/>
+        <output name="min_run">
+            <assert_contents>
+                <has_text text="3.1"/>
+            </assert_contents>
+        </output>
+        <output name="sigma_lower">
+            <assert_contents>
+                <has_text text="0.5"/>
+            </assert_contents>
+        </output>
+        <output name="sigma_higher">
+            <assert_contents>
+                <has_text text="1.5"/>
+            </assert_contents>
+        </output>
+        <output name="min_sd">
+            <assert_contents>
+                <has_text text="0.1"/>
+            </assert_contents>
+        </output>
+        <output name="max_sd">
+            <assert_contents>
+                <has_text text="0.9"/>
+            </assert_contents>
+        </output>
+        <output name="mz_tol">
+            <assert_contents>
+                <has_text text="0.01"/>
+            </assert_contents>
+        </output>
+        <output name="weighting">
+            <assert_contents>
+                <has_text text="true"/>
+            </assert_contents>
+        </output>
+        <output name="min_pres">
+            <assert_contents>
+                <has_text text="0.8"/>
+            </assert_contents>
+        </output>
+        <output name="group_threshold">
+            <assert_contents>
+                <has_text text="0.7"/>
+            </assert_contents>
+        </output>
+    </test>
+    </tests>
+    <help><![CDATA[
+
+.. class:: infomark
+
+**What it does**
+
+This tool parses parameters from a CSV row for parameter searches. It splits the CSV file into separate files for each column, excluding the header. This tool is intended to be used in workflows only.
+
+Usage
+.....
+
+**Input**
+
+- **Row of a CSV with the parameters, with header**: The input CSV file containing the parameters. The header row should contain the column names.
+
+**Output**
+
+- **min_run**: The minimum run value extracted from the specified column.
+- **sigma_lower**: The sigma lower value extracted from the specified column.
+- **sigma_higher**: The sigma higher value extracted from the specified column.
+- **min_sd**: The minimum standard deviation value extracted from the specified column.
+- **max_sd**: The maximum standard deviation value extracted from the specified column.
+- **mz_tol**: The mz tolerance value extracted from the specified column.
+- **weighting**: The weighting value extracted from the specified column.
+- **min_pres**: The minimum presence value extracted from the specified column.
+- **group_threshold**: The group threshold value extracted from the specified column.
+    ]]></help>
+    <citations>
+    </citations>
+</tool>
