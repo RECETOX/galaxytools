@@ -1,0 +1,184 @@
+<tool id="rdkit_structsim" name="RDKit structural similarity" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="23.0" license="MIT">
+    <description>calculate structural similarity using RDKit fingerprints from SMILES/InChI/SDF files</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <!-- Creator metadata -->
+    <expand macro="creator"/>
+    <!-- EDAM operations and topics -->
+    <expand macro="edam"/>
+    <expand macro="bio.tools"/>
+    <!-- Requirements -->
+    <requirements>
+        <requirement type="package" version="@TOOL_VERSION@">rdkit</requirement>
+    </requirements>
+    <!-- Required files -->
+    <required_files>
+        <include path="rdkit_structsim_wrapper.py"/>
+    </required_files>
+    <!-- Command section -->
+    <command detect_errors="exit_code"><![CDATA[
+        python3 '$__tool_directory__/rdkit_structsim_wrapper.py'
+            --queries '$queries'
+            --queries-type '$queries.ext'
+            --references '$references'
+            --references-type '$references.ext'
+            --similarity-metric '$similarity_metric'
+            --fingerprint-type '$fingerprint_type'
+            --output '$scores_out'
+    ]]></command>
+    <!-- Inputs -->
+    <inputs>
+        <param label="Query structures" name="queries" type="data" format="smi,inchi,sdf" help="Query compounds to compare. Supported formats: SMI (SMILES), INCHI (InChI), or SDF."/>
+        <param label="Reference structures" name="references" type="data" format="smi,inchi,sdf" help="Reference compounds to compare against. Supported formats: SMI (SMILES), INCHI (InChI), or SDF."/>
+        <expand macro="fingerprint_types"/>
+        <expand macro="similarity_metrics"/>
+    </inputs>
+    <!-- Outputs -->
+    <outputs>
+        <data label="${similarity_metric} similarity scores from ${on_string}" name="scores_out" format="tabular"/>
+    </outputs>
+    <!-- Tests -->
+    <tests>
+        <test>
+            <param name="queries" value="queries.sdf" ftype="sdf"/>
+            <param name="references" value="references.sdf" ftype="sdf"/>
+            <param name="fingerprint_type" value="Morgan"/>
+            <param name="similarity_metric" value="tanimoto"/>
+            <output name="scores_out" value="output_tanimoto_morgan.tsv" ftype="tabular"/>
+        </test>
+        <test>
+            <param name="queries" value="queries.inchi" ftype="inchi"/>
+            <param name="references" value="references.sdf" ftype="sdf"/>
+            <param name="fingerprint_type" value="RDKit"/>
+            <param name="similarity_metric" value="dice"/>
+            <output name="scores_out" value="output_dice_rdkit.tsv" ftype="tabular"/>
+        </test>
+        <test>
+            <param name="queries" value="queries.sdf" ftype="sdf"/>
+            <param name="references" value="references.smi" ftype="smi"/>
+            <param name="fingerprint_type" value="MACCS"/>
+            <param name="similarity_metric" value="cosine"/>
+            <output name="scores_out" value="output_cosine_maccs.tsv" ftype="tabular"/>
+        </test>
+    </tests>
+    <!-- Help -->
+    <help><![CDATA[
+**RDKit Structural Similarity Calculator**
+
+Description
+-----------
+This tool calculates structural similarity between compounds using RDKit molecular fingerprints.
+It accepts SMILES (.smi), InChI (.inchi), or SDF (.sdf) files. The tool automatically detects
+whether structures are SMILES or InChI format and ignores header lines and comments.
+
+The output is a tab-separated table with three columns: similarity score, query structure,
+and reference structure.
+
+Molecular fingerprints provide a digital representation of chemical structures that can be
+compared using various similarity metrics. This allows for rapid assessment of structural
+relatedness between compounds.
+
+Inputs
+------
+- **Query structures**: File containing query compounds in SMI, INCHI, or SDF format
+- **Reference structures**: File containing reference/library compounds
+- **Fingerprint type**: The type of molecular fingerprint to generate
+- **Similarity metric**: The mathematical measure used to compare fingerprints
+
+Input File Formats
+------------------
+
+**SMI Format (SMILES)**
+One SMILES string per line, optionally followed by tab-separated name/comment.
+Lines starting with # are treated as comments and ignored.
+
+Example:
+
+::
+
+    CC(=O)Oc1ccccc1C(O)=O    Aspirin
+    Cc1ccc(cc1)C(=O)O       p-Toluenecarboxylic acid
+
+**INCHI Format**:
+One InChI string per line. Lines starting with # are treated as comments.
+
+Example:
+
+::
+
+    InChI=1S/C9H8O4/c1-6(10)13-8-5-3-2-4-7(8)9(11)12/h2-5H,1H3,(H,11,12)
+    InChI=1S/C8H8O2/c1-7(9)5-6-8(2)10/h5-6H,1H3,(H,9,10)
+
+**SDF Format**:
+Structure Data File format containing one or more molecular structures.
+The tool extracts SMILES representations from each structure in the file.
+
+Parameters
+----------
+
+**Fingerprint Types**:
+
+- **Morgan**: Circular fingerprints (ECFP-like), radius=2, 2048 bits. Best for general purpose use.
+- **RDKit**: Path-based fingerprints, max path=7, 2048 bits. Good for traditional substructure search.
+- **MACCS**: 166-bit key-based fingerprint. Fast screening with smaller size.
+
+**Similarity Metrics**:
+
+- **Tanimoto (Jaccard)** c / (a + b - c). Most common, good for binary fingerprints.
+- **Dice (Sokal)** 2c / (a + b). Emphasizes shared features.
+- **Cosine**: c / sqrt(a * b). Angle-based similarity.
+- **Soergel**: abs(a - b) / max(a, b). Similar to Bray-Curtis dissimilarity.
+- **Kulczynski**: 0.5 * (c / a + c / b). Balanced ratio measure.
+- **McConnaughey**: (c - a * b / n) / (a + b - a * b / n). Corrects for chance similarity.
+
+Where:
+
+- ``a`` = bits set in fingerprint 1
+- ``b`` = bits set in fingerprint 2
+- ``c`` = bits set in both fingerprints
+
+Outputs
+-------
+**Similarity results (TSV)**: A tab-separated table with three columns:
+
+1. **similarity**: The calculated similarity score (0.0 to 1.0)
+2. **query_structure**: The structure string (SMILES) from the query dataset
+3. **reference_structure**: The structure string (SMILES) from the reference dataset
+
+Each row represents one pairwise comparison between a query and reference compound.
+
+Examples
+--------
+
+**Example 1: Compare compounds from SMI files**
+
+- Query file: queries.smi (SMILES format)
+- Reference file: library.smi (SMILES format)
+- Fingerprint: Morgan (default)
+- Metric: Tanimoto (default)
+
+**Example 2: Compare compounds from SDF files**
+
+- Query file: queries.sdf
+- Reference file: library.sdf
+- Fingerprint: MACCS (for faster computation)
+- Metric: Dice
+
+References
+----------
+[1] RDKit: Open-source cheminformatics software. http://www.rdkit.org
+
+[2] Landrum G. (2013). RDKit Documentation.
+
+[3] Rogers D., Hahn M. (2010). Extended-connectivity fingerprints. J Chem Inf Model. 50(5):742-54.
+
+[4] Dalby A. et al. (1990). Description of several chemical structure fingerprints.
+    In: Proceedings of the ACS national meeting.
+
+[5] InChI Trust. International Chemical Identifier (InChI). https://www.inchi-trust.org/
+
+]]></help>
+    <!-- Citations -->
+    <expand macro="citations"/>
+</tool>

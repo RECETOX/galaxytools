@@ -1,0 +1,65 @@
+<macros>
+    <token name="@TOOL_VERSION@">2026.03.3</token>
+    <token name="@VERSION_SUFFIX@">0</token>
+
+    <xml name="creator">
+        <creator>
+            <yield/>
+            <person givenName="Helge" familyName="Hecht" url="https://github.com/hechth" identifier="0000-0001-6744-996X"/>
+            <organization url="https://www.recetox.muni.cz/" email="GalaxyToolsDevelopmentandDeployment@space.muni.cz" name="RECETOX MUNI"/>
+        </creator>
+    </xml>
+
+    <xml name="bio.tools">
+        <xrefs>
+            <xref type="bio.tools">RDKit</xref>
+        </xrefs>
+    </xml>
+
+    <xml name="edam">
+        <edam_topics>
+            <edam_topic>topic_2258</edam_topic>
+            <edam_topic>topic_0091</edam_topic>
+        </edam_topics>
+        <edam_operations>
+            <edam_operation>operation_2483</edam_operation>
+        </edam_operations>
+    </xml>
+
+    <xml name="citations">
+        <citations>
+            <citation type="bibtex">
+@article{RDKit_2024,
+    author = {Landrum, Gregory and others},
+    title = {{RDKit: Open-source cheminformatics}},
+    year = {2024},
+    url = {https://www.rdkit.org}
+}
+            </citation>
+            <citation type="doi">10.1186/1758-2946-3-33</citation>
+        </citations>
+    </xml>
+
+    <xml name="fingerprint_types">
+        <param label="Fingerprint type" name="fingerprint_type" type="select" display="radio"
+            help="Type of molecular fingerprint to use for similarity calculation.">
+            <option value="Morgan" selected="true">Morgan (ECFP-like)</option>
+            <option value="RDKit">RDKit (Path-based)</option>
+            <option value="MACCS">MACCS Keys</option>
+        </param>
+    </xml>
+
+    <xml name="similarity_metrics">
+        <param label="Similarity metric" name="similarity_metric" type="select" display="radio"
+            help="Distance measure to compute structural similarity between molecular fingerprints.">
+            <option value="tanimoto" selected="true">Tanimoto (Jaccard)</option>
+            <option value="dice">Dice (Sokal)</option>
+            <option value="cosine">Cosine</option>
+            <option value="soergel">Soergel</option>
+            <option value="kulczynski">Kulczynski</option>
+            <option value="mcconnaughey">McConnaughey</option>
+        </param>
+    </xml>
+
+
+</macros>
