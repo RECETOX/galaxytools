@@ -1,4 +1,4 @@
-<tool id="bioconductor_scp" name="bioconductor-scp" version="@TOOL_VERSION@+galaxy1" profile="23.0">
+<tool id="bioconductor_scp" name="bioconductor-scp" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="23.0">
     <description>single cell proteomics data analysis workflow</description>
     <macros>
         <import>macros.xml</import>
