@@ -10,7 +10,7 @@
     <requirements>
         <requirement type="package" version="@TOOL_VERSION@">bioconductor-scp</requirement>
         <requirement type="package" version="1.84.0">bioconductor-impute</requirement>
-        <requirement type="package" version="3.54.0">bioconductor-sva</requirement>
+        <requirement type="package" version="3.58.0">bioconductor-sva</requirement>
         <requirement type="package" version="1.38.0">bioconductor-scater</requirement>
     </requirements>
     <required_files>
@@ -19,7 +19,7 @@
     <expand macro="creator" />
     <command detect_errors="aggressive"><![CDATA[
     echo ${run_script} &&
-    Rscript  -e 'source("${__tool_directory__}/utils.r")' -e 'source("${run_script}")'
+    Rscript -e 'source("${__tool_directory__}/utils.r")' -e 'source("${run_script}")'
     #if $data_export.export_R_script
     && cat ${run_script} >> $script
     #end if
@@ -123,7 +123,7 @@
                            refPattern = "Reference")
         #end if
 
-        scp <- scp::aggregateFeaturesOverAssays(
+        scp <- QFeatures::aggregateFeatures(
             scp,
             i = 1:number_of_assays,
             fcol = fcol_aggregation_pep,
@@ -234,7 +234,7 @@
         scp <- QFeatures::filterNA(scp, i = "peptides_log", pNA = pNA)
         #end if
 
-        scp <- scp::aggregateFeaturesOverAssays(
+        scp <- QFeatures::aggregateFeatures(
             scp,
             i = "peptides_log",
             fcol = fcol_aggregation_prot,
@@ -336,6 +336,13 @@
 
         #if $dimensionality_reduction.PCA_computation.run_PCA == "yes"
         PCA_color <- colnames(metadata)[$dimensionality_reduction.PCA_computation.pca_coloring]
+
+        scp[["proteins_batchC"]] <- SingleCellExperiment::SingleCellExperiment(
+            assays = list(assay = SummarizedExperiment::assay(scp[["proteins_batchC"]], "assay")),
+            colData = SummarizedExperiment::colData(scp[["proteins_batchC"]]),
+            rowData = SummarizedExperiment::rowData(scp[["proteins_batchC"]])
+        )
+
         scp[["proteins_batchC"]] <- scater::runPCA(
             scp[["proteins_batchC"]],
             ncomponents = ${dimensionality_reduction.PCA_computation.ncomponents_PCA},
