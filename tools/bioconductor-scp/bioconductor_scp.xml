@@ -449,7 +449,7 @@
                 <assert_contents>
                     <has_n_lines n="90"/>
                     <has_text text="E9PAV3"/>
-                    <has_size size="625000" delta="20"/>
+                    <has_size size="39105" delta="20"/>
                 </assert_contents>
             </output>
         </test>
@@ -493,7 +493,7 @@
             </output_collection>
             <output name="Processed_data">
                 <assert_contents>
-                    <has_size size="625000" delta="20"/>
+                    <has_size size="39105" delta="20"/>
                     <has_n_lines n="90"/>
                     <has_text text="E9PAV3"/>
                 </assert_contents>
@@ -531,7 +531,7 @@
             <output_collection name="intermediate_outputs" type="list" count="6"/>
             <output name="Processed_data">
                 <assert_contents>
-                    <has_size size="625000" delta="20"/>
+                    <has_size size="39105" delta="20"/>
                     <has_n_lines n="90"/>
                     <has_text text="E9PAV3"/>
                 </assert_contents>
@@ -569,14 +569,14 @@
             </section>
             <output name="Processed_data">
                 <assert_contents>
-                    <has_size size="625000" delta="20"/>
+                    <has_size size="39105" delta="20"/>
                     <has_n_lines n="90"/>
                     <has_text text="E9PAV3"/>
                 </assert_contents>
             </output>
             <output name="script">
                 <assert_contents>
-                    <has_n_lines n="271"/>
+                    <has_n_lines n="280"/>
                     <has_text text='ggplot2::ggsave(filename = file.path("plots", "PCA.pdf"), pca)'/>
                 </assert_contents>
             </output>
