@@ -30,7 +30,7 @@ from aoptk.normalization.provide_mesh_term_dataframe_from_xml import ProvideMesh
 chemicals = pd.read_csv("$input_file", sep="\t")
 col_name = chemicals.columns[int("$column_name") - 1]
 chemical_list = pd.read_csv("$chemical_list", sep="\t")
-chemical_col_name = chemicals.columns[int("$chemical_list_column_name") - 1]
+chemical_col_name = chemical_list.columns[int("$chemical_list_column_name") - 1]
 chemical_list = chemical_list[chemical_col_name].tolist()
 
 chemicals[col_name] = chemicals[col_name].apply(
