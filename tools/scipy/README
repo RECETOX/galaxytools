@@ -1,0 +1,35 @@
+Compute observed Pearson correlations, estimate a permutation null, and select an empirical FDR threshold
+for features to be considered statistically correlated wiht dilution factors.
+
+options:
+  -h, --help            
+  show this help message and exit
+
+  -i, --input INPUT     
+  Path to the tab-delimited intensity matrix input file.
+
+  -o, --output OUTPUT   
+  Path to save the intensity table with observed Pearson r and p values.
+
+  -p, --plot PLOT       
+  Path to save the diagnostic plot.
+
+  -c, --correlation_type 
+    Choose type of the correlation coefficient. Options: 
+        - Pearson correlation (pearson), default
+        - Spearman correlation (spearman)
+
+  -n, --n-permutations N_PERMUTATIONS
+  Number of random permutations to generate the null distribution.
+
+  -f, --target-fdr TARGET_FDR
+  Target empirical false discovery rate for threshold selection.
+
+  --seed SEED           
+  Random seed for permutation sampling.
+
+  --id-col ID_COL       
+  Name of the feature identifier column in the input table.
+
+  --results-dir RESULTS_DIR
+  Directory where output files will be saved. Defaults to a subfolder next to the input file.
