@@ -36,6 +36,15 @@
     ]]></command>
     <inputs>
         <param argument="--input" type="data" format="tsv,tabular" label="Intensity matrix input file." help="TODO" />
+        <param name="sample_metadata" type="data" format="tsv,tabular" label="Sample metadata input file." use_header_names="true" help="TODO" />
+        <param name="source_select" type="select" multiple="true" optional="false" label="Choose target factor">
+            <options from_dataset="sample_metadata">
+                <column name="name" index="1"/>
+                <column name="value" index="1"/>
+                <filter type="unique_value" column="1"/>
+                <filter type="remove_value" value="factor"/>
+            </options>
+        </param>
         <param argument="--id-col" type="data_column" data_ref="input" use_header_names="true"/>
         <param argument="--correlation-type" type="select" label="Correlation method" help="Select the correlation method to use.">
             <option value="pearson" selected="true">Pearson</option>
