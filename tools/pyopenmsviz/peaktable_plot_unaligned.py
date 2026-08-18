@@ -85,6 +85,7 @@ def main(argv=None):
         title=args.title,
         threshold=args.noise_threshold,
         signal_value=args.signal_value,
+        max_workers=1
     )
 
     output_html = args.output_html or os.path.join(

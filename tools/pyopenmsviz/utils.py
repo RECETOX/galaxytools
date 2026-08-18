@@ -1,5 +1,6 @@
 """Shared utility functions for pyopenmsviz interactive peak table plotting."""
 
+import itertools
 import math
 import colorsys
 from concurrent.futures import ProcessPoolExecutor, as_completed
@@ -7,6 +8,7 @@ from functools import partial
 import glob
 import json
 import os
+from pathlib import Path
 import re
 
 import numpy as np
@@ -95,6 +97,10 @@ def chunk_files(file_path, chunk_size):
             chunk_tuples.append((None, None))
         chunks.append(chunk_tuples)
     return chunks
+
+# def chunk_files(file_path, chunk_size):
+#     return list(map(lambda x: (x.suffix, x), itertools.batched(Path(file_path).glob('*'), n=chunk_size)))
+
 
 
 def compute_global_axes(file_path, threshold, signal_value):

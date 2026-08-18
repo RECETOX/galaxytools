@@ -1,0 +1,164 @@
+<tool id="plot_chromatograms" name="Plot EICs" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="25.1" license="MIT">
+    <description></description>
+    <macros>
+        <token name="@TOOL_VERSION@">1.0.0</token>
+        <token name="@VERSION_SUFFIX@">0</token>
+    </macros>
+    <requirements>
+        <requirement type="package" version="6.6.0">plotly</requirement>
+        <requirement type="package" version="23.0.1">pyarrow</requirement>
+        <requirement type="package" version="3.4.1">pyopenms</requirement>
+    </requirements>
+    <command detect_errors="exit_code"><![CDATA[
+        #for $f in $files:
+            ln -s '${f}' '${f.element_identifier}.${f.ext}' &&
+        #end for
+        python3 '${plot_chromatograms}'
+    ]]></command>
+    <configfiles>
+        <configfile name="plot_chromatograms"><![CDATA[
+import pandas as pd
+import os
+import pyarrow.parquet as pq
+from concurrent.futures import ProcessPoolExecutor
+from plotly.subplots import make_subplots
+import plotly.express as px
+import plotly.graph_objects as go
+import pyopenms as oms
+import numpy as np
+
+marker_filename = '$marker_filename'
+#set filenames = str("', '").join([str($f.element_identifier) + '.' + str($f.ext) for $f in $files])
+#set identifiers = str("', '").join([str($f.element_identifier) for $f in $files])
+filenames = ['$filenames']
+subplot_titles = ['$identifiers']
+template = "$template"
+
+cluster = int(os.getenv('GALAXY_SLOTS', 1))
+
+mz_tol_ppm = $mz_tol_ppm
+rt_tol_s = $rt_tol_s
+plots_per_row = $plots_per_row
+
+
+markers = pd.read_csv(marker_filename, sep='\t')
+
+# color assignment for a large number of variables:
+def get_colors(var, colorscale):
+    n_colors = var.nunique()
+    colors = px.colors.sample_colorscale(colorscale, [n/(n_colors -1) for n in range(n_colors)])
+    colordict = {f:colors[i] for i, f in enumerate(var.unique())}
+    return colordict
+
+def load_file(filename: str):
+    ext = os.path.splitext(filename)[1][1:].lower()
+    if ext == 'parquet':
+        eics = pd.read_parquet(filename)
+    elif ext == 'mzml':
+        exp = oms.MSExperiment()
+        oms.MzMLFile().load(filename, exp)
+        eics = exp.get_df(long=True).replace(0, np.nan).dropna(how='any').rename(columns={'RT':'rt', 'inty':'intensity'})
+    else:
+        raise ValueError(f"Unsupported file extension: {ext}")
+    
+    eics['Annotation'] = 'Unknown'
+    eics.sort_values(['rt'], inplace=True)
+
+    for _, marker in markers.iterrows():
+        mask = (
+            (eics['Annotation'] == 'Unknown') &
+            (eics['mz'] >= marker['mz'] - marker['mz'] * mz_tol_ppm * 1e-06) &
+            (eics['mz'] <= marker['mz'] + marker['mz'] * mz_tol_ppm * 1e-06) &
+            (eics['rt'] >= marker['rt'] - rt_tol_s) &
+            (eics['rt'] <= marker['rt'] + rt_tol_s)
+        )
+
+        eics.loc[mask, 'Annotation'] = marker['Compound Name']
+    return eics.drop(eics.loc[eics['Annotation'] == 'Unknown'].index)
+
+
+colordict = get_colors(markers['Compound Name'], 'phase')
+
+
+with ProcessPoolExecutor(max_workers=cluster) as executor:
+    samples = executor.map(load_file, filenames)
+
+n_files = len(filenames)
+n_rows = (n_files + plots_per_row - 1) // plots_per_row
+
+# Pad titles so the list matches the total number of subplot slots.
+
+fig = make_subplots(
+    rows=n_rows,
+    cols=plots_per_row,
+    subplot_titles=subplot_titles,
+    shared_xaxes='all',
+    shared_yaxes='all'
+)
+
+for i, eics in enumerate(samples):
+    row = i // plots_per_row + 1
+    col = i % plots_per_row + 1
+    grouped = eics.groupby('Annotation')
+
+    for name, group in grouped:
+        fig.add_trace(
+            go.Scatter(
+                x=group['rt'],
+                y=group['intensity'],
+                mode='lines',
+                name=name,
+                legendgroup=name,
+                line=dict(color=colordict[name]),
+                showlegend=(i == 0)
+            ),
+            row=row,
+            col=col
+        )
+
+fig.update_layout(template=template, xaxis_title="rt", yaxis_title="intensity")
+fig.write_html('plot.html')
+        ]]></configfile>
+    </configfiles>
+    <inputs>
+        <param argument="files" type="data" format="parquet,mzml" multiple="true" label="Input files" help="TODO" />
+        <param argument="marker_filename" type="data" format="csv,tsv,tabular" label="Marker table" help="TODO" />
+        <param name="mz_tol_ppm" type="integer" label="m/z Tolerance (ppm)" help="Mass-to-charge ratio tolerance in parts per million" value="5" min="1" max="100"/>
+        <param name="rt_tol_s" type="integer" label="Retention Time Tolerance (s)" help="Retention time tolerance in seconds" value="60" min="1" max="600"/>
+        <param name="plots_per_row" type="integer" label="Plots per Row" help="Number of plots per row in the subplot layout" value="2" min="1" max="10"/>
+        <param name="template" type="select" label="Plot Template" help="Select the template for the plot">
+            <option value="plotly_white" selected="true">Plotly White</option>
+            <option value="plotly_dark">Plotly Dark</option>
+            <option value="ggplot2">GGPlot2</option>
+        </param>
+    </inputs>
+    <outputs>
+        <data name="plot" format="html" label="Chromatogram plot" from_work_dir="plot.html" />
+    </outputs>
+    <tests>
+        <!-- Hint: You can use [ctrl+alt+t] after defining the inputs/outputs to auto-scaffold some basic test cases. -->
+    </tests>
+    <help><![CDATA[
+
+.. class:: infomark
+
+**What it does**
+
+TODO: Fill in help in reStructuredText format (https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html)
+
+Usage
+.....
+
+
+**Input**
+
+
+**Output**
+
+
+    ]]></help>
+    <citations>
+        <citation type="doi">10.1007/s13361-012-0516-6</citation>
+        <citation type="doi">10.5281/zenodo.14503524</citation>
+    </citations>
+</tool>
