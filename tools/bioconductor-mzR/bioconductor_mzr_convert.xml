@@ -1,7 +1,7 @@
 <tool id="bioconductor_mzr_convert" name="bioconductor-mzR convert" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="23.0" license="MIT">
     <description>mass spectrometry data conversion</description>
     <macros>
-        <token name="@TOOL_VERSION@">2.40.0</token>
+        <token name="@TOOL_VERSION@">2.44.0</token>
         <token name="@VERSION_SUFFIX@">0</token>
     </macros>
 

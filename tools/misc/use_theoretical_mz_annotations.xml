@@ -1,4 +1,4 @@
-<tool id="use_theoretical_mz_annotations" name="use theoretical m/z values" version="@TOOL_VERSION@+galaxy2" profile="23.0">
+<tool id="use_theoretical_mz_annotations" name="use theoretical m/z values" version="@TOOL_VERSION@+galaxy3" profile="23.0">
     <description>Overwrite experimentally measured mz values for peaks with theoretical values from peak comments.</description>
     <macros>
         <import>macros.xml</import>

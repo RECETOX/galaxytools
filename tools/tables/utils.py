@@ -76,7 +76,7 @@ def write_parquet(df: pd.DataFrame, file_path: str) -> None:
     df (pd.DataFrame): The dataframe to write.
     file_path (str): The path to the output Parquet file.
     """
-    df.to_parquet(file_path, index=False)
+    df.to_parquet(file_path, index=False, compression="snappy", engine="pyarrow")
 
 
 class StoreOutputAction(argparse.Action):

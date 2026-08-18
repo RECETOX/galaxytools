@@ -10,6 +10,8 @@ env:
   GALAXY_FORK: galaxyproject
   GALAXY_BRANCH: release_25.1
   MAX_CHUNKS: 40
+  OPENAI_API_KEY: ${{secrets.OPENAI_API_KEY }}
+  OPENAI_ENDPOINT_URL: https://llm.ai.e-infra.cz/v1
 jobs:
   setup:
     name: Setup cache and determine changed repositories
@@ -48,7 +50,7 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
     - name: Cache .cache/pip
-      uses: actions/cache@v4
+      uses: actions/cache@v5
       id: cache-pip
       with:
         path: ~/.cache/pip
@@ -92,7 +94,7 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
     - name: Cache .cache/pip
-      uses: actions/cache@v4
+      uses: actions/cache@v5
       id: cache-pip
       with:
         path: ~/.cache/pip
@@ -106,7 +108,7 @@ jobs:
         fail-level: error
         tool-list: ${{ needs.setup.outputs.tool-list }}
         additional-planemo-options: --biocontainers -s tests,output,inputs,help,general,command,citations,tool_xsd,version_bumped
-    - uses: actions/upload-artifact@v4
+    - uses: actions/upload-artifact@v7
       if: ${{ failure() }}
       with:
         name: 'Container report output'
@@ -129,7 +131,7 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
     - name: Cache .cache/pip
-      uses: actions/cache@v4
+      uses: actions/cache@v5
       id: cache-pip
       with:
         path: ~/.cache/pip
@@ -143,7 +145,7 @@ jobs:
         fail-level: warn
         tool-list: ${{ needs.setup.outputs.tool-list }}
         additional-planemo-options: -s version_bumped
-    - uses: actions/upload-artifact@v4
+    - uses: actions/upload-artifact@v7
       if: ${{ failure() }}
       with:
         name: 'Tool linting output'
@@ -179,13 +181,13 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
     - name: Cache .cache/pip
-      uses: actions/cache@v4
+      uses: actions/cache@v5
       id: cache-pip
       with:
         path: ~/.cache/pip
         key: pip_cache_py_${{ matrix.python-version }}_gxy_${{ needs.setup.outputs.galaxy-head-sha }}
     - name: Get number of CPU cores
-      uses: SimenB/github-actions-cpu-cores@v2
+      uses: SimenB/github-actions-cpu-cores@v3
       id: cpu-cores
     - name: Clean dotnet folder for space
       run: rm -Rf /usr/share/dotnet
@@ -203,7 +205,7 @@ jobs:
         galaxy-slots: ${{ steps.cpu-cores.outputs.count }}
         # Limit each test to 15 minutes
         test_timeout: 900
-    - uses: actions/upload-artifact@v4
+    - uses: actions/upload-artifact@v7
       with:
         name: 'Tool test output ${{ matrix.chunk }}'
         path: upload
@@ -222,14 +224,14 @@ jobs:
     # This job runs on Linux
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/download-artifact@v4
+    - uses: actions/download-artifact@v8
       with:
         path: artifacts
     - uses: actions/setup-python@v6
       with:
         python-version: ${{ matrix.python-version }}
     - name: Cache .cache/pip
-      uses: actions/cache@v4
+      uses: actions/cache@v5
       id: cache-pip
       with:
         path: ~/.cache/pip
@@ -241,7 +243,7 @@ jobs:
         mode: combine
         html-report: true
         markdown-report: true
-    - uses: actions/upload-artifact@v4
+    - uses: actions/upload-artifact@v7
       with:
         name: 'All tool test results'
         path: upload
