@@ -55,6 +55,12 @@ def build_parser():
         default=None,
         help="Optional output HTML path. Defaults next to input directory.",
     )
+    parser.add_argument(
+        "--num-workers",
+        default=-1,
+        type=int,
+        help="Number of threads to use for parallel processing."
+    )
     return parser
 
 
@@ -85,7 +91,7 @@ def main(argv=None):
         title=args.title,
         threshold=args.noise_threshold,
         signal_value=args.signal_value,
-        max_workers=1
+        max_workers=args.num_workers
     )
 
     output_html = args.output_html or os.path.join(

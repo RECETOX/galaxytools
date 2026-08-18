@@ -1,7 +1,7 @@
 <tool id="peaktable_plot_unaligned" name="peaktable plot unaligned" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="20.01" license="MIT">
     <description></description>
     <macros>
-        <token name="@TOOL_VERSION@">6.6.0</token>
+        <token name="@TOOL_VERSION@">6.9.0</token>
         <token name="@VERSION_SUFFIX@">0</token>
     </macros>
     <!-- TODO: please annotate this tool with topics and operations from http://edamontology.org -->
@@ -32,6 +32,7 @@
             --signal-value '$signal_value'
             --noise-threshold '$noise_threshold'
             --output-html '$plot'
+            --num-workers \${GALAXY_SLOTS:-1}
     ]]></command>
     <inputs>
         <param name="input_files" type="data_collection" format="mzml,parquet,csv,tsv,tabular" collection_type="list" label="Input files" help="TODO" />

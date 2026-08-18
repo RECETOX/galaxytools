@@ -5,7 +5,7 @@
         <token name="@VERSION_SUFFIX@">0</token>
     </macros>
     <requirements>
-        <requirement type="package" version="6.6.0">plotly</requirement>
+        <requirement type="package" version="6.9.0">plotly</requirement>
         <requirement type="package" version="23.0.1">pyarrow</requirement>
         <requirement type="package" version="3.4.1">pyopenms</requirement>
     </requirements>
