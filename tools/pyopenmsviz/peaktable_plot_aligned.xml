@@ -19,6 +19,7 @@
         <requirement type="package" version="@TOOL_VERSION@">plotly</requirement>
         <requirement type="package" version="23.0.1">pyarrow</requirement>
         <requirement type="package" version="5.0.1">pyteomics</requirement>
+        <requirement type="package" version="1.3.5">psims</requirement>
         <requirement type="package" version="3.1.6">jinja2</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
@@ -26,6 +27,8 @@
         #for $f in $input_files:
             ln -s '${f}' 'files/${f.element_identifier}.${f.ext}' &&
         #end for
+        ln -s '${annotation_path}' '${annotation_path.name}.${annotation_path.ext}' &&
+        ln -s '${markers_path}' '${markers_path.name}.${markers_path.ext}' &&
         python3 '${__tool_directory__}/peaktable_plot_aligned.py'
             --title 'Title'
             --raw-input-path 'files'
@@ -33,11 +36,13 @@
             --output-html '$plot'
             --cores-to-use \${GALAXY_SLOTS:-1}
             ${show_only_annotated}
-            ${markers_path}
-            ${intensity_path}
-            ${rt_path}
-            ${metadata_path}
-            ${annotation_path}
+            --markers-path '${markers_path.name}.${markers_path.ext}'
+            --intensity-path '${intensity_path}'
+            --rt-path '${rt_path}'
+            --metadata-path '${metadata_path}'
+            --annotation-path '${annotation_path.name}.${annotation_path.ext}'
+            --mz-tol-ppm ${mz_tol_ppm}
+            --rt-tol-s ${rt_tol_s}
     ]]></command>
     <inputs>
         <param name="input_files" type="data_collection" format="mzml" collection_type="list" label="Input files" help="TODO" />
@@ -48,6 +53,8 @@
         <param argument="--rt-path" type="data" format="parquet,csv" label="Aligned retention time table" help="TODO" />
         <param argument="--metadata-path" type="data" format="parquet,csv" label="Variable metadata table" help="TODO" />
         <param argument="--annotation-path" type="data" format="tabular,tsv,csv" label="Annotation table" help="TODO" />
+        <param argument="--mz-tol-ppm" type="integer" min="0" max="100" value="5" label="m/z tol [ppm]" help="TODO" />
+        <param argument="--rt-tol-s" type="float" min="0" max="100" value="10" label="rt tol [s]" help="TODO" />
     </inputs>
     <outputs>
         <data name="plot" format="html" label="${tool.name} on ${on_string}" />

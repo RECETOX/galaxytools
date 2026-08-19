@@ -477,11 +477,8 @@ def single_sample_eic(args):
     for name in compound_ions:
         compound_ions[name].sort()
 
-    try:
-        eics = load_file(fpath, markers, mz_tol_ppm, rt_tol_s)
-    except Exception as e:
-        print(f"[EIC] Skipping {fpath}: {e}")
-        return sample, {}
+    eics = load_file(fpath, markers, mz_tol_ppm, rt_tol_s)
+
 
     sample_dict = {}
     for compound, cdf in eics.groupby("Annotation"):
@@ -515,6 +512,7 @@ def compute_eic_data(raw_input_path: str, markers: pd.DataFrame, sample_names: l
     raw_files = {}
     for fname in os.listdir(raw_input_path):
         stem, ext = os.path.splitext(fname)
+        stem = Path(stem).stem
         if ext.lower() in supported_ext and stem in sample_names:
             raw_files[os.path.join(raw_input_path, fname)] = stem
 
@@ -529,35 +527,38 @@ def compute_eic_data(raw_input_path: str, markers: pd.DataFrame, sample_names: l
         futures = {executor.submit(single_sample_eic, args): args[1] for args in args_list}
         for future in as_completed(futures):
             sample_name = futures[future]
-            try:
-                sample, sample_dict = future.result()
-                eic_data[sample] = sample_dict
-                print(f"[EIC] Completed {sample_name}")
-            except Exception as e:
-                print(f"[EIC] Error in {sample_name}: {e}")
+            sample, sample_dict = future.result()
+            eic_data[sample] = sample_dict
+            print(f"[EIC] Completed {sample_name}")
+
 
     return eic_data
 
 
-def load_aligned_tables(intensity_path, rt_path, metadata_path, annotation_path, show_only_annotated=None):
+def load_aligned_tables(intensity_path:str, rt_path:str, metadata_path:str, annotation_path:str, aligned_tables_ext:str):
     """Load aligned table inputs and emit per-sample feature tables."""
-    if show_only_annotated is None:
-        raise ValueError("Show_only_annotated parameter is required")
-    if annotation_path is None:
-        raise ValueError("No annotation table provided. Please provide annotation_path.")
 
-    if intensity_path.endswith(".parquet") and rt_path.endswith(".parquet") and metadata_path.endswith(".parquet"):
+    if aligned_tables_ext == 'parquet':
         intensity_df = pd.read_parquet(intensity_path)
         rt_df = pd.read_parquet(rt_path)
         metadata_df = pd.read_parquet(metadata_path)
-        annotation_df = pd.read_table(annotation_path)
-    elif intensity_path.endswith(".csv") and rt_path.endswith(".csv") and metadata_path.endswith(".csv"):
+    elif aligned_tables_ext == 'csv':
         intensity_df = pd.read_csv(intensity_path)
         rt_df = pd.read_csv(rt_path)
         metadata_df = pd.read_csv(metadata_path)
-        annotation_df = pd.read_table(annotation_path)
+    elif aligned_tables_ext in ['tsv', 'tabular']:
+        intensity_df = pd.read_csv(intensity_path, sep='\t')
+        rt_df = pd.read_csv(rt_path, sep='\t')
+        metadata_df = pd.read_csv(metadata_path, sep='\t')
     else:
         raise ValueError("Aligned intensity/rt/metadata inputs must be all .csv or all .parquet")
+
+    if annotation_path.endswith('parquet'):
+        annotation_df = pd.read_parquet(annotation_path)
+    elif annotation_path.endswith('csv'):
+        annotation_df = pd.read_csv(annotation_path)
+    else:
+        annotation_df = pd.read_csv(annotation_path, sep='\t')
 
     sample_cols = [c for c in intensity_df.columns if c != "id"]
 
@@ -583,8 +584,6 @@ def load_aligned_tables(intensity_path, rt_path, metadata_path, annotation_path,
         )
 
         df["compound_name"] = df["id"].map(annotation_map).fillna("")
-        if show_only_annotated == 1:
-            df = df[df["compound_name"] != ""]
 
         df = df.dropna(subset=["rt", "mz", "intensity"])
         sample_dfs.append((sample, df))

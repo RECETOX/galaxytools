@@ -97,6 +97,12 @@ def build_parser():
         help="Path to aligned metadata table (.csv or .parquet).",
     )
     parser.add_argument(
+        "--aligned-tables-ext",
+        default="parquet",
+        choices=['parquet','csv','tsv'],
+        help="Format for the aligned tables."
+    )
+    parser.add_argument(
         "--annotation-path",
         required=True,
         help="Path to annotation table.",
@@ -129,22 +135,17 @@ def main(argv=None):
 
     start = time.perf_counter()
 
-    sample_dfs_full, _ = load_aligned_tables(
-        intensity_path=args.intensity_path,
-        rt_path=args.rt_path,
-        metadata_path=args.metadata_path,
-        annotation_path=args.annotation_path,
-        show_only_annotated=0,
-    )
-    global_axes = compute_global_axes_aligned(sample_dfs_full, threshold=args.noise_threshold)
-
     sample_dfs, annotation_df = load_aligned_tables(
         intensity_path=args.intensity_path,
         rt_path=args.rt_path,
         metadata_path=args.metadata_path,
         annotation_path=args.annotation_path,
-        show_only_annotated=1 if args.show_only_annotated else 0,
+        aligned_tables_ext = args.aligned_tables_ext
     )
+    global_axes = compute_global_axes_aligned(sample_dfs, threshold=args.noise_threshold)
+
+    if args.show_only_annotated == True:
+        sample_dfs = [(sample, df[df["compound_name"] != ""]) for sample, df in sample_dfs]
 
     markers = load_markers(args.markers_path)
     sample_names = [name for name, _ in sample_dfs]
