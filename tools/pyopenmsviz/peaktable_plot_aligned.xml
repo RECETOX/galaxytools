@@ -1,4 +1,4 @@
-<tool id="peaktable_plot_unaligned" name="plot peaktable" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="20.01" license="MIT">
+<tool id="peaktable_plot_aligned" name="plot aligned peaktable" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="20.01" license="MIT">
     <description></description>
     <macros>
         <token name="@TOOL_VERSION@">5.24.1</token>
@@ -26,17 +26,28 @@
         #for $f in $input_files:
             ln -s '${f}' 'files/${f.element_identifier}.${f.ext}' &&
         #end for
-        python3 '${__tool_directory__}/peaktable_plot_unaligned.py'
+        python3 '${__tool_directory__}/peaktable_plot_aligned.py'
             --title 'Title'
-            --file-path 'files'
-            --signal-value 'area'
+            --raw-input-path 'files'
             --noise-threshold $noise_threshold
             --output-html '$plot'
-            --num-workers \${GALAXY_SLOTS:-1}
+            --cores-to-use \${GALAXY_SLOTS:-1}
+            ${show_only_annotated}
+            ${markers_path}
+            ${intensity_path}
+            ${rt_path}
+            ${metadata_path}
+            ${annotation_path}
     ]]></command>
     <inputs>
-        <param name="input_files" type="data_collection" format="parquet,csv,tsv,tabular" collection_type="list" label="Input files" help="TODO" />
+        <param name="input_files" type="data_collection" format="mzml" collection_type="list" label="Input files" help="TODO" />
         <param name="noise_threshold" type="integer" min="0" value="1000" label="Noise threshold" help="TODO" />
+        <param argument="--show-only-annotated" type="boolean" truevalue="--show-only-annotated" falsevalue="" checked="false" label="Show only annotated features" help="TODO" />
+        <param argument="--markers-path" type="data" format="tsv,tabular" label="Markers / transition list" help="TODO" />
+        <param argument="--intensity-path" type="data" format="parquet,csv" label="Aligned intensity table / data matrix" help="TODO" />
+        <param argument="--rt-path" type="data" format="parquet,csv" label="Aligned retention time table" help="TODO" />
+        <param argument="--metadata-path" type="data" format="parquet,csv" label="Variable metadata table" help="TODO" />
+        <param argument="--annotation-path" type="data" format="tabular,tsv,csv" label="Annotation table" help="TODO" />
     </inputs>
     <outputs>
         <data name="plot" format="html" label="${tool.name} on ${on_string}" />

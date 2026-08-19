@@ -378,8 +378,10 @@ def render_single_chunk_worker(chunk_data, global_axes, title, threshold, signal
 
 def render_chunks_parallel(chunks, global_axes, title, threshold, signal_value, max_workers=None):
     """Render all unaligned chunks in parallel."""
-    if max_workers is None:
+    if max_workers is None or max_workers == -1:
         max_workers = min(len(chunks), os.cpu_count() or 4)
+
+    print(f"Processing with {max_workers} processes.")
 
     figures = [None] * len(chunks)
     trace_maps = [None] * len(chunks)
