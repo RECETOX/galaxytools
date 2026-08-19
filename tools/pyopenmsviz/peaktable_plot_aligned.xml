@@ -32,7 +32,7 @@
         python3 '${__tool_directory__}/peaktable_plot_aligned.py'
             --title 'Title'
             --raw-input-path 'files'
-            --noise-threshold $noise_threshold
+            --noise-threshold 0
             --output-html '$plot'
             --cores-to-use \${GALAXY_SLOTS:-1}
             ${show_only_annotated}
@@ -41,20 +41,20 @@
             --rt-path '${rt_path}'
             --metadata-path '${metadata_path}'
             --annotation-path '${annotation_path.name}.${annotation_path.ext}'
-            --mz-tol-ppm ${mz_tol_ppm}
-            --rt-tol-s ${rt_tol_s}
+            --mz-tol-ppm 5
+            --rt-tol-s 60
     ]]></command>
     <inputs>
         <param name="input_files" type="data_collection" format="mzml" collection_type="list" label="Input files" help="TODO" />
-        <param name="noise_threshold" type="integer" min="0" value="1000" label="Noise threshold" help="TODO" />
-        <param argument="--show-only-annotated" type="boolean" truevalue="--show-only-annotated" falsevalue="" checked="false" label="Show only annotated features" help="TODO" />
-        <param argument="--markers-path" type="data" format="tsv,tabular" label="Markers / transition list" help="TODO" />
         <param argument="--intensity-path" type="data" format="parquet,csv" label="Aligned intensity table / data matrix" help="TODO" />
         <param argument="--rt-path" type="data" format="parquet,csv" label="Aligned retention time table" help="TODO" />
         <param argument="--metadata-path" type="data" format="parquet,csv" label="Variable metadata table" help="TODO" />
+        <param argument="--markers-path" type="data" format="tsv,tabular" label="Markers / transition list" help="TODO" />
         <param argument="--annotation-path" type="data" format="tabular,tsv,csv" label="Annotation table" help="TODO" />
-        <param argument="--mz-tol-ppm" type="integer" min="0" max="100" value="5" label="m/z tol [ppm]" help="TODO" />
-        <param argument="--rt-tol-s" type="float" min="0" max="100" value="10" label="rt tol [s]" help="TODO" />
+        <param argument="--show-only-annotated" type="boolean" truevalue="--show-only-annotated" falsevalue="" checked="false" label="Show only annotated features" help="TODO" />
+        <!-- <param name="mz_tol_ppm" type="integer" min="0" max="100" value="5" label="m/z tol [ppm]" help="TODO" />
+        <param name="rt_tol_s" type="float" min="0" max="100" value="10" label="rt tol [s]" help="TODO" />
+        <param name="noise_threshold" type="integer" min="0" value="1000" label="Noise threshold" help="TODO" /> -->
     </inputs>
     <outputs>
         <data name="plot" format="html" label="${tool.name} on ${on_string}" />
