@@ -19,7 +19,7 @@ import argparse
 import os
 import time
 
-from utils import (
+from tools.pyopenmsviz.peaktable.utils import (
     chunk_samples,
     compute_eic_data,
     compute_global_axes_aligned,

@@ -13,7 +13,7 @@ import argparse
 import os
 import time
 
-from utils import (
+from tools.pyopenmsviz.peaktable.utils import (
     chunk_files,
     compute_global_axes,
     generate_html,

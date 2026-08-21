@@ -1,0 +1,96 @@
+<tool id="peaktable_plot_aligned" name="plot aligned peaktable" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="20.01" license="MIT">
+    <description>with EIC traces from raw files</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+
+    <expand macro="edam"/>
+    <expand macro="creator"/>
+    <expand macro="requirements"/>
+
+    <command detect_errors="exit_code"><![CDATA[
+        mkdir -p 'files' &&
+        #for $f in $input_files:
+            ln -s '${f}' 'files/${f.element_identifier}.${f.ext}' &&
+        #end for
+        ln -s '${annotation_path}' '${annotation_path.name}.${annotation_path.ext}' &&
+        ln -s '${markers_path}' '${markers_path.name}.${markers_path.ext}' &&
+        python3 '${__tool_directory__}/peaktable_plot_aligned.py'
+            --title '${annotation_path.name}'
+            --raw-input-path 'files'
+            --noise-threshold 0
+            --output-html '$plot'
+            --cores-to-use \${GALAXY_SLOTS:-1}
+            ${show_only_annotated}
+            --markers-path '${markers_path.name}.${markers_path.ext}'
+            --intensity-path '${intensity_path}'
+            --rt-path '${rt_path}'
+            --metadata-path '${metadata_path}'
+            --annotation-path '${annotation_path.name}.${annotation_path.ext}'
+            --mz-tol-ppm 5
+            --rt-tol-s 60
+    ]]></command>
+    <inputs>
+        <param name="input_files" type="data_collection" format="mzml" collection_type="list" label="Input files" help="List of raw mzML files for EIC extraction." />
+        <param argument="--intensity-path" type="data" format="parquet,csv" label="Aligned intensity table / data matrix" help="Table with aligned features and their intensities across samples." />
+        <param argument="--rt-path" type="data" format="parquet,csv" label="Aligned retention time table" help="Table with aligned retention times for each feature across samples." />
+        <param argument="--metadata-path" type="data" format="parquet,csv" label="Variable metadata table" help="Table with metadata for features (e.g., m/z, rt)." />
+        <param argument="--markers-path" type="data" format="tsv,tabular" label="Markers / transition list" help="List of markers or transitions to extract EIC traces from." />
+        <param argument="--annotation-path" type="data" format="tabular,tsv,csv" label="Annotation table" help="Table with compound annotations and identifiers." />
+        <param argument="--show-only-annotated" type="boolean" truevalue="--show-only-annotated" falsevalue="" checked="false" label="Show only annotated features" help="When enabled, only features with compound_name annotations are plotted." />
+    </inputs>
+    <outputs>
+        <data name="plot" format="html" label="${tool.name} on ${on_string}" />
+    </outputs>
+    <tests>
+        <!-- Hint: You can use [ctrl+alt+t] after defining the inputs/outputs to auto-scaffold some basic test cases. -->
+    </tests>
+    <help><![CDATA[
+
+.. class:: infomark
+
+**What it does**
+
+This tool generates an interactive HTML report with aligned peak plots and extracted ion chromatogram (EIC) traces. It takes aligned intensity, retention time, and metadata tables along with raw mzML files to produce visualizations that combine feature-level data with EIC traces extracted from the raw data.
+
+The output is a paginated HTML report showing subplots of features with their corresponding EIC traces, useful for quality control and visualization of metabolomics/proteomics data alignment results.
+
+Usage
+.....
+
+1. Provide aligned tables (intensity, RT, metadata) from a prior alignment step (output of recetox-aplcms or XCMS)
+2. Provide raw mzML files for EIC extraction
+3. Provide a marker/transition list defining which m/z ranges to extract EICs for (used for MS target screening)
+4. Optionally provide an annotation table for compound identification display (output of MS target screening or other annotation tools)
+5. Configure noise threshold to classify features as below/above noise level
+6. Generate the interactive HTML plot report
+
+Input
+.....
+
+- **Input files**: List of raw mzML files for EIC extraction
+- **Aligned intensity table**: Data matrix with features as rows and samples as columns
+- **Aligned retention time table**: Retention times for each feature across samples
+- **Variable metadata table**: Feature metadata including m/z values and annotations
+- **Markers/transition list**: TSV file defining m/z and RT windows for EIC extraction
+- **Annotation table**: Compound annotations to display in the plots
+- **Show only annotated features**: Filter to display only features with compound_name annotations
+
+Output
+......
+
+An interactive HTML report containing:
+
+- Paginated subplots showing aligned features across samples
+- Extracted ion chromatogram (EIC) traces overlaid on each subplot
+- Interactive controls for zooming and exploring the data
+- Links to compound annotations where available
+
+The HTML file can be viewed in any modern web browser without additional dependencies.
+
+    ]]></help>
+    <citations>
+        <citation type="doi">10.1007/s13361-012-0516-6</citation>
+        <citation type="doi">10.5281/zenodo.14503524</citation>
+    </citations>
+</tool>
