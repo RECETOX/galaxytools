@@ -21,7 +21,7 @@
         </credentials>
     </xml>
     <xml name="search_term">
-        <param name="search_term" type="text" label="Your search term" help="Type your search term as you would in PMC, Europe PMC, or PubMed." optional="false">
+        <param name="search_term" type="text" label="Search term" help="Enter the query exactly as you would in PMC, Europe PMC, or PubMed." optional="false">
             <sanitizer invalid_char="">
                 <valid initial="string.letters,string.digits">
                     <add value="_"/>
@@ -90,26 +90,26 @@
         </param>
     </xml>
     <xml name="llm_models">
-        <param name="llm_models" type="select" label="Select LLM" help="Select the LLM to analyze text.">
+        <param name="llm_models" type="select" label="Text model" help="Choose the large language model used to analyze text.">
             <option value="gpt-oss-120b" selected="true">GPT OSS 120B</option>
             <option value="qwen3.5">Qwen 3.5</option>
             <option value="deepseek-v3.2-thinking">DeepSeek v3.2</option>
         </param>
     </xml>
     <xml name="llm_models_images">
-        <param name="llm_models_images" type="select" label="Select the LLM to analyze image data." help="Choose the LLM to use for image data processing.">
-            <option value="qwen3.5">Qwen 3.5</option>
+        <param name="llm_models_images" type="select" label="Image model" help="Choose the large language model used to analyze image data.">
+            <option value="qwen3.5" selected="true">Qwen 3.5</option>
             <option value="redhatai-scout">RedHatAI Scout</option>
         </param>
     </xml>
     <xml name="model_selector" tokens="modality">
         <conditional name="model_selector">
-            <param name="model_source" type="select" label="Choose the model" help="Multimodal models are capable to have image and text as input.">
+            <param name="model_source" type="select" label="Model source" help="Choose whether to use a model provided through Galaxy or your own LiteLLM endpoint. Multimodal models accept both text and image inputs.">
                 <option value="builtin" selected="true">Models provided through Galaxy</option>
                 <option value="custom">Bring Your Own LiteLLM</option>
             </param>
             <when value="builtin">
-                <param name="model" type="select" optional="false" label="Model" help="Select the model you want to use.">
+                <param name="model" type="select" optional="false" label="Galaxy model" help="Select the Galaxy-provided model to use.">
                     <options from_data_table="genai_models">
                         <filter type="static_value" column="3" value="@MODALITY@"/>
                     </options>
@@ -117,7 +117,7 @@
                 </param>
             </when>
             <when value="custom">
-                <param name="model" type="text" label="LLM Model identifier" help="Model identifier - can be specific for the server at hand.">
+                <param name="model" type="text" label="Custom model identifier" help="Enter the model identifier expected by your LiteLLM-compatible server.">
                     <sanitizer invalid_char="">
                         <valid initial="string.letters,string.digits">
                             <add value="_"/>
@@ -128,7 +128,7 @@
                         </valid>
                     </sanitizer>
                 </param>
-                <param name="server_url" type="text" label="OpenAI API endpoint url" help="URL for the OpenAI API endpoint to use.">
+                <param name="server_url" type="text" label="LiteLLM / OpenAI-compatible API URL" help="Enter the base URL of the LiteLLM or OpenAI-compatible API endpoint to use.">
                     <sanitizer invalid_char="">
                         <valid initial="string.letters,string.digits">
                             <add value="_"/>
@@ -139,7 +139,7 @@
                         </valid>
                     </sanitizer>
                 </param>
-                <param name="credential_agreement" type="boolean" label="Do you provide your own API key in the credentials?" help="Double check to ensure you provided your own API key.">
+                <param name="credential_agreement" type="boolean" label="I provided my own API key in the credentials" help="Confirm that you supplied the API key needed by your custom LiteLLM endpoint in the tool credentials.">
                     <validator type="expression" message="You need to have your own API key setup in the credentials.">True == value</validator>
                 </param>
             </when>
@@ -171,7 +171,7 @@ litellm_base_url = source.get("LITELLM_BASE_URL")
 #end if
     ]]></token>
     <xml name="prompt_specification">
-        <param argument="--prompt_specification" type="text" value="" optional="true" label="Analysis specification" help="Prompt the LLM and specify what data to analyze (e.g., Only include data from HepG2 spheroids).">
+        <param argument="--prompt_specification" type="text" value="" optional="true" label="Additional analysis instructions" help="Provide optional extra instructions for the LLM, for example to restrict the analysis to a specific assay, model system, or experiment.">
             <sanitizer invalid_char="">
                 <valid initial="string.letters,string.digits">
                     <add value="_"/>
@@ -239,26 +239,26 @@ litellm_base_url = source.get("LITELLM_BASE_URL")
     </xml>
     <xml name="effects">
         <repeat name="effects" title="Effect" min="1">
-            <param argument="effect" type="text" value="" label="Effect to search" help="Specify the effect you want to search for (e.g., liver fibrosis, gap junction intracellular communication).">
+            <param argument="effect" type="text" value="" label="Effect" help="Specify the biological effect you want to search for, for example liver fibrosis or gap junction intracellular communication.">
                 <validator type="regex">[0-9a-zA-Z]+</validator>
             </param>
         </repeat>
     </xml>
     <xml name="relationship_types">
-        <param name="relationship_types" type="select" label="Select relationship type" help="Choose the type of relationship to identify." multiple="true" optional="false">
-            <option value="causative">Causative</option>
+        <param name="relationship_types" type="select" label="Relationship types" help="Choose which relationship types to identify between the chemicals and the requested effects." multiple="true" optional="false">
+            <option value="causative" selected="true">Causative</option>
             <option value="inhibitive">Inhibitive</option>
         </param>
     </xml>
     <xml name="preprint_mode">
-        <param name="preprint_mode" type="select" label="Preprint handling" help="Choose how preprints should be handled in the search results.">
+        <param name="preprint_mode" type="select" label="Preprint handling" help="Choose whether preprints should be included in the search results.">
             <option value="all" selected="true">Include preprints and non-preprints</option>
             <option value="exclude">Exclude preprints</option>
             <option value="only">Only include preprints</option>
         </param>
     </xml>
     <xml name="licensing">
-        <param name="licensing" type="select" label="Licensing" help="Limit your search results to publications with specific Creative Commons (CC) licenses.">
+        <param name="licensing" type="select" label="Licensing filter" help="Limit search results to publications with a specific Creative Commons (CC) license. This setting is ignored for PubMed.">
             <option value="all" selected="true">No licensing specification</option>
             <option value="open-access">Open Access</option>
             <option value="CC0">CC0</option>

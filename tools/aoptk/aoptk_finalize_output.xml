@@ -47,9 +47,9 @@ for effect, effect_group in output.groupby(by="effect", as_index=False):
 ]]></configfile>
     </configfiles>
     <inputs>
-        <param name="input_file" type="data" format="tabular,tsv" label="TSV file." help="Input tsv file with at least a heading or chemical column."/>
-        <param name="column_name" type="data_column" data_ref="input_file" use_header_names="true" label="Column to group by." help="Select the column from the input table to group by."/>
-        <param name="as_excel" type="boolean" falsevalue="False" truevalue="True"  checked="false" label="Output as Excel files." help="If true, the output will be saved as Excel files. If false, the output will be saved as TSV files."/>
+        <param name="input_file" type="data" format="tabular,tsv" label="Input TSV" help="Provide the relationship-identification output TSV. The table must contain at least an effect column and a chemical or heading column."/>
+        <param name="column_name" type="data_column" data_ref="input_file" use_header_names="true" label="Grouping column" help="Select the column used to group the summarized results, for example chemical or heading."/>
+        <param name="as_excel" type="boolean" falsevalue="False" truevalue="True"  checked="false" label="Write Excel output" help="If enabled, the summarized outputs are written as Excel files; otherwise TSV files are produced."/>
     </inputs>
     <outputs>
         <collection name="final_outputs" type="list" label="Summarized results of $input_file.element_identifier" format_source="input_file">
@@ -68,7 +68,10 @@ for effect, effect_group in output.groupby(by="effect", as_index=False):
 Summarize Results
 ===================
 
-Tool to remove duplicates and summarize the output of relationship identification.
+This tool summarizes the output of relationship identification for each effect.
+
+- Select the grouping column that should define each summarized row, for example a chemical or normalized heading.
+- The tool removes duplicate entries and writes one output file per effect, either as TSV or Excel.
 
     ]]></help>
     <citations>
