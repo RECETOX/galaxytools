@@ -1,0 +1,92 @@
+<macros>
+    <token name="@TOOL_VERSION@">0.2.0</token>
+    <token name="@VERSION_SUFFIX@">0</token>
+    <token name="@QUERY_TIMEOUT@">120</token>
+
+    <xml name="requirements">
+        <requirement type="package" version="3.3.0">openai</requirement>
+        <requirement type="package" version="7.6.0">rdflib</requirement>
+        <requirement type="package" version="6.0.3">pyyaml</requirement>
+        <requirement type="package" version="2.0.0">sparqlwrapper</requirement>
+    </xml>
+
+    <!-- Same OpenAI credentials mechanism as the aoptk tools: the user stores
+         their API key in Galaxy user credentials and it is injected into the
+         job environment as OPENAI_API_KEY. -->
+    <xml name="openai_config">
+        <credentials name="openai_config" label="Your OpenAI API key" version="1.0" optional="true" description="Provide OpenAI API key and URL for accessing the large language models.">
+            <secret name="api_key" inject_as_env="OPENAI_API_KEY" optional="true"/>
+        </credentials>
+    </xml>
+
+    <!-- Same model selection as the aoptk tools: either a model from the
+         institutional LiteLLM proxy (genai_models data table +
+         LITELLM_CONFIG_FILE) or a user-provided OpenAI-compatible endpoint. -->
+    <xml name="model_selector">
+        <conditional name="model_selector">
+            <param name="model_source" type="select" label="Choose the model" help="Models provided through Galaxy are served by the institutional LiteLLM proxy.">
+                <option value="builtin" selected="true">Models provided through Galaxy</option>
+                <option value="custom">Bring Your Own LiteLLM</option>
+            </param>
+            <when value="builtin">
+                <param name="model" type="select" optional="false" label="Model" help="Select the model you want to use.">
+                    <options from_data_table="genai_models">
+                        <filter type="static_value" column="3" value="text"/>
+                    </options>
+                    <validator message="No model annotation is available for LLM Hub" type="no_options"/>
+                </param>
+            </when>
+            <when value="custom">
+                <param name="model" type="text" label="LLM Model identifier" help="Model identifier - can be specific for the server at hand.">
+                    <sanitizer invalid_char="">
+                        <valid initial="string.letters,string.digits">
+                            <add value="_"/>
+                            <add value="-"/>
+                            <add value="."/>
+                            <add value=":"/>
+                            <add value="/"/>
+                        </valid>
+                    </sanitizer>
+                </param>
+                <param name="server_url" type="text" label="OpenAI API endpoint url" value="https://llm.ai.e-infra.cz/v1" help="URL for the OpenAI API endpoint to use.">
+                    <sanitizer invalid_char="">
+                        <valid initial="string.letters,string.digits">
+                            <add value="_"/>
+                            <add value="-"/>
+                            <add value="."/>
+                            <add value=":"/>
+                            <add value="/"/>
+                        </valid>
+                    </sanitizer>
+                </param>
+                <param name="credential_agreement" type="boolean" label="Do you provide your own API key in the credentials?" help="Double check to ensure you provided your own API key.">
+                    <validator type="expression" message="You need to have your own API key setup in the credentials.">True == value</validator>
+                </param>
+            </when>
+        </conditional>
+    </xml>
+
+    <xml name="natural_language_query">
+        <param name="query" type="text" value="" label="What do you want to query?" help="Describe in natural language what you are looking for, e.g. 'Find all compounds with a molecular weight below 500'.">
+            <sanitizer invalid_char="">
+                <valid initial="string.letters,string.digits">
+                    <add value="_"/>
+                    <add value=" "/>
+                    <add value="'"/>
+                    <add value="&quot;"/>
+                    <add value="("/>
+                    <add value=")"/>
+                    <add value="*"/>
+                    <add value="["/>
+                    <add value="]"/>
+                    <add value="-"/>
+                    <add value=":"/>
+                    <add value="/"/>
+                    <add value="?"/>
+                    <add value=","/>
+                    <add value="."/>
+                </valid>
+            </sanitizer>
+        </param>
+    </xml>
+</macros>

@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!-- Data tables used by the SPARQL tools in this directory.
+
+     Planemo registers this file automatically ('planemo serve' / 'planemo test'
+     pick up tool_data_table_conf.xml.sample next to the tool). On a real Galaxy
+     instance merge these table entries into tool_data_table_conf.xml; see the
+     sparql_endpoints table notes below for placing the .loc files.
+
+     The genai_models table is shared with the aoptk tools (same schema, same
+     'provider' keys as the LITELLM_CONFIG_FILE servers mapping); if aoptk is
+     installed on the same instance both registrations merge without conflict. -->
+<tables>
+    <table name="sparql_endpoints" comment_char="#" allow_duplicate_entries="False">
+        <columns>value,url,shacl,jsonld</columns>
+        <file path="${__HERE__}/tool-data/sparql_endpoints.loc" />
+    </table>
+    <!-- The shipped genai_models.loc.sample lists no active models (the list is
+         site-specific). Local 'planemo serve' still loads the table; copy the
+         sample to genai_models.loc and uncomment your site's models, or point
+         this entry at your instance's genai_models.loc. -->
+    <table name="genai_models" comment_char="#" allow_duplicate_entries="False">
+        <columns>value, model_id, name, domain, provider, free_tag</columns>
+        <file path="${__HERE__}/tool-data/genai_models.loc.sample" />
+    </table>
+</tables>

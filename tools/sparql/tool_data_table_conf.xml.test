@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<!-- Data table registration used by 'planemo test' (auto-discovered): tables
+     point at the checked-in test-data copy instead of tool-data. -->
+<tables>
+    <table name="sparql_endpoints" comment_char="#" allow_duplicate_entries="False">
+        <columns>value,url,shacl,jsonld</columns>
+        <file path="${__HERE__}/tool-data/sparql_endpoints.loc" />
+    </table>
+    <table name="genai_models" comment_char="#" allow_duplicate_entries="False">
+        <columns>value, model_id, name, domain, provider, free_tag</columns>
+        <file path="${__HERE__}/test-data/genai_models.loc" />
+    </table>
+</tables>
