@@ -176,15 +176,15 @@ for input_path, element_identifier in text_inputs:
     <inputs>
         <conditional name="input_source">
             <param name="input_mode" type="select" label="Input type" help="Choose whether to analyze one text file or every text file in a collection.">
-                <option value="single" selected="true">Single text file</option>
-                <option value="collection">Text collection</option>
+                <option value="single" selected="true">Single</option>
+                <option value="collection">Collection</option>
             </param>
             <when value="single">
-                <param name="input_file" type="data" format="txt" label="Text to analyze" help="Input text file (abstract/publication/parsed pdf)."/>
+                <param name="input_file" type="data" format="txt" label="Text to analyze" help="Provide a single text file, such as an abstract, publication, or parsed PDF."/>
                 <expand macro="model_selector" modality="text"/>
                 <conditional name="analysis_purpose">
-                    <param name="method" type="select" label="Purpose of the analysis.">
-                        <option value="relationships_chemicals">Identify chemicals and relationships</option>
+                    <param name="method" type="select" label="Analysis goal" help="Choose whether to extract chemicals, relationships, or both.">
+                        <option value="relationships_chemicals" selected="true">Identify chemicals and relationships</option>
                         <option value="relationships">Identify relationships, provide your own chemicals</option>
                         <option value="chemicals">Identify chemicals</option>
                     </param>
@@ -197,17 +197,17 @@ for input_path, element_identifier in text_inputs:
                         <expand macro="effects"/>
                         <expand macro="prompt_specification"/>
                         <expand macro="relationship_types"/>
-                        <param name="chemicals" type="data" format="tabular" label="Chemicals" help="Input TSV with chemicals."/>
+                        <param name="chemicals" type="data" format="tabular" label="Chemical list" help="Provide a TSV file with the chemicals to analyze."/>
                     </when>
                     <when value="chemicals"/>
                 </conditional>
             </when>
             <when value="collection">
-                <param name="input_collection" type="data_collection" collection_type="list" format="txt" label="Texts to analyze" help="Input collection of text files (abstracts/publications/parsed pdfs)."/>
+                <param name="input_collection" type="data_collection" collection_type="list" format="txt" label="Texts to analyze" help="Provide a collection of text files, such as abstracts, publications, or parsed PDFs."/>
                 <expand macro="model_selector" modality="text"/>
                 <conditional name="analysis_purpose">
-                    <param name="method" type="select" label="Purpose of the analysis.">
-                        <option value="relationships_chemicals">Identify chemicals and relationships</option>
+                    <param name="method" type="select" label="Analysis goal" help="Choose whether to extract chemicals, relationships, or both.">
+                        <option value="relationships_chemicals" selected="true">Identify chemicals and relationships</option>
                         <option value="relationships">Identify relationships, provide your own chemicals</option>
                         <option value="chemicals">Identify chemicals</option>
                     </param>
@@ -220,7 +220,7 @@ for input_path, element_identifier in text_inputs:
                         <expand macro="effects"/>
                         <expand macro="prompt_specification"/>
                         <expand macro="relationship_types"/>
-                        <param name="chemicals" type="data_collection" collection_type="list" format="tabular" label="Chemicals" help="Input collection of TSV files with chemicals."/>
+                        <param name="chemicals" type="data_collection" collection_type="list" format="tabular" label="Chemical lists" help="Provide a collection of TSV files with the chemicals to analyze."/>
                     </when>
                     <when value="chemicals"/>
                 </conditional>

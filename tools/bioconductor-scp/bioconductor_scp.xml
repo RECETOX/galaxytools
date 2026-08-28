@@ -1,4 +1,4 @@
-<tool id="bioconductor_scp" name="bioconductor-scp" version="@TOOL_VERSION@+galaxy1" profile="23.0">
+<tool id="bioconductor_scp" name="bioconductor-scp" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="23.0">
     <description>single cell proteomics data analysis workflow</description>
     <macros>
         <import>macros.xml</import>
@@ -9,26 +9,25 @@
     </xrefs>
     <requirements>
         <requirement type="package" version="@TOOL_VERSION@">bioconductor-scp</requirement>
-        <requirement type="package" version="3.54.0">bioconductor-sva</requirement>
-        <requirement type="package" version="1.80.0">bioconductor-impute</requirement>
-        <requirement type="package" version="1.34.0">bioconductor-scater</requirement>
-        <requirement type="package" version="1.16.0">bioconductor-qfeatures</requirement>
-        <requirement type="package" version="3.62.1">bioconductor-limma</requirement>
-        <requirement type="package" version="3.5.1">r-ggplot2</requirement>
+        <requirement type="package" version="1.84.0">bioconductor-impute</requirement>
+        <requirement type="package" version="3.58.0">bioconductor-sva</requirement>
+        <requirement type="package" version="1.38.0">bioconductor-scater</requirement>
     </requirements>
     <required_files>
         <include path="utils.r" />
     </required_files>
     <expand macro="creator" />
-    <command detect_errors="exit_code"><![CDATA[
+    <command detect_errors="aggressive"><![CDATA[
     echo ${run_script} &&
-    Rscript  -e 'source("${__tool_directory__}/utils.r")' -e 'source("${run_script}")'
+    Rscript -e 'source("${__tool_directory__}/utils.r")' -e 'source("${run_script}")'
     #if $data_export.export_R_script
     && cat ${run_script} >> $script
     #end if
     ]]></command>
     <configfiles>
         <configfile name="run_script"><![CDATA[
+        options(error = function() traceback(3))
+        
         data_input <- read.delim("$input_data", sep="\t")
         metadata <- read.delim("$input_annotations", sep="\t")
         runCol <- colnames(data_input)[$runcol]
@@ -124,7 +123,7 @@
                            refPattern = "Reference")
         #end if
 
-        scp <- scp::aggregateFeaturesOverAssays(
+        scp <- QFeatures::aggregateFeatures(
             scp,
             i = 1:number_of_assays,
             fcol = fcol_aggregation_pep,
@@ -145,7 +144,7 @@
             SummarizedExperiment::colData(scp)[["MedianRI"]] <- medians
 
             #if $generate_QC_plots
-            QC_medianRI <- SummarizedExperimentcolData(scp) |>
+            QC_medianRI <- SummarizedExperiment::colData(scp) |>
                             data.frame() |>
                             ggplot2::ggplot() +
                             ggplot2::aes(x = MedianRI,
@@ -235,7 +234,7 @@
         scp <- QFeatures::filterNA(scp, i = "peptides_log", pNA = pNA)
         #end if
 
-        scp <- scp::aggregateFeaturesOverAssays(
+        scp <- QFeatures::aggregateFeatures(
             scp,
             i = "peptides_log",
             fcol = fcol_aggregation_prot,
@@ -337,6 +336,13 @@
 
         #if $dimensionality_reduction.PCA_computation.run_PCA == "yes"
         PCA_color <- colnames(metadata)[$dimensionality_reduction.PCA_computation.pca_coloring]
+
+        scp[["proteins_batchC"]] <- SingleCellExperiment::SingleCellExperiment(
+            assays = list(assay = SummarizedExperiment::assay(scp[["proteins_batchC"]], "assay")),
+            colData = SummarizedExperiment::colData(scp[["proteins_batchC"]]),
+            rowData = SummarizedExperiment::rowData(scp[["proteins_batchC"]])
+        )
+
         scp[["proteins_batchC"]] <- scater::runPCA(
             scp[["proteins_batchC"]],
             ncomponents = ${dimensionality_reduction.PCA_computation.ncomponents_PCA},
@@ -443,7 +449,7 @@
                 <assert_contents>
                     <has_n_lines n="90"/>
                     <has_text text="E9PAV3"/>
-                    <has_size size="625000" delta="20"/>
+                    <has_size size="39105" delta="20"/>
                 </assert_contents>
             </output>
         </test>
@@ -487,7 +493,7 @@
             </output_collection>
             <output name="Processed_data">
                 <assert_contents>
-                    <has_size size="625000" delta="20"/>
+                    <has_size size="39105" delta="20"/>
                     <has_n_lines n="90"/>
                     <has_text text="E9PAV3"/>
                 </assert_contents>
@@ -525,7 +531,7 @@
             <output_collection name="intermediate_outputs" type="list" count="6"/>
             <output name="Processed_data">
                 <assert_contents>
-                    <has_size size="625000" delta="20"/>
+                    <has_size size="39105" delta="20"/>
                     <has_n_lines n="90"/>
                     <has_text text="E9PAV3"/>
                 </assert_contents>
@@ -563,14 +569,14 @@
             </section>
             <output name="Processed_data">
                 <assert_contents>
-                    <has_size size="625000" delta="20"/>
+                    <has_size size="39105" delta="20"/>
                     <has_n_lines n="90"/>
                     <has_text text="E9PAV3"/>
                 </assert_contents>
             </output>
             <output name="script">
                 <assert_contents>
-                    <has_n_lines n="271"/>
+                    <has_n_lines n="280"/>
                     <has_text text='ggplot2::ggsave(filename = file.path("plots", "PCA.pdf"), pca)'/>
                 </assert_contents>
             </output>

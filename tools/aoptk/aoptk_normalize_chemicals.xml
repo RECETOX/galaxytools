@@ -30,7 +30,7 @@ from aoptk.normalization.provide_mesh_term_dataframe_from_xml import ProvideMesh
 chemicals = pd.read_csv("$input_file", sep="\t")
 col_name = chemicals.columns[int("$column_name") - 1]
 chemical_list = pd.read_csv("$chemical_list", sep="\t")
-chemical_col_name = chemicals.columns[int("$chemical_list_column_name") - 1]
+chemical_col_name = chemical_list.columns[int("$chemical_list_column_name") - 1]
 chemical_list = chemical_list[chemical_col_name].tolist()
 
 chemicals[col_name] = chemicals[col_name].apply(
@@ -63,26 +63,26 @@ chemicals.to_csv("normalized_chemicals.tsv", sep="\t", index=False)
     </configfiles>
     <inputs>
         <conditional name="normalization_method">
-            <param name="method" type="select" label="Normalization Method">
-                <option value="pubchem">PubChem Synonyms</option>
+            <param name="method" type="select" label="Normalization method" help="Choose how the chemical names should be normalized.">
+                <option value="pubchem" selected="true">PubChem synonyms</option>
                 <option value="llm">Large Language Models</option>
                 <option value="mesh">MeSH Terms</option>
             </param>
             <when value="pubchem">
-                <param name="input_file" type="data" format="tabular,tsv" label="TSV with chemical column." help="Input tsv file with chemical column."/>
-                <param name="column_name" type="data_column" data_ref="input_file" use_header_names="true" label="Column to normalize." help="Select the column from the input table to normalize."/>
+                <param name="input_file" type="data" format="tabular,tsv" label="Input TSV" help="Provide a TSV file that contains the chemical names to normalize."/>
+                <param name="column_name" type="data_column" data_ref="input_file" use_header_names="true" label="Chemical column" help="Select the column in the input table that contains the chemical names to normalize."/>
             </when>
             <when value="llm">
                 <expand macro="model_selector" modality="text"/>
-                <param name="input_file" type="data" format="tabular,tsv" label="TSV with chemical column." help="Input tsv file with chemical column."/>
-                <param name="column_name" type="data_column" data_ref="input_file" use_header_names="true" label="Column to normalize." help="Select the column from the input table to normalize."/>
-                <param name="chemical_list" type="data" format="tabular,tsv" label="TSV with chemical list." help="Input tsv file with chemical list."/>
-                <param name="chemical_list_column_name" type="data_column" data_ref="chemical_list" use_header_names="true" label="Column with chemicals used for the normalization." help="Select the column from the chemical list table to use for normalization."/>
+                <param name="input_file" type="data" format="tabular,tsv" label="Input TSV" help="Provide a TSV file that contains the chemical names to normalize."/>
+                <param name="column_name" type="data_column" data_ref="input_file" use_header_names="true" label="Chemical column" help="Select the column in the input table that contains the chemical names to normalize."/>
+                <param name="chemical_list" type="data" format="tabular,tsv" label="Reference chemical list" help="Provide a TSV file containing the list of preferred chemical names to normalize to."/>
+                <param name="chemical_list_column_name" type="data_column" data_ref="chemical_list" use_header_names="true" label="Reference chemical column" help="Select the column in the reference table that contains the target chemical names."/>
             </when>
             <when value="mesh">
-                <param name="input_file" type="data" format="tabular,tsv" label="TSV with chemical column." help="Input tsv file with chemical column."/>
-                <param name="input_xml" type="data" format="xml" label="XML database with MeSH terms." help="Input xml file with MeSH terms." multiple="false"/>
-                <param name="column_name" type="data_column" data_ref="input_file" use_header_names="true" label="Column to normalize." help="Select the column from the input table to normalize."/>
+                <param name="input_file" type="data" format="tabular,tsv" label="Input TSV" help="Provide a TSV file that contains the chemical names to normalize."/>
+                <param name="input_xml" type="data" format="xml" label="MeSH XML database" help="Provide the MeSH XML file used for normalization." multiple="false"/>
+                <param name="column_name" type="data_column" data_ref="input_file" use_header_names="true" label="Chemical column" help="Select the column in the input table that contains the chemical names to normalize."/>
             </when>
         </conditional>
     </inputs>
