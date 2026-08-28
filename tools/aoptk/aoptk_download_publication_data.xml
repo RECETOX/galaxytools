@@ -83,15 +83,7 @@ raise ValueError("Select valid data type.")
         </conditional>
     </inputs>
     <outputs>
-        <!-- <collection name="text" type="list" label="Downloaded ${database} ${type_choice}" format="txt">
-            <filter>literature['type_choice'] == 'publications' or literature['type_choice'] == 'abstracts'</filter>
-            <discover_datasets pattern="(?P&lt;designation&gt;.*)\.txt$" ext="txt"/>
-        </collection>
-        <collection name="pdfs" type="list" label="Downloaded ${database} PDFs" format="pdf">
-            <filter>literature['type_choice'] == 'pdfs'</filter>
-            <discover_datasets pattern="(?P&lt;designation&gt;.*)\.pdf$" ext="pdf"/>
-        </collection> -->
-        <collection name="publications" type="list" label="Downloaded ${database} publications" format="txt">
+        <collection name="publications" type="list" label="Downloaded ${type_choice} in ${on_string} from ${database}" format="txt">
             <discover_datasets pattern="(?P&lt;designation&gt;.*)\.pdf$" ext="pdf"/>
             <discover_datasets pattern="(?P&lt;designation&gt;.*)\.txt$" ext="txt"/>
         </collection>
