@@ -1,4 +1,4 @@
-<tool id="wtv" name="wtv" version="@TOOL_VERSION@+galaxy0" profile="23.0" license="MIT">
+<tool id="wtv" name="wtv" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="23.0" license="MIT">
     <description>ion selection based on intra-library specificity and retention properties</description>
     <macros>
         <import>macros.xml</import>
@@ -9,19 +9,24 @@
          <requirement type="package" version="@TOOL_VERSION@">wtv</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
-        wtv-cli --msp_path ${input_file} --outpath . --mz_min ${mz_min} --mz_max ${mz_max} --rt_window ${rt_window} --min_ion_intensity_percent ${min_ion_intensity_percent} --min_ion_num ${min_ion_num} --prefer_mz_threshold ${prefer_mz_threshold} --similarity_threshold ${similarity_threshold} --fr_factor ${fr_factor} --retention_time_max ${retention_time_max}  
+        wtv-cli --msp_path ${input_file} --outpath . --mz_min ${mz_min} --mz_max ${mz_max} --rt_window ${rt_window} --min_ion_intensity_percent ${min_ion_intensity_percent} --min_ion_num ${min_ion_num} --prefer_mz_threshold ${prefer_mz_threshold} --similarity_threshold ${similarity_threshold} --fr_factor ${fr_factor} --retention_time_max ${retention_time_max} --retention_field ${retention_field} &&
+        basename ${input_file} | xargs -I{} mv {} filtered_ions.msp
     ]]></command>
     <inputs>
         <param type="data" name="input_file" format="msp" label="Input MSP file" help="MSP file to be processed." />
-        <param type="integer" name="mz_min" value="35" label="Minimum m/z value" help="Minimum m/z value (default: 35)." />
-        <param type="integer" name="mz_max" value="400" label="Maximum m/z value" help="Maximum m/z value (default: 400)." />
-        <param type="float" name="rt_window" value="2.00" label="Retention time window" help="Retention time window (default: 2.00).The units for rt_window match your retention time (RT) data, typically minutes." />
-        <param type="float" name="min_ion_intensity_percent" value="7" label="Minimum ion intensity percentage" help="Minimum ion intensity percentage (default: 7)." />
-        <param type="integer" name="min_ion_num" value="2" label="Minimum number of ions" help="Minimum number of ions (default: 2)." />
+        <param type="integer" name="mz_min" value="35" min="0" label="Minimum m/z value" help="Minimum m/z value (default: 35)." />
+        <param type="integer" name="mz_max" value="400" min="0" label="Maximum m/z value" help="Maximum m/z value (default: 400)." />
+        <param type="float" name="rt_window" value="2.00" min="0" label="Retention time window" help="Retention time window (default: 2.00).The units for rt_window match your retention time (RT) data, typically minutes." />
+        <param type="float" name="min_ion_intensity_percent" value="7" min="0" max="100" label="Minimum ion intensity percentage" help="Minimum ion intensity percentage (default: 7)." />
+        <param type="integer" name="min_ion_num" value="2" min="0" label="Minimum number of ions" help="Minimum number of ions (default: 2)." />
         <param type="integer" name="prefer_mz_threshold" min="0" value="60" label="Preferred m/z threshold" help="Preferred m/z threshold (default: 60). Ions with m/z below this threshold are either set to 1 or deprioritised during ion selection and scoring." />
         <param type="float" name="similarity_threshold" value="0.85" label="Similarity threshold" help="Similarity threshold (default: 0.85). The similarity_threshold is used to determine whether two compounds are considered similar based on their calculated similarity score."  min="0" max="1"/>
         <param type="float" name="fr_factor" value="2.0" label="FR factor" help="FR factor (default: 2.0). FR (Fragment Ratio) helps assess the similarity of two spectra by comparing the relative intensities of shared ions, improving spectral discrimination when enough ions are shared." />
         <param type="float" name="retention_time_max" value="68.80" label="Maximum retention time" help="Maximum retention time (default: 68.80)."  optional="true"/>
+        <param name="retention_field" type="select" label="Rentention Field" help="Field to use for retention data: 'retention_time' or 'retention_index'.">
+            <option value="retention_time" selected="true">Retention Time</option>
+            <option value="retention_index">Retention Index</option>
+        </param>
         <section name="options" title="Options">
             <param argument="log" type="boolean" truevalue="TRUE" falsevalue="FALSE" checked="false" label="Export log files" help="Export log files with potential errors." />
         </section>
@@ -39,7 +44,24 @@
                 <param name="log" value="TRUE"/>
             </section>
             <output name="filtered_ions" file="filtered_ions.msp" compare="sim_size"/>
-            <output name="input_data_error_info" file="input_data_error_info.csv" compare="sim_size"/>        </test>
+            <output name="input_data_error_info" file="input_data_error_info.csv" compare="sim_size"/>
+        </test>
+        <test expect_num_outputs="1">
+            <param name="input_file" location="https://github.com/RECETOX/wtv/raw/v0.2.1/test_data/sample_data/chunk_0.msp"/>
+            <param name="rt_window" value="20"/>
+            <param name="min_ion_intensity_percent" value="5"/>
+            <param name="min_ion_num" value="3"/>
+            <param name="prefer_mz_threshold" value="150"/>
+            <param name="mz_min" value="0"/>
+            <param name="mz_max" value="1000"/>
+            <param name="retention_field" value="retention_index"/>
+            <param name="retention_time_max" value="5000"/>
+            <output name="filtered_ions">
+                <assert_contents>
+                    <has_n_lines n="2018"/>
+                </assert_contents>
+            </output>
+        </test>
     </tests>
     <help><![CDATA[
 **WTV Galaxy Tool**

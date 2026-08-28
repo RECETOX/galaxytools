@@ -3,17 +3,14 @@
     <macros>
         <import>macros.xml</import>
     </macros>
-
     <requirements>
         <expand macro="requirements"/>
         <expand macro="email_credentials"/>
         <expand macro="ncbi_api_key"/>
     </requirements>
- 
     <command detect_errors="exit_code"><![CDATA[
         python3 '${query_literature}'
     ]]></command>
-
     <configfiles>
         <configfile name="query_literature">
 import asyncio
@@ -76,7 +73,6 @@ with open(f"ids.txt", "w") as f:
 
     </configfile>
     </configfiles>
-
     <inputs>
         <expand macro="search_term"/>
         <conditional name="literature">
@@ -97,35 +93,32 @@ with open(f"ids.txt", "w") as f:
                 <expand macro="preprint_mode"/>
             </when>
         </conditional>
-        <param name="full_text_subset" type="boolean" checked="true" label="Full text subset" help="Select if you want to query only for publications with full text available." />
+        <param name="full_text_subset" type="boolean" checked="true" label="Full text subset" help="Select if you want to query only for publications with full text available."/>
     </inputs>
-
     <outputs>
-        <data name="ids" format="txt" from_work_dir="ids.txt" label="Query ${search_term} on ${database}" />
+        <data name="ids" format="txt" from_work_dir="ids.txt" label="Query ${search_term} on ${database}"/>
     </outputs>
-
     <tests>
-          <test>
-              <param name="search_term" value="hepg2 thioacetamide"/>
-              <param name="literature|database" value="pubmed"/>
-              <param name="literature|preprint_mode" value="exclude"/>
-              <output name="ids" file="ids_pubmed.txt" compare="sim_size" delta="100"/>
-          </test>
-          <test>
-              <param name="search_term" value="liver fibrosis thioacetamide methotrexate"/>
-              <param name="literature|database" value="europepmc"/>
-              <param name="literature|licensing" value="CC-BY-NC-SA"/>
-              <output name="ids" file="ids_europepmc.txt" compare="sim_size" delta="100"/>
-          </test>
-          <test>
-              <param name="search_term" value="hepg2 methotrexate spheroid heparg"/>
-              <param name="literature|database" value="pmc"/>
-              <param name="literature|preprint_mode" value="exclude"/>
-              <param name="literature|licensing" value="open-access"/>
-              <output name="ids" file="ids_pmc.txt" compare="sim_size" delta="100"/>
-          </test>
+        <test>
+            <param name="search_term" value="hepg2 thioacetamide"/>
+            <param name="literature|database" value="pubmed"/>
+            <param name="literature|preprint_mode" value="exclude"/>
+            <output name="ids" file="ids_pubmed.txt" compare="sim_size" delta="100"/>
+        </test>
+        <test>
+            <param name="search_term" value="liver fibrosis thioacetamide methotrexate"/>
+            <param name="literature|database" value="europepmc"/>
+            <param name="literature|licensing" value="CC-BY-NC-SA"/>
+            <output name="ids" file="ids_europepmc.txt" compare="sim_size" delta="100"/>
+        </test>
+        <test>
+            <param name="search_term" value="hepg2 methotrexate spheroid heparg"/>
+            <param name="literature|database" value="pmc"/>
+            <param name="literature|preprint_mode" value="exclude"/>
+            <param name="literature|licensing" value="open-access"/>
+            <output name="ids" file="ids_pmc.txt" compare="sim_size" delta="100"/>
+        </test>
     </tests>
-
     <help><![CDATA[
 Tool for Downloading Publication IDs
 ====================================
@@ -147,9 +140,7 @@ Please note that query modifications may vary depending on the database. For det
 
 
     ]]></help>
-
     <citations>
         <citation type="doi">10.5281/zenodo.20036704</citation>
     </citations>
-
 </tool>

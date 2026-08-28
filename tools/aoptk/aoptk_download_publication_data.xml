@@ -3,19 +3,16 @@
     <macros>
         <import>macros.xml</import>
     </macros>
-
     <requirements>
         <expand macro="requirements"/>
         <expand macro="email_credentials"/>
         <expand macro="ncbi_api_key"/>
     </requirements>
- 
     <command detect_errors="exit_code"><![CDATA[
         python3 '${download_publication_data}'
     ]]></command>
-
-<configfiles>
-<configfile name="download_publication_data">
+    <configfiles>
+        <configfile name="download_publication_data">
 import os
 from Bio import Entrez
 from aoptk.literature.databases.pmc import PMC
@@ -60,10 +57,9 @@ raise ValueError("Select valid data type.")
 
 
 </configfile>
-</configfiles>
-
+    </configfiles>
     <inputs>
-        <param name="input_file" type="data" format="txt" label="List of IDs to search for." help="Input text file with IDs to search for." />
+        <param name="input_file" type="data" format="txt" label="List of IDs to search for." help="Input text file with IDs to search for."/>
         <conditional name="literature">
             <param name="database" type="select" label="Select which database to search." help="PubMed only accepts searches with up to 10 000 results. No limit for Europe PMC and PMC.">
                 <option value="pmc" selected="true">PMC</option>
@@ -91,18 +87,16 @@ raise ValueError("Select valid data type.")
             </when>
         </conditional>
     </inputs>
-
     <outputs>
         <collection name="text" type="list" label="Downloaded ${database} ${type_choice}" format="txt">
             <filter>literature['type_choice'] == 'publications' or literature['type_choice'] == 'abstracts'</filter>
-            <discover_datasets pattern="(?P&lt;designation&gt;.*)\.txt$" ext="txt" />
+            <discover_datasets pattern="(?P&lt;designation&gt;.*)\.txt$" ext="txt"/>
         </collection>
         <collection name="pdfs" type="list" label="Downloaded ${database} PDFs" format="pdf">
             <filter>literature['type_choice'] == 'pdfs'</filter>
-            <discover_datasets pattern="(?P&lt;designation&gt;.*)\.pdf$" ext="pdf" />
+            <discover_datasets pattern="(?P&lt;designation&gt;.*)\.pdf$" ext="pdf"/>
         </collection>
     </outputs>
-
     <tests>
         <test expect_num_outputs="1">
             <param name="literature|database" value="pmc"/>
@@ -129,7 +123,6 @@ raise ValueError("Select valid data type.")
             <output_collection name="text" type="list" count="2"/>
         </test>
     </tests>
-
     <help><![CDATA[
 Download Publication Data
 =========================
@@ -145,9 +138,7 @@ To speed up downloads from NCBI databases (PMC and PubMed), you may provide your
 - To comply with NCBI usage guidelines, you may also provide your email address.
 
     ]]></help>
-
     <citations>
         <citation type="doi">10.5281/zenodo.20036704</citation>
     </citations>
-
 </tool>

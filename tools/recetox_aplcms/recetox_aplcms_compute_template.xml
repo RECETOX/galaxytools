@@ -36,7 +36,21 @@
     </outputs>
 
     <tests>
-        <test expect_failure="true" />
+        <test expect_num_outputs="1">
+            <param name="files">
+                <collection type="list">
+                  <element name="RCX_06_shortened_extracted_clusters.parquet" location="https://gitlab.ics.muni.cz/umsa/umsa-files/-/blob/master/testdata/recetox-aplcms/clusters/RCX_06_shortened_extracted_clusters.parquet" ftype = "parquet"/>
+                  <element name="RCX_07_shortened_extracted_clusters.parquet" location="https://gitlab.ics.muni.cz/umsa/umsa-files/-/blob/master/testdata/recetox-aplcms/clusters/RCX_07_shortened_extracted_clusters.parquet" ftype = "parquet" />
+                  <element name="RCX_08_shortened_extracted_clusters.parquet" location="https://gitlab.ics.muni.cz/umsa/umsa-files/-/blob/master/testdata/recetox-aplcms/clusters/RCX_08_shortened_extracted_clusters.parquet" ftype = "parquet" />
+                </collection>
+            </param> 
+            <output name="output_file"> 
+                <assert_contents>
+                    <!-- change size! -->
+                    <has_size size="10k" />  
+                </assert_contents>
+            </output>
+        </test>
     </tests>
     
     <help>

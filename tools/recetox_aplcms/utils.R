@@ -29,6 +29,15 @@ load_sample_name <- function(df) {
     }
 }
 
+load_sample_id <- function(profiles) {
+    sample_names <- unname(sapply(profiles, function(i){i$sample_id[1]}))
+    if (is.null(sample_name)) {
+        return(NA)
+    } else {
+        return(sample_name)
+    }
+}
+
 save_data_as_parquet_file <- function(data, filename) {
     arrow::write_parquet(data, filename)
 }

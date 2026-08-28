@@ -17,9 +17,13 @@
     ]]></command>
     <configfiles>
          <configfile name="run_script"><![CDATA[
+         
               #set filenames = str("', '").join([str($f) for $f in $files])
               feature_tables <- load_parquet_collection(c('$filenames'))
-              sample_names <- unlist(lapply(feature_tables, load_sample_name))
+              sample_names <- laad_sample_id(feature_table)
+
+              message(sprintf("Loaded %d sample names", length(sample_names)))
+              message(paste("sample_names:", paste(sample_names, collapse = ", ")))
 
               validate_sample_names(sample_names)
 
@@ -35,6 +39,10 @@
               )
 
               sample_names <- unlist(lapply(clusters, restore_sample_name))
+
+              message(sprintf("Changed %d sample names", length(sample_names)))
+              message(paste("sample_names:", paste(sample_names, collapse = ", ")))
+
               save_parquet_collection(clusters, sample_names, "clustered")
          ]]></configfile>
     </configfiles>
@@ -53,7 +61,23 @@
     </outputs>
 
     <tests>
-        <test expect_failure="true" />
+        <test expect_num_outputs="1">
+            <param name="files">
+                <collection type="list">
+                  <element name="8_qc_no_dil_milliq.mzml.parquet" location="https://gitlab.ics.muni.cz/umsa/umsa-files/-/raw/master/testdata/recetox-aplcms/extracted/8_qc_no_dil_milliq.mzml.parquet" ftype = "parquet"/>
+                  <element name="21_qc_no_dil_milliq.mzml.parquet" location="https://gitlab.ics.muni.cz/umsa/umsa-files/-/raw/master/testdata/recetox-aplcms/extracted/21_qc_no_dil_milliq.mzml.parquet" ftype = "parquet"/>
+                  <element name="29_qc_no_dil_milliq.mzml.parquet" location="https://gitlab.ics.muni.cz/umsa/umsa-files/-/raw/master/testdata/recetox-aplcms/extracted/29_qc_no_dil_milliq.mzml.parquet" ftype = "parquet"/>
+                </collection>
+            </param> 
+            <output_collection name="clustered_feature_tables" type="list">
+                <assert_contents>
+                <!-- ??????????? -->
+                    <has_n_elements_with_path n="9" path="BlastOutput_iterations/Iteration/Iteration_hits/Hit/Hit_num" />
+                    <!-- change size! -->
+                    <has_size size="10k"/>
+                </assert_contents>
+            </output_collection>
+        </test>
     </tests>
 
     <help>

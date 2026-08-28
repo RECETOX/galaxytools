@@ -108,7 +108,32 @@
     </outputs>
 
     <tests>
-        <test expect_failure="true" />
+        <test expect_num_outputs="1"> <!-- TEST #1: Test . -->
+            <!-- <test expect_failure="true" /> -->
+            <param name="input_file" location="https://gitlab.ics.muni.cz/umsa/umsa-files/-/raw/master/testdata/recetox-aplcms/input/RCX_06_shortened.mzML" ftype = "mzml"/>
+            <param name="extracted_files">
+                <collection type="list">
+                  <element name="RCX_06_shortened.parquet" location="https://gitlab.ics.muni.cz/umsa/umsa-files/-/raw/master/testdata/recetox-aplcms/extracted/RCX_06_shortened.parquet" ftype = "parquet"/>
+                  <element name="RCX_07_shortened.parquet" location="https://gitlab.ics.muni.cz/umsa/umsa-files/-/raw/master/testdata/recetox-aplcms/extracted/RCX_07_shortened.parquet" ftype = "parquet"/>
+                  <element name="RCX_08_shortened.parquet" location="https://gitlab.ics.muni.cz/umsa/umsa-files/-/raw/master/testdata/recetox-aplcms/extracted/RCX_08_shortened.parquet" ftype = "parquet"/>
+                </collection>
+            </param>         
+            <param name="corrected_files">
+                <collection type="list">
+                  <element name="RCX_06_shortened.parquet" location="https://gitlab.ics.muni.cz/umsa/umsa-files/-/raw/master/testdata/recetox-aplcms/adjusted/RCX_06_shortened.parquet" ftype = "parquet"/>
+                  <element name="RCX_07_shortened.parquet" location="https://gitlab.ics.muni.cz/umsa/umsa-files/-/raw/master/testdata/recetox-aplcms/adjusted/RCX_07_shortened.parquet" ftype = "parquet"/>
+                  <element name="RCX_08_shortened.parquet" location="https://gitlab.ics.muni.cz/umsa/umsa-files/-/raw/master/testdata/recetox-aplcms/adjusted/RCX_08_shortened.parquet" ftype = "parquet"/>
+                </collection>
+            </param> 
+            <param name="metadata_file" location="https://gitlab.ics.muni.cz/umsa/umsa-files/-/raw/master/testdata/recetox-aplcms/aligned/metadata_table.parquet" ftype = "parquet"/>
+            <param name="intensity_file" location="https://gitlab.ics.muni.cz/umsa/umsa-files/-/raw/master/testdata/recetox-aplcms/aligned/intensity_table.parquet" ftype = "parquet"/>
+            <param name="rt_file" location="https://gitlab.ics.muni.cz/umsa/umsa-files/-/raw/master/testdata/recetox-aplcms/aligned/rt_table.parquet" ftype="parquet"/>
+            <output name="output_file"> 
+                <assert_contents>
+                    <has_size size="10k" />
+                </assert_contents>
+            </output>
+        </test>
     </tests>
 
     <help>
