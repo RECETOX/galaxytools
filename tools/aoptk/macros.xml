@@ -1,6 +1,6 @@
 <macros>
     <token name="@TOOL_VERSION@">0.5.0</token>
-    <token name="@VERSION_SUFFIX@">6</token>
+    <token name="@VERSION_SUFFIX@">7</token>
     <xml name="requirements">
         <requirement type="package" version="@TOOL_VERSION@">aoptk</requirement>
         <requirement type="package" version="6.0.3">pyyaml</requirement>
@@ -87,6 +87,13 @@
                 </valid>
             </sanitizer>
             <validator type="regex">[0-9a-zA-Z_ ()*'"[\]\[\]\-:.\[\]α-ωΑ-Ω]*</validator>
+        </param>
+    </xml>
+    <xml name="database">
+        <param name="database" type="select" label="Literature database" help="Choose the database to search in / download from. PubMed only accepts searches with up to 10,000 results, while Europe PMC and PMC have no such limit. Pubmed only allows downloading abstracts">
+            <option value="europepmc">Europe PMC</option>
+            <option value="pmc" selected="true">PMC</option>
+            <option value="pubmed">PubMed</option>
         </param>
     </xml>
     <xml name="llm_models">

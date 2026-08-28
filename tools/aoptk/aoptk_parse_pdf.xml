@@ -49,8 +49,8 @@ for input_path, element_identifier in pdf_inputs:
     <inputs>
         <conditional name="input_source">
             <param name="input_mode" type="select" label="Input type" help="Choose whether to parse one PDF or every PDF in a collection.">
-                <option value="single" selected="true">Single PDF</option>
-                <option value="collection">PDF collection</option>
+                <option value="single" selected="true">Single</option>
+                <option value="collection">Collection</option>
             </param>
             <when value="single">
                 <param name="input_file" type="data" format="pdf" label="PDF to parse" help="Provide a single PDF file to parse into text."/>

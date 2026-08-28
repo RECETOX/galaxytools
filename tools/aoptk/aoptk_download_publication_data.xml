@@ -2,6 +2,13 @@
     <description>Download publication data - full text publications and figures, abstracts, or PDFs.</description>
     <macros>
         <import>macros.xml</import>
+        <xml name="type_choice">
+            <param name="type_choice" type="select" label="Download" help="Select which publication content to download.">
+                <option value="publications" selected="true">Parsed full text publications</option>
+                <option value="abstracts">Abstracts</option>
+                <option value="pdfs">PDFs</option>
+            </param>
+        </xml>
     </macros>
     <requirements>
         <expand macro="requirements"/>
@@ -61,40 +68,32 @@ raise ValueError("Select valid data type.")
     <inputs>
         <param name="input_file" type="data" format="txt" label="Publication IDs" help="Provide a text file containing one publication ID per line."/>
         <conditional name="literature">
-            <param name="database" type="select" label="Literature database" help="Choose the database that contains the provided IDs. PubMed only supports abstract downloads in this tool.">
-                <option value="pmc" selected="true">PMC</option>
-                <option value="pubmed">PubMed</option>
-                <option value="europepmc">Europe PMC</option>
-            </param>
+            <expand macro="database"/>
             <when value="pubmed">
                 <param name="type_choice" type="select" label="Download" help="Select which publication content to download. PubMed only provides abstracts here.">
                     <option value="abstracts" selected="true">Abstracts</option>
                 </param>
             </when>
             <when value="europepmc">
-                <param name="type_choice" type="select" label="Download" help="Select which publication content to download.">
-                    <option value="publications" selected="true">Full text publications</option>
-                    <option value="abstracts">Abstracts</option>
-                    <option value="pdfs">PDFs</option>
-                </param>
+                <expand macro="type_choice"/>
             </when>
             <when value="pmc">
-                <param name="type_choice" type="select" label="Download" help="Select which publication content to download.">
-                    <option value="publications" selected="true">Full text publications</option>
-                    <option value="abstracts">Abstracts</option>
-                    <option value="pdfs">PDFs</option>
-                </param>
+                <expand macro="type_choice"/>
             </when>
         </conditional>
     </inputs>
     <outputs>
-        <collection name="text" type="list" label="Downloaded ${database} ${type_choice}" format="txt">
+        <!-- <collection name="text" type="list" label="Downloaded ${database} ${type_choice}" format="txt">
             <filter>literature['type_choice'] == 'publications' or literature['type_choice'] == 'abstracts'</filter>
             <discover_datasets pattern="(?P&lt;designation&gt;.*)\.txt$" ext="txt"/>
         </collection>
         <collection name="pdfs" type="list" label="Downloaded ${database} PDFs" format="pdf">
             <filter>literature['type_choice'] == 'pdfs'</filter>
             <discover_datasets pattern="(?P&lt;designation&gt;.*)\.pdf$" ext="pdf"/>
+        </collection> -->
+        <collection name="publications" type="list" label="Downloaded ${database} publications" format="txt">
+            <discover_datasets pattern="(?P&lt;designation&gt;.*)\.pdf$" ext="pdf"/>
+            <discover_datasets pattern="(?P&lt;designation&gt;.*)\.txt$" ext="txt"/>
         </collection>
     </outputs>
     <tests>
@@ -102,25 +101,25 @@ raise ValueError("Select valid data type.")
             <param name="literature|database" value="pmc"/>
             <param name="literature|type_choice" value="publications"/>
             <param name="input_file" value="ids.txt"/>
-            <output_collection name="text" type="list" count="1"/>
+            <output_collection name="publications" type="list" count="1"/>
         </test>
         <test expect_num_outputs="1">
             <param name="literature|database" value="europepmc"/>
             <param name="literature|type_choice" value="abstracts"/>
             <param name="input_file" value="ids.txt"/>
-            <output_collection name="text" type="list" count="2"/>
+            <output_collection name="publications" type="list" count="2"/>
         </test>
         <test expect_num_outputs="1">
             <param name="literature|database" value="pmc"/>
             <param name="literature|type_choice" value="pdfs"/>
             <param name="input_file" value="ids.txt"/>
-            <output_collection name="pdfs" type="list" count="1"/>
+            <output_collection name="publications" type="list" count="1"/>
         </test>
         <test expect_num_outputs="1">
             <param name="literature|database" value="pubmed"/>
             <param name="literature|type_choice" value="abstracts"/>
             <param name="input_file" value="ids.txt"/>
-            <output_collection name="text" type="list" count="2"/>
+            <output_collection name="publications" type="list" count="2"/>
         </test>
     </tests>
     <help><![CDATA[

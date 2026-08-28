@@ -1,4 +1,4 @@
-<tool id="aoptk_finalize_output" name="aoptk summarize results" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="25.1" license="MIT">
+<tool id="aoptk_final_modification" name="aoptk summarize results" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="25.1" license="MIT">
     <description>Finalize the output of relationship identification.</description>
     <macros>
         <import>macros.xml</import>

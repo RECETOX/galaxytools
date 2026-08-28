@@ -53,7 +53,7 @@ full_text_subset = True
 #else:
 full_text_subset = False
 #end if
-query = Query(search_term="$search_term", full_text_subset=full_text_subset, only_preprint=only_preprint, licensing=licensing)
+query = Query(search_term='$search_term', full_text_subset=full_text_subset, only_preprint=only_preprint, licensing=licensing)
 
 #if $database == "pubmed":
 Entrez.email = email
@@ -75,11 +75,7 @@ with open(f"ids.txt", "w") as f:
     </configfiles>
     <inputs>
         <expand macro="search_term"/>
-        <param name="database" type="select" label="Literature database" help="Choose the database to search. PubMed only accepts searches with up to 10,000 results, while Europe PMC and PMC have no such limit.">
-            <option value="europepmc" selected="true">Europe PMC</option>
-            <option value="pmc">PMC</option>
-            <option value="pubmed">PubMed</option>
-        </param>
+        <expand macro="database"/>
         <expand macro="preprint_mode"/>
         <expand macro="licensing"/>
         <param name="full_text_subset" type="boolean" checked="true" label="Only include publications with full text" help="Limit the query to publications for which full text is available."/>

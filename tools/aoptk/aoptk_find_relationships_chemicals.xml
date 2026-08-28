@@ -176,8 +176,8 @@ for input_path, element_identifier in text_inputs:
     <inputs>
         <conditional name="input_source">
             <param name="input_mode" type="select" label="Input type" help="Choose whether to analyze one text file or every text file in a collection.">
-                <option value="single" selected="true">Single text file</option>
-                <option value="collection">Text collection</option>
+                <option value="single" selected="true">Single</option>
+                <option value="collection">Collection</option>
             </param>
             <when value="single">
                 <param name="input_file" type="data" format="txt" label="Text to analyze" help="Provide a single text file, such as an abstract, publication, or parsed PDF."/>
