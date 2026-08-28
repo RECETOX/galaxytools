@@ -1,6 +1,7 @@
 <macros>
-    <token name="@TOOL_VERSION@">2.6.0</token>
-    <token name="@ONNX_VERSION@">1.19.1</token>
+    <token name="@TOOL_VERSION@">2.9.0</token>
+    <token name="@VERSION_SUFFIX@">1</token>
+    <token name="@ONNX_VERSION@">1.22.0</token>
 
     <xml name="creator">
         <creator>
@@ -61,7 +62,7 @@
         <param label="Training Dataset" name="spectra" type="data" format="msp,mgf"
             help="Spectra file that should be used for training. (it will be split in training, validation and test sets)."/>
         <param name="model_param" type="data" format="json" label="Model Settings" help="json file with the MS2Deepscore model settings."/>
-        <param name="validation_split_fraction" type="integer" min="0" max="100" value="20" label="Validation split fraction [%]" 
+        <param name="train_test_split_fraction" type="integer" min="0" max="100" value="20" label="Train test split fraction [%]" 
             help="The fraction of the inchikeys that will be used for validation and test"/>
     </xml>
 
@@ -87,7 +88,7 @@
                 help="Width of each m/z bin for tensorization." />
             <param name="intensity_scaling" type="float" label="Intensity Scaling" min="0" max="1" value="0.5" 
                 help="Scaling factor applied to intensities during tensorization." />
-            <param name="fingerprint_type" type="text" value="daylight" label="Fingerprint Type"
+            <param name="fingerprint_type" type="text" value="rdkit_binary" label="Fingerprint Type"
                 help="The fingerprint type that should be used for tanimoto score calculations." />
             <param name="fingerprint_nbits" type="integer" label="Fingerprint Number of Bits" value="2048"
                 help="The number of bits to use for the fingerprint." />

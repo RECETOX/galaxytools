@@ -44,11 +44,12 @@
     "val_spectra_per_inchikey": 1,
     "random_seed": 42,
     "max_pair_resampling": 100,
-    "fingerprint_type": "daylight",
+    "fingerprint_type": "rdkit_binary",
     "fingerprint_nbits": 2048,
     "augment_removal_max": 0.2,
     "augment_removal_intensity": 0.2,
     "augment_intensity": 0.2,
     "augment_noise_max": 10,
-    "augment_noise_intensity": 0.02
+    "augment_noise_intensity": 0.02,
+    "train_test_split_fraction": 20
 }
