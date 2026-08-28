@@ -107,7 +107,33 @@
     </outputs>
 
     <tests>
-        <test expect_failure="true" />
+        <!-- <test expect_failure="true" /> -->
+        <test expect_num_outputs="2">
+            <param name="metadata_file" value="aligned/metadata_table.parquet" ftype = "parquet"/>
+            <param name="intensity_file" value="aligned/intensity_table.parquet" ftype="parquet" />
+            <param name="rt_file" value="aligned/rt_table.parquet" ftype="parquet" />
+            <param name="known_table" value="merge_known_table/known_table.parquet" ftype="parquet" />
+            <conditional name="direction">
+                <param name="selection" value="TRUE"/>
+            </conditional>
+
+            <output name="output_known_table" value="merge_known_table/output_known_table.parquet" ftype="parquet"  compare="sim_size" delta="50" />
+            <output name="output_pairing" value="merge_known_table/output_pairing.parquet" ftype="parquet"  compare="sim_size" delta="50" />
+        </test>
+
+        <test expect_num_outputs="3">
+            <param name="metadata_file" value="aligned/metadata_table.parquet" ftype = "parquet"/>
+            <param name="intensity_file" value="aligned/intensity_table.parquet" ftype="parquet" />
+            <param name="rt_file" value="aligned/rt_table.parquet" ftype="parquet" />
+            <param name="known_table" value="merge_known_table/known_table.parquet" ftype="parquet" />
+            <conditional name="direction">
+                <param name="selection" value="FALSE"/>
+            </conditional>
+
+            <output name="output_metadata_file" value="merge_known_table/output_metadata_table.parquet" ftype="parquet"  compare="sim_size" delta="50" />
+            <output name="output_intensity_file" value="merge_known_table/output_intensity_table.parquet" ftype="parquet"  compare="sim_size" delta="50" />
+            <output name="output_rt_file" value="merge_known_table/output_rt_table.parquet" ftype="parquet"  compare="sim_size" delta="50" />
+        </test>
     </tests>
 
     <help>
