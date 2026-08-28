@@ -8,49 +8,53 @@
         <requirement type="package" version="3.1.5">openpyxl</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
-        cat ${summarize_results} &&
         python3 '${summarize_results}'
     ]]></command>
     <configfiles>
         <configfile name="summarize_results"><![CDATA[
 import pandas as pd
+import itertools
 
 def join_unique(series):
-    values = series.dropna().astype(str).str.strip()
-    return ";".join(pd.unique(values))
+    values = series.dropna().astype(str).str.strip().unique()
+    return ";".join(values)
 
 output = pd.read_csv("$input_file", sep="\t")
-
 col_name = output.columns[$column_name - 1]
 
-for effect in output["effect"].unique():
+for effect, effect_group in output.groupby(by="effect", as_index=False):
     file_name = effect.strip().lower().replace(" ", "_")
+    final_output = effect_group.copy()[[col_name]].drop_duplicates()
+    final_output.set_index(col_name, inplace=True)
+    
+    basenames = list([col for col in effect_group.columns if col not in [col_name, "effect", "relationship"]])
+    colnames = [col for col in itertools.product(effect_group["relationship"].unique(), ["hits"] + basenames)]
+    colnames = [f"{col[1]}({col[0]})" for col in colnames]
 
-    output_filtered = output[output["effect"] == effect].copy()
-
-    output_filtered["relationship"] = output_filtered["relationship"].astype(str).str.strip().str.lower()
-    relationships = sorted(output_filtered["relationship"].unique())
-    final_output = output_filtered[[col_name]].drop_duplicates()
-
-    for relationship in relationships:
-        subset = output_filtered[output_filtered["relationship"] == relationship]
-        result = subset.groupby(col_name, as_index=False, dropna=False).agg(
-            hits=("id", "size"),
-            ids=("id", join_unique),
-        )
-        result.rename(columns={"hits": f"{relationship}", "ids": f"{relationship} IDs"}, inplace=True)
-        final_output = final_output.merge(result, on=col_name, how="left")
-
-    final_output.to_excel(f"./{file_name}.xlsx", index=False)
+    final_output[colnames] = pd.NA
+    
+    for col_value, subset in effect_group.groupby(by=col_name, as_index=False):
+        for relationship, relationship_group in subset.groupby(by="relationship"):
+            result = relationship_group.agg(join_unique).drop(["relationship", "effect"]).add_suffix(f"({relationship})").rename({f"{col_name}({relationship})": col_name}).to_frame().T
+            result[f"hits({relationship})"] = len(relationship_group)
+            result.set_index(col_name, inplace=True)
+            final_output.update(result)
+    
+    if $as_excel:
+        final_output.to_excel(f"./{file_name}.xlsx")
+    else:
+        final_output.to_csv(f"./{file_name}.tsv", sep="\t")
 ]]></configfile>
     </configfiles>
     <inputs>
-        <param name="input_file" type="data" format="tabular" label="TSV file." help="Input tsv file with at least a heading or chemical column."/>
+        <param name="input_file" type="data" format="tabular,tsv" label="TSV file." help="Input tsv file with at least a heading or chemical column."/>
         <param name="column_name" type="data_column" data_ref="input_file" use_header_names="true" label="Column to group by." help="Select the column from the input table to group by."/>
+        <param name="as_excel" type="boolean" falsevalue="False" truevalue="True"  checked="false" label="Output as Excel files." help="If true, the output will be saved as Excel files. If false, the output will be saved as TSV files."/>
     </inputs>
     <outputs>
-        <collection name="final_outputs" type="list" label="Summarized results of $input_file.element_identifier" format="xlsx">
+        <collection name="final_outputs" type="list" label="Summarized results of $input_file.element_identifier" format_source="input_file">
             <discover_datasets pattern="(?P&lt;designation&gt;.*)\.xlsx$" ext="xlsx" directory="."/>
+            <discover_datasets pattern="(?P&lt;designation&gt;.*)\.tsv$" ext="tsv" directory="."/>
         </collection>
     </outputs>
     <tests>
