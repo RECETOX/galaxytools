@@ -13,7 +13,8 @@
     </requirements>
 
     <command detect_errors="exit_code"><![CDATA[
-        python3 '${python_wrapper}'
+        python3 '${python_wrapper}' &&
+        python3 -m json.tool ${scores_out} temp.json && mv temp.json ${scores_out}
     ]]> </command>
 
     <environment_variables>

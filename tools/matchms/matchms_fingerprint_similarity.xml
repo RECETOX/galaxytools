@@ -17,7 +17,8 @@
 
 
     <command detect_errors="exit_code"><![CDATA[
-        python3 ${python_wrapper}
+        python3 ${python_wrapper} &&
+        python3 -m json.tool ${scores_out} temp.json && mv temp.json ${scores_out} 
     ]]> </command>
 
 <configfiles>
@@ -75,7 +76,7 @@ scores.to_json("$scores_out")
                 <param name="references" value="similarity/rcx_exposome_pesticides_subset.msp" ftype="msp"/>
             </conditional>
             <param name="fingerprint_similarity" value="cosine" />
-            <output name="scores_out" value="fingerprints/cosine.json" ftype="json" />
+            <output name="scores_out" value="fingerprints/cosine.json" compare="diff" ftype="json" lines_diff="20"/>
         </test>
         <test>
             <conditional name="scores">
@@ -95,11 +96,10 @@ scores.to_json("$scores_out")
 
         .. rubric:: **Footnotes**
         .. [1] SQL join types explained on W3School_.
-        .. [2] Fingerprint - the `daylight fingerprint`_ is used to compute chemical similarity.
+        .. [2] Fingerprint - the daylight fingerprint is used to compute chemical similarity.
                Fingerprints are derived from SMILES or InChI structure notations present in the spectrum metadata.
         
         .. _W3School: https://www.w3schools.com/sql/sql_join.asp
-        .. _daylight fingerprint: https://www.daylight.com/dayhtml/doc/theory/theory.finger.html
         
         @HELP_matchms@
     </help>

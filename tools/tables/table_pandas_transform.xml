@@ -1,4 +1,4 @@
-<tool id="table_pandas_transform" name="table column transformations" version="@PANDAS_VERSION@+galaxy@VERSION_SUFFIX@" profile="20.01" license="MIT">
+<tool id="table_pandas_transform" name="table column transformations" version="@PANDAS_VERSION@+galaxy@VERSION_SUFFIX@" profile="@PROFILE_VERSION@" license="MIT">
     <description>apply transformations on multiple columns</description>
     <macros>
         <import>macros.xml</import>

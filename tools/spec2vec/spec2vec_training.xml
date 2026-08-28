@@ -183,7 +183,9 @@
         </test>
         <test expect_num_outputs="3"> <!-- Test 2: pickle output -->
             <param name="spectra_filename" value="RECETOX_Exposome_pesticides_HR_MS_normalized_20220323.msp" ftype="msp"/>
-            <param name="as_pickle" value="TRUE"/>
+            <section name="output_parameters">
+                <param name="as_pickle" value="TRUE"/>
+            </section>
             <output name="model_filename" file="model.json" ftype="json"/>
             <output name="weights_filename" ftype="binary">
                 <assert_contents>
@@ -201,10 +203,12 @@
         </test>
         <test expect_num_outputs="3"> <!-- Test 3: model checkpoints -->
             <param name="spectra_filename" value="RECETOX_Exposome_pesticides_HR_MS_normalized_20220323.msp" ftype="msp"/>
-            <conditional name="model_checkpoints">
-                <param name="save_checkpoints" value="TRUE"/>
-                <param name="checkpoints" value="1,5,8,10"/>
-            </conditional>
+            <section name="output_parameters">
+                <conditional name="model_checkpoints">
+                    <param name="save_checkpoints" value="TRUE"/>
+                    <param name="checkpoints" value="1,5,8,10"/>
+                </conditional>
+            </section>
             <output name="model_filename" file="model.json" ftype="json"/>
             <output name="weights_filename" ftype="binary">
                 <assert_contents>
@@ -236,9 +240,11 @@
                 </element>
             </output_collection>
         </test>
-        <test> <!-- Test 4: embeddings size in output corresponds to `vector_size` param -->
+        <test expect_num_outputs="2"> <!-- Test 4: embeddings size in output corresponds to `vector_size` param -->
             <param name="spectra_filename" value="RECETOX_Exposome_pesticides_HR_MS_normalized_20220323.msp" ftype="msp"/>
-            <param name="vector_size" value="100"/>
+            <section name="training_parameters">
+                <param name="vector_size" value="100"/>
+            </section>
             <output name="model_filename" file="model_vector_size_100.json" ftype="json"/>
             <output name="weights_filename" ftype="binary">
                 <assert_contents>

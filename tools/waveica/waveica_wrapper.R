@@ -53,8 +53,8 @@ waveica <- function(data_matrix_file,
                     wavelet_filter,
                     wavelet_length,
                     k,
-                    t,
-                    t2,
+                    batch_threshold,
+                    group_threshold,
                     alpha,
                     exclude_blanks,
                     transpose = FALSE) {
@@ -75,7 +75,7 @@ waveica <- function(data_matrix_file,
         "injectionOrder", "batch"
     )
 
-    metadata <- dplyr::select(metadata, required_columns)
+    metadata <- dplyr::select(metadata, all_of(required_columns))
 
     # Ensure both tables have a sampleName column
     if (!"sampleName" %in% colnames(features) || !"sampleName" %in% colnames(metadata)) { # nolint
@@ -113,8 +113,8 @@ waveica <- function(data_matrix_file,
         batch = batch,
         group = group,
         K = k,
-        t = t,
-        t2 = t2,
+        batch_threshold = batch_threshold,
+        group_threshold = group_threshold,
         alpha = alpha
     )
     non_feature_columns <- setdiff(colnames(data), feature_columns)
@@ -344,8 +344,9 @@ tranpose_data <- function(data, column_names) {
 
 
 final_data_processing <- function(
-    data, non_feature_columns,
-    transpose, original_first_colname) {
+  data, non_feature_columns,
+  transpose, original_first_colname
+) {
     # Remove all columns that are in non_
     # feature_columns, except the first column
     cols_to_keep <- !(colnames(data) %in% non_feature_columns)

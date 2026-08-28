@@ -83,6 +83,7 @@ scores.to_json("$similarity_scores")
             <param name="model_param" value="Model_Parameter_JSON.json" ftype="json"/>
             <output name="similarity_scores" value="msp_json_score_out.json" ftype="json" compare="sim_size" />
         </test>
+
         <test expect_num_outputs="1">
             <conditional name="scores">
                 <param name="use_scores" value="True"/>

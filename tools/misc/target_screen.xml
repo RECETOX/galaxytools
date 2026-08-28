@@ -2,8 +2,20 @@
     <description>Extract peaks from recetox-aplcms tables using a list of target ions</description>
     <macros>
         <token name="@TOOL_VERSION@">0.1.0</token>
-        <token name="@VERSION_SUFFIX@">1</token>
+        <token name="@VERSION_SUFFIX@">2</token>
     </macros>
+
+    <creator>
+      <person
+          givenName="Helge"
+          familyName="Hecht"
+          url="https://github.com/hechth"
+          identifier="0000-0001-6744-996X" />
+      <organization
+          url="https://www.recetox.muni.cz/"
+          email="GalaxyToolsDevelopmentandDeployment@space.muni.cz"
+          name="RECETOX MUNI" />
+    </creator>
 
     <requirements>
         <requirement type="package" version="2.2.3">pandas</requirement>

@@ -1,5 +1,5 @@
 <macros>
-    <token name="@TOOL_VERSION@">0.4.1</token>
+    <token name="@TOOL_VERSION@">0.5.1</token>
 
     <xml name="creator">
         <creator>
@@ -39,11 +39,15 @@
     </token>
 
     <xml name="job_options">
+        <option value="canonical_smiles formula RDKit">RDKit: canonical_smiles -> formula</option>
         <option value="canonical_smiles mw RDKit">RDKit: canonical_smiles -> mw</option>
         <option value="formula mw RDKit">RDKit: formula -> mw</option>
         <option value="inchi canonical_smiles RDKit">RDKit: inchi -> canonical_smiles</option>
+        <option value="inchi formula RDKit">RDKit: inchi -> formula</option>
         <option value="inchi isomeric_smiles RDKit">RDKit: inchi -> isomeric_smiles</option>
+        <option value="isomeric_smiles formula RDKit">RDKit: isomeric_smiles -> formula</option>
         <option value="isomeric_smiles mw RDKit">RDKit: isomeric_smiles -> mw</option>
+        <option value="smiles formula RDKit">RDKit: smiles -> formula</option>
         <option value="smiles mw RDKit">RDKit: smiles -> mw</option>
         <option value="compound_name canonical_smiles IDSM">IDSM: compound_name -> canonical_smiles</option>
         <option value="compound_name formula IDSM">IDSM: compound_name -> formula</option>

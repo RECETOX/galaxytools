@@ -1,4 +1,4 @@
-<tool id="msmetaenhancer" name="MSMetaEnhancer" version="@TOOL_VERSION@+galaxy2" profile="23.0">
+<tool id="msmetaenhancer" name="MSMetaEnhancer" version="@TOOL_VERSION@+galaxy0" profile="23.0">
     <description>collect and convert chemical identifiers in tables or MS libraries</description>
 
     <macros>
@@ -97,7 +97,7 @@
     <tests>
         <test expect_num_outputs="2">
             <param name="input_file" value="sample.msp" ftype="msp" />
-            <param name="jobs" value="compound_name inchi PubChem,inchi canonical_smiles PubChem"/>
+            <param name="jobs" value="casno smiles CIR"/>
             <section name="options">
                 <conditional name="logging">
                     <param name="output_log" value="TRUE"/>
@@ -112,13 +112,13 @@
         </test>
         <test expect_num_outputs="1">
             <param name="input_file" value="msme_sample.tsv" ftype="tsv" />
-            <param name="jobs" value="compound_name inchi PubChem,inchi canonical_smiles PubChem"/>
-            <output name="output_file" file="msme_sample_out.tabular" ftype="tabular"/>
+            <param name="jobs" value="compound_name inchi IDSM,inchi canonical_smiles RDKit"/>
+            <output name="output_file" file="msme_sample_out_rdkit.tabular" ftype="tabular"/>
         </test>
         <test expect_num_outputs="1">
             <param name="input_file" value="msme_sample.tsv" ftype="tabular" />
-            <param name="jobs" value="compound_name inchi PubChem,inchi canonical_smiles PubChem"/>
-            <output name="output_file" file="msme_sample_out.tabular" ftype="tabular"/>
+            <param name="jobs" value="compound_name inchi IDSM,inchi canonical_smiles IDSM"/>
+            <output name="output_file" file="msme_sample_out_pubchem.tabular" ftype="tabular"/>
         </test>
     </tests>
 

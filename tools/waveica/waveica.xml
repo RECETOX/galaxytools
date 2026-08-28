@@ -8,8 +8,8 @@
 
     <requirements>
         <requirement type="package" version="@TOOL_VERSION@">r-recetox-waveica</requirement>
-        <requirement type="package" version="8.0.0">r-arrow</requirement>
-        <requirement type="package" version="1.0.10">r-dplyr</requirement>
+        <requirement type="package" version="24.0.0">r-arrow</requirement>
+        <requirement type="package" version="1.2.1">r-dplyr</requirement>
     </requirements>
     <command detect_errors="aggressive"><![CDATA[
         Rscript -e "source('${__tool_directory__}/waveica_wrapper.R');
@@ -23,8 +23,8 @@
                 wavelet_filter = '$wf.wavelet_filter',
                 wavelet_length = '$wf.wavelet_length',
                 k = $k,
-                t = $batch_correction.t,
-                t2 = $batch_correction.t2,
+                batch_threshold = $batch_correction.batch_threshold,
+                group_threshold = $batch_correction.group_threshold,
                 alpha = $alpha,
                 exclude_blanks = $exclude_blanks,
                 transpose = $transpose_feature_table
@@ -63,8 +63,8 @@
                 <option value="single_batch">Single batch (or no batch information)</option>
             </param>
             <when value="batchwise">
-                <param type="float" value="0.05" name="t" label="Batch-association threshold" help="threshold to consider a component associate with the batch, should be between 0 and 1"/>
-                <param type="float" value="0.05" name="t2" label="Group-association threshold" help="threshold to consider a component associate with the group, should be between 0 and 1"/>
+                <param type="float" value="0.05" name="batch_threshold" label="Batch-association threshold" help="threshold to consider a component associate with the batch, should be between 0 and 1"/>
+                <param type="float" value="0.05" name="group_threshold" label="Group-association threshold" help="threshold to consider a component associate with the group, should be between 0 and 1"/>
             </when>
             <when value="single_batch">
                 <param type="float" value="0" name="cutoff" label="Cutoff" help="threshold of the variation explained by the injection order for independent components, should be between 0 and 1"/>
@@ -87,8 +87,8 @@
             </conditional>
             <conditional name="batch_correction">
                 <param name="mode" value="batchwise"/>
-                <param name="t" value="0.05"/>
-                <param name="t2" value="0.05"/>
+                <param name="batch_threshold" value="0.05"/>
+                <param name="group_threshold" value="0.05"/>
             </conditional>
             <output name="normalized_data" file="test1_output.csv" ftype="csv"/>
         </test>
@@ -103,8 +103,8 @@
             </conditional>
             <conditional name="batch_correction">
                 <param name="mode" value="batchwise"/>
-                <param name="t" value="0.05"/>
-                <param name="t2" value="0.05"/>
+                <param name="batch_threshold" value="0.05"/>
+                <param name="group_threshold" value="0.05"/>
             </conditional>
             <output name="normalized_data" file="normalized_data.tsv" ftype="tabular"/>
         </test>
@@ -119,8 +119,8 @@
             </conditional>
             <conditional name="batch_correction">
                 <param name="mode" value="batchwise"/>
-                <param name="t" value="0.05"/>
-                <param name="t2" value="0.05"/>
+                <param name="batch_threshold" value="0.05"/>
+                <param name="group_threshold" value="0.05"/>
             </conditional>
             <output name="normalized_data" file="test3_output.parquet" compare="sim_size" delta="200" ftype="parquet"/>
         </test>
