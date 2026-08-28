@@ -49,18 +49,18 @@ for input_path, element_identifier in pdf_inputs:
     <inputs>
         <conditional name="input_source">
             <param name="input_mode" type="select" label="Input type" help="Choose whether to parse one PDF or every PDF in a collection.">
-                <option value="single" selected="true">Single PDF</option>
-                <option value="collection">PDF collection</option>
+                <option value="single" selected="true">Single</option>
+                <option value="collection">Collection</option>
             </param>
             <when value="single">
-                <param name="input_file" type="data" format="pdf" label="PDF to parse" help="Input PDF."/>
+                <param name="input_file" type="data" format="pdf" label="PDF to parse" help="Provide a single PDF file to parse into text."/>
             </when>
             <when value="collection">
-                <param name="input_collection" type="data_collection" collection_type="list" format="pdf" label="PDF collection to parse" help="Input collection of PDFs."/>
+                <param name="input_collection" type="data_collection" collection_type="list" format="pdf" label="PDF collection to parse" help="Provide a collection of PDF files to parse into text."/>
             </when>
         </conditional>
         <conditional name="llms">
-            <param name="use_llms" type="select" display="radio" checked="false" truevalue="true" falsevalue="false" label="Use LLMs to parse scanned PDFs" help="Check if you want to use LLMs to parse old PDFs which contain scans of text as images and not text encoded through OCR.">
+            <param name="use_llms" type="select" display="radio" checked="false" truevalue="true" falsevalue="false" label="Use an LLM for scanned PDFs" help="Enable this when the PDF mainly contains page images rather than machine-readable text, for example older scanned articles.">
                 <option value="true">Yes</option>
                 <option value="false" selected="true">No</option>
             </param>
@@ -104,7 +104,10 @@ for input_path, element_identifier in pdf_inputs:
 Parse PDF
 ===================
 
-Tool to parse PDF files.
+This tool converts one PDF or a collection of PDFs into plain-text files.
+
+- Use the default parsing mode for PDFs that already contain machine-readable text.
+- Enable the LLM option for scanned PDFs where the pages are mostly images rather than embedded text.
 
     ]]></help>
     <citations>
