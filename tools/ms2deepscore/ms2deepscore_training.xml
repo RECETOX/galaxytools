@@ -8,7 +8,7 @@
 
     <requirements>
         <requirement type="package" version="@TOOL_VERSION@">ms2deepscore</requirement>
-        <requirement type="package" version="@ONNX_VERSION@">onnx</requirement>
+        <requirement type="package" version="12.0.0">onnx</requirement>
     </requirements>
     
     <command detect_errors="exit_code"><![CDATA[
