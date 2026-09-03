@@ -1,4 +1,4 @@
-<tool id="ms2deepscore_training" name="MS2DeepScore Model Training" version="@TOOL_VERSION@+galaxy0">
+<tool id="ms2deepscore_training" name="MS2DeepScore Model Training" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="23.0" license="MIT">
     <description>Compute similarity scores using a pre-trained MS2DeepScore model</description>
     <macros>
         <import>macros.xml</import>
@@ -16,23 +16,28 @@
         cp $spectra processing/input."$spectra.ext";
         python3 ${python_wrapper}
     ]]></command>
+
+    <expand macro="environment_variables"/>
+
 <configfiles>
 <configfile name="python_wrapper">
 import onnx
+import onnxscript
 import os
 import torch
+from matchms import set_matchms_logger_level
 from ms2deepscore.models import load_model
 from ms2deepscore.SettingsMS2Deepscore import SettingsMS2Deepscore
-from ms2deepscore.wrapper_functions.training_wrapper_functions import train_ms2deepscore_wrapper, StoreTrainingData
+from ms2deepscore.wrapper_functions.training_wrapper_functions import train_ms2deepscore_wrapper
 
 @json_load@
 
-settings = SettingsMS2Deepscore(**model_params)
+set_matchms_logger_level("ERROR")
 file = "processing/input.$spectra.ext"
-directory = train_ms2deepscore_wrapper(file, settings, $validation_split_fraction)
+settings = SettingsMS2Deepscore(spectrum_file_path=file,**model_params)
+train_ms2deepscore_wrapper(settings)
 
-expected_file_names = StoreTrainingData(file)
-pt_model_path = os.path.join(expected_file_names.trained_models_folder, directory, settings.model_file_name)
+pt_model_path = os.path.join(settings.model_directory_name, settings.model_file_name)
 
 model = load_model(pt_model_path)
 model.eval()
@@ -52,6 +57,8 @@ torch.onnx.export(
     model,
     (spectra_tensors_1, spectra_tensors_2, metadata_1, metadata_2),
     "$onnx_trained_model",
+    dynamo=True,
+    external_data=False,
     verbose=True
 )
 
@@ -63,15 +70,16 @@ torch.onnx.export(
     </inputs>
     
     <outputs>
-        <data label="Trained model" name="onnx_trained_model" format="onnx"/>
+        <data name="onnx_trained_model" format="onnx"/>
     </outputs>
 
     <tests>
         <test expect_num_outputs="1">
-            <param name="spectra" value="clean_spectra.mgf" ftype="mgf"/>
-            <param name="model_param" value="Model_Parameter_JSON.json" ftype="json" />
-            <param name="validation_split_fraction" value="5"/>
-            <output name="onnx_trained_model" value="Trained_model.onnx" ftype="onnx" compare="sim_size"/>
+            <param name="spectra" ftype="msp" location='https://galaxy-umsa.grid.cesnet.cz/api/datasets/fa57798f4c6835f5/display?to_ext=msp'/>
+            <param name="model_param" value="Model_Parameter_JSON_test.json" ftype="json" />
+            <param name="train_test_split_fraction" value="20"/>
+            <!-- <output name="onnx_trained_model" location='https://galaxy-umsa.grid.cesnet.cz/api/datasets/feaa5809758067ab/display?to_ext=onnx' ftype="onnx" compare="sim_size"/> -->
+            <output name="onnx_trained_model" value='Trained_model.onnx' ftype="onnx" compare="sim_size"/>
         </test>
     </tests>
 
