@@ -9,8 +9,6 @@
     <requirements>
         <requirement type="package" version="@TOOL_VERSION@">ms2deepscore</requirement>
         <requirement type="package" version="@ONNX_VERSION@">onnx</requirement>
-        <requirement type="package" version="0.7.1">onnxscript</requirement>
-        <requirement type="package" version="2.3.3">pandas</requirement>
     </requirements>
     
     <command detect_errors="exit_code"><![CDATA[
@@ -59,6 +57,8 @@ torch.onnx.export(
     model,
     (spectra_tensors_1, spectra_tensors_2, metadata_1, metadata_2),
     "$onnx_trained_model",
+    dynamo=True,
+    external_data=False,
     verbose=True
 )
 
@@ -78,7 +78,8 @@ torch.onnx.export(
             <param name="spectra" ftype="msp" location='https://galaxy-umsa.grid.cesnet.cz/api/datasets/fa57798f4c6835f5/display?to_ext=msp'/>
             <param name="model_param" value="Model_Parameter_JSON_test.json" ftype="json" />
             <param name="train_test_split_fraction" value="20"/>
-            <output name="onnx_trained_model" location='https://galaxy-umsa.grid.cesnet.cz/api/datasets/feaa5809758067ab/display?to_ext=onnx' ftype="onnx" compare="sim_size"/>
+            <!-- <output name="onnx_trained_model" location='https://galaxy-umsa.grid.cesnet.cz/api/datasets/feaa5809758067ab/display?to_ext=onnx' ftype="onnx" compare="sim_size"/> -->
+            <output name="onnx_trained_model" value='Trained_model.onnx' ftype="onnx" compare="sim_size"/>
         </test>
     </tests>
 
