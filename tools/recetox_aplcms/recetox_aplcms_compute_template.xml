@@ -41,7 +41,7 @@
                 <collection type="list">
                   <element name="RCX_06_shortened_extracted_clusters.parquet" location="https://github.com/RECETOX/recetox-aplcms/tree/master/tests/testdata/clusters/RCX_06_shortened_extracted_clusters.parquet" ftype = "parquet"/>
                   <element name="RCX_07_shortened_extracted_clusters.parquet" location="https://github.com/RECETOX/recetox-aplcms/tree/master/tests/testdata/clusters/RCX_07_shortened_extracted_clusters.parquet" ftype = "parquet" />
-                  <element name="RCX_08_shortened_extracted_clusters.parquet" location="https://github.com/RECETOX/recetox-aplcms/tree/master/tests/testdata/clusters/RCX_07_shortened_extracted_clusters.parquet" ftype = "parquet" />
+                  <element name="RCX_08_shortened_extracted_clusters.parquet" location="https://github.com/RECETOX/recetox-aplcms/tree/master/tests/testdata/clusters/RCX_08_shortened_extracted_clusters.parquet" ftype = "parquet" />
                 </collection>
             </param> 
             <output name="output_file"> 
