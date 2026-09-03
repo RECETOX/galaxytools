@@ -58,23 +58,23 @@
     <tests>
         <!-- <test expect_failure="true" /> -->
         <test expect_num_outputs="3"> <!-- TEST #1: Test RCX_07 . -->
-            <param name="input_file" location="https://gitlab.ics.muni.cz/umsa/umsa-files/-/blob/master/testdata/recetox-aplcms/clusters/RCX_07_shortened_adjusted_clusters.parquet" ftype = "parquet"/>      
+            <param name="input_file" location="https://github.com/RECETOX/recetox-aplcms/blob/master/tests/testdata/clusters/RCX_07_shortened_adjusted_clusters.parquet" ftype = "parquet"/>      
             <output name="metadata_file"> 
                 <assert_contents>
                     <!-- change size! -->
-                    <has_size size="10k" />
+                    <has_size size="72.4k" />
                 </assert_contents>
             </output>
             <output name="rt_file"> 
                 <assert_contents>
                     <!-- change size! -->
-                    <has_size size="10k" />  
+                    <has_size size="16.5k" />  
                 </assert_contents>
             </output>
             <output name="intensity_file"> 
                 <assert_contents>
                     <!-- change size! -->
-                    <has_size size="10k" />
+                    <has_size size="16.6k" />
                 </assert_contents>
             </output>
         </test>
