@@ -20,7 +20,7 @@
         <configfile name="run_script"><![CDATA[
              #set filenames = str("', '").join([str($f) for $f in $files])
              feature_tables <- load_parquet_collection(c('$filenames'))
-             sample_names <- load_sample_id(feature_tables)
+             sample_names <- unlist(lapply(feature_tables, load_sample_id))
 
              validate_sample_names(sample_names)
 
@@ -57,24 +57,27 @@
 
     <tests>
         <!-- <test expect_failure="true" /> -->
-        <test expect_num_outputs="3"> <!-- TEST #1: Test RCX_07 . -->
-            <param name="input_file" location="https://github.com/RECETOX/recetox-aplcms/tree/master/tests/testdata/clusters/RCX_07_shortened_adjusted_clusters.parquet" ftype = "parquet"/>      
-            <output name="metadata_file"> 
+        <test expect_num_outputs="3"> 
+        <param name="files">
+                <collection type="list">
+                  <element name="RCX_06_shortened_adjusted_clusters.parquet" location="https://media.githubusercontent.com/media/RECETOX/recetox-aplcms/master/tests/testdata/clusters/RCX_06_shortened_adjusted_clusters.parquet" ftype = "parquet"/>
+                  <element name="RCX_07_shortened_adjusted_clusters.parquet" location="https://media.githubusercontent.com/media/RECETOX/recetox-aplcms/master/tests/testdata/clusters/RCX_07_shortened_adjusted_clusters.parquet" ftype = "parquet"/>
+                  <element name="RCX_08_shortened_adjusted_clusters.parquet" location="https://media.githubusercontent.com/media/RECETOX/recetox-aplcms/master/tests/testdata/clusters/RCX_08_shortened_adjusted_clusters.parquet" ftype = "parquet"/>
+                </collection>
+            </param>            
+            <output name="metadata_file" ftype="parquet" md5="d006dd0b26c8aec1b490d17ddf5b289d"> 
                 <assert_contents>
-                    <!-- change size! -->
-                    <has_size size="72.4k" delta="10" />
+                    <has_size size="75987" />
                 </assert_contents>
             </output>
-            <output name="rt_file"> 
+            <output name="rt_file" ftype="parquet" md5="4db8dec1430bf3fac3ae9f4a0358b9e0"> 
                 <assert_contents>
-                    <!-- change size! -->
-                    <has_size size="16.5k"  delta="2"/>  
+                    <has_size size="16862" />  
                 </assert_contents>
             </output>
-            <output name="intensity_file"> 
+            <output name="intensity_file" ftype="parquet" md5="30539d3ab5b136659acb36e552b8d4a2"> 
                 <assert_contents>
-                    <!-- change size! -->
-                    <has_size size="16.6k" delta="2" />
+                    <has_size size="16981" />
                 </assert_contents>
             </output>
         </test>
