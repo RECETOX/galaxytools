@@ -14,12 +14,12 @@
     <expand macro="requirements"/>
 
     <command detect_errors="aggressive"><![CDATA[
-        python '${__tool_directory__}/mzml_id_getter.py' '$input_file';
+        ln -s $input_file input.$input_file.ext &&
         Rscript -e 'source("${__tool_directory__}/utils.R")' -e 'source("${run_script}")'
     ]]></command>
     <configfiles>
         <configfile name="run_script"><![CDATA[
-            sample_name <- readChar('sample_name.txt', file.info('sample_name.txt')\$size)
+            sample_name <- read_run_id('input.${input_file.ext}')
 
             if(is.na(sample_name)) {
                 stop("The mzML file does not contain run ID.")
@@ -27,13 +27,13 @@
 
             #set extracted_filenames = str("', '").join([str($f) for $f in $extracted_files])
             extracted_feature_tables <- load_parquet_collection(c('$extracted_filenames'))
-            sample_names <- unlist(lapply(extracted_feature_tables, load_sample_name))
+            sample_names <- unlist(lapply(extracted_feature_tables, load_sample_id))
             validate_sample_names(sample_names)
             extracted_features <- select_table_with_sample_name(extracted_feature_tables, sample_name)
 
             #set corrected_filenames = str("', '").join([str($f) for $f in $corrected_files])
             corrected_feature_tables <- load_parquet_collection(c('$corrected_filenames'))
-            sample_names <- unlist(lapply(corrected_feature_tables, load_sample_name))
+            sample_names <- unlist(lapply(corrected_feature_tables, load_sample_id))
             validate_sample_names(sample_names)
             corrected_features <- select_table_with_sample_name(corrected_feature_tables, sample_name)
 
@@ -42,7 +42,7 @@
             intensity_table <- load_data_from_parquet_file('$intensity_file')
 
             recovered <- recover.weaker(
-                filename = '$input_file',
+                filename = 'input.${input_file.ext}',
                 sample_name = sample_name,
                 extracted_features = extracted_features,
                 adjusted_features = corrected_features,
@@ -79,8 +79,6 @@
             )
 
             recovered <- select_adjusted(recovered)
-
-            recovered <- save_sample_name(recovered, sample_name)
             save_data_as_parquet_file(recovered, '$output_file')
         ]]></configfile>
     </configfiles>
@@ -108,29 +106,28 @@
     </outputs>
 
     <tests>
-        <test expect_num_outputs="1"> <!-- TEST #1: Test . -->
-            <!-- <test expect_failure="true" /> -->
-            <param name="input_file" location="https://github.com/RECETOX/recetox-aplcms/tree/master/tests/testdata/input/RCX_06_shortened.mzML" ftype = "mzml"/>
+        <test expect_num_outputs="1"> 
+            <param name="input_file" location="https://media.githubusercontent.com/media/RECETOX/recetox-aplcms/master/tests/testdata/input/RCX_06_shortened.mzML" ftype = "mzml"/>
             <param name="extracted_files">
                 <collection type="list">
-                  <element name="RCX_06_shortened.parquet" location="https://github.com/RECETOX/recetox-aplcms/tree/master/tests/testdata/extracted/RCX_06_shortened.parquet" ftype = "parquet"/>
-                  <element name="RCX_07_shortened.parquet" location="https://github.com/RECETOX/recetox-aplcms/tree/master/tests/testdata/extracted/RCX_07_shortened.parquet" ftype = "parquet"/>
-                  <element name="RCX_08_shortened.parquet" location="https://github.com/RECETOX/recetox-aplcms/tree/master/tests/testdata/extracted/RCX_08_shortened.parquet" ftype = "parquet"/>
+                  <element name="RCX_06_shortened.parquet" location="https://media.githubusercontent.com/media/RECETOX/recetox-aplcms/master/tests/testdata/extracted/RCX_06_shortened.parquet" ftype = "parquet"/>
+                  <element name="RCX_07_shortened.parquet" location="https://media.githubusercontent.com/media/RECETOX/recetox-aplcms/master/tests/testdata/extracted/RCX_07_shortened.parquet" ftype = "parquet"/>
+                  <element name="RCX_08_shortened.parquet" location="https://media.githubusercontent.com/media/RECETOX/recetox-aplcms/master/tests/testdata/extracted/RCX_08_shortened.parquet" ftype = "parquet"/>
                 </collection>
             </param>         
             <param name="corrected_files">
                 <collection type="list">
-                  <element name="RCX_06_shortened.parquet" location="https://github.com/RECETOX/recetox-aplcms/tree/master/tests/testdata/adjusted/RCX_06_shortened.parquet" ftype = "parquet"/>
-                  <element name="RCX_07_shortened.parquet" location="https://github.com/RECETOX/recetox-aplcms/tree/master/tests/testdata/adjusted/RCX_07_shortened.parquet" ftype = "parquet"/>
-                  <element name="RCX_08_shortened.parquet" location="https://github.com/RECETOX/recetox-aplcms/tree/master/tests/testdata/adjusted/RCX_08_shortened.parquet" ftype = "parquet"/>
+                  <element name="RCX_06_shortened.parquet" location="https://media.githubusercontent.com/media/RECETOX/recetox-aplcms/master/tests/testdata/adjusted/RCX_06_shortened.parquet" ftype = "parquet"/>
+                  <element name="RCX_07_shortened.parquet" location="https://media.githubusercontent.com/media/RECETOX/recetox-aplcms/master/tests/testdata/adjusted/RCX_07_shortened.parquet" ftype = "parquet"/>
+                  <element name="RCX_08_shortened.parquet" location="https://media.githubusercontent.com/media/RECETOX/recetox-aplcms/master/tests/testdata/adjusted/RCX_08_shortened.parquet" ftype = "parquet"/>
                 </collection>
             </param> 
-            <param name="metadata_file" location="https://github.com/RECETOX/recetox-aplcms/tree/master/tests/testdata/aligned/metadata_table.parquet" ftype = "parquet"/>
-            <param name="intensity_file" location="https://github.com/RECETOX/recetox-aplcms/tree/master/tests/testdata/aligned/intensity_table.parquet" ftype = "parquet"/>
-            <param name="rt_file" location="https://github.com/RECETOX/recetox-aplcms/tree/master/tests/testdata/aligned/rt_table.parquet" ftype="parquet"/>
-            <output name="output_file"> 
+            <param name="metadata_file" location="https://media.githubusercontent.com/media/RECETOX/recetox-aplcms/master/tests/testdata/aligned/metadata_table.parquet" ftype = "parquet"/>
+            <param name="intensity_file" location="https://media.githubusercontent.com/media/RECETOX/recetox-aplcms/master/tests/testdata/aligned/intensity_table.parquet" ftype = "parquet"/>
+            <param name="rt_file" location="https://media.githubusercontent.com/media/RECETOX/recetox-aplcms/master/tests/testdata/aligned/rt_table.parquet" ftype="parquet"/>
+            <output name="output_file" md5="ff58a750b2a347ae8baea637e42d6785"> 
                 <assert_contents>
-                    <has_size size="10k" />
+                    <has_size size="71226" />
                 </assert_contents>
             </output>
         </test>
