@@ -62,6 +62,8 @@
                help="The minimum proportion of presence in the time period for a series of signals grouped by m/z to be considered a peak." />
         <param name="min_run" type="float" value="12" label="Minimal elution time [unit corresponds to the retention time]"
                help="The minimum length of elution time for a series of signals grouped by m/z to be considered a peak." />
+        <param name="max_run" type="float" value="100" label = "Maximum elution time [unit corresponds to the retention time]"
+               help="The maximum length of elution time for a series of signals grouped by m/z to be considered a peak." />
         <param name="mz_tol" type="float" value="10" label="m/z tolerance [ppm]"
                help="The m/z tolerance level for the grouping of data points. This value is expressed as the fraction of the m/z value.
                This value, multiplied by the m/z value, becomes the cutoff level.
@@ -78,10 +80,18 @@
         <param name="BIC_factor" type="float" value="2.0" label="BIC factor"
                help="A factor influencing Bayesian information criterion (BIC) in estimation of RT peak shape.
                If the value is larger than 1, models with more peaks are penalized more." />
+        
+        <param name="shape_model" type="select" label="Peak shape model"
+               help="The mathematical model for the shape of a peak. There are two choices - 'bi-Gaussian' and 'Gaussian'. 
+               When the peaks are asymmetric, the bi-Gaussian is better. The default is 'bi-Gaussian'.">
+               <option value="bi-Gaussian" selected="true">bi-Gaussian</option>
+               <option value="Gaussian">Gaussian</option>
+        </param>
+        
         <section name="advanced" title="Advanced" expanded="false">
             <param name="component_eliminate" type="float" value="0.01" label="Component eliminate"
                    help="In fitting mixture of bi-Gaussian model of an EIC, when a component accounts for a proportion of intensities less than this value, the component will be ignored." />
-            <section name="shape_model" title="Shape model deviations" expanded="true">
+            <section name="shape_model_param" title="Shape model deviations" expanded="true">
                  <param name="sigma_ratio_lim_min" type="float" optional="true" label="Minimal sigma ratio"
                         help="The lower limit of the ratio range between the left-standard deviation and the right-standard deviation of the bi-Gaussian function to fit the data." />
                  <param name="sigma_ratio_lim_max" type="float" optional="true" label="Maximal sigma ratio"
