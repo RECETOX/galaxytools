@@ -1,4 +1,13 @@
 {
+    "spectrum_file_path": null,
+    "root_dir": null,
+    "spectrum_file_name": null,
+    "validation_spectra_file_name": null,
+    "test_spectra_file_name": null,
+    "training_spectra_file_name": null,
+    "results_folder": null,
+    "model_directory_name": null,
+    "train_test_split_fraction": 20,
     "base_dims": [
         20,
         20
@@ -6,6 +15,7 @@
     "embedding_dim": 15,
     "ionisation_mode": "negative",
     "activation_function": "relu",
+    "balanced_sampling_across_ionmodes": false,
     "train_binning_layer": false,
     "train_binning_layer_group_size": 20,
     "train_binning_layer_output_per_group": 2,
@@ -17,7 +27,7 @@
     "weighting_factor": 0,
     "model_file_name": "ms2deepscore_model.pt",
     "history_plot_file_name": "history.svg",
-    "time_stamp": "2025_06_23_11_16_54",
+    "time_stamp": "2026_09_16_16_40_32",
     "min_mz": 10,
     "max_mz": 1000,
     "mz_bin_width": 0.1,
