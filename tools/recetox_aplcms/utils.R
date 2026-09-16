@@ -11,30 +11,16 @@ get_env_sample_name <- function() {
     return(sample_name)
 }
 
-save_sample_name <- function(df, sample_name) {
-    attr(df, "sample_name") <- sample_name
-    return(df)
-}
-
 restore_sample_name <- function(df) {
     return(df$sample_id[1])
 }
 
-load_sample_name <- function(df) {
-    sample_name <- attr(df, "sample_name")
-    if (is.null(sample_name)) {
+load_sample_id <- function(profile) {
+    id <- profile$sample_id[1]
+    if (is.null(id)) {
         return(NA)
     } else {
-        return(sample_name)
-    }
-}
-
-load_sample_id <- function(profiles) {
-    sample_names <- unname(sapply(profiles, function(i){i$sample_id[1]}))
-    if (is.null(sample_name)) {
-        return(NA)
-    } else {
-        return(sample_name)
+        return(id)
     }
 }
 
@@ -57,7 +43,6 @@ save_parquet_collection <- function(feature_tables, sample_names, subdir) {
     for (i in seq_len(length(feature_tables))) {
         filename <- file.path(subdir, paste0(sample_names[i], ".parquet"))
         feature_table <- as.data.frame(feature_tables[[i]])
-        feature_table <- save_sample_name(feature_table, sample_names[i])
         arrow::write_parquet(feature_table, filename)
     }
 }
@@ -79,7 +64,7 @@ save_aligned_features <- function(aligned_features, metadata_file, rt_file, inte
 }
 
 select_table_with_sample_name <- function(tables, sample_name) {
-    sample_names <- lapply(tables, load_sample_name)
+    sample_names <- lapply(tables, load_sample_id)
     index <- which(sample_names == sample_name)
     if (length(index) > 0) {
         return(tables[[index]])
@@ -114,8 +99,8 @@ read_known_table <- function(filename) {
 }
 
 save_pairing <- function(table, filename) {
-    df <- table$pairing %>%
-        as_tibble() %>%
+    df <- table$pairing |>
+        tibble::as_tibble() |>
         setNames(c("new", "old"))
     arrow::write_parquet(df, filename)
 }
