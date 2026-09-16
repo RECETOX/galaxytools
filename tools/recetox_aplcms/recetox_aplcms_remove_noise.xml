@@ -12,6 +12,7 @@
     <expand macro="creator"/>
     <expand macro="requirements">
         <requirement type="package" version="1.18.0">bioconductor-rawrr</requirement>
+        <requirement type="package" version="78.3">icu</requirement>
         <!-- <requirement type="package" version="6.12.0.199">mono</requirement> -->
     </expand>
 
