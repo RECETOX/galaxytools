@@ -22,13 +22,6 @@
         </creator>
     </xml>
 
-    <xml name="environment_variables">
-        <environment_variables>
-            <environment_variable name="NUMBA_CACHE_DIR">tmp</environment_variable>
-            <environment_variable name="MPLCONFIGDIR">tmp</environment_variable>
-        </environment_variables>
-    </xml>
-
     <xml name="edam">
         <xrefs>
             <xref type="bio.tools">ms2deepscore</xref>

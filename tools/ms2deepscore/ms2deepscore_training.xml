@@ -17,8 +17,6 @@
         python3 ${python_wrapper}
     ]]></command>
 
-    <expand macro="environment_variables"/>
-
 <configfiles>
 <configfile name="python_wrapper">
 import onnx
