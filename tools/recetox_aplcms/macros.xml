@@ -1,5 +1,4 @@
 <macros>
-    <!-- new patch version? 0.13.4 -> 0.13.5 - introducing tests -->
     <token name="@TOOL_VERSION@">0.15.0</token>                
     <xml name="requirements">
         <requirements>
