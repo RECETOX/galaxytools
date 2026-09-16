@@ -34,13 +34,25 @@ onnx_model = onnx.load("$model")
 # Extract the initializers (weights and biases)
 initializers = {init.name: onnx.numpy_helper.to_array(init) for init in onnx_model.graph.initializer}
 
-# Convert NumPy arrays to PyTorch tensors
-state_dict = {name: torch.tensor(np_array) for name, np_array in initializers.items()}
-
 @json_load@
 
 model = SiameseSpectralModel(settings=SettingsMS2Deepscore(**model_params))
-model.load_state_dict(state_dict)
+
+model_keys = model.state_dict().keys()
+state_dict = {
+    name: torch.tensor(array)
+    for name, array in initializers.items()
+    if name in model_keys
+}
+
+load_result = model.load_state_dict(state_dict, strict=False)
+
+if load_result.missing_keys or load_result.unexpected_keys:
+    raise RuntimeError(
+        f"Invalid model state: missing={load_result.missing_keys}, "
+        f"unexpected={load_result.unexpected_keys}"
+    )
+    
 model.eval()
 
 #if $scores.use_scores == "True"
