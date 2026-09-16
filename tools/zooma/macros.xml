@@ -32,6 +32,21 @@
         If the service is unavailable, the job fails early with a clear error message instead of producing
         partial output.
 
+        **Batching and retry logic**
+
+        For large inputs, query values are processed in configurable batches. If a batch fails, it is retried
+        once automatically. If a batch fails twice, those values are skipped and reported to the job log.
+        If two consecutive batches fail, the job terminates with an error because the server appears unavailable.
+
+        **Ontology filtering**
+
+        Results can be filtered to a subset of ontologies:
+
+        - **All ontologies**: No filter applied; all available ontologies are queried.
+        - **EFO and OBO foundry ontologies**: Restricts results to EFO and OBO foundry sources.
+        - **OBO foundry ontologies only**: Restricts results to OBO foundry sources only.
+        - **Custom ontology selection**: Manually select specific ontologies to include.
+
         **Output**
 
         The output table contains one row per returned result candidate and includes:

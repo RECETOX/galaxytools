@@ -22,6 +22,11 @@
             #end if
             --health-url 'https://www.ebi.ac.uk/spot/zooma/v3/api/health'
             --timeout '60'
+            --batch-size '$batch_size'
+            --ontology-filter '$ontology_filter.filter_type'
+            #if str($ontology_filter.filter_type) == 'custom'
+            --ontologies '$ontology_filter.ontologies'
+            #end if
     ]]></command>
 
     <inputs>
@@ -31,6 +36,24 @@
             <option value="annotate">Annotate (legacy endpoint)</option>
             <option value="map" selected="true">Map (v3 endpoint)</option>
         </param>
+        <param name="batch_size" type="integer" value="10" min="1" max="100" label="Batch size" help="Number of query values to send per API call. Reduce if you experience timeouts." />
+        <conditional name="ontology_filter">
+            <param name="filter_type" type="select" label="Ontology filter" help="Select which ontologies should be used for mapping results, similar to the ZOOMA web GUI.">
+                <option value="all" selected="true">All ontologies</option>
+                <option value="efo_obo">EFO and OBO foundry ontologies</option>
+                <option value="obo">OBO foundry ontologies only</option>
+                <option value="custom">Custom ontology selection</option>
+            </param>
+            <when value="all" />
+            <when value="efo_obo" />
+            <when value="obo" />
+            <when value="custom">
+                <param name="ontologies" type="select" label="Select ontologies" help="Choose specific ontologies to include. More ontologies will be added in a future release." multiple="true">
+                    <option value="efo">EFO (Experimental Factor Ontology)</option>
+                    <option value="obo">OBO Foundry</option>
+                </param>
+            </when>
+        </conditional>
     </inputs>
 
     <outputs>
