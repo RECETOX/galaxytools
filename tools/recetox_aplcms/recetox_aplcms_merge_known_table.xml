@@ -109,10 +109,10 @@
     <tests>
         <!-- <test expect_failure="true" /> -->
         <test expect_num_outputs="2">
-            <param name="metadata_file" value="aligned/metadata_table.parquet" ftype = "parquet"/>
-            <param name="intensity_file" value="aligned/intensity_table.parquet" ftype="parquet" />
-            <param name="rt_file" value="aligned/rt_table.parquet" ftype="parquet" />
-            <param name="known_table" value="merge_known_table/known_table.parquet" ftype="parquet" />
+            <param name="metadata_file" location="https://github.com/RECETOX/recetox-aplcms/tree/master/tests/testdata/aligned/metadata_table.parquet" ftype = "parquet"/>
+            <param name="intensity_file" location="https://github.com/RECETOX/recetox-aplcms/tree/master/tests/testdata/aligned/intensity_table.parquet" ftype="parquet" />
+            <param name="rt_file" location="https://github.com/RECETOX/recetox-aplcms/tree/master/tests/testdata/aligned/rt_table.parquet" ftype="parquet" />
+            <param name="known_table" location="https://github.com/RECETOX/recetox-aplcms/tree/master/tests/testdata/hybrid/known_table.parquet" ftype="parquet" />
             <conditional name="direction">
                 <param name="selection" value="TRUE"/>
             </conditional>
@@ -122,10 +122,10 @@
         </test>
 
         <test expect_num_outputs="3">
-            <param name="metadata_file" value="aligned/metadata_table.parquet" ftype = "parquet"/>
-            <param name="intensity_file" value="aligned/intensity_table.parquet" ftype="parquet" />
-            <param name="rt_file" value="aligned/rt_table.parquet" ftype="parquet" />
-            <param name="known_table" value="merge_known_table/known_table.parquet" ftype="parquet" />
+            <param name="metadata_file" location="https://github.com/RECETOX/recetox-aplcms/tree/master/tests/testdata/aligned/metadata_table.parquet" ftype = "parquet"/>
+            <param name="intensity_file" location="https://github.com/RECETOX/recetox-aplcms/tree/master/tests/testdata/aligned/intensity_table.parquet" ftype="parquet" />
+            <param name="rt_file" location="https://github.com/RECETOX/recetox-aplcms/tree/master/tests/testdata/aligned/rt_table.parquet" ftype="parquet" />
+            <param name="known_table" location="https://github.com/RECETOX/recetox-aplcms/tree/master/tests/testdata/hybrid/known_table.parquet" ftype="parquet" />
             <conditional name="direction">
                 <param name="selection" value="FALSE"/>
             </conditional>

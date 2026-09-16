@@ -64,9 +64,9 @@
         <test expect_num_outputs="1">
             <param name="files">
                 <collection type="list">
-                  <element name="8_qc_no_dil_milliq.mzml.parquet" location="https://gitlab.ics.muni.cz/umsa/umsa-files/-/raw/master/testdata/recetox-aplcms/extracted/8_qc_no_dil_milliq.mzml.parquet" ftype = "parquet"/>
-                  <element name="21_qc_no_dil_milliq.mzml.parquet" location="https://gitlab.ics.muni.cz/umsa/umsa-files/-/raw/master/testdata/recetox-aplcms/extracted/21_qc_no_dil_milliq.mzml.parquet" ftype = "parquet"/>
-                  <element name="29_qc_no_dil_milliq.mzml.parquet" location="https://gitlab.ics.muni.cz/umsa/umsa-files/-/raw/master/testdata/recetox-aplcms/extracted/29_qc_no_dil_milliq.mzml.parquet" ftype = "parquet"/>
+                  <element name="8_qc_no_dil_milliq.mzml.parquet" location="https://github.com/RECETOX/recetox-aplcms/tree/master/tests/testdata/extracted/8_qc_no_dil_milliq.mzml.parquet" ftype = "parquet"/>
+                  <element name="21_qc_no_dil_milliq.mzml.parquet" location="https://github.com/RECETOX/recetox-aplcms/tree/master/tests/testdata/extracted/21_qc_no_dil_milliq.mzml.parquet" ftype = "parquet"/>
+                  <element name="29_qc_no_dil_milliq.mzml.parquet" location="https://github.com/RECETOX/recetox-aplcms/tree/master/tests/testdata/extracted/29_qc_no_dil_milliq.mzml.parquet" ftype = "parquet"/>
                 </collection>
             </param> 
             <output_collection name="clustered_feature_tables" type="list">

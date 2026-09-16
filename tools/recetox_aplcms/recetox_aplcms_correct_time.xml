@@ -49,8 +49,8 @@
 
     <tests>
         <test expect_num_outputs="1">
-            <param name="features_table" location="https://gitlab.ics.muni.cz/umsa/umsa-files/-/blob/master/testdata/recetox-aplcms/clusters/RCX_06_shortened_extracted_clusters.parquet" ftype = "parquet"/>
-            <param name="template" location="https://gitlab.ics.muni.cz/umsa/umsa-files/-/blob/master/testdata/recetox-aplcms/template/RCX_shortened.parquet" ftype = "parquet"/>
+            <param name="features_table" location="https://github.com/RECETOX/recetox-aplcms/tree/master/tests/testdata/clusters/RCX_06_shortened_extracted_clusters.parquet" ftype = "parquet"/>
+            <param name="template" location="https://github.com/RECETOX/recetox-aplcms/tree/master/tests/testdata/template/RCX_shortened.parquet" ftype = "parquet"/>
             <output name="output_file">
                 <assert_contents>
                     <!-- change size! -->
