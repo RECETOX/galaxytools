@@ -1,0 +1,24 @@
+<macros>
+    <xml name="creator">
+        <creator>
+            <person
+                givenName="Helge"
+                familyName="Hecht"
+                url="https://github.com/hechth"
+                identifier="0000-0001-6744-996X" />
+            <person
+                givenName="Michaela"
+                familyName="Boďova"
+                url="https://github.com/mbodova"
+                identifier="" />
+            <organization
+                url="https://www.recetox.muni.cz/"
+                email="GalaxyToolsDevelopmentandDeployment@space.muni.cz"
+                name="RECETOX MUNI" />
+        </creator>
+    </xml>
+
+
+    <token name="@TOOL_VERSION@">0.14.0</token>
+    <token name="@VERSION_SUFFIX@">0</token>
+</macros>

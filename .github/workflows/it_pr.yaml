@@ -1,0 +1,109 @@
+name: Galaxy Interactive Tool Linting and Tests for push and PR
+on:
+  workflow_dispatch:
+  pull_request:
+    paths-ignore:
+      - '.github/**'
+      - 'deprecated/**'
+      - 'docs/**'
+      - '*'
+  push:
+    branches:
+      - main
+      - master
+    paths-ignore:
+      - '.github/**'
+      - 'deprecated/**'
+      - 'docs/**'
+      - '*'
+env:
+  GALAXY_FORK: galaxyproject
+  GALAXY_BRANCH: release_25.1
+  MAX_CHUNKS: 4
+  MAX_FILE_SIZE: 1M
+  
+concurrency:
+  # Group runs by PR, but keep runs on the default branch separate
+  # because we do not want to cancel ToolShed uploads
+  group: pr-${{ (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main') && github.run_number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  changed_files:    
+    runs-on: ubuntu-latest  # windows-latest || macos-latest
+    name: Test changed-files
+    steps: # check out rep
+      - uses: actions/checkout@v6
+
+        # find files that are changed compared to master
+        # find dockerfiles that have changed and pick first or fail if more are changed
+      - name: Get all changed Dockerfiles
+        id: changed-dockerfiles
+        uses: tj-actions/changed-files@v47 # v47.0.6
+        with:
+          # Avoid using single or double quotes for multiline patterns
+          files: |
+            interactive_tools/**/Dockerfile
+    
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+
+      - name: Install Planemo
+        shell: bash
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install planemo
+
+      - name: Validate Planemo installation
+        shell: bash
+        run: |
+          which planemo
+          planemo --version
+
+      # Expand macros and extract image name using planemo
+      - name: Expand macros and extract image name
+        id: expand-macros
+        shell: bash
+        run: |
+          # Get the directory containing the changed Dockerfile
+          changed_dockerfile="${{ steps.changed-dockerfiles.outputs.all_changed_files }}"
+          tool_dir=$(dirname "$changed_dockerfile")
+
+          # Find tool XML file
+          tool_xml=$(find "$tool_dir" -maxdepth 1 -name "*.xml" ! -name "macros.xml" | head -1 | xargs)
+
+          if [[ -z "$tool_xml" ]]; then
+            echo "No tool XML found in $tool_dir"
+            exit 1
+          fi
+
+           # Expand macros and capture output
+          expanded=$(planemo normalize --expand_macros "$tool_xml")
+
+          # Extract the container image name (only for type="docker")
+          image_name=$(echo "$expanded" | grep -oP '<container type="docker">\K[^<]+')
+    
+          if [[ -z "$image_name" ]]; then
+            echo "No container tag with type=\"docker\" found after macro expansion"
+            exit 1
+          fi
+    
+          echo "image_name=$image_name" >> "$GITHUB_OUTPUT"
+          echo "Extracted image: $image_name"
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v4
+  
+        # built docker image locally using the action from eu repo
+      - name: Build docker image
+        env:
+          CHANGED_FILES: ${{ steps.changed-dockerfiles.outputs.all_changed_files }}
+        uses: docker/build-push-action@v7
+        with:
+          push: false
+          file: ${{ env.CHANGED_FILES }}
+          tags: ${{ steps.expand-macros.outputs.image_name }}
+
+    # use planemo to run the tests for interactivetool
