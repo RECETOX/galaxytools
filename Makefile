@@ -10,11 +10,13 @@ TOOL_DIRS := $(sort $(wildcard tools/*/))
 PLANEMO ?= planemo
 FLAKE8 ?= flake8
 R_STYLER ?= ./.github/styler.R
+# To make planemo fail on warnings|errors --> warn|error
+PLANEMO_LINT_FLAG ?= --fail_level warn 
 
 lint:
 	@for d in $(TOOL_DIRS); do \
 		echo "[lint] $$d"; \
-		(cd "$$d" && $(PLANEMO) lint .); \
+		(cd "$$d" && $(PLANEMO) lint $(PLANEMO_LINT_FLAG) .); \
 	done
 
 # Lint Python scripts in all tool directories.

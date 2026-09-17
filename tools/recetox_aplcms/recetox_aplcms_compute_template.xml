@@ -1,4 +1,4 @@
-<tool id="recetox_aplcms_compute_template" name="recetox-aplcms - compute template" version="@TOOL_VERSION@+galaxy0" profile="21.09">
+<tool id="recetox_aplcms_compute_template" name="recetox-aplcms - compute template" version="@TOOL_VERSION@+galaxy0" profile="23.0">
     <description>compute retention time correction template feature table</description>
     <macros>
         <import>macros.xml</import>
@@ -36,7 +36,20 @@
     </outputs>
 
     <tests>
-        <test expect_failure="true" />
+        <test expect_num_outputs="1">
+            <param name="files">
+                <collection type="list">
+                  <element name="RCX_06_shortened_extracted_clusters.parquet" location="https://media.githubusercontent.com/media/RECETOX/recetox-aplcms/master/tests/testdata/clusters/RCX_06_shortened_extracted_clusters.parquet" ftype = "parquet"/>
+                  <element name="RCX_07_shortened_extracted_clusters.parquet" location="https://media.githubusercontent.com/media/RECETOX/recetox-aplcms/master/tests/testdata/clusters/RCX_07_shortened_extracted_clusters.parquet" ftype = "parquet" />
+                  <element name="RCX_08_shortened_extracted_clusters.parquet" location="https://media.githubusercontent.com/media/RECETOX/recetox-aplcms/master/tests/testdata/clusters/RCX_08_shortened_extracted_clusters.parquet" ftype = "parquet" />
+                </collection>
+            </param> 
+            <output name="output_file"> 
+                <assert_contents>
+                    <has_size size="32714" />  
+                </assert_contents>
+            </output>
+        </test>
     </tests>
     
     <help>

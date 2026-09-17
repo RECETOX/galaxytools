@@ -1,4 +1,4 @@
-<tool id="ms2deepscore_similarity" name="MS2DeepScore Similarity" version="@TOOL_VERSION@+galaxy0">
+<tool id="ms2deepscore_similarity" name="MS2DeepScore Similarity" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="23.0" license="MIT">
     <description>Compute similarity scores using a pre-trained MS2DeepScore model</description>
     <macros>
         <import>macros.xml</import>
@@ -14,6 +14,7 @@
     <command detect_errors="exit_code"><![CDATA[
         python3 ${python_wrapper}
     ]]></command>
+
 <configfiles>
 <configfile name="python_wrapper">
 @init_logger@
@@ -31,13 +32,25 @@ onnx_model = onnx.load("$model")
 # Extract the initializers (weights and biases)
 initializers = {init.name: onnx.numpy_helper.to_array(init) for init in onnx_model.graph.initializer}
 
-# Convert NumPy arrays to PyTorch tensors
-state_dict = {name: torch.tensor(np_array) for name, np_array in initializers.items()}
-
 @json_load@
 
 model = SiameseSpectralModel(settings=SettingsMS2Deepscore(**model_params))
-model.load_state_dict(state_dict)
+
+model_keys = model.state_dict().keys()
+state_dict = {
+    name: torch.tensor(array)
+    for name, array in initializers.items()
+    if name in model_keys
+}
+
+load_result = model.load_state_dict(state_dict, strict=False)
+
+if load_result.missing_keys or load_result.unexpected_keys:
+    raise RuntimeError(
+        f"Invalid model state: missing={load_result.missing_keys}, "
+        f"unexpected={load_result.unexpected_keys}"
+    )
+    
 model.eval()
 
 #if $scores.use_scores == "True"
@@ -71,16 +84,21 @@ scores.to_json("$similarity_scores")
 
     <tests>
         <test expect_num_outputs="1">
-            <param name="use_scores" value="False"/>
-            <param name="references" value="inp_filtered_library.msp" ftype="msp"/>
-            <param name="queries" value="inp_filtered_spectra.msp" ftype="msp"/>
+            <conditional name="scores">
+                <param name="use_scores" value="False"/>
+                <param name="references" value="inp_filtered_library.msp" ftype="msp"/>
+                <param name="queries" value="inp_filtered_spectra.msp" ftype="msp"/>
+            </conditional>
             <param name="model" value="Trained_model.onnx" ftype="onnx"/>
             <param name="model_param" value="Model_Parameter_JSON.json" ftype="json"/>
             <output name="similarity_scores" value="msp_json_score_out.json" ftype="json" compare="sim_size" />
         </test>
+
         <test expect_num_outputs="1">
-            <param name="use_scores" value="True"/>
-            <param name="scores_in" value="ri_match_60.json" ftype="json"/>
+            <conditional name="scores">
+                <param name="use_scores" value="True"/>
+                <param name="scores_in" value="ri_match_60.json" ftype="json"/>
+            </conditional>
             <param name="model" value="Trained_model.onnx" ftype="onnx"/>
             <param name="model_param" value="Model_Parameter_JSON.json" ftype="json"/>
             <output name="similarity_scores" value="usescore_json_score_out.json" ftype="json" compare="sim_size" />

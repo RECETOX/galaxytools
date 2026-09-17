@@ -1,4 +1,4 @@
-<tool id="recetox_aplcms_generate_feature_table" name="recetox-aplcms - generate feature table" version="@TOOL_VERSION@+galaxy0" profile="21.09">
+<tool id="recetox_aplcms_generate_feature_table" name="recetox-aplcms - generate feature table" version="@TOOL_VERSION@+galaxy0" profile="23.0">
     <description>generate feature table from noise-removed HRMS profile data</description>
     <macros>
         <import>macros.xml</import>
@@ -19,7 +19,9 @@
     <configfiles>
          <configfile name="run_script"><![CDATA[
              profile <- load_data_from_parquet_file('$profile')
-             sample_name <- load_sample_name(profile)
+             sample_name <- load_sample_id(profile)
+
+             message(paste("sample_name:", paste(sample_name, collapse = ", ")))
 
              if(is.na(sample_name)) {
                  message("The file does not contain sample name.")
@@ -43,8 +45,8 @@
                  #else
                  sd_cut = c(0, Inf),
                  #end if
-                 sigma_ratio_lim = determine_sigma_ratios($advanced.shape_model.sigma_ratio_lim_min, $advanced.shape_model.sigma_ratio_lim_max),
-                 shape_model = "bi-Gaussian",
+                 sigma_ratio_lim = determine_sigma_ratios($advanced.shape_model_param.sigma_ratio_lim_min, $advanced.shape_model_param.sigma_ratio_lim_max),
+                 shape_model = "$shape_model",
                  peak_estim_method = "$advanced.peak_estim.peak_estim_method",
                  component_eliminate = $advanced.component_eliminate,
                  #if $advanced.peak_estim.peak_estim_method == "moment":
@@ -56,7 +58,6 @@
                  do.plot = FALSE
              )
 
-             feature_table <- save_sample_name(feature_table, sample_name)
              save_data_as_parquet_file(feature_table, '$output_file')
          ]]></configfile>
     </configfiles>
@@ -74,8 +75,66 @@
 
     <tests>
         <test>
-            <param name="profile" value="remove_noise_docker.parquet" />
-            <output name="output_file" file="peak_table_galaxy.parquet" />
+        <!-- #mbr_test0 -->
+            <param name="profile" location="https://media.githubusercontent.com/media/RECETOX/recetox-aplcms/master/tests/testdata/filtered/mbr_test0.parquet" ftype="parquet" />
+            <section name="advanced">
+                <conditional name="sd_cut">
+                    <param name="sd_cut_bounds" value="TRUE"/>
+                    <param name="sd_cut_min" value="0.1"/>
+                    <param name="sd_cut_max" value="100"/>
+                </conditional>
+            
+                <section name="shape_model_param">
+                    <param name="sigma_ratio_lim_min" value="0.1"/>
+                    <param name="sigma_ratio_lim_max" value="10"/>
+                </section>
+            </section>
+            <output name="output_file"> 
+                <assert_contents>
+                    <has_size size="2232"/>
+                </assert_contents>
+            </output>
+        </test>
+
+        <test>
+        <!-- thermo.raw -->
+            <param name="profile" location="https://media.githubusercontent.com/media/RECETOX/recetox-aplcms/master/tests/testdata/filtered/thermo_raw_profile.parquet" ftype="parquet" />
+            <param name="shape_model" value="Gaussian" />
+            <section name="advanced">
+                <conditional name="sd_cut">
+                    <param name="sd_cut_bounds" value="TRUE"/>
+                    <param name="sd_cut_min" value="0.1"/>
+                    <param name="sd_cut_max" value="1"/>
+                </conditional>
+            </section>
+            <output name="output_file"> 
+                <assert_contents>
+                    <has_size size="64508"/>
+                </assert_contents>
+            </output>
+        </test>
+
+        <test> 
+        <!-- #RCX_06_shortened_gaussian -->
+            <param name="profile" location="https://media.githubusercontent.com/media/RECETOX/recetox-aplcms/master/tests/testdata/filtered/RCX_06_shortened.parquet" ftype="parquet" />
+            <param name="shape_model" value="Gaussian" />
+            <section name="advanced">
+                <conditional name="sd_cut">
+                    <param name="sd_cut_bounds" value="TRUE"/>
+                    <param name="sd_cut_min" value="0.01"/>
+                    <param name="sd_cut_max" value="500"/>
+                </conditional>
+
+                <section name="shape_model_param">
+                    <param name="sigma_ratio_lim_min" value="0.01"/>
+                    <param name="sigma_ratio_lim_max" value="100"/>
+                </section>
+            </section>
+            <output name="output_file"> 
+                <assert_contents>
+                    <has_size size="649887"/>
+                </assert_contents>
+            </output>
         </test>
     </tests>
 
