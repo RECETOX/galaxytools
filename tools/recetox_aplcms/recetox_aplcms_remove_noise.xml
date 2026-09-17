@@ -17,6 +17,7 @@
     </expand>
 
     <command detect_errors="aggressive"><![CDATA[
+        export LD_LIBRARY_PATH="\${CONDA_PREFIX:+\${CONDA_PREFIX}/lib:}/usr/local/lib\${LD_LIBRARY_PATH:+:\${LD_LIBRARY_PATH}}" &&
         #if $input_file.ext == 'thermo.raw':
             cp $input_file input.$input_file.ext &&
             Rscript -e 'source("${install_rawrr}")' &&
@@ -53,6 +54,7 @@
 
         <configfile name="install_rawrr"><![CDATA[
             rawrr::installRawrrExe()
+            rawrr::rawrrAssemblyPath()
         ]]></configfile>
     </configfiles>
 
