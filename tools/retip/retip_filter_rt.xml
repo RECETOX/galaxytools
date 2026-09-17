@@ -32,8 +32,18 @@
             <param name="filtering_mode" value="order"/>
             <param name="tolerance" value="30"/>
             <param name="input" value="annotations-rtp.tsv"/>
-            <output name="filtered" file="annotations-good.tsv" ftype="tsv" compare="sim_size" delta_frac=".05"/>
-            <output name="dropped" file="annotations-bad.tsv" ftype="tsv" compare="sim_size" delta_frac=".05"/>
+            <output name="filtered" ftype="tsv" md5="cbead003cba9836a86c0afe5cfd2a717">
+                <assert_contents>
+                    <has_size size='1183295'/>
+                    <has_n_lines n='9446' delta='2'/>
+                </assert_contents>
+            </output>
+            <output name="dropped" ftype="tsv" md5="c7973f643f30f3b04d0cc916fd4359c0">
+                <assert_contents>
+                    <has_size size='1070634'/>
+                    <has_n_lines n='8547' delta='2'/>
+                </assert_contents>
+            </output>
         </test>
     </tests>
     <help>
