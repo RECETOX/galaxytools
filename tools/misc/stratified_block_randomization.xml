@@ -2,7 +2,7 @@
     <description>for hierarchical block-based balancing with proportional matching via largest-remainder rounding.</description>
     <macros>
         <token name="@TOOL_VERSION@">0.1.0</token>
-        <token name="@VERSION_SUFFIX@">0</token>
+        <token name="@VERSION_SUFFIX@">1</token>
     </macros>
     <creator>
       <person
@@ -60,8 +60,8 @@
         <param name="write_summary" type="boolean" checked="true" truevalue="TRUE" falsevalue="FALSE" label="Generate summary output" help="Create an additional summary table with counts per block and factor combination."/>
     </inputs>
     <outputs>
-        <data name="output" format="tabular"/>
-        <data name="summary" format="tabular" label="${tool.name} on ${on_string}: summary">
+        <data name="output" format="tsv"/>
+        <data name="summary" format="tsv" label="${tool.name} on ${on_string}: summary">
             <filter>write_summary</filter>
         </data>
     </outputs>
