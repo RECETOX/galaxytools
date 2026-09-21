@@ -73,7 +73,7 @@ torch.onnx.export(
 
     <tests>
         <test expect_num_outputs="1">
-            <param name="spectra" ftype="msp" location='https://galaxy-umsa.grid.cesnet.cz/api/datasets/fa57798f4c6835f5/display?to_ext=msp'/>
+            <param name="spectra" ftype="msp" location="https://zenodo.org/records/22872835/files/input_training.msp?download=1" />
             <param name="model_param" value="Model_Parameter_JSON_test.json" ftype="json" />
             <param name="train_test_split_fraction" value="20"/>
             <output name="onnx_trained_model" value='Trained_model.onnx' ftype="onnx" compare="sim_size"/>
