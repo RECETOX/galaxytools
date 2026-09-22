@@ -32,6 +32,7 @@ from ms2deepscore.wrapper_functions.training_wrapper_functions import train_ms2d
 
 set_matchms_logger_level("ERROR")
 file = "processing/input.$spectra.ext"
+model_params["train_test_split_fraction"] = $train_test_split_fraction
 settings = SettingsMS2Deepscore(spectrum_file_path=file,**model_params)
 train_ms2deepscore_wrapper(settings)
 
