@@ -1,4 +1,4 @@
-<tool id="recetox_aplcms_compute_clusters" name="recetox-aplcms - compute clusters" version="@TOOL_VERSION@+galaxy0" profile="21.09">
+<tool id="recetox_aplcms_compute_clusters" name="recetox-aplcms - compute clusters" version="@TOOL_VERSION@+galaxy0" profile="23.0">
     <description>compute clusters of mz and rt across samples and assign cluster IDs to individual features</description>
     <macros>
         <import>macros.xml</import>
@@ -17,9 +17,13 @@
     ]]></command>
     <configfiles>
          <configfile name="run_script"><![CDATA[
+         
               #set filenames = str("', '").join([str($f) for $f in $files])
               feature_tables <- load_parquet_collection(c('$filenames'))
-              sample_names <- unlist(lapply(feature_tables, load_sample_name))
+              sample_names <- unlist(lapply(feature_tables, load_sample_id))
+
+              message(sprintf("Loaded %d sample names", length(sample_names)))
+              message(paste("sample_names:", paste(sample_names, collapse = ", ")))
 
               validate_sample_names(sample_names)
 
@@ -34,7 +38,6 @@
                   rt_tol = $rt_tol
               )
 
-              sample_names <- unlist(lapply(clusters, restore_sample_name))
               save_parquet_collection(clusters, sample_names, "clustered")
          ]]></configfile>
     </configfiles>
@@ -53,7 +56,35 @@
     </outputs>
 
     <tests>
-        <test expect_failure="true" />
+        <test expect_num_outputs="1">
+            <param name="files">
+                <collection type="list">
+                  <element name="RCX_06_shortened.parquet" location="https://media.githubusercontent.com/media/RECETOX/recetox-aplcms/master/tests/testdata/extracted/RCX_06_shortened.parquet" ftype = "parquet"/>
+                  <element name="RCX_07_shortened.parquet" location="https://media.githubusercontent.com/media/RECETOX/recetox-aplcms/master/tests/testdata/extracted/RCX_07_shortened.parquet" ftype = "parquet"/>
+                  <element name="RCX_08_shortened.parquet" location="https://media.githubusercontent.com/media/RECETOX/recetox-aplcms/master/tests/testdata/extracted/RCX_08_shortened.parquet" ftype = "parquet"/>
+                </collection>
+            </param> 
+
+            <output_collection name="clustered_feature_tables" type="list">
+                <element name="data06.parquet">
+                    <assert_contents>
+                        <has_size size="76862"/>
+                    </assert_contents>
+                </element>
+
+                 <element name="data07.parquet">
+                    <assert_contents>
+                        <has_size size="83487"/>
+                    </assert_contents>
+                </element>
+
+                 <element name="data08.parquet">
+                    <assert_contents>
+                        <has_size size="77621"/>
+                    </assert_contents>
+                </element>
+            </output_collection>
+        </test>
     </tests>
 
     <help>
