@@ -35,11 +35,11 @@
             <option value="annotate">Annotate (legacy endpoint)</option>
             <option value="map" selected="true">Map (v3 endpoint)</option>
         </param>
-        <param name="batch_size" type="integer" value="10" min="1" max="100" label="Batch size" help="Number of query values processed per API request in Map mode. In Annotate mode values are still queried one by one, but a batch is retried and skipped as a unit. Reduce the value if requests time out." />
+        <param name="batch_size" type="integer" value="100" min="1" max="1000" label="Batch size" help="Number of query values processed per API request in Map mode. In Annotate mode values are still queried one by one, but a batch is retried and skipped as a unit. Reduce the value if requests time out." />
     </inputs>
 
     <outputs>
-        <data name="output" format="tabular" />
+        <data name="output" format="tabular" label="ZOOMA ${mode} based on column ${query_column} in ${on_string}" />
     </outputs>
 
     <tests>
