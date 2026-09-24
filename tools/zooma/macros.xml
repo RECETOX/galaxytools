@@ -1,6 +1,6 @@
 <macros>
     <token name="@TOOL_VERSION@">0.1.0</token>
-    <token name="@GALAXY_VERSION@">0</token>
+    <token name="@GALAXY_VERSION@">1</token>
 
     <xml name="creator">
         <creator>
@@ -31,6 +31,27 @@
         Before processing input rows, the tool calls ``/spot/zooma/v3/api/health``.
         If the service is unavailable, the job fails early with a clear error message instead of producing
         partial output.
+
+        **Batching**
+
+        Query values are processed in batches of the configured *Batch size*.
+
+        - In **Map** mode a batch is submitted as a single API request, so larger batches mean fewer
+          requests. ZOOMA answers with one mapping per submitted value and the wrapper checks that the
+          response lines up with the request before writing anything.
+        - In **Annotate** mode the legacy endpoint only accepts one value per request, so a batch is a group
+          of sequential requests. It is still processed, retried and skipped as a single unit.
+
+        **Retries and skipped values**
+
+        If a batch fails it is retried once. If it fails again its values are skipped, a ``WARNING`` line is
+        written to the job output naming the batch and how many values were dropped, and processing continues
+        with the next batch. If two batches fail one after another the job fails, because the service is then
+        considered unavailable.
+
+        Values are therefore only missing from the output if their batch failed twice, and every such event
+        is reported in the job output. Note that ZOOMA rejects any single value longer than 1000 characters,
+        which will always fail the batch containing it.
 
         **Output**
 
