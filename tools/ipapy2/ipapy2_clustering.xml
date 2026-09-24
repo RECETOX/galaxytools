@@ -1,0 +1,70 @@
+<tool id="ipapy2_clustering" name="ipaPy2 clustering" version="@TOOL_VERSION@+galaxy0" profile="@PROFILE@">
+    <description>clustering MS1 features based on correlation across samples as preparation for ipaPy2</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="requirements"/>
+    <command detect_errors="exit_code"><![CDATA[
+        python3 '${__tool_directory__}/ipapy2_clustering.py'
+        --input_dataset '${unclustered_MS1_intensities}' '${unclustered_MS1_intensities.ext}'
+        --Cthr ${Cthr}
+        --RTwin ${RTwin}
+        --Intmode ${Intmode}
+        --output_dataset '${clustered_MS1_intensities}' '${clustered_MS1_intensities.ext}'
+
+    ]]></command>
+    <inputs>
+        <param label="Unclustered data" name="unclustered_MS1_intensities" type="data" format="csv,tsv,tabular,parquet" help="a csv file containing the measured intensities across several samples, yet to be clustered"/>
+        <section name="clustering" title="clustering settings" expanded="true">
+            <param name="Cthr" type="float" value="0.8" min="0" max="1">
+                <label>correlation threshold</label>
+                <help>Minimum correlation allowed in each cluster. Default value 0.8.</help>
+            </param>
+            <param name="RTwin" type="float" value="1" min="0">
+                <label>RT threshold</label>
+                <help>Maximum difference in RT time between features in the same cluster. Default value 1.</help>
+            </param>
+            <param name="Intmode" type="select">
+                <label>intensity mode</label>
+                <help>intensity mode. Default 'max' or 'ave'.</help>
+                <option value="max" selected="true">max</option>
+                <option value="ave">ave</option>
+            </param>
+        </section>
+    </inputs>
+    <outputs>
+        <data label="${tool.name} on ${on_string}" name="clustered_MS1_intensities" format_source="unclustered_MS1_intensities" />
+    </outputs>
+    <tests>
+        <test>
+            <param name="unclustered_MS1_intensities" value="unclustered_MS1_intensities.csv"/>
+            <output name="clustered_MS1_intensities" file="clustered_MS1_intensities.csv"/>
+        </test>
+    </tests>
+    <help><![CDATA[
+    Before using the ipaPy2 package, the processed data coming from an untargeted metabolomics experiment must be properly prepared.
+    The data must be organized in a pandas dataframe containing the following columns:
+
+    - **ids**: an unique numeric id for each mass spectrometry feature 
+    - **mzs**: mass-to-charge ratios, usually the average across different samples.
+    - **RTs**: retention times in seconds, usually the average across different samples.
+    - **Int**: representative (e.g., maximum or average) intensity detected for each feature across samples (either peak area or peak intensity)
+
+    The clustering of the features is a necessary and must be performed before running the IPA method.
+    For this step, the use of widely used data processing software such as mzMatch and CAMERA is recommended.
+    Nevertheless, the ipaPy2 library provides a function (clusterFeatures()) able to perform such step,
+    starting from a dataframe containing the measured intensities across several samples (at least 3 samples, the more samples the better).
+    Such dataframe should be organized as follows:
+
+    +----+------+-----+-------------+-------------+-------------+
+    | id | mz   | rt  | intensity_1 | intensity_2 | intensity_3 |
+    +====+======+=====+=============+=============+=============+
+    | 1  | 100  | 10  | 500         | 600         | 700         |
+    +----+------+-----+-------------+-------------+-------------+
+    | 2  | 200  | 20  | 800         | 900         | 1000        |
+    +----+------+-----+-------------+-------------+-------------+
+    | 3  | 300  | 30  | 1100        | 1200        | 1300        |
+    +----+------+-----+-------------+-------------+-------------+
+    ]]></help>
+    <expand macro="citations"/>
+</tool>

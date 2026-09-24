@@ -28,6 +28,7 @@
 
     <xml name="requirements">
         <requirements>
+            <container type="singularity">oras://cerit.io/galaxy/retip:@TOOL_VERSION@-recetox4</container>
             <container type="docker">recetox/retip:@TOOL_VERSION@-recetox4</container>
         </requirements>
     </xml>

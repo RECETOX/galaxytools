@@ -1,0 +1,16 @@
+name: tables
+owner: recetox
+remote_repository_url: "https://github.com/RECETOX/galaxytools/tree/master/tools/tables"
+homepage_url: "https://github.com/RECETOX/galaxytools"
+categories:
+  - Metabolomics
+  - Statistics
+description: "Tools to manipulate and analyze data tables."
+long_description: "Tools to manipulate and analyze data tables. Current tools include interpolation using scipy and arithmetic operations on tables with pandas."
+auto_tool_repositories:
+  name_template: "{{ tool_id }}"
+  description_template: "{{ tool_name }} tool from the general purpose data analysis suite developed by RECETOX."
+suite:
+  name: suite_table_tools
+  description: This tool suites contains tools for general purpose data analysis built on top of pandas, scipy, dplyr and others.
+  type: repository_suite_definition

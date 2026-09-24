@@ -1,0 +1,130 @@
+<tool id="freqsap" name="freqSAP" version="@TOOL_VERSION@+galaxy0" profile="23.0" license="MIT">
+    <description>Get frequencies of single amino-acid polymorphisms based on nucleid-acid polymorphism for different populations from UniProt and DbSNP</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="creator"/>
+
+    <edam_topics>
+        <edam_topic>topic_0121</edam_topic>
+        <edam_topic>topic_3366</edam_topic>
+    </edam_topics>
+
+    <edam_operations>
+        <edam_operation>operation_3197</edam_operation>
+        <edam_operation>operation_2479</edam_operation>
+        <edam_operation>operation_2422</edam_operation>
+    </edam_operations>
+    
+
+    <requirements>
+        <requirement type="package" version="@TOOL_VERSION@">freqsap</requirement>
+    </requirements>
+
+
+    <command detect_errors="exit_code"><![CDATA[
+    freqsap -a '$accession' -r '${populations}' -d '${delimiter}' -o '$output_file' -t $timeout
+    ]]></command>
+    <inputs>
+        <param argument="--accession" type="text" label="Protein Accession in UniProt" help="UniProt accession of the protein to fetch variation data for.">
+            <sanitizer invalid_char="">
+                <valid initial="string.letters,string.digits">
+                    <add value="_" />
+                </valid>
+            </sanitizer>
+            <validator type="regex">[OPQ][0-9][A-Z0-9]{3}[0-9]|[A-NR-Z][0-9]([A-Z][A-Z0-9]{2}[0-9]){1,2}</validator>
+        </param>
+        <param name="populations" type="select" multiple="true" optional="false" label="Regions from which to choose the populations" help="The regions are broken down into sub-populations based on available entries in DbSNP.">
+            <option value="Africa">Africa</option>
+            <option value="North America">North America</option>
+            <option value="Asia">Asia</option>
+            <option value="Europe">Europe</option>
+            <option value="South America">South America</option>
+            <option value="Middle East">Middle East</option>
+            <option value="Other">Other</option>
+            <option value="Global" selected="true">Global</option>
+        </param>
+        <param argument="--delimiter" type="select" label="Output Format" help="Format in which to store the output file.">
+            <option value="\t" selected="true">Tab Separated Value (tabular)</option>
+            <option value=",">Comma Separated Value (csv)</option>
+            <option value="xlsx">Excel (xlsx)</option>
+            <sanitizer invalid_char="">
+                <valid initial="string.ascii_letters">
+                    <add value="\" />
+                </valid>
+            </sanitizer>
+       </param>
+       <param argument="--timeout" type="integer" min="0" max="300" value="30" label="Timeout" help="Timeout parameter for web requests. Default: 30" />
+    </inputs>
+    <outputs>
+        <data name="output_file" format="tabular" label="${tool.name} of ${accession}">
+            <change_format>
+                <when input="delimiter" value="," format="csv"/>
+                <when input="delimiter" value="xlsx" format="xlsx"/>
+            </change_format>
+        </data>
+    </outputs>
+
+    <tests>
+        <test>
+            <param name="accession" value="P0DJI9"/>
+            <output name="output_file" ftype="tabular">
+                <assert_contents>
+                    <has_n_columns n="12"/>
+                    <has_n_lines n="447" delta="20"/>
+                    <has_text text="rs1044068853"/>
+                </assert_contents>
+            </output>
+        </test>
+        <test>
+            <param name="accession" value="P05067"/>
+            <param name="delimiter" value="xlsx"/>
+            <output name="output_file" ftype="xlsx">
+                <assert_contents>
+                    <has_size size="116902" delta="100"/>
+                </assert_contents>
+            </output>
+        </test>
+    </tests>
+
+    <help><![CDATA[
+freqSAP: Frequency of Single Amino-Acid Polymorphisms
+=====================================================
+
+This tool retrieves the frequencies of single amino-acid polymorphisms (SAPs) for a given protein accession from UniProt and DbSNP, broken down by population regions.
+
+Inputs
+------
+
+- **Protein Accession in UniProt:**  
+  Enter the UniProt accession (e.g., ``P12345``) for the protein of interest.
+
+- **Regions from which to choose the populations:**  
+  Select one or more population regions. The tool will fetch SAP frequencies for the selected regions.
+
+- **Output Format:**  
+  Choose the format for the output file:
+  
+  - Tab Separated Value (``tabular``)
+  - Comma Separated Value (``csv``)
+  - Excel (``xlsx``)
+
+Outputs
+-------
+
+- A table listing SAP frequencies for the selected protein and populations, in the chosen format.
+
+Example Usage
+-------------
+
+1. Enter a UniProt accession (e.g., ``P69905``).
+2. Select ``Europe`` and ``Asia`` as populations.
+3. Choose ``csv`` as the output format.
+4. Run the tool to download the SAP frequency table.
+    ]]></help>
+
+    <citations>
+        <citation type="doi">10.1093/nar/29.1.308</citation>
+        <citation type="doi">10.1093/nar/gkaf394</citation>
+    </citations>
+</tool>

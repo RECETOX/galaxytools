@@ -1,4 +1,4 @@
-<tool id="rmassbank" name="RMassBank" version="@TOOL_VERSION@+galaxy3">
+<tool id="rmassbank" name="RMassBank" version="@TOOL_VERSION@+galaxy4" license="MIT" profile="23.0">
     <macros>
         <import>macros.xml</import>
     </macros>
@@ -11,10 +11,19 @@
         <requirement type="package" version="3.1.1">r-gplots</requirement>
         <requirement type="package" version="3.0">zip</requirement>
     </requirements>
+
+    <required_files>
+        <include path="rmassbank.r"/>
+        <include path="createSettingsFile.py"/>
+        <include path="addBabelPath.py"/>
+        <include path="mysettings.ini"/>
+    </required_files>
+
     <stdio>
         <exit_code range="1:"/>
         <exit_code range=":-1"/>
     </stdio>
+
     <command detect_errors="aggressive"><![CDATA[
          #for $infile in $param_in:
             ln -s '${infile}' '${infile.element_identifier}' &&
@@ -92,7 +101,7 @@
         ]]>
     </command>
     <inputs>
-        <param name="param_in" type="data" format="mzML" multiple="true" label="Input mzML files."/>
+        <param name="param_in" type="data" format="mzml" multiple="true" label="Input mzML files."/>
         <param format="csv" name="compounds" type="data" label="Compound list in CSV format."/>
         <param format="csv" name="infolist" type="data" label="Infolist in CSV format."/>
         <param name="mode" type="text" label="Mode for RMassBank pipeline."/>
@@ -104,7 +113,6 @@
                 <option value="external">Use external settings file</option>
             </param>
             <when value="template">
-
                 <section name="general_param" title="Setting of general parameters.">
                     <param name="rtMargin" type="float" value="0.4"
                            label="Deviation (in minutes) allowed the for retention time."/>
@@ -208,8 +216,11 @@
             <param name="infolist" value="infolist.csv"/>
             <param name="mode" value="pH"/>
             <param name="param_in" value="1_3_Trifluoromethylphenyl_piperazin_2819_pos.mzML"/>
-            <param name="ppmFine" value="5"/>
-
+            <conditional name="select_settings">
+                <section name="raw_settings">
+                    <param name="ppmFine" value="5"/>
+                </section>
+            </conditional>
             <output name="outputINI" value="mysettings_galaxy.ini" ftype="txt" lines_diff="2"/>
             <output name="csvfile" value="failedPeaks.csv" ftype="csv" lines_diff="1"/>
             <output name="pdfplot" value="plot.pdf" compare="sim_size" delta_frac="0.1"/>

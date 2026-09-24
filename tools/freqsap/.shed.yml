@@ -1,0 +1,11 @@
+name: freqsap
+owner: recetox
+type: unrestricted
+description: |
+ Get frequencies of single amino-acid polymorphisms based on nucleid-acid polymorphism for different populations from UniProt and DbSNP.
+long_description: |
+  Get frequencies of single amino-acid polymorphisms based on nucleid-acid polymorphism for different populations from UniProt and DbSNP.
+homepage_url: https://github.com/RECETOX/galaxytools
+remote_repository_url: https://github.com/RECETOX/galaxytools/tree/main/tools/freqsap
+categories:
+  - Proteomics

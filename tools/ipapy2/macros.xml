@@ -1,0 +1,71 @@
+<macros>
+    <token name="@TOOL_VERSION@">1.3.0</token>
+    <token name="@PROFILE@">23.0</token>
+
+    <xml name="citations">
+        <citations>
+        <citation type="doi">10.1021/acs.analchem.9b02354</citation>
+        <citation type="doi">10.1093/bioinformatics/btad455</citation>
+        </citations>
+    </xml>
+
+    <xml name="ionisation">
+        <param label="ionisation" name="ionisation" type="select" help="ionisation. positive +1 or negative -1">
+            <option value="1">positive</option>
+            <option value="-1">negative</option>
+        </param>
+    </xml>
+
+    <xml name="ppm">
+        <param name="ppm" type="float" value="100" min="0">
+            <label>ppm between isotopes</label>
+            <help>Maximum ppm value allowed between 2 isotopes. Default value 100.</help>
+        </param>
+    </xml>
+
+    <xml name="ms_unknown">
+        <param name="ppmunk" type="float" optional="true" min="0">
+            <label>ppm for unknown</label>
+            <help>ppm associated to the 'unknown' annotation. If not provided equal to ppm.</help>
+        </param>
+        <param name="ratiounk" type="float" optional="true" value="0.5" min="0">
+            <label>isotope ratio for unknown</label>
+            <help>isotope ratio associated to the 'unknown' annotation.</help>
+        </param>
+    </xml>
+
+    <xml name="ms_options">
+        <param name="ratiosd" type="float" value="0.9" optional="true" min="0">
+            <label>intensity ratio</label>
+            <help>acceptable ratio between predicted intensity and observed intensity of isotopes</help>
+        </param>
+        <param name="ppmthr" type="float" optional="true" min="0">
+            <label>ppm threshold</label>
+            <help>maximum ppm possible for the annotations. if not provided equal to 2*ppm.</help>
+        </param>
+        <param name="pRTNone" type="float" optional="true" value="0.8" min="0">
+            <label>no RT factor</label>
+            <help>multiplicative factor for the RT if no RTrange present in the database.</help>
+        </param>
+        <param name="pRTout" type="float" optional="true" value="0.4" min="0">
+            <label>outside RT factor</label>
+            <help>multiplicative factor for the RT if measured RT is outside the RTrange present in the database.</help>
+        </param>
+    </xml>
+    <xml name="gibbs">
+        <param label="Mapped isotope patterns" name="mapped_isotope_patterns" type="data" format="csv,tsv,tabular,parquet" help="A csv file containing the MS1 data. Ideally obtained from map_isotope_patterns."/>
+        <param label="annotations" name="annotations" type="data" format="csv,tsv,tabular,parquet" help="pandas dataframe containing all the possible annotations for the measured features."/>
+        <param label="gibbs sampler iterations" name="noits" type="integer" value="1000" help="number of iterations if the Gibbs sampler to be run."/>
+        <param label="ignored iterations" name="burn" type="integer" optional="true" value="10" help="number of iterations to be ignored when computing posterior probabilities. If None, is set to 10% of total iterations."/>
+        <param label="output Gibbs parameter" name="all_out" type="boolean" value="false" optional="true" help="logical value. If true the list of assignments found in each iteration is returned by the function. Default False."/>
+        <param label="previous Gibbs sampler" name="zs" type="data" format="txt" optional="true" help="list of assignments computed in a previous run of the Gibbs sampler. Optional, default None."/>
+    </xml>
+
+    <xml name="requirements">
+        <requirements>
+            <requirement type="package" version="@TOOL_VERSION@">ipapy2</requirement>
+            <requirement type="package" version="19.0.0">pyarrow</requirement>
+            <requirement type="package" version="2024.11.0">fastparquet</requirement>
+        </requirements>
+    </xml>
+</macros>

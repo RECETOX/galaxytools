@@ -1,0 +1,125 @@
+<tool id="ipapy2_compute_all_adducts" name="ipaPy2 compute all adducts" version="@TOOL_VERSION@+galaxy0" profile="@PROFILE@">
+    <description>compute the compound database with adducts</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    
+    <expand macro="requirements"/>
+
+    <command detect_errors="exit_code"><![CDATA[
+        python3 '${__tool_directory__}/ipapy2_compute_all_adducts.py'
+        --input_dataset_adduct '${adducts_data}' '${adducts_data.ext}'
+        --input_dataset_database ${MS1_DB} ${MS1_DB.ext}
+        --ionisation ${ionisation}
+        --output_dataset '${all_adducts}' '${all_adducts.ext}'
+        --ncores \${GALAXY_SLOTS:-1}
+    ]]></command>
+    <inputs>
+        <param label="Adducts data" name="adducts_data" type="data" format="csv,tsv,tabular,parquet" help="A csv,tsv,tabular or parquet file containing information on all possible adducts."/>
+        <param label="MS database" name="MS1_DB" type="data" format="csv,tsv,tabular,parquet" help="A csv,tsv,tabular or parquet file containing the MS1 database."/>
+        <expand macro="ionisation"/>
+    </inputs>
+
+    <outputs>
+        <data label="${tool.name} on ${on_string}" name="all_adducts" format_source="adducts_data"/>
+    </outputs>
+    
+    <tests>
+        <test>
+            <param name="adducts_data" value="adducts.csv"/>
+            <param name="MS1_DB" value="MS1_DB.csv"/>
+            <param name="ionisation" value="1"/>
+            <output name="all_adducts" file="all_adducts.csv"/>
+        </test>
+    </tests>
+    
+    <help><![CDATA[
+
+.. _ipapy2_compute_all_adducts:
+
+=========================================
+ipaPy2 Compute All Adducts Tool
+=========================================
+
+**Tool Description**
+
+This tool calculates all possible combinations of adducts and compounds given the adduct and compound (MS1) databases. The resulting table is essential for downstream annotation steps in the ipaPy2 workflow.
+
+It is recommended to avoid repeating this step unless necessary—reuse a previously calculated adducts database whenever possible. If you need to compute a new adducts database, include only the adducts you expect in your data (e.g., only the relevant ionization mode, multimers, or adducts based on your mobile phase).
+
+Inputs
+------
+
+1. **Adducts data**  
+   A file (CSV, TSV, Tabular, or Parquet) containing information on all possible adducts.
+
+2. **MS database**  
+   A file (CSV, TSV, Tabular, or Parquet) containing the MS1 compound database.
+
+3. **Ionisation mode**  
+   Specify the ionisation mode relevant for your experiment.
+
+Outputs
+-------
+
+- **all_adducts**  
+  A table containing all possible adduct-compound combinations, suitable for use in downstream annotation tools.
+
+Example of `adducts.csv` file
+-----------------------------
+
+.. list-table:: Example adducts.csv
+   :header-rows: 1
+
+   * - name
+     - calc
+     - Charge
+     - Mult
+     - Mass
+     - Ion_mode
+     - Formula_add
+     - Formula_ded
+     - Multi
+   * - [M+H]+
+     - 1.0073
+     - 1
+     - 1
+     - 1.0073
+     - positive
+     - H
+     - FALSE
+     - 1
+   * - [M+Na]+
+     - 22.9892
+     - 1
+     - 1
+     - 22.9892
+     - positive
+     - Na
+     - FALSE
+     - 1
+   * - [M+K]+
+     - 38.9632
+     - 1
+     - 1
+     - 38.9632
+     - positive
+     - K
+     - FALSE
+     - 1
+
+Notes
+-----
+
+- Only include adducts relevant to your experiment to reduce database size and improve annotation accuracy.
+- The tool supports multiple file formats for flexibility.
+
+References
+----------
+
+- For more details on adduct computation and usage in metabolomics annotation, refer to the ipaPy2 documentation or associated publications.
+
+    ]]></help>
+
+    <expand macro="citations"/>
+</tool>

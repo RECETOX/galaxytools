@@ -14,31 +14,10 @@
     </requirements>
 
     <command detect_errors="exit_code"><![CDATA[
-        python ${script} &&
-        #if $input.ext == "csv"
-        mv results.tsv ${output}
-        #else:
-        mv results.${input.ext} ${output}
-        #end if
+        riassigner ri-from-comment --query "$input" "$input.ext" "seconds" --ri-source "$format" --output "output.${output.ext}" &&
+        cp -r 'output.${output.ext}' '${output}'
         ]]>
     </command>
-
-    <configfiles>
-        <configfile name="script">
-from RIAssigner.data import PandasData, MatchMSData
-#if $input.ext in ["csv", "tsv", "parquet"]
-query = PandasData('${input}', '${input.ext}', rt_unit="seconds")
-#else
-query = MatchMSData('${input}', '${input.ext}', rt_unit="seconds")
-#end if
-query.init_ri_from_comment('${format}')
-#if $input.ext == "csv"
-query.write('results.tsv')
-#else
-query.write('results.${input.ext}')
-#end if
-        </configfile>
-    </configfiles>
 
     <inputs>
         <param name="input" type="data" format="csv,tsv,parquet,msp,mgf" label="Input File">

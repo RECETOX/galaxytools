@@ -1,0 +1,23 @@
+<macros>
+    <token name="@TOOL_VERSION@">1.0.7</token>
+
+    <xml name="creator">
+        <creator>
+            <person
+                givenName="Helge"
+                familyName="Hecht"
+                url="https://github.com/hechth"
+                identifier="0000-0001-6744-996X" />
+            <organization
+                url="https://www.recetox.muni.cz/"
+                email="GalaxyToolsDevelopmentandDeployment@space.muni.cz"
+                name="RECETOX MUNI" />
+        </creator>
+    </xml>
+
+    <xml name="citations">
+        <citations>
+            <citation type="doi">10.1021/acs.analchem.4c04091</citation>
+        </citations>
+    </xml>
+</macros>

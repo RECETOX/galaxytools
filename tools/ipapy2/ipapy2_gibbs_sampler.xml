@@ -1,0 +1,185 @@
+<tool id="ipapy2_gibbs_sampler" name="ipaPy2 gibbs sampler" version="@TOOL_VERSION@+galaxy0" profile="@PROFILE@">
+    <description>combine multiple information sources in a Gibbs sampler to improve annotation accuracy</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    
+    <expand macro="requirements"/>
+
+    <command detect_errors="exit_code"><![CDATA[
+        python3 '${__tool_directory__}/ipapy2_gibbs_sampler.py'
+        --input_dataset_mapped_isotope_patterns '${mapped_isotope_patterns}' '${mapped_isotope_patterns.ext}'
+        --input_dataset_annotations '${annotations}' '${annotations.ext}'
+        --integrating_mode '${integrating_mode.integrating_mode}'
+        #if $integrating_mode.integrating_mode == "adducts"
+            --delta_add '${integrating_mode.delta_add}'
+        #elif $integrating_mode.integrating_mode == "biochemical"
+            --input_dataset_bio '${integrating_mode.Bio}' '${integrating_mode.Bio.ext}'
+            --delta_bio '${integrating_mode.delta_bio}'
+        #else
+            --delta_add '${integrating_mode.delta_add}'
+            --input_dataset_bio '${integrating_mode.Bio}' '${integrating_mode.Bio.ext}'
+            --delta_bio '${integrating_mode.delta_bio}'
+        #end if
+        --noits '${noits}'
+        --burn '${burn}'
+        --all_out '${all_out}'
+        #if $zs:
+            --zs '${zs}' '${zs.ext}'
+        #else:
+            --zs '' ''
+        #end if
+        #if $zs_out:
+            --zs_out '${zs_out}' '${zs_out.ext}'
+        #else:
+            --zs_out '' ''
+        #end if
+        --output_dataset '${annotations_out}' '${annotations_out.ext}'
+
+    ]]></command>
+
+    <inputs>
+        <expand macro="gibbs"/>
+        
+        <conditional name="integrating_mode">
+            <param name="integrating_mode" type="select" label="integrating mode" help="select the integrating mode">
+                <option value="adducts">adducts</option>
+                <option value="biochemical">biochemical</option>
+                <option value="both">adducts and biochemical</option>
+            </param>
+            <when value="adducts">
+                <param name="delta_add" type="float" value="1" min="0" label="adducts weight" 
+                        help="parameter used when computing the conditional priors. The parameter must be positive. 
+                        The smaller the parameter the more weight the adducts connections have on the posterior probabilities. Default 1." />
+            </when>
+            <when value="biochemical">
+                <param name="Bio" type="data" format="csv,tsv,tabular,parquet" label="biochemical connections" 
+                        help="dataframe (2 columns), reporting all the possible connections between compounds. It uses the unique ids from the database. 
+                        It could be the output of Compute_Bio() or Compute_Bio_Parallel()." />
+                <param name="delta_bio" type="float" value="1" min="0" label="biochemical weight" 
+                        help="parameter used when computing the conditional priors. The parameter must be positive. 
+                        The smaller the parameter the more weight the biochemical connections have on the posterior probabilities. Default 1." />            
+            </when>
+            <when value="both">
+                <param name="delta_add" type="float" value="1" min="0" label="adducts weight" 
+                        help="parameter used when computing the conditional priors. The parameter must be positive. 
+                        The smaller the parameter the more weight the adducts connections have on the posterior probabilities. Default 1." />
+                <param name="Bio" type="data" format="csv,tsv,tabular,parquet" label="biochemical connections" 
+                        help="dataframe (2 columns), reporting all the possible connections between compounds. It uses the unique ids from the database. 
+                        It could be the output of Compute_Bio() or Compute_Bio_Parallel()." />
+                <param name="delta_bio" type="float" value="1" min="0" label="biochemical weight" 
+                        help="parameter used when computing the conditional priors. The parameter must be positive. 
+                        The smaller the parameter the more weight the biochemical connections have on the posterior probabilities. Default 1." /> 
+            </when>
+        </conditional>
+    </inputs>
+
+    <outputs>
+        <data label="${tool.name} annotations on ${on_string}" name="annotations_out" format_source="mapped_isotope_patterns"/>
+        <data label="${tool.name} zs on ${on_string}" name="zs_out" format="txt">
+            <filter>options['all_out']</filter>
+        </data>
+    </outputs>
+
+    <tests>
+        <test  expect_num_outputs="2">
+            <param name="mapped_isotope_patterns" value="mapped_isotope_patterns.parquet"/>
+            <param name="annotations" value="clean_annotations.csv"/>
+            <!-- Not the best way to test, but the results are stochastic hence difficult to test-->
+            <output name="annotations_out">
+                <assert_contents>
+                    <has_size value="9185" delta="100" />
+                </assert_contents>
+            </output>
+        </test>
+    </tests>
+
+    <help><![CDATA[
+
+.. _ipapy2_gibbs_sampler:
+
+==========================
+ipaPy2 Gibbs Sampler Tool
+==========================
+
+**Tool Description**
+
+This tool implements a Gibbs sampler that integrates multiple sources of information—biochemical connections and adducts connections—to improve the accuracy of metabolite annotation. By iteratively sampling from the posterior distribution, the tool refines annotation probabilities based on both network and chemical relationships.
+
+How it works
+------------
+
+- The Gibbs sampler updates annotation probabilities by considering:
+  - **Adducts connections**: Relationships between features that can be explained by known adduct transformations.
+  - **Biochemical connections**: Relationships between compounds based on known biochemical pathways or reactions.
+- The user can select to use only adducts, only biochemical connections, or both.
+- The influence of each connection type is controlled by the `adducts weight` and `biochemical weight` parameters: smaller values increase the influence of the respective connection type on the posterior probabilities.
+- The process is stochastic, so results may vary between runs.
+
+Inputs
+------
+
+1. **Mapped isotope patterns**  
+   Dataset containing mapped isotope patterns (e.g., output from the ipaPy2 map isotope patterns tool).
+
+2. **Annotations**  
+   Initial annotation table to be refined by the Gibbs sampler.
+
+3. **Integrating mode**  
+   - **adducts**: Use only adducts connections.
+   - **biochemical**: Use only biochemical connections (requires a biochemical connections table).
+   - **both**: Use both adducts and biochemical connections.
+
+4. **Adducts weight (`delta_add`)**  
+   Controls the influence of adducts connections (smaller = more influence).
+
+5. **Biochemical connections**  
+   Table (2 columns) reporting all possible biochemical connections between compounds (required if using biochemical mode).
+
+6. **Biochemical weight (`delta_bio`)**  
+   Controls the influence of biochemical connections (smaller = more influence).
+
+7. **Other parameters**  
+   - **noits**: Number of Gibbs sampler iterations.
+   - **burn**: Number of burn-in iterations.
+   - **all_out**: Output all intermediate results.
+   - **zs**: Optional input for initial state.
+   - **zs_out**: Optional output for sampled states.
+
+Outputs
+-------
+
+- **annotations_out**  
+  Refined annotation table with updated posterior probabilities.
+
+- **zs_out**  
+  (Optional) File containing sampled states from the Gibbs sampler (if `all_out` is enabled).
+
+Example
+-------
+
+Suppose you have mapped isotope patterns and an initial annotation table. You can run the Gibbs sampler as follows:
+
+.. code-block::
+
+    mapped_isotope_patterns.parquet
+    clean_annotations.csv
+
+Choose the integrating mode (e.g., both), set the weights, and run the tool. The output will be a refined annotation table.
+
+Notes
+-----
+
+- The results are stochastic; repeated runs may yield slightly different outputs.
+- For best results, ensure all input files are correctly formatted and contain the required columns.
+- The biochemical connections table should use unique IDs consistent with your annotation table.
+
+References
+----------
+
+- For more details on the Gibbs sampling algorithm and its application in metabolomics, refer to the ipaPy2 documentation or associated publications.
+
+    ]]></help>
+
+    <expand macro="citations"/>
+</tool>

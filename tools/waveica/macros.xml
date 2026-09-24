@@ -1,5 +1,5 @@
 <macros>
-    <token name="@TOOL_VERSION@">0.2.0</token>
+    <token name="@TOOL_VERSION@">0.2.1</token>
 
     <xml name="creator">
         <creator>
@@ -22,29 +22,10 @@
 
     <xml name="annotation">
         <xrefs>
-               <xref type="bio.tools">waveica</xref>
+            <xref type="bio.tools">waveica</xref>
         </xrefs>
      </xml>
 
-    <xml name="input_data">
-        <param type="data" name="data" label="Feature table" format="csv,tsv,parquet" help=""/>
-    </xml>
-    <xml name="general_parameters">
-        <param type="integer" value="20" name="k" label="Number of components to decompose" help="maximal component that ICA decomposes"/>
-        <param type="float" value="0" name="alpha" label="Alpha" help="trade-off value between the independence of samples (temporal ICA) and variables (spatial ICA), should be between 0 and 1"/>
-    </xml>
-    <xml name="batchwise_parameters">
-        <param type="float" value="0.05" name="t" label="Batch-association threshold" help="threshold to consider a component associate with the batch,
-        should be between 0 and 1"/>
-        <param type="float" value="0.05" name="t2" label="Group-association threshold" help="threshold to consider a component associate with the group,
-        should be between 0 and 1"/>
-    </xml>
-    <xml name="singlebatch_parameters">
-        <param type="float" value="0" name="cutoff" label="Cutoff" help="threshold of the variation explained by the injection order for independent components, should be between 0 and 1"/>
-    </xml>
-    <xml name="exclude_blanks">
-        <param name="exclude_blanks" type="boolean" checked="false" truevalue="TRUE" falsevalue="FALSE" label="Remove blanks" help="Excludes blank samples from the output" />
-    </xml>
     <xml name="wf">
         <conditional name="wf">
             <param type="select" name="wavelet_filter" label="Wavelet transform filter" help="wavelet function and filter length [1] (see footnotes for more details)">
@@ -96,22 +77,15 @@
             </when>
         </conditional>
     </xml>
-    <xml name="split_output">
-        <param name = "keep_two_output" label="Output metadata and data matrix as separate files" type="boolean" checked="false" 
-                truevalue="TRUE" falsevalue="FALSE" help="Keep two output files, one being the data matrix (feature table) and the second being the  metadata table." />
-    </xml>
 
     <xml name="outputs">
         <outputs>
             <data name="normalized_data" format="tabular" label="Normalized table of ${on_string}">
                 <change_format>
-                    <when input_dataset="data" attribute="ext" value="parquet" format="parquet" />
-                </change_format>
-            </data>
-            <data name="metadata" format="tabular" label="Metadata table of ${on_string}">
-                <filter>keep_two_output</filter>
-                <change_format>
-                    <when input_dataset="data" attribute="ext" value="parquet" format="parquet" />
+                    <when input_dataset="data_matrix" attribute="ext" value="parquet" format="parquet" />
+                    <when input_dataset="data_matrix" attribute="ext" value="csv" format="csv" />
+                    <when input_dataset="data_matrix" attribute="ext" value="tsv" format="tsv" />
+                    <when input_dataset="data_matrix" attribute="ext" value="tabular" format="tabular" />
                 </change_format>
             </data>
         </outputs>

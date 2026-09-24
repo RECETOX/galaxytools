@@ -1,0 +1,41 @@
+cff-version: 1.1.0
+message: "If you use this software, please cite it as below."
+authors:
+  - family-names: Hecht
+    given-names: Helge
+    orcid: https://orcid.org/0000-0001-6744-996X
+  - family-names: Trojak
+    given-names: Matej
+  - family-names: Cech
+    given-names: Martin
+  - family-names: Ahmad
+    given-names: Zargham
+  - family-names: Gomoryova
+    given-names: Kristina
+  - family-names: Rojas
+    given-names: Wudmir
+  - family-names: Acquaye
+    given-names: Frank
+  - family-names: Durnik
+    given-names: Robin
+  - family-names: Trachtova
+    given-names: Karolina
+  - family-names: Novotny
+    given-names: Jiri
+  - family-names: Usman
+    given-names: Muhammad
+  - family-names: Liu
+    given-names: Chang
+  - family-names: Gruening
+    given-names: Bjoern
+  - family-names: Krenek
+    given-names: Ales
+  - family-names: Bernt
+    given-names: Matthias
+  - family-names: Bromhead
+    given-names: Catherine
+  - family-names: Del Carratore
+    given-names: Francesco
+title: Galaxy tools for Untargeted Mass Spectrometry Analysis
+version: v0.6.9
+date-released: 2026-03-11
