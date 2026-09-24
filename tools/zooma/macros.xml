@@ -1,6 +1,6 @@
 <macros>
     <token name="@TOOL_VERSION@">0.1.0</token>
-    <token name="@GALAXY_VERSION@">0</token>
+    <token name="@GALAXY_VERSION@">1</token>
 
     <xml name="creator">
         <creator>
@@ -32,20 +32,26 @@
         If the service is unavailable, the job fails early with a clear error message instead of producing
         partial output.
 
-        **Batching and retry logic**
+        **Batching**
 
-        For large inputs, query values are processed in configurable batches. If a batch fails, it is retried
-        once automatically. If a batch fails twice, those values are skipped and reported to the job log.
-        If two consecutive batches fail, the job terminates with an error because the server appears unavailable.
+        Query values are processed in batches of the configured *Batch size*.
 
-        **Ontology filtering**
+        - In **Map** mode a batch is submitted as a single API request, so larger batches mean fewer
+          requests. ZOOMA answers with one mapping per submitted value and the wrapper checks that the
+          response lines up with the request before writing anything.
+        - In **Annotate** mode the legacy endpoint only accepts one value per request, so a batch is a group
+          of sequential requests. It is still processed, retried and skipped as a single unit.
 
-        Results can be filtered to a subset of ontologies:
+        **Retries and skipped values**
 
-        - **All ontologies**: No filter applied; all available ontologies are queried.
-        - **EFO and OBO foundry ontologies**: Restricts results to EFO and OBO foundry sources.
-        - **OBO foundry ontologies only**: Restricts results to OBO foundry sources only.
-        - **Custom ontology selection**: Manually select specific ontologies to include.
+        If a batch fails it is retried once. If it fails again its values are skipped, a ``WARNING`` line is
+        written to the job output naming the batch and how many values were dropped, and processing continues
+        with the next batch. If two batches fail one after another the job fails, because the service is then
+        considered unavailable.
+
+        Values are therefore only missing from the output if their batch failed twice, and every such event
+        is reported in the job output. Note that ZOOMA rejects any single value longer than 1000 characters,
+        which will always fail the batch containing it.
 
         **Output**
 

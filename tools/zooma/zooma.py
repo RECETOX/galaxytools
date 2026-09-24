@@ -1,18 +1,11 @@
 import argparse
 import csv
-import sys
 from urllib.parse import urlsplit, urlunsplit
 
 import requests
 
 DEFAULT_API_URL = "https://www.ebi.ac.uk/spot/zooma/v2/api/services/annotate"
 DEFAULT_HEALTH_URL = "https://www.ebi.ac.uk/spot/zooma/v3/api/health"
-
-ONTOLOGY_FILTER_PRESETS = {
-    "efo_obo": ["efo", "obo"],
-    "obo": ["obo"],
-    "all": [],
-}
 
 
 class ZoomaServiceError(RuntimeError):
@@ -49,18 +42,7 @@ def parse_args():
         "--batch-size",
         type=int,
         default=10,
-        help="Number of query values to send per API request",
-    )
-    parser.add_argument(
-        "--ontology-filter",
-        choices=["efo_obo", "obo", "all", "custom"],
-        default="all",
-        help="Which ontologies to include in results",
-    )
-    parser.add_argument(
-        "--ontologies",
-        default=None,
-        help="Comma-separated list of ontology names for custom filter",
+        help="Number of query values processed per batch",
     )
     return parser.parse_args()
 
@@ -90,6 +72,22 @@ def check_service_health(health_url, timeout):
         raise ZoomaServiceError(
             f"ZOOMA health check returned HTTP {response.status_code} for '{health_url}'.{details}"
         )
+
+
+def log_message(message):
+    """Report progress on stdout, which Galaxy exposes as the job's output."""
+    print(message, flush=True)
+
+
+def describe_values(values, max_values=5, max_length=40):
+    """Format skipped values for the log, bounding both count and length."""
+    previews = [
+        value if len(value) <= max_length else f"{value[:max_length]}..."
+        for value in values[:max_values]
+    ]
+    if len(values) > max_values:
+        previews.append(f"... ({len(values) - max_values} more)")
+    return ", ".join(repr(value) for value in previews)
 
 
 def get_nested_field(item, *path):
@@ -175,25 +173,11 @@ def normalize_map_results(query_value, mappings):
     return rows
 
 
-def resolve_ontology_filter(ontology_filter, ontologies_arg):
-    """Return a list of ontology names to filter by, or an empty list for 'all'."""
-    if ontology_filter in ONTOLOGY_FILTER_PRESETS:
-        return ONTOLOGY_FILTER_PRESETS[ontology_filter]
-    if ontology_filter == "custom":
-        if ontologies_arg:
-            return [o.strip() for o in ontologies_arg.split(",") if o.strip()]
-        return []
-    return []
-
-
-def query_zooma_annotate(query_value, api_url, timeout, ontology_filter=None):
-    params = {"propertyValue": query_value}
-    if ontology_filter:
-        params["ontologies"] = ",".join(ontology_filter)
+def query_zooma_annotate(query_value, api_url, timeout):
     try:
         response = requests.get(
             api_url,
-            params=params,
+            params={"propertyValue": query_value},
             headers={"Accept": "application/json"},
             timeout=timeout,
         )
@@ -211,11 +195,9 @@ def query_zooma_annotate(query_value, api_url, timeout, ontology_filter=None):
     raise ValueError("Unexpected response payload type from ZOOMA annotate API")
 
 
-def query_zooma_map(query_values, api_url, timeout, ontology_filter=None):
-    properties = [{"textToMap": v} for v in query_values]
-    body = {"properties": properties}
-    if ontology_filter:
-        body["ontologies"] = ontology_filter
+def query_zooma_map(query_values, api_url, timeout):
+    """Send a batch of values to the v3 map endpoint in a single request."""
+    body = {"properties": [{"textToMap": value} for value in query_values]}
 
     try:
         response = requests.post(
@@ -227,7 +209,8 @@ def query_zooma_map(query_values, api_url, timeout, ontology_filter=None):
         response.raise_for_status()
     except requests.RequestException as exc:
         raise ZoomaServiceError(
-            f"ZOOMA map request failed for values {query_values!r} against '{api_url}': {exc}"
+            f"ZOOMA map request failed for values "
+            f"{describe_values(query_values)} against '{api_url}': {exc}"
         ) from exc
 
     payload = response.json()
@@ -238,21 +221,127 @@ def query_zooma_map(query_values, api_url, timeout, ontology_filter=None):
     raise ValueError("Unexpected response payload type from ZOOMA map API")
 
 
-def process_batch(batch_values, args, ontology_filter):
-    """Process a batch of query values, returning a list of output rows."""
+def process_map_batch(batch, api_url, timeout):
+    """Map a whole batch in one request and return the output rows.
+
+    ZOOMA answers with one mapping per submitted value, in submission order,
+    echoing each value in ``textToMap``. The response is rejected unless it lines
+    up with the request, so results can never be attributed to the wrong value.
+    """
+    mappings = query_zooma_map(batch, api_url, timeout)
+    if len(mappings) != len(batch):
+        raise ValueError(
+            f"ZOOMA map returned {len(mappings)} mappings "
+            f"for {len(batch)} submitted values."
+        )
+
     output_rows = []
-    if args.mode == "map":
-        mappings = query_zooma_map(batch_values, args.api_url, args.timeout, ontology_filter)
-        for query_value in batch_values:
-            batch_mappings = [m for m in mappings if m.get("propertyValue") == query_value]
-            output_rows.extend(normalize_map_results(query_value, batch_mappings))
-    else:
-        for query_value in batch_values:
-            annotations = query_zooma_annotate(
-                query_value, args.api_url, args.timeout, ontology_filter
+    for query_value, mapping in zip(batch, mappings):
+        echoed_value = mapping.get("textToMap")
+        if echoed_value is not None and echoed_value != query_value:
+            raise ValueError(
+                f"ZOOMA map returned a mapping for {echoed_value!r} "
+                f"where {query_value!r} was submitted."
             )
-            output_rows.extend(normalize_annotations(query_value, annotations))
+        output_rows.extend(normalize_map_results(query_value, [mapping]))
     return output_rows
+
+
+def process_annotate_batch(batch, api_url, timeout, annotation_cache):
+    """Annotate a batch value by value and return the output rows.
+
+    The v2 annotate endpoint only accepts a single ``propertyValue`` per call, so
+    a batch is a group of requests that succeed or are retried together. Values
+    annotated by an earlier attempt are served from ``annotation_cache`` so a
+    retry only re-queries what is still missing.
+    """
+    output_rows = []
+    for query_value in batch:
+        if query_value not in annotation_cache:
+            annotation_cache[query_value] = query_zooma_annotate(
+                query_value, api_url, timeout
+            )
+        output_rows.extend(
+            normalize_annotations(query_value, annotation_cache[query_value])
+        )
+    return output_rows
+
+
+def process_batch(batch, args, annotation_cache):
+    if args.mode == "map":
+        return process_map_batch(batch, args.api_url, args.timeout)
+    return process_annotate_batch(batch, args.api_url, args.timeout, annotation_cache)
+
+
+def split_batches(query_values, batch_size):
+    return [
+        query_values[start: start + batch_size]
+        for start in range(0, len(query_values), batch_size)
+    ]
+
+
+def process_query_values(query_values, args, writer):
+    """Write results for every value, batching requests and retrying failures.
+
+    A batch that fails is retried once. If it fails again its values are skipped
+    and reported on stdout, and the job aborts once two batches have failed in a
+    row because the service is then considered unavailable.
+    """
+    batch_size = max(1, args.batch_size)
+    annotation_cache = {}
+    consecutive_failures = 0
+
+    for batch_number, batch in enumerate(
+        split_batches(query_values, batch_size), start=1
+    ):
+        succeeded = False
+
+        for attempt in (1, 2):
+            try:
+                output_rows = process_batch(batch, args, annotation_cache)
+            except (ZoomaServiceError, ValueError) as exc:
+                reason = str(exc)
+                if attempt == 1:
+                    log_message(
+                        f"WARNING: batch {batch_number} failed, retrying once. "
+                        f"Reason: {reason}"
+                    )
+                    continue
+                log_message(
+                    f"WARNING: batch {batch_number} failed twice, skipping "
+                    f"{len(batch)} value(s): {describe_values(batch)}. "
+                    f"Reason: {reason}"
+                )
+            else:
+                writer.writerows(output_rows)
+                succeeded = True
+                break
+
+        if succeeded:
+            consecutive_failures = 0
+        else:
+            consecutive_failures += 1
+            if consecutive_failures >= 2:
+                raise ZoomaServiceError(
+                    "Two consecutive batches failed. "
+                    "The ZOOMA service appears to be unavailable."
+                )
+
+
+def read_query_values(reader, column_index):
+    """Collect the non-empty values of ``column_index``, skipping the header."""
+    query_values = []
+    first_row = True
+    for row in reader:
+        if first_row:
+            first_row = False
+            continue
+        if column_index >= len(row):
+            continue
+        query_value = row[column_index].strip()
+        if query_value:
+            query_values.append(query_value)
+    return query_values
 
 
 def run():
@@ -261,8 +350,6 @@ def run():
     column_index = args.column - 1
     if column_index < 0:
         raise ValueError("Column index must be a positive integer.")
-
-    ontology_filter = resolve_ontology_filter(args.ontology_filter, args.ontologies)
 
     output_columns = [
         "query",
@@ -288,53 +375,8 @@ def run():
         )
         writer.writeheader()
 
-        # Collect query values (skip header)
-        query_values = []
-        first_row = True
-        for row in reader:
-            if first_row:
-                first_row = False
-                continue
-            if column_index >= len(row):
-                continue
-            query_value = row[column_index].strip()
-            if query_value:
-                query_values.append(query_value)
-
-        # Process in batches with retry logic
-        batch_size = max(1, args.batch_size)
-        consecutive_failures = 0
-
-        for batch_start in range(0, len(query_values), batch_size):
-            batch = query_values[batch_start: batch_start + batch_size]
-            succeeded = False
-
-            for attempt in range(2):
-                try:
-                    output_rows = process_batch(batch, args, ontology_filter)
-                    for output_row in output_rows:
-                        writer.writerow(output_row)
-                    succeeded = True
-                    consecutive_failures = 0
-                    break
-                except (ZoomaServiceError, ValueError) as exc:
-                    if attempt == 0:
-                        print(
-                            f"WARNING: Batch {batch_start // batch_size + 1} failed (attempt 1), retrying. Error: {exc}",
-                            file=sys.stdout,
-                        )
-                    else:
-                        print(
-                            f"WARNING: Batch {batch_start // batch_size + 1} failed twice. Skipping values: {batch}. Error: {exc}",
-                            file=sys.stdout,
-                        )
-
-            if not succeeded:
-                consecutive_failures += 1
-                if consecutive_failures >= 2:
-                    raise ZoomaServiceError(
-                        "Two consecutive batches failed. The ZOOMA server appears to be unavailable."
-                    )
+        query_values = read_query_values(reader, column_index)
+        process_query_values(query_values, args, writer)
 
 
 if __name__ == "__main__":
