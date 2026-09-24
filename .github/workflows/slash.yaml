@@ -4,12 +4,22 @@ on:
     types: [created]
 jobs:
   slashCommandDispatch:
+    # Gate on the command itself so the job is skipped (rather than run and fail)
+    # for every unrelated comment, and on PAT being configured so a repository
+    # without the secret no-ops instead of erroring.
+    if: >-
+      ${{ github.repository_owner == 'RECETOX'
+      && contains(github.event.comment.body, '/run-all-tool-tests') }}
     runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    env:
+      PAT: ${{ secrets.PAT }}
     steps:
       - name: Slash Command Dispatch
-        if: github.repository_owner == 'RECETOX'
-        uses: peter-evans/slash-command-dispatch@v4
+        if: ${{ env.PAT != '' }}
+        uses: peter-evans/slash-command-dispatch@v5
         with:
-          token: ${{ secrets.PAT }}
+          token: ${{ env.PAT }}
           commands: |
             run-all-tool-tests
