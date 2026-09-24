@@ -1,5 +1,8 @@
 name: Weekly global Tool Linting and Tests
 on:
+  # RECETOX divergence from tools-iuc: manual trigger, so the weekly pipeline can be
+  # validated on demand without waiting for Monday or spending a test run on
+  # a /run-all-tool-tests comment.
   workflow_dispatch:
   schedule:
     # Run at midnight every monday
@@ -8,8 +11,10 @@ on:
     types: [run-all-tool-tests-command]
 env:
   GALAXY_FORK: galaxyproject
-  GALAXY_BRANCH: release_25.1
+  GALAXY_BRANCH: release_26.1
   MAX_CHUNKS: 40
+  # RECETOX divergence from tools-iuc: the aoptk tools declare an LLM credential
+  # macro (tools/aoptk/macros.xml) that CI exercises.
   OPENAI_API_KEY: ${{secrets.OPENAI_API_KEY }}
   OPENAI_ENDPOINT_URL: https://llm.ai.e-infra.cz/v1
 jobs:
@@ -30,12 +35,14 @@ jobs:
     steps:
     - name: Add reaction
       if: ${{ github.event.client_payload.slash_command.command == 'run-all-tool-tests' }}
-      uses: peter-evans/create-or-update-comment@v4
+      uses: peter-evans/create-or-update-comment@v5
       with:
-        token: ${{ secrets.PAT }}
+        # An explicitly empty token overrides the action's github.token default,
+        # so fall back rather than passing secrets.PAT straight through.
+        token: ${{ secrets.PAT || github.token }}
         repository: ${{ github.event.client_payload.github.payload.repository.full_name }}
         comment-id: ${{ github.event.client_payload.github.payload.comment.id }}
-        reaction-type: hooray
+        reactions: hooray
     - name: Set galaxy fork and branch
       id: get-fork-branch
       run: |
@@ -46,11 +53,11 @@ jobs:
     - name: Determine latest commit in the Galaxy repo
       id: get-galaxy-sha
       run: echo "galaxy-head-sha=$(git ls-remote https://github.com/${{ steps.get-fork-branch.outputs.fork }}/galaxy refs/heads/${{ steps.get-fork-branch.outputs.branch }} | cut -f1)" >> $GITHUB_OUTPUT
-    - uses: actions/setup-python@v6
+    - uses: actions/setup-python@v7
       with:
         python-version: ${{ matrix.python-version }}
     - name: Cache .cache/pip
-      uses: actions/cache@v5
+      uses: actions/cache@v6
       id: cache-pip
       with:
         path: ~/.cache/pip
@@ -59,9 +66,9 @@ jobs:
     # are not available as wheels, pip will build a wheel for them, which can be cached.
     - name: Install wheel
       run: pip install wheel
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v7
       with:
-        fetch-depth: 1
+        persist-credentials: false
     - name: Fake a Planemo run to update cache and determine commit range, repositories, and chunks
       uses: galaxyproject/planemo-ci-action@v1
       id: discover
@@ -77,6 +84,10 @@ jobs:
       run: |
         echo 'Using ${{ steps.discover.outputs.chunk-count }} chunks (${{ steps.discover.outputs.chunk-list }})'
 
+  # RECETOX divergence from tools-iuc: kept as a separate job rather than folding
+  # --biocontainers into the lint job below. tools-iuc lints everything at
+  # fail-level: warn, which would silently downgrade a missing container from an
+  # error to a warning; this job keeps a hard gate and a dedicated report.
   containers:
     name: Check for missing containers
     needs: setup
@@ -87,14 +98,14 @@ jobs:
       matrix:
         python-version: ['3.11']
     steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v7
       with:
-        fetch-depth: 1
-    - uses: actions/setup-python@v6
+        persist-credentials: false
+    - uses: actions/setup-python@v7
       with:
         python-version: ${{ matrix.python-version }}
     - name: Cache .cache/pip
-      uses: actions/cache@v5
+      uses: actions/cache@v6
       id: cache-pip
       with:
         path: ~/.cache/pip
@@ -113,7 +124,7 @@ jobs:
       with:
         name: 'Container report output'
         path: check_containers_report.txt
-  
+
   lint:
     name: Lint tool-list
     needs: setup
@@ -124,14 +135,14 @@ jobs:
       matrix:
         python-version: ['3.11']
     steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v7
       with:
-        fetch-depth: 1
-    - uses: actions/setup-python@v6
+        persist-credentials: false
+    - uses: actions/setup-python@v7
       with:
         python-version: ${{ matrix.python-version }}
     - name: Cache .cache/pip
-      uses: actions/cache@v5
+      uses: actions/cache@v6
       id: cache-pip
       with:
         path: ~/.cache/pip
@@ -141,10 +152,15 @@ jobs:
       id: lint
       with:
         mode: lint
-        repository-list: ${{ needs.setup.outputs.repository-list }}
         fail-level: warn
+        repository-list: ${{ needs.setup.outputs.repository-list }}
         tool-list: ${{ needs.setup.outputs.tool-list }}
-        additional-planemo-options: -s version_bumped
+        # No --biocontainers here, unlike tools-iuc: that check lives in the
+        # dedicated `containers` job above, which enforces it at fail-level: error.
+        # Unlike the PR workflow, the weekly lint runs over every tool in the
+        # repository, where a version bump is not expected -- so skip it
+        # unconditionally rather than resolving it from PR labels.
+        additional-planemo-options: --skip version_bumped
     - uses: actions/upload-artifact@v7
       if: ${{ failure() }}
       with:
@@ -174,14 +190,14 @@ jobs:
     steps:
     # checkout the repository
     # and use it as the current working directory
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v7
       with:
-        fetch-depth: 1
-    - uses: actions/setup-python@v6
+        persist-credentials: false
+    - uses: actions/setup-python@v7
       with:
         python-version: ${{ matrix.python-version }}
     - name: Cache .cache/pip
-      uses: actions/cache@v5
+      uses: actions/cache@v6
       id: cache-pip
       with:
         path: ~/.cache/pip
@@ -191,6 +207,8 @@ jobs:
       id: cpu-cores
     - name: Clean dotnet folder for space
       run: rm -Rf /usr/share/dotnet
+    # RECETOX divergence from tools-iuc: some tool tests import these directly
+    # rather than declaring them as tool requirements.
     - run: python -m pip install pillow tifffile
     - name: Planemo test
       uses: galaxyproject/planemo-ci-action@v1
@@ -227,11 +245,11 @@ jobs:
     - uses: actions/download-artifact@v8
       with:
         path: artifacts
-    - uses: actions/setup-python@v6
+    - uses: actions/setup-python@v7
       with:
         python-version: ${{ matrix.python-version }}
     - name: Cache .cache/pip
-      uses: actions/cache@v5
+      uses: actions/cache@v6
       id: cache-pip
       with:
         path: ~/.cache/pip
@@ -255,9 +273,11 @@ jobs:
 
     - name: Create comment
       if: ${{ github.event.client_payload.slash_command.command == 'run-all-tool-tests' }}
-      uses: peter-evans/create-or-update-comment@v4
+      uses: peter-evans/create-or-update-comment@v5
       with:
-        token: ${{ secrets.PAT }}
+        # An explicitly empty token overrides the action's github.token default,
+        # so fall back rather than passing secrets.PAT straight through.
+        token: ${{ secrets.PAT || github.token }}
         repository: ${{ github.event.client_payload.github.payload.repository.full_name }}
         issue-number: ${{ github.event.client_payload.github.payload.issue.number }}
         body: |
