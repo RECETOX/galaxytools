@@ -1,10 +1,18 @@
 import argparse
 import csv
-from urllib.parse import urlsplit, urlunsplit
 
 import requests
 
-DEFAULT_API_URL = "https://www.ebi.ac.uk/spot/zooma/v2/api/services/annotate"
+ANNOTATE_API_URL = "https://www.ebi.ac.uk/spot/zooma/v2/api/services/annotate"
+MAP_API_URL = "https://www.ebi.ac.uk/spot/zooma/v3/api/services/map"
+API_URLS = {"annotate": ANNOTATE_API_URL, "map": MAP_API_URL}
+DEFAULT_MODE = "map"
+
+# Only the v3 API exposes a health endpoint. The v2 equivalents are unusable:
+# `/spot/zooma/v2/api/health` returns 404 and `/spot/zooma/v2/health` returns 200
+# with the ZOOMA web application HTML, like any other unknown path under
+# `/spot/zooma/`, so it would report the service as healthy no matter what. The
+# service reports one overall status, so both modes check the v3 endpoint.
 DEFAULT_HEALTH_URL = "https://www.ebi.ac.uk/spot/zooma/v3/api/health"
 
 
@@ -25,15 +33,20 @@ def parse_args():
         help="1-based input column index used for query terms",
     )
     parser.add_argument(
-        "--mode", choices=["annotate", "map"], default="annotate", help="ZOOMA API mode"
+        "--mode",
+        choices=["annotate", "map"],
+        default=DEFAULT_MODE,
+        help="ZOOMA API mode",
     )
     parser.add_argument(
-        "--api-url", default=DEFAULT_API_URL, help="ZOOMA annotation endpoint URL"
+        "--api-url",
+        default=None,
+        help="ZOOMA endpoint URL (defaults to the endpoint for the selected mode)",
     )
     parser.add_argument(
         "--health-url",
-        default=None,
-        help="ZOOMA health-check endpoint URL (defaults to a path derived from --api-url)",
+        default=DEFAULT_HEALTH_URL,
+        help="ZOOMA health-check endpoint URL (only the v3 API provides one)",
     )
     parser.add_argument(
         "--timeout", type=int, default=30, help="HTTP request timeout in seconds"
@@ -45,17 +58,6 @@ def parse_args():
         help="Number of query values processed per batch",
     )
     return parser.parse_args()
-
-
-def derive_health_url(api_url):
-    parsed = urlsplit(api_url)
-    path = parsed.path
-    marker = "/api/"
-    if marker in path:
-        path = path.split(marker, 1)[0] + "/api/health"
-    elif not path.endswith("/health"):
-        path = path.rstrip("/") + "/health"
-    return urlunsplit((parsed.scheme, parsed.netloc, path, "", ""))
 
 
 def check_service_health(health_url, timeout):
@@ -347,6 +349,9 @@ def read_query_values(reader, column_index):
 def run():
     args = parse_args()
 
+    if args.api_url is None:
+        args.api_url = API_URLS[args.mode]
+
     column_index = args.column - 1
     if column_index < 0:
         raise ValueError("Column index must be a positive integer.")
@@ -362,8 +367,7 @@ def run():
         "study_type",
     ]
 
-    health_url = args.health_url or derive_health_url(args.api_url)
-    check_service_health(health_url, args.timeout)
+    check_service_health(args.health_url, args.timeout)
 
     with (
         open(args.input, "r", encoding="utf-8", newline="") as infile,
