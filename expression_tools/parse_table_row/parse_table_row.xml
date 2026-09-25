@@ -1,0 +1,451 @@
+<tool id="parse_table_row" name="Parse table row into workflow parameters" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="20.01" license="MIT" tool_type="expression">
+    <description>Turn selected columns of a single table row into typed workflow parameters.</description>
+
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+
+    <expand macro="annotations"/>
+
+    <expression type="ecma5.1"><![CDATA[{
+        // Galaxy cannot declare a variable number of outputs, so the tool
+        // exposes a fixed pool of slots and prunes the unused ones with
+        // <filter> in <outputs>. The slot count, the <repeat max=""> and the
+        // number of outputs all come from the @MAX_SLOTS@ token in macros.xml.
+        var MAX_SLOTS = @MAX_SLOTS@;
+
+        var FLOAT_PATTERN = /^[+-]?(\d+(\.\d*)?|\.\d+)([eE][+-]?\d+)?$/;
+        var INTEGER_PATTERN = /^[+-]?\d+$/;
+        var TRUE_VALUES = ['true', 'yes', '1'];
+        var FALSE_VALUES = ['false', 'no', '0'];
+        var SUPPORTED_TYPES = ['float', 'integer', 'text', 'boolean'];
+
+        function fail(message) {
+            throw new Error(message);
+        }
+
+        function parseNumber(columnName, columnType, value) {
+            var pattern = columnType === 'integer' ? INTEGER_PATTERN : FLOAT_PATTERN;
+            if (!pattern.test(value)) {
+                fail('Column "' + columnName + '": "' + value + '" is not a valid ' + columnType + ' value.');
+            }
+            // Number() alone is not enough: it accepts "", "Infinity" and
+            // "1e400", the last two of which have no JSON representation.
+            var parsed = Number(value);
+            if (!isFinite(parsed)) {
+                fail('Column "' + columnName + '": "' + value + '" is out of range.');
+            }
+            return parsed;
+        }
+
+        function parseBoolean(columnName, value) {
+            var lowered = value.toLowerCase();
+            if (TRUE_VALUES.indexOf(lowered) !== -1) {
+                return true;
+            }
+            if (FALSE_VALUES.indexOf(lowered) !== -1) {
+                return false;
+            }
+            // Anything else is an error rather than a silent false, because the
+            // downstream tools use TRUE/False spellings interchangeably.
+            fail('Column "' + columnName + '": "' + value + '" is not a boolean value; expected one of ' +
+                 TRUE_VALUES.concat(FALSE_VALUES).join(', ') + ' (any case).');
+        }
+
+        function parseValue(columnName, columnType, rawValue) {
+            var value = String(rawValue).trim();
+            if (columnType === 'text') {
+                return value;
+            }
+            if (value.length === 0) {
+                fail('Column "' + columnName + '" is empty, but a ' + columnType + ' value is required.');
+            }
+            if (columnType === 'boolean') {
+                return parseBoolean(columnName, value);
+            }
+            return parseNumber(columnName, columnType, value);
+        }
+
+        try {
+            var columns = $job.columns;
+            var rowIndex = $job.row_index;
+            var delimiter = $job.delimiter === 'tab' ? '\t' : ',';
+
+            if (!columns || columns.length === 0) {
+                fail('At least one column has to be configured.');
+            }
+            if (columns.length > MAX_SLOTS) {
+                fail('At most ' + MAX_SLOTS + ' columns are supported, but ' + columns.length + ' were configured.');
+            }
+
+            var configuredNames = [];
+            var i;
+            for (i = 0; i < columns.length; i++) {
+                var name = String(columns[i].column_name).trim();
+                var columnType = String(columns[i].column_type).trim();
+                if (name.length === 0) {
+                    fail('Column ' + (i + 1) + ' has no name.');
+                }
+                if (configuredNames.indexOf(name) !== -1) {
+                    fail('Column name "' + name + '" is configured more than once.');
+                }
+                if (SUPPORTED_TYPES.indexOf(columnType) === -1) {
+                    fail('Column "' + name + '" has the unsupported type "' + columnType + '".');
+                }
+                configuredNames.push(name);
+            }
+
+            var rawContents = $job.table.contents;
+            if (typeof rawContents !== 'string') {
+                fail('The contents of the input table could not be read. Make sure the file is not empty.');
+            }
+
+            var lines = rawContents.split('\n');
+            var rows = [];
+            for (i = 0; i < lines.length; i++) {
+                rows.push(lines[i].replace(/\r$/, ''));
+            }
+            while (rows.length > 1 && rows[rows.length - 1].trim() === '') {
+                rows.pop();
+            }
+            if (rows.length < 2) {
+                fail('The input table needs a header row and at least one data row, but only ' + rows.length + ' row(s) were found.');
+            }
+
+            var header = [];
+            var headerCells = rows[0].split(delimiter);
+            for (i = 0; i < headerCells.length; i++) {
+                header.push(headerCells[i].trim());
+            }
+
+            if (rowIndex < 1 || rowIndex >= rows.length) {
+                fail('Row ' + rowIndex + ' does not exist. The table has ' + (rows.length - 1) +
+                     ' data row(s); row numbering starts at 1 for the row below the header.');
+            }
+            var cells = rows[rowIndex].split(delimiter);
+
+            // Only the used slots are returned: a slot whose <filter> kept the
+            // output but whose value is missing is a bug, and failing loudly is
+            // better than emitting a silently empty parameter.
+            var result = {};
+            for (i = 0; i < configuredNames.length; i++) {
+                var wanted = configuredNames[i];
+                var position = header.indexOf(wanted);
+                if (position === -1) {
+                    fail('Column "' + wanted + '" was not found in the header of the input table. Available columns: ' +
+                         header.join(', '));
+                }
+                if (position >= cells.length) {
+                    fail('Row ' + rowIndex + ' has no value for column "' + wanted +
+                         '". The header has ' + header.length + ' columns but this row has only ' + cells.length + '.');
+                }
+                result['v_' + i] = parseValue(wanted, String(columns[i].column_type).trim(), cells[position]);
+            }
+            return result;
+        } catch (error) {
+            return {'__error_message': String(error.message || error)};
+        }
+    }]]></expression>
+
+    <inputs>
+        <param argument="--table" type="data" format="csv,tabular" label="Input table"
+               help="Table with a header row. Exactly one row of this table is parsed into workflow parameters."
+               load_contents="64000"/>
+        <param argument="--delimiter" type="select" label="Column delimiter"
+               help="Delimiter used by the input table.">
+            <option value="comma" selected="true">Comma (CSV)</option>
+            <option value="tab">Tab (TSV / tabular)</option>
+        </param>
+        <param argument="--row_index" type="integer" value="1" min="1" label="Data row"
+               help="Which data row of the table to parse. 1 is the first row below the header."/>
+        <repeat name="columns" title="Column" min="1" max="@MAX_SLOTS@" default="1">
+            <param name="column_name" type="text" label="Column name"
+                   help="Must match a header cell of the input table exactly (ignoring surrounding whitespace)."/>
+            <param name="column_type" type="select" label="Column type"
+                   help="Type of the generated workflow parameter. Booleans accept true/false, yes/no and 1/0 in any case.">
+                <option value="float" selected="true">Float</option>
+                <option value="integer">Integer</option>
+                <option value="text">Text</option>
+                <option value="boolean">Boolean</option>
+            </param>
+        </repeat>
+    </inputs>
+
+    <outputs>
+        <expand macro="typed_outputs"/>
+    </outputs>
+
+    <tests>
+        <test expect_num_outputs="4">
+            <param name="table" value="mixed.csv"/>
+            <param name="row_index" value="2"/>
+            <repeat name="columns">
+                <param name="column_name" value="min_run"/>
+                <param name="column_type" value="float"/>
+            </repeat>
+            <repeat name="columns">
+                <param name="column_name" value="weighting"/>
+                <param name="column_type" value="boolean"/>
+            </repeat>
+            <repeat name="columns">
+                <param name="column_name" value="min_pres"/>
+                <param name="column_type" value="float"/>
+            </repeat>
+            <repeat name="columns">
+                <param name="column_name" value="study"/>
+                <param name="column_type" value="text"/>
+            </repeat>
+            <output name="float_0" value_json="4.2"/>
+            <output name="boolean_1" value_json="false"/>
+            <output name="float_2" value_json="0.8"/>
+            <output name="text_3" value_json="&quot;_NEG metabolomics&quot;"/>
+        </test>
+
+        <!-- Values are written as JSON, so a float with an integral value is
+             stored without a decimal point. Downstream float parameters accept
+             it, but test assertions compare types strictly. -->
+        <test>
+            <param name="table" value="mixed.csv"/>
+            <param name="row_index" value="3"/>
+            <repeat name="columns">
+                <param name="column_name" value="min_run"/>
+                <param name="column_type" value="float"/>
+            </repeat>
+            <output name="float_0" value_json="10"/>
+        </test>
+
+        <!-- The recetox-aplcms tools spell their boolean parameters TRUE. -->
+        <test>
+            <param name="table" value="mixed.csv"/>
+            <param name="row_index" value="3"/>
+            <repeat name="columns">
+                <param name="column_name" value="weighting"/>
+                <param name="column_type" value="boolean"/>
+            </repeat>
+            <output name="boolean_0" value_json="true"/>
+        </test>
+
+        <test expect_num_outputs="1">
+            <param name="table" value="mixed.csv"/>
+            <repeat name="columns">
+                <param name="column_name" value="mz_tol"/>
+                <param name="column_type" value="float"/>
+            </repeat>
+            <output name="float_0" value_json="0.01"/>
+        </test>
+
+        <test>
+            <param name="table" value="mixed.tsv"/>
+            <param name="delimiter" value="tab"/>
+            <repeat name="columns">
+                <param name="column_name" value="min_run"/>
+                <param name="column_type" value="integer"/>
+            </repeat>
+            <repeat name="columns">
+                <param name="column_name" value="weighting"/>
+                <param name="column_type" value="boolean"/>
+            </repeat>
+            <output name="integer_0" value_json="3"/>
+            <output name="boolean_1" value_json="false"/>
+        </test>
+
+        <test expect_failure="true">
+            <param name="table" value="mixed.csv"/>
+            <repeat name="columns">
+                <param name="column_name" value="does_not_exist"/>
+                <param name="column_type" value="float"/>
+            </repeat>
+        </test>
+
+        <test expect_failure="true">
+            <param name="table" value="mixed.csv"/>
+            <repeat name="columns">
+                <param name="column_name" value="study"/>
+                <param name="column_type" value="float"/>
+            </repeat>
+        </test>
+
+        <!-- parseFloat() would silently accept both of these as 3.1 and 1. -->
+        <test expect_failure="true">
+            <param name="table" value="bad_values.csv"/>
+            <repeat name="columns">
+                <param name="column_name" value="min_run"/>
+                <param name="column_type" value="float"/>
+            </repeat>
+        </test>
+
+        <test expect_failure="true">
+            <param name="table" value="bad_values.csv"/>
+            <param name="row_index" value="2"/>
+            <repeat name="columns">
+                <param name="column_name" value="min_run"/>
+                <param name="column_type" value="float"/>
+            </repeat>
+        </test>
+
+        <test expect_failure="true">
+            <param name="table" value="bad_values.csv"/>
+            <repeat name="columns">
+                <param name="column_name" value="weighting"/>
+                <param name="column_type" value="boolean"/>
+            </repeat>
+        </test>
+
+        <!-- Empty cells are common in hand-edited parameter tables; Number('')
+             would turn one into 0. -->
+        <test expect_failure="true">
+            <param name="table" value="bad_values.csv"/>
+            <param name="row_index" value="3"/>
+            <repeat name="columns">
+                <param name="column_name" value="min_run"/>
+                <param name="column_type" value="float"/>
+            </repeat>
+        </test>
+
+        <test expect_failure="true">
+            <param name="table" value="header_only.csv"/>
+            <repeat name="columns">
+                <param name="column_name" value="min_run"/>
+                <param name="column_type" value="float"/>
+            </repeat>
+        </test>
+
+        <!-- Fills every slot, with all four types represented. This is what
+             keeps the hand-written <expand> list in macros.xml in sync with
+             @MAX_SLOTS@: if a slot is missing from the list, the corresponding
+             output does not exist and this test fails. -->
+        <test expect_num_outputs="10">
+            <param name="table" value="wide.csv"/>
+            <repeat name="columns"><param name="column_name" value="c1"/><param name="column_type" value="float"/></repeat>
+            <repeat name="columns"><param name="column_name" value="c2"/><param name="column_type" value="integer"/></repeat>
+            <repeat name="columns"><param name="column_name" value="c3"/><param name="column_type" value="text"/></repeat>
+            <repeat name="columns"><param name="column_name" value="c4"/><param name="column_type" value="boolean"/></repeat>
+            <repeat name="columns"><param name="column_name" value="c5"/><param name="column_type" value="float"/></repeat>
+            <repeat name="columns"><param name="column_name" value="c6"/><param name="column_type" value="integer"/></repeat>
+            <repeat name="columns"><param name="column_name" value="c7"/><param name="column_type" value="text"/></repeat>
+            <repeat name="columns"><param name="column_name" value="c8"/><param name="column_type" value="boolean"/></repeat>
+            <repeat name="columns"><param name="column_name" value="c9"/><param name="column_type" value="float"/></repeat>
+            <repeat name="columns"><param name="column_name" value="c10"/><param name="column_type" value="integer"/></repeat>
+            <output name="float_0" value_json="1.5"/>
+            <output name="integer_1" value_json="2"/>
+            <output name="text_2" value_json="&quot;three&quot;"/>
+            <output name="boolean_3" value_json="true"/>
+            <output name="float_4" value_json="4.5"/>
+            <output name="integer_5" value_json="5"/>
+            <output name="text_6" value_json="&quot;five&quot;"/>
+            <output name="boolean_7" value_json="false"/>
+            <output name="float_8" value_json="6.5"/>
+            <output name="integer_9" value_json="7"/>
+        </test>
+
+        <test expect_failure="true">
+            <param name="table" value="mixed.csv"/>
+            <param name="row_index" value="4"/>
+            <repeat name="columns">
+                <param name="column_name" value="min_run"/>
+                <param name="column_type" value="float"/>
+            </repeat>
+        </test>
+
+        <!-- <repeat max=""> keeps this out of the UI, but tool requests can
+             bypass it, so the expression checks it too. -->
+        <test expect_failure="true">
+            <param name="table" value="mixed.csv"/>
+            <repeat name="columns">
+                <param name="column_name" value="min_run"/>
+                <param name="column_type" value="float"/>
+            </repeat>
+            <repeat name="columns">
+                <param name="column_name" value="mz_tol"/>
+                <param name="column_type" value="float"/>
+            </repeat>
+            <repeat name="columns">
+                <param name="column_name" value="weighting"/>
+                <param name="column_type" value="boolean"/>
+            </repeat>
+            <repeat name="columns">
+                <param name="column_name" value="min_pres"/>
+                <param name="column_type" value="float"/>
+            </repeat>
+            <repeat name="columns">
+                <param name="column_name" value="study"/>
+                <param name="column_type" value="text"/>
+            </repeat>
+            <repeat name="columns">
+                <param name="column_name" value="min_run"/>
+                <param name="column_type" value="integer"/>
+            </repeat>
+            <repeat name="columns">
+                <param name="column_name" value="mz_tol"/>
+                <param name="column_type" value="integer"/>
+            </repeat>
+            <repeat name="columns">
+                <param name="column_name" value="min_pres"/>
+                <param name="column_type" value="boolean"/>
+            </repeat>
+            <repeat name="columns">
+                <param name="column_name" value="study"/>
+                <param name="column_type" value="boolean"/>
+            </repeat>
+            <repeat name="columns">
+                <param name="column_name" value="min_run"/>
+                <param name="column_type" value="text"/>
+            </repeat>
+            <repeat name="columns">
+                <param name="column_name" value="mz_tol"/>
+                <param name="column_type" value="float"/>
+            </repeat>
+            <repeat name="columns">
+                <param name="column_name" value="min_pres"/>
+                <param name="column_type" value="float"/>
+            </repeat>
+        </test>
+    </tests>
+
+    <help><![CDATA[
+
+.. class:: infomark
+
+**What it does**
+
+This tool reads **one row** of a CSV or tabular file and turns the selected
+columns into **typed workflow parameters** (float, integer, text or boolean).
+Each output appears in the workflow editor as a connection point that can be
+attached to the input of a downstream tool, which makes the tool useful for
+parameter sweeps: keep one row per parameter set in a table and feed the
+workflow with it.
+
+This is the generic counterpart of ``recetox-aplcms - parse parameters``,
+which hard-codes the recetox-aplcms column names and types.
+
+Usage
+.....
+
+**Input**
+
+- **Input table**: a CSV or tabular file with a header row.
+- **Column delimiter** and **Data row**: how the table is read. Data row 1 is the row directly below the header.
+- **Column**: one entry per value to extract, given as a column name and its type. Column names must match header cells exactly (surrounding whitespace is ignored).
+
+**Output**
+
+One parameter per configured column, named after that column. Values are
+validated against the selected type and the tool fails with a message naming
+the offending column instead of coercing it. Booleans accept ``true``/``false``,
+``yes``/``no`` and ``1``/``0`` in any case.
+
+Limitation - fixed number of slots
+..................................
+
+Galaxy requires a tool to declare its outputs statically, so the number of
+outputs cannot grow and shrink freely with the number of configured columns.
+This tool works around that by declaring a pool of **@MAX_SLOTS@ slots** and
+hiding the unused ones with output filters, which has three visible
+consequences:
+
+- At most @MAX_SLOTS@ columns can be parsed per invocation; configuring more is an error.
+- The connection points shown in the workflow editor follow the configured columns, so adding or removing a column can change which downstream inputs are available.
+- Slots are positional: configuring ``mz_tol`` as the second column gives it the second slot. Output names are therefore generic (``float_0``, ``boolean_3``, ...), while the human readable label is the column name.
+
+    ]]></help>
+</tool>

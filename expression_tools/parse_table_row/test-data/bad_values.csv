@@ -1,0 +1,4 @@
+min_run,mz_tol,weighting,min_pres,study
+3.1xyz,0.01,maybe,0.9,pos
+1e400,0.01,true,0.9,pos
+,0.01,true,0.9,pos
