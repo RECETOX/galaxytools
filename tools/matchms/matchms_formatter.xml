@@ -1,4 +1,4 @@
-<tool id="matchms_formatter" name="matchms scores formatter" version="@TOOL_VERSION@+galaxy0" profile="23.0" license="MIT">
+<tool id="matchms_formatter" name="matchms scores formatter" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="23.0" license="MIT">
     <description>reformat scores object of matchms to long format table</description>
 
     <macros>
@@ -71,7 +71,5 @@ result.to_csv('$output', sep="\t", index=False)
         @HELP_matchms@
     </help>
 
-    <citations>
-        <citation type="doi">10.5281/zenodo.6035335</citation>
-    </citations>
+    <expand macro="citations"/>
 </tool>

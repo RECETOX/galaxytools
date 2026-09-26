@@ -1,4 +1,4 @@
-<tool id="matchms_metadata_merge" name="matchms metadata merge" version="@TOOL_VERSION@+galaxy0" profile="23.0" license="MIT">
+<tool id="matchms_metadata_merge" name="matchms metadata merge" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="23.0" license="MIT">
     <description>Merge metadata csv into MSP by a specified column</description>
     
     <macros>
@@ -91,7 +91,5 @@ matchms.exporting.save_as_msp(merged_array.tolist(), '${output}')
             file with the metadata in the MSP file on a user specified column.
     </help>
 
-    <citations>
-        <citation type="doi">10.5281/zenodo.8083373</citation>
-    </citations>
+    <expand macro="citations"/>
 </tool>

@@ -1,6 +1,6 @@
 <macros>
     <token name="@TOOL_VERSION@">0.33.1</token>
-
+    <token name="@VERSION_SUFFIX@">1</token>
     <xml name="creator">
         <creator>
             <yield/>
@@ -85,6 +85,7 @@
         <citations>
             <citation type="doi">10.5281/zenodo.7178586</citation>
             <citation type="doi">10.21105/joss.02411</citation>
+            <citation type="doi">10.1186/s13321-024-00878-1</citation>
         </citations>
     </xml>
 
@@ -103,5 +104,5 @@ join_type = "left"
 <token name="@init_logger@">
 from matchms import set_matchms_logger_level
 set_matchms_logger_level("WARNING")
-</token>   
+</token>
 </macros>
