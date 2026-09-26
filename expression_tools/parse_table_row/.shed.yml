@@ -1,0 +1,12 @@
+name: parse_table_row
+owner: recetox
+remote_repository_url: "https://github.com/RECETOX/galaxytools/tree/master/expression_tools/parse_table_row"
+homepage_url: "https://github.com/RECETOX/galaxytools"
+categories:
+  - Expression
+  - Workflow Control
+description: "Parse one row of a CSV or tabular file into typed workflow parameters."
+long_description: "Generic expression tool that turns selected columns of a single table row into float, integer, text or boolean workflow parameters, so a table of parameter sets can drive a workflow. The number of outputs is a fixed pool of slots pruned with output filters."
+auto_tool_repositories:
+  name_template: "{{ tool_id }}"
+  description_template: "{{ tool_name }} tool"
