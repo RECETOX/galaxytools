@@ -10,55 +10,60 @@
       active, selected by the declared type of the corresponding repeat entry.
       Galaxy requires outputs to be declared statically, so the slots are a
       fixed pool pruned with <filter>; see the tool help for the consequences.
+
+      @N@ is the 1-based slot number, used only to label the output. The label
+      is plain text on purpose: labels are rendered with Cheetah against the
+      tool parameters, and an expression that raises there fails the job. Since
+      columns are matched by position there is no column name to show anyway.
     -->
-    <xml name="typed_output" tokens="slot,type">
-        <output type="@TYPE@" name="@TYPE@_@SLOT@" from="v_@SLOT@" label="$columns[@SLOT@]['column_name']">
+    <xml name="typed_output" tokens="slot,n,type">
+        <output type="@TYPE@" name="@TYPE@_@SLOT@" from="v_@SLOT@" label="column @N@ (@TYPE@)">
             <filter>len(columns) > @SLOT@ and columns[@SLOT@]['column_type'] == '@TYPE@'</filter>
         </output>
     </xml>
 
     <!-- Slot pool: keep these <expand> lists in sync with @MAX_SLOTS@ below. -->
     <xml name="typed_outputs">
-        <expand macro="typed_output" slot="0" type="float"/>
-        <expand macro="typed_output" slot="1" type="float"/>
-        <expand macro="typed_output" slot="2" type="float"/>
-        <expand macro="typed_output" slot="3" type="float"/>
-        <expand macro="typed_output" slot="4" type="float"/>
-        <expand macro="typed_output" slot="5" type="float"/>
-        <expand macro="typed_output" slot="6" type="float"/>
-        <expand macro="typed_output" slot="7" type="float"/>
-        <expand macro="typed_output" slot="8" type="float"/>
-        <expand macro="typed_output" slot="9" type="float"/>
-        <expand macro="typed_output" slot="0" type="integer"/>
-        <expand macro="typed_output" slot="1" type="integer"/>
-        <expand macro="typed_output" slot="2" type="integer"/>
-        <expand macro="typed_output" slot="3" type="integer"/>
-        <expand macro="typed_output" slot="4" type="integer"/>
-        <expand macro="typed_output" slot="5" type="integer"/>
-        <expand macro="typed_output" slot="6" type="integer"/>
-        <expand macro="typed_output" slot="7" type="integer"/>
-        <expand macro="typed_output" slot="8" type="integer"/>
-        <expand macro="typed_output" slot="9" type="integer"/>
-        <expand macro="typed_output" slot="0" type="text"/>
-        <expand macro="typed_output" slot="1" type="text"/>
-        <expand macro="typed_output" slot="2" type="text"/>
-        <expand macro="typed_output" slot="3" type="text"/>
-        <expand macro="typed_output" slot="4" type="text"/>
-        <expand macro="typed_output" slot="5" type="text"/>
-        <expand macro="typed_output" slot="6" type="text"/>
-        <expand macro="typed_output" slot="7" type="text"/>
-        <expand macro="typed_output" slot="8" type="text"/>
-        <expand macro="typed_output" slot="9" type="text"/>
-        <expand macro="typed_output" slot="0" type="boolean"/>
-        <expand macro="typed_output" slot="1" type="boolean"/>
-        <expand macro="typed_output" slot="2" type="boolean"/>
-        <expand macro="typed_output" slot="3" type="boolean"/>
-        <expand macro="typed_output" slot="4" type="boolean"/>
-        <expand macro="typed_output" slot="5" type="boolean"/>
-        <expand macro="typed_output" slot="6" type="boolean"/>
-        <expand macro="typed_output" slot="7" type="boolean"/>
-        <expand macro="typed_output" slot="8" type="boolean"/>
-        <expand macro="typed_output" slot="9" type="boolean"/>
+        <expand macro="typed_output" slot="0" n="1" type="float"/>
+        <expand macro="typed_output" slot="1" n="2" type="float"/>
+        <expand macro="typed_output" slot="2" n="3" type="float"/>
+        <expand macro="typed_output" slot="3" n="4" type="float"/>
+        <expand macro="typed_output" slot="4" n="5" type="float"/>
+        <expand macro="typed_output" slot="5" n="6" type="float"/>
+        <expand macro="typed_output" slot="6" n="7" type="float"/>
+        <expand macro="typed_output" slot="7" n="8" type="float"/>
+        <expand macro="typed_output" slot="8" n="9" type="float"/>
+        <expand macro="typed_output" slot="9" n="10" type="float"/>
+        <expand macro="typed_output" slot="0" n="1" type="integer"/>
+        <expand macro="typed_output" slot="1" n="2" type="integer"/>
+        <expand macro="typed_output" slot="2" n="3" type="integer"/>
+        <expand macro="typed_output" slot="3" n="4" type="integer"/>
+        <expand macro="typed_output" slot="4" n="5" type="integer"/>
+        <expand macro="typed_output" slot="5" n="6" type="integer"/>
+        <expand macro="typed_output" slot="6" n="7" type="integer"/>
+        <expand macro="typed_output" slot="7" n="8" type="integer"/>
+        <expand macro="typed_output" slot="8" n="9" type="integer"/>
+        <expand macro="typed_output" slot="9" n="10" type="integer"/>
+        <expand macro="typed_output" slot="0" n="1" type="text"/>
+        <expand macro="typed_output" slot="1" n="2" type="text"/>
+        <expand macro="typed_output" slot="2" n="3" type="text"/>
+        <expand macro="typed_output" slot="3" n="4" type="text"/>
+        <expand macro="typed_output" slot="4" n="5" type="text"/>
+        <expand macro="typed_output" slot="5" n="6" type="text"/>
+        <expand macro="typed_output" slot="6" n="7" type="text"/>
+        <expand macro="typed_output" slot="7" n="8" type="text"/>
+        <expand macro="typed_output" slot="8" n="9" type="text"/>
+        <expand macro="typed_output" slot="9" n="10" type="text"/>
+        <expand macro="typed_output" slot="0" n="1" type="boolean"/>
+        <expand macro="typed_output" slot="1" n="2" type="boolean"/>
+        <expand macro="typed_output" slot="2" n="3" type="boolean"/>
+        <expand macro="typed_output" slot="3" n="4" type="boolean"/>
+        <expand macro="typed_output" slot="4" n="5" type="boolean"/>
+        <expand macro="typed_output" slot="5" n="6" type="boolean"/>
+        <expand macro="typed_output" slot="6" n="7" type="boolean"/>
+        <expand macro="typed_output" slot="7" n="8" type="boolean"/>
+        <expand macro="typed_output" slot="8" n="9" type="boolean"/>
+        <expand macro="typed_output" slot="9" n="10" type="boolean"/>
     </xml>
 
     <xml name="annotations">
