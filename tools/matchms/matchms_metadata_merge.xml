@@ -92,6 +92,6 @@ matchms.exporting.save_as_msp(merged_array.tolist(), '${output}')
     </help>
 
     <citations>
-        <citation type="doi">https://doi.org/10.5281/zenodo.8083373</citation>
+        <citation type="doi">10.5281/zenodo.8083373</citation>
     </citations>
 </tool>
