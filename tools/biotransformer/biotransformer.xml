@@ -1,4 +1,4 @@
-<tool id="biotransformer" name="BioTransformer" version="@TOOL_VERSION@+galaxy5" profile="23.0">
+<tool id="biotransformer" name="BioTransformer" version="@TOOL_VERSION@+galaxy6" profile="23.0">
     <description>Generate biotransformation products for molecules.</description>
     <macros>
         <import>macros.xml</import>
@@ -95,6 +95,6 @@
         ]]>
     </help>
     <citations>
-        <citation type="doi">https://doi.org/10.1186/s13321-018-0324-5</citation>
+        <citation type="doi">10.1186/s13321-018-0324-5</citation>
     </citations>
 </tool>
