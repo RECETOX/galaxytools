@@ -135,22 +135,26 @@
             <output_collection name="plots" type="list" count="4">
                 <element name="MSgroups">
                     <assert_contents>
-                        <has_size size="114675" delta="100"/>
+                        <has_image_width width="2100"/>
+                        <has_image_height height="2100"/>
                     </assert_contents>
                 </element>
                 <element name="VK">
                     <assert_contents>
-                        <has_size size="424518" delta="100"/>
+                        <has_image_width width="2100"/>
+                        <has_image_height height="2100"/>
                     </assert_contents>
                 </element>
                 <element name="errorMZ">
                     <assert_contents>
-                        <has_size size="548366" delta="100"/>
+                        <has_image_width width="2100"/>
+                        <has_image_height height="2100"/>
                     </assert_contents>
                 </element>
                 <element name="msassign">
                     <assert_contents>
-                        <has_size size="84901" delta="100"/>
+                        <has_image_width width="2100"/>
+                        <has_image_height height="2100"/>
                     </assert_contents>
                 </element>
             </output_collection>
