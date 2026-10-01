@@ -1,5 +1,9 @@
-<tool id="mzml_validator" name="mzML Schema Validator" version="0.1.0+galaxy2" profile="21.05">
+<tool id="mzml_validator" name="mzML Schema Validator" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="21.05">
     <description>validates mzML files against XML Schema Definition (XSD)</description>
+    <macros>
+        <token name="@VERSION_SUFFIX@">0</token>
+        <token name="@TOOL_VERSION@">4.9.1</token>
+    </macros>
     <creator>
         <person
             givenName="Maksym"
@@ -13,7 +17,7 @@
     </creator>
 
     <requirements>
-        <requirement type="package" version="4.9.1">lxml</requirement>
+        <requirement type="package" version="@TOOL_VERSION@">lxml</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
         python3 '${__tool_directory__}/mzml_validator_wrapper.py'
@@ -65,6 +69,6 @@
     ]]></help>
 
     <citations>
-        <citation type="doi">https://doi.org/10.5281/zenodo.6035335</citation>
+        <citation type="doi">10.5281/zenodo.6035335</citation>
     </citations>
 </tool>
