@@ -1,4 +1,4 @@
-<tool id="msp_merge" name="Merge MSP Spectra" version="0.1.0" python_template_version="3.5">
+<tool id="msp_merge" name="Merge MSP Spectra" version="0.14.0+galaxy0" license="MIT" profile="23.0">
    <creator>
         <person
             givenName="Wudmir"
@@ -42,6 +42,6 @@
     ]]></help>
 
     <citations>
-        <citation type="doi">https://doi.org/10.5281/zenodo.6035335</citation>
+        <citation type="doi">10.5281/zenodo.6035335</citation>
     </citations>
 </tool>
