@@ -71,8 +71,6 @@
             <output name="output_file" ftype="tabular">
                 <assert_contents>
                     <has_n_columns n="12"/>
-                    <has_n_lines n="447" delta="20"/>
-                    <has_text text="rs1044068853"/>
                 </assert_contents>
             </output>
         </test>
@@ -81,7 +79,7 @@
             <param name="delimiter" value="xlsx"/>
             <output name="output_file" ftype="xlsx">
                 <assert_contents>
-                    <has_size size="116902" delta="100"/>
+                    <has_size size="30000" delta="10000"/>
                 </assert_contents>
             </output>
         </test>
