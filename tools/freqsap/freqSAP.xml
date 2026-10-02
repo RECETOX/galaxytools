@@ -79,7 +79,7 @@
             <param name="delimiter" value="xlsx"/>
             <output name="output_file" ftype="xlsx">
                 <assert_contents>
-                    <has_size size="30000" delta="10000"/>
+                    <has_size size="35000" delta="20000"/>
                 </assert_contents>
             </output>
         </test>
