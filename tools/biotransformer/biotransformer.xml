@@ -1,4 +1,4 @@
-<tool id="biotransformer" name="BioTransformer" version="@TOOL_VERSION@+galaxy5" profile="23.0">
+<tool id="biotransformer" name="BioTransformer" version="@TOOL_VERSION@+galaxy6" profile="23.0">
     <description>Generate biotransformation products for molecules.</description>
     <macros>
         <import>macros.xml</import>
