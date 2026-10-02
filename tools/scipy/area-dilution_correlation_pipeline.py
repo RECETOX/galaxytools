@@ -14,19 +14,24 @@ correlation calculation.
 """
 
 
+
 from utils import (
-    load_intensity_table, compute_observed_r_and_p, select_threshold,
-    plot_diagnostic, permutation_based_fdr
+    disect_tables, compute_observed_r_and_p,
+    select_threshold, plot_diagnostic, permutation_based_fdr
 )
+
 
 
 def run_pipeline(
     input_path: str,
-    plot_path: str,
+    metadata_path: str,
+    min_factor: int,
     n_permutations: int,
     target_fdr: float,
     random_state: int,
-    id_col: str,
+    id_col: int,
+    sample_id_col: int,
+    sample_factor_col: int,
     correlation_type: str = "pearson",
     results_dir: str = ".",
 ):
@@ -37,65 +42,85 @@ def run_pipeline(
     # determine canonical "all" and "filtered" filenames inside results_dir
     format = ".tsv"
     base = input_path.stem
-    all_path = results_dir / f"{base}_all{format}"
-    filtered_path = results_dir / f"{base}_filtered{format}"
+    # all_path = results_dir / f"{base}_{df_name}_all{format}"
+    # filtered_path = results_dir / f"{base}_{df_name}_filtered{format}"
+    # plot_path = results_dir / f"{base}_{df_name}_r_threshold_diagnostic.png"
 
-    # load the intensity table and parse the dilution factors
-    intensity_table_df, concentrations, int_table = load_intensity_table(
-        input_path, id_col=id_col
-    )
+    subsets = disect_tables(input_path, metadata_path, min_factor, id_col=id_col, sample_id_col=sample_id_col, sample_factor_col=sample_factor_col)
 
-    # compute observed r and p values for each feature against the dilution vector and save to a new output table
-    observed_r, observed_p = compute_observed_r_and_p(
-        int_table, concentrations, correlation_type=correlation_type
-    )
-    df_out = intensity_table_df.copy()
+    pipeline_results = {}
 
-    r_col = f"{correlation_type}_r"
-    p_col = f"{correlation_type}_p"
+    for df_name, subset in subsets.items():
 
-    df_out[r_col] = observed_r
-    df_out[p_col] = observed_p
+        # paths
+        all_path = results_dir / f"{base}_{df_name}_all{format}"
+        filtered_path = results_dir / f"{base}_{df_name}_filtered{format}"
+        plot_path = results_dir / f"{base}_{df_name}_r_threshold_diagnostic.png"
 
-    df_out.to_csv(all_path, sep="\t", index=False)
-    print(f"Saved observed r/p (all features) to {all_path}")
+        # tables
+        intensity_table_df = subset["table"]
+        concentrations = subset["concentrations"]
+        int_array = subset["intensity_array"]
 
-    null_r_pooled, fdr_df = permutation_based_fdr(
-        int_table,
-        concentrations,
-        n_permutations,
-        random_state,
-        observed_r,
-        correlation_type=correlation_type,
-    )
+        observed_r, observed_p = compute_observed_r_and_p(
+            int_array, concentrations, correlation_type=correlation_type
+        )
+        df_out = intensity_table_df.copy()
+        # Continue correlation, permutation, and filtering with this subset.
 
-    # select threshold based on target FDR
-    threshold, valid_fdr_values = select_threshold(fdr_df, target_fdr=target_fdr)
-    filtered_df = df_out[df_out[r_col] >= threshold].copy()
-    fdr_monotone_under_target_fdr = valid_fdr_values[valid_fdr_values["FDR_monotone"] <= target_fdr]
+        # compute observed r and p values for each feature against the dilution vector and save to a new output table
+        observed_r, observed_p = compute_observed_r_and_p(
+            int_array, concentrations, correlation_type=correlation_type
+        )
+        df_out = intensity_table_df.copy()
+
+        r_col = f"{correlation_type}_r"
+        p_col = f"{correlation_type}_p"
+
+        df_out[r_col] = observed_r
+        df_out[p_col] = observed_p
+
+        df_out.to_csv(all_path, sep="\t", index=False)
+        print(f"Saved observed r/p (all features) to {all_path}")
+
+        null_r_pooled, fdr_df = permutation_based_fdr(
+            int_array,
+            concentrations,
+            n_permutations,
+            random_state,
+            observed_r,
+            correlation_type=correlation_type,
+        )
+
+        # select threshold based on target FDR
+        threshold, valid_fdr_values = select_threshold(fdr_df, target_fdr=target_fdr)
+        filtered_df = df_out[df_out[r_col] >= threshold].copy()
+        fdr_monotone_under_target_fdr = valid_fdr_values[valid_fdr_values["FDR_monotone"] <= target_fdr]
+        
+        if fdr_monotone_under_target_fdr.empty:
+            best = valid_fdr_values.loc[valid_fdr_values["FDR_monotone"].idxmin()]
+            print(f"Selected threshold at FDR <= {best['FDR_monotone']:.2%}: {threshold:.4f}")
+        else:
+            print(f"Selected threshold at FDR <= {target_fdr:.2%}: {threshold:.4f}")
+
+        # filter the intensity table to only include features with r >= threshold
+        if fdr_monotone_under_target_fdr.empty:
+            pass
+        else:
+            filtered_df.to_csv(filtered_path, sep="\t", index=False)
+            print(f"{len(filtered_df)} features with r >= {threshold:.4f} ({len(filtered_df) / len(df_out):.2%} of total {len(df_out)} features)\nSaved filtered intensity table to {filtered_path}.")
+
+        # generate diagnostic plot
+        plot_diagnostic(observed_r, null_r_pooled, fdr_df, threshold, target_fdr, plot_path, valid_fdr_values)
+
+        pipeline_results[df_name] = {
+            "threshold": threshold,
+            "filtered_path": filtered_path,
+            "plot_path": plot_path,
+            "fdr_table": fdr_df,
+        }
     
-    if fdr_monotone_under_target_fdr.empty:
-        best = valid_fdr_values.loc[valid_fdr_values["FDR_monotone"].idxmin()]
-        print(f"Selected threshold at FDR <= {best['FDR_monotone']:.2%}: {threshold:.4f}")
-    else:
-        print(f"Selected threshold at FDR <= {target_fdr:.2%}: {threshold:.4f}")
-
-    # filter the intensity table to only include features with r >= threshold
-    if fdr_monotone_under_target_fdr.empty:
-        pass
-    else:
-        filtered_df.to_csv(filtered_path, sep="\t", index=False)
-        print(f"{len(filtered_df)} features with r >= {threshold:.4f} ({len(filtered_df) / len(df_out):.2%} of total {len(df_out)} features)\nSaved filtered intensity table to {filtered_path}.")
-
-    # generate diagnostic plot
-    plot_diagnostic(observed_r, null_r_pooled, fdr_df, threshold, target_fdr, plot_path, valid_fdr_values)
-
-    return {
-        "threshold": threshold,
-        "filtered_path": filtered_path,
-        "plot_path": plot_path,
-        "fdr_table": fdr_df,
-    }
+    return pipeline_results
 
 
 
@@ -112,10 +137,17 @@ def parse_args():
     )
 
     parser.add_argument(
-        "-p",
-        "--plot",
-        default="r_threshold_diagnostic.png",
-        help="Path to save the diagnostic plot.",
+        "-m",
+        "--metadata",
+        required=True,
+        help="Path to the metadata file containing sample IDs and dilution factors.",
+    )
+
+    parser.add_argument(
+        "--min-factor",
+        type=int,
+        required=True,
+        help="Minimum dilution factor to include in the analysis (when 1, 2, 4, 8, 16 available, setting 4 will include dilution factors 1, 2, 4 levels in the smallest table).",
     )
 
     parser.add_argument(
@@ -153,8 +185,18 @@ def parse_args():
 
     parser.add_argument(
         "--id-col",
-        default="id",
-        help="Name of the feature identifier column in the input table.",
+        type=int,
+        help="Index of the feature identifier column in the input table.",
+    )
+    parser.add_argument(
+        "--sample-id-col",
+        type=int,
+        help="Index of the sample identifier column in the metadata table.",
+    )
+    parser.add_argument(
+        "--sample-factor-col",
+        type=int,
+        help="Index of the sample factor column in the metadata table.",
     )
 
     parser.add_argument(
@@ -171,11 +213,14 @@ def main():
     args = parse_args()
     run_pipeline(
         input_path=Path(args.input),
-        plot_path=Path(args.plot),
+        metadata_path=Path(args.metadata),
+        min_factor=args.min_factor,
         n_permutations=args.n_permutations,
         target_fdr=args.target_fdr,
         random_state=args.seed,
         id_col=args.id_col,
+        sample_id_col=args.sample_id_col,
+        sample_factor_col=args.sample_factor_col,
         results_dir=Path(args.results_dir),
         correlation_type=args.correlation_type,
     )

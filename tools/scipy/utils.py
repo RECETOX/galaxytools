@@ -1,4 +1,5 @@
 import re
+import os
 import math
 import numpy as np
 import pandas as pd
@@ -6,6 +7,8 @@ from scipy.stats import pearsonr
 from scipy.stats import rankdata
 from scipy.stats import spearmanr
 import matplotlib.pyplot as plt
+import pyarrow.parquet as pq
+from fractions import Fraction
 
 """
 Utility functions for computing Pearson correlation between feature intensities and dilution factors.
@@ -13,63 +16,84 @@ Utility functions for computing Pearson correlation between feature intensities 
 
 
 
-# the weakest part of this program is the parsing of the dilution factor from the column name.
-def dilution_to_concentration(colname: str) -> float:
+# Loaders for different file formats
+loaders = {
+    ".parquet": lambda f: pq.read_table(f).to_pandas(),
+    ".csv": pd.read_csv,
+    ".tsv": lambda f: pd.read_csv(f, sep="\t"),
+    ".tabular": lambda f: pd.read_csv(f, sep="\t"),
+}
+
+
+
+def load_table(table_path: str) -> pd.DataFrame:
     """
-    Extract the dilution factor from a column name and convert it to a
-    relative concentration.
+    Function loads a table. Supported formats: .parquet, .csv, .tsv and .tabular.
+
+    Parameters:
+    - table_path: path to the table, input as argument
+
+    Outputs:
+    - loaded df
     """
+    ext = os.path.splitext(table_path)[1].lower()
+    loader = loaders.get(ext)
+    if loader is None:
+        raise ValueError(f"Unsupported marker format: {ext}")
+    
+    return loader(table_path)
 
-    name = colname.lower()
-
-    # non-dilute = 1.0 dilution factor
-    if "non" in name and "dilute" in name:
-        return 1.0
-
-    # column name ends with an underscore followed by digits its a dilution factor -> convert it to a relative concentration
-    match = re.search(r"_(\d+)\s*$", colname)
-    if match:
-        if float(match.group(1)) == 0:
-            raise ValueError(f"Dilution factor cannot be zero in column: {colname}")
-        else:
-            factor = float(match.group(1))
-            return 1.0 / factor
-
-    raise ValueError(f"Could not parse dilution factor from column: {colname}")
+def invert_number(x):
+    return Fraction(1, x)
 
 
-
-def load_intensity_table(input_path: str, id_col: str = "id"):
+def disect_tables(input_path: str,  metadat_path: str, min_factor: int, id_col: int, sample_id_col: int, sample_factor_col: int):
     """
-    Loads the dilution-series tab delimited intensity table after feature alignment.
-
-    Returns:
-      intensity_table_df: full DataFrame as read from disk (id_col kept as a column)
-      concentrations    : np.ndarray of relative concentrations, aligned with qc_cols
-      intensity_array   : np.ndarray (n_features, n_samples) of raw intensities
+    This function creates a set of tables, each with the subset of samples from 
+    dilution series. Main idea is # TODO ...
     """
+    sub_dict = {}
+    max_cutoff = Fraction(1, min_factor)
 
-    # load the intensity table
-    intensity_table_df = pd.read_csv(input_path, sep="\t")
-    if id_col.isdigit():
-        id_col = intensity_table_df.columns[int(id_col) - 1]
+    aligned_table = load_table(table_path=input_path)
+    id_colname = aligned_table.columns[id_col - 1]
 
-    if id_col not in intensity_table_df.columns:
-        raise ValueError(
-            f"Expected an '{id_col}' column, found columns: {list(intensity_table_df.columns)}. "
-        )
+    # load metadata table
+    metadata_df = load_table(table_path=metadat_path)
 
-    # parse the QC sample columns and their corresponding concentrations
-    qc_cols = [c for c in intensity_table_df.columns if c != id_col]
-    concentrations = np.array([dilution_to_concentration(c) for c in qc_cols])
-    print("Parsed concentrations:")
-    for col, val in zip(qc_cols, concentrations):
-        print(f"  {col:25s} -> {val}")
+    # load dilution factors
+    factors_colname = metadata_df.columns[sample_factor_col - 1]
+    metadata_df[factors_colname] = metadata_df[factors_colname].apply(invert_number)
 
-    # convert the intensity table to a numpy array for faster computation of correlation coefficients
-    intensity_array = intensity_table_df[qc_cols].to_numpy(dtype=float)
-    return intensity_table_df, concentrations, intensity_array
+    # load sample names
+    sample_id_colname = metadata_df.columns[sample_id_col-1]
+    sample_names = metadata_df[sample_id_colname]
 
+    aligned_table = aligned_table.replace(0, np.nan)
+    
+    if sample_names.duplicated().any():
+        raise ValueError("Metadata contains duplicate sample IDs")
+    
+    if missing_ids := set(sample_names) - set(aligned_table.columns):
+        raise ValueError(f"Metadata IDs missing from intensity table: {sorted(missing_ids)}")
+
+
+    factors = metadata_df[factors_colname][metadata_df[factors_colname] <= max_cutoff]
+    if max_cutoff not in factors:
+        raise ValueError(f"min_factor must be one of: {[level for level in factors]} and is {max_cutoff}")
+
+    subsets = {}
+    for cutoff in factors:
+        cols = metadata_df[metadata_df[factors_colname] >= cutoff][sample_id_colname]
+        table = aligned_table[[id_colname, *cols]].dropna(subset=cols).copy()
+
+        subsets[str(cutoff).replace("/", "-")] = {
+            "table": table,
+            "concentrations": np.array([float(factors[col]) for col in cols]),
+            "intensity_array": table[cols].to_numpy(dtype=float),
+        }
+
+    return subsets
 
 
 def compute_observed_r_and_p(intensity_array: np.ndarray, dilution_array: np.ndarray, correlation_type: str):

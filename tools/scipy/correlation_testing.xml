@@ -6,12 +6,12 @@
     </macros>
     <!-- TODO: please annotate this tool with topics and operations from http://edamontology.org -->
     <!-- TODO: for more information see: https://galaxy-iuc-standards.readthedocs.io/en/latest/best_practices/tool_xml.html#edam-topics-and-operations -->
-    <edam_topics>
+    <!-- <edam_topics>
         <edam_topic>topic_TODO</edam_topic>
     </edam_topics>
     <edam_operations>
         <edam_operation>operation_TODO</edam_operation>
-    </edam_operations>
+    </edam_operations> -->
     <xrefs>
         <xref type="bio.tools"></xref>
     </xrefs>
@@ -20,24 +20,31 @@
         <requirement type="package" version="2.5">numpy</requirement>
         <requirement type="package" version="3.0">pandas</requirement>
         <requirement type="package" version="3.11">matplotlib</requirement>
+        <requirement type="package" version="24.0.0">pyarrow</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
         mkdir -p features &&
-        ln -s '${input}' '${input}.${input.ext}' &&
+        ln -sf '${input}' '${input}.${input.ext}' &&
+        ln -sf '${sample_metadata}' '${sample_metadata}.${sample_metadata.ext}' &&
         python3 '${__tool_directory__}/area-dilution_correlation_pipeline.py' 
-            --input '${input}.${input.ext}' 
+            --input '${input}.${input.ext}'
+            --metadata '${sample_metadata}.${sample_metadata.ext}'
+            --min-factor ${source_select}
             --id-col ${id_col}
+            --sample-id-col ${sample_id_col}
+            --sample-factor-col 2
             --correlation-type '${correlation_type}' 
             --target-fdr ${target_fdr}
             --n-permutations ${n_permutations}
             --seed ${seed} 
             --results-dir 'features' 
-            --plot 'plot.png'
     ]]></command>
     <inputs>
         <param argument="--input" type="data" format="tsv,tabular" label="Intensity matrix input file." help="TODO" />
+        <param argument="--id-col" type="data_column" data_ref="input" use_header_names="true"/>
         <param name="sample_metadata" type="data" format="tsv,tabular" label="Sample metadata input file." use_header_names="true" help="TODO" />
-        <param name="source_select" type="select" multiple="true" optional="false" label="Choose target factor">
+        <param argument="--sample-id-col" type="data_column" data_ref="sample_metadata" use_header_names="true"/>
+        <param name="source_select" type="select" optional="false" label="Choose target factor">
             <options from_dataset="sample_metadata">
                 <column name="name" index="1"/>
                 <column name="value" index="1"/>
@@ -45,7 +52,6 @@
                 <filter type="remove_value" value="factor"/>
             </options>
         </param>
-        <param argument="--id-col" type="data_column" data_ref="input" use_header_names="true"/>
         <param argument="--correlation-type" type="select" label="Correlation method" help="Select the correlation method to use.">
             <option value="pearson" selected="true">Pearson</option>
             <option value="spearman">Spearman</option>
@@ -55,9 +61,10 @@
         <param argument="--seed" type="integer" value="0" label="Seed" help="Random seed for permutation sampling." />
     </inputs>
     <outputs>
-        <data name="plot" format="png" from_work_dir="plot.png" label="Plot of ${tool.name} on ${on_string}" />
-        <!-- TODO: creating dynamic outputs with collections is covered in depth in the planemo documentation at https://planemo.readthedocs.io/en/latest/writing_advanced.html#collections -->
-        <collection name="features" type="list" label="${tool.name} on ${on_string}" format_source="input">
+        <collection name="plots" type="list" label="Plots of ${tool.name} on ${on_string}" format="png">
+            <discover_datasets pattern="__name_and_ext__" directory="features" />
+        </collection>        <!-- TODO: creating dynamic outputs with collections is covered in depth in the planemo documentation at https://planemo.readthedocs.io/en/latest/writing_advanced.html#collections -->
+        <collection name="features" type="list" label="Filtered feature tables of ${tool.name} on ${on_string}" format_source="input">
             <discover_datasets pattern="__name_and_ext__" directory="features" />
         </collection>
     </outputs>
