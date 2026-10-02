@@ -13,7 +13,7 @@ def InchiToSmiles(df):
     sm = []
     for item in df['InChI']:
         tmp = pybel.readstring("inchi", item)
-        sm.append(tmp.write("smi"))
+        sm.append(tmp.write("smi").strip())
     return sm
 
 
