@@ -1,4 +1,4 @@
-<tool id="mfassignr_recal" name="MFAssignR Recal" version="@TOOL_VERSION@+galaxy0" profile="23.0">
+<tool id="mfassignr_recal" name="MFAssignR Recal" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="23.0">
     <description>Internal mass recalibration using a recalibrant series.</description>
     <macros>
         <import>macros.xml</import>
@@ -84,7 +84,8 @@
             <output name="Recalibrants" file="recal/recalibrants.tabular"/>
             <output name="MZplot">
                 <assert_contents>
-                    <has_size size="91080" delta="200"/>
+                      <has_image_width width="2100"/>
+                      <has_image_height height="2100"/>
                 </assert_contents>
             </output> 
         </test> 
