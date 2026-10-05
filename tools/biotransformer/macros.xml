@@ -1,6 +1,6 @@
 <macros>
     <token name="@TOOL_VERSION@">3.0.20230403</token>
-    <token name="@VERSION_SUFFIX@">1</token>
+    <token name="@VERSION_SUFFIX@">6</token>
     <xml name="creator">
         <creator>
             <person
