@@ -46,6 +46,11 @@ def run_pipeline(
     # filtered_path = results_dir / f"{base}_{df_name}_filtered{format}"
     # plot_path = results_dir / f"{base}_{df_name}_r_threshold_diagnostic.png"
 
+    Path.mkdir(results_dir / "all")
+    Path.mkdir(results_dir / "plots")
+    Path.mkdir(results_dir / "filtered")
+    
+
     subsets = disect_tables(input_path, metadata_path, min_factor, id_col=id_col, sample_id_col=sample_id_col, sample_factor_col=sample_factor_col)
 
     pipeline_results = {}
@@ -53,9 +58,9 @@ def run_pipeline(
     for df_name, subset in subsets.items():
 
         # paths
-        all_path = results_dir / f"{base}_{df_name}_all{format}"
-        filtered_path = results_dir / f"{base}_{df_name}_filtered{format}"
-        plot_path = results_dir / f"{base}_{df_name}_r_threshold_diagnostic.png"
+        all_path = results_dir / "all"/ f"{base}_{df_name}_all{format}"
+        filtered_path = results_dir / "filtered"/ f"{base}_{df_name}_filtered{format}"
+        plot_path = results_dir / "plots"/ f"{base}_{df_name}_r_threshold_diagnostic.png"
 
         # tables
         intensity_table_df = subset["table"]

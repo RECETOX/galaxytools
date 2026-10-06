@@ -78,7 +78,8 @@ def disect_tables(input_path: str,  metadat_path: str, min_factor: int, id_col: 
         raise ValueError(f"Metadata IDs missing from intensity table: {sorted(missing_ids)}")
 
 
-    factors = metadata_df[factors_colname][metadata_df[factors_colname] <= max_cutoff]
+    factors = sorted(metadata_df[factors_colname][metadata_df[factors_colname] <= max_cutoff].unique())
+    print(factors)
     if max_cutoff not in factors:
         raise ValueError(f"min_factor must be one of: {[level for level in factors]} and is {max_cutoff}")
 
@@ -87,12 +88,16 @@ def disect_tables(input_path: str,  metadat_path: str, min_factor: int, id_col: 
         cols = metadata_df[metadata_df[factors_colname] >= cutoff][sample_id_colname]
         table = aligned_table[[id_colname, *cols]].dropna(subset=cols).copy()
 
+        print(factors)
+        print(cols)
+
         subsets[str(cutoff).replace("/", "-")] = {
             "table": table,
-            "concentrations": np.array([float(factors[col]) for col in cols]),
+            "concentrations": metadata_df[factors_colname][metadata_df[factors_colname] >= cutoff].apply(float).values,
             "intensity_array": table[cols].to_numpy(dtype=float),
         }
 
+    print(subsets)
     return subsets
 
 
