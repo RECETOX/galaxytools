@@ -1,0 +1,11 @@
+similarity	query_structure	reference_structure
+1.0	CC(=O)Oc1ccccc1C(=O)O	CC(=O)Oc1ccccc1C(O)=O
+0.6900655593423543	CC(=O)Oc1ccccc1C(=O)O	Cc1ccc(cc1)C(=O)O
+0.6900655593423543	Cc1ccc(C(=O)O)cc1	CC(=O)Oc1ccccc1C(O)=O
+1.0	Cc1ccc(C(=O)O)cc1	Cc1ccc(cc1)C(=O)O
+0.6172133998483676	CC(C)Cc1ccccc1C(C)C(=O)O	CC(=O)Oc1ccccc1C(O)=O
+0.7453559924999299	CC(C)Cc1ccccc1C(C)C(=O)O	Cc1ccc(cc1)C(=O)O
+0.4504426164614508	Cn1c(=O)c2c(ncn2C)n(C)c1=O	CC(=O)Oc1ccccc1C(O)=O
+0.3263766828841098	Cn1c(=O)c2c(ncn2C)n(C)c1=O	Cc1ccc(cc1)C(=O)O
+0.6900655593423543	Oc1ccccc1	CC(=O)Oc1ccccc1C(O)=O
+0.6	Oc1ccccc1	Cc1ccc(cc1)C(=O)O
