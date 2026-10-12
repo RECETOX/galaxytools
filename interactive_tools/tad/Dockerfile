@@ -1,4 +1,4 @@
-FROM node:26-bookworm-slim
+FROM node:24-bookworm-slim
 
 ARG PORT=8765
 
