@@ -308,6 +308,7 @@ jobs:
   deploy:
     name: Deploy
     needs: [setup, lint, changed_dockerfiles]
+    if: ${{ (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main' ) && github.repository_owner == 'RECETOX' }}
     runs-on: ubuntu-latest
     strategy:
       matrix:
