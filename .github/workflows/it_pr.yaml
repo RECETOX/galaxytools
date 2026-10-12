@@ -44,6 +44,11 @@ jobs:
           # Avoid using single or double quotes for multiline patterns
           files: |
             interactive_tools/**/Dockerfile
+      
+      - name: Lint changed Dockerfiles
+        uses: immanuwell/dockerfile-roast@1.7.0
+        with:
+          files: ${{ steps.changed-dockerfiles.outputs.all_changed_files }}
     
       - name: Set up Python
         uses: actions/setup-python@v6
