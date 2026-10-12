@@ -1,4 +1,4 @@
-<tool id="query" name="Query" version="@TOOL_VERSION@">
+<tool id="query" name="Query" version="@TOOL_VERSION@+galaxy0" profile="25.01">
     <macros>
         <import>macros.xml</import>
     </macros>
@@ -27,8 +27,6 @@
                     #return 'csv'
                 #elif $data.is_of_type('tsv', 'tabular')
                     #return 'tsv'
-                #elif $data.is_of_type('feather', 'arrow')
-                    #return 'feather'
                 #elif $data.is_of_type('parquet')
                     #return 'parquet'
                 #elif $data.is_of_type('sqlite')
@@ -60,7 +58,7 @@
 
     <inputs>
         <repeat name="tables" title="Table">
-            <param name="file" type="data" format="csv,tsv,h5,feather,parquet,sqlite" label="File"/>
+            <param name="file" type="data" format="csv,tsv,h5,parquet,sqlite" label="File"/>
             <param name="format" type="select" optional="true">
                 <label>Force the file format</label>
                 <help>Force a particular file format to get around formats unknown to Galaxy, ie. Parquet.</help>
@@ -90,7 +88,6 @@
             <expand macro="internal_name" format="sqlite"/>
             <when value="csv"></when>
             <when value="tsv"></when>
-            <when value="feather"></when>
             <when value="parquet"></when>
         </conditional>
     </inputs>
@@ -101,7 +98,6 @@
                 <when input="result.format" value="h5" format="h5"/>
                 <when input="result.format" value="csv" format="csv"/>
                 <when input="result.format" value="tsv" format="tsv"/>
-                <when input="result.format" value="feather" format="feather"/>
                 <when input="result.format" value="parquet" format="parquet"/>
                 <when input="result.format" value="sqlite" format="sqlite"/>
             </change_format>

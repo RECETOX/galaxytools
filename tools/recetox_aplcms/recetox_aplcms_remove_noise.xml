@@ -1,4 +1,4 @@
-<tool id="recetox_aplcms_remove_noise" name="recetox-aplcms - remove noise" version="@TOOL_VERSION@+galaxy0" profile="21.09">
+<tool id="recetox_aplcms_remove_noise" name="recetox-aplcms - remove noise" version="@TOOL_VERSION@+galaxy0" profile="23.0">
     <description>filter noise and detect peaks in high resolution mass spectrometry (HRMS) profile data</description>
     <macros>
         <import>macros.xml</import>
@@ -10,20 +10,36 @@
     </edam_operations>
     <expand macro="refs"/>
     <expand macro="creator"/>
-    <expand macro="requirements"/>
+    <expand macro="requirements">
+        <requirement type="package" version="1.18.0">bioconductor-rawrr</requirement>
+        <requirement type="package" version="78.3">icu</requirement>
+        <!-- <requirement type="package" version="6.12.0.199">mono</requirement> -->
+    </expand>
 
     <command detect_errors="aggressive"><![CDATA[
-        python '${__tool_directory__}/mzml_id_getter.py' '$input_file';
-        Rscript -e 'source("${__tool_directory__}/utils.R")' -e 'source("${run_script}")'
+        export LD_LIBRARY_PATH="\${CONDA_PREFIX:+\${CONDA_PREFIX}/lib:}/usr/local/lib\${LD_LIBRARY_PATH:+:\${LD_LIBRARY_PATH}}" &&
+        #if $input_file.ext == 'thermo.raw':
+            cp $input_file input.$input_file.ext &&
+            Rscript -e 'source("${install_rawrr}")' &&
+            Rscript -e "future::plan(future::multicore, workers = \${GALAXY_SLOTS:-1})" &&
+        #else:
+            ln -s $input_file input.$input_file.ext &&
+        #end if
+        Rscript -e 'source("${__tool_directory__}/utils.R")' -e 'source("${run_script}")' -e 'future::plan(future::sequential)'
     ]]></command>
     <configfiles>
         <configfile name="run_script"><![CDATA[
-            sample_name <- readChar('sample_name.txt', file.info('sample_name.txt')\$size)
+            sample_name <- read_run_id('input.${input_file.ext}')
+
+            if(is.na(sample_name)) {
+                stop("The file does not contain run ID.")
+            }
 
             profile <- remove_noise(
-                filename = '$input_file',
+                filename = 'input.${input_file.ext}',
                 min_pres = $min_pres,
                 min_run = $min_run,
+                max_run = $max_run,
                 mz_tol = ${mz_tol}/1e6,
                 baseline_correct = $baseline_correct,
                 baseline_correct_noise_percentile = 0.05,
@@ -33,13 +49,17 @@
                 grouping_threshold = $grouping_threshold
             )
 
-            profile <- save_sample_name(profile, sample_name)
             save_data_as_parquet_file(profile, '$output_file')
+        ]]></configfile>
+
+        <configfile name="install_rawrr"><![CDATA[
+            rawrr::installRawrrExe()
+            rawrr::rawrrAssemblyPath()
         ]]></configfile>
     </configfiles>
 
     <inputs>
-        <param label="Input spectra data" name="input_file" type="data" format="mzml"
+        <param label="Input spectra data" name="input_file" type="data" format="mzml,thermo.raw"
                help="Sample data in .mzml format acquired in profile mode." />
         <expand macro="remove_noise_params"/>
     </inputs>
@@ -50,13 +70,31 @@
 
     <tests>
         <test>
-            <param name="input_file" value="mbr_test0.mzml" ftype="mzml"/>
-            <output name="output_file" file="remove_noise_docker.parquet" ftype="parquet" />
+            <param name="input_file" location="https://media.githubusercontent.com/media/RECETOX/recetox-aplcms/master/tests/testdata/input/mbr_test0.mzml" ftype="mzml"/>
+            <output name="output_file" ftype="parquet" md5="1149335a50e3b84616595e878e77f445"> 
+                <assert_contents>
+                    <has_size size="362346"/>
+                </assert_contents>
+            </output>
         </test>
         <test>
-            <param name="input_file" value="mbr_test0.mzml" ftype="mzml"/>
-            <param name="grouping_threshold" value="2" />
-            <output name="output_file" file="remove_noise_docker_threshold.parquet" ftype="parquet" />
+            <param name="input_file" location="https://media.githubusercontent.com/media/RECETOX/recetox-aplcms/master/tests/testdata/input/mbr_test0.mzml" ftype="mzml"/>
+            <param name="grouping_threshold" value="3" />
+            <output name="output_file" ftype="parquet" md5="ad90a5177676654bd2187467a281a095"> 
+                <assert_contents>
+                    <has_size size="3068"/>
+                </assert_contents>
+            </output>
+        </test>
+        <test>
+            <param name="input_file" ftype="thermo.raw" location="https://media.githubusercontent.com/media/RECETOX/recetox-aplcms/master/tests/testdata/input/8_qc_no_dil_milliq.raw"/>
+            <param name="min_run" value="0" />
+            <param name="grouping_threshold" value="3" />
+            <output name="output_file" ftype="parquet" md5="c4727074e6cc76ad8e5354705d8cf603"> 
+                <assert_contents>
+                    <has_size size="9349928"/>
+                </assert_contents>
+            </output>
         </test>
     </tests>
 

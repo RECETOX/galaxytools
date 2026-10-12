@@ -15,12 +15,11 @@
 
     <xml name="xrefs">
         <xrefs>
-            <xref type="bio.tools">msnbase</xref>
             <xref type="bioconductor">msnbase</xref>
         </xrefs>
     </xml>
 
-    <token name="@TOOL_VERSION@">2.32.0</token>
+    <token name="@TOOL_VERSION@">2.36.0</token>
     <token name="@VERSION_SUFFIX@">1</token>
     <xml name="requirements">
         <requirements>

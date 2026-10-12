@@ -1,4 +1,4 @@
-<tool id="recetox_aplcms_correct_time" name="recetox-aplcms - correct time" version="@TOOL_VERSION@+galaxy0" profile="21.09">
+<tool id="recetox_aplcms_correct_time" name="recetox-aplcms - correct time" version="@TOOL_VERSION@+galaxy0" profile="23.0">
     <description>correct retention time across samples for peak alignment</description>
     <macros>
         <import>macros.xml</import>
@@ -17,22 +17,21 @@
     ]]></command>
     <configfiles>
          <configfile name="run_script"><![CDATA[
-              features_table <- load_data_from_parquet_file('$features_table')
-              sample_name <- load_sample_name(features_table)
+            features_table <- load_data_from_parquet_file('$features_table')
+            sample_name <- load_sample_id(features_table)
 
-              if(is.na(sample_name)) {
-                  message("The file does not contain sample name.")
-              }
+            if(is.na(sample_name)) {
+                message("The file does not contain sample name.")
+            }
 
-              template_features <- load_data_from_parquet_file('$template')
+            template_features <- load_data_from_parquet_file('$template')
 
-              corrected_table <- correct_time(
-                   this.feature = features_table,
-                   template_features = template_features
-              )
-
-              corrected_table <- save_sample_name(corrected_table, sample_name)
-              save_data_as_parquet_file(corrected_table, '$output_file')
+            corrected_table <- correct_time(
+                this.feature = features_table,
+                template_features = template_features
+            )
+               
+            save_data_as_parquet_file(corrected_table, '$output_file') 
          ]]></configfile>
     </configfiles>
 
@@ -48,7 +47,15 @@
     </outputs>
 
     <tests>
-        <test expect_failure="true" />
+        <test expect_num_outputs="1">
+            <param name="features_table" location="https://media.githubusercontent.com/media/RECETOX/recetox-aplcms/master/tests/testdata/clusters/RCX_06_shortened_extracted_clusters.parquet" ftype = "parquet"/>
+            <param name="template" location="https://media.githubusercontent.com/media/RECETOX/recetox-aplcms/master/tests/testdata/template/RCX_shortened.parquet" ftype = "parquet"/>
+            <output name="output_file" md5="7109789c92389df000d1c7544488322f" ftype="parquet">
+                <assert_contents>
+                    <has_size size="68870" />  
+                </assert_contents>
+            </output>
+        </test>
     </tests>
 
     <help>
