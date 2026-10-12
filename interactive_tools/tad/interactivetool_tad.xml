@@ -7,7 +7,7 @@
     <expand macro="creator"/>
 
     <requirements>
-        <container type="docker">recetox/tad:@TOOL_VERSION@-@DOCKER_BUILD@</container>
+        <container type="docker">recetox/tad:@TOOL_VERSION@</container>
     </requirements>
 
     <entry_points>

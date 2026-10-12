@@ -21,5 +21,4 @@
 
     <token name="@TOOL_VERSION@">0.14.0</token>
     <token name="@VERSION_SUFFIX@">1</token>
-    <token name="@DOCKER_BUILD@">0</token>
 </macros>
