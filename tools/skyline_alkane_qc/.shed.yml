@@ -1,0 +1,9 @@
+name: skyline_alkane_qc
+owner: recetox
+remote_repository_url: "https://github.com/RECETOX/galaxytools/tree/master/tools/skyline_alkane_qc"
+homepage_url: "https://github.com/RECETOX/galaxytools"
+categories:
+  - Visualization
+description: "Calculate mass accuracy and retention time deviation from Skyline alkane reports."
+long_description: "Creates a QC summary and plots for mass error, retention time, and per-alkane retention time deviation."
+type: unrestricted
