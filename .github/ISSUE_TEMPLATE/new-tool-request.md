@@ -2,7 +2,7 @@
 name: New Tool Request
 about: This issue template creates an issue for a new tool request.
 title: "[New Tool Request]:"
-labels: new tool request
+labels: tool-request
 assignees: ''
 
 ---
