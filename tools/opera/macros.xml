@@ -1,0 +1,138 @@
+<macros>
+    <token name="@TOOL_VERSION@">2.9.5</token>
+    <token name="@VERSION_SUFFIX@">0</token>
+    <token name="@PROFILE@">24.05</token>
+    <!-- Where the OPERA command-line installer and the MATLAB Runtime live inside
+         the container image. OPERA is distributed as a MATLAB-compiled, self-extracting
+         installer (there is no conda/pip package), so the binary and its ~1.1 GB
+         MATLAB Runtime are baked into a purpose-built container instead of being
+         declared as <requirement type="package"> entries. -->
+    <token name="@OPERA_PREFIX@">/opt/OPERA</token>
+    <token name="@RUN_SCRIPT@">/opt/OPERA/run_OPERA.sh</token>
+    <token name="@MCR_DIR@">/opt/matlab_runtime/v242</token>
+    <xml name="bio_tools">
+        <xrefs>
+            <xref type="bio.tools">opera-qsar</xref>
+        </xrefs>
+    </xml>
+    <xml name="requirements">
+        <requirements>
+            <!--
+                OPERA (https://github.com/NIEHS/OPERA) is MIT licensed but is shipped only as a
+                MATLAB-compiled installer and requires the MathWorks MATLAB Runtime (v24.2), which
+                cannot be redistributed through bioconda. The tool therefore depends on a
+                purpose-built container image assembled from:
+                    * OPERA2.9_CL.tar.xz  (sha256:2cef7db56b18d75367a6f3c1ce45e595827181c1eb585dd08e2908dff6fe88cb)
+                    * MATLAB Runtime v24.2 (MathWorks licence)
+                    * OpenJDK 11 (required by PaDEL-Descriptor 1.00 / CDK 2.0)
+                See https://github.com/NIEHS/OPERA/releases/tag/v2.9.5
+            -->
+            <container type="docker">quay.io/recetox/opera:@TOOL_VERSION@</container>
+            <container type="singularity">docker://quay.io/recetox/opera:@TOOL_VERSION@</container>
+            <yield/>
+        </requirements>
+    </xml>
+    <xml name="version_command">
+        <version_command>@RUN_SCRIPT@ @MCR_DIR@ -V 2&gt;&amp;1 | grep -oE '[0-9]+\.[0-9]+(\.[0-9]+)?' | head -n 1</version_command>
+    </xml>
+    <xml name="stdio">
+        <stdio>
+            <!-- Anything other than zero is an error -->
+            <exit_code range="1:"/>
+            <exit_code range=":-1"/>
+            <!-- MATLAB reports fatal problems through these prefixes -->
+            <regex match="Error:"/>
+            <regex match="Exception:"/>
+        </stdio>
+    </xml>
+    <xml name="citations">
+        <citations>
+            <citation type="doi">10.1186/s13321-018-0263-1</citation>
+            <citation type="doi">10.1186/s13321-024-00814-3</citation>
+            <citation type="doi">10.1186/s13321-019-0384-1</citation>
+            <citation type="doi">10.1289/EHP8495</citation>
+            <citation type="doi">10.1080/1062936X.2016.1253611</citation>
+            <citation type="bibtex">@misc{opera_gh,
+  author = {Mansouri, Kamel},
+  title = {OPERA: an open-source/open-data suite of QSAR models},
+  publisher = {GitHub},
+  journal = {GitHub repository},
+  howpublished = {\url{https://github.com/NIEHS/OPERA}}
+}</citation>
+            <yield/>
+        </citations>
+    </xml>
+    <token name="@ATTRIBUTION@"><![CDATA[
+**Attribution**
+
+OPERA was developed by Kamel Mansouri and colleagues at the U.S. EPA National
+Center for Computational Toxicology and the NIEHS (kamel.mansouri@nih.gov), and is
+distributed from the NIEHS GitHub organisation under the MIT licence
+(`<https://github.com/NIEHS/OPERA>`_). Molecular descriptors are calculated with
+PaDEL-Descriptor 1.00 and the Chemistry Development Kit (CDK) 2.0. Model
+descriptions (QMRFs) are available from the JRC QSAR Model Database
+(`<https://qsardb.jrc.ec.europa.eu/qmrf/endpoint>`_).
+    ]]></token>
+    <!-- The individual endpoints accepted by OPERA (``-e`` / ``-Endpoint``).
+         Values are exactly the tokens accepted upstream (case-insensitive). -->
+    <xml name="macro_endpoints">
+        <option value="StrP">StrP - General structural properties (MW, atom counts, rings, H-bond donors/acceptors, TPSA, ...)</option>
+        <option value="LogP">LogP - Octanol-water partition coefficient (log10)</option>
+        <option value="MP">MP - Melting point (deg. C)</option>
+        <option value="BP">BP - Boiling point (deg. C, 760 mm Hg)</option>
+        <option value="VP">VP - Vapor pressure (log10 mmHg)</option>
+        <option value="WS">WS - Water solubility (log10 Mol/L at 25 deg. C)</option>
+        <option value="HL">HL - Henry's law constant (log10 atm-m3/mole)</option>
+        <option value="KOA">KOA - Octanol/air partition coefficient (log10)</option>
+        <option value="RT">RT - HPLC retention time (min, obsolete model)</option>
+        <option value="pKa">pKa - Logarithmic acid/base dissociation constants</option>
+        <option value="LogD">LogD - Octanol-water distribution coefficient at pH 5.5 and 7.4</option>
+        <option value="LogBCF">LogBCF - Fish bioconcentration factor (log10)</option>
+        <option value="AOH">AOH - OH rate constant for atmospheric gas-phase reactions (log10 cm3/molecule-sec)</option>
+        <option value="BioDeg">BioDeg - Biodegradation half-life (log10 days)</option>
+        <option value="RB">RB - Ready biodegradability (binary active/inactive)</option>
+        <option value="LogKM">LogKM - Whole-body primary biotransformation rate constant (log10 days)</option>
+        <option value="KOC">KOC - Soil adsorption coefficient (log10 L/Kg)</option>
+        <option value="CERAPP">CERAPP - Estrogen receptor activity (ER agonist/antagonist/binding)</option>
+        <option value="CoMPARA">CoMPARA - Androgen receptor activity (AR agonist/antagonist/binding)</option>
+        <option value="CATMoS">CATMoS - Acute oral toxicity (EPA/GHS category and LD50)</option>
+        <option value="FuB">FuB - Human plasma fraction unbound</option>
+        <option value="Clint">Clint - Human hepatic intrinsic clearance (ul/min/10^6 cells)</option>
+        <option value="Caco2">Caco2 - Caco-2 membrane permeability (logPapp, log cm/s)</option>
+    </xml>
+    <!-- Groups of endpoints accepted by OPERA (``-StrP`` / ``-PC`` / ...). -->
+    <xml name="macro_endpoint_groups">
+        <option value="StrP">StrP - General structural properties</option>
+        <option value="PC">PC - Physicochemical properties (LogP, MP, BP, VP, WS, HL, KOA, RT, pKa, LogD)</option>
+        <option value="EF">EF - Environmental fate (LogBCF, AOH, BioDeg, RBiodeg, LogKM, LogKoc)</option>
+        <option value="Tox">Tox - Toxicity (CERAPP, CoMPARA, CATMoS)</option>
+        <option value="ADME">ADME (FuB, Clint, Caco2)</option>
+    </xml>
+    <token name="@ENDPOINT_TABLE@"><![CDATA[
+| Endpoint | Group | Description |
+| --- | --- | --- |
+| ``StrP`` | Structural | MW, atom/heavy-atom counts, C/O/N counts, aromatic atoms, rings, hetero-rings, Sp3/Sp2 hybridisation ratio, rotatable bonds, H-bond acceptors/donors, Lipinski failures, topological polar surface area, molar refraction, dipolarity/polarizability |
+| ``LogP`` | Physchem | Octanol-water partition coefficient (log10) |
+| ``MP`` | Physchem | Melting point (deg. C) |
+| ``BP`` | Physchem | Boiling point (deg. C at 760 mm Hg) |
+| ``VP`` | Physchem | Vapor pressure (log10 mmHg) |
+| ``WS`` | Physchem | Water solubility (log10 Mol/L at 25 deg. C) |
+| ``HL`` | Physchem | Henry's law constant (log10 atm-m3/mole) |
+| ``KOA`` | Physchem | Octanol/air partition coefficient (log10) |
+| ``RT`` | Physchem | HPLC retention time (min) - obsolete model |
+| ``pKa`` | Physchem | Logarithmic acidic and basic dissociation constants |
+| ``LogD`` | Physchem | Octanol-water distribution coefficient at pH 5.5 and 7.4 |
+| ``LogBCF`` | Env. fate | Fish bioconcentration factor (log10) |
+| ``AOH`` | Env. fate | OH rate constant for atmospheric gas-phase reactions (log10 cm3/molecule-sec) |
+| ``BioDeg`` | Env. fate | Biodegradation half-life (log10 days) |
+| ``RB`` | Env. fate | Ready biodegradability (binary) |
+| ``LogKM`` | Env. fate | Whole-body primary biotransformation rate constant (log10 days) |
+| ``KOC`` | Env. fate | Soil adsorption coefficient (log10 L/Kg) |
+| ``CERAPP`` | Toxicity | Estrogen receptor activity - agonist, antagonist and binding consensus models |
+| ``CoMPARA`` | Toxicity | Androgen receptor activity - agonist, antagonist and binding consensus models |
+| ``CATMoS`` | Toxicity | Acute oral toxicity - EPA category, GHS category and LD50 (mg/kg) |
+| ``FuB`` | ADME | Human plasma fraction unbound |
+| ``Clint`` | ADME | Human hepatic intrinsic clearance (ul/min/10^6 cells) |
+| ``Caco2`` | ADME | Caco-2 membrane permeability (logPapp, log cm/s) |
+    ]]></token>
+</macros>
