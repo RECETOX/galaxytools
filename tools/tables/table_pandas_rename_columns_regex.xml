@@ -2,7 +2,6 @@
     <description>rename columns in a table using regex</description>
     <macros>
         <import>macros.xml</import>
-        <token name="@VERSION_SUFFIX@">0</token>
     </macros>
 
     <requirements>

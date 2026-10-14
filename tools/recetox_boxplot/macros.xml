@@ -1,6 +1,6 @@
 <macros>
     <token name="@TOOL_VERSION@">4.0.3</token>
-    <token name="@VERSION_SUFFIX@">0</token>
+    <token name="@VERSION_SUFFIX@">1</token>
     <xml name="creator">
         <creator>
             <person
@@ -61,7 +61,7 @@
 
     <xml name="citations">
         <citations>
-            <citation type="doi">https://doi.org/10.1007/978-0-387-98141-3</citation>
+            <citation type="doi">10.1007/978-0-387-98141-3</citation>
         </citations>        
     </xml>
 </macros>

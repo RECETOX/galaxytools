@@ -1,4 +1,4 @@
-<tool id="rem_complex" name="Remove coordination complexes" version="@TOOL_VERSION@+galaxy4"  profile="21.09">
+<tool id="rem_complex" name="Remove coordination complexes" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@"  profile="21.09">
     <description>Remove molecular coordination complexes from a list of structure representations</description>
     <macros>
         <import>macros.xml</import>
@@ -55,6 +55,6 @@
         ]]>
     </help>
     <citations>
-        <citation type="doi">https://doi.org/10.5281/zenodo.6035335</citation>
+        <citation type="doi">10.5281/zenodo.6035335</citation>
     </citations>
 </tool>

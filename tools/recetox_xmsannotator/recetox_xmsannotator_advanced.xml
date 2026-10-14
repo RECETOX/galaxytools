@@ -1,4 +1,4 @@
-<tool id="recetox_xmsannotator_advanced" name="recetox-xMSannotator" version="@TOOL_VERSION@+galaxy1">
+<tool id="recetox_xmsannotator_advanced" name="recetox-xMSannotator" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@">
 
     <description>annotate peak intensity table including scores and confidence levels</description>
     <macros>
