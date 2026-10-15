@@ -185,7 +185,7 @@ jobs:
           rm -f "$GITHUB_WORKSPACE/.commit-msg" "$GITHUB_WORKSPACE/.pr-body" "$GITHUB_WORKSPACE/.is-update"
       - name: Upload gitignored files as artifacts
         if: steps.create_pr.outcome == 'success'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: gitignored-test-data
           path: |
