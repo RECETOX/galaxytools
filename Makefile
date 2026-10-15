@@ -2,8 +2,9 @@ SHELL := /bin/bash
 
 .PHONY: lint lint-python lint-r style-r lint-scripts test-biocontainers test
 
-# All tool directories in this repository.
-TOOL_DIRS := $(sort $(wildcard tools/*/))
+# All tool directories in this repository. expression_tools/ holds tools that
+# need no container or requirements because they run as Galaxy expressions.
+TOOL_DIRS := $(sort $(wildcard tools/*/) $(wildcard expression_tools/*/))
 
 # Override to use a specific planemo executable, e.g.:
 # make lint PLANEMO=planemo
