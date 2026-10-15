@@ -1,4 +1,4 @@
-<tool id="retip_apply" name="Retip prediction" version="@TOOL_VERSION@+galaxy6">
+<tool id="retip_apply" name="Retip prediction" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@">
     <description>is retention time predictor for Metabolomics</description>
     <macros>
         <import>macros.xml</import>

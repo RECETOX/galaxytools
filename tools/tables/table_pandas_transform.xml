@@ -2,7 +2,6 @@
     <description>apply transformations on multiple columns</description>
     <macros>
         <import>macros.xml</import>
-        <token name="@VERSION_SUFFIX@">0</token>
     </macros>
     <requirements>
         <expand macro="requirement_pandas_pyarrow"/>

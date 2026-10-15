@@ -1,4 +1,4 @@
-<tool id="rcx-tk" name="rcx-tk" version="@TOOL_VERSION@+galaxy0" profile="23.05">
+<tool id="rcx-tk" name="rcx-tk" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="23.05">
     <description>Processes and standardizes sequence, alkane, or MSDial output files for downstream analysis.</description>
     <macros>
         <import>macros.xml</import>
