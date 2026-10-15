@@ -80,8 +80,6 @@ def plot_by_sample(report, column, ylabel, title, output_path, absolute=False, s
         group = data[data["Molecule Name"] == molecule]
         group = group.sort_values("Sample Position")
         axis.plot(group["Sample Position"], group["Plot Value"], color=color, label=molecule)
-    # axis.set_xticks(sample_order)
-    # axis.set_xticklabels(sample_labels, rotation=45, ha="right")
     axis.set_xlabel("Sample Number")
     axis.set_ylabel(ylabel)
     axis.set_title(title)
