@@ -49,5 +49,9 @@ per-alkane retention time range (seconds), plus plots of absolute mass error and
 retention time across samples and a bar plot of retention time range for each alkane.
 Retention times in the input are assumed to be in minutes. Sample names beginning
 with a number are ordered by that number.
+Molecules retain the order in which they first appear in the input report.
     ]]></help>
+    <citations>
+        <citation type="doi">10.1109/MCSE.2007.55</citation>
+    </citations>
 </tool>

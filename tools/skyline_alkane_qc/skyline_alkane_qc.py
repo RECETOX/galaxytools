@@ -1,4 +1,5 @@
 import argparse
+import colorsys
 
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -33,7 +34,7 @@ def process_report(input_path):
 
     rt_deviation = (
         report.dropna(subset=["Retention Time"])
-        .groupby("Molecule Name")["Retention Time"]
+        .groupby("Molecule Name", sort=False)["Retention Time"]
         .agg(lambda values: (values.max() - values.min()) * 60)
         .rename("rt_diff (sec)")
         .reset_index()
@@ -70,9 +71,15 @@ def plot_by_sample(report, column, ylabel, title, output_path, absolute=False, s
         data["Plot Value"] = data["Plot Value"] * 60
 
     figure, axis = plt.subplots(figsize=(12, 6))
-    for molecule, group in data.groupby("Molecule Name"):
+    molecules = data["Molecule Name"].drop_duplicates().tolist()
+    colors = [
+        colorsys.hsv_to_rgb(index / len(molecules), 0.4, 1.0)
+        for index in range(len(molecules))
+    ]
+    for molecule, color in zip(molecules, colors):
+        group = data[data["Molecule Name"] == molecule]
         group = group.sort_values("Sample Position")
-        axis.plot(group["Sample Position"], group["Plot Value"], label=molecule)
+        axis.plot(group["Sample Position"], group["Plot Value"], color=color, label=molecule)
     # axis.set_xticks(sample_order)
     # axis.set_xticklabels(sample_labels, rotation=45, ha="right")
     axis.set_xlabel("Sample Number")
