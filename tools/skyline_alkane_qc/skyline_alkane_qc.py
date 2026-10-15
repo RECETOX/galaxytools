@@ -53,9 +53,7 @@ def plot_by_sample(report, column, ylabel, title, output_path, absolute=False, s
         data["File Name"].str.extract(r"^(\d+)")[0], errors="coerce"
     )
     if data["Sample Number"].notna().all():
-        sample_order = sorted(data["Sample Number"].unique())
         data["Sample Position"] = data["Sample Number"]
-        sample_labels = [str(int(number)) for number in sample_order]
     else:
         sample_order = (
             data[["File Name", "Sample Number"]]
@@ -65,7 +63,6 @@ def plot_by_sample(report, column, ylabel, title, output_path, absolute=False, s
         )
         sample_positions = {name: index for index, name in enumerate(sample_order)}
         data["Sample Position"] = data["File Name"].map(sample_positions)
-        sample_labels = sample_order
     data["Plot Value"] = data[column]
     if absolute:
         data["Plot Value"] = data["Plot Value"].abs()
@@ -75,9 +72,9 @@ def plot_by_sample(report, column, ylabel, title, output_path, absolute=False, s
     figure, axis = plt.subplots(figsize=(12, 6))
     for molecule, group in data.groupby("Molecule Name"):
         group = group.sort_values("Sample Position")
-        axis.plot(group["Sample Position"], group["Plot Value"], marker="o", label=molecule)
-    axis.set_xticks(sample_order)
-    axis.set_xticklabels(sample_labels, rotation=45, ha="right")
+        axis.plot(group["Sample Position"], group["Plot Value"], label=molecule)
+    # axis.set_xticks(sample_order)
+    # axis.set_xticklabels(sample_labels, rotation=45, ha="right")
     axis.set_xlabel("Sample Number")
     axis.set_ylabel(ylabel)
     axis.set_title(title)
