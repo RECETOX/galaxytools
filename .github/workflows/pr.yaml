@@ -496,9 +496,7 @@ jobs:
       if: steps.getpr.outputs.number != ''
       uses: peter-evans/create-or-update-comment@v5
       with:
-        # An explicitly empty token overrides the action's github.token default,
-        # so fall back rather than passing secrets.PAT straight through.
-        token: ${{ secrets.PAT || github.token }}
+        token: ${{ github.token }}
         issue-number: ${{ steps.getpr.outputs.number }}
         body: |
           Deployment status: **${{ needs.deploy.result }}**

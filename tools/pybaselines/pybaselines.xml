@@ -2,7 +2,7 @@
     <description>subtract baseline intensities from extracted ion chromatograms (EICs)</description>
     <macros>
         <token name="@TOOL_VERSION@">1.2.1</token>
-        <token name="@VERSION_SUFFIX@">0</token>
+        <token name="@VERSION_SUFFIX@">1</token>
     </macros>
     <requirements>
         <requirement type="package" version="@TOOL_VERSION@">pybaselines</requirement>

@@ -1,4 +1,4 @@
-<tool id="query" name="Query" version="@TOOL_VERSION@+galaxy0" profile="25.01">
+<tool id="query" name="Query" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="25.01">
     <macros>
         <import>macros.xml</import>
     </macros>
@@ -128,6 +128,6 @@
     </help>
 
     <citations>
-        <citation type="doi">https://doi.org/10.5281/zenodo.6035335</citation>
+        <citation type="doi">10.5281/zenodo.6035335</citation>
     </citations>
 </tool>

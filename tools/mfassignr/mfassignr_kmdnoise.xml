@@ -1,4 +1,4 @@
-<tool id="mfassignr_kmdnoise" name="MFAssignR KMDNoise" version="@TOOL_VERSION@+galaxy0" profile="23.0">
+<tool id="mfassignr_kmdnoise" name="MFAssignR KMDNoise" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="23.0">
     <description>Noise level assessment using the KMDNoise.</description>
     <macros>
         <import>macros.xml</import>
@@ -52,7 +52,8 @@
             </output>
             <output name="KMD_plot" ftype="png">
                 <assert_contents>
-                    <has_size size="1164615" delta="200"/>
+                    <has_image_width width="2100"/>
+                    <has_image_height height="2100"/>
                 </assert_contents>
             </output>
         </test>    </tests>

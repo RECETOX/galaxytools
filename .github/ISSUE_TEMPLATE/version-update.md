@@ -2,7 +2,7 @@
 name: Version Update
 about: Issue template to describe tool version updates
 title: "[TOOL]: CURRENT -> NEW"
-labels: new version
+labels: tool-update
 assignees: ''
 
 ---

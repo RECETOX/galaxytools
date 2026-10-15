@@ -1,4 +1,4 @@
-<tool id="msp_merge" name="Merge MSP Spectra" version="0.1.0" python_template_version="3.5">
+<tool id="msp_merge" name="Merge MSP Spectra" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" license="MIT" profile="23.0">
    <creator>
         <person
             givenName="Wudmir"
@@ -15,7 +15,14 @@
             email="GalaxyToolsDevelopmentandDeployment@space.muni.cz"
             name="RECETOX MUNI"/>
     </creator>
+
     <description>Merge MSP Spectra files</description>
+    
+    <macros>
+        <token name="@TOOL_VERSION@">0.14.0</token>
+        <token name="@VERSION_SUFFIX@">1</token>
+    </macros>
+
     <requirements>
          <requirement type="package" version="0.14.0">matchms</requirement>
     </requirements>
@@ -42,6 +49,6 @@
     ]]></help>
 
     <citations>
-        <citation type="doi">https://doi.org/10.5281/zenodo.6035335</citation>
+        <citation type="doi">10.5281/zenodo.6035335</citation>
     </citations>
 </tool>
