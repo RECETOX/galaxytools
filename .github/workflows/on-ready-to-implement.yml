@@ -38,7 +38,7 @@ jobs:
     # Note: if allowed_maintainers is configured, the CLI verifies
     # github.event.actor is in the list and exits with code 1 if not.
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Post status comment
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
