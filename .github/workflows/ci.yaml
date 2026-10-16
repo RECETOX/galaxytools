@@ -118,7 +118,7 @@ jobs:
         repository-list: ${{ needs.setup.outputs.repository-list }}
         fail-level: error
         tool-list: ${{ needs.setup.outputs.tool-list }}
-        additional-planemo-options: --biocontainers -s tests,output,inputs,help,general,command,citations,tool_xsd,version_bumped
+        additional-planemo-options: --biocontainers
     - uses: actions/upload-artifact@v7
       if: ${{ failure() }}
       with:
