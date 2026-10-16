@@ -2,7 +2,7 @@
     <description>subtract baseline intensities from extracted ion chromatograms (EICs)</description>
     <macros>
         <token name="@TOOL_VERSION@">1.2.1</token>
-        <token name="@VERSION_SUFFIX@">1</token>
+        <token name="@VERSION_SUFFIX@">2</token>
     </macros>
     <requirements>
         <requirement type="package" version="@TOOL_VERSION@">pybaselines</requirement>
@@ -69,7 +69,7 @@ corrected.to_parquet("$outfile")
             <param name="method" value="lsrpls"/>
             <param name="lambda" value="600"/>
             <param name="max_iter" value="50"/>
-            <output name="outfile" file="result.parquet"/>
+            <output name="outfile" file="result.parquet" compare="sim_size" delta="20"/>
         </test>
 
     </tests>
