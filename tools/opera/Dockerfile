@@ -60,7 +60,7 @@ ENV MCR_ROOT=/opt/matlab_runtime/${MCR_VERSION} \
 # /opt/OPERA/run_OPERA.sh and /opt/matlab_runtime/v242
 # match the @RUN_SCRIPT@ / @MCR_DIR@ tokens in macros.xml.
 # ---------------------------------------------------------------------------
-COPY OPERA2.9_CL_Par.tar.xz /tmp/
+RUN wget https://github.com/NIEHS/OPERA/releases/download/v2.9.5/OPERA2.9_CL.tar.xz /tmp/
 RUN tar -xJf /tmp/OPERA2.9_CL_Par.tar.xz -C /tmp \
  && mkdir -p /opt/OPERA \
  && ( \
