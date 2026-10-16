@@ -1,0 +1,8 @@
+path	value	grounded
+label	example	yes
+relationships[0].subject	CHEBI:6801	yes
+relationships[0].predicate	AUTO:inhibits	no
+relationships[0].object	GO:0005747	yes
+relationships[1].subject	CHEBI:6801	yes
+relationships[1].predicate	AUTO:responsible for	no
+relationships[1].object	GO:0005747	yes
