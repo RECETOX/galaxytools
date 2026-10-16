@@ -1,0 +1,21 @@
+input_text: Metformin inhibits mitochondrial complex I.
+extracted_object:
+  label: example
+  relationships:
+  - subject: CHEBI:6801
+    predicate: AUTO:inhibits
+    object: GO:0005747
+  - subject: CHEBI:6801
+    predicate: AUTO:responsible%20for
+    object: GO:0005747
+named_entities:
+- id: CHEBI:6801
+  label: Metformin
+  original_spans:
+  - '0:8'
+- id: GO:0005747
+  label: mitochondrial complex I
+  original_spans:
+  - '19:41'
+- id: AUTO:ghost
+  label: hallucinated

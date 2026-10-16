@@ -1,0 +1,11 @@
+<!-- Paths are relative to the value of `tool_data_path` in galaxy.ini -->
+<tables>
+    <table name="ontogpt_templates" comment_char="#" allow_duplicate_entries="False">
+        <columns>value, name, description</columns>
+        <file path="ontogpt_templates.loc" />
+    </table>
+    <table name="genai_models" comment_char="#" allow_duplicate_entries="False">
+        <columns>value, model_id, name, domain, provider, free_tag</columns>
+        <file path="genai_models.loc" />
+    </table>
+</tables>
