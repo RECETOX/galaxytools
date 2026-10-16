@@ -1,0 +1,20 @@
+---
+name: opera
+owner: recetox
+description: OPERA QSAR predictions of physicochemical, environmental fate, ADME and toxicity endpoints
+categories:
+- Chemistry
+- Predictive Models
+homepage_url: https://github.com/NIEHS/OPERA
+long_description: |
+  Galaxy wrapper for OPERA, the free and open-source/open-data suite of QSAR models
+  developed at the U.S. EPA / NIEHS. OPERA predicts ~30 endpoints (general structural
+  properties, physicochemical properties, environmental fate, ADME and toxicity,
+  including the CERAPP, CoMPARA and CATMoS consensus models) from chemical structures
+  (SDF/MOL/SMILES), chemical identifiers (CASRN/DTXSID/DTXCID/InChIKey) or
+  pre-calculated PaDEL descriptors. Every prediction is reported together with an
+  applicability-domain flag, an applicability-domain index and a confidence estimate.
+  OPERA is distributed as a MATLAB-compiled command-line application, so it is
+  provided through a purpose-built container image rather than a conda package.
+remote_repository_url: https://github.com/recetox/galaxy-tools/tree/main/tools/opera
+type: unrestricted
