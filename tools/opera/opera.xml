@@ -1,0 +1,371 @@
+<tool id="opera" name="OPERA" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="@PROFILE@">
+    <description>- QSAR predictions of physicochemical, environmental fate, ADME and toxicity endpoints</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="bio_tools"/>
+    <expand macro="requirements"/>
+    <expand macro="stdio"/>
+    <expand macro="version_command"/>
+    <command detect_errors="aggressive"><![CDATA[
+## ---------------------------------------------------------------------------
+## OPERA picks its input parser from the *extension* of the input file
+## (.sdf/.mol/.smi/.txt) and Galaxy dataset paths carry no extension, so link
+## the input to a file name with the extension OPERA expects.
+## ---------------------------------------------------------------------------
+#if str($input_source.input_type) == "structures":
+  #set $input_name = 'opera_input.' + str($input_source.input_format)
+  ln -s '$input_source.input_file' '$input_name' &&
+#end if
+
+## ---------------------------------------------------------------------------
+## Output location.  With -x OPERA does NOT write the requested file but one
+## file per endpoint named <output>_<Endpoint>.<ext>, so point it into a
+## dedicated directory which is then harvested as a collection.
+## ---------------------------------------------------------------------------
+#set $out_ext = str($output_format)
+#if str($separate_outputs) == '-x':
+  mkdir -p 'separate' &&
+  #set $out_path = 'separate/predictions.' + $out_ext
+#else:
+  #set $out_path = 'predictions.' + $out_ext
+#end if
+
+@RUN_SCRIPT@ @MCR_DIR@
+
+## ------------------------------- Input -------------------------------------
+#if str($input_source.input_type) == "structures":
+  -s '$input_name'
+#else
+  -d '$input_source.descriptor_file'
+  #if $input_source.molid_file
+    -i '$input_source.molid_file'
+  #end if
+  #if $input_source.labels_file
+    -l '$input_source.labels_file'
+  #end if
+#end if
+$standardize
+#if $salt_info
+  -t '$salt_info'
+#end if
+
+## ----------------------------- Endpoints -----------------------------------
+#set $mode = str($endpoint_selector.endpoint_mode)
+#if $mode == "group" and $endpoint_selector.endpoint_group
+  #for $group in $endpoint_selector.endpoint_group
+    -$group
+  #end for
+#elif $mode == "custom" and $endpoint_selector.endpoints
+  -e
+  #for $endpoint in $endpoint_selector.endpoints
+    $endpoint
+  #end for
+#else
+  -a
+#end if
+
+## ------------------------------ Output -------------------------------------
+#if str($full_output) == '-O'
+  -O '$out_path'
+#else
+  -o '$out_path'
+#end if
+$separate_outputs
+$include_neighbors
+$get_descriptors
+$experimental
+
+## ---------------------------- Miscellaneous --------------------------------
+$clean_temp
+-v $verbose
+
+## ---------------------------------------------------------------------------
+## MATLAB can exit 0 after a silent failure; make sure something was written.
+## ---------------------------------------------------------------------------
+&&
+#if str($separate_outputs) == '-x':
+  ls separate/*.csv > /dev/null
+#else:
+  test -s '$out_path'
+#end if
+]]></command>
+    <inputs>
+        <conditional name="input_source">
+            <param name="input_type" type="select" label="Input data type" help="OPERA predicts either from chemical structures/identifiers (descriptors are then calculated internally with PaDEL-Descriptor and CDK) or from pre-calculated PaDEL descriptors">
+                <option value="structures" selected="true">Chemical structures or identifiers</option>
+                <option value="descriptors">Pre-calculated PaDEL descriptors</option>
+            </param>
+            <when value="structures">
+                <param name="input_file" type="data" format="sdf,mol,txt,csv" label="Chemical structures or identifiers" help="(-s) SDF/MOL (v2000), a tab-delimited SMILES file, or a text file with one CASRN/DTXSID/DTXCID/InChIKey per line. Organic molecules only; MW &lt;= 2000 g/mol; &lt;= 100 heavy atoms; no mixtures, UVCBs or nanomaterials."/>
+                <param name="input_format" type="select" label="Input file format" help="OPERA selects the parser from the file extension, which Galaxy dataset names do not carry, so it has to be declared here">
+                    <option value="sdf">SDF - structure file in v2000 format (single or multiple structures)</option>
+                    <option value="mol">MOL - single structure in v2000 MOL format</option>
+                    <option value="smi">SMILES - tab-delimited text, optionally with molecule names; no header and no empty lines</option>
+                    <option value="txt">Identifiers - one CASRN, DTXSID, DTXCID or InChIKey per line; no header and no empty lines</option>
+                </param>
+                <param argument="-st" type="boolean" truevalue="-st" falsevalue="" checked="false" label="Generate QSAR-ready structures before predicting" help="(-st) Runs the bundled KNIME QSAR-ready workflow to standardize and desalt the input structures. Improves predictions (salt information is derived automatically) but is slow and needs the KNIME workflow shipped with the OPERA installer."/>
+            </when>
+            <when value="descriptors">
+                <param name="descriptor_file" type="data" format="csv,txt" label="Pre-calculated PaDEL descriptors (CSV)" help="(-d) Standard PaDEL 2D descriptor output; the first column should be named 'Name' and hold the molecule identifiers, otherwise generic IDs are assigned. Note that pKa/LogD additionally require PaDEL fingerprints and CERAPP/CoMPARA/CATMoS/FuB/Clint/Caco2 additionally require CDK 2.0 descriptors, so those endpoints cannot be predicted from a PaDEL-only descriptor file."/>
+                <param argument="-i" name="molid_file" type="data" format="csv,txt" optional="true" label="Molecule names (optional)" help="(-i) Molecule identifiers, one per row, in the same order as the descriptor file. Used when the descriptor file has no 'Name' column."/>
+                <param argument="-l" name="labels_file" type="data" format="csv,txt" optional="true" label="Descriptor labels (optional)" help="(-l) Descriptor names, one per column. Required if the descriptor file carries no header or contains more than the 1444 PaDEL 2D descriptors."/>
+            </when>
+        </conditional>
+        <param argument="-t" name="salt_info" type="data" format="csv,txt" optional="true" label="Salt information (optional)" help="(-t) Salt IDs, one per molecule, used to improve the LogP, MP, BP, VP, WS, LogD and CATMoS predictions. The list of valid IDs is provided in Salts.xls of the OPERA installation."/>
+        <conditional name="endpoint_selector">
+            <param name="endpoint_mode" type="select" label="Endpoints to predict">
+                <option value="all" selected="true">All endpoints (structural, physicochemical, environmental fate, ADME and toxicity)</option>
+                <option value="group">Selected groups of endpoints</option>
+                <option value="custom">Selected individual endpoints</option>
+            </param>
+            <when value="all"/>
+            <when value="group">
+                <param name="endpoint_group" type="select" label="Endpoint groups" multiple="true">
+                    <expand macro="macro_endpoint_groups"/>
+                </param>
+            </when>
+            <when value="custom">
+                <param name="endpoints" type="select" label="Endpoints" multiple="true" help="Descriptors are calculated once and shared by all selected endpoints, so predicting several endpoints in one run is much cheaper than running the tool several times.">
+                    <expand macro="macro_endpoints"/>
+                </param>
+            </when>
+        </conditional>
+        <param name="output_format" type="select" label="Output format" help="OPERA derives the format from the extension of the requested output file">
+            <option value="csv" selected="true">CSV - comma separated table (recommended)</option>
+            <option value="txt">TXT - human readable report</option>
+        </param>
+        <param argument="-x" name="separate_outputs" type="boolean" truevalue="-x" falsevalue="" checked="false" label="Write a separate output file for each endpoint" help="(-x) Recommended when predicting many molecules; the per-endpoint files are returned as additional datasets."/>
+        <param argument="-n" name="include_neighbors" type="boolean" truevalue="-n" falsevalue="" checked="false" label="Include the 5 nearest neighbours from the training set" help="(-n) Adds the CAS numbers, InChIKeys and DTXSIDs of the nearest neighbours together with their observed and predicted values."/>
+        <param argument="-O" name="full_output" type="boolean" truevalue="-O" falsevalue="" checked="false" label="Full output: all prediction details, nearest neighbours and used descriptors" help="(-O) Equivalent to combining 'Include the 5 nearest neighbours' and 'Include used descriptors'. Only available for CSV output."/>
+        <param argument="-gd" name="get_descriptors" type="boolean" truevalue="-gd" falsevalue="" checked="false" label="Append the descriptors used by the models to the output" help="(-gd) The descriptor values are appended as additional columns of the predictions table."/>
+        <param argument="-exp" name="experimental" type="boolean" truevalue="-exp" falsevalue="" checked="false" label="Include experimental values where available" help="(-exp) Requires CASRN or DTXSID identifiers in the input; free-form molecule names are not enough."/>
+        <param argument="-c" name="clean_temp" type="boolean" truevalue="-c" falsevalue="" checked="true" label="Remove the temporary descriptor files" help="(-c) Deletes the PaDEL/CDK descriptor files generated during the run."/>
+        <param argument="-v" name="verbose" type="select" label="Verbose level" help="Controls how much detail is written to the job log">
+            <option value="0">0 - silent</option>
+            <option value="1" selected="true">1 - minimum details (recommended)</option>
+            <option value="2">2 - full details</option>
+        </param>
+    </inputs>
+    <outputs>
+        <data name="predictions" format="csv">
+            <change_format>
+                <when input="output_format" value="txt" format="tabular"/>
+            </change_format>
+            <filter>$separate_outputs == ''</filter>
+        </data>
+        <data name="separate_predictions" format="csv" label="${tool.name} per-endpoint predictions on ${on_string}">
+            <discover_datasets pattern="__name_and_ext__" directory="separate"/>
+            <filter>$separate_outputs == '-x'</filter>
+        </data>
+    </outputs>
+    <tests>
+        <!-- Structures from an SDF file, two individual endpoints -->
+        <test expect_num_outputs="1">
+            <conditional name="input_source">
+                <param name="input_type" value="structures"/>
+                <param name="input_file" ftype="sdf" value="opera_4.sdf"/>
+                <param name="input_format" value="sdf"/>
+            </conditional>
+            <param name="endpoint_mode" value="custom"/>
+            <param name="endpoints" value="LogP,MP"/>
+            <param name="verbose" value="0"/>
+            <output name="predictions" ftype="csv" file="expected_logp_mp.csv">
+                <assert_contents>
+                    <has_text text="benzene"/>
+                    <has_text text="naphthalene"/>
+                    <has_text text="LogP_pred"/>
+                    <has_text text="AD_LogP"/>
+                    <has_text text="AD_index_LogP"/>
+                    <has_text text="Conf_index_LogP"/>
+                    <has_text text="MP_pred"/>
+                    <not_has_text text="BP_pred"/>
+                </assert_contents>
+            </output>
+            <assert_command>
+                <has_text text="-s 'opera_input.sdf'"/>
+                <has_text text="-e"/>
+                <has_text text="LogP"/>
+                <has_text text="MP"/>
+                <has_text text="-o 'predictions.csv'"/>
+            </assert_command>
+        </test>
+        <!-- Structures from a SMILES file, all endpoints -->
+        <test expect_num_outputs="1">
+            <conditional name="input_source">
+                <param name="input_type" value="structures"/>
+                <param name="input_file" ftype="txt" value="opera_4.smi"/>
+                <param name="input_format" value="smi"/>
+            </conditional>
+            <param name="endpoint_mode" value="all"/>
+            <param name="verbose" value="0"/>
+            <output name="predictions" ftype="csv">
+                <assert_contents>
+                    <has_text text="LogP_pred"/>
+                    <has_text text="LogBCF_pred"/>
+                    <has_text text="ReadyBiodeg_pred"/>
+                    <has_text text="CERAPP_Ago_pred"/>
+                    <has_text text="CoMPARA_Ago_pred"/>
+                    <has_text text="CATMoS_LD50_pred"/>
+                    <has_text text="Caco2_pred"/>
+                </assert_contents>
+            </output>
+            <assert_command>
+                <has_text text="-s 'opera_input.smi'"/>
+                <has_text text="-a"/>
+            </assert_command>
+        </test>
+        <!-- Identifiers, an endpoint group and experimental values -->
+        <test expect_num_outputs="1">
+            <conditional name="input_source">
+                <param name="input_type" value="structures"/>
+                <param name="input_file" ftype="txt" value="opera_cas.txt"/>
+                <param name="input_format" value="txt"/>
+            </conditional>
+            <param name="endpoint_mode" value="group"/>
+            <param name="endpoint_group" value="PC"/>
+            <param name="experimental" value="True"/>
+            <param name="verbose" value="0"/>
+            <output name="predictions" ftype="csv">
+                <assert_contents>
+                    <has_text text="FoundBy"/>
+                    <has_text text="LogP_exp"/>
+                    <has_text text="71-43-2"/>
+                </assert_contents>
+            </output>
+            <assert_command>
+                <has_text text="-s 'opera_input.txt'"/>
+                <has_text text="-PC"/>
+                <has_text text="-exp"/>
+            </assert_command>
+        </test>
+        <!-- Human readable TXT report -->
+        <test expect_num_outputs="1">
+            <conditional name="input_source">
+                <param name="input_type" value="structures"/>
+                <param name="input_file" ftype="txt" value="opera_4.smi"/>
+                <param name="input_format" value="smi"/>
+            </conditional>
+            <param name="endpoint_mode" value="custom"/>
+            <param name="endpoints" value="LogP"/>
+            <param name="output_format" value="txt"/>
+            <param name="verbose" value="0"/>
+            <output name="predictions" ftype="tabular">
+                <assert_contents>
+                    <has_text text="LogP predicted"/>
+                    <has_text text="AD_index"/>
+                    <has_text text="Conf_index"/>
+                </assert_contents>
+            </output>
+            <assert_command>
+                <has_text text="-o 'predictions.txt'"/>
+            </assert_command>
+        </test>
+        <!-- Full output (implies nearest neighbours and descriptors) -->
+        <test expect_num_outputs="1">
+            <conditional name="input_source">
+                <param name="input_type" value="structures"/>
+                <param name="input_file" ftype="txt" value="opera_4.smi"/>
+                <param name="input_format" value="smi"/>
+            </conditional>
+            <param name="endpoint_mode" value="custom"/>
+            <param name="endpoints" value="LogP"/>
+            <param name="full_output" value="True"/>
+            <param name="verbose" value="0"/>
+            <output name="predictions" ftype="csv">
+                <assert_contents>
+                    <has_text text="LogP_CAS_neighbor"/>
+                    <has_text text="LogP_InChiKey_neighbor"/>
+                    <has_text text="LogP_Exp_neighbor"/>
+                </assert_contents>
+            </output>
+            <assert_command>
+                <has_text text="-O 'predictions.csv'"/>
+            </assert_command>
+        </test>
+    </tests>
+    <help format="markdown"><![CDATA[
+## What it does
+
+**OPERA** is a free, open-source and open-data suite of **QSAR** (quantitative
+structure–activity relationship) models developed at the U.S. EPA / NIEHS. For a
+list of chemicals it predicts around **30 endpoints** covering general structural
+properties, physicochemical properties, environmental fate, ADME and toxicity —
+including the CERAPP (estrogen receptor), CoMPARA (androgen receptor) and CATMoS
+(acute oral toxicity) consensus models.
+
+Every single prediction is reported together with:
+
+| Column | Meaning |
+| --- | --- |
+| `<endpoint>_pred` | The predicted value |
+| `<endpoint>_predRange` | The predicted range (accuracy interval) |
+| `<endpoint>_AD` | Applicability domain flag: `1` = inside, `0` = outside |
+| `<endpoint>_AD_index` | Applicability domain index (0-1, higher = more similar to the training set) |
+| `<endpoint>_Conf_index` | Confidence / accuracy estimate (0-1) |
+
+Each model has a published **QMRF** (Quantitative Structure-Activity Relationship
+Model Reporting Format) in the JRC QSAR Model Database:
+<https://qsardb.jrc.ec.europa.eu/qmrf/endpoint>.
+
+## Input
+
+OPERA accepts one of:
+
+- **SDF / MOL** — structures in MDL v2000 format (single or multiple records).
+- **SMILES** — a tab-delimited text file `SMILES[<TAB>name]`, with **no header and
+  no empty lines**. Molecule names are optional; generic `AUTOGEN_n` IDs are
+  assigned when they are missing.
+- **Identifiers** — a text file with one **CASRN**, **DTXSID**, **DTXCID** or
+  **InChIKey** per line (no header, no empty lines). Structures are resolved
+  against the QSAR-ready database shipped with OPERA and the `FoundBy` column
+  reports how each structure was found (`NotFound` marks unresolved IDs).
+- **Pre-calculated PaDEL descriptors** — the standard PaDEL 2D descriptor CSV.
+  pKa/LogD additionally require PaDEL fingerprints and
+  CERAPP/CoMPARA/CATMoS/FuB/Clint/Caco2 additionally require CDK 2.0 descriptors,
+  so those endpoints cannot be predicted from a PaDEL-only descriptor file.
+
+Because OPERA chooses its parser from the **file extension**, please confirm the
+*Input file format* — Galaxy dataset names do not carry an extension.
+
+**Hard limits** (organics only): molecular weight ≤ 2000 g/mol, ≤ 100 heavy atoms,
+and no mixtures, UVCBs or nanomaterials.
+
+## Endpoints
+
+@ENDPOINT_TABLE@
+
+Choose **All endpoints**, whole **groups** (`StrP`, `PC`, `EF`, `Tox`, `ADME`) or
+individual endpoints.
+
+## Output
+
+By default a single table is produced with the molecule ID followed by the
+prediction, applicability-domain and confidence columns of every requested
+endpoint.
+
+- **Separate output file for each endpoint** (`-x`) returns one dataset per
+  endpoint — recommended for large input sets.
+- **TXT** output produces the human-readable OPERA report instead of a table.
+- **Include experimental values** (`-exp`) adds `<endpoint>_exp` columns; this
+  requires CASRN or DTXSID identifiers in the input.
+- **Full output** (`-O`) additionally appends the nearest neighbours and the
+  descriptor values used by the models (CSV only).
+
+## Notes
+
+- OPERA runs **fully offline**: the models and the reference databases are part of
+  the installation and the application has no access to the web.
+- Salt information materially improves the LogP, MP, BP, VP, WS, LogD and CATMoS
+  predictions. It is retrieved automatically when the input contains CASRN or
+  DTXSID identifiers, when *Generate QSAR-ready structures* is enabled, or when a
+  salt-information file is supplied; otherwise OPERA warns that predictions may be
+  affected.
+- The **serial** OPERA build is wrapped here. The parallel build (`OPERA_par`) is a
+  different installer and does not accept the same argument list, so it is not
+  exposed by this tool.
+
+@ATTRIBUTION@
+    ]]></help>
+    <expand macro="citations"/>
+</tool>
