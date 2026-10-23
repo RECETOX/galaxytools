@@ -2,7 +2,7 @@
     <description>subtract baseline intensities from extracted ion chromatograms (EICs)</description>
     <macros>
         <token name="@TOOL_VERSION@">1.2.1</token>
-        <token name="@VERSION_SUFFIX@">2</token>
+        <token name="@VERSION_SUFFIX@">3</token>
     </macros>
     <requirements>
         <requirement type="package" version="@TOOL_VERSION@">pybaselines</requirement>
@@ -20,7 +20,9 @@ import numpy as np
 
 def correct_baseline(group):
     """Apply baseline correction to a single group."""
+    group_number = group.name
     group = group.sort_values(by="rt").reset_index(drop=True)
+    group["group_number"] = group_number
 
     x = group.rt.values
     y = group.intensity.values
@@ -31,6 +33,7 @@ def correct_baseline(group):
     baseline, params = func(y, lam=$lambda, max_iter=$max_iter, tol=0.1)
 
     group["intensity"] = np.maximum(np.zeros_like(y), y - baseline)
+    group["baseline"] = baseline
     return group
 
 ## Read and group by group_number, then apply baseline correction to each group
@@ -39,7 +42,12 @@ corrected = eics.groupby("group_number", group_keys=False).apply(correct_baselin
 
 ## Reset index on final result
 corrected = corrected.reset_index(drop=True)
+baseline = corrected.copy()
+baseline["intensity"] = baseline.pop("baseline")
+corrected = corrected.drop(columns=["baseline"])
 corrected.to_parquet("$outfile")
+if "$output_baseline" == "TRUE":
+    baseline.to_parquet("$baselinefile")
         ]]></configfile>
     </configfiles>
     <inputs>
@@ -59,19 +67,31 @@ corrected.to_parquet("$outfile")
         </param>
         <param argument="lambda" type="integer" min="1" max="100000" value="1000" label="Smoothing strength (lambda)" help="Controls baseline smoothness. Larger values produce a smoother baseline and usually stronger background removal; smaller values follow local intensity changes more closely." />
         <param argument="max_iter" type="integer" min="1" max="100" value="50" label="Maximum optimization iterations" help="Upper limit for algorithm iterations per EIC group. Increase if baseline fitting does not converge; decrease for faster runtime on large datasets." />
+        <param name="output_baseline" type="boolean" truevalue="TRUE" falsevalue="FALSE" checked="false" label="Output estimated baseline" help="Create an additional parquet table containing the estimated baseline for each EIC." />
     </inputs>
     <outputs>
         <data name="outfile" format="parquet" label="${tool.name} on ${on_string}" />
+        <data name="baselinefile" format="parquet" label="${tool.name} baseline on ${on_string}">
+            <filter>output_baseline</filter>
+        </data>
     </outputs>
     <tests>
-        <test>
+        <test expect_num_outputs="1">
             <param name="infile" value="input.parquet"/>
             <param name="method" value="lsrpls"/>
             <param name="lambda" value="600"/>
             <param name="max_iter" value="50"/>
             <output name="outfile" file="result.parquet" compare="sim_size" delta="20"/>
         </test>
-
+        <test expect_num_outputs="2">
+            <param name="infile" value="input.parquet"/>
+            <param name="method" value="lsrpls"/>
+            <param name="lambda" value="600"/>
+            <param name="max_iter" value="50"/>
+            <param name="output_baseline" value="TRUE"/>
+            <output name="outfile" file="result.parquet" compare="sim_size" delta="20"/>
+            <output name="baselinefile" file="baseline.parquet" compare="sim_size" delta="20"/>
+        </test>
     </tests>
     <help><![CDATA[
 
@@ -126,9 +146,10 @@ Other columns are preserved.
 
 **Output**
 
-- A parquet table with the same row-level structure as input.
-- The ``intensity`` column contains baseline-corrected values.
-- Negative corrected intensities are clipped to zero.
+- A parquet table with the same row-level structure as input. The ``intensity``
+  column contains baseline-corrected values, and negative values are clipped to zero.
+- Optionally, a parquet table with estimated baseline values in the ``intensity``
+  column. Both outputs preserve the EIC identifiers and other input columns.
 
 
 **Notes**
