@@ -44,7 +44,20 @@ def load_table(table_path: str) -> pd.DataFrame:
     return loader(table_path)
 
 def invert_number(x):
-    return Fraction(1, x)
+    """
+    Accept a string like "3/5", an int, float, or a Fraction.
+    Return the mathematical inverse as a Fraction.
+    """
+
+    try:
+        original = Fraction(str(x).strip())
+    except Exception as e:
+        raise ValueError(f"Cannot interpret factor '{x}': {e}")
+
+    if original == 0:
+        raise ZeroDivisionError("Factor value is zero – cannot invert")
+
+    return Fraction(original.numerator, original.denominator)
 
 
 def disect_tables(input_path: str,  metadat_path: str, min_factor: int, id_col: int, sample_id_col: int, sample_factor_col: int):
