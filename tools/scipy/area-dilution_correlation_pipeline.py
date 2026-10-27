@@ -161,7 +161,7 @@ def parse_args():
         type=str,
         default="pearson",
         help="Choose type of the correlation coefficient. Options:"
-        "- Pearson correlation (pearson), default"
+        "- Pearson correlation (pearson) = default,"
         "- Spearman correlation (spearman)"
         )
 
