@@ -38,13 +38,13 @@ jobs:
     # Note: if allowed_maintainers is configured, the CLI verifies
     # github.event.actor is in the list and exits with code 1 if not.
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Post status comment
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh issue comment $ISSUE_NUMBER --body "🔄 Tool generation started — [view progress](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})"
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v7
         with:
           python-version: '3.12'
       - run: pip install --no-cache-dir gxy-tool-bot==0.1.2
@@ -185,7 +185,7 @@ jobs:
           rm -f "$GITHUB_WORKSPACE/.commit-msg" "$GITHUB_WORKSPACE/.pr-body" "$GITHUB_WORKSPACE/.is-update"
       - name: Upload gitignored files as artifacts
         if: steps.create_pr.outcome == 'success'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: gitignored-test-data
           path: |
