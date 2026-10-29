@@ -8,8 +8,8 @@
          MATLAB Runtime are baked into a purpose-built container instead of being
          declared as <requirement type="package"> entries. -->
     <token name="@OPERA_PREFIX@">/opt/OPERA</token>
-    <token name="@RUN_SCRIPT@">/opt/OPERA/run_OPERA.sh</token>
-    <token name="@MCR_DIR@">/opt/matlab_runtime/v242</token>
+    <token name="@RUN_SCRIPT@">/opt/OPERA/application/run_OPERA.sh</token>
+    <token name="@MCR_DIR@">/opt/matlab_runtime</token>
     <xml name="bio_tools">
         <xrefs>
             <xref type="bio.tools">opera-qsar</xref>
