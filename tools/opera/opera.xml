@@ -152,11 +152,11 @@ $clean_temp
             <change_format>
                 <when input="output_format" value="txt" format="tabular"/>
             </change_format>
-            <filter>$separate_outputs == ''</filter>
+            <filter>not separate_outputs</filter>
         </data>
         <data name="separate_predictions" format="csv" label="${tool.name} per-endpoint predictions on ${on_string}">
             <discover_datasets pattern="__name_and_ext__" directory="separate"/>
-            <filter>$separate_outputs == '-x'</filter>
+            <filter>separate_outputs</filter>
         </data>
     </outputs>
     <tests>
@@ -167,8 +167,10 @@ $clean_temp
                 <param name="input_file" ftype="sdf" value="opera_4.sdf"/>
                 <param name="input_format" value="sdf"/>
             </conditional>
-            <param name="endpoint_mode" value="custom"/>
-            <param name="endpoints" value="LogP,MP"/>
+            <conditional name="endpoint_selector">
+                <param name="endpoint_mode" value="custom"/>
+                <param name="endpoints" value="LogP,MP"/>
+            </conditional>
             <param name="verbose" value="0"/>
             <output name="predictions" ftype="csv" file="expected_logp_mp.csv">
                 <assert_contents>
@@ -197,7 +199,9 @@ $clean_temp
                 <param name="input_file" ftype="txt" value="opera_4.smi"/>
                 <param name="input_format" value="smi"/>
             </conditional>
-            <param name="endpoint_mode" value="all"/>
+            <conditional name="endpoint_selector">
+                <param name="endpoint_mode" value="all"/>
+            </conditional>
             <param name="verbose" value="0"/>
             <output name="predictions" ftype="csv">
                 <assert_contents>
@@ -222,8 +226,10 @@ $clean_temp
                 <param name="input_file" ftype="txt" value="opera_cas.txt"/>
                 <param name="input_format" value="txt"/>
             </conditional>
-            <param name="endpoint_mode" value="group"/>
-            <param name="endpoint_group" value="PC"/>
+            <conditional name="endpoint_selector">
+                <param name="endpoint_mode" value="group"/>
+                <param name="endpoint_group" value="PC"/>
+            </conditional>
             <param name="experimental" value="True"/>
             <param name="verbose" value="0"/>
             <output name="predictions" ftype="csv">
@@ -246,8 +252,10 @@ $clean_temp
                 <param name="input_file" ftype="txt" value="opera_4.smi"/>
                 <param name="input_format" value="smi"/>
             </conditional>
-            <param name="endpoint_mode" value="custom"/>
-            <param name="endpoints" value="LogP"/>
+            <conditional name="endpoint_selector">
+                <param name="endpoint_mode" value="custom"/>
+                <param name="endpoints" value="LogP"/>
+            </conditional>
             <param name="output_format" value="txt"/>
             <param name="verbose" value="0"/>
             <output name="predictions" ftype="tabular">
@@ -268,8 +276,10 @@ $clean_temp
                 <param name="input_file" ftype="txt" value="opera_4.smi"/>
                 <param name="input_format" value="smi"/>
             </conditional>
-            <param name="endpoint_mode" value="custom"/>
-            <param name="endpoints" value="LogP"/>
+            <conditional name="endpoint_selector">
+                <param name="endpoint_mode" value="custom"/>
+                <param name="endpoints" value="LogP"/>
+            </conditional>
             <param name="full_output" value="True"/>
             <param name="verbose" value="0"/>
             <output name="predictions" ftype="csv">
