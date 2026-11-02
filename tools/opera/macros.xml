@@ -68,10 +68,10 @@
 OPERA was developed by Kamel Mansouri and colleagues at the U.S. EPA National
 Center for Computational Toxicology and the NIEHS (kamel.mansouri@nih.gov), and is
 distributed from the NIEHS GitHub organisation under the MIT licence
-(`<https://github.com/NIEHS/OPERA>`_). Molecular descriptors are calculated with
+(<https://github.com/NIEHS/OPERA>). Molecular descriptors are calculated with
 PaDEL-Descriptor 1.00 and the Chemistry Development Kit (CDK) 2.0. Model
 descriptions (QMRFs) are available from the JRC QSAR Model Database
-(`<https://qsardb.jrc.ec.europa.eu/qmrf/endpoint>`_).
+(<https://qsardb.jrc.ec.europa.eu/qmrf/endpoint>).
     ]]></token>
     <!-- The individual endpoints accepted by OPERA (``-e`` / ``-Endpoint``).
          Values are exactly the tokens accepted upstream (case-insensitive). -->
