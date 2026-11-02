@@ -77,7 +77,8 @@ RUN wget https://github.com/NIEHS/OPERA/releases/download/v2.9.5/OPERA2.9_CL.tar
  && rm -rf /tmp/* /tmp/.[!.]*
 
  RUN run_OPERA="$(find /opt/OPERA -maxdepth 3 -type f -name 'run_OPERA.sh' | head -n1)" \
- && chmod +x "${run_OPERA}" 
+ && chmod +x "${run_OPERA}" \
+ && ln -sf /opt/OPERA /usr/local/bin/OPERA
 
  RUN mcr_directory="$(find /opt/OPERA -maxdepth 3 -type d -name 'R2023b' | head -n1)" \
  && ln -sf "${mcr_directory}" /opt/matlab_runtime 
