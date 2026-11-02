@@ -2,8 +2,8 @@ name: opera
 owner: recetox
 description: OPERA QSAR predictions of physicochemical, environmental fate, ADME and toxicity endpoints
 categories:
-- Chemistry
-- Predictive Models
+- Computational chemistry
+
 homepage_url: https://github.com/NIEHS/OPERA
 long_description: |
   Galaxy wrapper for OPERA, the free and open-source/open-data suite of QSAR models
