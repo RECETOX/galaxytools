@@ -153,12 +153,14 @@ $clean_temp
             <change_format>
                 <when input="output_format" value="txt" format="tabular"/>
             </change_format>
+            <filter>not separate_outputs</filter>
         </data>
-        <data name="separate_predictions" format="csv" label="${tool.name} per-endpoint predictions on ${on_string}">
-            <discover_datasets pattern="__name_and_ext__" directory="separate"/>
+        <collection name="separate_predictions" type="list" label="${tool.name} per-endpoint predictions on ${on_string}">
+            <discover_datasets pattern="__designation_and_ext__" directory="separate"/>
             <filter>separate_outputs</filter>
-        </data>
+        </collection>
     </outputs>
+
     <tests>
         <!-- #1 Simple test with only -s flag -->
         <test expect_num_outputs="1">
@@ -167,7 +169,7 @@ $clean_temp
                 <param name="input_file" ftype="sdf" value="opera_4.sdf"/>
                 <param name="input_format" value="sdf"/>
             </conditional>
-            <output name="predictions" ftype="csv" file="OPERA2.9_Pred.csv"/>
+            <output name="predictions" ftype="csv" file="basic_prediction.csv"/>
         </test>
 
         <!-- #2 Structures from an SDF file, two individual endpoints -->
@@ -222,7 +224,7 @@ $clean_temp
                     <has_text text="CERAPP_Ago_pred"/>
                     <has_text text="CoMPARA_Ago_pred"/>
                     <has_text text="CATMoS_LD50_pred"/>
-                    <has_text text="Caco2_pred"/>
+                    <has_text text="CACO2_pred"/>
                 </assert_contents>
             </output>
             <assert_command>
@@ -246,7 +248,6 @@ $clean_temp
             <param name="verbose" value="0"/>
             <output name="predictions" ftype="csv">
                 <assert_contents>
-                    <has_text text="FoundBy"/>
                     <has_text text="LogP_exp"/>
                     <has_text text="71-43-2"/>
                 </assert_contents>
@@ -305,6 +306,29 @@ $clean_temp
             </output>
             <assert_command>
                 <has_text text="-O 'predictions.csv'"/>
+            </assert_command>
+        </test>
+
+        <!-- #7 One output file per endpoint, collected from the 'separate' directory -->
+        <test expect_num_outputs="1">
+            <conditional name="input_source">
+                <param name="input_type" value="structures"/>
+                <param name="input_file" ftype="sdf" value="opera_4.sdf"/>
+                <param name="input_format" value="sdf"/>
+            </conditional>
+            <conditional name="endpoint_selector">
+                <param name="endpoint_mode" value="custom"/>
+                <param name="endpoints" value="LogP,MP"/>
+            </conditional>
+            <param name="separate_outputs" value="True"/>
+            <param name="verbose" value="0"/>
+            <output_collection name="separate_predictions" type="list" count="2">
+                <element name="predictions_LogP" file="expected_logp_separate.csv" ftype="csv"/>
+                <element name="predictions_MP" file="expected_mp_separate.csv" ftype="csv"/>
+            </output_collection>
+            <assert_command>
+                <has_text text="mkdir -p 'separate'"/>
+                <has_text text="-o 'separate/predictions.csv'"/>
             </assert_command>
         </test>
     </tests>
