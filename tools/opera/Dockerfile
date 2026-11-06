@@ -7,10 +7,9 @@
 # (sha256 91971dbf2ed89ca4418d44eb397eebe7592c75768d5a4aac6ce45197d685c13e), downloaded from
 # https://github.com/NIEHS/OPERA/releases/tag/v2.9.5
 #
-# docker build -t quay.io/recetox/opera:2.9.5--0 .
+# docker build -t recetox/opera:2.9.5--0 .
 #
-# NOTE: the MathWorks MATLAB Runtime is not MIT-licensed. Review the MCR redistribution terms and
-# host the resulting image in an institutional quay.io organisation before publishing.
+# NOTE: the MathWorks MATLAB Runtime is not MIT-licensed.
 
 FROM ubuntu:22.04
 
@@ -37,28 +36,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
  && rm -rf /var/lib/apt/lists/
 
 # ---------------------------------------------------------------------------
-# MATLAB Runtime installation (optional)
-
-# OPERA installer installs the MATLAB runtime if not found so we don't need this in the dockerfile. 
-# If you want to install it manually, uncomment the following lines and change the version and URL as needed. 
-# ----------------------------------------------------------------------------   
-# ARG MCR_VERSION=v242
-# ARG MCR_INSTALLER_URL=https://ssd.mathworks.com/supportfiles/downloads/R2024b/Release/10/deployment_files/installer/complete/glnxa64/MATLAB_Runtime_R2024b_Update_10_glnxa64.zip
-# RUN mkdir -p /opt/matlab_runtime/${MCR_VERSION} /tmp/mcr \
-#  && curl -fSL "${MCR_INSTALLER_URL}" -o /tmp/mcr/mcr.zip \
-#  && unzip -q /tmp/mcr/mcr.zip -d /tmp/mcr \
-#  && /tmp/mcr/install -mode silent -agreeToLicense yes \
-#  -destinationFolder /opt/matlab_runtime/${MCR_VERSION} \
-#  && rm -rf /tmp/mcr
-
-# ENV MCR_ROOT=/opt/matlab_runtime/${MCR_VERSION} \
-#  LD_LIBRARY_PATH=/opt/matlab_runtime/${MCR_VERSION}/runtime:/opt/matlab_runtime/${MCR_VERSION}/bin/glnxa64:/opt/matlab_runtime/${MCR_VERSION}/sys/os/glnxa64:/opt/matlab_runtime/${MCR_VERSION}/sys/opencsv/glnxa64
-
-# ---------------------------------------------------------------------------
-# OPERA itself (parallel build: the Galaxy wrapper passes -P ${GALAXY_SLOTS}).
+# OPERA itself - stripped version, with bundled KNIME software removed. Galaxy tool won't be using option requiring this software.
 # The release asset is a self-extracting archive; it is unpacked to /opt/OPERA so that
-# /opt/OPERA/run_OPERA.sh and /opt/matlab_runtime/v242
+# /opt/OPERA/application/run_OPERA.sh and /opt/matlab_runtime/
 # match the @RUN_SCRIPT@ / @MCR_DIR@ tokens in macros.xml.
+
 # ---------------------------------------------------------------------------
 RUN wget https://github.com/NIEHS/OPERA/releases/download/v2.9.5/OPERA2.9_CL.tar.xz  -O /tmp/OPERA2.9_CL_Par.tar.xz \
  && tar -xJf /tmp/OPERA2.9_CL_Par.tar.xz -C /tmp \
@@ -74,6 +56,8 @@ RUN wget https://github.com/NIEHS/OPERA/releases/download/v2.9.5/OPERA2.9_CL.tar
  cp -a "${src}/." /opt/OPERA/ ; \
  fi \
  ) \
+ && knime_sw="$(find /opt/OPERA -maxdepth 3 -type d -name 'knime*' | head -n1)" \
+ && rm -rf "${knime_sw}" \
  && rm -rf /tmp/* /tmp/.[!.]*
 
  RUN run_OPERA="$(find /opt/OPERA -maxdepth 3 -type f -name 'run_OPERA.sh' | head -n1)" \
