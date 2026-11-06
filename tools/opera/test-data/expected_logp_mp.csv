@@ -1,0 +1,5 @@
+MoleculeID,LogP_pred,LogP_predRange,AD_LogP,AD_index_LogP,Conf_index_LogP,MP_pred,MP_predRange,AD_MP,AD_index_MP,Conf_index_MP
+benzene,2.13,[2.13:2.17],1,1,0.9,5,[-2:12],1,1,0.84
+naphthalene,3.3,[3.26:3.34],1,1,0.98,80,[75:80],1,1,0.86
+phenol,1.46,[1.46:1.49],1,1,0.89,41,[38:44],1,1,0.92
+toluene,2.73,[2.71:2.75],1,1,0.93,-93,[-95:-83],1,1,0.78
