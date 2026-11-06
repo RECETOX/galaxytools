@@ -1,7 +1,7 @@
-# Container image for the Galaxy OPERA tool.#
+# Container image for the Galaxy OPERA tool.
 # OPERA is a MATLAB-compiled application: it needs the proprietary MathWorks MATLAB Runtime
-# (v24.2, ~1.1 GB), a JRE (OpenJDK 8-11), PaDEL-Descriptor 1.00 and CDK 2.0. None of this is
-# available on bioconda, so the Galaxy tool is delivered through this image (see README.rst).
+# a JRE (OpenJDK 8-11), PaDEL-Descriptor 1.00 and CDK 2.0. None of this is available on bioconda, 
+# so the Galaxy tool is delivered through this image.
 #
 # Build context must contain the upstream release asset OPERA2.9_CL_Par.tar.xz
 # (sha256 91971dbf2ed89ca4418d44eb397eebe7592c75768d5a4aac6ce45197d685c13e), downloaded from
