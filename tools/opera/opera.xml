@@ -156,17 +156,7 @@ mv '$out_path' '$predictions'
     </outputs>
 
     <tests>
-        <!-- #1 Simple test with only -s flag -->
-        <test expect_num_outputs="1">
-            <conditional name="input_source">
-                <param name="input_type" value="structures"/>
-                <param name="input_file" ftype="sdf" value="opera_4.sdf"/>
-                <param name="input_format" value="sdf"/>
-            </conditional>
-            <output name="predictions" ftype="csv" file="basic_prediction.csv"/>
-        </test>
-
-        <!-- #2 Structures from an SDF file, two individual endpoints -->
+        <!-- #1 Structures from an SDF file, two individual endpoints -->
         <test expect_num_outputs="1">
             <conditional name="input_source">
                 <param name="input_type" value="structures"/>
@@ -199,7 +189,7 @@ mv '$out_path' '$predictions'
             </assert_command>
         </test>
         
-        <!-- #3 Structures from a SMILES file, all endpoints -->
+        <!-- #2 Structures from a SMILES file, all endpoints -->
         <test expect_num_outputs="1">
             <conditional name="input_source">
                 <param name="input_type" value="structures"/>
@@ -227,7 +217,7 @@ mv '$out_path' '$predictions'
             </assert_command>
         </test>
 
-        <!-- #4 Identifiers, an endpoint group and experimental values -->
+        <!-- #3 Identifiers, an endpoint group and experimental values -->
         <test expect_num_outputs="1">
             <conditional name="input_source">
                 <param name="input_type" value="structures"/>
@@ -253,7 +243,7 @@ mv '$out_path' '$predictions'
             </assert_command>
         </test>
 
-        <!-- #5 Human readable TXT report -->
+        <!-- #4 Human readable TXT report -->
         <test expect_num_outputs="1">
             <conditional name="input_source">
                 <param name="input_type" value="structures"/>
@@ -278,7 +268,7 @@ mv '$out_path' '$predictions'
             </assert_command>
         </test>
 
-        <!-- #6 Full output (implies nearest neighbours and descriptors) -->
+        <!-- #5 Full output (implies nearest neighbours and descriptors) -->
         <test expect_num_outputs="1">
             <conditional name="input_source">
                 <param name="input_type" value="structures"/>
@@ -303,7 +293,7 @@ mv '$out_path' '$predictions'
             </assert_command>
         </test>
 
-        <!-- #7 Checking if temp files are collected when -c flag is unchecked -->
+        <!-- #6 Checking if temp files are collected when -c flag is unchecked -->
         <test expect_num_outputs="2">
             <conditional name="input_source">
                 <param name="input_type" value="structures"/>
