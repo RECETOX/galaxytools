@@ -2,12 +2,6 @@
     <token name="@TOOL_VERSION@">2.9.5</token>
     <token name="@VERSION_SUFFIX@">0</token>
     <token name="@PROFILE@">24.05</token>
-    <!-- Where the OPERA command-line installer and the MATLAB Runtime live inside
-         the container image. OPERA is distributed as a MATLAB-compiled, self-extracting
-         installer (there is no conda/pip package), so the binary and its ~1.1 GB
-         MATLAB Runtime are baked into a purpose-built container instead of being
-         declared as <requirement type="package"> entries. -->
-    <token name="@OPERA_PREFIX@">/opt/OPERA</token>
     <token name="@RUN_SCRIPT@">/opt/OPERA/application/run_OPERA.sh</token>
     <token name="@MCR_DIR@">/opt/matlab_runtime</token>
     <xml name="bio_tools">
@@ -19,15 +13,14 @@
         <requirements>
             <!--
                 OPERA (https://github.com/NIEHS/OPERA) is MIT licensed but is shipped only as a
-                MATLAB-compiled installer and requires the MathWorks MATLAB Runtime (v24.2), which
+                MATLAB-compiled installer and requires the MathWorks MATLAB Runtime, which
                 cannot be redistributed through bioconda. The tool therefore depends on a
                 purpose-built container image assembled from:
-                    * OPERA2.9_CL.tar.xz  (sha256:2cef7db56b18d75367a6f3c1ce45e595827181c1eb585dd08e2908dff6fe88cb)
-                    * MATLAB Runtime v24.2 (MathWorks licence)
+                    * OPERA2.9_CL.tar.xz  (sha256:2cef7db56b18d75367a6f3c1ce45e595827181c1eb585dd08e2908dff6fe88cb) with MathWorks MATLAB Runtime included
                     * OpenJDK 11 (required by PaDEL-Descriptor 1.00 / CDK 2.0)
                 See https://github.com/NIEHS/OPERA/releases/tag/v2.9.5
             -->
-            <container type="docker">quay.io/recetox/opera:@TOOL_VERSION@</container>
+            <container type="docker">recetox/opera:@TOOL_VERSION@</container>
             <container type="singularity">docker://quay.io/recetox/opera:@TOOL_VERSION@</container>
             <yield/>
         </requirements>
