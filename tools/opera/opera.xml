@@ -83,8 +83,10 @@ mv '$out_path' '$predictions'
 ## ---------------------------------------------------------------------------
 #if not $clean_temp:
    &&
-   mkdir -p 'descriptors' &&
-   find . -maxdepth 1 -type f -exec mv -t descriptors -- {} +
+   mkdir -p 'temp_files' &&
+   find . -maxdepth 1 -type f -exec mv -t temp_files -- {} + &&
+   log_file=\$(find . -type f -name "*.log") &&
+   mv \$log_file ./temp_files/log_file.txt
 #end if
 
 ]]></command>
@@ -149,8 +151,8 @@ mv '$out_path' '$predictions'
                 <when input="output_format" value="txt" format="tabular"/>
             </change_format>
         </data>
-        <collection name="descriptors" type="list" label="${tool.name} temporary descriptor files on ${on_string}">
-            <discover_datasets pattern="__name_and_ext__" directory="descriptors"/>
+        <collection name="temp_files" type="list" label="${tool.name} temporary descriptor files on ${on_string}">
+            <discover_datasets pattern="__name_and_ext__" directory="temp_files"/>
             <filter>not clean_temp</filter>
         </collection>
     </outputs>
@@ -307,13 +309,13 @@ mv '$out_path' '$predictions'
             <param name="clean_temp" value="False"/>
             <param name="verbose" value="0"/>
             <output name="predictions" ftype="csv" file="expected_logp_mp.csv"/>
-            <output_collection name="descriptors" type="list" count="2">
-                <element name="opera_input_PaDELlogfile" ftype="log"/>
+            <output_collection name="temp_files" type="list" count="2">
+                <element name="log_file" ftype="txt"/>
                 <element name="opera_input_PadelDesc" ftype="csv"/>
             </output_collection>
             <assert_command>
-                <has_text text="mkdir -p 'descriptors'"/>
-                <has_text text="find . -maxdepth 1 -type f -exec mv -t descriptors"/>
+                <has_text text="mkdir -p 'temp_files'"/>
+                <has_text text="find . -maxdepth 1 -type f -exec mv -t temp_files"/>
             </assert_command>
         </test>
     </tests>
