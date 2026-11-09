@@ -120,6 +120,16 @@
             <param name="jobs" value="compound_name inchi IDSM,inchi canonical_smiles IDSM"/>
             <output name="output_file" file="msme_sample_out_pubchem.tabular" ftype="tabular"/>
         </test>
+        <test expect_num_outputs="1">
+            <param name="input_file" value="msme_sample.tsv" ftype="tsv" />
+            <param name="jobs" value="casno inchikey Wikidata"/>
+            <output name="output_file" file="msme_sample_out_wikidata.tabular" ftype="tabular"/>
+        </test>
+        <test expect_num_outputs="1">
+            <param name="input_file" value="msme_sample.tsv" ftype="tsv" />
+            <param name="jobs" value="casno wikidataid Wikidata"/>
+            <output name="output_file" file="msme_sample_out_wikidata.tabular" ftype="tabular"/>
+        </test>
     </tests>
 
     <help>
