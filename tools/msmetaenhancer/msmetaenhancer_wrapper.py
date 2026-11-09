@@ -9,7 +9,6 @@ from MSMetaEnhancer import Application
 from MSMetaEnhancer.libs.converters.compute import RDKit
 from MSMetaEnhancer.libs.converters.web import BridgeDb, CIR, CTS, IDSM, PubChem, Wikidata
 from MSMetaEnhancer.libs.utils.ConverterBuilder import ConverterBuilder
-from MSMetaEnhancer.libs.utils.Logger import Logger
 
 
 def handle_xlsx_file(app, filename):
