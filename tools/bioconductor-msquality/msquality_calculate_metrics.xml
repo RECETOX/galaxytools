@@ -20,7 +20,9 @@
     <!-- Galaxy hands boolean parameters to templates either as real booleans or
          as the strings 'true'/'false' depending on how the tool was called, so
          the two boolean parameters below are compared case insensitively rather
-         than against a fixed spelling. -->
+         than against a fixed spelling. The core count is read from the job
+         environment by the script itself: config files are written as they are,
+         so a shell expansion would reach R as literal text. -->
     <configfiles>
         <configfile name="run_script"><![CDATA[
 source('${__tool_directory__}/msquality_wrapper.R')
@@ -58,7 +60,7 @@ run_msquality(
 #else
     filter_empty = FALSE,
 #end if
-    cores = \${GALAXY_SLOTS:-1}
+    cores = suppressWarnings(max(1L, as.integer(Sys.getenv("GALAXY_SLOTS")), na.rm = TRUE))
 )
 ]]></configfile>
     </configfiles>
@@ -158,6 +160,11 @@ run_msquality(
                 </element>
             </output_collection>
         </test>
+        <!-- qc_sample_A_out.mzqc in test-data is the document this tool wrote for
+             the parameters below, kept as a readable example of the output. It is
+             not compared to the job output: an mzQC document carries the time of
+             the run and the location of the copy of the input file the job read,
+             so no two runs write the same bytes. -->
         <test expect_num_outputs="1">
             <param name="input" value="qc_sample_A.mzML,qc_sample_B.mzML" ftype="mzml" />
             <section name="metric_selection">
@@ -171,6 +178,7 @@ run_msquality(
                 <element name="qc_sample_A" ftype="mzqc">
                     <assert_contents>
                         <has_text text="qc_sample_A.mzML" />
+                        <has_text text="&quot;version&quot;: &quot;1.0.0&quot;" />
                         <has_text text="MS:4000059" />
                         <has_text text="MsQuality" />
                     </assert_contents>
@@ -178,6 +186,7 @@ run_msquality(
                 <element name="qc_sample_B" ftype="mzqc">
                     <assert_contents>
                         <has_text text="qc_sample_B.mzML" />
+                        <has_text text="&quot;version&quot;: &quot;1.0.0&quot;" />
                         <has_text text="MS:4000059" />
                         <has_text text="MsQuality" />
                     </assert_contents>
