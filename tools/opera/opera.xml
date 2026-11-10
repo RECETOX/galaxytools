@@ -84,9 +84,7 @@ mv '$out_path' '$predictions'
 #if not $clean_temp:
    &&
    mkdir -p 'temp_files' &&
-   find . -maxdepth 1 -type f -exec mv -t temp_files -- {} + &&
-   log_file=\$(find . -type f -name "*.log") &&
-   mv \$log_file ./temp_files/log_file.txt
+   find . -maxdepth 1 -type f -exec mv -t temp_files -- {} + 
 #end if
 
 ]]></command>
@@ -310,7 +308,12 @@ mv '$out_path' '$predictions'
             <param name="verbose" value="0"/>
             <output name="predictions" ftype="csv" file="expected_logp_mp.csv"/>
             <output_collection name="temp_files" type="list" count="2">
-                <element name="log_file" ftype="txt"/>
+                <element name="opera_input_PaDELlogfile">
+                    <assert_contents>
+                        <has_text text="Processing"/>
+                        <has_size size="340" delta="10"/>
+                    </assert_contents>
+                </element>
                 <element name="opera_input_PadelDesc" ftype="csv"/>
             </output_collection>
             <assert_command>
