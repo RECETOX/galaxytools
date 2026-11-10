@@ -115,20 +115,23 @@
             <param name="jobs" value="compound_name inchi IDSM,inchi canonical_smiles RDKit"/>
             <output name="output_file" file="msme_sample_out_rdkit.tabular" ftype="tabular"/>
         </test>
+        <!-- # Pubchem -->
         <test expect_num_outputs="1">
             <param name="input_file" value="msme_sample.tsv" ftype="tabular" />
             <param name="jobs" value="compound_name inchi IDSM,inchi canonical_smiles IDSM"/>
             <output name="output_file" file="msme_sample_out_pubchem.tabular" ftype="tabular"/>
         </test>
+        <!-- # Wikidata -->
         <test expect_num_outputs="1">
             <param name="input_file" value="msme_sample.tsv" ftype="tsv" />
-            <param name="jobs" value="casno inchikey Wikidata"/>
+            <param name="jobs" value="casno inchi Wikidata,casno wikidataid Wikidata"/>
             <output name="output_file" file="msme_sample_out_wikidata.tabular" ftype="tabular"/>
         </test>
+        <!-- # ChEBI -->
         <test expect_num_outputs="1">
             <param name="input_file" value="msme_sample.tsv" ftype="tsv" />
-            <param name="jobs" value="casno wikidataid Wikidata"/>
-            <output name="output_file" file="msme_sample_out_wikidata.tabular" ftype="tabular"/>
+            <param name="jobs" value="compound_name chebiid ChEBI,compound_name inchikey ChEBI"/>
+            <output name="output_file" file="msme_sample_out_chebi.tabular" ftype="tabular"/>
         </test>
     </tests>
 

@@ -1,5 +1,5 @@
 <macros>
-    <token name="@TOOL_VERSION@">0.6.1</token>
+    <token name="@TOOL_VERSION@">0.7.0</token>
     <token name="@VERSION_SUFFIX@">0</token>
 
     <xml name="creator">
@@ -40,7 +40,7 @@
     </token>
 
     <xml name="job_options">
-       <option value="canonical_smiles formula RDKit">RDKit: canonical_smiles -> formula</option>
+        <option value="canonical_smiles formula RDKit">RDKit: canonical_smiles -> formula</option>
         <option value="canonical_smiles inchi RDKit">RDKit: canonical_smiles -> inchi</option>
         <option value="canonical_smiles inchikey RDKit">RDKit: canonical_smiles -> inchikey</option>
         <option value="canonical_smiles mw RDKit">RDKit: canonical_smiles -> mw</option>
@@ -214,7 +214,43 @@
         <option value="wikidataid compound_name Wikidata">Wikidata: wikidataid -> compound_name</option>
         <option value="wikidataid inchi Wikidata">Wikidata: wikidataid -> inchi</option>
         <option value="wikidataid inchikey Wikidata">Wikidata: wikidataid -> inchikey</option>
-        <option value="wikidataid pubchemid Wikidata">Wikidata: wikidataid -> pubchemid</option> 
+        <option value="wikidataid pubchemid Wikidata">Wikidata: wikidataid -> pubchemid</option>
+        <option value="chebiid compound_name ChEBI">ChEBI: chebiid -> compound_name</option>
+        <option value="chebiid formula ChEBI">ChEBI: chebiid -> formula</option>
+        <option value="chebiid inchi ChEBI">ChEBI: chebiid -> inchi</option>
+        <option value="chebiid inchikey ChEBI">ChEBI: chebiid -> inchikey</option>
+        <option value="chebiid iupac_name ChEBI">ChEBI: chebiid -> iupac_name</option>
+        <option value="chebiid smiles ChEBI">ChEBI: chebiid -> smiles</option>
+        <option value="compound_name chebiid ChEBI">ChEBI: compound_name -> chebiid</option>
+        <option value="compound_name formula ChEBI">ChEBI: compound_name -> formula</option>
+        <option value="compound_name inchi ChEBI">ChEBI: compound_name -> inchi</option>
+        <option value="compound_name inchikey ChEBI">ChEBI: compound_name -> inchikey</option>
+        <option value="compound_name iupac_name ChEBI">ChEBI: compound_name -> iupac_name</option>
+        <option value="compound_name smiles ChEBI">ChEBI: compound_name -> smiles</option>
+        <option value="inchi chebiid ChEBI">ChEBI: inchi -> chebiid</option>
+        <option value="inchi compound_name ChEBI">ChEBI: inchi -> compound_name</option>
+        <option value="inchi formula ChEBI">ChEBI: inchi -> formula</option>
+        <option value="inchi inchikey ChEBI">ChEBI: inchi -> inchikey</option>
+        <option value="inchi iupac_name ChEBI">ChEBI: inchi -> iupac_name</option>
+        <option value="inchi smiles ChEBI">ChEBI: inchi -> smiles</option>
+        <option value="inchikey chebiid ChEBI">ChEBI: inchikey -> chebiid</option>
+        <option value="inchikey compound_name ChEBI">ChEBI: inchikey -> compound_name</option>
+        <option value="inchikey formula ChEBI">ChEBI: inchikey -> formula</option>
+        <option value="inchikey inchi ChEBI">ChEBI: inchikey -> inchi</option>
+        <option value="inchikey iupac_name ChEBI">ChEBI: inchikey -> iupac_name</option>
+        <option value="inchikey smiles ChEBI">ChEBI: inchikey -> smiles</option>
+        <option value="iupac_name chebiid ChEBI">ChEBI: iupac_name -> chebiid</option>
+        <option value="iupac_name compound_name ChEBI">ChEBI: iupac_name -> compound_name</option>
+        <option value="iupac_name formula ChEBI">ChEBI: iupac_name -> formula</option>
+        <option value="iupac_name inchi ChEBI">ChEBI: iupac_name -> inchi</option>
+        <option value="iupac_name inchikey ChEBI">ChEBI: iupac_name -> inchikey</option>
+        <option value="iupac_name smiles ChEBI">ChEBI: iupac_name -> smiles</option>
+        <option value="smiles chebiid ChEBI">ChEBI: smiles -> chebiid</option>
+        <option value="smiles compound_name ChEBI">ChEBI: smiles -> compound_name</option>
+        <option value="smiles formula ChEBI">ChEBI: smiles -> formula</option>
+        <option value="smiles inchi ChEBI">ChEBI: smiles -> inchi</option>
+        <option value="smiles inchikey ChEBI">ChEBI: smiles -> inchikey</option>
+        <option value="smiles iupac_name ChEBI">ChEBI: smiles -> iupac_name</option>
     </xml>
 
 </macros>

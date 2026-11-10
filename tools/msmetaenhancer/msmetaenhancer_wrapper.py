@@ -7,7 +7,7 @@ import sys
 from matchms import set_matchms_logger_level
 from MSMetaEnhancer import Application
 from MSMetaEnhancer.libs.converters.compute import RDKit
-from MSMetaEnhancer.libs.converters.web import BridgeDb, CIR, CTS, IDSM, PubChem, Wikidata
+from MSMetaEnhancer.libs.converters.web import BridgeDb, CIR, CTS, IDSM, PubChem, Wikidata, ChEBI
 from MSMetaEnhancer.libs.utils.ConverterBuilder import ConverterBuilder
 
 
@@ -43,7 +43,7 @@ def main(argv):
     app.curate_metadata()
 
     # register all available converters
-    converters = [PubChem, CTS, CIR, RDKit, IDSM, BridgeDb, Wikidata]
+    converters = [PubChem, CTS, CIR, RDKit, IDSM, BridgeDb, Wikidata, ChEBI]
     ConverterBuilder.register(converters)
 
     # specify requested services and jobs
