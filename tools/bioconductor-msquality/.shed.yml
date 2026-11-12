@@ -1,0 +1,23 @@
+name: bioconductor_msquality
+owner: recetox
+remote_repository_url: "https://github.com/RECETOX/galaxytools/tree/master/tools/bioconductor-msquality"
+homepage_url: "https://bioconductor.org/packages/MsQuality"
+categories:
+  - Metabolomics
+  - Proteomics
+description: "Calculate standardized quality metrics for mass spectrometry data with the Bioconductor package MsQuality, reported as a tabular file or as mzQC."
+long_description: |
+  MsQuality calculates low level quality metrics for mass spectrometry data at the per sample level,
+  following the quality metric framework defined by the Human Proteome Organisation Proteomics
+  Standards Initiative (HUPO-PSI). The metrics quantify the quality of spectral raw files using a
+  controlled vocabulary and only require retention time, m/z and intensity, which are read from the
+  mzML files through the Spectra package.
+  The tool reports the metrics as a tabular file or writes them as mzQC, and can plot every
+  calculated metric.
+auto_tool_repositories:
+  name_template: "{{ tool_id }}"
+  description_template: "{{ tool_name }} tool from the MsQuality package"
+suite:
+  name: suite_bioconductor_msquality
+  description: MsQuality calculates quality metrics for mass spectrometry data at the per sample level, based on the HUPO-PSI mzQC framework.
+  type: repository_suite_definition
