@@ -1,0 +1,16 @@
+name: ontogpt
+owner: recetox
+remote_repository_url: "https://github.com/RECETOX/galaxytools/tree/master/tools/ontogpt"
+homepage_url: "https://monarch-initiative.github.io/ontogpt/"
+categories:
+  - Machine Learning
+description: "OntoGPT extracts ontology-grounded structured information from text using large language models."
+long_description: |
+  "OntoGPT (SPIRES) uses a LinkML template and a large language model to extract structured information from free text and grounds the extracted terms against ontologies."
+auto_tool_repositories:
+  name_template: "{{ tool_id }}"
+  description_template: "{{ tool_name }} tool from the OntoGPT package"
+suite:
+  name: suite_ontogpt
+  description: OntoGPT extracts ontology-grounded structured information from text using large language models.
+  type: repository_suite_definition

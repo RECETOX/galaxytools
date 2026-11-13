@@ -1,0 +1,18 @@
+#This is a sample file used to define the OntoGPT templates offered by the tool,
+#using 3 columns tab separated (longer whitespace are TAB characters):
+#
+#<value>	<name>	<description>
+#
+#value: Template file stem in ontogpt/templates (NOT the id printed by `ontogpt list-templates`)
+#name: Display name shown to users
+#description: Short description
+#
+#Examples:
+#
+#environmental_sample	Environmental sample	Environmental sample metadata
+#environmental-metadata	Environmental metadata	Environmental metadata of a sample
+#metagenome	Metagenome study	Metagenome study description
+#adverse_outcome_pathway	Adverse outcome pathway	Adverse outcome pathway (AOP)
+#ctd	CTD	Chemical-disease relationships
+#biotic_interaction	Biotic interaction	Interactions between organisms
+#reaction	Reaction	Chemical reactions

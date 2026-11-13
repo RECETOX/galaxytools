@@ -1,0 +1,79 @@
+<macros>
+    <token name="@TOOL_VERSION@">1.2.0</token>
+    <token name="@VERSION_SUFFIX@">0</token>
+    <xml name="requirements">
+        <requirements>
+            <container type="singularity">oras://cerit.io/galaxy/ontogpt:@TOOL_VERSION@-recetox1</container>
+            <container type="docker">recetox/ontogpt:@TOOL_VERSION@-recetox1</container>
+            <expand macro="openai_config"/>
+        </requirements>
+    </xml>
+    <xml name="openai_config">
+        <credentials name="openai_config" label="Your OpenAI API key" version="1.0" optional="true" description="Provide the API key for accessing the large language model (OpenAI-compatible endpoints).">
+            <secret name="api_key" inject_as_env="OPENAI_API_KEY" optional="true"/>
+        </credentials>
+    </xml>
+    <xml name="model_selector">
+        <conditional name="model_selector">
+            <param name="model_source" type="select" label="Model source" help="Choose whether to use a model provided through Galaxy or your own LiteLLM / OpenAI-compatible endpoint.">
+                <option value="builtin" selected="true">Models provided through Galaxy</option>
+                <option value="custom">Bring Your Own LiteLLM</option>
+            </param>
+            <when value="builtin">
+                <param name="model" type="select" optional="false" label="Galaxy model" help="Select the Galaxy-provided model to use.">
+                    <options from_data_table="genai_models">
+                        <filter type="static_value" column="3" value="text"/>
+                    </options>
+                    <validator message="No model annotation is available for LLM Hub" type="no_options"/>
+                </param>
+            </when>
+            <when value="custom">
+                <param name="model" type="text" label="Custom model identifier" help="Enter the model identifier expected by your endpoint. Pin an explicit model name instead of a moving alias.">
+                    <sanitizer invalid_char="">
+                        <valid initial="string.letters,string.digits">
+                            <add value="_"/>
+                            <add value="-"/>
+                            <add value="."/>
+                            <add value=":"/>
+                            <add value="/"/>
+                        </valid>
+                    </sanitizer>
+                </param>
+                <param name="server_url" type="text" label="LiteLLM / OpenAI-compatible API URL" help="Enter the base URL of the API endpoint to use.">
+                    <sanitizer invalid_char="">
+                        <valid initial="string.letters,string.digits">
+                            <add value="_"/>
+                            <add value="-"/>
+                            <add value="."/>
+                            <add value=":"/>
+                            <add value="/"/>
+                        </valid>
+                    </sanitizer>
+                </param>
+                <param name="credential_agreement" type="boolean" label="I provided my own API key in the credentials" help="Confirm that you supplied the API key needed by your endpoint in the tool credentials.">
+                    <validator type="expression" message="You need to have your own API key setup in the credentials.">True == value</validator>
+                </param>
+            </when>
+        </conditional>
+    </xml>
+    <token name="@HELP@"><![CDATA[
+**OntoGPT** extracts structured, ontology-grounded information from free text using a large language model (SPIRES method).
+You choose a LinkML template that describes what should be extracted; OntoGPT builds the prompt, calls the model,
+parses the reply into the template structure and grounds the terms against ontologies.
+
+**Things to know**
+
+* Output is **not deterministic**: the temperature cannot be controlled for current model families.
+* A value prefixed with ``AUTO:`` means the term was extracted but **not grounded** in an ontology. Treat it as a hallucination warning. The ``grounded`` column of the tabular output reflects this.
+* Entity offsets (``start``/``end``) are found by matching the extracted label back into the text and are 0-indexed and inclusive; entities without offsets were not found in the text, so offsets show presence, not correctness.
+* Using an LLM costs money or quota and there is no budget cap. Use ``Maximum text length`` to limit the size of requests.
+* The job fails if OntoGPT returns an empty extraction, because some LLM errors (timeouts, rate limits) are otherwise silently swallowed.
+* The first run may download ontologies, so internet access is required.
+    ]]></token>
+    <xml name="citations">
+        <citations>
+            <citation type="doi">10.1093/bioinformatics/btae104</citation>
+            <citation type="doi">10.5281/zenodo.7894107</citation>
+        </citations>
+    </xml>
+</macros>
