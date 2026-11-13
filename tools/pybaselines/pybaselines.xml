@@ -2,7 +2,7 @@
     <description>subtract baseline intensities from extracted ion chromatograms (EICs)</description>
     <macros>
         <token name="@TOOL_VERSION@">1.2.1</token>
-        <token name="@VERSION_SUFFIX@">3</token>
+        <token name="@VERSION_SUFFIX@">4</token>
     </macros>
     <requirements>
         <requirement type="package" version="@TOOL_VERSION@">pybaselines</requirement>
@@ -136,10 +136,14 @@ Other columns are preserved.
 
 - **Baseline correction algorithm**: Selects the Whittaker-smoothing-based
     baseline estimator (for example ``lsrpls``, ``asls``, ``airpls``, ``arpls``).
-    Different datasets may perform better with different algorithms.
+    The Whittaker smoothing algorithms are based on Penalised Least Squares. 
+    The available methods are all conceptually similar, using only a different 
+    weighting matrix in the minimised objective function. Different datasets 
+    may perform better with different algorithms.
 - **Smoothing strength (lambda)**: Controls how smooth the estimated baseline
-    is. Larger values generally yield a smoother baseline and can remove more
-    low-frequency background; smaller values track local variation more closely.
+    is. Larger values yield a smoother baseline and is usually a more conservative 
+    estimate of the baseline. Smaller values fit the baseline more closely, 
+    removing more peak abundance. 
 - **Maximum optimization iterations**: Upper bound on solver iterations for
     each group. Increase if fitting appears unstable or does not converge.
 
@@ -155,9 +159,11 @@ Other columns are preserved.
 **Notes**
 
 - Runtime scales with the number of groups and points per group.
-- If correction is too aggressive, try lowering ``lambda``.
-- If residual baseline remains, try increasing ``lambda`` or testing a
+- If correction is too aggressive, try increasing ``lambda``.
+- If residual baseline remains, try lowering ``lambda`` or testing a
     different algorithm.
+- The ``lambda`` value required to fit a particular baseline will
+    increase as the number of data points increases.
 
     ]]></help>
     <citations>
