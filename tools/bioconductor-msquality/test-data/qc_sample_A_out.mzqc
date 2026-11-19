@@ -1,0 +1,55 @@
+{
+  "mzQC": {
+    "version": "1.0.0",
+    "creationDate": "2026-11-10T11:34:26Z",
+    "contactName": "Galaxy",
+    "description": "A mzQC document on the sample qc_sample_A",
+    "runQualities": [
+      {
+        "metadata": {
+          "label": "qc_sample_A",
+          "inputFiles": [
+            {
+              "name": "qc_sample_A.mzML",
+              "location": "file:////tmp/tmppexpf24g/files/a/9/e/dataset_a9ed2b22-27cf-4bf0-82a8-a62ad333a262.dat",
+              "fileFormat": {
+                "accession": "MS:1000584",
+                "name": "mzML format"
+              }
+            }
+          ],
+          "analysisSoftware": [
+            {
+              "accession": "MS:4000151",
+              "name": "MsQuality",
+              "version": "1.10.0",
+              "uri": "https://github.com/tnaake/MsQuality/",
+              "description": "\"MsQuality – an interoperable open-source package for the calculation of standardized quality metrics of mass spectrometry data.\" [DOI:10.1101/2023.05.12.540477, https://github.com/tnaake/MsQuality/]"
+            }
+          ]
+        },
+        "qualityMetrics": [
+          {
+            "accession": "MS:4000059",
+            "name": "number of MS1 spectra",
+            "description": "\"The number of MS1 events in the run.\" [PSI:MS]",
+            "value": 44
+          },
+          {
+            "accession": "MS:4000155",
+            "name": "area under TIC",
+            "description": "\"The area under the total ion chromatogram.\" [PSI:MS]",
+            "value": 9989103357.8893
+          }
+        ]
+      }
+    ],
+    "controlledVocabularies": [
+      {
+        "name": "Proteomics Standards Initiative Mass Spectrometry Ontology",
+        "uri": "https://github.com/HUPO-PSI/psi-ms-CV/releases/download/v4.2.15/psi-ms.obo",
+        "version": "4.2.15"
+      }
+    ]
+  }
+} 

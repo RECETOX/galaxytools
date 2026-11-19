@@ -1,0 +1,256 @@
+<tool id="msquality_calculate_metrics" name="MsQuality" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" license="GPL-3" profile="23.0">
+    <description>calculate standardized quality metrics for mass spectrometry data</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="creator" />
+    <expand macro="xrefs" />
+    <expand macro="requirements" />
+
+    <required_files>
+        <include path="msquality_wrapper.R" />
+    </required_files>
+
+    <version_command>echo "@TOOL_VERSION@"</version_command>
+
+    <command detect_errors="exit_code"><![CDATA[
+        Rscript '${run_script}'
+    ]]></command>
+
+    <!-- Galaxy hands boolean parameters to templates either as real booleans or
+         as the strings 'true'/'false' depending on how the tool was called, so
+         the two boolean parameters below are compared case insensitively rather
+         than against a fixed spelling. The core count is read from the job
+         environment by the script itself: config files are written as they are,
+         so a shell expansion would reach R as literal text. -->
+    <configfiles>
+        <configfile name="run_script"><![CDATA[
+source('${__tool_directory__}/msquality_wrapper.R')
+
+# Sample labels are taken from the input element identifiers, the metrics are
+# reported under these labels and the mzQC documents are named after them.
+input_files <- c()
+#for $f in $input
+input_files['${f.element_identifier}'] <- '${f}'
+#end for
+
+metrics <- c()
+#if str($metric_selection.mode) == 'select'
+    #for $m in $metric_selection.metrics
+metrics <- c(metrics, '${m}')
+    #end for
+#end if
+
+run_msquality(
+    input_files = input_files,
+    metrics = metrics,
+#if str($output_format) == 'tabular'
+    out_metrics = 'metrics.tsv',
+    out_legend = 'metrics_legend.tsv',
+#end if
+#if str($output_format) == 'mzqc'
+    mzqc_dir = 'mzqc',
+#end if
+#if str($generate_plots).lower() == 'true'
+    plots_dir = 'plots',
+#end if
+    ms_level = ${ms_level}L,
+#if str($filter_empty).lower() == 'true'
+    filter_empty = TRUE,
+#else
+    filter_empty = FALSE,
+#end if
+    cores = suppressWarnings(max(1L, as.integer(Sys.getenv("GALAXY_SLOTS")), na.rm = TRUE))
+)
+]]></configfile>
+    </configfiles>
+
+    <inputs>
+        <param name="input" type="data" format="mzml" multiple="true"
+            label="Input files"
+            help="One or more mzML files. Every file is treated as one sample, so pass the whole measurement series to compare samples." />
+
+        <conditional name="metric_selection">
+            <param name="mode" type="select" label="Quality metrics">
+                <option value="all">All metrics available in MsQuality</option>
+                <option value="select">Select metrics manually</option>
+            </param>
+            <when value="all" />
+            <when value="select">
+                <param name="metrics" type="select" label="Metrics" multiple="true"
+                    help="Metrics marked as needing MS2 precursor data return no value for MS1-only files.">
+                    <expand macro="metrics_options" />
+                </param>
+            </when>
+        </conditional>
+
+        <param name="output_format" type="select" label="Report metrics as">
+            <option value="tabular">Tabular file (one row per sample, all metrics)</option>
+            <option value="mzqc">mzQC (one document per sample, as a list collection)</option>
+            <help>MzQC only contains the metrics covered by the HUPO-PSI controlled vocabulary and writes one document per sample. The tabular file always reports every calculated metric.</help>
+        </param>
+
+        <param name="generate_plots" type="boolean" checked="true" label="Plot the calculated metrics"
+            help="Creates one plot per metric as a list collection." />
+
+        <param name="ms_level" type="select" label="MS level" value="1">
+            <option value="1">MS1</option>
+            <option value="2">MS2</option>
+        </param>
+
+        <param name="filter_empty" type="boolean" checked="false"
+            label="Remove empty and zero intensity spectra before calculating"
+            help="Matching the way QuaMeter skips spectra with no peaks, which makes the metrics comparable to that software." />
+    </inputs>
+
+    <outputs>
+        <data name="metrics" format="tabular" from_work_dir="metrics.tsv"
+            label="quality metrics of ${on_string}">
+            <filter>output_format == 'tabular'</filter>
+        </data>
+        <data name="metrics_legend" format="tabular" from_work_dir="metrics_legend.tsv"
+            label="metric legend of ${on_string}">
+            <filter>output_format == 'tabular'</filter>
+        </data>
+        <collection name="mzqc" type="list" label="mzQC of ${on_string}">
+            <discover_datasets pattern="__name_and_ext__" directory="mzqc" />
+            <filter>output_format == 'mzqc'</filter>
+        </collection>
+        <collection name="plots" type="list" format="png" label="metric plots of ${on_string}">
+            <discover_datasets pattern="__name_and_ext__" directory="plots" />
+            <filter>generate_plots</filter>
+        </collection>
+    </outputs>
+
+    <tests>
+        <test expect_num_outputs="3">
+            <param name="input" value="qc_sample_A.mzML,qc_sample_B.mzML" ftype="mzml" />
+            <section name="metric_selection">
+                <param name="mode" value="select" />
+                <param name="metrics" value="chromatographyDuration,numberSpectra" />
+            </section>
+            <param name="output_format" value="tabular" />
+            <param name="generate_plots" value="true" />
+            <param name="ms_level" value="1" />
+            <output name="metrics" ftype="tabular">
+                <assert_contents>
+                    <has_text text="qc_sample_A" />
+                    <has_text text="qc_sample_B" />
+                    <has_text text="numberSpectra" />
+                </assert_contents>
+            </output>
+            <output name="metrics_legend" ftype="tabular">
+                <assert_contents>
+                    <has_text text="chromatographyDuration" />
+                    <has_text text="MS:4000053" />
+                </assert_contents>
+            </output>
+            <output_collection name="plots" type="list" count="2">
+                <element name="chromatographyDuration" ftype="png">
+                    <assert_contents>
+                        <has_image_width width="1000" />
+                        <has_image_height height="600" />
+                    </assert_contents>
+                </element>
+                <element name="numberSpectra" ftype="png">
+                    <assert_contents>
+                        <has_image_width width="1000" />
+                        <has_image_height height="600" />
+                    </assert_contents>
+                </element>
+            </output_collection>
+        </test>
+        <!-- qc_sample_A_out.mzqc in test-data is the document this tool wrote for
+             the parameters below, kept as a readable example of the output. It is
+             not compared to the job output: an mzQC document carries the time of
+             the run and the location of the copy of the input file the job read,
+             so no two runs write the same bytes. -->
+        <test expect_num_outputs="1">
+            <param name="input" value="qc_sample_A.mzML,qc_sample_B.mzML" ftype="mzml" />
+            <section name="metric_selection">
+                <param name="mode" value="select" />
+                <param name="metrics" value="numberSpectra,areaUnderTic" />
+            </section>
+            <param name="output_format" value="mzqc" />
+            <param name="generate_plots" value="false" />
+            <param name="ms_level" value="1" />
+            <output_collection name="mzqc" type="list" count="2">
+                <element name="qc_sample_A" ftype="mzqc">
+                    <assert_contents>
+                        <has_text text="qc_sample_A.mzML" />
+                        <has_text text="&quot;version&quot;: &quot;1.0.0&quot;" />
+                        <has_text text="MS:4000059" />
+                        <has_text text="MsQuality" />
+                    </assert_contents>
+                </element>
+                <element name="qc_sample_B" ftype="mzqc">
+                    <assert_contents>
+                        <has_text text="qc_sample_B.mzML" />
+                        <has_text text="&quot;version&quot;: &quot;1.0.0&quot;" />
+                        <has_text text="MS:4000059" />
+                        <has_text text="MsQuality" />
+                    </assert_contents>
+                </element>
+            </output_collection>
+        </test>
+    </tests>
+
+    <help><![CDATA[
+What it does
+------------
+
+Calculates low level quality metrics for mass spectrometry data with the
+Bioconductor package **MsQuality**. Metrics describe properties of a single
+measurement, such as the chromatography duration, the number of spectra, the
+area under the total ion chromatogram or the retention time interquartile
+range, and are defined by the HUPO-PSI mzQC framework.
+
+MsQuality needs as little information about the data as possible: retention
+time, m/z and intensity are read directly from the mzML files through the
+`Spectra` package.
+
+Inputs
+------
+
+Pass the complete measurement series rather than single files. Every input file
+is calculated as one sample and the metrics of the samples are reported side by
+side, which is how they are meant to be read: a metric is rarely meaningful on
+its own, but a sample drifting away from the others is. The input element
+identifiers become the sample names in the output.
+
+Outputs
+-------
+
+* **Tabular file**: one row per sample, one column per metric. Metrics that
+  return more than one value add one column per value, named after the metric
+  (`ticQuantileRtFraction.25%`).
+* **Metric legend**: the PSI-MS accession of every calculated metric, so the
+  column names can be looked up without leaving Galaxy.
+* **mzQC**: one document per sample, collected in a list that mirrors the input
+  collection and named after the input samples. Only metrics covered by the
+  HUPO-PSI controlled vocabulary are written. The documents are tagged with the
+  `mzqc` data type where the Galaxy installation provides it.
+* **Plots**: one plot per calculated metric, collected in a list.
+
+Limitations
+-----------
+
+* MsQuality calculates metrics only. It does not select QC samples, does not
+  know about batches and does not normalize or correct anything; only samples of
+  the same type should be compared. Tools such as `proBatch` or `MatrixQCvis`
+  cover those steps.
+* Metrics that depend on precursor annotations return no value for MS1 only
+  data. They are marked in the metric list.
+* Some metrics can return `NaN` for very short runs, for example when there are
+  not enough scans to compute a quantile.
+* Writing mzQC needs the PSI-MS controlled vocabulary. When the job has no
+  network access, a version bundled with the `rmzqc` package is used instead;
+  the version that was used is recorded in the mzQC document.
+* Every mzQC document names its input file after the input element it was made
+  from, but records the location of the copy of that file the job read: a
+  dataset in Galaxy has no address that outlives the job, so the location is
+  only useful for tracing a run back, not for opening the file elsewhere.
+    ]]></help>
+
+    <expand macro="citations" />
+</tool>

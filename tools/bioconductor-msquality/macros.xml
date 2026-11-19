@@ -1,0 +1,76 @@
+<macros>
+    <token name="@TOOL_VERSION@">1.10.0</token>
+    <token name="@VERSION_SUFFIX@">0</token>
+
+    <xml name="creator">
+        <creator>
+            <person
+                givenName="Helge"
+                familyName="Hecht"
+                url="https://github.com/hechth"
+                identifier="0000-0001-6744-996X" />
+            <organization
+                url="https://www.recetox.muni.cz/"
+                email="GalaxyToolsDevelopmentandDeployment@space.muni.cz"
+                name="RECETOX MUNI" />
+        </creator>
+    </xml>
+
+    <xml name="xrefs">
+        <xrefs>
+            <xref type="bioconductor">MsQuality</xref>
+        </xrefs>
+    </xml>
+
+    <!-- mzR is only a suggests dependency of MsQuality, but it is required to
+         read mzML files through the MsBackendMzR backend, so it has to be
+         declared explicitly. rmzqc and ggplot2 are imports of MsQuality and are
+         installed with it; they are used through their namespace prefix. -->
+    <xml name="requirements">
+        <requirements>
+            <requirement type="package" version="@TOOL_VERSION@">bioconductor-msquality</requirement>
+            <requirement type="package" version="2.44.0">bioconductor-mzr</requirement>
+            <requirement type="package" version="1.20.1">bioconductor-spectra</requirement>
+        </requirements>
+    </xml>
+
+    <xml name="citations">
+        <citations>
+            <citation type="doi">10.1093/bioinformatics/btad618</citation>
+        </citations>
+    </xml>
+
+    <xml name="metrics_options">
+        <option value="chromatographyDuration">chromatographyDuration</option>
+        <option value="ticQuantileRtFraction">ticQuantileRtFraction</option>
+        <option value="rtOverMsQuarters">rtOverMsQuarters</option>
+        <option value="ticQuartileToQuartileLogRatio">ticQuartileToQuartileLogRatio</option>
+        <option value="numberSpectra">numberSpectra</option>
+        <option value="numberEmptyScans">numberEmptyScans</option>
+        <option value="rtIqr">rtIqr</option>
+        <option value="rtIqrRate">rtIqrRate</option>
+        <option value="areaUnderTic">areaUnderTic</option>
+        <option value="areaUnderTicRtQuantiles">areaUnderTicRtQuantiles</option>
+        <option value="medianTicRtIqr">medianTicRtIqr</option>
+        <option value="medianTicOfRtRange">medianTicOfRtRange</option>
+        <option value="mzAcquisitionRange">mzAcquisitionRange</option>
+        <option value="rtAcquisitionRange">rtAcquisitionRange</option>
+        <option value="msSignal10xChange">msSignal10xChange</option>
+        <option value="medianPrecursorMz">medianPrecursorMz (needs MS2 precursor data)</option>
+        <option value="precursorIntensityRange">precursorIntensityRange (needs MS2 precursor data)</option>
+        <option value="precursorIntensityQuartiles">precursorIntensityQuartiles (needs MS2 precursor data)</option>
+        <option value="precursorIntensityMean">precursorIntensityMean (needs MS2 precursor data)</option>
+        <option value="precursorIntensitySd">precursorIntensitySd (needs MS2 precursor data)</option>
+        <option value="extentIdentifiedPrecursorIntensity">extentIdentifiedPrecursorIntensity (needs MS2 precursor data)</option>
+        <option value="ratioCharge1over2">ratioCharge1over2 (needs MS2 precursor data)</option>
+        <option value="ratioCharge3over2">ratioCharge3over2 (needs MS2 precursor data)</option>
+        <option value="ratioCharge4over2">ratioCharge4over2 (needs MS2 precursor data)</option>
+        <option value="meanCharge">meanCharge (needs MS2 precursor data)</option>
+        <option value="medianCharge">medianCharge (needs MS2 precursor data)</option>
+    </xml>
+
+    <xml name="assertions_metrics">
+        <has_text text="sample" />
+        <has_text text="chromatographyDuration" />
+    </xml>
+</macros>
