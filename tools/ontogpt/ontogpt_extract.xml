@@ -1,0 +1,84 @@
+<tool id="ontogpt_extract" name="OntoGPT extract" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="25.1" license="BSD-3-Clause">
+    <description>ontology-grounded information extraction from text with an LLM</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="requirements"/>
+    <required_files>
+        <include path="ontogpt_wrapper.py"/>
+    </required_files>
+    <command detect_errors="exit_code"><![CDATA[
+        python3 '${__tool_directory__}/ontogpt_wrapper.py'
+            --input '$input'
+            --template '$template'
+            --model-source '$model_selector.model_source'
+            #if $model_selector.model_source == "builtin"
+                --model '$model_selector.model.fields.model_id'
+                --provider '$model_selector.model.fields.provider'
+            #else
+                --model '$model_selector.model'
+                --server-url '$model_selector.server_url'
+            #end if
+            #if $use_pdf
+                --use-pdf
+            #end if
+            #if $advanced.no_validate_terms
+                --no-validate-terms
+            #end if
+            #if $advanced.cut_input_text
+                --cut-input-text
+            #end if
+            #if $advanced.show_prompt
+                --show-prompt
+            #end if
+            #if $advanced.max_text_length
+                --max-text-length $advanced.max_text_length
+            #end if
+            #if $advanced.system_message
+                --system-message '$advanced.system_message'
+            #end if
+            --yaml-output '$predictions'
+            --extracted-output '$extracted_object'
+            --entities-output '$named_entities'
+    ]]></command>
+    <inputs>
+        <param name="input" type="data" format="txt,pdf" label="Input text" help="A single text or PDF file to extract information from."/>
+        <param name="use_pdf" type="boolean" truevalue="true" falsevalue="" label="Input is a PDF file" help="Enable to read the input with the PDF parser."/>
+        <param name="template" type="select" label="Extraction template" help="LinkML template describing what to extract.">
+            <options from_data_table="ontogpt_templates">
+                <column name="value" index="0"/>
+                <column name="name" index="1"/>
+            </options>
+            <validator type="no_options" message="No OntoGPT templates are configured."/>
+        </param>
+        <expand macro="model_selector"/>
+        <section name="advanced" title="Advanced options" expanded="false">
+            <param name="max_text_length" type="integer" min="0" value="0" label="Maximum text length" help="Split the input into chunks of this many characters. 0 disables chunking."/>
+            <param name="system_message" type="text" optional="true" label="System message" help="Optional system prompt sent to the model."/>
+            <param name="no_validate_terms" type="boolean" truevalue="true" falsevalue="" checked="false" label="Skip term validation" help="Disable validation of grounded identifiers."/>
+            <param name="cut_input_text" type="boolean" truevalue="true" falsevalue="" checked="false" label="Truncate echoed input text" help="Truncate the input text echoed in the result to 1000 characters."/>
+            <param name="show_prompt" type="boolean" truevalue="true" falsevalue="" checked="false" label="Log prompts" help="Log the prompts sent to the model."/>
+        </section>
+    </inputs>
+    <outputs>
+        <data name="predictions" format="yaml" label="${tool.name} on ${on_string}: result (YAML)"/>
+        <data name="extracted_object" format="tabular" label="${tool.name} on ${on_string}: extracted values"/>
+        <data name="named_entities" format="tabular" label="${tool.name} on ${on_string}: named entities"/>
+    </outputs>
+    <tests>
+        <test expect_num_outputs="3" expect_test_failure="true">
+            <param name="input" value="input.txt"/>
+            <param name="template" value="environmental_sample"/>
+            <conditional name="model_selector">
+                <param name="model_source" value="custom"/>
+                <param name="model" value="dummy-model"/>
+                <param name="server_url" value="dummy"/>
+                <param name="credential_agreement" value="true"/>
+            </conditional>
+        </test>
+    </tests>
+    <help><![CDATA[
+@HELP@
+    ]]></help>
+    <expand macro="citations"/>
+</tool>
