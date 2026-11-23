@@ -1,0 +1,19 @@
+name: pyopenms
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - python=3.12
+  - pip
+  - pip:
+      - pyopenms==3.6.0
+      - pyopenms-viz==1.0.1
+      - pymzml==2.6.0
+      - pandas
+      - numpy
+      - plotly
+      - bokeh
+      - datashader
+      - matplotlib
+      - openpyxl
+      - pytest
