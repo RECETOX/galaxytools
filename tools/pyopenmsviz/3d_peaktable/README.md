@@ -17,8 +17,8 @@ measurement**. All panels share
 | `templates/peakmaps_report.html.j2` | markup and CSS of the report, rendered with Jinja |
 | `templates/peakmaps_report.js` | the browser script that keeps the panels in sync |
 | `tests.py` | pytest suite for the helpers, the parser and one full end to end run |
-| `test_data/` | three dummy `.mzml` files (about 0.5 MB in total) used by the tests |
-| `OLD/make_test_data.py` | subsamples a real run into the small dummy files in `test_data/` |
+| `test-data/` | three dummy `.mzml` files (about 0.5 MB in total) used by the tests |
+| `OLD/make_test_data.py` | subsamples a real run into the small dummy files in `test-data/` |
 | `OLD/` | the notebook this tool came from, the original reports and the data generator |
 
 ## Requirements
@@ -112,9 +112,25 @@ The half widths used to be called `rt_tol` and `mz_tol_ppm` because they describ
 instrument tolerances. They are now `rt_to_colour` and `mz_to_colour_ppm` because they
 simply describe the region that should be coloured, whatever the reason for it is.
 
+## Peak aggregation
+
+Panels with more than 2500 peaks in the displayed window are aggregated so the
+report stays responsive: `pyopenms_viz` divides the rt / m/z plane into a 50 x 50
+grid and every cell is drawn as one stem at the cell centre whose height is the
+mean intensity of the peaks of that cell. The stems are grouped by label, so the
+coloured and the grey peaks of a cell are averaged separately, and the same
+window can therefore be drawn with different bar heights depending on
+`--colour-all` / `--no-colour-all`. Individual peaks may not be visible, and bar
+heights are cell averages rather than exact peak intensities.
+
+Because of that, the intensity axis and the shared colour scale follow the bars
+that are actually drawn: the axis top is the tallest drawn bar of the report and
+the colour scale spans the drawn coloured stems. Both can differ between the two
+colouring modes and from the raw peak intensities.
+
 ## Tests
 
-The tests read raw data from `test_data/`, which holds three committed subsamples of
+The tests read raw data from `test-data/`, which holds three committed subsamples of
 around the tested window: `dummy_peak_a.mzml` and `dummy_peak_b.mzml` both contain the
 tested ion, `dummy_blank.mzml` contains nothing so that the "no peaks in this window"
 path is covered as well. They are part of the project, so nothing has to be generated
@@ -130,7 +146,7 @@ pytest tests.py -v
 `tests.py` covers reading and windowing, the ion box including its borders, the shared
 colour and axis ranges, the stem colours, one built panel, the written HTML including the
 WebGL budget and both ways of running `main.py`. It takes about fifteen seconds; the tests
-that read raw data are skipped with a hint if `test_data/` is missing.
+that read raw data are skipped with a hint if `test-data/` is missing.
 
 ## Report features worth knowing
 
@@ -141,6 +157,8 @@ that read raw data are skipped with a hint if `test_data/` is missing.
   a half dead graph and is drawn again when you scroll back to it.
 - The header has a filter for the file names, checkboxes for sync rotation and sync
   axes, a *Reset all views* button and the shared colour bar.
+- The intensity axis is scaled to the tallest bar the panels actually draw and the
+  colour scale to the drawn coloured stems, see *Peak aggregation* above.
 - The panel that you are dragging is outlined in blue, the caption of every panel
   shows how many peaks it holds and how many of them are annotated.
 - `window.peakmapDebug()` in the browser console returns the shared camera, the panels

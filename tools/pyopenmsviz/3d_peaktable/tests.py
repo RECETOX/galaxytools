@@ -1,6 +1,6 @@
 """Tests for the peakmap report of utils.py and the command line tool main.py.
 
-The tests that read raw data run on the small dummy files in test_data, which are
+The tests that read raw data run on the small dummy files in test-data, which are
 subsamples of a real measurement (see make_test_data.py):
 
     python make_test_data.py
@@ -20,7 +20,7 @@ import utils
 
 
 HERE = Path(__file__).resolve().parent
-TEST_DATA = HERE / "test_data"
+TEST_DATA = HERE / "test-data"
 
 # window and ion of the report that was built in the notebook
 RT_RANGE = (455.0, 462.0)
@@ -46,7 +46,7 @@ def mzml_folder():
     Inputs:
         none=pytest fixture without arguments
     outputs:
-        mzml_folder=path to test_data, tests using it are skipped while the dummy
+        mzml_folder=path to test-data, tests using it are skipped while the dummy
             files are missing
     """
     if not list(TEST_DATA.glob("*.mzml")):
@@ -152,6 +152,36 @@ def two_measurements():
     )
 
     return [("first", first), ("second", second)]
+
+
+
+def binned_frame():
+    """
+    Measurement with more peaks than the 50 x 50 bins of pyopenms_viz, so every
+    panel built from it is aggregated.
+
+    The tall peak (150 million) lies outside the ion box of the constants of
+    this module and shares its rt / mz bin with the two dim peaks inside the
+    box: binning averages it with them when everything is coloured, but leaves
+    it alone when only the ion box is coloured.
+
+    Inputs:
+        none=this frame is fixed, it has no arguments
+    outputs:
+        df=DataFrame with 2603 peaks whose tallest bin average is lower than
+            its tallest peak
+    """
+    n_filler = 2600
+
+    return pd.DataFrame(
+        {
+            "rt": [ION_RT, ION_RT, ION_RT + 0.01]
+            + [457.0 + (i % 130) * 0.02 for i in range(n_filler)],
+            "mz": [ION_MZ - 0.05, ION_MZ, ION_MZ]
+            + [324.0 + (i // 130) * 0.002 for i in range(n_filler)],
+            "intensity": [1.5e8, 100.0, 100.0] + [1000.0] * n_filler,
+        }
+    )
 
 
 
@@ -676,6 +706,85 @@ def test_build_peakmap_figure_shares_camera_and_ranges():
 
 
 
+# ---------------------------------------------------------------- drawn ranges
+def test_intensity_axis_follows_the_drawn_bars():
+    """
+    The z axis is scaled to the tallest bar that is drawn, not to the data.
+
+    Binning averages the tall peak with the dim peaks of its bin when
+    everything is coloured, so the tallest bar is lower than the tallest peak
+    and the axis has to follow the bar.
+
+    Inputs:
+        none=uses binned_frame
+    outputs:
+        none=the test only asserts
+    """
+    panel_ranges = utils.shared_axis_ranges([("binned", binned_frame())])
+
+    for colour_all, tallest_bar in ((True, (1.5e8 + 100.0 + 100.0) / 3), (False, 1.5e8)):
+        df = binned_frame()
+        utils.label_peaks(
+            df,
+            colour_all=colour_all,
+            ion_mz=ION_MZ,
+            ion_rt=ION_RT,
+            mz_to_colour_ppm=MZ_TO_COLOUR_PPM,
+            rt_to_colour=RT_TO_COLOUR,
+        )
+        figure = utils.build_peakmap_figure(df, color_range=(0.0, 9.0), panel_ranges=panel_ranges)
+
+        z_max = utils.apply_shared_intensity_range([figure], utils.drawn_intensity_max([figure]))
+        scene = figure.to_plotly_json()["layout"]["scene"]
+
+        assert z_max == pytest.approx(tallest_bar)
+        assert scene["zaxis"]["range"] == pytest.approx([0.0, tallest_bar])
+
+
+
+def test_color_bar_spans_the_drawn_stems():
+    """
+    The color scale endpoints come from the stems that are actually drawn.
+
+    Binning averages the peaks of every cell separately for the coloured and
+    the grey stems, so the drawn colored stems decide where the scale starts
+    and ends, and the grey trace keeps its flat lightgray.
+
+    Inputs:
+        none=uses binned_frame
+    outputs:
+        none=the test only asserts
+    """
+    tall_bin_mean = (1.5e8 + 100.0 + 100.0) / 3
+
+    for colour_all, drawn in (
+        (True, (math.log10(1000.0 + 1), math.log10(tall_bin_mean + 1))),
+        (False, (math.log10(100.0 + 1), math.log10(100.0 + 1) + 1)),
+    ):
+        df = binned_frame()
+        utils.label_peaks(
+            df,
+            colour_all=colour_all,
+            ion_mz=ION_MZ,
+            ion_rt=ION_RT,
+            mz_to_colour_ppm=MZ_TO_COLOUR_PPM,
+            rt_to_colour=RT_TO_COLOUR,
+        )
+        figure = utils.build_peakmap_figure(df, color_range=(0.0, 9.0), panel_ranges=None)
+
+        assert utils.drawn_color_range([figure]) == pytest.approx(drawn)
+
+        utils.apply_shared_color_range([figure], drawn)
+
+        for trace in figure.data:
+            if trace.name == utils.UNKNOWN_LABEL:
+                assert trace.line.color == "lightgray"
+            else:
+                assert trace.line.cmin == pytest.approx(drawn[0])
+                assert trace.line.cmax == pytest.approx(drawn[1])
+
+
+
 # ---------------------------------------------------------------- report
 def test_write_report_embeds_every_panel(tmp_path):
     """
@@ -1070,6 +1179,52 @@ def test_main_writes_a_report_for_a_selected_range(mzml_folder, tmp_path):
     assert code == 0
     assert {"Cholesterol 1TMS", utils.UNKNOWN_LABEL} <= trace_names(config)
     assert "Cholesterol 1TMS in raw data" in html
+
+
+
+def test_main_scales_the_axes_to_the_drawn_bars(mzml_folder, tmp_path):
+    """
+    The report axis follows the tallest bar the panels actually draw.
+
+    The dummy files hold more peaks than the 50 x 50 bins of pyopenms_viz, so
+    the tallest bar is a bin average below the tallest peak and the intensity
+    axis of every panel has to match it.
+
+    Inputs:
+        mzml_folder=fixture with the dummy .mzml files
+        tmp_path=pytest fixture with an empty temporary folder
+    outputs:
+        none=the test only asserts
+    """
+    output_file = tmp_path / "scaled.html"
+
+    code = main.main(
+        [
+            "--mzml_folder", str(mzml_folder),
+            "--rt-min", "455", "--rt-max", "462",
+            "--mz-min", "324", "--mz-max", "333",
+            "--output", str(output_file),
+        ]
+    )
+    config = peakmap_config(output_file.read_text(encoding="utf8"))
+
+    tallest_bar = max(
+        z
+        for panel in config["figures"]
+        for trace in panel["data"]
+        for z in (trace.get("z") or [])
+        if z is not None
+    )
+    raw_max = max(
+        df["intensity"].max()
+        for _, df in utils.load_mzml_folder(str(mzml_folder), (455.0, 462.0), (324.0, 333.0))
+    )
+
+    assert code == 0
+    # binning lowered the tallest bar below the tallest peak of the window
+    assert tallest_bar < raw_max
+    for panel in config["figures"]:
+        assert panel["layout"]["scene"]["zaxis"]["range"] == pytest.approx([0.0, tallest_bar])
 
 
 

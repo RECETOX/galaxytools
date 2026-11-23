@@ -406,6 +406,125 @@ def build_peakmap_figure(
 
 
 
+def drawn_intensity_max(figures):
+    """
+    Height of the tallest bar that the figures actually draw.
+
+    Binning inside pyopenms_viz can draw stems below the raw peak heights, so
+    the intensity axis has to follow the bars on the page instead of the data.
+
+    Inputs:
+        figures=list of plotly Figures of the panels, as built by build_peakmap_figure
+    outputs:
+        z_max=largest non-None z coordinate of any trace, the height of the
+            tallest drawn bar of the report
+    """
+
+    z_values = [
+        float(z)
+        for figure in figures
+        for trace in figure.data
+        for z in (trace.z or [])
+        if z is not None
+    ]
+
+    if not z_values:
+        raise ValueError("no drawn bars in any figure")
+
+    return max(z_values)
+
+
+
+def apply_shared_intensity_range(figures, z_max):
+    """
+    Scale the intensity axis of every figure to the tallest drawn bar.
+
+    Inputs:
+        figures=list of plotly Figures of the panels, as built by build_peakmap_figure
+        z_max=height of the tallest drawn bar, from drawn_intensity_max
+    outputs:
+        applied=z_max with a floor of 1.0, so that a window of zero height
+            peaks still gets a visible axis; what the figures now show
+    """
+
+    applied = max(float(z_max), 1.0)
+
+    for figure in figures:
+        figure.update_scenes(zaxis_range=[0.0, applied])
+
+    return applied
+
+
+
+def drawn_color_range(figures, unknown_label=UNKNOWN_LABEL):
+    """
+    Common log10 intensity range of the coloured stems the figures draw.
+
+    The stem colours are the values build_peakmap_figure writes into the color
+    array of every coloured trace, so this only collects them. A stem separator
+    has a z of None and is not drawn, so its fill value is skipped.
+
+    Inputs:
+        figures=list of plotly Figures of the panels, as built by build_peakmap_figure
+        unknown_label=name of the trace whose peaks stay grey
+    outputs:
+        cmin=lowest log10(intensity + 1) of any drawn coloured stem
+        cmax=highest log10(intensity + 1) of any drawn coloured stem
+    """
+
+    values = []
+
+    for figure in figures:
+        for trace in figure.data:
+            colors = trace.line.color
+
+            if trace.name == unknown_label or not isinstance(colors, (list, tuple)):
+                continue
+
+            values.extend(
+                float(color)
+                for z, color in zip(trace.z or [], colors)
+                if z is not None
+            )
+
+    if not values:
+        raise ValueError("no drawn coloured stems in any figure")
+
+    cmin, cmax = min(values), max(values)
+    if cmin == cmax:  # avoid a zero width color scale
+        cmax = cmin + 1
+
+    return cmin, cmax
+
+
+
+def apply_shared_color_range(figures, color_range, unknown_label=UNKNOWN_LABEL):
+    """
+    Map the coloured stems of every figure onto the given color scale.
+
+    The colour values of the stems stay as they are, only the endpoints of the
+    mapping are rewritten, so every panel and the color bar of the header share
+    the same scale.
+
+    Inputs:
+        figures=list of plotly Figures of the panels, as built by build_peakmap_figure
+        color_range=(cmin, cmax) shared log10 intensity range, from drawn_color_range
+        unknown_label=name of the trace whose peaks stay grey
+    outputs:
+        none=the figures are updated in place
+    """
+
+    cmin, cmax = color_range
+
+    for figure in figures:
+        for trace in figure.data:
+            if trace.name == unknown_label or not isinstance(trace.line.color, (list, tuple)):
+                continue
+
+            trace.line.update(cmin=cmin, cmax=cmax)
+
+
+
 def color_scale_ticks(cmin, cmax, ticks=color_bar_ticks):
     """
     Numeric labels of the color bar of the header.
