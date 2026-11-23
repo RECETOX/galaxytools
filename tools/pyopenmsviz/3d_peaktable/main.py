@@ -218,8 +218,9 @@ def create_peakmap_report(arguments):
     outputs:
         report=dict with the keys "output_file" (path of the written HTML file),
             "measurements" (number of panels), "names" (titles of the panels),
-            "color_range" (shared log10 intensity range) and "axis_ranges"
-            (shared rt / mz / intensity ranges)
+            "color_range" (shared log10 intensity range of the drawn coloured
+            stems) and "axis_ranges" (shared rt / mz / intensity ranges, the
+            intensity one scaled to the tallest drawn bar)
     """
     rt_range = (arguments.rt_min, arguments.rt_max)
     mz_range = (arguments.mz_min, arguments.mz_max)
@@ -264,6 +265,16 @@ def create_peakmap_report(arguments):
         )
         panel_titles.append(str(name))
         panel_meta.append(utils.panel_summary(sample_df))
+
+    # Binning inside pyopenms_viz can draw the bars below the raw peak heights
+    # and differently for the coloured and the grey stems, so the intensity axis
+    # and the color scale follow the bars that are actually on the page.
+    z_max = utils.drawn_intensity_max(peakmap_figures)
+    z_max = utils.apply_shared_intensity_range(peakmap_figures, z_max)
+    panel_ranges["intensity"] = [0.0, z_max]
+
+    color_rng = utils.drawn_color_range(peakmap_figures)
+    utils.apply_shared_color_range(peakmap_figures, color_rng)
 
     output_file = utils.write_synchronized_peakmaps_html(
         peakmap_figures,
