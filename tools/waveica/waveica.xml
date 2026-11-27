@@ -1,4 +1,4 @@
-<tool id="waveica" name="WaveICA" version="@TOOL_VERSION@+galaxy10" profile="23.0">
+<tool id="waveica" name="WaveICA" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="23.0">
     <description>removal of batch effects for untargeted metabolomics data</description>
     <macros>
         <import>macros.xml</import>

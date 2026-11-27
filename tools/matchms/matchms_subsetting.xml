@@ -1,4 +1,4 @@
-<tool id="matchms_subsetting" name="matchms subsetting" version="@TOOL_VERSION@+galaxy0" profile="23.0" license="MIT">
+<tool id="matchms_subsetting" name="matchms subsetting" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="23.0" license="MIT">
     <description>Extract spectra from a library given unique metadata identifier</description>
     
     <macros>
@@ -107,6 +107,6 @@ matchms.exporting.save_as_msp(filtered_spectra.tolist(), '${output}')
     </help>
 
     <citations>
-        <citation type="doi">https://doi.org/10.5281/zenodo.8083373</citation>
+        <citation type="doi">10.5281/zenodo.8083373</citation>
     </citations>
 </tool>

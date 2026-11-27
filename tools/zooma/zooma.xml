@@ -9,7 +9,10 @@
         <requirement type="package" version="2.32.3">requests</requirement>
     </requirements>
 
-    <command detect_errors="aggressive"><![CDATA[
+    <!-- exit_code, not aggressive: a batch that fails twice is skipped and reported on
+         stdout while the job still succeeds, and those WARNING lines quote API messages
+         containing "error:", which aggressive detection would treat as fatal. -->
+    <command detect_errors="exit_code"><![CDATA[
         python '$__tool_directory__/zooma.py'
             --input '$input'
             --output '$output'
@@ -22,6 +25,7 @@
             #end if
             --health-url 'https://www.ebi.ac.uk/spot/zooma/v3/api/health'
             --timeout '60'
+            --batch-size '$batch_size'
     ]]></command>
 
     <inputs>
@@ -31,21 +35,94 @@
             <option value="annotate">Annotate (legacy endpoint)</option>
             <option value="map" selected="true">Map (v3 endpoint)</option>
         </param>
+        <param name="batch_size" type="integer" value="100" min="1" max="1000" label="Batch size" help="Number of query values processed per API request in Map mode. In Annotate mode values are still queried one by one, but a batch is retried and skipped as a unit. Reduce the value if requests time out." />
     </inputs>
 
     <outputs>
-        <data name="output" format="tabular" />
+        <data name="output" format="tabular" label="ZOOMA ${mode} based on column ${query_column} in ${on_string}" />
     </outputs>
 
     <tests>
+        <!-- Map mode sends the whole batch in one request and writes one row per
+             candidate, mapping each candidate back to the value it came from. -->
         <test>
             <param name="input" value="input.tsv" ftype="tabular" />
             <param name="query_column" value="1" />
             <output name="output" ftype="tabular">
                 <assert_contents>
-                    <has_n_lines n="150" delta="50"/>
+                    <has_n_columns n="8" />
+                    <has_line line="query&#009;property_value&#009;property_type&#009;semantic_tags&#009;confidence&#009;source_name&#009;source_type&#009;study_type" />
+                    <has_line_matching expression="asthma&#009;.*&#009;MONDO_0004979&#009;.*" />
+                    <has_line_matching expression="asthma&#009;.*&#009;DOID_2841&#009;.*" />
+                    <has_line_matching expression="unknown&#009;.*&#009;CDAO_0000222&#009;.*" />
                 </assert_contents>
             </output>
+        </test>
+
+        <!-- Annotate mode queries each value separately through the v2 endpoint,
+             which returns curated annotations rather than ontology candidates. -->
+        <test>
+            <param name="input" value="input.tsv" ftype="tabular" />
+            <param name="query_column" value="1" />
+            <param name="mode" value="annotate" />
+            <output name="output" ftype="tabular">
+                <assert_contents>
+                    <has_n_columns n="8" />
+                    <has_line_matching expression="asthma&#009;asthma&#009;.*&#009;HIGH&#009;.*" />
+                    <has_line_matching expression="unknown&#009;.*" min="1" />
+                </assert_contents>
+            </output>
+        </test>
+
+        <!-- Four values at batch size 2, one of them repeated: batching must neither
+             lose nor duplicate rows, so each row keeps only its own candidates. -->
+        <test>
+            <param name="input" value="input_batching.tsv" ftype="tabular" />
+            <param name="query_column" value="1" />
+            <param name="batch_size" value="2" />
+            <output name="output" ftype="tabular">
+                <assert_contents>
+                    <!-- header + heart mass (2) + asthma (10) + liver cancer (6) + heart mass (2) -->
+                    <has_n_lines n="21" />
+                    <has_line_matching expression="heart mass&#009;.*" n="4" />
+                    <has_line_matching expression="asthma&#009;.*" n="10" />
+                    <has_line_matching expression="liver cancer&#009;.*" n="6" />
+                </assert_contents>
+            </output>
+        </test>
+
+        <!-- ZOOMA rejects values longer than 1000 characters, so that batch is
+             retried, reported on stdout and skipped while the other values are kept.
+             The job must still succeed. -->
+        <test>
+            <param name="input" value="input_overlong.tsv" ftype="tabular" />
+            <param name="query_column" value="1" />
+            <param name="batch_size" value="1" />
+            <assert_stdout>
+                <has_line_matching expression="WARNING: batch 2 failed, retrying once\. Reason: .*" />
+                <has_line_matching expression="WARNING: batch 2 failed twice, skipping 1 value\(s\): .*" />
+            </assert_stdout>
+            <output name="output" ftype="tabular">
+                <assert_contents>
+                    <!-- header + heart mass (2) + liver cancer (6); the overlong value is dropped -->
+                    <has_n_lines n="9" />
+                    <has_line_matching expression="heart mass&#009;.*" n="2" />
+                    <has_line_matching expression="liver cancer&#009;.*" n="6" />
+                    <has_text text="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" negate="true" />
+                </assert_contents>
+            </output>
+        </test>
+
+        <!-- Two batches failing one after another means the service is considered
+             unavailable, so the job fails rather than returning silent partial output. -->
+        <test expect_failure="true">
+            <param name="input" value="input_two_overlong.tsv" ftype="tabular" />
+            <param name="query_column" value="1" />
+            <param name="batch_size" value="1" />
+            <assert_stdout>
+                <has_line_matching expression="WARNING: batch 1 failed twice, skipping 1 value\(s\): .*" />
+                <has_line_matching expression="WARNING: batch 2 failed twice, skipping 1 value\(s\): .*" />
+            </assert_stdout>
         </test>
     </tests>
 

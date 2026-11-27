@@ -1,4 +1,4 @@
-<tool id="matchms_remove_key" name="matchms remove key" version="@TOOL_VERSION@+galaxy0" profile="23.0" license="MIT">
+<tool id="matchms_remove_key" name="matchms remove key" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="23.0" license="MIT">
     <description>Remove metadata entry for all spectra in a library</description>
     
     <macros>
@@ -83,7 +83,5 @@ matchms.exporting.save_as_msp(new_spectra, "${output}")
         attribute which will be removed from all spectra records in the MSP.
     ]]></help>
 
-    <citations>
-        <citation type="doi">10.5281/zenodo.6035335</citation>
-    </citations>
+    <expand macro="citations"/>
 </tool>

@@ -1,5 +1,6 @@
 <macros>
     <token name="@TOOL_VERSION@">0.5.4</token>
+    <token name="@VERSION_SUFFIX@">8</token>
 
     <xml name="creator">
         <creator>
@@ -34,7 +35,7 @@
     </xml>
     <xml name="citations">
         <citations>
-            <citation type="doi">https://doi.org/10.1021/acs.analchem.9b05765</citation>
+            <citation type="doi">10.1021/acs.analchem.9b05765</citation>
         </citations>
     </xml>
     <token name="@HELP@"><![CDATA[

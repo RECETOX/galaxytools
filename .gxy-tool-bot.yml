@@ -1,0 +1,63 @@
+api:
+  base_url: https://llm.ai.e-infra.cz/v1   # or https://api.openai.com/v1
+  model: agentic                       # or gpt-4o, etc.
+  fallback_models:                          # optional; tried in order if primary fails
+    - thinker
+    - mini
+  max_tool_iterations: 25
+  # Optional: scale validation retry rounds by the number of tool XMLs in the plan.
+  # The generator gets max_validation_retries + validation_retries_per_extra_tool_xml * (N - 1)
+  # rounds, where N is the number of tool wrapper XMLs (macros.xml is not counted).
+  # Each round gets the full max_tool_iterations budget. 0 (default) disables scaling.
+  # e.g. with max_validation_retries=3 and validation_retries_per_extra_tool_xml=1,
+  # a 4-XML tool family gets 3 + 1*(4-1) = 6 rounds of 25 iterations each.
+  validation_retries_per_extra_tool_xml: 0
+  temperature_plan: 0.4
+  temperature_generate: 0.2
+  max_context_chars: 100000
+  max_validation_retries: 3
+  read_timeout: 600                         # seconds; increase for slow models
+
+exemplars:
+  - url: https://raw.githubusercontent.com/galaxyproject/tools-iuc/main/tools/bcftools/bcftools_view.xml
+    macros: https://raw.githubusercontent.com/galaxyproject/tools-iuc/main/tools/bcftools/macros.xml
+    shed_yml: https://raw.githubusercontent.com/galaxyproject/tools-iuc/main/tools/bcftools/.shed.yml
+  - url: https://raw.githubusercontent.com/galaxyproject/tools-iuc/main/tools/seqtk/seqtk_seq.xml
+    macros: https://raw.githubusercontent.com/galaxyproject/tools-iuc/main/tools/seqtk/macros.xml
+    shed_yml: https://raw.githubusercontent.com/galaxyproject/tools-iuc/main/tools/seqtk/.shed.yml
+
+# repo is optional — falls back to GITHUB_REPOSITORY env var (set automatically in GitHub Actions)
+repo: RECETOX/galaxytools
+
+# tool_owner is optional — defaults to 'iuc' for galaxyproject/tools-iuc,
+# otherwise the GitHub repo owner (first part of owner/repo)
+tool_owner: recetox
+
+allowed_maintainers:
+  - hechth
+  - mbodova
+
+# Integrated self-review: runs a review agent after generate/feedback flows
+# and feeds findings back to the original agent for fix rounds.
+#   "never" (default) — no integrated review
+#   "on-validation-pass" — review only after validation passes
+#   "always" — review after completion regardless of validation status
+integrated_review_mode: never
+# Max review→fix rounds in integrated mode. Each round: review → feed findings → agent fixes.
+# Default 1. 0 disables integrated review even if integrated_review_mode is set.
+max_review_fix_rounds: 1
+
+# Scheduled autoupdates (see "Scheduled autoupdates" below): detects newer
+# versions of each tool's main conda requirement and opens a PR per tool.
+# Disabled unless enabled: true.
+autoupdate:
+  enabled: false
+  channels:                        # conda channels checked for latest versions
+    - bioconda
+    - conda-forge
+  skip:                            # tool dirs (or XML paths) never to update
+    - my_tool
+  skip_file: autoupdate-skip.txt   # optional file with one entry per line
+  max_tools_per_run: 10            # cap on tools updated per run (0 = no cap);
+                                   # a first run on a big repo could otherwise
+                                   # fire hundreds of agent jobs at once

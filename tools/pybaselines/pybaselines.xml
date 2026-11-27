@@ -2,7 +2,7 @@
     <description>subtract baseline intensities from extracted ion chromatograms (EICs)</description>
     <macros>
         <token name="@TOOL_VERSION@">1.2.1</token>
-        <token name="@VERSION_SUFFIX@">0</token>
+        <token name="@VERSION_SUFFIX@">4</token>
     </macros>
     <requirements>
         <requirement type="package" version="@TOOL_VERSION@">pybaselines</requirement>
@@ -20,7 +20,7 @@ import numpy as np
 
 def correct_baseline(group):
     """Apply baseline correction to a single group."""
-    group = group.sort_values(by="rt").reset_index(drop=True)
+    group = group.sort_values(by="rt")
 
     x = group.rt.values
     y = group.intensity.values
@@ -28,18 +28,22 @@ def correct_baseline(group):
     base_fitter = Baseline(x)
     func = base_fitter.$method
 
-    baseline, params = func(y, lam=$lambda, max_iter=$max_iter, tol=0.1)
+    baseline, params = func(y, lam=$lambda, max_iter=$max_iter, tol=$tol)
 
-    group["intensity"] = np.maximum(np.zeros_like(y), y - baseline)
+    group["corrected"] = np.maximum(np.zeros_like(y), y - baseline)
+    group["baseline"] = baseline
     return group
 
 ## Read and group by group_number, then apply baseline correction to each group
 eics = pd.read_parquet("$infile")
-corrected = eics.groupby("group_number", group_keys=False).apply(correct_baseline)
+corrected = eics.groupby("group_number").filter(lambda x: len(x.index) > 2).groupby("group_number").apply(correct_baseline).reset_index(level=0)
 
-## Reset index on final result
-corrected = corrected.reset_index(drop=True)
-corrected.to_parquet("$outfile")
+if "$output_baseline" == "TRUE":
+    baseline = corrected.copy()
+    baseline.to_parquet("$baselinefile", index=False)
+
+corrected = corrected.drop(columns=["baseline", "intensity"]).rename(columns={"corrected" : "intensity"})
+corrected.to_parquet("$outfile", index=False)
         ]]></configfile>
     </configfiles>
     <inputs>
@@ -59,19 +63,39 @@ corrected.to_parquet("$outfile")
         </param>
         <param argument="lambda" type="integer" min="1" max="100000" value="1000" label="Smoothing strength (lambda)" help="Controls baseline smoothness. Larger values produce a smoother baseline and usually stronger background removal; smaller values follow local intensity changes more closely." />
         <param argument="max_iter" type="integer" min="1" max="100" value="50" label="Maximum optimization iterations" help="Upper limit for algorithm iterations per EIC group. Increase if baseline fitting does not converge; decrease for faster runtime on large datasets." />
+        <param name="tol" type="select" label="Accuracy" help="Accuracy of the model fit for baseline estimation.">
+            <option value="0.1">low</option>
+            <option value="0.01">medium</option>
+            <option value="0.001" selected="true">high</option>
+        </param>
+        <param name="output_baseline" type="boolean" truevalue="TRUE" falsevalue="FALSE" checked="false" label="Output estimated baseline" help="Create an additional parquet table containing the estimated baseline for each EIC." />
     </inputs>
     <outputs>
         <data name="outfile" format="parquet" label="${tool.name} on ${on_string}" />
+        <data name="baselinefile" format="parquet" label="${tool.name} baseline on ${on_string}">
+            <filter>output_baseline</filter>
+        </data>
     </outputs>
     <tests>
-        <test>
+        <test expect_num_outputs="1">
             <param name="infile" value="input.parquet"/>
-            <param name="method" value="lsrpls"/>
             <param name="lambda" value="600"/>
-            <param name="max_iter" value="50"/>
-            <output name="outfile" file="result.parquet"/>
+            <output name="outfile" file="result.parquet" compare="sim_size" delta="20"/>
         </test>
-
+        <test expect_num_outputs="1">
+            <param name="infile" value="multi_eic.parquet"/>
+            <param name="method" value="airpls"/>
+            <param name="lambda" value="100"/>
+            <param name="tol" value="0.1"/>
+            <output name="outfile" file="multi_eic_result.parquet" compare="sim_size" delta="20"/>
+        </test>
+        <test expect_num_outputs="2">
+            <param name="infile" value="input.parquet"/>
+            <param name="lambda" value="600"/>
+            <param name="output_baseline" value="TRUE"/>
+            <output name="outfile" file="result.parquet" compare="sim_size" delta="20"/>
+            <output name="baselinefile" file="baseline.parquet" compare="sim_size" delta="20"/>
+        </test>
     </tests>
     <help><![CDATA[
 
@@ -116,27 +140,34 @@ Other columns are preserved.
 
 - **Baseline correction algorithm**: Selects the Whittaker-smoothing-based
     baseline estimator (for example ``lsrpls``, ``asls``, ``airpls``, ``arpls``).
-    Different datasets may perform better with different algorithms.
+    The Whittaker smoothing algorithms are based on Penalised Least Squares. 
+    The available methods are all conceptually similar, using only a different 
+    weighting matrix in the minimised objective function. Different datasets 
+    may perform better with different algorithms.
 - **Smoothing strength (lambda)**: Controls how smooth the estimated baseline
-    is. Larger values generally yield a smoother baseline and can remove more
-    low-frequency background; smaller values track local variation more closely.
+    is. Larger values yield a smoother baseline and is usually a more conservative 
+    estimate of the baseline. Smaller values fit the baseline more closely, 
+    removing more peak abundance. 
 - **Maximum optimization iterations**: Upper bound on solver iterations for
     each group. Increase if fitting appears unstable or does not converge.
 
 
 **Output**
 
-- A parquet table with the same row-level structure as input.
-- The ``intensity`` column contains baseline-corrected values.
-- Negative corrected intensities are clipped to zero.
+- A parquet table with the same row-level structure as input. The ``intensity``
+  column contains baseline-corrected values, and negative values are clipped to zero.
+- Optionally, a parquet table with estimated baseline values in the ``intensity``
+  column. Both outputs preserve the EIC identifiers and other input columns.
 
 
 **Notes**
 
 - Runtime scales with the number of groups and points per group.
-- If correction is too aggressive, try lowering ``lambda``.
-- If residual baseline remains, try increasing ``lambda`` or testing a
+- If correction is too aggressive, try increasing ``lambda``.
+- If residual baseline remains, try lowering ``lambda`` or testing a
     different algorithm.
+- The ``lambda`` value required to fit a particular baseline will
+    increase as the number of data points increases.
 
     ]]></help>
     <citations>

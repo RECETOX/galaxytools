@@ -2,6 +2,7 @@
     <token name="@PANDAS_VERSION@">3.0.2</token>
     <token name="@SCIPY_VERSION@">1.17.1</token>
     <token name="@PROFILE_VERSION@">25.1</token>
+    <token name="@VERSION_SUFFIX@">1</token>
 
     <xml name="requirement_pandas_pyarrow">
         <requirement type="package" version="@PANDAS_VERSION@">pandas</requirement>

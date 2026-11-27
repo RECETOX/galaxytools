@@ -1,4 +1,4 @@
-<tool id="filter_orgmet_anorg" name="Filter organometallics and/or anorganics" version="@TOOL_VERSION@+galaxy@GALAXY_VERSION@">
+<tool id="filter_orgmet_anorg" name="Filter organometallics and/or anorganics" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@">
     <description>from a library of compounds</description>
     <macros>
         <import>macros.xml</import>
@@ -45,7 +45,7 @@
         ]]>
     </help>
     <citations>
-        <citation type="doi">https://doi.org/10.5281/zenodo.6035335</citation>
+        <citation type="doi">10.5281/zenodo.6035335</citation>
     </citations>
 </tool>
 
