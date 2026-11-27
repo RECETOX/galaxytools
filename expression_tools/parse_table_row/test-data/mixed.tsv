@@ -1,0 +1,4 @@
+min_run	mz_tol	weighting	min_pres	study
+3	0.01	False	0.9	pos
+4.2	2.5e-3	no	0.8	_NEG metabolomics
+10	1e-5	TRUE	0.5	HILIC
