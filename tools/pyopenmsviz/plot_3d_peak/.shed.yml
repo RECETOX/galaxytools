@@ -1,0 +1,20 @@
+name: plot_peakmaps
+owner: recetox
+remote_repository_url: "https://github.com/RECETOX/galaxytools/tree/master/tools/pyopenmsviz/3d_peaktable"
+homepage_url: "https://github.com/OpenMS/pyopenms_viz/"
+categories:
+  - Visualization
+  - Metabolomics
+description: "3D peakmap report for a collection of mzML files."
+long_description: |
+  Reads every mzML file of the input collection, cuts it to the retention time
+  and m/z window and writes one HTML report with one 3D peakmap panel per
+  measurement. All panels share the same rotation, the same rt / m/z / intensity
+  window and the same log10(intensity + 1) colour scale.
+auto_tool_repositories:
+  name_template: "{{ tool_id }}"
+  description_template: "{{ tool_name }} tool from the pyopenmsviz suite"
+suite:
+  name: suite_plot_peakmaps
+  description: 3D peakmap plotting
+  type: repository_suite_definition

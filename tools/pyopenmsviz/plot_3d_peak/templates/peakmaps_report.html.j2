@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ page_title }}</title>
+<style>
+  :root { color-scheme: light; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #f5f5f7; color: #1d1d1f;
+         font: 14px/1.45 -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+  .toolbar { position: sticky; top: 0; z-index: 10; background: #ffffff;
+             border-bottom: 1px solid #d8d8de; padding: 10px 16px;
+             display: flex; flex-wrap: wrap; gap: 10px 24px; align-items: center; }
+  .toolbar h1 { font-size: 17px; margin: 0; }
+  .hint { margin: 2px 0 0; color: #6b6b72; font-size: 12px; }
+  .controls { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-left: auto; }
+  .controls input[type="search"] { padding: 5px 8px; border: 1px solid #c7c7ce;
+             border-radius: 6px; min-width: 220px; font: inherit; }
+  .controls label { display: inline-flex; gap: 5px; align-items: center; color: #3c3c43; }
+  .controls button { padding: 5px 11px; border: 1px solid #c7c7ce; border-radius: 6px;
+             background: #fafafc; font: inherit; cursor: pointer; }
+  .controls button:hover { background: #eeeeF3; }
+  .status { color: #6b6b72; font-size: 12px; min-width: 150px; }
+  .scale { display: flex; align-items: center; gap: 10px; flex-basis: 100%; }
+  .scale-name { color: #3c3c43; font-size: 12px; white-space: nowrap; }
+  .scale-bar { width: 220px; height: 10px; border-radius: 5px; border: 1px solid #c7c7ce; }
+  .scale-ticks { position: relative; height: 14px; width: 220px; font-size: 11px; color: #6b6b72; }
+  .scale-ticks .cb-tick { position: absolute; transform: translateX(-50%); }
+  #grid { display: grid; gap: {{ grid_gap }}px; padding: {{ grid_gap }}px;
+          grid-template-columns: repeat(auto-fill,
+            minmax(min(100%, max({{ min_column_width }}px,
+              calc((100% - {{ grid_gap * (panels_per_row - 1) }}px) / {{ panels_per_row }}))), 1fr)); }
+  .panel { background: #fff; border: 1px solid #e0e0e6; border-radius: 8px; padding: 6px 8px 2px; }
+  .panel.hidden { display: none; }
+  .panel.driving { border-color: #2f6fdd; box-shadow: 0 0 0 2px rgba(47, 111, 221, .25); }
+  .panel-head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px;
+                margin: 0 0 2px; font-size: 13px; font-weight: 600; }
+  .panel-meta { font-weight: 400; color: #6b6b72; font-size: 11px; }
+  .plot { width: 100%; }
+  /* a panel whose WebGL context the browser took away shows this instead of a plot */
+  .plot.note { display: flex; align-items: center; justify-content: center;
+               color: #9a9aa2; font-size: 12px; text-align: center; padding: 0 24px; }
+</style>
+</head>
+<body>
+<header class="toolbar">
+  <div>
+    <h1>{{ page_title }}</h1>
+    <p class="hint">{{ hint }}</p>
+  </div>
+  <div class="controls">
+    <input id="filter" type="search" placeholder="Filter {{ panels|length }} measurements" aria-label="Filter measurements">
+    <label><input type="checkbox" id="sync-rotation" checked> sync rotation</label>
+    <label><input type="checkbox" id="sync-axes" checked> sync axes</label>
+    <button id="reset-view" type="button">Reset all views</button>
+    <span class="status" id="status"></span>
+  </div>
+  <div class="scale">
+    <span class="scale-name">{{ color_label }}</span>
+    <span class="scale-bar" style="background: {% if color_stops %}linear-gradient(to right, {{ color_stops|join(', ') }}){% else %}transparent{% endif %}"></span>
+    <span class="scale-ticks">{% for tick in color_ticks %}<span class="cb-tick" style="left:{{ '%.2f'|format(tick.position) }}%">{{ '%.1f'|format(tick.value) }}</span>{% endfor %}</span>
+  </div>
+</header>
+<main id="grid">
+{%- for panel in panels %}
+    <section class="panel" data-name="{{ panel.name }}">
+      <h2 class="panel-head">
+        <span class="panel-title">{{ panel.name }}</span>
+        <span class="panel-meta">{{ panel.meta }}</span>
+      </h2>
+      <div class="plot" style="height: {{ panel.height }}px"></div>
+    </section>
+{%- endfor %}
+</main>
+{# plotly is bundled so the file works offline, both payloads are raw javascript #}
+<script>{{ plotly_js|safe }}</script>
+<script>window.peakmapConfig = {{ config_json|safe }};</script>
+<script>
+{% include "peakmaps_report.js" %}</script>
+</body>
+</html>

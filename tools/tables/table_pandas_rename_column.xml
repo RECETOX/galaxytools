@@ -37,6 +37,7 @@
                 <sanitizer invalid_char="">
                     <valid initial="string.letters,string.digits">
                         <add value="_" />
+                        <add value=" " />
                     </valid>
                 </sanitizer>
                 <validator type="regex">[0-9a-zA-Z_]+</validator>

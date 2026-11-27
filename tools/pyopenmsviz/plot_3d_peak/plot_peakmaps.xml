@@ -1,0 +1,213 @@
+<tool id="plot_peakmaps" name="Plot 3D peakmaps" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="25.1" license="MIT">
+    <description>from a collection of mzML files</description>
+    <macros>
+        <token name="@TOOL_VERSION@">1.0.0</token>
+        <token name="@VERSION_SUFFIX@">0</token>
+    </macros>
+    <edam_topics>
+        <edam_topic>topic_0092</edam_topic>
+        <edam_topic>topic_3172</edam_topic>
+        <edam_topic>topic_3370</edam_topic>
+    </edam_topics>
+    <edam_operations>
+        <edam_operation>operation_3203</edam_operation>
+        <edam_operation>operation_3744</edam_operation>
+        <edam_operation>operation_2940</edam_operation>
+    </edam_operations>
+    <creator>
+        <organization url="https://www.recetox.muni.cz/" email="GalaxyToolsDevelopmentandDeployment@space.muni.cz" name="RECETOX MUNI" />
+        <organization url="https://www.eu-parc.eu/thematic-areas/tools-resources/innovative-methods-tools" email="MSOmics@space.muni.cz" name="PARC WP7" />
+    </creator>
+    <requirements>
+        <requirement type="package" version="3.6.0">pyopenms</requirement>
+        <requirement type="package" version="1.0.1">pyopenms-viz</requirement>
+        <requirement type="package" version="5.24.1">plotly</requirement>
+        <requirement type="package" version="3.1.6">jinja2</requirement>
+    </requirements>
+    <command detect_errors="exit_code"><![CDATA[
+        mkdir -p 'mzml' &&
+        #for $f in $input_files:
+            ln -s '${f}' 'mzml/${f.element_identifier}.${f.ext}' &&
+        #end for
+        python3 '${__tool_directory__}/main.py'
+            --mzml_folder 'mzml'
+            --rt-min $rt_min
+            --rt-max $rt_max
+            --mz-min $mz_min
+            --mz-max $mz_max
+            #if str($colouring.mode) == 'ion':
+                --no-colour-all
+                --ion-mz $colouring.ion_mz
+                --ion-rt $colouring.ion_rt
+                --mz-to-colour-ppm $colouring.mz_to_colour_ppm
+                --rt-to-colour $colouring.rt_to_colour
+            #end if
+            --annotation '${annotation}'
+            #if $title:
+                --title '${title}'
+            #end if
+            --colorscale '${advanced.colorscale}'
+            --panel-width $advanced.panel_width
+            --panel-height $advanced.panel_height
+            --panels-per-row $advanced.panels_per_row
+            --max-live-plots $advanced.max_live_plots
+            --output '$report'
+    ]]></command>
+    <inputs>
+        <param name="input_files" type="data_collection" format="mzml" collection_type="list" label="Input mzML files" help="Every file of the collection becomes one panel titled after its element identifier; files without peaks inside the displayed window are skipped. Avoid the glob special characters '[', '*' and '?' in the identifiers." />
+        <param name="rt_min" type="float" label="Lowest retention time to display" help="In the time unit of the mzML files." />
+        <param name="rt_max" type="float" label="Highest retention time to display" help="In the time unit of the mzML files; has to be larger than the lowest retention time." />
+        <param name="mz_min" type="float" label="Lowest m/z to display" />
+        <param name="mz_max" type="float" label="Highest m/z to display" help="Has to be larger than the lowest m/z." />
+        <conditional name="colouring">
+            <param name="mode" type="select" label="Colouring mode" help="Colour every peak of the displayed window, or only the peaks around one selected ion and draw everything else lightgray.">
+                <option value="colour_all" selected="true">Colour every peak of the displayed window</option>
+                <option value="ion">Colour only the box around one ion</option>
+            </param>
+            <when value="colour_all" />
+            <when value="ion">
+                <param name="ion_mz" type="float" label="m/z of the ion to colour" help="Centre of the coloured m/z box." />
+                <param name="ion_rt" type="float" label="Retention time of the ion to colour" help="Centre of the coloured retention time box, in the time unit of the mzML files." />
+                <param name="mz_to_colour_ppm" type="float" value="5" min="0" label="Half width of the coloured m/z box (ppm)" help="In ppm of the ion m/z." />
+                <param name="rt_to_colour" type="float" value="2" min="0" label="Half width of the coloured retention time box" help="In the time unit of the mzML files." />
+            </when>
+        </conditional>
+        <param name="annotation" type="text" value="target" label="Annotation" help="Name of the coloured region; it is the legend entry and part of the default report title." />
+        <param name="title" type="text" optional="true" label="Report title" help="Leave empty to use the default ('&lt;annotation&gt; in raw data')." />
+        <section name="advanced" title="Report layout">
+            <param name="colorscale" type="select" label="Colour scale" help="Plotly colourscale of the coloured peaks.">
+                <option value="Plasma" selected="true">Plasma</option>
+                <option value="Viridis">Viridis</option>
+                <option value="Cividis">Cividis</option>
+                <option value="Turbo">Turbo</option>
+                <option value="Hot">Hot</option>
+                <option value="Jet">Jet</option>
+            </param>
+            <param name="panel_width" type="integer" value="640" min="200" label="Panel width" help="Smallest panel width in pixels." />
+            <param name="panel_height" type="integer" value="520" min="200" label="Panel height" help="Height of every panel in pixels." />
+            <param name="panels_per_row" type="integer" value="3" min="1" max="8" label="Panels per row" help="Largest number of panels next to each other." />
+            <param name="max_live_plots" type="integer" value="6" min="1" max="16" label="Maximum live plots" help="Hard limit of plotly graphs the browser may keep alive at once (WebGL context budget). Do not raise above about 10 unless the report freezes in your browser." />
+        </section>
+    </inputs>
+    <outputs>
+        <data name="report" format="html" label="${tool.name} on ${on_string}" />
+    </outputs>
+    <tests>
+        <test expect_num_outputs="1">
+            <param name="input_files">
+                <collection type="list">
+                    <element name="dummy_peak_a" value="dummy_peak_a.mzml" />
+                    <element name="dummy_peak_b" value="dummy_peak_b.mzml" />
+                    <element name="dummy_blank" value="dummy_blank.mzml" />
+                </collection>
+            </param>
+            <param name="rt_min" value="455" />
+            <param name="rt_max" value="462" />
+            <param name="mz_min" value="324" />
+            <param name="mz_max" value="333" />
+            <conditional name="colouring">
+                <param name="mode" value="colour_all" />
+            </conditional>
+            <output name="report" ftype="html">
+                <assert_contents>
+                    <has_text text="target in raw data" />
+                    <has_text text="dummy_peak_a" />
+                    <has_text text="dummy_peak_b" />
+                    <not_has_text text="dummy_blank" />
+                    <has_text text="Filter 2 measurements" />
+                </assert_contents>
+            </output>
+        </test>
+        <test expect_num_outputs="1">
+            <param name="input_files">
+                <collection type="list">
+                    <element name="dummy_peak_a" value="dummy_peak_a.mzml" />
+                    <element name="dummy_peak_b" value="dummy_peak_b.mzml" />
+                    <element name="dummy_blank" value="dummy_blank.mzml" />
+                </collection>
+            </param>
+            <param name="rt_min" value="455" />
+            <param name="rt_max" value="462" />
+            <param name="mz_min" value="324" />
+            <param name="mz_max" value="333" />
+            <conditional name="colouring">
+                <param name="mode" value="ion" />
+                <param name="ion_mz" value="329.3203" />
+                <param name="ion_rt" value="458.6873" />
+                <param name="mz_to_colour_ppm" value="5" />
+                <param name="rt_to_colour" value="2" />
+            </conditional>
+            <param name="annotation" value="Cholesterol 1TMS" />
+            <section name="advanced">
+                <param name="colorscale" value="Viridis" />
+                <param name="panels_per_row" value="2" />
+            </section>
+            <output name="report" ftype="html">
+                <assert_contents>
+                    <has_text text="Cholesterol 1TMS in raw data" />
+                    <has_text text="dummy_peak_a" />
+                    <has_text text="dummy_peak_b" />
+                    <not_has_text text="dummy_blank" />
+                </assert_contents>
+            </output>
+        </test>
+    </tests>
+    <help><![CDATA[
+
+.. class:: infomark
+
+**What it does**
+
+Reads every mzML file of the input collection, cuts it to the retention time and
+m/z window you ask for and writes **one HTML file with one 3D peakmap panel per
+measurement**. All panels share
+
+- the same rotation (drag one plot, every plot follows),
+- the same rt / m/z / intensity window,
+- the same ``log10(intensity + 1)`` colour scale, which is drawn once in the header.
+
+**Input**
+
+- A list collection of mzML files. Every file becomes one panel titled after its
+  element identifier; files without peaks inside the displayed window are skipped.
+- The displayed retention time and m/z window (the minimum has to be smaller than
+  the maximum in both dimensions).
+
+**Colouring mode**
+
+- *Colour every peak of the displayed window*: every peak inside the displayed
+  window is coloured with the shared colour scale.
+- *Colour only the box around one ion*: only the peaks inside the m/z and
+  retention time box around the selected ion are coloured (both bounds inclusive),
+  everything else is drawn flat lightgray.
+
+**Peak aggregation**
+
+Panels with more than 2500 peaks in the displayed window are aggregated so the
+report stays responsive: the rt / m/z plane is divided into a 50 x 50 grid and
+every cell is drawn as one stem at the cell centre whose height is the mean
+intensity of the peaks of that cell (coloured and grey peaks are averaged
+separately). Individual peaks may therefore not be visible, and bar heights are
+cell averages rather than exact peak intensities. The intensity axis and the
+colour scale are scaled to the bars that are actually drawn, so they can differ
+between the colouring modes and from the raw peak intensities.
+
+**Output**
+
+A single self-contained HTML report - plotly is bundled into the file, so it can
+be opened offline. Panels are created while you scroll and thrown away again when
+they leave the page, never more than *Maximum live plots* of them at a time, so a
+collection with a hundred measurements does not run out of WebGL contexts. The
+header has a filter for the file names, checkboxes for sync rotation and sync
+axes, a *Reset all views* button and the shared colour bar. The panel that you are
+dragging is outlined in blue; the caption of every panel shows how many peaks it
+holds and how many of them are annotated.
+
+    ]]></help>
+    <citations>
+        <citation type="doi">10.1007/s13361-012-0516-6</citation>
+        <citation type="doi">10.5281/zenodo.14503524</citation>
+        <citation type="doi">10.1002/pmic.201300246</citation>
+        <citation type="doi">10.1021/acs.jproteome.4c00873</citation>
+    </citations>
+</tool>

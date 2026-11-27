@@ -1,0 +1,17 @@
+name: 
+owner: recetox
+remote_repository_url: ""
+homepage_url: ""
+categories:
+  - Visualization
+  - Metabolomics
+description: ""
+long_description: |
+ ""
+auto_tool_repositories:
+  name_template: "{{ tool_id }}"
+  description_template: "{{ tool_name }} tool from the peaktable plotting suite"
+suite:
+  name: suite_plot_peaktable
+  description: 
+  type: repository_suite_definition
